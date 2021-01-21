@@ -3,6 +3,7 @@ package ooioo.ruches.evenement;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -33,7 +34,6 @@ public class EvenementController {
 	private static final String EVEN_EVENFORM = "evenement/evenementForm";
 	private static final String REDIRECT_EVEN_LISTE = "redirect:/evenement/liste";
 	private static final String REDIRECT_EVEN = "redirect:/evenement/";
-	private static final String ACTIONPREFIX = "actionPrefix";
 
 	final Logger logger = LoggerFactory.getLogger(EvenementController.class);
 
@@ -140,7 +140,7 @@ public class EvenementController {
 	 * Appel du formulaire de modification d'un événement
 	 */
 	@GetMapping("/modifie/{evenementId}")
-	public String modifie(Model model, @PathVariable long evenementId) {
+	public String modifie(Model model, HttpServletRequest request, @PathVariable long evenementId) {
 		Optional<Evenement> evenementOpt = evenementRepository.findById(evenementId);
 		if (evenementOpt.isPresent()) {
 			model.addAttribute(Const.RUCHES, rucheRepository.findAllProjectedIdNomByOrderByNom());
@@ -149,7 +149,6 @@ public class EvenementController {
 			model.addAttribute(Const.ESSAIMS, essaimRepository.findAllProjectedIdNomByOrderByNom());
 			model.addAttribute("complet", "false");
 			model.addAttribute(Const.EVENEMENT, evenementOpt.get());
-			model.addAttribute(ACTIONPREFIX, "");
 		} else {
 			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
 			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);

@@ -17,10 +17,6 @@
 				$(".ruches").hide();
 			}
 		});
-		// $("#date").focus();
-		$('.confirmation').on('click', function () {
-	        return confirm([[#{supprimerevenement?}]]);
-	    });
 		$("#evenementForm").validate({
 			rules : {
 				date : {
@@ -41,9 +37,20 @@
 	<br />
 	<div class="container-fluid">
 		<div class="row">
+		<!-- 
 			<div class="col">
-				<h1 class="item" th:text="${titre}"></h1>
+				<h1 class="item" th:utext="${titre}"></h1>
 			</div>
+		 -->
+			<div class="col">
+				<h1 class="item" th:unless="${evenement.id}" th:text="#{ajouterEvenement}"></h1>
+				<h1 class="item" th:if="${evenement.id}">
+					<th:block th:text="#{modification}"></th:block>
+					<a th:href="@{'/evenement/'+${evenement.id}}"
+						th:text="#{evenement} + ' ' + ${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"></a>
+				</h1>
+			</div>
+			
 			<div class="col">
        			<span class="padicons">
        				<input type="checkbox" id="showruches" th:title="#{afficherrucheetc}" checked/>
