@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:inline="javascript">
+$(document).ready(function() {
+	$('.oi-question-mark').popover({
+        html: true
+    });
+    $('.popover-dismiss').popover({
+        trigger: 'focus'
+    });
+    $('#statistiques').DataTable({
+    	dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
+	    buttons: [
+	    	'csv',
+            {extend: 'print', text: [[#{buttontextprint}]]}
+        ]
+    });
+} );
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item" th:text="#{ProductionRuchers}"></h1>
+			</div>
+		
+			<div class="col">
+				<a href="#" class="oi oi-question-mark" data-toggle="popover"
+					data-trigger="focus" tabindex="0" role="button"
+					th:attr="data-content=#{aideStatistiqueRucher}"></a>
+			</div>
+        </div>
+		
+    </div>
+	<div class="container-fluid">
+	<table class="table dt-responsive table-bordered table-striped" id="statistiques">
+			<thead>
+			    <tr>
+					<th th:text="#{rucher}"></th>
+					<th th:text="#{recolte}"></th>
+					<th th:text="#{Total}"></th>
+					<th th:text="#{Max}"></th>
+					<th th:text="#{Min}"></th>
+					<th th:text="#{Moyen}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="rucherPoids : ${ruchersPoids}">
+					<td><a th:href="@{'/rucher/'+${rucherPoids.id}}"
+						th:text="${rucherPoids.nom}"></a></td>
+				    <td th:text="${rucherPoids.nbRecoltes}"></td>
+				    <td th:text="${rucherPoids.pTotal}"></td>
+				    <td th:text="${rucherPoids.pMax}"></td>		
+					<td th:text="${rucherPoids.pMin}"></td>	
+					<td th:text="${rucherPoids.pMoyen}"></td>	
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

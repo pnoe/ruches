@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:inline="javascript">
+$().ready(function() {
+	$('.confirmation').on('click', function () {
+		if([[${recolteHausses}]]) {
+			alert([[#{haussenonsupprimeerefrecolte}]]);
+			return false;
+		} else if ([[${evenements}]]) {
+	        return confirm([[#{supprimerhausseevenement}]]);			
+		} else {
+			return confirm([[#{supprimerhausse?}]]);
+		}
+    });
+	function nomexiste (value) {   
+		return $.inArray(value, [[${haussenoms}]]) != -1;
+		};
+	$( "#clone" ).click(function() {
+		const noms = prompt([[#{nomhaussesvirgule}]]);
+		if (noms == null || noms == "") {
+		    return;
+		} else {
+			let tabNomExiste=[];
+			let tabNomOk=[];
+			noms.split(',').map(item => item.trim()).forEach(function(item){
+				if (nomexiste(item)) {
+					tabNomExiste.push(item);
+				} else {
+					tabNomOk.push(item);
+				}
+			});
+			if (tabNomExiste.length > 0) {
+				let promptexistedeja = [[#{lesHausses}]] + ' : ' + tabNomExiste.join(',') + ' ' + [[#{nomexistentdeja}]];
+				if (tabNomOk.length == 0) {
+					alert(promptexistedeja);
+					return false;					
+				}
+				if (!confirm(promptexistedeja + '. ' + [[#{creer}]] + ' ' + tabNomOk.join(',') + ' ?')) {
+					return false;
+				}
+			}
+			let requestData = {nomclones : tabNomOk.join(',')};
+			const _csrf_token = [[${_csrf.token}]];
+		    const _csrf_param_name = [[${_csrf.parameterName}]];
+		    requestData[_csrf_param_name] = _csrf_token;
+		    $.post( [[@{/hausse/clone/}]] + [[${hausse.id}]],
+					requestData).done(function (data) { 
+						alert( data );
+						document.location.reload(true);
+			});
+		} 
+	});
+});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col">
+					<h1 class="item" id="titre" th:text="#{hausse}+' '+${hausse.nom}"></h1>
+				</div>
+				<div class="col">
+					<a th:href="@{'/hausse/modifie/'+${hausse.id}}"
+					  class="oi oi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
+					<span id="clone" class="oi oi-layers" th:title="#{cloner}" aria-hidden="true"></span>
+       				<a id="supprime" th:href="@{'/hausse/supprime/'+${hausse.id}}"
+       				  class="confirmation oi oi-trash" th:title="#{supprimer}" aria-hidden="true"></a>&nbsp;
+					<a th:href="@{'/evenement/hausse/'+${hausse.id}}"
+					  class="padicons oi oi-list-rich" th:title="#{evenements}" aria-hidden="true"></a>
+					<a th:href="@{'/evenement/hausse/commentaire/'+${hausse.id}}"
+					  class="oi oi-info" th:title="#{evenementCommentaire}" aria-hidden="true"></a>
+					<a th:href="@{'/evenement/hausse/remplissage/'+${hausse.id}}"
+					  class="oi oi-beaker" th:title="#{evenementRemplissage}" aria-hidden="true"></a>
+				</div>
+			</div>
+		</div>
+		<table class="table table-responsive table-bordered">
+			<thead>
+				<tr>
+					<th th:if="${session.voirInactif}" th:text="#{active}"></th>
+					<th th:text="#{dateAcquisition}"></th>
+					<th th:text="#{poidsVide}"></th>
+					<th th:text="#{nbCadres}"></th>
+					<th th:text="#{nbCadresMax}"></th>
+					<th th:text="#{commentaire}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td th:if="${session.voirInactif}" th:text="${hausse.active}? #{oui} : #{non}"></td>
+					<td th:text="${hausse.dateAcquisition}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(hausse.poidsVide,1,2,'DEFAULT')}"></td>
+					<td class="num" th:text="${hausse.nbCadres}"></td>
+					<td class="num" th:text="${hausse.nbCadresMax}"></td>
+					<td th:text="${hausse.commentaire}"></td>
+				</tr>
+			</tbody>
+		</table>
+		<table class="table table-responsive table-bordered">
+			<thead>
+				<tr>
+					<th style="background-color:PaleGoldenRod" th:text="#{ruche}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{ordre}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{rucher}"></th>	
+					<th style="background-color:LemonChiffon" th:text="#{date}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{essaim}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>	
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><a th:href="@{'/ruche/'+${hausse.ruche?.id}}"
+						th:text="${hausse.ruche?.nom}"></a></td>
+					<td th:text="${hausse.ordreSurRuche}"></td>
+					<td th:text="${#temporals.format(dateHAUSSEPOSERUCHE, 'yyyy/MM/dd')}"></td>
+					<td><a th:href="@{'/rucher/'+${hausse.ruche?.rucher?.id}}"
+						th:text="${hausse.ruche?.rucher?.nom}"></a></td>
+					<td th:text="${#temporals.format(dateRUCHEAJOUTRUCHER, 'yyyy/MM/dd')}"></td>
+					
+					<td><a th:href="@{'/essaim/'+${hausse.ruche?.essaim?.id}}"
+						th:text="${hausse.ruche?.essaim?.nom}"></a></td>
+					<td th:text="${#temporals.format(dateAJOUTESSAIMRUCHE, 'yyyy/MM/dd')}"></td>
+					
+				</tr>
+			</tbody>
+		</table>
+		<table class="table table-responsive table-bordered">			
+			<thead>
+				<tr>
+					<th style="background-color:PaleGoldenRod" th:text="#{remplissage}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{commentaire}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{date}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="num" th:text="${valeurHAUSSEREMPLISSAGE}"></td>
+					<td th:text="${#temporals.format(dateHAUSSEREMPLISSAGE, 'yyyy/MM/dd')}"></td>
+					<td th:text="${commentaireHAUSSEREMPLISSAGE}"></td>
+					<td th:text="${commentaireCOMMENTAIREHAUSSE}"></td>
+					<td th:text="${#temporals.format(dateCOMMENTAIREHAUSSE, 'yyyy/MM/dd')}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

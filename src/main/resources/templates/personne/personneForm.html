@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:inline="javascript">
+	$().ready(function() {
+		$("#nom").focus();
+		jQuery.validator.addMethod("loginExiste", function(value) {   
+    		return $.inArray(value, [[${personneLogins}]]) == -1;
+			}, [[#{nomexiste}]]);
+		jQuery.validator.addMethod("emailExiste", function(value) {   
+    		return $.inArray(value, [[${personneEmails}]]) == -1;
+			}, [[#{emailexiste}]]);
+		$("#personneForm").validate({
+			rules : {
+				nom : "required",
+				prenom : "required",
+				email : { email : true, emailExiste : true },
+				login : "loginExiste"
+			}
+		});
+	});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item" th:unless="${personne.id}" th:text="#{ajouterPersonne}"></h1>
+				<h1 class="item" th:if="${personne.id}">
+					<th:block th:text="#{modification}"></th:block>
+					<a th:href="@{'/personne/'+${personne.id}}"
+						th:text="#{personne} + ' ' + ${personne.nom}"></a>
+				</h1>
+			</div>
+		</div>
+	</div>
+	<form action="#" th:action="@{/personne/sauve}"
+		th:object="${personne}" method="post" id="personneForm">
+		<input type="hidden" th:field="*{id}" /> 
+		<input type="hidden" sec:authorize="!hasRole('ROLE_admin')" th:field="*{roles}" /> 
+		<div th:insert="includeForm :: nomField"></div>
+		<div class="form-group">
+			<label th:text="#{prenom}" for="prenom"></label>
+			<input class="form-control" type="text" th:field="*{prenom}"
+				th:errorclass="fieldError" maxlength="35" />
+		</div>
+		<div class="form-group">		
+			<label th:text="#{email}" for="email"></label>
+			<input class="form-control"
+				type="text" th:field="*{email}" th:errorclass="fieldError" maxlength="255" />
+		</div>
+		<div class="form-group">					
+			<label th:text="#{adresse}" for="adresse"></label>
+			<input
+				class="form-control" type="text" th:field="*{adresse}"
+				th:errorclass="fieldError" maxlength="255" />
+		</div>
+		<div class="form-group">					
+			<label th:text="#{login}" for="login"></label>
+			<input
+				class="form-control" type="text" th:field="*{login}"
+				th:errorclass="fieldError" maxlength="35" />
+		</div>
+		<div class="form-group">					
+			<label th:text="#{password}" for="password"></label>
+			<input
+				class="form-control" type="password" th:field="*{password}"
+				th:errorclass="fieldError" maxlength="35" />
+		</div>
+		<div class="form-group" sec:authorize="hasRole('ROLE_admin')">					
+			<label th:text="#{roles}" for="roles"></label>
+			<input
+				class="form-control" type="text" th:field="*{roles}"
+				th:errorclass="fieldError" maxlength="35" />
+		</div>
+		<div th:insert="includeForm :: activeField"></div>
+		<div th:insert="includeForm :: BtnForm"></div>
+	</form>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:src="@{/js/ruches/rucherDetailGg.js}"></script>
+<script th:src="@{/js/ruches/rucherDetailCarto.js}"></script>
+<script th:inline="javascript">
+	let rucheParcours = [[${rucheParcours}]];
+	let distParcours = [[${distParcours}]];
+	const rucher = [[${rucher}]];
+	const rucherMapZoom = [[${@environment.getProperty('rucher.map.zoom')}]];
+	const urlruches = [[@{/}]];
+	const nomHausses = [[${hausseNoms}]];
+	const essaimtxt = [[#{essaim}]];
+	const pasdessaimtxt = [[#{Pasdessaim}]];
+	const ruchetxt = [[#{ruche}]];
+	const haussestxt = [[#{lesHausses}]];
+	const pasdehaussetxt = [[#{Pasdehausse}]];
+	const ruches = [[${ruches}]];
+	const ruchestxt= [[#{ruches}]];
+	const distancedeparcourstxt = [[#{distancedeparcours}]];
+	const entreetxt = [[#{Entree}]];	
+    const _csrf_token = [[${_csrf.token}]];
+</script>
+<script async defer	th:src="${ggMapsUrl}"></script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					<th:block th:text="#{carteGg}+' '"></th:block>
+					<a th:href="@{'/rucher/'+${rucher.id}}"
+						th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+				</h1>
+			</div>
+			<div class="col">
+				<input type="text" th:placeholder="#{recherche}" id="searchtext"/>
+       			<span class="padicons">
+       				<input type="checkbox" id="dragMarker" th:title="#{markerFixes}" checked/>
+				</span>
+				<span id="liste" class="liste oi oi-list" th:title="#{listeRuchesOrdonnees}" aria-hidden="true"></span>
+		 		<span id="listeplus" class="liste oi oi-list-rich" th:title="#{listePlusRuchesOrdonnees}" aria-hidden="true"></span>					
+				<span id="export-gpx" class="oi oi-globe" th:title="#{exportGPX}"
+					aria-hidden="true"></span>
+				<a id="gpx-download"></a>
+				<span id="export-kml" class="oi oi-contrast" th:title="#{exportKML}"
+					aria-hidden="true"></span>
+				<a id="kml-download"></a>
+				<span th:if="${ruches.size()} > ${rucherParcoursNbruches}" id="parcours-redraw" class="oi oi-reload" th:title="#{parcoursRecalcul}"
+					aria-hidden="true"></span>
+			</div>
+		</div>
+	</div>
+	<div id="map"></div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

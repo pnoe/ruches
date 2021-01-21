@@ -1,0 +1,30 @@
+{
+    "sEmptyTable":     "Aucune donnée disponible dans le tableau",
+    "sInfo":           "Affichage de _START_ à _END_ sur _TOTAL_",
+    "sInfoEmpty":      "Affichage de 0 à 0 sur 0",
+    "sInfoFiltered":   "(filtré à partir de _MAX_ éléments au total)",
+    "sInfoPostFix":    "",
+    "sInfoThousands":  ",",
+    "sLengthMenu":     "Afficher _MENU_ éléments",
+    "sLoadingRecords": "Chargement...",
+    "sProcessing":     "Traitement...",
+    "sSearch":         "Rechercher",
+    "sZeroRecords":    "Aucun élément correspondant trouvé",
+    "oPaginate": {
+        "sFirst":    "Premier",
+        "sLast":     "Dernier",
+        "sNext":     ">",
+        "sPrevious": "<"
+    },
+    "oAria": {
+        "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+        "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+    },
+    "select": {
+            "rows": {
+                "_": "&nbsp;- %d sélectionnés",
+                "0": "&nbsp;- 0 sélectionné",
+                "1": "&nbsp;- 1 sélectionné"
+            } 
+    }
+}

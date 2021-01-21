@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:replace="include :: jsdatetimepicker"></script>
+<link th:replace="include :: cssdatetimepicker"/>
+<script th:replace="include :: localejsdatetimepicker"></script>
+<script>
+	$().ready(function() {
+		$("#evenementForm").validate({
+			rules : {
+				date : {
+					required : true
+				},
+				commentaire : {
+					maxlength : 255
+				}
+			}
+		});
+	});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br/><br/><br/>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					<a th:href="@{'/essaim/associe/'+${essaimId}}"
+						th:text="#{association}+' '+#{essaim}+' '+${essaim.nom}"></a>
+					<th:block
+						th:text="#{ruche} + ' ' + ${ruche.nom}"></th:block>
+				</h1>
+			</div>
+		</div>
+	</div>
+	<form action="#"
+		th:action="@{'/essaim/ruche/associe/sauve/' + ${ruche.id} + '/' + ${essaim.id}}"
+		method="post" id="evenementForm">
+		<div th:replace="includeForm :: date"></div>
+		<div th:replace="includeForm :: commentaire"></div>
+		<div class="form-check"  th:if="${rucheSource}">
+		  <input class="form-check-input" type="checkbox" id="swapPositions" name="swapPositions" /> 
+		  <label class="form-check-label" for="swapPositions" 
+		    th:text="'Échanger les positions des ruches ' + ${ruche.nom} + ' et ' + ${rucheSource.nom}"></label>
+	    </div>
+	    <br/><br/>
+		<div th:replace="includeForm :: BtnForm"></div>
+	</form>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

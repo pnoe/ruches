@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:replace="include :: jsdatetimepicker"></script>
+<link th:replace="include :: cssdatetimepicker"/>
+<script th:replace="include :: localejsdatetimepicker"></script>
+<script>
+	$().ready(function() {
+		$("#commentaire").focus();
+		$('#finTraitement').on('click', function () {
+			if ($(this).is(':checked')) {
+				document.getElementById('typeEvenement').setAttribute('value', "ESSAIMTRAITEMENTFIN");
+			} else {		
+				document.getElementById('typeEvenement').setAttribute('value', "ESSAIMTRAITEMENT");
+			}
+	    });
+		$("#evenementForm").validate({
+			rules : {
+				date : {
+					required : true
+				},
+				commentaire : {
+					maxlength : 255
+				}
+			}
+		});
+	});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+				<th:block th:text="#{traitement} + ' '"></th:block>
+				  <a th:href="@{'/essaim/'+${essaimId}}"
+					th:text="#{essaim} + ' ' + ${essaim.nom}"></a>
+				</h1>
+				<th:block th:text="${dateESSAIMTRAITEMENT}?
+				'Traité le '+${#temporals.format(dateESSAIMTRAITEMENT, 'dd/MM/yyyy')}:''">
+		        </th:block>
+			</div>
+        </div>
+    </div>
+	<form action="#" th:action="@{'/evenement/essaim/sauve/' + ${essaim.id}}"
+		method="post" id="evenementForm">
+		<input type="hidden" id="retourRuche" name="retourRuche" th:value="${retourRuche}"/>
+		<input type="hidden" id="valeur" name="valeur"/>
+		<input type="hidden" id="typeEvenement" name="typeEvenement" value="ESSAIMTRAITEMENT" />
+		<div th:insert="includeForm :: date"></div>
+		<div th:insert="includeForm :: finTraitement"></div>
+		<div th:insert="includeForm :: commentaire"></div>
+		<div th:insert="includeForm :: BtnForm"></div>
+	</form>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

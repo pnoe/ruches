@@ -1,0 +1,186 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:inline="javascript">
+$().ready(function() {
+	$('.confirmation').on('click', function () {
+		if([[${recolteHausses}]]) {
+			alert([[#{ruchenepeutetresupprimeerecolte}]]);
+			return false;
+		} else if ([[${evenements}]]) {
+	        return confirm([[#{supprimerrucheeteven?}]]);			
+		} else {
+			return confirm([[#{supprimercetteruche?}]]);
+		}
+    });
+	$( "#clone" ).click(function() {
+		const noms = prompt([[#{nomruchesvirgule}]]);
+		if (noms == null || noms == "") {
+		    return;
+		}
+		let tabNomExiste=[];
+		let tabNomOk=[];
+		noms.split(',').map(item => item.trim()).forEach(function(item){
+			if ($.inArray(item, [[${ruchenoms}]]) !== -1) {
+				tabNomExiste.push(item);
+			} else {
+				tabNomOk.push(item);
+			}
+		});
+		if (tabNomExiste.length > 0) {
+			let promptexistedeja = [[#{lesRuches}]] + ' : ' + tabNomExiste.join(',') + ' ' + [[#{nomexistentdeja}]];
+			if (tabNomOk.length == 0) {
+				alert(promptexistedeja);
+				return false;					
+			}
+			if (!confirm(promptexistedeja + '. ' + [[#{creer}]] + ' ' + tabNomOk.join(',') + ' ?')) {
+				return false;
+			}
+		}
+	    let requestData = {nomclones : tabNomOk.join(',')};
+		const _csrf_token = [[${_csrf.token}]];
+	    const _csrf_param_name = [[${_csrf.parameterName}]];
+	    requestData[_csrf_param_name] = _csrf_token;
+		$.post( [[@{/ruche/clone/}]] + [[${ruche.id}]],
+				requestData).done(function (data) { 
+					alert( data );
+					document.location.reload(true);
+		});		
+	});
+});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item" id="titre" th:text="#{ruche}+' '+${ruche.nom}"></h1>
+			</div>
+			<div class="col">
+				<a th:href="@{'/ruche/modifie/'+${ruche.id}}"
+				  class="oi oi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
+        		<span id="clone" class="oi oi-layers" th:title="#{cloner}" aria-hidden="true"></span>
+				<a th:href="@{'/ruche/hausses/'+${ruche.id}}"
+				  class="oi oi-align-center" th:title="#{ajoutRetraitHausses}" aria-hidden="true"></a>
+       			<a th:href="@{'/ruche/rucher/'+${ruche.id}}"
+       			  class="oi oi-home" th:title="#{changerDeRucher}" aria-hidden="true"></a>
+				<a id="supprime" th:href="@{'/ruche/supprime/'+${ruche.id}}"
+				  class="confirmation oi oi-trash" th:title="#{supprimer}" aria-hidden="true"></a>&nbsp;
+				<a th:href="@{'/evenement/ruche/'+${ruche.id}}"
+				  class="padicons oi oi-list-rich" th:title="#{evenements}" aria-hidden="true"></a>
+				<a th:href="@{'/evenement/ruche/commentaire/'+${ruche.id}}"
+				  class="oi oi-info" th:title="#{evenementCommentaire}" aria-hidden="true"></a>
+        	</div>
+        </div>
+    </div>
+	<div class="container-fluid">
+		<table class="table table-responsive table-bordered">			
+		<thead>
+			<tr>
+				<th th:if="${session.voirInactif}" th:text="#{active}"></th>
+				<th th:text="#{dateAcquisition}"></th>
+				<th th:text="#{poidsVide}"></th>
+				<th th:text="#{nbCadresMax}"></th>
+				<th th:text="#{typeRuche}"></th>
+				<th style="background-color:LemonChiffon" th:text="#{latitude}"></th>
+				<th style="background-color:LemonChiffon" th:text="#{longitude}"></th>
+				<th th:text="#{commentaire}"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td th:if="${session.voirInactif}" th:text="${ruche.active}? #{oui} : #{non}"></td>
+				<td th:text="${ruche.dateAcquisition}"></td>
+				<td class="num" th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
+				<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
+				<td th:text="${ruche.type?.nom}"></td>
+				<td class="num" th:text="${#numbers.formatDecimal(ruche.latitude,1,4)}"></td>
+				<td class="num" th:text="${#numbers.formatDecimal(ruche.longitude,1,4)}"></td>
+				<td th:text="${ruche.commentaire}"></td>				
+			</tr>
+		</tbody>
+	</table>
+	<table class="table table-responsive table-bordered">			
+		<thead>
+			<tr>
+				<th style="background-color:PaleGoldenRod" th:text="#{rucher}"></th>
+				<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>
+				<th style="background-color:PaleGoldenRod" th:text="#{commentaire}"></th>
+				<th style="background-color:LemonChiffon" th:text="#{essaim}"></th>
+				<th style="background-color:LemonChiffon" th:text="#{date}"></th>
+				<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><a th:href="@{'/rucher/'+${ruche.rucher?.id}}"
+					th:text="${ruche.rucher?.nom}"></a></td>
+				<td th:text="${#temporals.format(dateRUCHEAJOUTRUCHER, 'yyyy/MM/dd')}"></td>
+				<td th:text="${commentaireRUCHEAJOUTRUCHER}"></td>
+				<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}"
+					th:text="${ruche.essaim?.nom}"></a></td>
+				<td th:text="${#temporals.format(dateAJOUTESSAIMRUCHE, 'yyyy/MM/dd')}"></td>
+				<td th:text="${commentaireAJOUTESSAIMRUCHE}"></td>
+			</tr>
+		</tbody>
+	</table>
+	<th:block th:if="${commentaireCOMMENTAIRERUCHE}">
+		<h6 th:text="#{evenements}" ></h6>
+	<table class="table table-responsive table-bordered">			
+		<thead>
+			<tr>
+				<th style="background-color:PaleGoldenRod" th:text="#{commentaire}"></th>
+				<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td th:text="${commentaireCOMMENTAIRERUCHE}"></td>
+				<td th:text="${#temporals.format(dateCOMMENTAIRERUCHE, 'yyyy/MM/dd')}"></td>
+			</tr>
+		</tbody>
+	</table>
+	</th:block>
+	<h6 th:if="${#lists.isEmpty(haussesRuche)}" th:text="#{Pasdehausse}"></h6>
+	<th:block th:if="${not #lists.isEmpty(haussesRuche)}">
+		<h6 th:text="#{listeHausses}" ></h6>
+		<table class="table table-responsive table-bordered">			
+			<thead>
+				<tr>
+					<th th:text="#{nom}"></th>
+					<th th:text="#{ordre}"></th>
+					<th>Date pose</th>
+					<th th:if="${session.voirInactif}" th:text="#{active}"></th>
+					<th th:text="#{dateAcquisition}"></th>
+					<th th:text="#{poidsVide}"></th>
+					<th th:text="#{nbCadres}"></th>
+					<th th:text="#{nbCadresMax}"></th>
+					<th th:text="#{commentaire}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="hausseRuche : ${haussesRuche}">
+					<td><a href="/retraitHausse"
+						th:href="@{'/hausse/'+${hausseRuche.id}}"
+						th:text="${hausseRuche.nom}"></a></td>
+					<td th:text="${hausseRuche.ordreSurRuche}"></td>
+					<td th:text="${#temporals.format( datesPoseHausse[hausseRucheStat.index] , 'yyyy/MM/dd')}">
+					</td>
+					<td th:if="${session.voirInactif}" th:text="${hausseRuche.active}? #{oui} : #{non}"></td>
+					<td th:text="${hausseRuche.dateAcquisition}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(hausseRuche.poidsVide,1,1,'DEFAULT')}"></td>
+					<td class="num" th:text="${hausseRuche.nbCadres}"></td>
+					<td class="num" th:text="${hausseRuche.nbCadresMax}"></td>
+					<td th:text="${hausseRuche.commentaire}"></td>			
+				</tr>
+			</tbody>
+		</table>
+		</th:block>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:replace="include :: jsdatetimepicker"></script>
+<link th:replace="include :: cssdatetimepicker"/>
+<script th:replace="include :: localejsdatetimepicker"></script>
+<script>
+	$().ready(function() {
+		$("#evenementForm").validate({
+			rules : {
+				date : {
+					required : true
+				},
+				commentaire : {
+					maxlength : 255
+				}
+			}
+		});
+	});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+				  <a th:href="@{'/rucher/ruches/'+${rucherId}}"
+					th:text="#{ajoutruches} + ' ' + ${rucher.nom}"></a>
+				<th:block th:text="' ' + #{lesRuches} + ' ' + ${ruchesNoms}"></th:block>
+				</h1>
+        	</div>
+        </div>
+    </div>
+	<form action="#" th:action="@{'/rucher/ruches/ajouter/sauve/' + ${rucherId}} + '/' + ${ruchesNoms}"
+		method="post" id="evenementForm">
+		<div th:insert="includeForm :: date"></div>
+		<div th:insert="includeForm :: commentaire"></div>
+		<div th:insert="includeForm :: BtnForm"></div>
+	</form>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:inline="javascript">
+$().ready(function() {
+	let tableajout = $('#ajoutRuches').DataTable({
+    	select: true
+    });
+	$('#retraitRuches').DataTable({
+    });
+	function updateLinkAjout( e, dt, type, indexes ) {
+    	if ( type === 'row' ) {
+    		let rucheNoms = "";
+    		tableajout.rows( { selected: true } ).data().pluck( 0 ).each(function (value, index) {
+            	rucheNoms += value + ",";
+            });
+            if (rucheNoms) { 
+                // on enlève la dernière virgule et met à jour l'url de
+				// traitement
+            	rucheNoms = rucheNoms.substring(0, rucheNoms.length-1);
+            	document.getElementById('actionAjoutRuches').setAttribute('href',
+            			[[@{/rucher/ruches/ajouter/}]] +
+            			[[${rucher.id}]] + '/' + rucheNoms);
+            } else {
+            	document.getElementById('actionAjoutRuches').setAttribute('href', "#actionAjoutRuches");
+            }      
+        }
+	}
+    tableajout.on( 'select deselect', updateLinkAjout);
+    $('#actionAjoutRuches').on('click', function () {
+    	if ($(this).attr("href") == "#actionAjoutRuches") {
+    		return confirm([[#{selectruchesajout}]]);	
+    	}
+    });
+});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					<th:block th:text="#{ajoutderuches}+' '"></th:block>
+					<a th:href="@{'/rucher/'+${rucher.id}}"
+						th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+				</h1>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid " id="ajouterRetirerRuches">
+		<table class="table table-bordered" id="retraitRuches">
+			<thead>
+				<tr>
+					<th th:text="#{nom}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="ruche : ${ruches}">
+					<td th:text="${ruche.nom}"></td>
+				</tr>
+			</tbody>
+		</table>
+		<h6>
+			<a id="actionAjoutRuches" href="#actionAjoutRuches"
+				th:text="#{ajouterRuchesRucher}"></a>
+		</h6>
+		<table class="table table-bordered" id="ajoutRuches">
+			<thead>
+				<tr>
+					<th th:text="#{nom}"></th>
+					<th th:text="#{rucher}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="rucheNot : ${ruchesNot}">
+					<td th:text="${rucheNot.nom}"></td>
+					<td th:text="${rucheNot.rucher?.nom}"></td>
+				</tr>
+			</tbody>
+		</table>
+		<br />
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

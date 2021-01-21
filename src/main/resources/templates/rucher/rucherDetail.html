@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:inline="javascript">
+	$().ready(function() {
+		$('.confirmationsupp').on('click', function () {
+			if ([[${rucher.depot}]]) {
+				alert("Le dépôt ne peut être supprimé");
+				return false;
+			} else {
+				if([[${recolteHausses}]]) {
+					alert([[#{ruchernonsupprimerefrecolte}]]);
+					return false;
+				} else if ([[${evenements}]]) {
+			        return confirm([[#{supprimerruchereteven}]]);			
+				} else {
+					return confirm([[#{supprimercerucher?}]]);
+				}
+			}
+	    });		
+		$('#ruches').DataTable({
+	        dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
+		    buttons: [
+	             'csv',
+	             {extend: 'pdf',  exportOptions: {columns: ':visible'}, 
+	            	 title: [[#{rucher}]] + ' : ' +[[${rucher.nom}]] + ' - ' + [[#{listeRuches}]] + " " + (new Date()).toLocaleDateString()},
+	                 {extend: 'print', text: [[#{buttontextprint}]]},
+	                 {extend: 'colvis', text: [[#{buttontextcol}]]}
+	         ]
+	       });  
+	});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item" id="titre" th:text="#{rucher}+' '+${rucher.nom}"></h1>
+			</div>
+			<div class="col">
+				<a th:href="@{'/rucher/modifie/'+${rucher.id}}" 
+				  class="oi oi-pencil" th:title="#{modifier}" aria-hidden="true"></a> 
+				<a th:href="@{'/rucher/Gg/'+${rucher.id}}" 
+				  class="oi oi-globe" th:title="#{carteGg}" aria-hidden="true"></a> 
+				<a th:href="@{'/rucher/Ign/'+${rucher.id}}" 
+				  class="oi oi-signpost" th:title="#{carteIgn}" aria-hidden="true"></a>	
+				<a th:href="@{'/rucher/Osm/'+${rucher.id}}" 
+				  class="oi oi-flag" th:title="#{carteOsm}" aria-hidden="true"></a>
+				<a th:href="@{'/rucher/meteo/'+${rucher.id}}" 
+				  class="oi oi-cloud" th:title="#{meteo}" aria-hidden="true"></a> 
+       			<a th:href="@{'/rucher/ruches/'+${rucher.id}}" 
+       			  class="oi oi-align-center" th:title="#{ajoutRuches}" aria-hidden="true"></a>
+       			<a id="supprime" th:href="@{'/rucher/supprime/'+${rucher.id}}" 
+       			  class="confirmationsupp oi oi-trash" th:title="#{supprimer}" aria-hidden="true"></a>&nbsp;
+       			<a th:href="@{'/evenement/rucher/'+${rucher.id}}"
+       			  class="padicons oi oi-list-rich" th:title="#{evenements}" aria-hidden="true"></a>
+				<a th:href="@{'/evenement/rucher/commentaire/'+${rucher.id}}"
+				  class="oi oi-info" th:title="#{evenementCommentaire}" aria-hidden="true"></a>
+				  
+				  &nbsp;
+				<a th:href="@{'/rucher/historique/'+${rucher.id}}"
+				  class="oi oi-calendar" th:title="'Historique'" aria-hidden="true"></a>
+				  
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid " id="detailRucher">
+		<table class="table table-responsive table-bordered">
+			<thead>
+				<tr>
+					<th th:if="${session.voirInactif}" th:text="#{actif}"></th>
+					<th th:text="#{depot}"></th>
+					<th th:text="#{contact}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{adresse}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{latitude}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{longitude}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{altitude}"></th>
+					<th th:text="#{ressource}"></th>
+					<th th:text="#{commentaire}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td th:if="${session.voirInactif}" th:text="${rucher.actif}? #{oui} : #{non}"></td>
+					<td th:text="${rucher.depot}? #{oui} : #{non}"></td>
+					<td><a th:href="@{'/personne/'+${rucher.contact?.id}}" th:text="${rucher.contact?.nom}"></a></td>
+					<td th:text="${rucher.adresse}"></td>
+					<td><a class="num" th:href="@{'geo:'+${rucher.latitude}+','+${rucher.longitude}}" 
+					  th:text="${#numbers.formatDecimal(rucher.latitude,1,4)}"></a></td>
+					<td class="num" th:text="${#numbers.formatDecimal(rucher.longitude,1,4)}"></td>
+					<td class="num" th:text="${rucher.altitude}"></td>
+					<td th:text="${rucher.ressource}"></td>
+					<td th:text="${rucher.commentaire}"></td>
+				</tr>
+			</tbody>
+		</table>
+		<h6	th:text="#{listeRuches}"></h6>
+		<table class="table table-responsive table-bordered" id="ruches">
+			<thead>
+			<tr>
+				<th th:text="#{nom}"></th>
+				<th th:text="#{essaim}"></th>
+				<th th:if="${session.voirInactif}" th:text="#{active}"></th>
+				<th th:text="#{dateAcquisition}"></th>
+				<th class="num" th:text="#{poidsVide}"></th>
+				<th class="num" th:text="#{nbCadres}"></th>
+				<th style="background-color:PaleGoldenRod" class="num" th:text="#{nbCadresMax}"></th>
+				<th style="background-color:PaleGoldenRod" th:text="#{typeRuche}"></th>
+				<th th:text="#{commentaire}"></th>
+			</tr>
+			</thead>
+			<tbody>
+				<tr th:each="ruche : ${ruches}">
+					<td><a th:href="@{'/ruche/'+${ruche.id}}" th:text="${ruche.nom}"></a></td>
+					<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}" th:text="${ruche.essaim?.nom}"></a></td>
+					<td th:if="${session.voirInactif}" th:text="${ruche.active}? #{oui} : #{non}"></td>
+					<td th:text="${ruche.dateAcquisition}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
+					<td class="num" th:text="${nbCadres[rucheStat.index]}"></td>
+					<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
+					<td th:text="${ruche.type?.nom}"></td>
+					<td th:text="${ruche.commentaire}"></td>
+				</tr>
+			</tbody>
+		</table>
+		
+		
+		<table th:if="${#arrays.length(poidsListe)} &gt; 0" class="table table-responsive table-bordered">			
+		<thead>
+			<tr>
+				<th style="background-color:LightCyan" th:text="#{recolte}"></th>
+				<td th:each="recolte : ${recoltesListe}">
+					<a th:href="@{'/recolte/'+${recolte.id}}" th:text="${#temporals.format(recolte.date, 'yyyy/MM/dd')}"></a>
+				</td>
+				<th style="background-color:LightCyan" th:text="#{Total}"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th style="background-color:LightCyan" th:text="#{poidskg}"></th>
+				<td th:each="poids : ${poidsListe}" th:text="${#numbers.formatDecimal(poids/1000.0,1,2,'DEFAULT')}"></td>
+				<td th:text="${#numbers.formatDecimal(poidsTotal/1000.0,1,2,'DEFAULT')}"></td>		
+			</tr>
+			<tr>
+				<th style="background-color:LightCyan" th:text="#{lesRuches}"></th>
+				<td th:each="nb : ${recoltesNbRuches}" th:text="${nb}"></td>
+				<td></td>		
+			</tr>
+			<tr>
+				<th style="background-color:LightCyan" th:text="'Poids/Ruches'"></th>
+				<td th:each="poids, iterStat : ${poidsListe}" 
+					th:text="${#numbers.formatDecimal(poids/recoltesNbRuches[iterStat.index]/1000.0,1,2,'DEFAULT')}"></td>
+				<td></td>		
+			</tr>
+		</tbody>
+	</table>
+	
+	
+	
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

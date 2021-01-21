@@ -1,0 +1,67 @@
+package ooioo.ruches.hausse;
+
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+
+import ooioo.ruches.IdNom;
+import ooioo.ruches.Nom;
+
+@RepositoryRestResource(collectionResourceRel = "hausseRepository")
+public interface HausseRepository extends CrudRepository<Hausse, Long> {
+
+	// correction spring boot 2.2.0 iterable -> list
+	List<Hausse> findByRucheIdOrderByOrdreSurRuche(Long id);
+
+	Iterable<Hausse> findByActiveAndRucheIdNot(boolean active, Long id);
+
+	Iterable<Hausse> findByActiveAndRucheIsNull(boolean active);
+
+	Iterable<Hausse> findAllByOrderByNom();
+
+	Iterable<Hausse> findByActiveOrderByNom(boolean actif);
+	
+	
+	Integer countByActiveAndRucheIsNull(boolean active);
+
+	// Liste des hausses qui ne sont pas dans la récolte recolteId :
+	// hausses non référencées dans les détails de la récolte recolteId
+//	@Query(value = "select * from hausse where id not in (select hausse_id from recolte_hausse where recolte_id = ?1)", nativeQuery = true)
+	@Query(value = "select hausse from Hausse hausse where hausse.id not in (select "
+	  + "recoltehausse.hausse.id from RecolteHausse recoltehausse where recoltehausse.recolte.id = ?1)")
+	Iterable<Hausse> findHaussesNotInRecolteId(Long recolteId);
+
+//	 @Query(value = "select * from hausse where id in (select hausse_id from recolte_hausse where recolte_id = ?1)", nativeQuery = true)
+	@Query(value =	"select hausse from Hausse hausse where hausse.id in (select "
+	  + "recoltehausse.hausse.id from RecolteHausse recoltehausse where recoltehausse.recolte.id = ?1)")
+	Iterable<Hausse> findHaussesInRecolteId(Long recolteId);
+	
+	@Query(value =	"select count(h) from Hausse h, Ruche r, Rucher rr where " +
+			"h.ruche.id = r.id and r.rucher.id = rr.id and rr.id = ?1")
+			Integer countHausseInRucher(Long rucherId);
+
+	Integer countByRucheId(Long id);
+
+	Collection<Nom> findAllProjectedBy();
+	
+	Collection<Nom> findByRucheId(Long rucherId);
+
+	Collection<Hausse> findCompletByRucheId(Long rucherId);
+
+	Collection<IdNom> findAllProjectedIdNomByOrderByNom();
+	
+	// en nativeQuery à cause de string_agg
+	@Query(value = "select string_agg(nom, ', ') from Hausse where ruche_id = ?1", nativeQuery = true)
+	String hausseNomsByRucheId(Long rucheId);
+	
+	long countByActiveTrue();
+	
+	long countByActiveTrueAndRucheNotNullAndRucheActiveTrueAndRucheEssaimNotNull();
+	
+	long countByActiveTrueAndRucheNull();
+	
+
+}

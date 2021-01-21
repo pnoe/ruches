@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script>
+	$().ready(function() {
+		$("#poidsAvant").focus();
+		$(".toggleplus").hide();
+		$("#toggleplus").click(function() {
+			$(".toggleplus").toggle();
+		});
+	});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					<a th:href="@{'/recolte/'+${recolte.id}}"
+						th:text="#{recolte} + ' ' + ${#temporals.format(recolte.date, 'yyyy/MM/dd HH:mm')}"></a>
+					<th:block th:text="' : '+#{hausse}+' '+${detailRecolte.hausse.nom}"></th:block>
+				</h1>
+			</div>
+		</div>
+	</div>
+	<form action="#" th:action="@{/recolte/detail/sauve}"
+		th:object="${detailRecolte}" method="post" id="recolteHausseForm">
+		<input type="hidden" th:field="*{id}" /> <input type="hidden"
+			th:field="*{recolte}" /> <input type="hidden" th:field="*{hausse}" />
+		<div class="form-group">
+			<label th:text="#{poidsAvant}" for="poidsAvant"></label> <input
+				class="form-control" type="text" th:field="*{poidsAvant}"
+				th:errorclass="fieldError" />
+		</div>
+		<div class="form-group">
+			<label th:text="#{poidsApres}" for="poidsApres"></label> <input
+				class="form-control" type="text" th:field="*{poidsApres}"
+				th:errorclass="fieldError" />
+		</div>
+		<button type="button" id="toggleplus" th:text="#{plus}" ></button>
+		<br/><br/>
+		<div class="form-group toggleplus">
+			<label for="essaim" th:text="#{essaim}"></label> <select
+				class="form-control" th:field="*{essaim}">
+				<option value="" th:text="#{aucun}">;</option>
+				<option th:each="essaimopt : ${essaims}" th:value="${essaimopt.id}"
+					th:text="${essaimopt.nom}"></option>
+			</select>
+		</div>
+		<div class="form-group toggleplus">
+			<label for="ruche" th:text="#{ruche}"></label> <select
+				class="form-control" th:field="*{ruche}">
+				<option value="" th:text="#{aucune}"></option>
+				<option th:each="rucheopt : ${ruches}" th:value="${rucheopt.id}"
+					th:text="${rucheopt.nom}"></option>
+			</select>
+		</div>
+		<div class="form-group toggleplus">
+			<label for="rucher" th:text="#{rucher}"></label> <select
+				class="form-control" th:field="*{rucher}">
+				<option value="" th:text="#{aucun}"></option>
+				<option th:each="rucheropt : ${ruchers}" th:value="${rucheropt.id}"
+					th:text="${rucheropt.nom}"></option>
+			</select>
+		</div>
+		<div th:insert="includeForm :: BtnForm"></div>
+	</form>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

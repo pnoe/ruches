@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:replace="include :: jsdatetimepicker"></script>
+<link th:replace="include :: cssdatetimepicker"/>
+<script th:replace="include :: localejsdatetimepicker"></script>
+<script th:inline="javascript">
+	$().ready(function() {
+		$("#rucherId").focus();
+		$("#evenementForm").validate({
+			rules : {
+				date : {
+					required : true
+				},
+				commentaire : {
+					maxlength : 255
+				}
+			}
+		});
+		$("#rucherId").change(function() {
+			showHideEven();
+		});
+	});
+
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+				<th:block th:text="#{changerDeRucher} + ' '"></th:block>
+				  <a th:href="@{'/ruche/'+${rucheId}}"
+					th:text="#{ruche} + ' ' + ${ruche.nom}"></a>
+				</h1>
+        	</div>
+        </div>
+    </div>
+	<form action="#" th:action="@{'/ruche/sauverucher/'+${rucheId}}"
+		method="post" id="evenementForm">
+		<div th:insert="includeForm :: date"></div>
+		<div class="form-group">
+			<label for="rucher" th:text="#{rucher}"></label>
+			<select class="form-control"
+				id="rucherId" name="rucherId" th:field="${ruche.rucher}">
+				<option th:each="rucheropt : ${ruchers}" th:value="${rucheropt.id}"
+							th:text="${rucheropt.nom}"></option>
+			</select>
+		</div>
+		<div th:insert="includeForm :: commentaire"></div>
+		<div th:insert="includeForm :: BtnForm"></div>
+	</form>
+	<footer th:include="include::footer"></footer>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script>
+	$(document).ready(function() {
+		$('.datatable-tri').DataTable({
+			paging : false,
+			searching : false,
+			info : false
+		});
+		$( ".accordion" ).accordion({
+			active : false,
+			collapsible : true
+		});
+	});
+	
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<h1 class="item" th:utext="${accueilTitre}"></h1>
+		</div>
+		<div class="row">
+			<ul>
+				<li th:text="${nbRuchers} + ' ' + #{ruchersdepot}"></li>
+				<li
+					th:text="${nbRuches} + ' ' + #{rucheset} + ${nbHausses} + ' ' + #{haussesactives}"></li>
+				<li
+					th:text="${nbRuchesAuDepot} + ' ' + #{ruchesaudepot} + ${nbHaussesHorsRuche} + ' ' + #{haussesnonposees}"></li>
+				<li
+					th:text="${nbRuchesAvecEssaim} + ' ' + #{ruchesavecessaim} + ${nbHaussesSurRuchesAvecEssaim} + ' ' + #{haussesposees}"></li>
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid accordion">
+		<h1 class="item">Valeurs par année</h1>
+		<table class="table table-responsive table-bordered table-striped" id="ruches">
+			<thead>
+				<tr>
+					<th scope="col" th:text="#{date}"></th>
+					<th scope="col" th:each="annee : ${annees}"
+						th:text="${#numbers.formatDecimal(annee,1,0)}"></th>
+					<th>Total</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row">Poids miel en pot</th>
+					<td th:each="pds : ${pdsMiel}"
+						th:text="${#numbers.formatDecimal(pds/1000.0,1,2,'DEFAULT')}"></td>
+				</tr>
+				<tr>
+					<th scope="row">Nb essaims</th>
+					<td th:each="nbE : ${nbEssaims}"
+						th:text="${nbE}"></td>
+					<td></td>
+				</tr>	
+				<tr>
+					<th scope="row">Poids miel / Nb essaims</th>
+					<td th:each="nbE : ${nbEssaims}"
+						th:text="${#numbers.formatDecimal(pdsMiel[nbEStat.index]/nbE/1000.0,1,2,'DEFAULT')}"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th scope="row">Nb essaims créés</th>
+					<td th:each="nbCree : ${nbCreationEssaims}"
+						th:text="${nbCree}"></td>
+				</tr>
+				<tr>
+					<th scope="row">Nb essaims dispersés</th>
+					<td th:each="nbDisp : ${nbDispersionEssaims}"
+						th:text="${nbDisp}"></td>
+				</tr>
+				<tr>
+					<th scope="row">Sucre</th>
+					<td th:each="sucre : ${sucreEssaims}"
+						th:text="${#numbers.formatDecimal(sucre,1,2,'DEFAULT')}"></td>
+				</tr>
+				<tr>
+					<th scope="row">Nb traitements</th>
+					<td th:each="nbTraitements : ${nbTraitementsEssaims}"
+						th:text="${nbTraitements}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div th:if="${#arrays.length(ruchesDepotEssaim)} &gt; 0"
+		class="container-fluid accordion">
+		<h1 class="item" th:text="${#arrays.length(ruchesDepotEssaim)} + 
+			' ruche(s) avec essaim au dépôt'"></h1>
+		<div>
+		<table class="table table-bordered table-striped datatable-tri">
+			<thead>
+				<tr>
+					<th scope="col" th:text="#{nom}"></th>
+					<th scope="col" th:text="#{essaim}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="rucheDepotEssaim : ${ruchesDepotEssaim}">
+					<td><a th:href="@{'/ruche/'+${rucheDepotEssaim.id}}"
+						th:text="${rucheDepotEssaim.nom}"></a></td>
+					<td><a th:href="@{'/essaim/'+${rucheDepotEssaim.essaim?.id}}"
+						th:text="${rucheDepotEssaim.essaim?.nom}"></a></td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+	</div>
+	<div th:if="${#arrays.length(ruchesDepotHausses)} &gt; 0"
+		class="container-fluid accordion">
+		<h1 class="item" th:text="${#arrays.length(ruchesDepotHausses)} + 
+			' ruche(s) avec hausses au dépôt'"></h1>
+		<div>
+		<table class="table table-bordered table-striped datatable-tri">
+			<thead>
+				<tr>
+					<th scope="col" th:text="#{nom}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="rucheDepotHausses : ${ruchesDepotHausses}">
+					<td><a th:href="@{'/ruche/'+${rucheDepotHausses.id}}"
+						th:text="${rucheDepotHausses.nom}"></a></td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+	</div>
+	<div th:if="${#arrays.length(ruchesPasDepotSansEssaim)} &gt; 0"
+		class="container-fluid accordion">
+		<h1 class="item"
+			th:text="${#arrays.length(ruchesPasDepotSansEssaim)} + 
+				' ruche(s) sans essaim qui ne sont pas au dépôt'"></h1>
+		<div>
+		<table class="table table-bordered table-striped datatable-tri">
+			<thead>
+				<tr>
+					<th scope="col" th:text="#{nom}"></th>
+					<th scope="col" th:text="#{rucher}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="ruchePasDepotSansEssaim : ${ruchesPasDepotSansEssaim}">
+					<td><a th:href="@{'/ruche/'+${ruchePasDepotSansEssaim.id}}"
+						th:text="${ruchePasDepotSansEssaim.nom}"></a></td>
+					<td><a
+						th:href="@{'/rucher/'+${ruchePasDepotSansEssaim.rucher?.id}}"
+						th:text="${ruchePasDepotSansEssaim.rucher?.nom}"></a></td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+	</div>
+	<div th:if="${#arrays.length(essaimsActifSansRuche)} &gt; 0"
+		class="container-fluid accordion">
+		<h1 class="item" th:text="${#arrays.length(essaimsActifSansRuche)} + 
+			' essaim(s) actif(s) hors ruche'"></h1>
+		<div>
+		<table class="table table-bordered table-striped datatable-tri">
+			<thead>
+				<tr>
+					<th scope="col" th:text="#{nom}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="essaimActifSansRuche : ${essaimsActifSansRuche}">
+					<td><a th:href="@{'/essaim/'+${essaimActifSansRuche.id}}"
+						th:text="${essaimActifSansRuche.nom}"></a></td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+	</div>
+	<div th:if="${#arrays.length(ruchersMalCales)} &gt; 0"
+		class="container-fluid accordion">
+		<h1 class="item"
+			th:text="${#arrays.length(ruchersMalCales)} + ' rucher(s) à plus de ' + 
+				${#numbers.formatDecimal(distRuchersTropLoins,1,0)} + 'm du barycentre de leurs ruches'"></h1>
+		<div>
+		<table class="table table-bordered table-striped datatable-tri">
+			<thead>
+				<tr>
+					<th scope="col" th:text="#{nom}"></th>
+					<th scope="col" th:text="#{Distance}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="rucherMalCale : ${ruchersMalCales}">
+					<td><a th:href="@{'/rucher/'+${rucherMalCale.id}}"
+						th:text="${rucherMalCale.nom}"></a></td>
+					<td
+						th:text="${#numbers.formatDecimal(distances[rucherMalCaleStat.index],1,0)}"></td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+	</div>
+	<div th:if="${#arrays.length(ruchesTropLoins)} &gt; 0"
+		class="container-fluid accordion">
+		<h1 class="item" th:text="${#arrays.length(ruchesTropLoins)} + ' ruche(s) à plus de ' + 
+			${#numbers.formatDecimal(distRuchesTropLoins,1,0)} + 'm de leurs ruchers'"></h1>
+		<div>
+		<table class="table table-bordered table-striped datatable-tri">
+			<thead>
+				<tr>
+					<th scope="col" th:text="#{nom}"></th>
+					<th scope="col" th:text="#{rucher}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="rucheTropLoin : ${ruchesTropLoins}">
+					<td><a th:href="@{'/ruche/'+${rucheTropLoin.id}}"
+						th:text="${rucheTropLoin.nom}"></a></td>
+					<td><a th:href="@{'/rucher/'+${rucheTropLoin.rucher?.id}}"
+						th:text="${rucheTropLoin.rucher?.nom}"></a></td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+	</div>
+	<div th:if="${#arrays.length(ruchesPasDEvenement)} &gt; 0"
+		class="container-fluid accordion">
+		<h1 class="item"
+			th:text="${#arrays.length(ruchesPasDEvenement)} + ' ruche(s) sans événement depuis ' + 
+				${retardRucheEvenement} + ' semaines'"></h1>
+		<div>
+		<table class="table table-bordered table-striped datatable-tri">
+			<thead>
+				<tr>
+					<th scope="col" th:text="#{nom}"></th>
+					<th scope="col" th:text="#{rucher}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="ruchePasDEvenement : ${ruchesPasDEvenement}">
+					<td><a th:href="@{'/ruche/'+${ruchePasDEvenement.id}}"
+						th:text="${ruchePasDEvenement.nom}"></a></td>
+					<td><a
+						th:href="@{'/rucher/'+${ruchePasDEvenement.rucher?.id}}"
+						th:text="${ruchePasDEvenement.rucher?.nom}"></a></td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+	</div>
+	<br />
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

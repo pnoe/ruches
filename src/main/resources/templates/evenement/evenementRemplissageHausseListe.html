@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:replace="include :: moment"></script>
+<script th:replace="include :: jquerydaterangepicker"></script>
+<link th:replace="include :: cssjquerydaterangepicker"/>
+<script th:src="@{/js/ruches/evenementListe.js}"></script>
+<script th:inline="javascript">
+	const listeEvenements = [[#{listeEvenements}]];
+	const buttontextprint = [[#{buttontextprint}]];
+	const buttontextcol = [[#{buttontextcol}]];
+	$(document).ready(function() {
+		evenementListe(true);
+	});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar">Menu</nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col" th:text="#{evenementremplissagehausse}">
+			</div>
+			<div th:insert="includeForm :: evenementListeDates(retController='/evenement/hausse/listeRemplissageHausse')" class="col">
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<table class="table table-bordered table-striped dt-responsive" id="evenements">
+			<thead>
+				<tr>
+					<th th:text="#{date}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{ruche}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{essaim}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{rucher}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{hausse}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{remplissage}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="evenement : ${evenements}">
+					<td>
+						<a th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
+							th:href="@{'/evenement/'+${evenement.id}}"></a>
+					</td>
+					<td th:text="${evenement.ruche?.nom}"></td>
+					<td th:text="${evenement.essaim?.nom}"></td>
+					<td th:text="${evenement.rucher?.nom}"></td>
+					<td th:text="${evenement.hausse?.nom}"></td>
+					<td th:text="${evenement.valeur}"></td>
+					<td th:text="${evenement.commentaire}"></td>
+				</tr>				
+			</tbody>
+		</table>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:inline="javascript">
+$(document).ready(function() {
+    $('#hausses').DataTable({
+        dom: 'Blftip',
+        buttons: [
+	    	'csv',
+	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
+	    		title: [[#{listeHausses}]] + " " + (new Date()).toLocaleDateString()},
+	        {extend: 'print', text: [[#{buttontextprint}]]},
+	        {extend: 'colvis', text: [[#{buttontextcol}]]}
+        ]
+    });  
+});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item" th:text="#{lesHausses}"></h1>
+			</div>
+			<div class="col">
+				<a id="cree" th:href="@{/hausse/cree}"
+				  class="oi oi-plus" th:title="#{ajouterHausse}" aria-hidden="true"></a> 
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<table class="table table-bordered table-striped dt-responsive" id="hausses">
+			<thead>
+				<tr>
+					<th th:text="#{nom}"></th>
+					<th th:text="#{ruche}"></th>
+					<th th:text="#{essaim}"></th>
+					<th th:text="#{rucher}"></th>
+					<th th:text="#{dateAcquisition}"></th>
+					<th th:if="${session.voirInactif}" th:text="#{active}"></th>
+					<th th:text="#{poidsVide}"></th>
+					<th th:text="#{nbCadres}"></th>
+					<th th:text="#{nbCadresMax}"></th>
+					<th th:text="#{commentaire}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="hausse : ${hausses}">
+					<td><a th:href="@{'/hausse/'+${hausse.id}}"
+						th:text="${hausse.nom}"></a></td>
+					<td><a th:href="@{'/ruche/'+${hausse.ruche?.id}}"
+						th:text="${hausse.ruche?.nom}"></a></td>
+					<td><a th:href="@{'/essaim/'+${hausse.ruche?.essaim?.id}}"
+						th:text="${hausse.ruche?.essaim?.nom}"></a></td>
+					<td><a th:href="@{'/rucher/'+${hausse.ruche?.rucher?.id}}"
+						th:text="${hausse.ruche?.rucher?.nom}"></a></td>
+					<td th:text="${hausse.dateAcquisition}"></td>
+					<td th:if="${session.voirInactif}" th:text="${hausse.active}? #{oui} : #{non}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(hausse.poidsVide,1,2,'DEFAULT')}"></td>
+					<td class="num" th:text="${hausse.nbCadres}"></td>
+					<td class="num" th:text="${hausse.nbCadresMax}"></td>
+					<td th:text="${hausse.commentaire}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

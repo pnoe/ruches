@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:inline="javascript">
+	$().ready(function() {
+		$("#nom").focus();
+		jQuery.validator.addMethod("nomExiste", function(value) {   
+    		return $.inArray(value, [[${rucheTypeNoms}]]) == -1;
+			}, [[#{nomexiste}]]);
+		$("#rucheTypeForm").validate({
+			rules : {
+				nom : {
+					required : true,
+					nomExiste : true
+				},
+				nbCadresMax : {
+					required : true,
+					digits : true,
+				}
+			}
+		});
+	});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item" th:unless="${rucheType.id}" th:text="#{ajouterRucheType}"></h1>
+				<h1 class="item" th:if="${rucheType.id}">
+					<th:block th:text="#{modification}"></th:block>
+					<a th:href="@{/rucheType/liste}"
+					th:text="#{rucheType} + ' ' + ${rucheType.nom}"></a>
+				</h1>
+			</div>
+		</div>
+	</div>
+	<form action="#" th:action="@{/rucheType/sauve}"
+		th:object="${rucheType}" method="post" id="rucheTypeForm">
+		<input type="hidden" th:field="*{id}" />
+		<div th:insert="includeForm :: nomField"></div>
+		<div class="form-group">
+			<label for="nbCadresMax" th:text="#{nbCadresMax}"></label> <input
+				class="form-control" type="number" th:field="*{nbCadresMax}"
+				th:errorclass="fieldError" id="nbCadresMax" name="nbCadresMax" />
+		</div>
+		<div th:insert="includeForm :: BtnForm"></div>
+	</form>
+	<footer th:include="include::footer"></footer>
+</body>
+</html>

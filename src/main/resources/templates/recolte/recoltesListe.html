@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:inline="javascript">
+$(document).ready(function() {
+    $('#recoltes').DataTable({
+    	dom: 'Blftip',
+	    buttons: [
+	    	'csv',
+	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
+	    		title: [[#{listeRuches}]] + " " + (new Date()).toLocaleDateString()},
+            {extend: 'print', text: [[#{buttontextprint}]]},
+            {extend: 'colvis', text: [[#{buttontextcol}]]}
+        ],
+    	"order": [ [ 0, "desc" ] ]
+    });
+});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+			<h1 class="item" th:text="#{lesRecoltes}"></h1>
+			</div>
+			<div class="col">
+				<a id="cree" th:href="@{/recolte/cree}"
+				  class="oi oi-plus" th:title="#{ajouterRecolte}" aria-hidden="true"></a>
+				<a th:href="@{/recolte/statistiques/essaim}"
+				  class="oi oi-bar-chart" th:title="#{statistiquesessaims}" aria-hidden="true"></a>
+        	</div>
+        </div>
+    </div>
+	<div class="container-fluid">
+	<table class="table table-bordered table-striped dt-responsive" id="recoltes">			
+			<thead>
+				<tr>
+					<th th:text="#{date}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{rucher}"></th>
+					<th th:text="#{typeMiel}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{poidsMielPot}"></th>
+					<th th:text="#{commentaire}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="recolte : ${recoltes}">
+					<td><a th:href="@{'/recolte/'+${recolte.id}}"
+						th:text="${#temporals.format(recolte.date, 'yyyy/MM/dd HH:mm')}"></a></td>
+					<td th:text="${ruchers[recolteStat.index]}"></td>
+					<td th:text="#{${recolte.typeMiel}}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(recolte.poidsMiel,1,2,'DEFAULT')}"></td>
+					<td th:text="${recolte.commentaire}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

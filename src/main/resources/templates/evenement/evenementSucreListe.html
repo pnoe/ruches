@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:replace="include :: moment"></script>
+<script th:replace="include :: jquerydaterangepicker"></script>
+<link th:replace="include :: cssjquerydaterangepicker"/>
+<script th:src="@{/js/ruches/evenementListe.js}"></script>
+<script th:inline="javascript">
+$(document).ready(function() {
+    $('#evenementssucre').DataTable({
+        order: [ [ 0, 'desc' ] ],
+        dom: 'Blftip',
+        buttons: [
+	    	'csv',
+	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
+	    		title: [[#{listeEvenements}]] + " " + (new Date()).toLocaleDateString()},
+	            {extend: 'print', text: [[#{buttontextprint}]]},
+	            {extend: 'colvis', text: [[#{buttontextcol}]]}
+        ],   
+        "footerCallback": function(row, data, start, end, display) {
+            var api = this.api(), data;
+            // Remove the formatting to get integer data for summation
+            var intVal = function (i) {
+                return typeof i === 'string' ?
+                    i.replace(',','')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+            var valPoids = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[,]/, '.')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+ 			let coltotal=4;
+            let total = api
+                .column(coltotal, {search:'applied'})
+                .data()
+                .reduce(function (a, b) {
+                    return valPoids(a) + valPoids(b);
+                }, 0);
+            let pageTotal = api
+                .column( coltotal, {page: 'current'})
+                .data()
+                .reduce(function (a, b) {
+                    return valPoids(a) + valPoids(b);
+                }, 0);
+            $(api.column(coltotal).footer()).html(
+            		Number.parseFloat(total).toFixed(2) +'<br/>page '+ Number.parseFloat(pageTotal).toFixed(2));
+        }  
+    });
+    evenementListe(false);
+});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar">Menu</nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col" th:text="#{evenementssucre}">
+			</div>
+			<div th:insert="includeForm :: evenementListeDates(retController='/evenement/essaim/listeSucre')" class="col">
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<table class="table table-bordered table-striped dt-responsive" id="evenementssucre">
+			<thead>
+				<tr>
+					<th th:text="#{date}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{ruche}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{essaim}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{rucher}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{poidsVide}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="evenement : ${evenements}">
+					<td>
+						<a th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
+							th:href="@{'/evenement/'+${evenement.id}}"></a>
+					</td>
+					<td th:text="${evenement.ruche?.nom}"></td>
+					<td th:text="${evenement.essaim?.nom}"></td>
+					<td th:text="${evenement.rucher?.nom}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(evenement.valeur,1,2,'COMMA')}"></td>
+					<td th:text="${evenement.commentaire}"></td>
+				</tr>				
+			</tbody>
+			<tfoot>
+				<tr>
+					<th colspan="4" style="text-align:right" th:text="#{Total}"></th>
+					<th></th>
+					<th></th>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

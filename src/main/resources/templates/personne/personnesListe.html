@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:inline="javascript">
+$(document).ready(function() {
+    $('#personnes').DataTable({
+        dom: 'Blftip',
+	    buttons: [
+	    	'csv',
+	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
+	    		title: [[#{listePersonnes}]] + " " + (new Date()).toLocaleDateString()},
+	        {extend: 'print', text: [[#{buttontextprint}]]},
+	        {extend: 'colvis', text: [[#{buttontextcol}]]}
+        ]
+    });
+});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+			<h1 class="item" th:text="#{lesPersonnes}"></h1>
+			</div>
+			<div class="col">
+				<a id="cree" th:href="@{/personne/cree}"
+				  class="oi oi-plus" th:title="#{ajouterPersonne}" aria-hidden="true"></a>
+        	</div>
+        </div>
+    </div>
+	<div class="container-fluid">
+		<table class="table table-bordered table-striped dt-responsive" id="personnes">			
+			<thead>
+				<tr>
+					<th th:text="#{nom}"></th>
+					<th th:text="#{prenom}"></th>
+					<th th:text="#{email}"></th>
+					<th th:text="#{adresse}"></th>
+					<th th:text="#{login}"></th>
+					<th th:text="#{roles}"></th>
+					<th th:if="${session.voirInactif}" th:text="#{active}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="personne : ${personnes}">
+					<td><a th:href="@{'/personne/'+${personne.id}}"
+						th:text="${personne.nom}"></a></td>
+					<td th:text="${personne.prenom}"></td>
+					<td th:text="${personne.email}"></td>
+					<td th:text="${personne.adresse}"></td>
+					<td th:text="${personne.login}"></td>
+					<td th:text="${personne.roles}"></td>
+					<td th:if="${session.voirInactif}" th:text="${personne.active}? #{oui} : #{non}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:inline="javascript">
+	$(document).ready(function() {
+		const tableRetrait = $('#retraitHausses').DataTable({
+			paging: false,
+			searching: false,
+			info: false,
+			ordering: true,
+			rowReorder: {
+		        selector: 'tr'
+		    },
+			columns : [
+		    	{ orderable : false },
+		    	{ orderable : false }
+		  	]
+		});
+		tableRetrait.on( 'row-reordered', function (e, diff) {
+			if(diff.length === 0) return;
+			let hausses = [];
+			let ordre = [];
+		    for ( let i=0, ien=diff.length ; i<ien ; i++ ) {
+		    	const href = $(diff[i].node).find('a').attr('href');
+		    	hausses.push(href.substring(href.lastIndexOf('/') + 1));
+		    	ordre.push($(diff[i].node).children(":first").text()[0]);
+		    }
+		    let requestData = {hausses : hausses, ordre : ordre};
+			const _csrf_token = [[${_csrf.token}]];
+		    const _csrf_param_name = [[${_csrf.parameterName}]];
+		    requestData[_csrf_param_name] = _csrf_token;
+			$.post( [[@{/ruche/ordreHausses/}]] + [[${ruche.id}]],
+					requestData).done(function (data) {
+						if(!data.equals("OK")) {
+							alert( data );
+						}
+			});
+		});
+		$('#ajoutHausses').DataTable();
+	});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					<th:block th:text="#{ajoutretraithausses}"></th:block>
+					<a th:href="@{'/ruche/'+${ruche.id}}"
+						th:text="#{ruche} + ' ' + ${ruche.nom}"></a>
+				</h1>
+			</div>
+		</div>
+	</div>
+	<br />
+	<div class="container-fluid">
+		<h6 th:text="#{retirerreordonnerHausses}"></h6>
+		<table class="table table-bordered" id="retraitHausses">
+			<thead>
+				<tr>
+					<th th:text="#{ordre}"></th>
+					<th th:text="#{nom}"></th>	
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="hausseRuche : ${haussesRuche}">
+					<td th:text="${hausseRuche.ordreSurRuche}"></td>
+					<td><a data-toggle="tooltip" th:title="#{retirerhausse}"
+						th:href="@{'/evenement/ruche/hausse/retrait/'+${ruche.id}+'/'+${hausseRuche.id}}"
+						th:text="${hausseRuche.nom}"></a></td>
+				</tr>
+			</tbody>
+		</table>
+		<h6 th:text="#{ajouterHausses}"></h6>
+		<table class="table table-bordered" id="ajoutHausses">
+			<thead>
+				<tr>
+					<th th:text="#{nom}"></th>
+					<th th:text="#{ruche}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="hausseRucheNull : ${haussesRucheNull}">
+					<td><a data-toggle="tooltip" th:title="#{ajouterhausse}"
+						th:href="@{'/evenement/ruche/hausse/ajout/'+${ruche.id}+'/'+${hausseRucheNull.id}}"
+						th:text="${hausseRucheNull.nom}"></a></td>
+					<td></td>
+				</tr>
+				<tr th:each="hausseRucheNot : ${haussesRucheNot}">
+					<td><a data-toggle="tooltip" th:title="#{ajouterhausse}"
+						th:href="@{'/evenement/ruche/hausse/ajout/'+${ruche.id}+'/'+${hausseRucheNot.id}}"
+						th:text="${hausseRucheNot.nom}"></a></td>
+					<td th:text="${hausseRucheNot.ruche?.nom}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

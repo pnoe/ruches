@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					<th:block th:text="#{meteo}+' '"></th:block>
+					<a th:href="@{'/rucher/'+${rucher.id}}"
+						th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+				</h1>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid " id="meteo">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th th:text="#{date}"></th>
+					<th th:text="#{description}"></th>
+					<th th:text="#{detail}"></th>
+					<th th:text="#{temperature}"></th>
+					<th th:text="#{humidite}"></th>
+					<th th:text="#{pression}"></th>
+					<th th:text="#{ventVitesse}"></th>
+					<th th:text="#{ventDirection}"></th>
+					<th th:text="#{nuages}"></th>
+					<th th:text="#{pluieVol3h}"></th>
+					<th th:text="#{neigeVol3h}"></th>
+					<th th:text="#{leverSoleil}"></th>
+					<th th:text="#{coucherSoleil}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+				    <td th:text="${#dates.format(currentWeather.dateTime, 'dd/MM/yyyy HH:mm')}"></td>
+					<td th:text="${currentWeather.weatherList[0].mainInfo}"></td>
+					<td th:text="${currentWeather.weatherList[0].description}"></td>
+					<td th:text="${#numbers.formatDecimal(currentWeather.mainData.temp,1,0)}"></td>
+					<td th:text="${#numbers.formatDecimal(currentWeather.mainData.humidity,1,0)}"></td>
+					<td th:text="${#numbers.formatDecimal(currentWeather.mainData.pressure,1,0)}"></td>
+					<td th:text="${#numbers.formatDecimal(currentWeather.windData?.speed,1,0)}"></td>
+					<td th:text="${#numbers.formatDecimal(currentWeather.windData?.degree,1,0)}"></td>
+					<td th:text="${#numbers.formatDecimal(currentWeather.cloudData?.cloud,1,0)}"></td>
+					<td th:text="${#numbers.formatDecimal(currentWeather.rainData?.precipVol3h,1,0)}"></td>
+					<td th:text="${#numbers.formatDecimal(currentWeather.snowData?.snowVol3h,1,0)}"></td>
+					<td th:text="${#dates.format(currentWeather.systemData.sunriseDateTime, 'dd/MM/yyyy HH:mm')}"></td>
+					<td th:text="${#dates.format(currentWeather.systemData.sunsetDateTime, 'dd/MM/yyyy HH:mm')}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

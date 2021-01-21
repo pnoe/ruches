@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include">
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<img th:src="@{/images/abeille_erreur.jpeg}" />
+	<h1 th:text="#{oups}"></h1>
+	<br />
+	<p th:if="${path}">
+		<b>Page:</b> <span th:text="${path}"></span>
+	</p>
+	<p th:if="${timestamp}">
+		<b><span th:text="#{occurred}"></span></b>
+		<span th:text="${timestamp}"></span>
+	</p>
+	<br/>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

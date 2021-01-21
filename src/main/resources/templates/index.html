@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div th:fragment="logout" class="logout"
+		sec:authorize="isAuthenticated()">
+		<span th:text="#{connecte}"></span> : <span sec:authentication="name"></span> | Roles: <span
+			sec:authentication="principal.authorities"></span>
+		<div>
+			<form action="#" th:action="@{/logout}" method="post">
+				<input type="submit" th:value="#{deconnexion}" />
+			</form>
+		</div>
+	</div>
+	<br />
+	<h1 class="item messageinfo" th:if="${message}" th:text="${message}"></h1>
+	<div class="row">
+		<header class="col jumbotron jumbotron-fluid">
+			<div class="container-fluid">
+				<h1 id="titre" class="display-4 text-primary" th:utext="${accueilTitre}">
+				</h1>
+			</div>
+		</header>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

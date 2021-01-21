@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:inline="javascript">
+$(document).ready(function() {
+    $('#ruchers').DataTable({
+        dom: 'Blftip',
+	    buttons: [
+	    	'csv',
+	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
+	    		title: [[#{listeRuchers}]] + " " + (new Date()).toLocaleDateString()},
+	        {extend: 'print', text: [[#{buttontextprint}]]},
+	        {extend: 'colvis', text: [[#{buttontextcol}]]}
+        ]
+    });
+});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+			<h1 class="item" th:text="#{lesRuchers}"></h1>
+			</div>
+			<div class="col">
+       		 <a id="cree" th:href="@{/rucher/cree}" class="oi oi-plus" th:title="#{ajouterRucher}" aria-hidden="true"></a>
+			 <a th:href="@{/rucher/Gg/}" class="oi oi-globe" th:title="#{carteGg}" aria-hidden="true"></a>
+       		 <a th:href="@{/rucher/Ign/}" class="oi oi-signpost" th:title="#{carteIgn}" aria-hidden="true"></a>
+			 <a th:href="@{/rucher/Osm/}" class="oi oi-flag" th:title="#{carteOsm}" aria-hidden="true"></a>
+			 <a th:href="@{/rucher/statistiques}"
+				  class="oi oi-bar-chart" th:title="#{statistiquesruchers}" aria-hidden="true"></a>
+        	</div>
+        </div>
+    </div>
+	<div class="container-fluid" id="ruchersDiv">
+	<table class="table table-bordered table-striped dt-responsive" id="ruchers">			
+			<thead>
+				<tr>
+					<th th:text="#{nom}"></th>
+					<th th:if="${session.voirInactif}" th:text="#{actif}"></th>
+					<th th:text="#{contact}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{adresse}"></th>
+					<th:block th:if="${session.voirLatLon}">
+						<th style="background-color:LemonChiffon" th:text="#{latitude}"></th>
+						<th style="background-color:LemonChiffon" th:text="#{longitude}"></th>
+					</th:block>
+					<th style="background-color:LemonChiffon" th:text="#{altitude}"></th>
+					<th th:text="#{ressource}"></th>
+					<th th:text="#{lesRuches}"></th>
+					<th th:text="#{lesHausses}"></th>
+					<th th:text="#{commentaire}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="rucher : ${ruchers}">
+					<td><a th:href="@{'/rucher/'+${rucher.id}}"
+						th:text="${rucher.nom}"></a></td>
+					<td th:if="${session.voirInactif}" th:text="${rucher.actif}? #{oui} : #{non}"></td>
+					<td th:text="${rucher.contact?.nom}"></td>
+					<td th:text="${rucher.adresse}"></td>
+					<th:block th:if="${session.voirLatLon}">
+						<td class="num" th:text="${#numbers.formatDecimal(rucher.latitude,1,4)}"></td>
+						<td class="num" th:text="${#numbers.formatDecimal(rucher.longitude,1,4)}"></td>
+					</th:block>
+					<td class="num" th:text="${rucher.altitude}"></td>
+					<td th:text="${rucher.ressource}"></td>
+					<td class="num" th:text="${nbRuches[rucherStat.index]}"></td>
+					<td class="num" th:text="${nbHausses[rucherStat.index]}"></td>
+					<td th:text="${rucher.commentaire}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

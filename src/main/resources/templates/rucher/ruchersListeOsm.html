@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:replace="include :: jsol"></script>
+<script th:replace="include :: jsGpOsmPluginOpenLayers"></script>
+<script th:src="@{/js/ruches/rucherListeOl.js}"></script>
+<script th:inline="javascript">
+	const ruchers = [[${ruchers}]];	
+	const nomRuches = [[${rucheNoms}]];
+	const recentertxt = [[#{recentrer?}]];
+	const lesRucherstxt = [[#{lesRuchers}]];
+	const lesRuchestxt = [[#{lesRuches}]];
+	const ruchertxt = [[#{rucher}]];
+	const couchemarqueursrucherstxt = [[#{couchemarqueursruchers}]];
+	const pleinecrantxt = [[#{pleinecran}]];
+	const urlruches = [[@{/}]];
+	const _csrf_token = [[${_csrf.token}]];
+	window.onload = function () {
+		rucherListeIgn(false); 			
+	}
+</script>
+<script th:replace="include :: cssol"></script>
+<script th:replace="include :: cssGpPluginOpenLayers"></script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item" th:text="#{rucherscarteosm}"></h1>
+			</div>
+			<div class="col">
+				<a href="#" class="oi oi-question-mark" data-toggle="popover" data-trigger="focus" tabindex="0" role="button"
+					th:attr="data-content=#{aiderucherlisteignmarkers}"></a>
+				<input type="text" placeholder="Recherche..." id="searchtext"/>
+				<a th:href="@{/rucher/recentre}"
+				  class="recentre oi oi-aperture" th:title="#{recentrer}" aria-hidden="true">
+       			</a>
+			</div>		
+		</div>
+	</div>
+	<div id="map"></div>
+	<div id="popup" class="ol-popup">
+      <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+      <div id="popup-content"></div>
+    </div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

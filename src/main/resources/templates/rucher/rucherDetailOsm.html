@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:replace="include :: jsol"></script>
+<script th:replace="include :: jsGpOsmPluginOpenLayers"></script>
+<script th:src="@{/js/ruches/rucherDetailOl.js}"></script>
+<script th:src="@{/js/ruches/rucherDetailCarto.js}"></script>
+<script th:replace="include :: dom-to-image"></script>
+<script th:replace="include :: jspdf"></script>
+<script th:inline="javascript">
+	let rucheParcours = [[${rucheParcours}]];
+	let distParcours = [[${distParcours}]];
+	const ruches = [[${ruches}]];
+	const rucher = [[${rucher}]];
+	const nomHausses = [[${hausseNoms}]];
+	const rapprochertxt = [[#{rapprocher?}]];
+	const pleinecran = [[#{pleinecran}]];
+	const lesRuches = [[#{lesRuches}]];
+	const couchemarqueursruches = [[#{couchemarqueursruches}]];
+	const essaimtxt = [[#{essaim}]];
+	const pasdessaimtxt = [[#{Pasdessaim}]];
+	const ruchetxt = [[#{ruche}]];
+	const lesHausses = [[#{lesHausses}]];
+	const pasdehaussetxt = [[#{Pasdehausse}]];
+	const parcourstxt = [[#{parcours}]];
+	const parcoursoptimumtxt = [[#{parcoursoptimum}]];
+	const ruchestxt= [[#{ruches}]];
+	const distancedeparcourstxt = [[#{distancedeparcours}]];
+	const entreetxt = [[#{Entree}]];
+	const ruchesurl = [[@{/}]];
+	const _csrf_token = [[${_csrf.token}]];
+	window.onload = function () {
+ 		rucherDetail(false);
+	}
+</script>
+<script th:replace="include :: cssol"></script>
+<script th:replace="include :: cssGpPluginOpenLayers"></script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					<th:block th:text="#{carteOsm}+' '"></th:block>
+					<a th:href="@{'/rucher/'+${rucher.id}}"
+						th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+				</h1>
+			</div>
+			<div class="col">
+				<a href="#" class="oi oi-question-mark" data-toggle="popover"
+					data-trigger="focus" tabindex="0" role="button"
+					th:attr="data-content=#{aiderucherdetailignmarkers}"></a>&nbsp;&nbsp;
+				<input type="text" th:placeholder="#{recherche}" id="searchtext" />
+				<a th:href="@{'/rucher/rapproche/'+${rucher.id}}"
+				  class="rapproche oi oi-aperture" th:title="#{rapprocher}"
+					aria-hidden="true"></a>
+				<span id="liste" class="liste oi oi-list"
+					th:title="#{listeRuchesOrdonnees}" aria-hidden="true"></span>
+				<span id="listeplus" class="liste oi oi-list-rich"
+					th:title="#{listePlusRuchesOrdonnees}" aria-hidden="true"></span>
+				<span id="export-png" class="oi oi-file" th:title="#{exportPng}"
+					aria-hidden="true"></span>
+				<a id="image-download" download="map.png"></a>
+				<span id="export-gpx" class="oi oi-globe" th:title="#{exportGPX}"
+					aria-hidden="true"></span>
+				<a id="gpx-download"></a>	
+				<span id="export-kml" class="oi oi-contrast" th:title="#{exportKML}"
+					aria-hidden="true"></span>
+				<a id="kml-download"></a>				
+				<span th:if="${ruches.size()} > ${rucherParcoursNbruches}" id="parcours-redraw"
+					class="oi oi-reload" th:title="#{parcoursRecalcul}"
+					aria-hidden="true"></span>				
+				<span id="export-pdf" class="oi oi-print"
+					th:title="#{exportPdf}" aria-hidden="true"></span>
+				<form style="display:inline;" class="form">
+					<select id="format">
+						<option value="a3">A3</option>
+						<option value="a4" selected>A4</option>
+					</select> <select id="resolution">
+						<option value="72">72 dpi</option>
+						<option value="150" selected>150 dpi</option>
+						<option value="300">300 dpi</option>
+					</select>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div id="map"></div>
+	<div id="popup" class="ol-popup">
+		<a href="#" id="popup-closer" class="ol-popup-closer"></a>
+		<div id="popup-content"></div>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:inline="javascript">
+$(document).ready(function() {
+	$('#retraitHausseRecolte').DataTable({
+    });	
+	$('#ajoutHausseRecolte').DataTable({
+    });	
+});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+				  <th:block th:text="#{ajoutretraithaussesrecolte}"></th:block>
+				  <a th:href="@{'/recolte/'+${recolte.id}}"
+					th:text="#{recolte} + ' ' + ${#temporals.format(recolte.date, 'yyyy/MM/dd HH:mm')}"></a>
+				</h1>
+			</div>
+        </div>
+    </div>
+	<div class="container-fluid">
+		<table class="table table-bordered">			
+		<thead>
+			<tr>
+				<th th:text="#{typeMiel}"></th>
+				<th th:text="#{rucher}"></th>
+				<th th:text="#{poidsMiel}"></th>
+				<th th:text="#{commentaire}"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td th:text="${recolte.typeMiel}"></td>
+				<td th:text="${rucher}"></td>
+				<td class="num" th:text="${#numbers.formatDecimal(recolte.poidsMiel,1,2,'DEFAULT')}"></td>
+				<td th:text="${recolte.commentaire}"></td>
+			</tr>
+		</tbody>
+	</table>
+	<h6 th:text="#{retirerHausses}" ></h6>
+	<table class="table table-bordered" id="retraitHausseRecolte">			
+		<thead>
+			<tr>
+				<th th:text="#{nom}"></th>
+				<th th:text="#{rucher}"></th>
+				<th th:text="#{ruche}"></th>
+				<th th:text="#{essaim}"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="hausseRecolte : ${haussesRecolte}">
+				<td><a data-toggle="tooltip" th:title="#{retirerhausse}"
+					th:href="@{'/recolte/retraitHausse/'+${recolte.id}+'/'+${hausseRecolte.id}}"
+					th:text="${hausseRecolte.nom}"></a></td>
+				<td><a th:href="@{'/rucher/'+${hausseRecolte.ruche?.rucher?.id}}"  
+					th:text="${hausseRecolte.ruche?.rucher?.nom}"></a></td>
+				<td><a th:href="@{'/ruche/'+${hausseRecolte.ruche?.id}}" 
+					th:text="${hausseRecolte.ruche?.nom}"></a></td>
+				<td><a th:href="@{'/essaim/'+${hausseRecolte.ruche?.essaim?.id}}" 
+					th:text="${hausseRecolte.ruche?.essaim?.nom}"></a></td>
+			</tr>
+		</tbody>
+	</table>
+	<h6 th:text="#{ajouterHausses}"></h6>
+	<table class="table table-bordered" id="ajoutHausseRecolte">			
+		<thead>
+			<tr>
+				<th th:text="#{nom}"></th>
+				<th th:text="#{rucher}"></th>
+				<th th:text="#{ruche}"></th>
+				<th th:text="#{essaim}"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="hausseNotInRecolte : ${haussesNotInRecolte}">
+				<td><a data-toggle="tooltip" th:title="#{ajouterhausse}" 
+					th:href="@{'/recolte/ajoutHausse/'+${recolte.id}+'/'+${hausseNotInRecolte.id}}"
+					th:text="${hausseNotInRecolte.nom}"></a></td>
+				<td><a th:href="@{'/rucher/'+${hausseNotInRecolte.ruche?.rucher?.id}}"  
+					th:text="${hausseNotInRecolte.ruche?.rucher?.nom}"></a></td>
+				<td><a th:href="@{'/ruche/'+${hausseNotInRecolte.ruche?.id}}" 
+					th:text="${hausseNotInRecolte.ruche?.nom}"></a></td>
+				<td><a th:href="@{'/essaim/'+${hausseNotInRecolte.ruche?.essaim?.id}}" 
+					th:text="${hausseNotInRecolte.ruche?.essaim?.nom}"></a></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

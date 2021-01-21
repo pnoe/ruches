@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:inline="javascript">
+$(document).ready(function() {
+	let table = $('#essaims').DataTable({
+    	select: true,
+        dom: 'Blftip',
+        buttons: [
+	    	'csv',
+	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
+	    		title: [[#{listeEssaims}]] + " " + (new Date()).toLocaleDateString()},
+	        {extend: 'print', text: [[#{buttontextprint}]]},
+	        {extend: 'colvis', text: [[#{buttontextcol}]]}
+        ]
+    });
+	function updateLinks( e, dt, type, indexes ) {
+    	if ( type === 'row' ) {
+    		let essaimNoms = "";
+            table.rows( { selected: true } ).data().pluck( 0 ).each(function (value, index) {
+            	// on récupère le nom de l'essaim dans le texte de la balise <a ...>
+            	let a = document.createElement('a');
+            	a.innerHTML = value;
+            	essaimNoms += a.textContent + ",";
+            });
+            if (essaimNoms) { 
+                // on enlève la dernière virgule et met à jour l'url de traitement
+            	essaimNoms = essaimNoms.substring(0, essaimNoms.length-1);
+            	document.getElementById('traitementvarroa').setAttribute('href', [[@{/evenement/essaim/traitementLot/}]] + essaimNoms);
+            	document.getElementById('traitementSucre').setAttribute('href', [[@{/evenement/essaim/sucreLot/}]] + essaimNoms);
+            } else {
+            	document.getElementById('traitementvarroa').setAttribute('href', "#");
+            	document.getElementById('traitementSucre').setAttribute('href', "#");
+            }      
+        }
+	}
+    table.on( 'select deselect', updateLinks);
+    $('.selection').on('click', function () {
+    	if ($(this).attr("href") == "#") {
+    		return confirm([[#{selectesssaimstraiter}]]);	
+    	}      
+    });
+});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item" th:text="#{lesEssaims}"></h1>
+			</div>
+			<div class="col">
+				<a id="cree" th:href="@{/essaim/cree}"
+				  class="oi oi-plus" th:title="#{ajouterEssaim}" aria-hidden="true"></a>&nbsp;
+       			<a id="traitementvarroa" href="#"
+					class="selection oi oi-bug" th:title="#{evenementsTraitement}" aria-hidden="true"></a>
+				<a id="traitementSucre" href="#"
+				  class="selection oi oi-beaker" th:title="#{evenementsSucre}" aria-hidden="true"></a>
+
+				<a th:href="@{/essaim/statistiques}"
+				  class="oi oi-bar-chart" th:title="#{statistiquesessaims}" aria-hidden="true"></a>
+				  
+        	</div>
+        </div>
+    </div>
+	<div class="container-fluid">
+	<table class="table table-bordered table-striped dt-responsive" id="essaims">			
+			<thead>
+				<tr>
+					<th th:text="#{nom}"></th>
+					<th th:text="#{ruche}"></th>
+					<th th:text="#{rucher}"></th>
+					<th th:if="${session.voirInactif}" th:text="#{actif}"></th>
+					<th th:text="#{dateAcquisition}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{reineMarquee}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{reineCouleurMarquage}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{reineDateNaissance}"></th>
+					<th th:text="#{souche}"></th>
+					<th th:text="#{agressivite}"></th>
+					<th th:text="#{proprete}"></th>						
+					<th th:text="#{commentaire}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="essaim : ${essaims}">
+					<td><a th:href="@{'/essaim/'+${essaim.id}}"
+						th:text="${essaim.nom}"></a></td>												
+					<td><a th:href="@{'/ruche/'+${ruches[essaimStat.index][0]}}"
+						th:text="${ruches[essaimStat.index][1]}"></a></td>
+					<td><a th:href="@{'/rucher/'+${ruches[essaimStat.index][2]}}"
+						th:text="${ruches[essaimStat.index][3]}"></a></td>
+					<td th:if="${session.voirInactif}" th:text="${essaim.actif}? #{oui} : #{non}"></td>
+					<td th:text="${essaim.dateAcquisition}"></td>
+					<td th:text="${essaim.reineMarquee}? #{oui} : #{non}"></td>
+					<td th:text="#{${essaim.reineCouleurMarquage}}"></td>
+					<td th:text="${essaim.reineDateNaissance}"></td>
+					<td><a th:href="@{'/essaim/'+${essaim.souche?.id}}"
+						th:text="${essaim.souche?.nom}"></a>
+					</td>
+					<td th:text="${essaim.agressivite}"></td>
+					<td th:text="${essaim.proprete}"></td>
+					<td th:text="${essaim.commentaire}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer th:include="include::footer"></footer>
+</body>
+</html>

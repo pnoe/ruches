@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:replace="include :: jsdatetimepicker"></script>
+<link th:replace="include :: cssdatetimepicker"/>
+<script th:replace="include :: localejsdatetimepicker"></script>
+<script th:inline="javascript">
+	$().ready(function() {
+		$("#valeur").focus();
+		$("#evenementForm").validate({
+			rules : {
+				date : {
+					required : true
+				},
+				valeur : {
+					required : true,
+					number : true
+				},
+				commentaire : {
+					maxlength : 255
+				}
+			}
+		});
+	});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+				  <th:block th:text="#{pesee} + ' '"></th:block>
+				  <a th:href="@{'/essaim/'+${ruche.essaim.id}}"
+					th:text="#{essaim} + ' ' + ${ruche.essaim.nom}"></a>
+				</h1>
+				<th:block th:text="${valeurRUCHEPESEE}?${#numbers.formatDecimal(valeurRUCHEPESEE,1,2)}+'kg le '+${#temporals.format(dateRUCHEPESEE,'dd/MM/yyyy')}:''">				
+				</th:block>
+        	</div>
+        </div>
+    </div>
+	<form action="#" th:action="@{'/evenement/ruche/sauve/'+${ruche.id}}"
+		method="post" id="evenementForm">
+		<input type="hidden" id="retourEssaim" name="retourEssaim" th:value="${retourEssaim}"/>
+		<input type="hidden" id="typeEvenement" name="typeEvenement" value="RUCHEPESEE" />
+		<div th:insert="includeForm :: date"></div>
+		<div th:insert="includeForm :: poidskg"></div>
+		<div th:insert="includeForm :: commentaire"></div>
+		<div th:insert="includeForm :: BtnForm"></div>
+	</form>
+	<footer th:include="include::footer"></footer>
+</body>
+</html>

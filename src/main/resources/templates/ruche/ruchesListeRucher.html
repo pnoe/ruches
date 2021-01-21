@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:inline="javascript">
+$(document).ready(function() {
+    $('#ruches').DataTable({
+        dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
+	    buttons: [
+	    	'csv',
+	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
+	    		title: [[#{listeRuches}]] + " " + (new Date()).toLocaleDateString()},
+            {extend: 'print', text: [[#{buttontextprint}]]},
+            {extend: 'colvis', text: [[#{buttontextcol}]]}
+        ]
+    });
+});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar">Menu</nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					<th:block th:text="#{listeRuches}+' '"></th:block>	
+					<a th:href="@{'/rucher/'+${rucher.id}}"
+						th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+				</h1>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<table class="table table-bordered table-striped" id="ruches">
+			<thead>
+				<tr>
+					<th style="background-color:LightGoldenRodYellow" th:text="#{Ordre}"></th>
+					<th style="background-color:LightGoldenRodYellow" th:text="#{nom}"></th>
+					<th th:text="#{essaim}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{daterucher}"></th>
+					<th th:if="${session.voirInactif}" th:text="#{active}"></th>
+					<th th:text="#{dateAcquisition}"></th>
+					<th th:text="#{poidsVide}"></th>
+					<th style="background-color:Tomato" th:text="#{nbCadres}"></th>
+					<th style="background-color:Tomato" th:text="#{nbCadresMax}"></th>
+					<th th:text="#{typeRuche}"></th>
+					<th th:text="#{lesHausses}"></th>
+					<th:block th:if="${session.voirLatLon}">
+						<th style="background-color: LemonChiffon" th:text="#{latitude}"></th>
+						<th style="background-color: LemonChiffon" th:text="#{longitude}"></th>
+					</th:block>
+					<th th:text="#{commentaire}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="ruche : ${ruches}">
+					<td th:text="${ordreRuche[rucheStat.index]}"></td>
+					<td><a th:href="@{'/ruche/'+${ruche.id}}"
+						th:text="${ruche.nom}"></a></td>
+					<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}"
+						th:text="${ruche.essaim?.nom}"></a></td>
+					<td th:text="${dateAjoutRucher[rucheStat.index]}"></td>
+					<td th:if="${session.voirInactif}"
+						th:text="${ruche.active}? #{oui} : #{non}"></td>						
+					<td th:text="${ruche.dateAcquisition}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
+					<td class="num" th:text="${listeEvenCadre[rucheStat.index]?.valeur}"></td>
+					<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
+					<td th:text="${ruche.type?.nom}"></td>
+					<td class="num" th:text="${nbHausses[rucheStat.index]}"></td>
+					<th:block th:if="${session.voirLatLon}">
+						<td class="num" th:text="${#numbers.formatDecimal(ruche.latitude,1,5)}"></td>
+						<td class="num" th:text="${#numbers.formatDecimal(ruche.longitude,1,5)}"></td>
+					</th:block>
+					<td th:text="${ruche.commentaire}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:replace="include :: jsdatepicker-fr"></script>
+<script th:inline="javascript">
+	$().ready(function() {
+		$("#nom").focus();
+		jQuery.validator.addMethod("nomExiste", function(value) {   
+    		return $.inArray(value, [[${rucheNoms}]]) == -1;
+			}, [[#{nomexiste}]]);
+		if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('fr') != -1)) {
+			$.datepicker.setDefaults(
+				$.datepicker.regional['fr']
+			);
+		} else {
+			$.datepicker.setDefaults(
+					$.datepicker.regional['en']
+				);
+		}
+		$.datepicker.setDefaults({
+			dateFormat : 'yy-mm-dd',
+			changeYear: true
+		});
+		$("#dateAcquisition").datepicker();
+		$("#rucheForm").validate({
+			rules : {
+				nom : {
+					required : true,
+					nomExiste : true
+				},
+				dateAcquisition : {
+					required : true
+				},
+				// permet de refuser 12.23 qui est accepté par le input type="number"
+				// mais mal interprété par java, accepte 12,23
+				poidsVide : {
+					required : true,
+					number : true
+				},
+				longitude : {
+					number : true
+				},
+				latitude : {
+					number : true
+				}
+			}
+		});
+	});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item" th:unless="${ruche.id}" th:text="#{ajouterRuche}"></h1>
+				<h1 class="item" th:if="${ruche.id}">
+					<th:block th:text="#{modification}"></th:block>
+					<a th:href="@{'/ruche/'+${ruche.id}}"
+					th:text="#{ruche} + ' ' + ${ruche.nom}"></a>
+				</h1>
+			</div>
+		</div>
+	</div>
+	<form action="#" th:action="@{/ruche/sauve}" th:object="${ruche}"
+		method="post" id="rucheForm">
+		<input type="hidden" th:field="*{id}" /> <input type="hidden"
+			th:field="*{essaim}" /> <input type="hidden" th:field="*{rucher}" />
+		<div th:insert="includeForm :: nomField"></div>
+		<div th:insert="includeForm :: activeField"></div>
+		<div class="form-group">
+			<label for="poidsVide" th:text="#{poidskg}"></label> <input
+				class="form-control" type="number" step="0.001"
+				th:field="*{poidsVide}" th:errorclass="fieldError" />
+				<!-- type="number" step="0.001"  -->
+		</div>
+		<div class="form-group">
+			<label for="type" th:text="#{typeRuche}"></label> <select
+				class="form-control" th:field="*{type}">
+				<option th:each="type : ${rucheTypes}" th:value="${type.id}"
+					th:text="${type.nom}"></option>
+			</select>
+		</div>
+		<div th:insert="includeForm :: dateAcquisitionField"></div>
+		<div th:insert="includeForm :: latitudeField"></div>
+		<div th:insert="includeForm :: longitudeField"></div>
+		<div th:insert="includeForm :: commentaireField"></div>
+		<div th:insert="includeForm :: BtnForm"></div>
+	</form>
+	<footer th:include="include::footer"></footer>
+</body>
+</html>

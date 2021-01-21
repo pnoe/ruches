@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:inline="javascript">
+$(document).ready(function() {
+    $('.oi-question-mark').popover({
+        html: true
+    });
+    $('.popover-dismiss').popover({
+        trigger: 'focus'
+    });
+    $('#statistiques').DataTable({
+    	dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
+	    buttons: [
+	    	'csv',
+            {extend: 'print', text: [[#{buttontextprint}]]}
+        ]
+    });
+} );
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item" th:text="#{ProductionEssaim}"></h1>
+			</div>
+			<div class="col">
+				<a href="#" class="oi oi-question-mark" data-toggle="popover"
+					data-trigger="focus" tabindex="0" role="button"
+					th:attr="data-content=#{aideStatistiqueEssaim}"></a>
+			</div>
+        </div>
+    </div>
+    <div class="container-fluid">
+	    <form action="#" th:action="@{/essaim/statistiques}"
+			method="post" id="evenementForm">
+			<div class="form-group row">
+				<label for="rucherId" th:text="#{rucher}"
+				  class="col-sm-2 col-form-label"></label>
+				<select class="form-control col-sm-10" id="rucherId" name="rucherId">
+					<option th:each="rucheropt : ${rucherIdNom}" th:value="${rucheropt.id}"
+								th:text="${rucheropt.nom}"  
+								th:selected="${rucheropt.id} == (${rucherId}==null?'0':${rucherId})">
+					</option>
+				</select>
+			</div>
+			<div class="input-group mb-3 row">
+  			  <div class="form-group form-check col-sm-2 ">
+			    <input class="form-check-input" type="checkbox" id="masquerInactif" 
+			      name="masquerInactif" th:checked="${masquerInactif}"/>
+			    <label class="form-check-label" for="masquerInactif" th:text="#{masquerInactif}"></label>
+		      </div>
+			  <input class="col-sm-1 btn input-group-append btn-outline-primary btn-sm" type="submit"
+				th:value="#{filtrer}" /> 
+		    </div>
+		</form>
+    </div>
+	<div class="container-fluid">
+	<table class="table dt-responsive table-bordered table-striped" id="statistiques">
+			<thead>
+			    <tr>
+					<th th:text="#{essaim}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{dateAcquisition}"></th>
+					<th style="background-color:LemonChiffon" th:unless="${masquerInactif}" th:text="#{dispersion}"></th>
+					<th style="background-color:LemonChiffon" th:if="${rucherId == null}" th:text="#{Duree}"></th>
+					<th th:text="#{Total}"></th>
+					<th th:text="#{Max}"></th>
+					<th th:text="#{Min}"></th>
+					<th th:if="${rucherId == null}" th:text="#{Moyen}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="essaimPoids : ${essaimsPoids}">
+				   <td><a th:href="@{'/essaim/'+${essaimPoids.id}}"
+						th:text="${essaimPoids.nom}"></a></td>
+				   <td th:text="${essaimPoids.dateAcquisition}"></td>
+				   <td th:unless="${masquerInactif}"  th:text="${essaimPoids.dateDispersion}"></td>	
+					<td th:if="${rucherId == null}" th:text="${essaimPoids.duree}"></td>
+				   <td th:text="${essaimPoids.pTotal}"></td>	
+					<td th:text="${essaimPoids.pMax}"></td>	
+					<td th:text="${essaimPoids.pMin}"></td>
+					<td th:if="${rucherId == null}" th:text="${essaimPoids.pMoyen}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

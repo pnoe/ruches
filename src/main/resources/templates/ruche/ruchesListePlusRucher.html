@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:inline="javascript">
+$(document).ready(function() {
+    $('#ruches').DataTable({
+        dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
+	    buttons: [
+	    	'csv',
+	    	{extend: 'pdf', exportOptions: {columns: ':visible', pageSize: 'A3', oriention: 'landscape'}, 
+	    		title: [[#{listeRuches}]] + " " + (new Date()).toLocaleDateString()},
+	        {extend: 'print', text: [[#{buttontextprint}]], exportOptions: {columns: ':visible', pageSize: 'A3', oriention: 'landscape'}},
+	        {extend: 'colvis', text: [[#{buttontextcol}]]}
+         ]
+       });    
+});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar">Menu</nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					<th:block th:text="#{listeRuches}+' '"></th:block>	
+					<a th:href="@{'/rucher/'+${rucher.id}}"
+						th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+				</h1>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<table class="table table-sm table-bordered table-striped" id="ruches">
+			<thead>
+				<tr>
+					<th style="background-color:LightGoldenRodYellow" th:text="#{Ordre}"></th>
+					<th style="background-color:LightGoldenRodYellow" th:text="#{nom}"></th>
+					<th style="background-color:lightskyblue" th:text="#{essaim}"></th>
+					<th style="background-color:lightskyblue" th:text="#{dateAcquisition}"></th>
+					<th style="background-color:lightskyblue" th:text="#{commentaire}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{daterucher}"></th>
+					<th th:if="${session.voirInactif}" th:text="#{active}"></th>
+					<th th:text="#{dateAcquisition}"></th>
+					<th th:text="#{poidsVide}"></th>
+					<th style="background-color:Tomato" th:text="#{nbCadres}"></th>
+					<th style="background-color:Tomato" th:text="#{nbCadresMax}"></th>
+					<th th:text="#{typeRuche}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{lesHausses}"></th>
+					<th style="background-color:PaleGoldenRod"></th>										
+					<th style="background-color:PaleGoldenRod" >Commentaire hausse</th>
+					<th:block th:if="${session.voirLatLon}">
+						<th style="background-color: LemonChiffon" th:text="#{latitude}"></th>
+						<th style="background-color: LemonChiffon" th:text="#{longitude}"></th>
+					</th:block>
+					<th th:text="#{commentaire}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{reineMarquee}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{reineCouleurMarquage}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{reineDateNaissance}"></th>
+					<th style="background-color:lightskyblue" th:text="#{commentaire1}"></th>
+					<th style="background-color:lightskyblue" th:text="#{commentaire2}"></th>
+					<th style="background-color:lightskyblue" th:text="#{commentaire3}"></th>
+				</tr>
+			</thead>
+			<tbody th:with="f='dd/MM/yyyy'">
+				<tr th:with="e=${listeEvensCommentaireEsaim[rucheStat.index]}, eh=${evensHaussesRuches[rucheStat.index]}, ec=${listeEvenCadre[rucheStat.index]}"
+					th:each="ruche : ${ruches}">
+					<td th:text="${ordreRuche[rucheStat.index]}"></td>
+					<td><a th:href="@{'/ruche/'+${ruche.id}}"
+						th:text="${ruche.nom}"></a></td>
+					<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}"
+						th:text="${ruche.essaim?.nom}"></a></td>
+					<td th:text="${ruche.essaim?.dateAcquisition}"></td>
+					<td th:text="${ruche.essaim?.commentaire}"></td>
+					<td th:text="${dateAjoutRucher[rucheStat.index]}"></td>
+					<td th:if="${session.voirInactif}"
+						th:text="${ruche.active}? #{oui} : #{non}"></td>
+					<td th:text="${ruche.dateAcquisition}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(ruche.poidsVide,1,1,'DEFAULT')}"></td>
+					<td class="num" th:text="${ec == null}?'':${ec.valeur}+' '+${#temporals.format(ec.date, f)}+' '+${ec.commentaire}"></td>
+					<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
+					<td th:text="${ruche.type?.nom}"></td>
+					<td th:text="${hausseNoms[rucheStat.index]}"></td>
+					<td class="num" th:text="${nbHausses[rucheStat.index]}"></td>
+					<td th:text="${eh == null}?'':(${nbHausses[rucheStat.index]} &gt; 1 ? ${eh.hausse.nom} + '  ':'') + ${#temporals.format(eh.date, f)} + ' ' + ${eh.commentaire}"></td>
+					<th:block th:if="${session.voirLatLon}">
+						<td class="num" th:text="${#numbers.formatDecimal(ruche.latitude,1,5)}"></td>
+						<td class="num" th:text="${#numbers.formatDecimal(ruche.longitude,1,5)}"></td>
+					</th:block>
+					<td th:text="${ruche.commentaire}"></td>
+					<td th:text="${ruche.essaim?.reineMarquee}? #{oui} : #{non}"></td>
+					<td th:text="${ruche.essaim}? #{${ruche.essaim.reineCouleurMarquage}} : '-'"></td>
+					<td th:text="${ruche.essaim?.reineDateNaissance}"></td>
+					<td th:text=
+					  "${#arrays.length(e)} &gt; 0 ? ${#temporals.format(e[0].date, f)} + ' ' + ${e[0].commentaire}"
+					></td>
+					<td th:text=
+					  "${#arrays.length(e)} &gt; 1 ? ${#temporals.format(e[1].date, f)} + ' ' + ${e[1].commentaire}"
+					></td>
+					<td th:text=
+					  "${#arrays.length(e)} &gt; 2 ? ${#temporals.format(e[2].date, f)} + ' ' + ${e[2].commentaire}"
+					></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

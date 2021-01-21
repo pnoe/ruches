@@ -1,0 +1,389 @@
+let vectorLineLayer;
+let layerSwitcher;
+let map;
+
+function rucherDetail(ign) {
+	$('.rapproche').on('click', function() {
+		return confirm(rapprochertxt);
+	});
+	$('.oi-question-mark').popover({
+		html: true
+	});
+	$('.popover-dismiss').popover({
+		trigger: 'focus'
+	});
+	const markerRuches = [];
+	const closer = document.getElementById('popup-closer');
+	const overlay = new ol.Overlay({
+		element: document.getElementById('popup'),
+		autoPan: true,
+		autoPanAnimation: {
+			duration: 250
+		}
+	});
+	closer.onclick = function() {
+		overlay.setPosition(undefined);
+		closer.blur();
+		return false;
+	};
+	for (let i = 0; i < ruches.length; i += 1) {
+		const coordsMarker = [];
+		coordsMarker.push(ruches[i].longitude);
+		coordsMarker.push(ruches[i].latitude);
+		const iconFeature = new ol.Feature({
+			type: 'geoMarker',
+			geometry: new ol.geom.Point(ol.proj.fromLonLat(coordsMarker)),
+			rucheid: ruches[i].id,
+			ruchenom: ruches[i].nom,
+			essaimnom: (ruches[i].essaim == null) ? '' : ruches[i].essaim.nom,
+			essaimid: (ruches[i].essaim == null) ? '' : ruches[i].essaim.id,
+			haussesnom: nomHausses[i]
+		});
+		iconFeature.setStyle(
+			new ol.style.Style({
+				image: new ol.style.Circle({
+					radius: 12,
+					fill: new ol.style.Fill({
+						color: (ruches[i].essaim == null) ? '#FE00FE' : ruches[i].essaim.reineCouleurMarquage
+					})
+				}),
+				text: new ol.style.Text({
+					text: (((ruches[i].essaim != null) && (ruches[i].essaim.reineMarquee == true)) ? '*' : '') + ruches[i].nom,
+					font: '14px sans-serif'
+				})
+			})
+		);
+		markerRuches.push(iconFeature);
+	}
+	const coordsEntree = [];
+	coordsEntree.push(rucher.longitude);
+	coordsEntree.push(rucher.latitude);
+	const iconFeatureEntree = new ol.Feature({
+		type: 'geoMarker',
+		rucheid: 'entree',
+		geometry: new ol.geom.Point(ol.proj.fromLonLat(coordsEntree))
+	});
+	iconFeatureEntree.setStyle(
+		new ol.style.Style({
+			image: new ol.style.Circle({
+				radius: 12,
+				fill: new ol.style.Fill({
+					color: '#FFFFFF'
+				})
+			}),
+			text: new ol.style.Text({
+				text: entreetxt
+			})
+		})
+	);
+	markerRuches.push(iconFeatureEntree);
+	vectorLineLayer = newVectorLineLayer();
+	const mapcenter = [];
+	mapcenter.push(rucher.longitude);
+	mapcenter.push(rucher.latitude);
+	const vectorLayer = new ol.layer.Vector({
+		source: new ol.source.Vector({
+			features: markerRuches
+		})
+	});
+	const select = new ol.interaction.Select({
+		layers: [vectorLayer],
+		toggleCondition: ol.events.condition.never,
+		style: false
+	});
+
+	select.on('select', function(e) {
+		e.selected.forEach(function(feature) {
+			let style = feature.getStyle(); let txt = style.getText().getText();
+			style.getText().setText('[' + txt + ']'); feature.setStyle(style);
+		});
+		e.deselected.forEach(function(feature) {
+			let style = feature.getStyle(); let txt = style.getText().getText();
+			style.getText().setText(txt.substring(1, txt.length - 1)); feature.setStyle(style);
+		});
+	});
+
+	const translate = new ol.interaction.Translate({
+		features: select.getFeatures(),
+		layers: [vectorLayer]
+	});
+	map = new ol.Map({
+		interactions: ol.interaction.defaults({ doubleClickZoom: false }).extend([select, translate]),
+		controls: ol.control.defaults({
+			attribution: false
+		}),
+		target: 'map',
+		layers: [
+			vectorLayer,
+			vectorLineLayer
+		],
+		overlays: [overlay],
+		view: new ol.View({
+			center: ol.proj.fromLonLat(mapcenter),
+			zoom: 19
+		})
+	});
+	layerSwitcher = new ol.control.LayerSwitcher({
+		layers: [{
+			layer: vectorLayer,
+			config: {
+				title: lesRuches,
+				description: couchemarqueursruches
+			}
+		},
+		{
+			layer: vectorLineLayer,
+			config: {
+				title: parcourstxt,
+				description: parcoursoptimumtxt
+			}
+		}
+		]
+	});
+	let layersMap = map.getLayers();
+	if (ign) {
+		layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
+			layer: "CADASTRALPARCELS.PARCELS",
+			olParams: {
+				visible: false
+			}
+		}));
+		layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
+			layer: "GEOGRAPHICALGRIDSYSTEMS.MAPS.SCAN-EXPRESS.STANDARD"
+		}));
+		layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
+			layer: "ORTHOIMAGERY.ORTHOPHOTOS"
+		}));
+		map.addControl(new ol.control.ElevationPath());
+		map.addControl(layerSwitcher);
+		map.addControl(new ol.control.GeoportalMousePosition({
+			collapsed: true,
+			displayCoordinates: false
+		}));
+	} else {
+		const osmLayer = new ol.layer.Tile({
+			source: new ol.source.OSM()
+		});
+		layersMap.insertAt(0, osmLayer);
+		map.addControl(layerSwitcher);
+		layerSwitcher.removeLayer(osmLayer);
+		layerSwitcher.addLayer(osmLayer, {
+			title: 'OpenStreetMap',
+			description: 'Carte OpenStreetMap'
+		});
+	}
+	map.addControl(new ol.control.MeasureLength());
+	map.addControl(new ol.control.MeasureArea());
+	map.addControl(new ol.control.MeasureAzimuth());
+	map.addControl(new ol.control.FullScreen({
+		tipLabel: pleinecran
+	}));
+	document.getElementsByClassName('ol-full-screen')[0].style.left = '43px';
+	document.getElementsByClassName('ol-full-screen')[0].style.right = 'unset';	
+	const selectDoubleClick = new ol.interaction.Select({
+		condition: ol.events.condition.doubleClick,
+		layers: [vectorLayer]
+	});
+	map.addInteraction(selectDoubleClick);
+	selectDoubleClick.on('select', function(e) {
+		const feature = e.target.getFeatures().getArray()[0];
+		if (feature.get("rucheid") === 'entree') {
+			document.getElementById('popup-content').innerHTML =
+				ruches.length + ' ' + ruchestxt + '<br/>' + distancedeparcourstxt +
+				' ' + distParcours.toFixed(2) + 'm';
+		} else {
+			document.getElementById('popup-content').innerHTML =
+				'<a href="' + ruchesurl + 'ruche/' + feature.get('rucheid') + '">' +
+				ruchetxt + ' ' + feature.get("ruchenom") +
+				'</a><br/>' +
+				((feature.get("essaimnom") === '') ? pasdessaimtxt :
+					'<a href="' + ruchesurl + 'essaim/' + feature.get('essaimid') + '">' +
+					essaimtxt + ' ' + feature.get("essaimnom") + '</a>') +
+				'<br/>' +
+				((feature.get("haussesnom") === '') ? pasdehaussetxt :
+					lesHausses + ' ' + feature.get("haussesnom"));
+		}
+		overlay.setPosition(feature.getGeometry().getCoordinates());
+		selectDoubleClick.getFeatures().clear();
+	});
+	translate.on('translateend', function(evt) {
+		const coord = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
+		const req = new XMLHttpRequest();
+		if (evt.features.getArray()[0].get("rucheid") === 'entree') {
+			req.open('POST', ruchesurl + 'rucher/deplace/' + rucher.id +
+				'/' + coord[1] + '/' + coord[0], true);
+		} else {
+			req.open('POST', ruchesurl + 'ruche/deplace/' + evt.features.getArray()[0].get("rucheid") +
+				'/' + coord[1] + '/' + coord[0], true);
+		}
+		req.setRequestHeader('x-csrf-token', _csrf_token);
+		req.onload = function() {
+			if (req.readyState === 4) {
+				if (req.status === 200) {
+					if (req.responseText !== "OK") {
+						alert(req.responseText);
+					} else {
+						parcoursRedraw();
+					}
+				}
+			}
+		};
+		req.onerror = function() {
+			alert(req.statusText);
+		};
+		req.send(null);
+	});
+	$("#searchtext").keyup(function(event) {
+		if (event.keyCode === 13) {
+			let searchtext = $("#searchtext").val().toUpperCase();
+			for (let marker of markerRuches) {
+				if ((marker.getStyle().getText().getText().toUpperCase() === searchtext) ||
+					(marker.getStyle().getText().getText().toUpperCase() === '*' + searchtext) ||
+					(marker.get("essaimnom").toUpperCase() === searchtext)) {
+					selectDoubleClick.getFeatures().clear();
+					selectDoubleClick.getFeatures().push(marker);
+					selectDoubleClick.dispatchEvent({
+						type: 'select',
+						selected: [marker],
+						deselected: []
+					});
+					break;
+				}
+			}
+		}
+	});
+	$('.liste').click(function(e) {
+		window.location = ruchesurl + 'ruche/liste/' + rucher.id +
+			'?parcours=' + encodeURIComponent(JSON.stringify(rucheParcours)) +
+			'&plus=' + (e.target.id != 'liste');
+	});
+
+	$('#export-png').click(function() {
+		map.once('rendercomplete', function() {
+			domtoimage.toPng(map.getTargetElement().getElementsByClassName("ol-layers")[0])
+				.then(function(dataURL) {
+					let link = document.getElementById('image-download');
+					link.href = dataURL;
+					link.click();
+				});
+		});
+		map.renderSync();
+	});
+
+	$('#export-gpx').click(function() {
+		exportGpx();
+	});
+
+	$('#export-kml').click(function() {
+		exportKml();
+	});
+
+	$('#parcours-redraw').click(function() {
+		document.getElementById('popup-content').innerHTML = 'Calcul en cours...';
+		overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());
+		parcoursRedraw(true);
+	});
+
+	const exportPdf = $('#export-pdf');
+	exportPdf.click(function() {
+		exportPdf.disabled = true;
+		document.body.style.cursor = 'progress';
+		const format = document.getElementById('format').value;
+		const resolution = document.getElementById('resolution').value;
+		const dims = {
+			a3: [420, 297],
+			a4: [297, 210]
+		};
+		const dim = dims[format];
+		const width = Math.round(dim[0] * resolution / 25.4);
+		const height = Math.round(dim[1] * resolution / 25.4);
+		const size = map.getSize();
+		const viewResolution = map.getView().getResolution();
+		map.once('rendercomplete', function() {
+			let exportOptions = {};
+			exportOptions.width = width;
+			exportOptions.height = height;
+			domtoimage.toJpeg(map.getTargetElement().getElementsByClassName("ol-layers")[0], exportOptions)
+				.then(function(dataURL) {
+					let pdf = new jsPDF('landscape', undefined, format);
+					pdf.addImage(dataURL, 'JPEG', 0, 0, dim[0], dim[1]);
+					pdf.save('map.pdf');
+					// Reset original map size
+					map.setSize(size);
+					map.getView().setResolution(viewResolution);
+					exportPdf.disabled = false;
+					document.body.style.cursor = 'auto';
+				});
+		});
+		const printSize = [width, height];
+		map.setSize(printSize);
+		const scaling = Math.min(width / size[0], height / size[1]);
+		map.getView().setResolution(viewResolution / scaling);
+	});
+
+
+
+	function newVectorLineLayer() {
+		const coordsLineString = [];
+		for (let i = 0; i < rucheParcours.length; i++) {
+			const coords = [];
+			coords.push(rucheParcours[i].longitude);
+			coords.push(rucheParcours[i].latitude);
+			coordsLineString.push(ol.proj.fromLonLat(coords));
+		}
+		const lineString = new ol.geom.LineString(coordsLineString);
+		const lineFeature = new ol.Feature({
+			geometry: lineString
+		})
+		const lineRuches = [];
+		lineRuches.push(lineFeature);
+		const lineSource = new ol.source.Vector({
+			features: lineRuches
+		});
+		return new ol.layer.Vector({
+			source: lineSource
+		});
+	}
+
+	function parcoursRedraw(redraw = false) {
+		const req2 = new XMLHttpRequest();
+		req2.open('GET', ruchesurl + 'rucher/parcours/' + rucher.id, true);
+		req2.onload = function() {
+			if (req2.readyState === 4) {
+				if (req2.status === 200) {
+					let response = JSON.parse(req2.responseText);
+					// distParcours et rucheParcours var globales
+					if (redraw && (response.distParcours + 0.1 > distParcours)) {
+						document.getElementById('popup-content').innerHTML =
+							"Pas d'amélioration<br/>" + 
+							 distancedeparcourstxt + ' ' + distParcours.toFixed(2) + 'm';
+						overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());
+						return;
+					}
+					let dist = distParcours;
+					distParcours = response.distParcours;
+					rucheParcours = response.rucheParcours;
+					let visible = vectorLineLayer.getVisible();
+					map.removeLayer(vectorLineLayer);
+					layerSwitcher.removeLayer(vectorLineLayer);
+					vectorLineLayer = newVectorLineLayer();
+					map.addLayer(vectorLineLayer);
+					vectorLineLayer.setVisible(visible);
+					layerSwitcher.addLayer(vectorLineLayer, {
+						title: parcourstxt,
+						description: parcoursoptimumtxt
+					});
+					if (redraw) {
+						document.getElementById('popup-content').innerHTML =
+							'La distance est diminuée de ' + (dist - distParcours).toFixed(2) +
+							'm<br/>' + distancedeparcourstxt +
+							' ' + distParcours.toFixed(2) + 'm';
+						overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());
+					}
+				}
+			}
+		};
+		req2.send();
+	}
+
+}

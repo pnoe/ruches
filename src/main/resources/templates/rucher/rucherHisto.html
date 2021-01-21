@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<h1 class="item">
+			<th:block th:text="'Historique '"></th:block>
+			<a th:href="@{'/rucher/'+${rucher.id}}"
+				th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+		</h1>
+	</div>
+	<div class="container-fluid " id="detailRucher">
+		<table class="table table-bordered">
+		<thead>
+				<tr>
+					<th th:text="'Date'"></th>
+					<th th:text="'Type'"></th>
+					<th th:text="'Ruche'"></th>
+					<th th:text="'Nb'"></th>
+					<th th:text="'État'"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="eve : ${histo}">
+				<td>
+					<a th:text="${eve.get('date')}"
+							th:href="@{'/evenement/'+${eve.get('eveid')}}"></a>
+				</td>			
+				  <td th:text="${eve.get('type')}"></td>
+				  <td th:text="${eve.get('ruche')}"></td>
+				  <td th:text="${eve.get('nbruche')}"></td>
+				  <td th:text="${eve.get('etat')}"></td>
+				</tr>
+		</table>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>
