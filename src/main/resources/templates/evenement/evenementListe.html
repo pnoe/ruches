@@ -55,10 +55,10 @@
 				<tr>
 					<th th:text="#{date}"></th>
 					<th th:text="#{evenement}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{ruche}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{essaim}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{rucher}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{hausse}"></th>
+					<th th:unless="${rucheId}" style="background-color:PaleGoldenRod" th:text="#{ruche}"></th>
+					<th th:unless="${essaimId}" style="background-color:PaleGoldenRod" th:text="#{essaim}"></th>
+					<th th:unless="${rucherId}" style="background-color:PaleGoldenRod" th:text="#{rucher}"></th>
+					<th th:unless="${hausseId}" style="background-color:PaleGoldenRod" th:text="#{hausse}"></th>
 					<th style="background-color:LemonChiffon" th:text="#{valeur}"></th>
 					<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
 				</tr>
@@ -70,10 +70,10 @@
 							th:href="@{'/evenement/'+${evenement.id}}"></a>
 					</td>
 					<td th:text="#{${evenement.type}}"></td>
-					<td th:text="${evenement.ruche?.nom}"></td>
-					<td th:text="${evenement.essaim?.nom}"></td>
-					<td th:text="${evenement.rucher?.nom}"></td>
-					<td th:text="${evenement.hausse?.nom}"></td>
+					<td th:unless="${rucheId}" th:text="${evenement.ruche?.nom}"></td>
+					<td th:unless="${essaimId}" th:text="${evenement.essaim?.nom}"></td>
+					<td th:unless="${rucherId}" th:text="${evenement.rucher?.nom}"></td>
+					<td th:unless="${hausseId}" th:text="${evenement.hausse?.nom}"></td>
 					<th:block th:switch="${evenement.type}">
 						<td class="num" th:case="${T(ooioo.ruches.evenement.TypeEvenement).ESSAIMSUCRE}" th:text="${#numbers.formatDecimal(evenement.valeur,1,2,'COMMA')}"></td>
 						<td class="num" th:case="${T(ooioo.ruches.evenement.TypeEvenement).RUCHEPESEE}"  th:text="${#numbers.formatDecimal(evenement.valeur,1,2,'COMMA')}"></td>
