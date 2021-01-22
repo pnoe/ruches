@@ -98,37 +98,38 @@
 				</tr>
 			</tbody>
 		</table>
-		<h6	th:text="#{listeRuches}"></h6>
-		<table class="table table-responsive table-bordered" id="ruches">
-			<thead>
-			<tr>
-				<th th:text="#{nom}"></th>
-				<th th:text="#{essaim}"></th>
-				<th th:if="${session.voirInactif}" th:text="#{active}"></th>
-				<th th:text="#{dateAcquisition}"></th>
-				<th class="num" th:text="#{poidsVide}"></th>
-				<th class="num" th:text="#{nbCadres}"></th>
-				<th style="background-color:PaleGoldenRod" class="num" th:text="#{nbCadresMax}"></th>
-				<th style="background-color:PaleGoldenRod" th:text="#{typeRuche}"></th>
-				<th th:text="#{commentaire}"></th>
-			</tr>
-			</thead>
-			<tbody>
-				<tr th:each="ruche : ${ruches}">
-					<td><a th:href="@{'/ruche/'+${ruche.id}}" th:text="${ruche.nom}"></a></td>
-					<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}" th:text="${ruche.essaim?.nom}"></a></td>
-					<td th:if="${session.voirInactif}" th:text="${ruche.active}? #{oui} : #{non}"></td>
-					<td th:text="${ruche.dateAcquisition}"></td>
-					<td class="num" th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
-					<td class="num" th:text="${nbCadres[rucheStat.index]}"></td>
-					<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
-					<td th:text="${ruche.type?.nom}"></td>
-					<td th:text="${ruche.commentaire}"></td>
+		<h6	th:unless="${#arrays.length(ruches)}" th:text="#{Pasderuche}"></h6>
+		<th:block th:if="${#arrays.length(ruches)}">
+			<h6	th:text="#{listeRuches}"></h6>
+			<table class="table table-responsive table-bordered" id="ruches">
+				<thead>
+				<tr>
+					<th th:text="#{nom}"></th>
+					<th th:text="#{essaim}"></th>
+					<th th:if="${session.voirInactif}" th:text="#{active}"></th>
+					<th th:text="#{dateAcquisition}"></th>
+					<th class="num" th:text="#{poidsVide}"></th>
+					<th class="num" th:text="#{nbCadres}"></th>
+					<th style="background-color:PaleGoldenRod" class="num" th:text="#{nbCadresMax}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{typeRuche}"></th>
+					<th th:text="#{commentaire}"></th>
 				</tr>
-			</tbody>
-		</table>
-		
-		
+				</thead>
+				<tbody>
+					<tr th:each="ruche : ${ruches}">
+						<td><a th:href="@{'/ruche/'+${ruche.id}}" th:text="${ruche.nom}"></a></td>
+						<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}" th:text="${ruche.essaim?.nom}"></a></td>
+						<td th:if="${session.voirInactif}" th:text="${ruche.active}? #{oui} : #{non}"></td>
+						<td th:text="${ruche.dateAcquisition}"></td>
+						<td class="num" th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
+						<td class="num" th:text="${nbCadres[rucheStat.index]}"></td>
+						<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
+						<td th:text="${ruche.type?.nom}"></td>
+						<td th:text="${ruche.commentaire}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</th:block>
 		<table th:if="${#arrays.length(poidsListe)} &gt; 0" class="table table-responsive table-bordered">			
 		<thead>
 			<tr>
@@ -158,9 +159,6 @@
 			</tr>
 		</tbody>
 	</table>
-	
-	
-	
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
