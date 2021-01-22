@@ -38,13 +38,15 @@
 						th:text="#{hausse} + ' ' + ${hausseNom}"></a>
 				</h1>			
 			</div>
-			<div class="col" th:unless="${rucheId} or ${rucherId} or ${essaimId} or ${hausseId}">
-				<a id="cree" th:href="@{/evenement/cree}"
-				  class="oi oi-plus" th:title="#{evenementCree}" aria-hidden="true">
-   				</a>
-			</div>
-			<div th:insert="includeForm :: evenementListeDates(retController='/evenement/liste')" class="col">
-			</div>
+			<th:block th:unless="${rucheId} or ${rucherId} or ${essaimId} or ${hausseId}">
+				<div class="col" >
+					<a id="cree" th:href="@{/evenement/cree}"
+					  class="oi oi-plus" th:title="#{evenementCree}" aria-hidden="true">
+	   				</a>
+				</div>
+				<div th:insert="includeForm :: evenementListeDates(retController='/evenement/liste')" class="col">
+				</div>
+			</th:block>
 		</div>
 	</div>
 	<div class="container-fluid">
