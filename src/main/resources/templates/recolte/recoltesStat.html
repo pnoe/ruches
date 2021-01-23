@@ -24,12 +24,12 @@
 			<h1 class="item">
 			    <th:block th:text="#{productionessaim} + ' '"></th:block>
 				<a th:href="@{'/recolte/'+${recolte.id}}"
-						th:text="#{recolte} + ' ' + ${recolte.date}"></a>
+						th:text="#{recolte} + ' ' + ${#temporals.format(recolte.date, 'yy/MM/dd HH:mm')}"></a>
 			</h1>
 			</div>
 			<div class="col">
 			  <span th:text="#{poidsMielHausses} + ' ' + 
-			  	${#numbers.formatDecimal(poidsTotal/1000.0,1,2,'DEFAULT')}">
+			  	${#numbers.formatDecimal(poidsTotal/1000.0,1,2,'DEFAULT')} + 'kg'">
 			  </span>
 			</div>
         </div>
