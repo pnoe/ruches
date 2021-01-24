@@ -38,6 +38,9 @@ function graphe() {
 		data: data,
 		options: {
 			plugins: {
+				legend: {
+					position: 'bottom'
+				},
 				tooltip: {
 					callbacks: {
 						label: function(tooltipItem) {
