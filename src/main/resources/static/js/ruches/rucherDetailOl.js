@@ -85,13 +85,38 @@ function rucherDetail(ign) {
 		source: new ol.source.Vector({
 			features: markerRuches
 		})
+	});	
+	const coordsCentre = [];
+	coordsCentre.push(longitudeCentre);
+	coordsCentre.push(latitudeCentre);
+	const olProjCentre = ol.proj.fromLonLat(coordsCentre);
+	const cerclesLayer = new ol.layer.Vector({
+		visible: false,
+		source: new ol.source.Vector({
+			features: [
+				new ol.Feature(new ol.geom.Circle(olProjCentre, 1000)),
+				new ol.Feature(new ol.geom.Circle(olProjCentre, 2000)),
+				new ol.Feature(new ol.geom.Circle(olProjCentre, 3000)),
+				new ol.Feature(new ol.geom.Circle(olProjCentre, 4000))
+				]
+		}),
+	  style: [
+	    new ol.style.Style({
+	      stroke: new ol.style.Stroke({
+	        color: 'blue',
+	        width: 1
+	      }),
+	      fill: new ol.style.Fill({
+	        color: 'rgba(0, 0, 255, 0.02)'
+	      })
+	    })
+	  ]
 	});
 	const select = new ol.interaction.Select({
 		layers: [vectorLayer],
 		toggleCondition: ol.events.condition.never,
 		style: false
 	});
-
 	select.on('select', function(e) {
 		e.selected.forEach(function(feature) {
 			let style = feature.getStyle(); let txt = style.getText().getText();
@@ -102,7 +127,6 @@ function rucherDetail(ign) {
 			style.getText().setText(txt.substring(1, txt.length - 1)); feature.setStyle(style);
 		});
 	});
-
 	const translate = new ol.interaction.Translate({
 		features: select.getFeatures(),
 		layers: [vectorLayer]
@@ -115,7 +139,8 @@ function rucherDetail(ign) {
 		target: 'map',
 		layers: [
 			vectorLayer,
-			vectorLineLayer
+			vectorLineLayer, 
+			cerclesLayer
 		],
 		overlays: [overlay],
 		view: new ol.View({
@@ -137,8 +162,14 @@ function rucherDetail(ign) {
 				title: parcourstxt,
 				description: parcoursoptimumtxt
 			}
-		}
-		]
+		},
+		{
+			layer: cerclesLayer,
+			config: {
+				title: cercles,
+				description: distButinage
+			}
+		}]
 	});
 	let layersMap = map.getLayers();
 	if (ign) {
