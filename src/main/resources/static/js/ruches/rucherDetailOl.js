@@ -90,18 +90,11 @@ function rucherDetail(ign) {
 	coordsCentre.push(longitudeCentre);
 	coordsCentre.push(latitudeCentre);
 	const olProjCentre = ol.proj.fromLonLat(coordsCentre);
-	const cerclesLayer = new ol.layer.Vector({
-		visible: false,
-		source: new ol.source.Vector({
-			features: [
-				new ol.Feature(new ol.geom.Circle(olProjCentre, 1000)),
-				new ol.Feature(new ol.geom.Circle(olProjCentre, 2000)),
-				new ol.Feature(new ol.geom.Circle(olProjCentre, 3000)),
-				new ol.Feature(new ol.geom.Circle(olProjCentre, 4000))
-				]
-		}),
-	  style: [
-	    new ol.style.Style({
+	const sourceCercles = new ol.source.Vector();
+	for (r of rayonsButinage) {
+		sourceCercles.addFeature(new ol.Feature(new ol.geom.Circle(olProjCentre, r)))
+	}
+	const styleCercles = new ol.style.Style({
 	      stroke: new ol.style.Stroke({
 	        color: 'blue',
 	        width: 1
@@ -109,8 +102,11 @@ function rucherDetail(ign) {
 	      fill: new ol.style.Fill({
 	        color: 'rgba(0, 0, 255, 0.02)'
 	      })
-	    })
-	  ]
+	    });
+	const cerclesLayer = new ol.layer.Vector({
+		visible: false,
+		source: sourceCercles,
+	    style: styleCercles
 	});
 	const select = new ol.interaction.Select({
 		layers: [vectorLayer],
@@ -167,7 +163,7 @@ function rucherDetail(ign) {
 			layer: cerclesLayer,
 			config: {
 				title: cercles,
-				description: distButinage
+				description: distButinage + ' ' + rayonsButinage.join(', ') + 'm'
 			}
 		}]
 	});

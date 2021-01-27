@@ -102,7 +102,8 @@ public class RucherController {
 	private String openweathermapKey;
 	@Value("${rucher.parcours.nbruches}")
 	private int rucherParcoursNbruches;
-	
+	@Value("${rucher.butinage.rayons}")
+	private int[] rayonsButinage;
 	
 	
 	/**
@@ -515,7 +516,9 @@ public class RucherController {
 				latitude /= nbRuches;
 				model.addAttribute("longitudeCentre", longitude);
 				model.addAttribute("latitudeCentre", latitude);
+				model.addAttribute("rayonsButinage", rayonsButinage);
 			}
+			
 			
 			
 			
