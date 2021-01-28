@@ -3,6 +3,7 @@ let map;
 const markersRuche = [];
 let markerRucher;
 let infowindowp;
+const circlesButinage = [];
 
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
@@ -89,6 +90,22 @@ function initMap() {
 	  });
 	markersRuche.push(markerRucher);
 	newParcours();
+	for (r of rayonsButinage) {
+		circlesButinage.push(new google.maps.Circle({
+	      strokeColor: "#0000FF",
+	      strokeOpacity: 0.8,
+	      strokeWeight: 1,
+	      fillColor: "#0000FF",
+	      fillOpacity: 0.02,
+	      map,
+	      center: {
+				lat : latitudeCentre,
+				lng : longitudeCentre
+		    },
+	      radius: r,
+	      visible: false
+	    }));
+	}
 }
 
 function sauveRucherPosition(e) {
@@ -231,5 +248,15 @@ $(document).ready(function() {
 				}
 			}
 		}
-	});	
+	});
+	$('#cercles').attr("title", distButinage + ' ' + rayonsButinage.join(', ') + 'm');
+	$('#cercles').click(function() {
+		const visi = !circlesButinage[0].getVisible();
+		for (c of circlesButinage) {
+			c.setVisible(visi);
+		}
+		const bgCol = visi?'rgba(0, 0, 255, 0.2)':'';
+		$('#cercles').css({'background-color': bgCol});
+	});
+	
 });

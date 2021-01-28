@@ -91,8 +91,9 @@ function rucherDetail(ign) {
 	coordsCentre.push(latitudeCentre);
 	const olProjCentre = ol.proj.fromLonLat(coordsCentre);
 	const sourceCercles = new ol.source.Vector();
+	const resol = ol.proj.getPointResolution('EPSG:3857', 1, ol.proj.fromLonLat(coordsCentre));
 	for (r of rayonsButinage) {
-		sourceCercles.addFeature(new ol.Feature(new ol.geom.Circle(olProjCentre, r)))
+		sourceCercles.addFeature(new ol.Feature(new ol.geom.Circle(olProjCentre, r/resol)))
 	}
 	const styleCercles = new ol.style.Style({
 	      stroke: new ol.style.Stroke({
