@@ -108,6 +108,12 @@ function rucherDetail(ign) {
 		source: sourceCercles,
 	    style: styleCercles
 	});
+	cerclesLayer.on('change:visible', function() {
+		let view = map.getView();
+		if (this.get('visible') && view.getZoom() > 16) {
+			view.setZoom(14);
+		}
+	});
 	const select = new ol.interaction.Select({
 		layers: [vectorLayer],
 		toggleCondition: ol.events.condition.never,
