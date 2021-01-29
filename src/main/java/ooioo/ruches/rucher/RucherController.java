@@ -205,7 +205,6 @@ public class RucherController {
 				} 
 			}
 			if (pMin == 1000000) { pMin = 0; }
-			
 			Map<String, String> rucherPoids = new HashMap<>();
 			rucherPoids.put("nom", rucher.getNom());
 			rucherPoids.put("id", rucher.getId().toString());
@@ -509,19 +508,16 @@ public class RucherController {
 				latitude += ruche.getLatitude();
 				
 			}
-			
-			
 			if (nbRuches != 0) {
 				longitude = (float) (Math.atan2(ylon, xlon) * 180d / Math.PI);
 				latitude /= nbRuches;
-				model.addAttribute("longitudeCentre", longitude);
-				model.addAttribute("latitudeCentre", latitude);
-				model.addAttribute("rayonsButinage", rayonsButinage);
+			} else {
+				longitude = rucher.getLongitude();
+				latitude = rucher.getLatitude();
 			}
-			
-			
-			
-			
+			model.addAttribute("longitudeCentre", longitude);
+			model.addAttribute("latitudeCentre", latitude);
+			model.addAttribute("rayonsButinage", rayonsButinage);
 			model.addAttribute(Const.HAUSSENOMS, nomHausses);
 			model.addAttribute(Const.RUCHER, rucher);
 			model.addAttribute(Const.RUCHES, ruches);
