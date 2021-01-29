@@ -1,3 +1,8 @@
+/* jshint  esversion: 6, browser: true, jquery: true */
+/* globals
+   rucheParcours, distParcours, ruches, rucher, nomHausses,
+   ruchestxt, distancedeparcourstxt  */
+
 function exportGpx() {
 	let gpxcontent = '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>' +
 		'<gpx xmlns="http://www.topografix.com/GPX/1/1" ' +

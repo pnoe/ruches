@@ -1,8 +1,12 @@
+/* jshint  esversion: 6, browser: true, jquery: true */
+/* globals d3, Chart,
+   poidsmiel, nomsessaims, poidsTotal
+*/
+
 // https://github.com/code-nebula/chart-color-generator
 function calculatePoint(i, intervalSize, colorRangeInfo) {
 	const { colorStart, colorEnd, useEndAsStart } = colorRangeInfo;
-	return (useEndAsStart
-		? (colorEnd - (i * intervalSize))
+	return (useEndAsStart ? (colorEnd - (i * intervalSize))
 		: (colorStart + (i * intervalSize)));
 }
 

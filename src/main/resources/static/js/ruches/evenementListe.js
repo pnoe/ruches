@@ -1,3 +1,6 @@
+/* jshint  esversion: 6, browser: true, jquery: true */
+/* globals listeEvenements, buttontextprint, buttontextcol */
+
 function evenementListe(initDatatable) {
 	if (initDatatable) {
 		$('#evenements').DataTable({

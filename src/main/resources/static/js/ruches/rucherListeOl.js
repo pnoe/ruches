@@ -1,3 +1,9 @@
+/* jshint  esversion: 6, browser: true, jquery: true */
+/* globals ol,
+	ruchers, nomRuches,	recentertxt, lesRucherstxt,	lesRuchestxt, ruchertxt, couchemarqueursrucherstxt,
+	pleinecrantxt, urlruches, _csrf_token
+*/
+
 function rucherListeIgn(ign) {
 	$('.recentre').on('click', function () {
         return confirm(recentertxt);
@@ -5,7 +11,7 @@ function rucherListeIgn(ign) {
 	$('.oi-question-mark').popover({html: true});
 	$('.popover-dismiss').popover({
 		  trigger: 'focus'
-		})
+		});
 	const markerRuchers = [];
 	const closer = document.getElementById('popup-closer');
 	const overlay = new ol.Overlay({

@@ -1,3 +1,8 @@
+/* jshint  esversion: 6, browser: true, jquery: true */
+/* globals d3,
+	data, essaimnom, essaimtxt,	ruchetxt, ruchertxt,
+	MielKgtxt, MielDescKgtxt, urlessaim	*/
+
 function essaimGraphe() {
 	const dataMap = data.reduce(function(map, node) {
 		map[node.name] = node;

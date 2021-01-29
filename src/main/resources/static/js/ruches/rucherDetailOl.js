@@ -1,3 +1,11 @@
+/* jshint  esversion: 6, browser: true, jquery: true */
+/* globals ol, domtoimage, jsPDF, exportGpx, exportKml,
+   rucheParcours, distParcours, longitudeCentre, latitudeCentre, rayonsButinage, cercles, distButinage, ruches, 
+   rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
+   ruchetxt, lesHausses, pasdehaussetxt, parcourstxt,
+   parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token  */
+// "use strict"
+
 let vectorLineLayer;
 let layerSwitcher;
 let map;
@@ -92,8 +100,8 @@ function rucherDetail(ign) {
 	const olProjCentre = ol.proj.fromLonLat(coordsCentre);
 	const sourceCercles = new ol.source.Vector();
 	const resol = ol.proj.getPointResolution('EPSG:3857', 1, ol.proj.fromLonLat(coordsCentre));
-	for (r of rayonsButinage) {
-		sourceCercles.addFeature(new ol.Feature(new ol.geom.Circle(olProjCentre, r/resol)))
+	for (const r of rayonsButinage) {
+		sourceCercles.addFeature(new ol.Feature(new ol.geom.Circle(olProjCentre, r/resol)));
 	}
 	const styleCercles = new ol.style.Style({
 	      stroke: new ol.style.Stroke({
@@ -355,8 +363,6 @@ function rucherDetail(ign) {
 		map.getView().setResolution(viewResolution / scaling);
 	});
 
-
-
 	function newVectorLineLayer() {
 		const coordsLineString = [];
 		for (let i = 0; i < rucheParcours.length; i++) {
@@ -368,7 +374,7 @@ function rucherDetail(ign) {
 		const lineString = new ol.geom.LineString(coordsLineString);
 		const lineFeature = new ol.Feature({
 			geometry: lineString
-		})
+		});
 		const lineRuches = [];
 		lineRuches.push(lineFeature);
 		const lineSource = new ol.source.Vector({

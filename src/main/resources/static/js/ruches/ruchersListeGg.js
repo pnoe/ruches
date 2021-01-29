@@ -1,3 +1,8 @@
+/* jshint  esversion: 6, browser: true, jquery: true */
+/* globals google,
+	ruchers, nomRuches,	urlruches, ruchertxt, lesRuchestxt,	ruchersmapzoom, _csrf_token
+ */
+
 const markersRucher = [];
 
 function initMap() {

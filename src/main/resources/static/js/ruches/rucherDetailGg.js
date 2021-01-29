@@ -1,3 +1,10 @@
+/* jshint  esversion: 6, browser: true, jquery: true */
+/* globals google, exportGpx, exportKml,
+    rucheParcours, distParcours, rucher, rucherMapZoom, longitudeCentre, latitudeCentre,
+	 rayonsButinage, distButinage, urlruches, nomHausses, essaimtxt, pasdessaimtxt,
+	 ruchetxt, haussestxt, pasdehaussetxt, ruches, ruchestxt, distancedeparcourstxt,
+	 entreetxt, _csrf_token */
+
 let parcours;
 let map; 	
 const markersRuche = [];
@@ -16,8 +23,7 @@ function initMap() {
 	});
 	const infowindow = new google.maps.InfoWindow();
     for (let i = 0; i < ruches.length; i++) {
-		const 
-		markerRuche = new google.maps.Marker({
+		const markerRuche = new google.maps.Marker({
 			position : {
 	    		lat : ruches[i].latitude,
 	    		lng : ruches[i].longitude
@@ -26,7 +32,7 @@ function initMap() {
 			icon : {
 			    path: "M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0",
 			    fillColor: (ruches[i].essaim == null) ? '#FE00FE' : ruches[i].essaim.reineCouleurMarquage,
-			    fillOpacity: .5,
+			    fillOpacity: 0.5,
 			    anchor: new google.maps.Point(0,0),
 			    strokeWeight: 0,
 			    scale: 0.70
@@ -68,7 +74,7 @@ function initMap() {
 		icon : {
 		    path: "M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0",
 		    fillColor: '#FFFFFF',
-		    fillOpacity: .5,
+		    fillOpacity: 0.5,
 		    anchor: new google.maps.Point(0,0),
 		    strokeWeight: 0,
 		    scale: 0.70
@@ -90,7 +96,7 @@ function initMap() {
 	  });
 	markersRuche.push(markerRucher);
 	newParcours();
-	for (r of rayonsButinage) {
+	for (const r of rayonsButinage) {
 		circlesButinage.push(new google.maps.Circle({
 	      strokeColor: "#0000FF",
 	      strokeOpacity: 0.8,
@@ -240,7 +246,7 @@ $(document).ready(function() {
 	$("#searchtext").keyup(function(event) {
 		if (event.keyCode === 13) {
 			let searchtext = $("#searchtext").val().toUpperCase();
-			for (let marker of markersRuche) {
+			for (const marker of markersRuche) {
 				if ((marker.label.text.toUpperCase() === searchtext) ||
 					(marker.label.text.toUpperCase() === '*' + searchtext) ||
 					(marker.essaimnom.toUpperCase() === searchtext)) {
@@ -252,7 +258,7 @@ $(document).ready(function() {
 	$('#cercles').attr("title", distButinage + ' ' + rayonsButinage.join(', ') + 'm');
 	$('#cercles').click(function() {
 		const visi = !circlesButinage[0].getVisible();
-		for (c of circlesButinage) {
+		for (const c of circlesButinage) {
 			c.setVisible(visi);
 		}
 		const bgCol = visi?'rgba(0, 0, 255, 0.2)':'';
