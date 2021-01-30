@@ -1,4 +1,4 @@
-/* jshint  esversion: 6, browser: true, jquery: true */
+/* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals ol,
 	ruchers, nomRuches,	recentertxt, lesRucherstxt,	lesRuchestxt, ruchertxt, couchemarqueursrucherstxt,
 	pleinecrantxt, urlruches, _csrf_token

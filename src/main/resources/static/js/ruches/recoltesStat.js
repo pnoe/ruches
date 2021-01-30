@@ -1,4 +1,4 @@
-/* jshint  esversion: 6, browser: true, jquery: true */
+/* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals d3, Chart,
    poidsmiel, nomsessaims, poidsTotal
 */

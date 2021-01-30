@@ -1,4 +1,4 @@
-/* jshint  esversion: 6, browser: true, jquery: true */
+/* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals google, exportGpx, exportKml,
     rucheParcours, distParcours, rucher, rucherMapZoom, longitudeCentre, latitudeCentre,
 	 rayonsButinage, distButinage, urlruches, nomHausses, essaimtxt, pasdessaimtxt,
@@ -188,7 +188,7 @@ function sauveRuchePosition(e, markerRuche) {
     		urlruches + 'ruche/deplace/' + markerRuche.rucheid + '/' + e.latLng.lat() + '/' + e.latLng.lng(),
     		true);
     req.setRequestHeader('x-csrf-token', _csrf_token);
-    req.onload = function(e) {
+    req.onload = function() {
         if (req.readyState === 4) {
             if (req.status === 200) {
                 if (req.responseText !== "OK") {

@@ -1,4 +1,4 @@
-/* jshint  esversion: 6, browser: true, jquery: true */
+/* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals google,
 	ruchers, nomRuches,	urlruches, ruchertxt, lesRuchestxt,	ruchersmapzoom, _csrf_token
  */

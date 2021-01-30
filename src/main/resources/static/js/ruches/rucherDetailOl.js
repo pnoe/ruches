@@ -1,4 +1,4 @@
-/* jshint  esversion: 6, browser: true, jquery: true */
+/* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals ol, domtoimage, jsPDF, exportGpx, exportKml,
    rucheParcours, distParcours, longitudeCentre, latitudeCentre, rayonsButinage, cercles, distButinage, ruches, 
    rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 

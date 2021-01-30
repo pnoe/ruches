@@ -1,4 +1,4 @@
-/* jshint  esversion: 6, browser: true, jquery: true */
+/* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals listeEvenements, buttontextprint, buttontextcol */
 
 function evenementListe(initDatatable) {
@@ -17,12 +17,12 @@ function evenementListe(initDatatable) {
 			]
 		});
 	}
-	$('#periode').on('change', function(evt) {
+	$('#periode').on('change', function() {
 		if ($(this).val() !== '6') {
 			this.form.submit();
 		}
 	});
-	$('#cal').on('click', function(evt) {
+	$('#cal').on('click', function() {
 		if ($(this).parent().val() === '6') {
 			$(this).parent().dateRangePicker({
 				autoClose: true,
