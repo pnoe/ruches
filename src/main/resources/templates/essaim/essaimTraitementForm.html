@@ -9,9 +9,9 @@
 		$("#commentaire").focus();
 		$('#finTraitement').on('click', function () {
 			if ($(this).is(':checked')) {
-				document.getElementById('typeEvenement').setAttribute('value', "ESSAIMTRAITEMENTFIN");
+				$('#typeEvenement').attr('value', "ESSAIMTRAITEMENTFIN");
 			} else {		
-				document.getElementById('typeEvenement').setAttribute('value', "ESSAIMTRAITEMENT");
+				$('#typeEvenement').attr('value', "ESSAIMTRAITEMENT");
 			}
 	    });
 		$("#evenementForm").validate({

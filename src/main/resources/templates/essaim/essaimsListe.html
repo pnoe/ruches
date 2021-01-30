@@ -19,18 +19,18 @@ $(document).ready(function() {
     		let essaimNoms = "";
             table.rows( { selected: true } ).data().pluck( 0 ).each(function (value, index) {
             	// on récupère le nom de l'essaim dans le texte de la balise <a ...>
-            	let a = document.createElement('a');
+            	const a = document.createElement('a');
             	a.innerHTML = value;
             	essaimNoms += a.textContent + ",";
             });
             if (essaimNoms) { 
                 // on enlève la dernière virgule et met à jour l'url de traitement
             	essaimNoms = essaimNoms.substring(0, essaimNoms.length-1);
-            	document.getElementById('traitementvarroa').setAttribute('href', [[@{/evenement/essaim/traitementLot/}]] + essaimNoms);
-            	document.getElementById('traitementSucre').setAttribute('href', [[@{/evenement/essaim/sucreLot/}]] + essaimNoms);
+            	$('#traitementvarroa').attr('href', [[@{/evenement/essaim/traitementLot/}]] + essaimNoms);
+            	$('#traitementSucre').attr('href', [[@{/evenement/essaim/sucreLot/}]] + essaimNoms);
             } else {
-            	document.getElementById('traitementvarroa').setAttribute('href', "#");
-            	document.getElementById('traitementSucre').setAttribute('href', "#");
+            	$('#traitementvarroa').attr('href', "#");
+            	$('#traitementSucre').attr('href', "#");
             }      
         }
 	}
