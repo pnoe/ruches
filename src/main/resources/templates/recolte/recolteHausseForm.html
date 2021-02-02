@@ -2,8 +2,33 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script>
+<script th:inline="javascript">
 	$().ready(function() {
+		$.validator.addMethod( "greaterThanEqual", function( value, element, param ) {
+		    var target = $( param );
+		    if (isNaN(value) || isNaN(target.val())) {
+		    	return true;
+		    }
+		    if ( this.settings.onfocusout && target.not( ".validate-greaterThanEqual-blur" ).length ) {
+		        target.addClass( "validate-greaterThanEqual-blur" ).on( "blur.validate-greaterThanEqual", function() {
+		            $( element ).valid();
+		        } );
+		    }
+		    return parseFloat(value) >= parseFloat(target.val());
+		}, "Le poids avant récolte doit être supérieur ou égal au poids après récolte." );		
+		$("#recolteHausseForm").validate({
+			rules : {
+				poidsAvant : {
+					required: true,
+					number: true,
+					greaterThanEqual : $("#poidsApres")
+				},
+				poidsApres : {
+					required: true,
+					number: true
+				}
+			}
+		});
 		$("#poidsAvant").focus();
 		$(".toggleplus").hide();
 		$("#toggleplus").click(function() {
@@ -25,6 +50,11 @@
 						th:text="#{recolte} + ' ' + ${#temporals.format(recolte.date, 'yyyy/MM/dd HH:mm')}"></a>
 					<th:block th:text="' : '+#{hausse}+' '+${detailRecolte.hausse.nom}"></th:block>
 				</h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<p th:text="'Poids vide ' + ${#numbers.formatDecimal(detailRecolte.hausse.poidsVide,1,2,'COMMA')} + 'kg'"></p>
 			</div>
 		</div>
 	</div>
