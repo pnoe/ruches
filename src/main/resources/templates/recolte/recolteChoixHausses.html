@@ -5,8 +5,33 @@
 $(document).ready(function() {
 	$('#retraitHausseRecolte').DataTable({
     });	
-	$('#ajoutHausseRecolte').DataTable({
-    });	
+	let tableAjout = $('#ajoutHausseRecolte').DataTable({
+		select: true
+    });
+	function updateLinks( e, dt, type, indexes ) {
+    	if ( type === 'row' ) {
+    		let hausseNoms = "";
+    		tableAjout.rows( { selected: true } ).data().pluck( 0 ).each(function (value, index) {
+            	// on récupère le nom de l'essaim dans le texte de la balise <a ...>
+            	const a = document.createElement('a');
+            	a.innerHTML = value;
+            	hausseNoms += a.textContent + ",";
+            });
+            if (hausseNoms) { 
+                // on enlève la dernière virgule et met à jour l'url de traitement
+            	hausseNoms = hausseNoms.substring(0, hausseNoms.length-1);
+            	$('#ajouterHausses').attr('href', [[@{/recolte/ajoutHausses/}+${recolte.id}+'/']] + hausseNoms);
+            } else {
+            	$('#ajouterHausses').attr('href', "#");
+            }      
+        }
+	}
+	tableAjout.on( 'select deselect', updateLinks);
+    $('#ajouterHausses').on('click', function () {
+    	if ($(this).attr("href") == "#") {
+    		return confirm([[#{selecthaussestraiter}]]);	
+    	}      
+    });
 });
 </script>
 </head>
@@ -69,7 +94,9 @@ $(document).ready(function() {
 			</tr>
 		</tbody>
 	</table>
-	<h6 th:text="#{ajouterHausses}"></h6>
+	<h6>
+		<a id="ajouterHausses" href="#" th:text="#{ajouterHausses}"></a>
+	</h6>
 	<table class="table table-bordered" id="ajoutHausseRecolte">			
 		<thead>
 			<tr>
@@ -81,8 +108,7 @@ $(document).ready(function() {
 		</thead>
 		<tbody>
 			<tr th:each="hausseNotInRecolte : ${haussesNotInRecolte}">
-				<td><a data-toggle="tooltip" th:title="#{ajouterhausse}" 
-					th:href="@{'/recolte/ajoutHausse/'+${recolte.id}+'/'+${hausseNotInRecolte.id}}"
+				<td><a th:href="@{'/hausse/'+${hausseNotInRecolte.id}}"
 					th:text="${hausseNotInRecolte.nom}"></a></td>
 				<td><a th:href="@{'/rucher/'+${hausseNotInRecolte.ruche?.rucher?.id}}"  
 					th:text="${hausseNotInRecolte.ruche?.rucher?.nom}"></a></td>

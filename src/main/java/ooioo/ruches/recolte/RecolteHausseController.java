@@ -156,10 +156,58 @@ public class RecolteHausseController {
 		}
 		return RECOLTECHOIXHAUSSES;
 	}
+	
+	/**
+	 * Ajout d'une série de hausses dans la récolte
+	 */
+	@GetMapping("/ajoutHausses/{recolteId}/{haussesNoms}")
+	public String ajoutHausses(Model model, @PathVariable long recolteId, @PathVariable String[] haussesNoms) {
+		for (String hausseNom : haussesNoms) {
+			Optional<Hausse> hausseOpt = hausseRepository.findByNom(hausseNom);
+			Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
+			if (recolteOpt.isPresent()) {
+				if (hausseOpt.isPresent()) {
+					Recolte recolte = recolteOpt.get();
+					Hausse hausse = hausseOpt.get();
+					BigDecimal poids = hausse.getPoidsVide().add(hausseResteMiel);
+					RecolteHausse recolteHausse = new RecolteHausse(recolte, hausse, poids,	poids);
+					Ruche ruche = hausse.getRuche();
+					if (ruche == null) {
+						// la hausse n'est pas sur une ruche. On ne saura ni la ruche, ni le rucher,
+						// ni l'essaim correspondants
+						logger.error("Récolte {} hausse {} Id ruche inconnu", recolteId, hausse.getId());
+					} else {
+						recolteHausse.setRuche(ruche);
+						Rucher rucher = ruche.getRucher();
+						recolteHausse.setRucher(rucher);
+						Essaim essaim = ruche.getEssaim();
+						recolteHausse.setEssaim(essaim);
+						// on n'enleve pas la hausse de la ruche
+						// on a alors accès au nom de la ruche dans la liste haussesRecolte
+						// et on peut retirer une hausse sans avoir à la réaffecter à une ruche
+					}
+					recolteHausseRepository.save(recolteHausse);
+					model.addAttribute(Const.RECOLTE, recolte);
+					model.addAttribute(HAUSSESRECOLTE, hausseRepository.findHaussesInRecolteId(recolteId));
+					model.addAttribute(HAUSSESNOTINRECOLTE, hausseRepository.findHaussesNotInRecolteId(recolteId));
+				} else {
+					logger.error("Nom hausse inconnu", hausseNom);
+				}
+			} else {
+				logger.error(Const.IDRECOLTEXXINCONNU, recolteId);
+				model.addAttribute(Const.MESSAGE, Const.IDRECOLTEINCONNU);
+				return Const.INDEX;
+			}
+		}
+		return "redirect:/recolte/choixHausses/" + recolteId;
+	}
 
 	/**
 	 * Ajout d'une hausse dans la récolte
+	 *     Méthode remplacée par celle ci dessus. A supprimer !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	 *     ******************************************************************************************************************
 	 */
+	/*
 	@GetMapping("/ajoutHausse/{recolteId}/{hausseId}")
 	public String ajoutHausse(Model model, @PathVariable long recolteId, @PathVariable long hausseId) {
 		Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
@@ -201,7 +249,8 @@ public class RecolteHausseController {
 		}
 		return "redirect:/recolte/choixHausses/" + recolteId;
 	}
-
+	*/
+	
 	/**
 	 * Retrait d'une hausse de la récolte
 	 */

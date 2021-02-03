@@ -2,6 +2,7 @@ package ooioo.ruches.hausse;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -12,6 +13,8 @@ import ooioo.ruches.Nom;
 
 @RepositoryRestResource(collectionResourceRel = "hausseRepository")
 public interface HausseRepository extends CrudRepository<Hausse, Long> {
+	
+	Optional<Hausse> findByNom(String hausseNom);
 
 	// correction spring boot 2.2.0 iterable -> list
 	List<Hausse> findByRucheIdOrderByOrdreSurRuche(Long id);
