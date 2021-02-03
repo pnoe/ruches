@@ -1,5 +1,6 @@
 package ooioo.ruches.recolte;
 
+import java.math.BigDecimal;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,6 +61,10 @@ public class RecolteHausseController {
 	private EssaimRepository essaimRepository;
 	@Autowired
 	private RucherRepository rucherRepository;
+	
+	@Value("${hausse.reste.miel}")
+	private BigDecimal hausseResteMiel;
+	
 
 	@Autowired
 	private RecolteHausseService recolteHausseService;
@@ -162,8 +168,8 @@ public class RecolteHausseController {
 			if (hausseOpt.isPresent()) {
 				Recolte recolte = recolteOpt.get();
 				Hausse hausse = hausseOpt.get();
-				RecolteHausse recolteHausse = new RecolteHausse(recolte, hausse, hausse.getPoidsVide(),
-						hausse.getPoidsVide());
+				BigDecimal poids = hausse.getPoidsVide().add(hausseResteMiel);
+				RecolteHausse recolteHausse = new RecolteHausse(recolte, hausse, poids,	poids);
 				Ruche ruche = hausse.getRuche();
 				if (ruche == null) {
 					// la hausse n'est pas sur une ruche. On ne saura ni la ruche, ni le rucher,
