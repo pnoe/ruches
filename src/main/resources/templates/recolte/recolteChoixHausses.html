@@ -3,15 +3,22 @@
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
 $(document).ready(function() {
-	$('#retraitHausseRecolte').DataTable({
-    });	
-	let tableAjout = $('#ajoutHausseRecolte').DataTable({
-		select: true
-    });
 	function updateLinks( e, dt, type, indexes ) {
+		let id; 
+		let href;
+		let table;
+		if (this.id == "ajoutHausseRecolte") {
+			id = $('#ajouterHausses');
+			href = [[@{/recolte/ajoutHausses/}]];
+			table = tableAjout;
+		} else {
+			id = $('#retirerHausses');
+			href = [[@{/recolte/retraitHausses/}]];
+			table = tableRetrait;
+		}
     	if ( type === 'row' ) {
     		let hausseNoms = "";
-    		tableAjout.rows( { selected: true } ).data().pluck( 0 ).each(function (value, index) {
+    		table.rows( { selected: true } ).data().pluck( 0 ).each(function (value, index) {
             	// on récupère le nom de l'essaim dans le texte de la balise <a ...>
             	const a = document.createElement('a');
             	a.innerHTML = value;
@@ -20,12 +27,24 @@ $(document).ready(function() {
             if (hausseNoms) { 
                 // on enlève la dernière virgule et met à jour l'url de traitement
             	hausseNoms = hausseNoms.substring(0, hausseNoms.length-1);
-            	$('#ajouterHausses').attr('href', [[@{/recolte/ajoutHausses/}+${recolte.id}+'/']] + hausseNoms);
+            	id.attr('href', href + [[${recolte.id}+'/']] + hausseNoms);
             } else {
-            	$('#ajouterHausses').attr('href', "#");
+            	id.attr('href', "#");
             }      
         }
 	}
+	const tableRetrait = $('#retraitHausseRecolte').DataTable({
+		select: true
+    });
+	tableRetrait.on( 'select deselect', updateLinks);
+    $('#retirerHausses').on('click', function () {
+    	if ($(this).attr("href") == "#") {
+    		return confirm([[#{selecthaussestraiter}]]);	
+    	}      
+    });
+	const tableAjout = $('#ajoutHausseRecolte').DataTable({
+		select: true
+    });
 	tableAjout.on( 'select deselect', updateLinks);
     $('#ajouterHausses').on('click', function () {
     	if ($(this).attr("href") == "#") {
@@ -70,7 +89,9 @@ $(document).ready(function() {
 			</tr>
 		</tbody>
 	</table>
-	<h6 th:text="#{retirerHausses}" ></h6>
+	<h6>
+		<a id="retirerHausses" href="#" th:text="#{retirerHausses}"></a>
+	</h6>
 	<table class="table table-bordered" id="retraitHausseRecolte">			
 		<thead>
 			<tr>
@@ -82,8 +103,7 @@ $(document).ready(function() {
 		</thead>
 		<tbody>
 			<tr th:each="hausseRecolte : ${haussesRecolte}">
-				<td><a data-toggle="tooltip" th:title="#{retirerhausse}"
-					th:href="@{'/recolte/retraitHausse/'+${recolte.id}+'/'+${hausseRecolte.id}}"
+				<td><a th:href="@{'/hausse/'+${hausseRecolte.id}}"
 					th:text="${hausseRecolte.nom}"></a></td>
 				<td><a th:href="@{'/rucher/'+${hausseRecolte.ruche?.rucher?.id}}"  
 					th:text="${hausseRecolte.ruche?.rucher?.nom}"></a></td>
