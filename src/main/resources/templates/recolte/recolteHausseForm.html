@@ -15,17 +15,19 @@
 		        } );
 		    }
 		    return parseFloat(value) >= parseFloat(target.val());
-		}, "Le poids avant récolte doit être supérieur ou égal au poids après récolte." );		
+		}, [[#{poidsAvantSupPoidsApres}]] );		
 		$("#recolteHausseForm").validate({
 			rules : {
 				poidsAvant : {
 					required: true,
 					number: true,
+					min: [[${detailRecolte.hausse.poidsVide}]],
 					greaterThanEqual : $("#poidsApres")
 				},
 				poidsApres : {
 					required: true,
-					number: true
+					number: true,
+					min: [[${detailRecolte.hausse.poidsVide}]]
 				}
 			}
 		});
