@@ -29,7 +29,7 @@ $(document).ready(function() {
         return confirm([[#{supprimerrecolteethausses}]]);
     });
     $('#hausses').DataTable({
-        order: [ [ 1, 'asc' ] ] ,
+        order: [ [ 1, 'asc' ], [ 0, 'asc' ] ] ,
     	rowGroup: {
             dataSrc: 1, // on groupe sur les ruches
             startRender: null,

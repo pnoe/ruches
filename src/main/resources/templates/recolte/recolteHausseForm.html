@@ -6,8 +6,8 @@
 	$().ready(function() {
 		$.validator.addMethod( "greaterThanEqual", function( value, element, param ) {
 		    var target = $( param );
-		    if (isNaN(value) || isNaN(target.val())) {
-		    	return true;
+		    if (target.val() === "") {
+		     	return true;
 		    }
 		    if ( this.settings.onfocusout && target.not( ".validate-greaterThanEqual-blur" ).length ) {
 		        target.addClass( "validate-greaterThanEqual-blur" ).on( "blur.validate-greaterThanEqual", function() {
@@ -20,13 +20,11 @@
 			rules : {
 				poidsAvant : {
 					required: true,
-					number: true,
 					min: [[${detailRecolte.hausse.poidsVide}]],
-					greaterThanEqual : $("#poidsApres")
+					greaterThanEqual : "#poidsApres"
 				},
 				poidsApres : {
 					required: true,
-					number: true,
 					min: [[${detailRecolte.hausse.poidsVide}]]
 				}
 			}
@@ -66,12 +64,12 @@
 			th:field="*{recolte}" /> <input type="hidden" th:field="*{hausse}" />
 		<div class="form-group">
 			<label th:text="#{poidsAvant}" for="poidsAvant"></label> <input
-				class="form-control" type="text" th:field="*{poidsAvant}"
+				class="form-control" type="number" th:field="*{poidsAvant}"
 				th:errorclass="fieldError" />
 		</div>
 		<div class="form-group">
 			<label th:text="#{poidsApres}" for="poidsApres"></label> <input
-				class="form-control" type="text" th:field="*{poidsApres}"
+				class="form-control" type="number" th:field="*{poidsApres}"
 				th:errorclass="fieldError" />
 		</div>
 		<button type="button" id="toggleplus" th:text="#{plus}" ></button>
