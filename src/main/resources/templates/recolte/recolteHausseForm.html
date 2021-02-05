@@ -20,12 +20,12 @@
 			rules : {
 				poidsAvant : {
 					required: true,
-					min: [[${detailRecolte.hausse.poidsVide}]],
+					range: [ [[${detailRecolte.hausse.poidsVide}]] , 80],
 					greaterThanEqual : "#poidsApres"
 				},
 				poidsApres : {
 					required: true,
-					min: [[${detailRecolte.hausse.poidsVide}]]
+					range: [ [[${detailRecolte.hausse.poidsVide}]], 80]
 				}
 			}
 		});
