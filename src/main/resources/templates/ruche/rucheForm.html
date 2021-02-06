@@ -32,17 +32,8 @@
 				dateAcquisition : {
 					required : true
 				},
-				// permet de refuser 12.23 qui est accepté par le input type="number"
-				// mais mal interprété par java, accepte 12,23
 				poidsVide : {
-					required : true,
-					number : true
-				},
-				longitude : {
-					number : true
-				},
-				latitude : {
-					number : true
+					required : true
 				}
 			}
 		});
@@ -74,9 +65,10 @@
 		<div th:insert="includeForm :: activeField"></div>
 		<div class="form-group">
 			<label for="poidsVide" th:text="#{poidskg}"></label> <input
-				class="form-control" type="number" step="0.001"
+				class="form-control" 
+				type="number" step="0.001" min="0" max="80"
 				th:field="*{poidsVide}" th:errorclass="fieldError" />
-				<!-- type="number" step="0.001"  -->
+				
 		</div>
 		<div class="form-group">
 			<label for="type" th:text="#{typeRuche}"></label> <select

@@ -13,16 +13,6 @@
 				nom : {
 					required : true,
 					nomExiste : true
-				},
-				longitude : 
-				{
-					number : true
-				},
-				latitude : {
-					number : true
-				},
-				altitude : {
-					number : true
 				}
 			}
 		});
@@ -65,9 +55,10 @@
 		<div th:insert="includeForm :: latitudeField"></div>
 		<div th:insert="includeForm :: longitudeField"></div>
 		<div class="form-group">
-			<label for="altitude" th:text="#{altitude}"></label> <input
-				type="text" class="form-control" th:field="*{altitude}"
-				th:errorclass="fieldError" id="altitude" name="altitude" />
+			<label for="altitude" th:text="#{altitude}"></label>
+			<input class="form-control"
+				type="number" step="1" min="-200" max="4000"
+				th:field="*{altitude}" th:errorclass="fieldError" />
 		</div>
 		<div class="form-group">
 			<label for="adresse" th:text="#{adresse}"></label> <input type="text"

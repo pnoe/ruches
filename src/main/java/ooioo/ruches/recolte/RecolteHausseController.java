@@ -143,8 +143,6 @@ public class RecolteHausseController {
 		Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
 		if (recolteOpt.isPresent()) {
 			Recolte recolte = recolteOpt.get();
-			// List<RecolteHausse> recolteHausses = recolteHausseRepository.findByRecolte(recolte);
-			// model.addAttribute(Const.RUCHER, recolteHausseService.nomsRuchers(recolteHausses));
 			model.addAttribute(Const.RECOLTE, recolte);
 			model.addAttribute(HAUSSESRECOLTE, hausseRepository.findHaussesInRecolteId(recolteId));
 			model.addAttribute(HAUSSESNOTINRECOLTE, hausseRepository.findHaussesNotInRecolteId(recolteId));
@@ -187,7 +185,7 @@ public class RecolteHausseController {
 					}
 					recolteHausseRepository.save(recolteHausse);
 				} else {
-					logger.error("Nom hausse inconnu", hausseNom);
+					logger.error("Nom hausse {} inconnu", hausseNom);
 				}
 			} else {
 				logger.error(Const.IDRECOLTEXXINCONNU, recolteId);
@@ -214,7 +212,7 @@ public class RecolteHausseController {
 					RecolteHausse recolteHausse = recolteHausseRepository.findByRecolteAndHausse(recolte, hausse);
 					recolteHausseRepository.delete(recolteHausse);
 				} else {
-					logger.error("Nom hausse inconnu", hausseNom);
+					logger.error("Nom hausse {} inconnu", hausseNom);
 				}
 			} else {
 				logger.error(Const.IDRECOLTEXXINCONNU, recolteId);

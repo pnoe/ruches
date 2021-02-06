@@ -68,14 +68,16 @@
 				cols="35"></textarea>
 		</div>
 		<div th:fragment="latitudeField" class="form-group">
-			<label for="latitude" th:text="#{latitude}"></label> <input
-				class="form-control" type="number" th:field="*{latitude}"
-				th:errorclass="fieldError" />
+			<label for="latitude" th:text="#{latitude}"></label>
+			<input class="form-control" 
+				type="number" step="any" min="-90" max="90"
+				th:field="*{latitude}" th:errorclass="fieldError" />
 		</div>
 		<div th:fragment="longitudeField" class="form-group">
-			<label for="longitude" th:text="#{longitude}"></label> <input
-				class="form-control" type="number" th:field="*{longitude}"
-				th:errorclass="fieldError" />
+			<label for="longitude" th:text="#{longitude}"></label>
+			<input class="form-control"
+				type="number" step="any" min="-180" max="180"
+				th:field="*{longitude}" th:errorclass="fieldError" />
 		</div>
 		<div th:fragment="BtnForm" class="form-group">
 			<input class="btn btn-primary" type="submit"
