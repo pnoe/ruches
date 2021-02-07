@@ -13,8 +13,7 @@
 					'required' : true
 				},
 				poidsMiel : {
-					required : true,
-					number : true,
+					required : true
 				}
 			}
 		});
@@ -56,8 +55,9 @@
 		</div>		
 		<div class="form-group">
 			<label th:text="#{poidsMiel}" for="poidsMiel"></label>
-			<input class="form-control" type="number" step="0.001" th:field="*{poidsMiel}"
-				th:errorclass="fieldError" />
+			<input class="form-control" 
+				type="number" step="0.001" min="0"
+			th:field="*{poidsMiel}"	th:errorclass="fieldError" />
 		</div>		
 		<div th:insert="includeForm :: commentaireField"></div>
 		<div th:insert="includeForm :: BtnForm"></div>
