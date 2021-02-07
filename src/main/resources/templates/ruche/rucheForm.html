@@ -64,8 +64,8 @@
 		<div th:insert="includeForm :: nomField"></div>
 		<div th:insert="includeForm :: activeField"></div>
 		<div class="form-group">
-			<label for="poidsVide" th:text="#{poidskg}"></label> <input
-				class="form-control" 
+			<label for="poidsVide" th:text="#{poidskg}"></label>
+			<input class="form-control" 
 				type="number" step="0.001" min="0" max="80"
 				th:field="*{poidsVide}" th:errorclass="fieldError" />
 				
