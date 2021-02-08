@@ -130,7 +130,7 @@ public class RucherController {
 					itemHisto.put("date", eve.getDate().format(formatter));
 					itemHisto.put("type", "Événement incomplet");
 					itemHisto.put("ruche", (eve.getRuche() == null) ? "" : eve.getRuche().getNom());
-					itemHisto.put("nbruche", Integer.toString(ruches.size()));
+					itemHisto.put(Const.NBRUCHES, Integer.toString(ruches.size()));
 					itemHisto.put("etat", "");
 					itemHisto.put("eveid", eve.getId().toString());					
 					histo.add(itemHisto);
@@ -145,7 +145,7 @@ public class RucherController {
 					itemHisto.put("date", eve.getDate().format(formatter));
 					itemHisto.put("type", "Ajout");
 					itemHisto.put("ruche", eve.getRuche().getNom());
-					itemHisto.put("nbruche", Integer.toString(ruches.size()));
+					itemHisto.put(Const.NBRUCHES, Integer.toString(ruches.size()));
 					itemHisto.put("etat", String.join(" ", ruches)); 
 					itemHisto.put("eveid", eve.getId().toString());
 					histo.add(itemHisto);
@@ -159,7 +159,7 @@ public class RucherController {
 						itemHisto.put("date", eve.getDate().format(formatter));
 						itemHisto.put("type", "Retrait");
 						itemHisto.put("ruche", eve.getRuche().getNom());
-						itemHisto.put("nbruche", Integer.toString(ruches.size()));
+						itemHisto.put(Const.NBRUCHES, Integer.toString(ruches.size()));
 						itemHisto.put("etat", String.join(" ", ruches));
 						itemHisto.put("eveid", eve.getId().toString());
 						histo.add(itemHisto);

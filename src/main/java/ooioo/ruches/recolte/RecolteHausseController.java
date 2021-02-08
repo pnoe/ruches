@@ -78,15 +78,10 @@ public class RecolteHausseController {
 		if (recolteOpt.isPresent()) {
 			Recolte recolte = recolteOpt.get();
 			model.addAttribute(Const.RECOLTE, recolte);
-			
 			model.addAttribute("dateRecolteEpoch", recolte.getDate().toEpochSecond(ZoneOffset.UTC));
-			
-		
 			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByRecolte(recolte);
 			model.addAttribute("detailsRecolte", recolteHausses);
-			
-			model.addAttribute("nbruches", recolteHausseService.nomsRuches(recolteHausses).size());
-			
+			model.addAttribute(Const.NBRUCHES, recolteHausseService.nomsRuches(recolteHausses).size());
 			model.addAttribute(Const.RUCHER, recolteHausseService.nomsRuchers(recolteHausses));
 		} else {
 			logger.error(Const.IDRECOLTEXXINCONNU, recolteId);
