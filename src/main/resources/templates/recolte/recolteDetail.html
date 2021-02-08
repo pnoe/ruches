@@ -41,7 +41,7 @@ $(document).ready(function() {
                         return a + parseFloat(b.replace(/,/g,'.'));
                     }, 0.00);
                 return $('<tr/>')
-                    .append( '<td colspan="4">Total pour la ruche '+group+'<\/td>' )
+                    .append( '<td colspan="4">'+[[#{totalPourLaRuche}]]+' '+group+'<\/td>' )
                     //.append( '<td class="num">'+mielTotal.toFixed(2)+'<\/td>' )
                     .append( '<td class="num">'+new Intl.NumberFormat(navigator.language, 
                     	{minimumFractionDigits:2}).format(mielTotal)+'<\/td>' )
