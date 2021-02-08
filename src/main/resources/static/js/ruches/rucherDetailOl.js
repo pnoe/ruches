@@ -142,6 +142,7 @@ function rucherDetail(ign) {
 		features: select.getFeatures(),
 		layers: [vectorLayer]
 	});
+	translate.setActive(!$('#dragMarker')[0].checked);
 	map = new ol.Map({
 		interactions: ol.interaction.defaults({ doubleClickZoom: false }).extend([select, translate]),
 		controls: ol.control.defaults({
@@ -324,6 +325,10 @@ function rucherDetail(ign) {
 		document.getElementById('popup-content').innerHTML = 'Calcul en cours...';
 		overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());
 		parcoursRedraw(true);
+	});
+	
+	$('#dragMarker').change(function() {
+	  	translate.setActive(!this.checked);
 	});
 
 	const exportPdf = $('#export-pdf');

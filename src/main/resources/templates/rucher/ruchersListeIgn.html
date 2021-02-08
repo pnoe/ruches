@@ -36,6 +36,9 @@
 				<a href="#" class="oi oi-question-mark" data-toggle="popover" data-trigger="focus" tabindex="0" role="button"
 					th:attr="data-content=#{aiderucherlisteignmarkers}"></a>
 				<input type="text" placeholder="Recherche..." id="searchtext" />
+				<span class="padicons">
+       				<input type="checkbox" id="dragMarker" th:title="#{markerFixes}" checked/>
+				</span>
 				<a th:href="@{/rucher/recentre}"
 				  class="recentre oi oi-aperture" th:title="#{recentrer}" aria-hidden="true">
        			</a>

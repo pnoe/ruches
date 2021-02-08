@@ -62,6 +62,9 @@
 					data-trigger="focus" tabindex="0" role="button"
 					th:attr="data-content=#{aiderucherdetailignmarkers}"></a>&nbsp;&nbsp;
 				<input type="text" th:placeholder="#{recherche}" id="searchtext" />
+				<span class="padicons">
+       				<input type="checkbox" id="dragMarker" th:title="#{markerFixes}" checked/>
+				</span>
 				<a th:href="@{'/rucher/rapproche/'+${rucher.id}}"
 				  class="rapproche oi oi-aperture" th:title="#{rapprocher}"
 					aria-hidden="true"></a>

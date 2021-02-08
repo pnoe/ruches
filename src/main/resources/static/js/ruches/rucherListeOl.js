@@ -77,6 +77,7 @@ function rucherListeIgn(ign) {
       features: select.getFeatures(),
       layers: [vectorLayer]
     });
+    translate.setActive(!$('#dragMarker')[0].checked);
 	const map = new ol.Map({
 		// ajout {doubleClickZoom: false}
 		interactions: ol.interaction.defaults({doubleClickZoom: false}).extend([select, translate]),
@@ -184,4 +185,7 @@ function rucherListeIgn(ign) {
 	    	}
     	}
     });
+    $('#dragMarker').change(function() {
+	  	translate.setActive(!this.checked);
+	});
   }
