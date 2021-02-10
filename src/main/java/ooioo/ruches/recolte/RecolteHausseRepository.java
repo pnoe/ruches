@@ -19,7 +19,7 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 	List<RecolteHausse> findByRecolte(Recolte recolte);
 	
 	@Query(value = "select count(distinct ruche) as nbruches from RecolteHausse where recolte.id=?1 and rucher.id=?2")
-	Integer countRucheByRecolteByRucher(Long recolteId, Long rucheId);
+	Integer countRucheByRecolteByRucher(Long recolteId, Long rucherId);
 	
 	List<RecolteHausse> findByRucheId(Long rucheId);
 
