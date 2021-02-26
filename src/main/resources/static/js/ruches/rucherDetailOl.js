@@ -6,9 +6,10 @@
    parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token  */
 // "use strict"
 
-let vectorLineLayer;
-let layerSwitcher;
-let map;
+// let vectorLineLayer;
+// let layerSwitcher;
+// let map;
+// let drawControl;
 
 function rucherDetail(ign) {
 	$('.rapproche').on('click', function() {
@@ -85,7 +86,7 @@ function rucherDetail(ign) {
 		})
 	);
 	markerRuches.push(iconFeatureEntree);
-	vectorLineLayer = newVectorLineLayer();
+	let vectorLineLayer = newVectorLineLayer();
 	const mapcenter = [];
 	mapcenter.push(rucher.longitude);
 	mapcenter.push(rucher.latitude);
@@ -93,7 +94,7 @@ function rucherDetail(ign) {
 		source: new ol.source.Vector({
 			features: markerRuches
 		})
-	});	
+	});
 	const coordsCentre = [];
 	coordsCentre.push(longitudeCentre);
 	coordsCentre.push(latitudeCentre);
@@ -143,7 +144,18 @@ function rucherDetail(ign) {
 		layers: [vectorLayer]
 	});
 	translate.setActive(!$('#dragMarker')[0].checked);
-	map = new ol.Map({
+	
+	// Utiliser KMLExtended pour sauver et lire les textes	
+	// const format = new ol.format.KMLExtended({});
+    const format = new ol.format.KML({});
+	const dessinsFeatures = (rucher.dessin === null)?new ol.Collection():new ol.Collection(format.readFeatures(rucher.dessin));
+	const drawLayer = new ol.layer.Vector({
+		source: new ol.source.Vector({
+			features: dessinsFeatures
+		})
+	});
+	
+	const map = new ol.Map({
 		interactions: ol.interaction.defaults({ doubleClickZoom: false }).extend([select, translate]),
 		controls: ol.control.defaults({
 			attribution: false
@@ -152,7 +164,10 @@ function rucherDetail(ign) {
 		layers: [
 			vectorLayer,
 			vectorLineLayer, 
-			cerclesLayer
+			cerclesLayer,
+			
+			drawLayer
+			
 		],
 		overlays: [overlay],
 		view: new ol.View({
@@ -160,7 +175,25 @@ function rucherDetail(ign) {
 			zoom: 19
 		})
 	});
-	layerSwitcher = new ol.control.LayerSwitcher({
+	
+			
+	
+	const drawControl = new ol.control.Drawing({
+		layer: drawLayer
+		/*,
+		popup : {
+		     display : false
+		},
+		tools: {
+			display: false,
+			text: false,
+			tooltip: false
+		} */
+	});	
+	map.addControl(drawControl);
+	
+	
+	const layerSwitcher = new ol.control.LayerSwitcher({
 		layers: [{
 			layer: vectorLayer,
 			config: {
@@ -168,6 +201,16 @@ function rucherDetail(ign) {
 				description: couchemarqueursruches
 			}
 		},
+		
+		{
+			layer: drawLayer,
+			config: {
+				title: 'Dessin',
+				description: 'Dessin manuels'
+			}
+		},
+		
+		
 		{
 			layer: vectorLineLayer,
 			config: {
@@ -228,6 +271,7 @@ function rucherDetail(ign) {
 		layers: [vectorLayer]
 	});
 	map.addInteraction(selectDoubleClick);
+	
 	selectDoubleClick.on('select', function(e) {
 		const feature = e.target.getFeatures().getArray()[0];
 		if (feature.get("rucheid") === 'entree') {
@@ -249,6 +293,7 @@ function rucherDetail(ign) {
 		overlay.setPosition(feature.getGeometry().getCoordinates());
 		selectDoubleClick.getFeatures().clear();
 	});
+	
 	translate.on('translateend', function(evt) {
 		const coord = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
 		const req = new XMLHttpRequest();
@@ -276,6 +321,7 @@ function rucherDetail(ign) {
 		};
 		req.send(null);
 	});
+	
 	$("#searchtext").keyup(function(event) {
 		if (event.keyCode === 13) {
 			let searchtext = $("#searchtext").val().toUpperCase();
@@ -389,6 +435,34 @@ function rucherDetail(ign) {
 			source: lineSource
 		});
 	}
+	
+	
+	
+	
+	$('#sauve-dessin').click(function() {
+		sauveDessin();
+	});
+	function sauveDessin() {
+		const req = new XMLHttpRequest();
+    	req.open('POST', ruchesurl + 'rucher/sauveDessin/' + rucher.id, true);
+	    req.setRequestHeader('x-csrf-token', _csrf_token);
+	    req.onload = function() {
+	        if (req.readyState === 4) {
+	            if (req.status === 200) {
+	                if (req.responseText !== "OK") {
+	                    alert(req.responseText);	
+	                } else {
+	                	alert("Dessin enregistré");
+	                }
+	            }
+	        }
+	    };
+	    req.send(format.writeFeatures(drawLayer.getSource().getFeatures()));
+	    // alert(format.writeFeatures(drawLayer.getSource().getFeatures()));
+	}
+	
+	
+	
 
 	function parcoursRedraw(redraw = false) {
 		const req2 = new XMLHttpRequest();

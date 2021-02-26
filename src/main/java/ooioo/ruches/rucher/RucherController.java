@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -375,8 +376,9 @@ public class RucherController {
 	/**
 	 * Rapprocher les ruches trop éloignées de leur rucher
 	 */
-	@GetMapping("/rapproche/{rucherId}")
-	public String rapproche(Model model, @PathVariable long rucherId) {
+	@GetMapping({"/rapproche/Ign/{rucherId}", "/rapproche/Osm/{rucherId}"})
+	public String rapproche(Model model, @PathVariable long rucherId, HttpServletRequest request) {
+		String servletPath = request.getServletPath().split("/")[3];
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
@@ -400,7 +402,7 @@ public class RucherController {
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
-		return "redirect:/rucher/Ign/{rucherId}";
+		return "redirect:/rucher/" + servletPath + "/{rucherId}";
 	}
 
 	/**
@@ -585,7 +587,6 @@ public class RucherController {
 	/**
 	 * Ajoute une liste de ruches dans un rucher 
 	 * Création de l'événement RUCHEAJOUTRUCHER par ruche
-	 * A supprimer : Création des événements RUCHERETRAITRUCHER et RUCHEAJOUTRUCHER par ruche
 	 */
 	@PostMapping("/ruches/ajouter/sauve/{rucherId}/{ruchesNoms}")
 	public String sauveAjouterRuches(Model model, @PathVariable long rucherId, @PathVariable String[] ruchesNoms,
@@ -723,6 +724,23 @@ public class RucherController {
 		logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 		map.put("erreur", "Id rucher inconnu");
 		return map;
+	}
+	
+	/**
+	 * Sauvegarde d'un dessin sur carte ign ou osm (appel XMLHttpRequest)
+	 */
+	@PostMapping("/sauveDessin/{rucherId}")
+	@ResponseStatus(value = HttpStatus.OK)
+	public @ResponseBody String sauveDessin(@PathVariable Long rucherId, @RequestBody String dessin) {
+		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
+		if (rucherOpt.isPresent()) {
+			Rucher rucher = rucherOpt.get();
+			rucher.setDessin(dessin);
+			rucherRepository.save(rucher);
+			return "OK";
+		}
+		logger.error(Const.IDRUCHERXXINCONNU, rucherId);
+		return "error";
 	}
 	
 

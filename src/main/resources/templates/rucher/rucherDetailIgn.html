@@ -63,9 +63,13 @@
 		 		<span class="padicons">
        				<input type="checkbox" id="dragMarker" th:title="#{markerFixes}" checked/>
 				</span>
-		 		<a th:href="@{'/rucher/rapproche/'+${rucher.id}}"
+		 		<a th:href="@{'/rucher/rapproche/Ign/'+${rucher.id}}"
 		 		  class="rapproche oi oi-aperture" th:title="#{rapprocher}" aria-hidden="true">
        			</a>
+       			<!--/*  	
+				<span id="sauve-dessin" class="oi oi-pencil"
+					th:title="'sauve dessin'" aria-hidden="true"></span>
+				*/-->
        			<span id="liste" class="liste oi oi-list" th:title="#{listeRuchesOrdonnees}" aria-hidden="true"></span>
 		 		<span id="listeplus" class="liste oi oi-list-rich" th:title="#{listePlusRuchesOrdonnees}" aria-hidden="true"></span>
 				<span id="export-gpx" class="oi oi-globe" th:title="#{exportGPX}"

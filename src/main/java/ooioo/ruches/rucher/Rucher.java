@@ -67,6 +67,11 @@ public class Rucher {
 	 * Rucher actif ?
 	 */
 	private boolean actif = true;
+	
+	/**
+	 * Dessin créé dans une carte ign ou osm au format kml
+	 */
+	private String dessin;
 
 	public Long getId() {
 		return id;
@@ -154,6 +159,14 @@ public class Rucher {
 
 	public void setActif(boolean actif) {
 		this.actif = actif;
+	}
+
+	public String getDessin() {
+		return dessin;
+	}
+
+	public void setDessin(String dessin) {
+		this.dessin = dessin;
 	}
 
 }
