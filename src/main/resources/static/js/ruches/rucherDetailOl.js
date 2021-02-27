@@ -6,11 +6,6 @@
    parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token  */
 // "use strict"
 
-// let vectorLineLayer;
-// let layerSwitcher;
-// let map;
-// let drawControl;
-
 function rucherDetail(ign) {
 	$('.rapproche').on('click', function() {
 		return confirm(rapprochertxt);
@@ -147,6 +142,7 @@ function rucherDetail(ign) {
 	
 	// Utiliser KMLExtended pour sauver et lire les textes	
 	// const format = new ol.format.KMLExtended({});
+	// Ne fonctionne pas avec ol 6 pour le moment
     const format = new ol.format.KML({});
 	const dessinsFeatures = (rucher.dessin === null)?new ol.Collection():new ol.Collection(format.readFeatures(rucher.dessin));
 	const drawLayer = new ol.layer.Vector({
@@ -192,6 +188,17 @@ function rucherDetail(ign) {
 	});	
 	map.addControl(drawControl);
 	
+	const gfi = new ol.control.GetFeatureInfo({
+            layers: [{
+                    obj : drawLayer,
+                    event: 'contextmenu'
+            }],
+            options : {
+            	hidden: true,
+                auto: false
+            }
+    });
+    map.addControl(gfi);
 	
 	const layerSwitcher = new ol.control.LayerSwitcher({
 		layers: [{
