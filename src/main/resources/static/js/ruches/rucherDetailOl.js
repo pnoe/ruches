@@ -141,9 +141,9 @@ function rucherDetail(ign) {
 	translate.setActive(!$('#dragMarker')[0].checked);
 	
 	// Utiliser KMLExtended pour sauver et lire les textes	
-	// const format = new ol.format.KMLExtended({});
+	const format = new ol.format.KMLExtended({});
 	// Ne fonctionne pas avec ol 6 pour le moment
-    const format = new ol.format.KML({});
+    // const format = new ol.format.KML({});
 	const dessinsFeatures = (rucher.dessin === null)?new ol.Collection():new ol.Collection(format.readFeatures(rucher.dessin));
 	const drawLayer = new ol.layer.Vector({
 		source: new ol.source.Vector({
@@ -175,16 +175,10 @@ function rucherDetail(ign) {
 			
 	
 	const drawControl = new ol.control.Drawing({
-		layer: drawLayer
-		/*,
-		popup : {
-		     display : false
-		},
+		layer: drawLayer,
 		tools: {
-			display: false,
-			text: false,
-			tooltip: false
-		} */
+			text: false
+		}
 	});	
 	map.addControl(drawControl);
 	
