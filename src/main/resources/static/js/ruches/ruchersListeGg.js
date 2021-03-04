@@ -8,10 +8,10 @@ const markersRucher = [];
 function initMap() {
 	let mapcenterlong;
 	let mapcenterlat;
-	for (let i = 0; i < ruchers.length; i++) {
-		if (ruchers[i].depot === true) {
-			mapcenterlong = ruchers[i].longitude;
-			mapcenterlat = ruchers[i].latitude;
+	for (let rucher of ruchers) {
+		if (rucher.depot === true) {
+			mapcenterlong = rucher.longitude;
+			mapcenterlat = rucher.latitude;
 		}
 	}
 	const map = new google.maps.Map(document.getElementById('map'), {

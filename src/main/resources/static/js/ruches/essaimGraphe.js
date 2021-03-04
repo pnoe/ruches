@@ -66,7 +66,6 @@ function essaimGraphe() {
 			return d.data.couleurReine;
 		})
 		.style("stroke", function(d) {
-			// return d.data.fillColor;
 			if (d.data.name == essaimnom) {
 				return "black";
 			}

@@ -30,9 +30,9 @@ function exportGpx() {
 		'<trk><name><![CDATA[Rucher ' + rucher.nom + ']]></name><desc>' +
 		ruches.length + ' ' + ruchestxt + ', ' + distancedeparcourstxt + ' ' +
 		distParcours.toFixed(2) + 'm</desc><trkseg>';
-	for (let i = 0; i < rucheParcours.length; i++) {
-		gpxcontent += '<trkpt lat="' + rucheParcours[i].latitude +
-			'" lon="' + rucheParcours[i].longitude + '"></trkpt>';
+	for (let ruche of rucheParcours) {
+		gpxcontent += '<trkpt lat="' + ruche.latitude +
+			'" lon="' + ruche.longitude + '"></trkpt>';
 	}
 	gpxcontent += '</trkseg></trk></gpx>';
 	let link = document.getElementById('gpx-download');
@@ -116,9 +116,9 @@ function exportKml() {
 		ruches.length + ' ' + ruchestxt + ', ' +
 		distancedeparcourstxt + ' ' + distParcours.toFixed(2) + 'm' +
 		'</description><styleUrl>#yellowLineGreenPoly</styleUrl><LineString><coordinates> ';
-	for (let i = 0; i < rucheParcours.length; i++) {
-		kmlcontent += rucheParcours[i].longitude + ',' +
-			rucheParcours[i].latitude + ',0 ';
+	for (let ruche of rucheParcours) {
+		kmlcontent += ruche.longitude + ',' +
+			ruche.latitude + ',0 ';
 	}
 	kmlcontent += '</coordinates></LineString></Placemark></Document></kml>';
 	let link = document.getElementById('kml-download');

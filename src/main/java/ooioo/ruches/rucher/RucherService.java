@@ -312,11 +312,9 @@ public class RucherService {
 	/**
 	 * Ajoute une liste de ruches dans un rucher. 
 	 * Création de l'événement RUCHEAJOUTRUCHER
-	 * A supprimer : Création des événements RUCHERETRAITRUCHER et RUCHEAJOUTRUCHER
 	 */
 	public void sauveAjouterRuches(Rucher rucher, String[] ruchesNoms, String date, String commentaire) {
 		LocalDateTime dateEveAjout = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
-		// LocalDateTime dateEveCadre = dateEveAjout.withSecond(0).withNano(0).plusMinutes(1L);
 		for (String rucheNom : ruchesNoms) {
 			Ruche ruche = rucheRepository.findByNom(rucheNom);
 			ruche.setRucher(rucher);

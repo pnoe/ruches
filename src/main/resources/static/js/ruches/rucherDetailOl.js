@@ -141,10 +141,10 @@ function rucherDetail(ign) {
 	translate.setActive(!$('#dragMarker')[0].checked);
 	
 	// Utiliser KMLExtended pour sauver et lire les textes	
-	const format = new ol.format.KMLExtended({});
+	const formatKML = new ol.format.KMLExtended({});
 	// Ne fonctionne pas avec ol 6 pour le moment
-    // const format = new ol.format.KML({});
-	const dessinsFeatures = (rucher.dessin === null)?new ol.Collection():new ol.Collection(format.readFeatures(rucher.dessin));
+    // const formatKML = new ol.format.KML({});
+	const dessinsFeatures = (rucher.dessin === null)?new ol.Collection():new ol.Collection(formatKML.readFeatures(rucher.dessin));
 	const drawLayer = new ol.layer.Vector({
 		source: new ol.source.Vector({
 			features: dessinsFeatures
@@ -417,10 +417,8 @@ function rucherDetail(ign) {
 
 	function newVectorLineLayer() {
 		const coordsLineString = [];
-		for (let i = 0; i < rucheParcours.length; i++) {
-			const coords = [];
-			coords.push(rucheParcours[i].longitude);
-			coords.push(rucheParcours[i].latitude);
+		for (let rucher of rucheParcours) {
+			const coords = [rucher.longitude, rucher.latitude];
 			coordsLineString.push(ol.proj.fromLonLat(coords));
 		}
 		const lineString = new ol.geom.LineString(coordsLineString);
@@ -458,8 +456,7 @@ function rucherDetail(ign) {
 	            }
 	        }
 	    };
-	    req.send(format.writeFeatures(drawLayer.getSource().getFeatures()));
-	    // alert(format.writeFeatures(drawLayer.getSource().getFeatures()));
+	    req.send(formatKML.writeFeatures(drawLayer.getSource().getFeatures()));
 	}
 	
 	
