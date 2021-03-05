@@ -8,7 +8,7 @@ const markersRucher = [];
 function initMap() {
 	let mapcenterlong;
 	let mapcenterlat;
-	for (let rucher of ruchers) {
+	for (const rucher of ruchers) {
 		if (rucher.depot === true) {
 			mapcenterlong = rucher.longitude;
 			mapcenterlat = rucher.latitude;
@@ -57,14 +57,14 @@ function initMap() {
 $(document).ready(function() {
 	$('#dragMarker').change(function() 
 	  {
-	    for (let marker of markersRucher) {
+	    for (const marker of markersRucher) {
         	 marker.setDraggable(!this.checked);
         }
 	});
 	$("#searchtext").keyup( function(event) {
     	if (event.keyCode === 13) {
 	    	let searchtext = $("#searchtext").val().toUpperCase();
-	    	for (let marker of markersRucher) {
+	    	for (const marker of markersRucher) {
 	    		if (marker.label.toUpperCase().includes(searchtext)) {
 	    			google.maps.event.trigger(marker, 'click');
 				}

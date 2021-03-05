@@ -206,7 +206,7 @@ function sauveRuchePosition(e, markerRuche) {
 function newParcours() {
 	// https://developers.google.com/maps/documentation/javascript/shapes?hl=fr#polylines
 	const coordsLineString = [];
-	for (let rucheP of rucheParcours) {
+	for (const rucheP of rucheParcours) {
 		const coords = { lat: rucheP.latitude, lng: rucheP.longitude };
 		coordsLineString.push(coords);
 	}
@@ -222,7 +222,7 @@ function newParcours() {
 
 $(document).ready(function() {
 	$('#dragMarker').change(function() {
-		for (let markersR of markersRuche) {
+		for (const markersR of markersRuche) {
 			markersR.setDraggable(!this.checked);
 		}
 	});

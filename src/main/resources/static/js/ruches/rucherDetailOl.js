@@ -326,7 +326,7 @@ function rucherDetail(ign) {
 	$("#searchtext").keyup(function(event) {
 		if (event.keyCode === 13) {
 			let searchtext = $("#searchtext").val().toUpperCase();
-			for (let marker of markerRuches) {
+			for (const marker of markerRuches) {
 				if ((marker.getStyle().getText().getText().toUpperCase() === searchtext) ||
 					(marker.getStyle().getText().getText().toUpperCase() === '*' + searchtext) ||
 					(marker.get("essaimnom").toUpperCase() === searchtext)) {
@@ -417,8 +417,8 @@ function rucherDetail(ign) {
 
 	function newVectorLineLayer() {
 		const coordsLineString = [];
-		for (let rucher of rucheParcours) {
-			const coords = [rucher.longitude, rucher.latitude];
+		for (const rucheP of rucheParcours) {
+			const coords = [rucheP.longitude, rucheP.latitude];
 			coordsLineString.push(ol.proj.fromLonLat(coords));
 		}
 		const lineString = new ol.geom.LineString(coordsLineString);

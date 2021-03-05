@@ -12,13 +12,13 @@ function exportGpx() {
 		'<metadata><link href="https://gitlab.com/ooioo/ruches"><text>gitlab ruches</text></link>' +
 		'<time>' + new Date().toISOString() + '</time>' +
 		'</metadata>';
-	for (let i = 1; i < rucheParcours.length; i++) {
-		gpxcontent += '<wpt lat="' + rucheParcours[i].latitude +
-			'" lon="' + rucheParcours[i].longitude + '"><desc><![CDATA[';
-		if (rucheParcours[i].id === 0) {
+	for (const rucheP of rucheParcours) {
+		gpxcontent += '<wpt lat="' + rucheP.latitude +
+			'" lon="' + rucheP.longitude + '"><desc><![CDATA[';
+		if (rucheP.id === 0) {
 			gpxcontent += "Entrée";
 		} else {
-			let rucheidx = ruches.findIndex(x => x.id === rucheParcours[i].id);
+			let rucheidx = ruches.findIndex(x => x.id === rucheP.id);
 			let ruche = ruches[rucheidx];
 			gpxcontent += 'Ruche ' + ruche.nom + '. ' +
 				((ruche.essaim == null) ? "Pas d'essaim" : ('Essaim ' + ruche.essaim.nom)) + '. ' +
@@ -30,9 +30,9 @@ function exportGpx() {
 		'<trk><name><![CDATA[Rucher ' + rucher.nom + ']]></name><desc>' +
 		ruches.length + ' ' + ruchestxt + ', ' + distancedeparcourstxt + ' ' +
 		distParcours.toFixed(2) + 'm</desc><trkseg>';
-	for (let ruche of rucheParcours) {
-		gpxcontent += '<trkpt lat="' + ruche.latitude +
-			'" lon="' + ruche.longitude + '"></trkpt>';
+	for (const rucheP of rucheParcours) {
+		gpxcontent += '<trkpt lat="' + rucheP.latitude +
+			'" lon="' + rucheP.longitude + '"></trkpt>';
 	}
 	gpxcontent += '</trkseg></trk></gpx>';
 	let link = document.getElementById('gpx-download');
@@ -116,9 +116,9 @@ function exportKml() {
 		ruches.length + ' ' + ruchestxt + ', ' +
 		distancedeparcourstxt + ' ' + distParcours.toFixed(2) + 'm' +
 		'</description><styleUrl>#yellowLineGreenPoly</styleUrl><LineString><coordinates> ';
-	for (let ruche of rucheParcours) {
-		kmlcontent += ruche.longitude + ',' +
-			ruche.latitude + ',0 ';
+	for (const rucheP of rucheParcours) {
+		kmlcontent += rucheP.longitude + ',' +
+			rucheP.latitude + ',0 ';
 	}
 	kmlcontent += '</coordinates></LineString></Placemark></Document></kml>';
 	let link = document.getElementById('kml-download');

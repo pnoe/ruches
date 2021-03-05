@@ -171,7 +171,7 @@ function rucherListeIgn(ign) {
     $("#searchtext").keyup( function(event) {
     	if (event.keyCode === 13) {
 	    	let searchtext = $("#searchtext").val().toUpperCase();
-	    	for (let marker of markerRuchers) {
+	    	for (const marker of markerRuchers) {
 	    		if (marker.getStyle().getText().getText().toUpperCase().includes(searchtext)) {
 	    			selectDoubleClick.getFeatures().clear();
 	    	        selectDoubleClick.getFeatures().push(marker);   
