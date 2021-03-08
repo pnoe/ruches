@@ -11,6 +11,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+/**
+ * Internationalisation, paramètre lang sur l'url (par ex: ?lang=en)
+ * https://www.baeldung.com/spring-boot-internationalization
+ * pour utitiliser le header accept language voir :
+ * https://stackoverflow.com/questions/55736861/retrieve-locale-based-on-the-accept-language-in-spring-boot/55740234
+ */
 @Configuration
 @ComponentScan(basePackages = "ooioo.ruches")
 public class MvcConfig implements WebMvcConfigurer {
