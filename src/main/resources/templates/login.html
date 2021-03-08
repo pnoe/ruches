@@ -18,13 +18,6 @@
 	}
 	window.onload = function() {
 		document.getElementById("username").focus();
-		/*
-		document.getElementById("lang").onchange = function() {
-			this.form.setAttribute('action',
-					[[@{/login?lang=}]]+document.getElementById("lang").value);
-			this.form.submit();	
-		};
-		*/
 	}
 </script>
 
@@ -33,16 +26,6 @@
 	<div th:if="${param.error}" th:text="#{nomOuPassIncorrect}"></div>
 	<div th:if="${param.logout}" th:text="#{deconnecte}"></div>
 	<br />
-	<!--/* 
-	<form th:action="@{/login}" method="get">
-		<div class="form-group">
-			<select name="lang" id="lang">
-				<option value="fr" th:selected="${#locale.language} == 'fr'">Français</option>
-				<option value="en" th:selected="${#locale.language} == 'en'">English</option>
-			</select>
-		</div>
-	</form>
-	*/-->
 	<form th:action="@{/login}" method="post">
 		<div class="form-group">
 			<label for="username" th:text="#{nomUtilisateur}"></label> <input
