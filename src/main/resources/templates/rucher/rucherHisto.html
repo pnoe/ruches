@@ -9,7 +9,7 @@
 	<br />
 	<div class="container-fluid">
 		<h1 class="item">
-			<th:block th:text="'Historique '"></th:block>
+			<th:block th:text="#{historique} + ' '"></th:block>
 			<a th:href="@{'/rucher/'+${rucher.id}}"
 				th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
 		</h1>
@@ -18,11 +18,11 @@
 		<table class="table table-bordered">
 		<thead>
 				<tr>
-					<th th:text="'Date'"></th>
-					<th th:text="'Type'"></th>
-					<th th:text="'Ruche'"></th>
-					<th th:text="'Nb'"></th>
-					<th th:text="'État'"></th>
+					<th th:text="#{date}"></th>
+					<th th:text="#{type}"></th>
+					<th th:text="#{ruche}"></th>
+					<th th:text="#{nb}"></th>
+					<th th:text="#{etat}"></th>
 				</tr>
 			</thead>
 			<tbody>

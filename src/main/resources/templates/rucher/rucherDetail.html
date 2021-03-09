@@ -63,7 +63,7 @@
 				  
 				  &nbsp;
 				<a th:href="@{'/rucher/historique/'+${rucher.id}}"
-				  class="oi oi-calendar" th:title="'Historique'" aria-hidden="true"></a>
+				  class="oi oi-calendar" th:title="#{historique}" aria-hidden="true"></a>
 				  
 			</div>
 		</div>
@@ -152,7 +152,7 @@
 				<td></td>		
 			</tr>
 			<tr>
-				<th style="background-color:LightCyan" th:text="'Poids/Ruches'"></th>
+				<th style="background-color:LightCyan" th:text="#{poidsParRuches}"></th>
 				<td th:each="poids, iterStat : ${poidsListe}" 
 					th:text="${#numbers.formatDecimal(poids/recoltesNbRuches[iterStat.index]/1000.0,1,2,'DEFAULT')}"></td>
 				<td></td>		
