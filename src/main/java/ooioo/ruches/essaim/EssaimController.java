@@ -204,7 +204,7 @@ public class EssaimController {
 			}
 			String nomsJoin = String.join(",", nomsCrees);
 			logger.info("Essaims {} créé(s)", nomsJoin);
-			return "Essaim(s) " + nomsJoin + " créé(s)";
+			return messageSource.getMessage("cloneessaimcrees", new Object[] {nomsJoin}, LocaleContextHolder.getLocale());
 		}
 		logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 		return "Erreur : id essaim inconnu";
