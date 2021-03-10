@@ -115,7 +115,7 @@ public class RucheController {
 			}
 			String nomsJoin = String.join(",", nomsCrees);
 			logger.info("Ruches {} créée(s)", nomsJoin);
-			return "Ruche(s) " + nomsJoin + " créée(s)";
+			return messageSource.getMessage("cloneruchecreees", new Object[] {nomsJoin}, LocaleContextHolder.getLocale());
 		}
 		logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 		return "Erreur : id ruche inconnu";

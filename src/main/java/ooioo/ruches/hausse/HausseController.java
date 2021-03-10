@@ -90,7 +90,7 @@ public class HausseController {
 			}
 			String nomsJoin = String.join(",", nomsCrees);
 			logger.info("Hausses {} créée(s)", nomsJoin);
-			return "Hausse(s) " + nomsJoin + " créée(s)";
+			return messageSource.getMessage("clonehaussecreees", new Object[] {nomsJoin}, LocaleContextHolder.getLocale());
 		}
 		logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
 		model.addAttribute(Const.MESSAGE, 
