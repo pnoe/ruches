@@ -1,6 +1,7 @@
 ## Web application to manage apiaries
 
-Spring Boot application running in Tomcat with Postgresql.
+Spring Boot web application running in Tomcat with Postgresql.
+In french or english.
 
 GPL-3 license
 
