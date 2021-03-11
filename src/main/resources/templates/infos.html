@@ -39,7 +39,7 @@
 		</div>
 	</div>
 	<div class="container-fluid accordion">
-		<h1 class="item">Valeurs par année</h1>
+		<h1 class="item" th:text="#{valeursParAnnee}"></h1>
 		<table class="table table-responsive table-bordered table-striped" id="ruches">
 			<thead>
 				<tr>
@@ -51,18 +51,18 @@
 			</thead>
 			<tbody>
 				<tr>
-					<th scope="row">Poids miel en pot</th>
+					<th scope="row" th:text="#{poidsMielEnPot}"></th>
 					<td th:each="pds : ${pdsMiel}"
 						th:text="${#numbers.formatDecimal(pds/1000.0,1,2,'DEFAULT')}"></td>
 				</tr>
 				<tr>
-					<th scope="row">Nb essaims</th>
+					<th scope="row" th:text="#{nbEssaims}"></th>
 					<td th:each="nbE : ${nbEssaims}"
 						th:text="${nbE}"></td>
 					<td></td>
 				</tr>	
 				<tr>
-					<th scope="row">Poids miel / Nb essaims</th>
+					<th scope="row" th:text="#{poidsMiel_nbEssaims}"></th>
 					<td th:each="nbE : ${nbEssaims}"
 						th:text="${#numbers.formatDecimal(pdsMiel[nbEStat.index]/nbE/1000.0,1,2,'DEFAULT')}"></td>
 					<td></td>
