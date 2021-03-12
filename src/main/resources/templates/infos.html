@@ -68,22 +68,22 @@
 					<td></td>
 				</tr>
 				<tr>
-					<th scope="row">Nb essaims créés</th>
+					<th scope="row" th:text="#{nbEssaimsCrees}"></th>
 					<td th:each="nbCree : ${nbCreationEssaims}"
 						th:text="${nbCree}"></td>
 				</tr>
 				<tr>
-					<th scope="row">Nb essaims dispersés</th>
+					<th scope="row" th:text="#{nbEssaimsDisperses}"></th>
 					<td th:each="nbDisp : ${nbDispersionEssaims}"
 						th:text="${nbDisp}"></td>
 				</tr>
 				<tr>
-					<th scope="row">Sucre</th>
+					<th scope="row" th:text="#{actionSucre}"></th>
 					<td th:each="sucre : ${sucreEssaims}"
 						th:text="${#numbers.formatDecimal(sucre,1,2,'DEFAULT')}"></td>
 				</tr>
 				<tr>
-					<th scope="row">Nb traitements</th>
+					<th scope="row" th:text="#{nbTraitements}"></th>
 					<td th:each="nbTraitements : ${nbTraitementsEssaims}"
 						th:text="${nbTraitements}"></td>
 				</tr>
