@@ -5,7 +5,9 @@ In french or english.
 
 GPL-3 license
 
-See https://gitlab.com/ruches/ruches-doc for documentation in french.
+* https://gitlab.com/ruches/ruches-doc/sql database creation
+* https://gitlab.com/ruches/ruches-doc/install vhhost, context.xml ...
+* https://gitlab.com/ruches/ruches-doc for documentation in french.
 
 ## Our clients, they trust us !   :-)
 
