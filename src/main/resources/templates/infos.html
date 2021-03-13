@@ -92,8 +92,8 @@
 	</div>
 	<div th:if="${#arrays.length(ruchesDepotEssaim)} &gt; 0"
 		class="container-fluid accordion">
-		<h1 class="item" th:text="${#arrays.length(ruchesDepotEssaim)} + 
-			' ruche(s) avec essaim au dépôt'"></h1>
+		<h1 class="item" th:text="${#arrays.length(ruchesDepotEssaim)} + ' ' +
+			#{ruchesAvecEssaimDepot}"></h1>
 		<div>
 		<table class="table table-bordered table-striped datatable-tri">
 			<thead>
