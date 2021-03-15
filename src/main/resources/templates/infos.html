@@ -115,8 +115,8 @@
 	</div>
 	<div th:if="${#arrays.length(ruchesDepotHausses)} &gt; 0"
 		class="container-fluid accordion">
-		<h1 class="item" th:text="${#arrays.length(ruchesDepotHausses)} + 
-			' ruche(s) avec hausses au dépôt'"></h1>
+		<h1 class="item" th:text="${#arrays.length(ruchesDepotHausses)} + ' ' +
+			#{ruchesAvecHaussesDepot}"></h1>
 		<div>
 		<table class="table table-bordered table-striped datatable-tri">
 			<thead>
@@ -136,8 +136,8 @@
 	<div th:if="${#arrays.length(ruchesPasDepotSansEssaim)} &gt; 0"
 		class="container-fluid accordion">
 		<h1 class="item"
-			th:text="${#arrays.length(ruchesPasDepotSansEssaim)} + 
-				' ruche(s) sans essaim qui ne sont pas au dépôt'"></h1>
+			th:text="${#arrays.length(ruchesPasDepotSansEssaim)} + ' ' + 
+				#{ruchesSansEssaimPasDepot}"></h1>
 		<div>
 		<table class="table table-bordered table-striped datatable-tri">
 			<thead>
@@ -160,8 +160,8 @@
 	</div>
 	<div th:if="${#arrays.length(essaimsActifSansRuche)} &gt; 0"
 		class="container-fluid accordion">
-		<h1 class="item" th:text="${#arrays.length(essaimsActifSansRuche)} + 
-			' essaim(s) actif(s) hors ruche'"></h1>
+		<h1 class="item" th:text="${#arrays.length(essaimsActifSansRuche)} + ' ' +
+			#{essaimsActifsHorsRuche}"></h1>
 		<div>
 		<table class="table table-bordered table-striped datatable-tri">
 			<thead>
@@ -181,8 +181,8 @@
 	<div th:if="${#arrays.length(ruchersMalCales)} &gt; 0"
 		class="container-fluid accordion">
 		<h1 class="item"
-			th:text="${#arrays.length(ruchersMalCales)} + ' rucher(s) à plus de ' + 
-				${#numbers.formatDecimal(distRuchersTropLoins,1,0)} + 'm du barycentre de leurs ruches'"></h1>
+			th:text="${#arrays.length(ruchersMalCales)} + ' ' +
+			#{ruchersLoinDeLeursRuches(${#numbers.formatDecimal(distRuchersTropLoins,1,0)})}"></h1>
 		<div>
 		<table class="table table-bordered table-striped datatable-tri">
 			<thead>
