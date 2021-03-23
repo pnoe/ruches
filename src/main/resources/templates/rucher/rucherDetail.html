@@ -5,7 +5,7 @@
 	$().ready(function() {
 		$('.confirmationsupp').on('click', function () {
 			if ([[${rucher.depot}]]) {
-				alert("Le dépôt ne peut être supprimé");
+				alert([[#{depotNePeutEtreSupprime}]]);
 				return false;
 			} else {
 				if([[${recolteHausses}]]) {

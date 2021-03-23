@@ -35,7 +35,7 @@
 <script th:inline="javascript">
 $().ready(function() {
   $('.confirmdeploie').on('click', function() {
-	return confirm("Voulez-vous déployer l'application à partir de ses sources sur gitlab ?");
+	return confirm([[#{confirmDeploie}]]);
   });
 });
 if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('fr') != -1)) {

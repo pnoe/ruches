@@ -42,7 +42,7 @@
 		<div class="form-check"  th:if="${rucheSource}">
 		  <input class="form-check-input" type="checkbox" id="swapPositions" name="swapPositions" /> 
 		  <label class="form-check-label" for="swapPositions" 
-		    th:text="'Échanger les positions des ruches ' + ${ruche.nom} + ' et ' + ${rucheSource.nom}"></label>
+		    th:text="#{echangePositionsRuches(${ruche.nom},${rucheSource.nom})}"></label>
 	    </div>
 	    <br/><br/>
 		<div th:replace="includeForm :: BtnForm"></div>
