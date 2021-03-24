@@ -52,7 +52,7 @@
 		</div>
 		<div class="row">
 			<div class="col">
-				<p th:text="'Poids vide ' + ${#numbers.formatDecimal(detailRecolte.hausse.poidsVide,1,2,'COMMA')} + 'kg'"></p>
+				<p th:text="#{poidsVideKg(${#numbers.formatDecimal(detailRecolte.hausse.poidsVide,1,2,'COMMA')})}"></p>
 			</div>
 		</div>
 	</div>

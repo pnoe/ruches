@@ -56,7 +56,7 @@ $(document).ready(function() {
 		}
 		let prompterreur = "";
 		if (tabNomRucheIncorrect.length > 0) {
-			prompterreur = [[#{lesRuches}]] + ' : ' + tabNomRucheIncorrect.join(',') + ' ' + "n'existe(nt) pas ou ne sont pas vide(s)";
+			prompterreur = [[#{lesRuches}]] + ' : ' + tabNomRucheIncorrect.join(',') + ' ' + [[#{nexistentPasOuPasVides}]];
 		}
 		if (tabNomExiste.length > 0) {
 			if (prompterreur != "") { prompterreur += '\n'; }		
