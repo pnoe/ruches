@@ -10,10 +10,11 @@
 	<h1 th:text="#{oups}"></h1>
 	<br />
 	<p th:if="${path}">
-		<b>Page:</b> <span th:text="${path}"></span>
+		<strong th:text="#{page}"></strong>
+		<span th:text="${path}"></span>
 	</p>
 	<p th:if="${timestamp}">
-		<b><span th:text="#{occurred}"></span></b>
+		<strong th:text="#{date}"></strong>
 		<span th:text="${timestamp}"></span>
 	</p>
 	<br/>
