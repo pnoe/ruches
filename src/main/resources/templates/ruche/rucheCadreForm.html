@@ -37,7 +37,7 @@
 				<a th:href="@{'/essaim/'+${ruche.essaim.id}}"
 					th:text="#{essaim} + ' ' + ${ruche.essaim.nom}"></a>
 				</h1>
-				<th:block th:text="${valeurRUCHECADRE}?${valeurRUCHECADRE}+' cadres le '+ ${#temporals.format(dateRUCHECADRE, 'dd/MM/yyyy')}:''">
+				<th:block th:text="${valeurRUCHECADRE}?${valeurRUCHECADRE}+ ' ' + #{cadresLe} + ' ' + ${#temporals.format(dateRUCHECADRE, 'dd/MM/yyyy')}:''">
 				</th:block>
         	</div>
         </div>
