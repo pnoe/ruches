@@ -162,6 +162,16 @@ public class EvenementEssaimController {
 		model.addAttribute("essaimsNoms", essaimsNoms);
 		return "essaim/essaimTraitementLotForm";
 	}
+	
+	/**
+	 * Appel du formulaire pour créer des commentaires pour un lot d'essaims
+	 */
+	@GetMapping("/commentaireLot/{essaimsNoms}")
+	public String commentaireLot(HttpSession session, Model model, @PathVariable String essaimsNoms) {
+		model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
+		model.addAttribute("essaimsNoms", essaimsNoms);
+		return "essaim/essaimCommentaireLotForm";
+	}
 
 	/**
 	 * Créations des événements pour un lot d'essaims

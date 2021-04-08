@@ -26,11 +26,13 @@ $(document).ready(function() {
             if (essaimNoms) { 
                 // on enlève la dernière virgule et met à jour l'url de traitement
             	essaimNoms = essaimNoms.substring(0, essaimNoms.length-1);
-            	$('#traitementvarroa').attr('href', [[@{/evenement/essaim/traitementLot/}]] + essaimNoms);
-            	$('#traitementSucre').attr('href', [[@{/evenement/essaim/sucreLot/}]] + essaimNoms);
+            	$('#traitement').attr('href', [[@{/evenement/essaim/traitementLot/}]] + essaimNoms);
+            	$('#sucre').attr('href', [[@{/evenement/essaim/sucreLot/}]] + essaimNoms);
+            	$('#commentaire').attr('href', [[@{/evenement/essaim/commentaireLot/}]] + essaimNoms);
             } else {
-            	$('#traitementvarroa').attr('href', "#");
-            	$('#traitementSucre').attr('href', "#");
+            	$('#traitement').attr('href', "#");
+            	$('#sucre').attr('href', "#");
+            	$('#commentaire').attr('href', "#");
             }      
         }
 	}
@@ -56,10 +58,12 @@ $(document).ready(function() {
 			<div class="col">
 				<a id="cree" th:href="@{/essaim/cree}"
 				  class="oi oi-plus" th:title="#{ajouterEssaim}" aria-hidden="true"></a>&nbsp;
-       			<a id="traitementvarroa" href="#"
+       			<a id="traitement" href="#"
 					class="selection oi oi-bug" th:title="#{evenementsTraitement}" aria-hidden="true"></a>
-				<a id="traitementSucre" href="#"
+				<a id="sucre" href="#"
 				  class="selection oi oi-beaker" th:title="#{evenementsSucre}" aria-hidden="true"></a>
+				<a id="commentaire" href="#"
+				  class="selection oi oi-info" th:title="#{evenementsCommentaire}" aria-hidden="true"></a>
 
 				<a th:href="@{/essaim/statistiques}"
 				  class="oi oi-bar-chart" th:title="#{statistiquesessaims}" aria-hidden="true"></a>
