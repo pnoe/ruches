@@ -34,7 +34,7 @@ $(document).ready(function() {
         }
 	}
 	const tableRetrait = $('#retraitHausseRecolte').DataTable({
-		select: true
+		select: {style: 'multi+shift'}
     });
 	tableRetrait.on( 'select deselect', updateLinks);
 	function selectHausses() {
@@ -44,7 +44,7 @@ $(document).ready(function() {
     }
     $('#retirerHausses').on('click', selectHausses);
 	const tableAjout = $('#ajoutHausseRecolte').DataTable({
-		select: true
+		select: {style: 'multi+shift'}
     });
 	tableAjout.on( 'select deselect', updateLinks);
     $('#ajouterHausses').on('click', selectHausses);

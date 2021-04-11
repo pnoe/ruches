@@ -5,7 +5,7 @@
 <script th:inline="javascript">
 $().ready(function() {
 	let tableajout = $('#ajoutRuches').DataTable({
-    	select: true
+		select: {style: 'multi+shift'}
     });
 	$('#retraitRuches').DataTable({
     });
