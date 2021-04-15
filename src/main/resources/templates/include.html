@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="common_header(scripts,styles,links)">
-<title th:text="#{include.title}"></title>
+<title th:text="#{lesRuches}"></title>
 <meta charset="UTF-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -147,7 +147,7 @@ if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('f
 							th:href="@{/evenement/ruche/listePoidsRuche}"></a>
 						<a class="dropdown-item" th:text="#{cadreruche}"
 							th:href="@{/evenement/ruche/listeCadreRuche}"></a>
-						<a class="dropdown-item" th:text="#{remplissagehausse}"
+						<a class="dropdown-item" th:text="#{HAUSSEREMPLISSAGE}"
 							th:href="@{/evenement/hausse/listeRemplissageHausse}"></a>
 						<a class="dropdown-item" th:text="#{rucherucher}"
 							th:href="@{/evenement/rucher/listeRucheAjout}"></a>
