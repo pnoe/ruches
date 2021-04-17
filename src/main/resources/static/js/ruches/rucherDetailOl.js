@@ -378,6 +378,7 @@ function rucherDetail(ign) {
 	  	translate.setActive(!this.checked);
 	});
 
+	const { jsPDF } = window.jspdf;
 	const exportPdf = $('#export-pdf');
 	exportPdf.click(function() {
 		exportPdf.disabled = true;
