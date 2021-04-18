@@ -161,6 +161,32 @@ public class EvenementRucheController {
 	}
 
 	/**
+	 * Appel du formulaire pour créer des commentaires pour un lot de ruches
+	 */
+	@GetMapping("/commentaireLot/{ruchesNoms}")
+	public String commentaireLot(HttpSession session, Model model, @PathVariable String ruchesNoms) {
+		model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
+		model.addAttribute("ruchesNoms", ruchesNoms);
+		return "ruche/rucheCommentaireLotForm";
+	}
+
+	/**
+	 * Créations des événements pour un lot de ruches
+	 */
+	@PostMapping("/sauve/lot/{ruchesNom}")
+	public String sauveLot(@PathVariable String[] ruchesNom, @RequestParam TypeEvenement typeEvenement,
+			@RequestParam String date, @RequestParam String valeur, @RequestParam String commentaire) {
+		for (String rucheNom : ruchesNom) {
+			Ruche ruche = rucheRepository.findByNom(rucheNom);
+			LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
+			Evenement evenement = new Evenement(dateEve, typeEvenement, ruche, ruche.getEssaim(), ruche.getRucher(),
+					null, valeur, commentaire);
+			evenementRepository.save(evenement);
+		}
+		return "redirect:/ruche/liste";
+	}
+	
+	/**
 	 * Appel du formulaire pour un événement Cadres
 	 */
 	@GetMapping("/cadre/{rucheId}")

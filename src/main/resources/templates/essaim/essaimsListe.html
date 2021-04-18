@@ -16,19 +16,19 @@ $(document).ready(function() {
     });
 	function updateLinks( e, dt, type, indexes ) {
     	if ( type === 'row' ) {
-    		let essaimNoms = "";
+    		let noms = "";
             table.rows( { selected: true } ).data().pluck( 0 ).each(function (value, index) {
             	// on récupère le nom de l'essaim dans le texte de la balise <a ...>
             	const a = document.createElement('a');
             	a.innerHTML = value;
-            	essaimNoms += a.textContent + ",";
+            	noms += a.textContent + ",";
             });
-            if (essaimNoms) { 
+            if (noms) { 
                 // on enlève la dernière virgule et met à jour l'url de traitement
-            	essaimNoms = essaimNoms.substring(0, essaimNoms.length-1);
-            	$('#traitement').attr('href', [[@{/evenement/essaim/traitementLot/}]] + essaimNoms);
-            	$('#sucre').attr('href', [[@{/evenement/essaim/sucreLot/}]] + essaimNoms);
-            	$('#commentaire').attr('href', [[@{/evenement/essaim/commentaireLot/}]] + essaimNoms);
+            	noms = noms.substring(0, noms.length-1);
+            	$('#traitement').attr('href', [[@{/evenement/essaim/traitementLot/}]] + noms);
+            	$('#sucre').attr('href', [[@{/evenement/essaim/sucreLot/}]] + noms);
+            	$('#commentaire').attr('href', [[@{/evenement/essaim/commentaireLot/}]] + noms);
             } else {
             	$('#traitement').attr('href', "#");
             	$('#sucre').attr('href', "#");
@@ -39,7 +39,7 @@ $(document).ready(function() {
     table.on( 'select deselect', updateLinks);
     $('.selection').on('click', function () {
     	if ($(this).attr("href") == "#") {
-    		return confirm([[#{selectesssaimstraiter}]]);	
+    		return confirm([[#{selectessaimstraiter}]]);	
     	}      
     });
 });

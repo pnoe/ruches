@@ -3,7 +3,8 @@
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
 	$(document).ready(function() {
-	    $('#ruches').DataTable({
+		let table = $('#ruches').DataTable({
+	    	select: {style: 'multi+shift'},
 	        dom: 'Blftip',
 		    buttons: [
 		    	'csv',
@@ -12,6 +13,30 @@
 	            {extend: 'print', text: [[#{buttontextprint}]]},
 	            {extend: 'colvis', text: [[#{buttontextcol}]]}
 	        ]
+	    });
+	    function updateLinks( e, dt, type, indexes ) {
+	    	if ( type === 'row' ) {
+	    		let noms = "";
+	            table.rows( { selected: true } ).data().pluck( 0 ).each(function (value, index) {
+	            	// on récupère le nom de la ruche dans le texte de la balise <a ...>
+	            	const a = document.createElement('a');
+	            	a.innerHTML = value;
+	            	noms += a.textContent + ",";
+	            });
+	            if (noms) { 
+	                // on enlève la dernière virgule et met à jour l'url de traitement
+	            	noms = noms.substring(0, noms.length-1);
+	            	$('#commentaire').attr('href', [[@{/evenement/ruche/commentaireLot/}]] + noms);
+	            } else {
+	            	$('#commentaire').attr('href', "#");
+	            }      
+	        }
+		}
+	    table.on( 'select deselect', updateLinks);
+	    $('.selection').on('click', function () {
+	    	if ($(this).attr("href") == "#") {
+	    		return confirm([[#{selectruchestraiter}]]);	
+	    	}      
 	    });
 	});
 </script>
@@ -29,6 +54,9 @@
 			<div class="col">
 				<a id="cree" th:href="@{/ruche/cree}" class="oi oi-plus"
 					th:title="#{ajouterRuche}" aria-hidden="true"></a>
+				&nbsp;	
+				<a id="commentaire" href="#"
+				  class="selection oi oi-info" th:title="#{evenementsCommentaire}" aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
