@@ -250,8 +250,7 @@ public class EvenementEssaimController {
 	 */
 	@PostMapping("/sauve/{essaimId}")
 	public String sauve(Model model, @PathVariable long essaimId, @RequestParam TypeEvenement typeEvenement,
-			@RequestParam String valeur, @RequestParam String date, @RequestParam String commentaire, 
-			@RequestParam(defaultValue = "false") boolean retourRuche) {
+			@RequestParam String valeur, @RequestParam String date, @RequestParam String commentaire) {
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isPresent()) {
 			Essaim essaim = essaimOpt.get();
@@ -265,11 +264,7 @@ public class EvenementEssaimController {
 					commentaire);
 			evenementRepository.save(evenement);
 			logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
-			if (retourRuche) {
-				return "redirect:/ruche/" + ruche.getId();
-			} else {
-				return Const.REDIRECT_ESSAIM_ESSAIMID;
-			}
+			return Const.REDIRECT_ESSAIM_ESSAIMID;
 		}
 		logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 		model.addAttribute(Const.MESSAGE, 

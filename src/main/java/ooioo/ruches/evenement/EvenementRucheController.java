@@ -154,9 +154,9 @@ public class EvenementRucheController {
 	 * Appel du formulaire pour la création d'un événement COMMENTAIRERUCHE
 	 */
 	@GetMapping("/commentaire/{rucheId}")
-	public String creeCommentaire(HttpSession session, Model model, @PathVariable long rucheId, 
-			@RequestParam(defaultValue = "false") boolean retourEssaim) {
-		model.addAttribute(Const.RETOURESSAIM, retourEssaim);
+	public String creeCommentaire(HttpSession session, Model model, @PathVariable long rucheId) { 
+			// noe retourEssaim ,@RequestParam(defaultValue = "false") boolean retourEssaim) {
+		// model.addAttribute(Const.RETOURESSAIM, retourEssaim);
 		return prepareAppelFormulaire(session, model, rucheId, "ruche/rucheCommentaireForm");
 	}
 
@@ -272,8 +272,7 @@ public class EvenementRucheController {
 	 */
 	@PostMapping("/sauve/{rucheId}")
 	public String sauve(Model model, @PathVariable long rucheId, @RequestParam TypeEvenement typeEvenement,
-			@RequestParam String valeur, @RequestParam String date, @RequestParam String commentaire,
-			@RequestParam(defaultValue = "false") boolean retourEssaim) {
+			@RequestParam String valeur, @RequestParam String date, @RequestParam String commentaire) {
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 		if (rucheOpt.isPresent()) {
 			Ruche ruche = rucheOpt.get();
@@ -282,11 +281,7 @@ public class EvenementRucheController {
 					null, valeur, commentaire);
 			evenementRepository.save(evenement);
 			logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
-			if (retourEssaim) {
-				return "redirect:/essaim/" + ruche.getEssaim().getId();
-			} else {
-				return "redirect:/ruche/" + rucheId;
-			}
+			return "redirect:/ruche/" + rucheId;
 		}
 		logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 		model.addAttribute(Const.MESSAGE, 

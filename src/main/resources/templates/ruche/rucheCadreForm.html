@@ -42,9 +42,8 @@
         	</div>
         </div>
     </div>
-	<form action="#" th:action="@{'/evenement/ruche/sauve/'+${ruche.id}}"
+	<form action="#" th:action="@{'/evenement/essaim/sauve/'+${ruche.essaim.id}}"
 		method="post" id="evenementForm">
-		<input type="hidden" id="retourEssaim" name="retourEssaim" th:value="${retourEssaim}"/>
 		<input type="hidden" id="typeEvenement" name="typeEvenement" value="RUCHECADRE"/>
 		<div th:insert="includeForm :: date"></div>
 		<div class="form-group">
