@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -61,6 +63,9 @@ public class RecolteHausseController {
 	private EssaimRepository essaimRepository;
 	@Autowired
 	private RucherRepository rucherRepository;
+	
+	@Autowired
+	MessageSource messageSource;
 	
 	@Value("${hausse.reste.miel}")
 	private BigDecimal hausseResteMiel;
@@ -188,7 +193,6 @@ public class RecolteHausseController {
 				return Const.INDEX;
 			}
 		}
-		// si redirect pas besoin de addattribute !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		return "redirect:/recolte/choixHausses/" + recolteId;
 	}
 
@@ -298,11 +302,10 @@ public class RecolteHausseController {
 			return Const.IDRECOLTEINCONNU;
 		}
 		if (retHausses.length() == 0) {
-			return "Pas de hausses à enlever de leurs ruches";
+			return messageSource.getMessage("pasDeHausseAenlever", null, LocaleContextHolder.getLocale());
 		} else {
-			return "Les hausses " + retHausses + " ont été enlevées des ruches " + retRuches;
+			return messageSource.getMessage("haussesEnlevees", new Object[] {retHausses, retRuches}, LocaleContextHolder.getLocale());
 		}
-		
 	}
 
 }

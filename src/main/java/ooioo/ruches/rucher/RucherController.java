@@ -491,24 +491,20 @@ public class RucherController {
 			model.addAttribute("distParcours", retParcours);
 			model.addAttribute("rucheParcours", chemin);
 			List<String> nomHausses = new ArrayList<>();
-			
 			// Pour calcul du barycentre des ruches, centre des cercles de butinage
 			Float longitude;
 			Float latitude = 0f;		
 			int nbRuches = 0;
 			double xlon = 0d;
 			double ylon = 0d;
-			
 			for (Ruche ruche : ruches) {
 				nomHausses.add(hausseRepository.findByRucheId(ruche.getId()).stream().map(Nom::getNom)
 						.reduce("", (a, b) -> a + " " + b).trim());
-				
 				nbRuches++;
 				Float longrad = (float) (ruche.getLongitude() * Math.PI / 180.0d);
 				xlon += Math.cos(longrad);
 				ylon += Math.sin(longrad);
 				latitude += ruche.getLatitude();
-				
 			}
 			if (nbRuches != 0) {
 				longitude = (float) (Math.atan2(ylon, xlon) * 180d / Math.PI);
