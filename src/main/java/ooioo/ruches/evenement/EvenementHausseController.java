@@ -103,6 +103,44 @@ public class EvenementHausseController {
 	}
 
 	/**
+	 * Appel du formulaire pour créer des commentaires pour un lot de hausses
+	 */
+	@GetMapping("/commentaireLot/{haussesNoms}")
+	public String commentaireLot(HttpSession session, Model model, @PathVariable String haussesNoms) {
+		model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
+		model.addAttribute("haussesNoms", haussesNoms);
+		return "hausse/hausseCommentaireLotForm";
+	}
+	
+	/**
+	 * Créations des événements pour un lot de hausses
+	 */
+	@PostMapping("/sauve/lot/{haussesNoms}")
+	public String sauveLot(@PathVariable String[] haussesNoms, @RequestParam TypeEvenement typeEvenement,
+			@RequestParam String date, @RequestParam String valeur, @RequestParam String commentaire) {
+		for (String hausseNoms : haussesNoms) {
+			Optional<Hausse> hausseOpt = hausseRepository.findByNom(hausseNoms);
+			if (hausseOpt.isPresent()) {
+				Hausse hausse = hausseOpt.get();
+				Ruche ruche = hausse.getRuche();
+				Essaim essaim = null;
+				Rucher rucher = null;
+				if (ruche != null) {
+					essaim = ruche.getEssaim();
+					rucher = ruche.getRucher();
+				}
+				LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
+				Evenement evenement = new Evenement(dateEve, typeEvenement, ruche, essaim, rucher,
+						hausse, valeur, commentaire);
+				evenementRepository.save(evenement);
+			} else {
+				logger.error("Nom hausse {} inconnu", hausseNoms);
+			}
+		}
+		return "redirect:/hausse/liste";
+	}
+
+	/**
 	 * Appel formulaire événement hausse remplissage
 	 */
 	@GetMapping("/remplissage/{hausseId}")

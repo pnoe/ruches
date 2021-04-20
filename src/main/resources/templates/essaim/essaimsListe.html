@@ -3,7 +3,7 @@
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
 $(document).ready(function() {
-	let table = $('#essaims').DataTable({
+	const table = $('#essaims').DataTable({
     	select: {style: 'multi+shift'},
         dom: 'Blftip',
         buttons: [

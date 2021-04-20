@@ -3,7 +3,10 @@
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
 $(document).ready(function() {
-    $('#hausses').DataTable({
+    const table = $('#hausses').DataTable({
+    	
+    	select: {style: 'multi+shift'},
+    	
         dom: 'Blftip',
         buttons: [
 	    	'csv',
@@ -12,7 +15,31 @@ $(document).ready(function() {
 	        {extend: 'print', text: [[#{buttontextprint}]]},
 	        {extend: 'colvis', text: [[#{buttontextcol}]]}
         ]
-    });  
+    });
+    
+    function updateLinks( e, dt, type, indexes ) {
+    	if ( type === 'row' ) {
+    		let noms = "";
+            table.rows( { selected: true } ).data().pluck( 0 ).each(function (value, index) {
+            	const a = document.createElement('a');
+            	a.innerHTML = value;
+            	noms += a.textContent + ",";
+            });
+            if (noms) { 
+            	noms = noms.substring(0, noms.length-1);
+            	$('#commentaire').attr('href', [[@{/evenement/hausse/commentaireLot/}]] + noms);
+            } else {
+            	$('#commentaire').attr('href', "#");
+            }      
+        }
+	}
+    table.on( 'select deselect', updateLinks);
+    $('.selection').on('click', function () {
+    	if ($(this).attr("href") == "#") {
+    		return confirm([[#{selecthaussestraiter}]]);	
+    	}      
+    });
+    
 });
 </script>
 </head>
@@ -28,7 +55,10 @@ $(document).ready(function() {
 			</div>
 			<div class="col">
 				<a id="cree" th:href="@{/hausse/cree}"
-				  class="oi oi-plus" th:title="#{ajouterHausse}" aria-hidden="true"></a> 
+				  class="oi oi-plus" th:title="#{ajouterHausse}" aria-hidden="true"></a>
+				&nbsp;	
+				<a id="commentaire" href="#"
+				  class="selection oi oi-info" th:title="#{evenementsCommentaire}" aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
