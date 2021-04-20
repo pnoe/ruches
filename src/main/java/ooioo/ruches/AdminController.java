@@ -136,9 +136,11 @@ public class AdminController {
 			destinationPath = Paths.get(tomcatWebappsPath + "ruchestest.war");
 			Files.copy(sourcePath, destinationPath,
 			            StandardCopyOption.REPLACE_EXISTING);
+			/*
 			destinationPath = Paths.get(tomcatWebappsPath + "ruchesmarion.war");
 			Files.copy(sourcePath, destinationPath,
 			            StandardCopyOption.REPLACE_EXISTING);
+			*/
 		} catch (IOException|InterruptedException e) {
 			e.printStackTrace();
 		}
