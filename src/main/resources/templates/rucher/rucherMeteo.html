@@ -19,17 +19,17 @@
 		</div>
 	</div>
 	<div class="container-fluid " id="meteo">
+	<!--/*  
 		<table class="table table-bordered">
 			<thead>
 				<tr>
 					<th th:text="#{date}"></th>
 					<th th:text="#{description}"></th>
-					<th th:text="#{detail}"></th>
 					<th th:text="#{temperature}"></th>
 					<th th:text="#{humidite}"></th>
 					<th th:text="#{pression}"></th>
 					<th th:text="#{ventVitesse}"></th>
-					<th th:text="#{ventDirection}"></th>
+					<th th:text="#{ventDirection}"></th>	
 					<th th:text="#{nuages}"></th>
 					<th th:text="#{pluieVol3h}"></th>
 					<th th:text="#{neigeVol3h}"></th>
@@ -39,22 +39,72 @@
 			</thead>
 			<tbody>
 				<tr>
-				    <td th:text="${#dates.format(currentWeather.dateTime, 'dd/MM/yyyy HH:mm')}"></td>
-					<td th:text="${currentWeather.weatherList[0].mainInfo}"></td>
-					<td th:text="${currentWeather.weatherList[0].description}"></td>
-					<td th:text="${#numbers.formatDecimal(currentWeather.mainData.temp,1,0)}"></td>
-					<td th:text="${#numbers.formatDecimal(currentWeather.mainData.humidity,1,0)}"></td>
-					<td th:text="${#numbers.formatDecimal(currentWeather.mainData.pressure,1,0)}"></td>
-					<td th:text="${#numbers.formatDecimal(currentWeather.windData?.speed,1,0)}"></td>
-					<td th:text="${#numbers.formatDecimal(currentWeather.windData?.degree,1,0)}"></td>
-					<td th:text="${#numbers.formatDecimal(currentWeather.cloudData?.cloud,1,0)}"></td>
-					<td th:text="${#numbers.formatDecimal(currentWeather.rainData?.precipVol3h,1,0)}"></td>
-					<td th:text="${#numbers.formatDecimal(currentWeather.snowData?.snowVol3h,1,0)}"></td>
-					<td th:text="${#dates.format(currentWeather.systemData.sunriseDateTime, 'dd/MM/yyyy HH:mm')}"></td>
-					<td th:text="${#dates.format(currentWeather.systemData.sunsetDateTime, 'dd/MM/yyyy HH:mm')}"></td>
+				    <td th:text="${#temporals.format(currentWeatherData.current.forecastTime, 'dd/MM/yyyy HH:mm')}"></td>
+				    <td th:text="${currentWeatherData.current.weatherState.description}"></td>
+				    <td th:text="${currentWeatherData.current.temperature.value}"></td>
+				    <td th:text="${currentWeatherData.current.humidity.value}"></td>
+				    <td th:text="${currentWeatherData.current.atmosphericPressure.seaLevelValue}"></td>
+				    <td th:text="${currentWeatherData.current.wind.speed}"></td>
+				    <td th:text="${currentWeatherData.current.wind.degrees}"></td>
+				    <td th:text="${currentWeatherData.current.clouds.value}"></td>
+				    <td th:text="${currentWeatherData.current.rain?.oneHourLevel}"></td>
+				    <td th:text="${currentWeatherData.current.snow?.oneHourLevel}"></td>
+				    <td th:text="${#temporals.format(currentWeatherData.current.sunriseTime, 'dd/MM/yyyy HH:mm')}"></td>
+				    <td th:text="${#temporals.format(currentWeatherData.current.sunsetTime, 'dd/MM/yyyy HH:mm')}"></td>
 				</tr>
 			</tbody>
 		</table>
+		*/-->
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th th:text="#{date}"></th>
+					<th th:text="#{description}"></th>
+					<th th:text="#{temperature}"></th>
+					<th th:text="#{humidite}"></th>
+					<th th:text="#{pression}"></th>
+					<th th:text="#{ventVitesse}"></th>
+					<th th:text="#{ventDirection}"></th>
+					<th th:if="${weather.wind?.gust}" th:text="#{ventRafales}"></th>
+					<th th:text="#{nuages}"></th>
+					<th:block th:if="${weather.rain}">
+						<th th:text="#{pluieVol1h}"></th>
+						<th th:text="#{pluieVol3h}"></th>
+					</th:block>
+					<th:block th:if="${weather.snow}">
+						<th th:text="#{neigeVol1h}"></th>
+						<th th:text="#{neigeVol3h}"></th>
+					</th:block>
+					<th th:text="#{leverSoleil}"></th>
+					<th th:text="#{coucherSoleil}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+				    <td th:text="${#temporals.format(weather.calculationTime, 'dd/MM/yyyy HH:mm')}"></td>
+				    <td th:text="${weather.weatherState?.description}"></td>
+				    <td th:text="${weather.temperature?.value}"></td>
+				    <td th:text="${weather.humidity?.value}"></td>
+				    <td th:text="${weather.atmosphericPressure?.value}"></td>
+				    <td th:text="${weather.wind?.speed}"></td>
+				    <td th:text="${weather.wind?.degrees}"></td>
+				    <td th:if="${weather.wind?.gust}" th:text="${weather.wind?.gust}"></td>
+				    <td th:text="${weather.clouds?.value}"></td>
+				    <th:block th:if="${weather.rain}">
+						<td th:text="${weather.rain?.oneHourLevel}"></td>
+					    <td th:text="${weather.rain?.threeHourLevel}"></td>
+					</th:block>
+					<th:block th:if="${weather.snow}">
+					    <td th:text="${weather.snow?.oneHourLevel}"></td>
+					    <td th:text="${weather.snow?.threeHourLevel}"></td>
+					</th:block>
+				    <td th:text="${#temporals.format(weather.location?.sunriseTime, 'dd/MM/yyyy HH:mm')}"></td>
+				    <td th:text="${#temporals.format(weather.location?.sunsetTime, 'dd/MM/yyyy HH:mm')}"></td>
+				</tr>
+			</tbody>
+		</table>
+		
+		
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>

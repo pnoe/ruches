@@ -35,11 +35,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import net.aksingh.owmjapis.api.APIException;
-import net.aksingh.owmjapis.core.OWM;
-import net.aksingh.owmjapis.core.OWM.Language;
-import net.aksingh.owmjapis.core.OWM.Unit;
-import net.aksingh.owmjapis.model.CurrentWeather;
+import com.github.prominence.openweathermap.api.OpenWeatherMapClient;
+import com.github.prominence.openweathermap.api.enums.Language;
+import com.github.prominence.openweathermap.api.enums.UnitSystem;
+import com.github.prominence.openweathermap.api.model.Coordinate;
+import com.github.prominence.openweathermap.api.model.onecall.current.CurrentWeatherData;
+import com.github.prominence.openweathermap.api.model.weather.Weather;
+
 import ooioo.ruches.Const;
 import ooioo.ruches.LatLon;
 import ooioo.ruches.Nom;
@@ -621,9 +623,14 @@ public class RucherController {
 		return "Id rucher inconnu";
 		
 	}
-
+	
 	/**
 	 * Météo d'un rucher
+	 * 
+	 * https://github.com/Prominence/openweathermap-java-api/blob/master/docs/SNAPSHOT.md
+	 * https://openweathermap.org/api/one-call-api
+	 * https://openweathermap.org/api
+	 * 
 	 */
 	@GetMapping("/meteo/{rucherId}")
 	public String meteo(Model model, @PathVariable long rucherId) {
@@ -631,23 +638,27 @@ public class RucherController {
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
 			model.addAttribute(Const.RUCHER, rucher);
-			OWM openWeatherMap = new OWM(openweathermapKey);
-			if (!"".equals(proxyHost) && !"".equals(proxyPort)) {
-				int proxy = Integer.parseInt(proxyPort);
-				openWeatherMap.setProxy(proxyHost, proxy);
-			}
-			openWeatherMap.setUnit(Unit.METRIC);
-			openWeatherMap.setLanguage(Language.FRENCH);
-			try {
-				CurrentWeather currentWeather = openWeatherMap.currentWeatherByCoords(rucher.getLatitude(),
-						rucher.getLongitude());
-				model.addAttribute("currentWeather", currentWeather);
-			} catch (APIException e) {
-				logger.error("Rucher {} api météo openWeatherMap, {}", rucherId, e.getMessage());
-				model.addAttribute(Const.MESSAGE, "Erreur api météo openWeatherMap");
-				model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
-			return Const.INDEX;
-			}
+			OpenWeatherMapClient openWeatherClient = new OpenWeatherMapClient(openweathermapKey);
+			/*
+			final CurrentWeatherData currentWeatherData = openWeatherClient
+			        .oneCall()
+			        .current()
+			        .byCoordinate(Coordinate.of(rucher.getLatitude(), rucher.getLongitude()))
+			        .language(Language.FRENCH)
+			        .unitSystem(UnitSystem.METRIC)
+			        .retrieve()
+			        .asJava();
+			model.addAttribute("currentWeatherData", currentWeatherData);
+			*/
+			final Weather weather = openWeatherClient
+			        .currentWeather()
+			        .single()
+			        .byCoordinate(Coordinate.of(rucher.getLatitude(), rucher.getLongitude()))
+			        .language(Language.FRENCH)
+			        .unitSystem(UnitSystem.METRIC)
+			        .retrieve()
+			        .asJava();
+			model.addAttribute("weather", weather);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE, 

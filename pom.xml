@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ooioo</groupId>
 	<artifactId>ruches</artifactId>
-	<version>4.3.0</version>
+	<version>4.4.0</version>
 	<packaging>war</packaging>
 	<!-- http://repo.spring.io/libs-milestone/org/springframework/boot/spring-boot-starter-parent/ -->
 	<parent>
@@ -86,19 +86,19 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/net.aksingh/owm-japis -->
+		<!-- https://mvnrepository.com/artifact/com.github.prominence/openweathermap-api -->
 		<dependency>
-			<groupId>net.aksingh</groupId>
-			<artifactId>owm-japis</artifactId>
-			<version>2.5.3.0</version>
+			<groupId>com.github.prominence</groupId>
+			<artifactId>openweathermap-api</artifactId>
+			<version>2.2.0</version>
 		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
 		</dependency>
 
-		
 	</dependencies>
 	<properties>
 		<java.version>11</java.version>
