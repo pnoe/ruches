@@ -36,6 +36,7 @@ $().ready(function() {
        	$('#humidite').html(data.current.humidity + '%');
        	$('#rosee').html(data.current.dew_point.toFixed(1) + '°C');
        	$('#pression').html(data.current.pressure + 'hPa');
+       	$('#tempRessent').html(data.current.feels_like.toFixed(1) + '°C');
        	$('#uvi').html(data.current.uvi);
        	$('#ventVitesse').html((data.current.wind_speed * 3.6).toFixed(1) + 'km/h');
        	$('#ventDirection').html(data.current.wind_deg + '° ' + degToCard(data.current.wind_deg));
@@ -117,6 +118,7 @@ $().ready(function() {
 		<table class="table table-bordered">
 			<thead>
 				<tr>
+					<th th:text="#{tempRessent}"></th>
 					<th th:text="#{uvi}"></th>
 					<th th:text="#{ventVitesse}"></th>
 					<th th:text="#{ventDirection}"></th>
@@ -125,6 +127,7 @@ $().ready(function() {
 			</thead>
 			<tbody>
 				<tr>
+					<td id="tempRessent"></td>
 					<td id="uvi"></td>
 					<td id="ventVitesse"></td>
 					<td id="ventDirection"></td>
