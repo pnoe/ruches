@@ -3,8 +3,11 @@
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
 $().ready(function() {
-	
-	
+	$( "#accordion" ).accordion({
+		active : 0,
+		collapsible : true,
+		 heightStyle: 'content'
+	});
 	  /*
 	  {"lat":43.4893,"lon":5.3778,"timezone":"Europe/Paris","timezone_offset":7200,
 		  "current":{"dt":1619087703,"sunrise":1619066664,"sunset":1619116151,"temp":18.16,"feels_like":17.13,
@@ -18,8 +21,7 @@ $().ready(function() {
 			  "pressure":1018,"humidity":42,"dew_point":5.06,"wind_speed":3.26,"wind_deg":241,"wind_gust":3.47,
 			  "weather":[{"id":800,"main":"Clear","description":"ciel dégagé","icon":"01d"}],
 			  "clouds":0,"pop":0,"uvi":6.15},
-			  
-			  {"dt":1619175600,"sunrise":1619152971,"sunset":1619202622,"moonrise":1619186400,"moonset":1619147460,"moon_phase":0.36,"temp":{"day":19.34,"min":10.7,"max":20.04,"night":15.06,"eve":17.85,"morn":10.7},"feels_like":{"day":18.4,"night":9.81,"eve":16.81,"morn":9.81},"pressure":1020,"humidity":41,"dew_point":5.5,"wind_speed":4.38,"wind_deg":227,"wind_gust":2.14,"weather":[{"id":800,"main":"Clear","description":"ciel dégagé","icon":"01d"}],"clouds":0,"pop":0,"uvi":6.1},{"dt":1619262000,"sunrise":1619239279,"sunset":1619289094,"moonrise":1619277360,"moonset":1619235480,"moon_phase":0.39,"temp":{"day":19.89,"min":12.36,"max":20.33,"night":15.69,"eve":18.56,"morn":12.36},"feels_like":{"day":18.98,"night":11.27,"eve":17.7,"morn":11.27},"pressure":1021,"humidity":40,"dew_point":5.6,"wind_speed":4.05,"wind_deg":217,"wind_gust":2.15,"weather":[{"id":802,"main":"Clouds","description":"partiellement nuageux","icon":"03d"}],"clouds":48,"pop":0,"uvi":7.17},{"dt":1619348400,"sunrise":1619325588,"sunset":1619375565,"moonrise":1619368380,"moonset":1619323440,"moon_phase":0.43,"temp":{"day":18.82,"min":14.26,"max":19.1,"night":15.28,"eve":17.83,"morn":14.5},"feels_like":{"day":17.78,"night":13.62,"eve":16.87,"morn":13.62},"pressure":1018,"humidity":39,"dew_point":4.28,"wind_speed":3.87,"wind_deg":208,"wind_gust":4.2,"weather":[{"id":803,"main":"Clouds","description":"nuageux","icon":"04d"}],"clouds":74,"pop":0.06,"uvi":6.03},{"dt":1619434800,"sunrise":1619411898,"sunset":1619462036,"moonrise":1619459580,"moonset":1619411400,"moon_phase":0.47,"temp":{"day":20.42,"min":12.8,"max":20.42,"night":14.59,"eve":16.52,"morn":13.71},"feels_like":{"day":19.61,"night":12.73,"eve":15.9,"morn":12.73},"pressure":1009,"humidity":42,"dew_point":6.97,"wind_speed":4.61,"wind_deg":114,"wind_gust":4.73,"weather":[{"id":500,"main":"Rain","description":"légère pluie","icon":"10d"}],"clouds":100,"pop":0.86,"rain":4.42,"uvi":5.98},{"dt":1619521200,"sunrise":1619498209,"sunset":1619548508,"moonrise":1619550900,"moonset":1619499480,"moon_phase":0.5,"temp":{"day":15.96,"min":13.51,"max":16.36,"night":13.51,"eve":14.13,"morn":13.89},"feels_like":{"day":15.41,"night":13.42,"eve":13.95,"morn":13.42},"pressure":1004,"humidity":69,"dew_point":9.99,"wind_speed":4.47,"wind_deg":265,"wind_gust":8.54,"weather":[{"id":501,"main":"Rain","description":"pluie modérée","icon":"10d"}],"clouds":99,"pop":0.98,"rain":4.97,"uvi":6},{"dt":1619607600,"sunrise":1619584521,"sunset":1619634979,"moonrise":1619642220,"moonset":1619587800,"moon_phase":0.55,"temp":{"day":15.56,"min":9.87,"max":16.67,"night":11.23,"eve":13.85,"morn":9.88},"feels_like":{"day":14.32,"night":7.1,"eve":12.54,"morn":7.1},"pressure":1005,"humidity":44,"dew_point":3.05,"wind_speed":9.77,"wind_deg":320,"wind_gust":15.37,"weather":[{"id":500,"main":"Rain","description":"légère pluie","icon":"10d"}],"clouds":15,"pop":0.96,"rain":0.1,"uvi":6},{"dt":1619694000,"sunrise":1619670835,"sunset":1619721450,"moonrise":1619733360,"moonset":1619676540,"moon_phase":0.59,"temp":{"day":17.69,"min":8.68,"max":18.04,"night":13.41,"eve":16.18,"morn":8.98},"feels_like":{"day":16.3,"night":5.54,"eve":14.87,"morn":5.54},"pressure":1011,"humidity":30,"dew_point":-0.18,"wind_speed":9.73,"wind_deg":318,"wind_gust":9.85,"weather":[{"id":800,"main":"Clear","description":"ciel dégagé","icon":"01d"}],"clouds":0,"pop":0,"uvi":6}]}
+			  ...
 	*/
 	const optionsDate={day: "numeric", month: "numeric", hour: "numeric", minute: "numeric"};
 	$.ajax({
@@ -30,7 +32,7 @@ $().ready(function() {
 			"&APPID=" + [[${openweathermapKey}]] +
 			"&exclude=minutely,hourly,alerts"			
     }).done(function (data) {
-       	$('#date').html(fdate(data.current.dt));
+    	$('#date').html(fdate(data.current.dt));
        	$('#description').html(data.current.weather[0].description);
        	$('#temperature').html(data.current.temp.toFixed(1) + '°C');
        	$('#humidite').html(data.current.humidity + '%');
@@ -50,6 +52,13 @@ $().ready(function() {
        	$('#leverLune').html(fdate(data.daily[0].moonrise));
        	$('#coucherLune').html(fdate(data.daily[0].moonset));
        	$('#phaseLune').html(data.daily[0].moon_phase);
+       	let htmlPrev='';
+       	data.daily.forEach(function(day) {
+       		htmlPrev+='<tr><td>' + fdate(day.dt) + '</td><td>' 
+       			+ day.temp.min.toFixed(1) + '°C</td><td>' 
+       			+ day.temp.max.toFixed(1) + '°C</td></tr>';
+       		});
+       	$('#previsions').append(htmlPrev);
 	});
 	function fdate(t) {
 		return new Date(t*1000).toLocaleString(undefined, optionsDate).replace(' à','');
@@ -94,8 +103,10 @@ $().ready(function() {
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid " id="meteo">
-		<table class="table table-bordered">
+	<div class="container-fluid" id="accordion">
+		<h1 class="item" th:text="#{aujourdhui}"></h1>
+		<div>
+		<table class="table">
 			<thead>
 				<tr>
 					<th th:text="#{date}"></th>
@@ -115,68 +126,82 @@ $().ready(function() {
 				</tr>
 			</tbody>
 		</table>	
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th th:text="#{tempRessent}"></th>
-					<th th:text="#{uvi}"></th>
-					<th th:text="#{ventVitesse}"></th>
-					<th th:text="#{ventDirection}"></th>
-					<th th:text="#{ventRafales}"></th>	
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td id="tempRessent"></td>
-					<td id="uvi"></td>
-					<td id="ventVitesse"></td>
-					<td id="ventDirection"></td>
-					<td id="ventRafales"></td>	
-				</tr>
-			</tbody>
-		</table>
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th th:text="#{description}"></th>
-					<th th:text="#{nuages}"></th>
-					<th th:text="#{visibilite}"></th>
-					<th th:text="#{pluieVol1h}"></th>
-					<th th:text="#{neigeVol1h}"></th>
-					
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td id="description"></td>
-				    <td id="nuages"></td>
-					<td id="visibilite"></td>
-					<td id="pluieVol1h"></td>
-					<td id="neigeVol1h"></td>
-				</tr>
-			</tbody>
-		</table>
-		
-		<table class="table table-bordered">
-			<thead>
-				<tr>	
-					<th th:text="#{leverSoleil}"></th>
-					<th th:text="#{coucherSoleil}"></th>
-					<th th:text="#{leverLune}"></th>
-					<th th:text="#{coucherLune}"></th>
-					<th th:text="#{phaseLune}"></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td id="leverSoleil"></td>
-					<td id="coucherSoleil"></td>
-					<td id="leverLune"></td>
-					<td id="coucherLune"></td>
-					<td id="phaseLune"></td>
-				</tr>
-			</tbody>
-		</table>
+			<table class="table">
+				<thead>
+					<tr>
+						<th th:text="#{tempRessent}"></th>
+						<th th:text="#{uvi}"></th>
+						<th th:text="#{ventVitesse}"></th>
+						<th th:text="#{ventDirection}"></th>
+						<th th:text="#{ventRafales}"></th>	
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td id="tempRessent"></td>
+						<td id="uvi"></td>
+						<td id="ventVitesse"></td>
+						<td id="ventDirection"></td>
+						<td id="ventRafales"></td>	
+					</tr>
+				</tbody>
+			</table>
+			<table class="table">
+				<thead>
+					<tr>
+						<th th:text="#{description}"></th>
+						<th th:text="#{nuages}"></th>
+						<th th:text="#{visibilite}"></th>
+						<th th:text="#{pluieVol1h}"></th>
+						<th th:text="#{neigeVol1h}"></th>
+						
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td id="description"></td>
+					    <td id="nuages"></td>
+						<td id="visibilite"></td>
+						<td id="pluieVol1h"></td>
+						<td id="neigeVol1h"></td>
+					</tr>
+				</tbody>
+			</table>		
+			<table class="table">
+				<thead>
+					<tr>	
+						<th th:text="#{leverSoleil}"></th>
+						<th th:text="#{coucherSoleil}"></th>
+						<th th:text="#{leverLune}"></th>
+						<th th:text="#{coucherLune}"></th>
+						<th th:text="#{phaseLune}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td id="leverSoleil"></td>
+						<td id="coucherSoleil"></td>
+						<td id="leverLune"></td>
+						<td id="coucherLune"></td>
+						<td id="phaseLune"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<h1 class="item" th:text="#{previsions}"></h1>
+		<div>
+			<table class="table table-bordered">
+				<thead>
+					<tr>	
+						<th th:text="#{date}"></th>
+						<th th:text="#{tempMin}"></th>
+						<th th:text="#{tempMax}"></th>
+					</tr>
+				</thead>
+				<tbody id="previsions">
+				</tbody>
+			</table>
+		</div>
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
