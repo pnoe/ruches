@@ -35,13 +35,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.github.prominence.openweathermap.api.OpenWeatherMapClient;
-import com.github.prominence.openweathermap.api.enums.Language;
-import com.github.prominence.openweathermap.api.enums.UnitSystem;
-import com.github.prominence.openweathermap.api.model.Coordinate;
-import com.github.prominence.openweathermap.api.model.onecall.current.CurrentWeatherData;
-import com.github.prominence.openweathermap.api.model.weather.Weather;
-
 import ooioo.ruches.Const;
 import ooioo.ruches.LatLon;
 import ooioo.ruches.Nom;
@@ -630,6 +623,7 @@ public class RucherController {
 	 * https://github.com/Prominence/openweathermap-java-api/blob/master/docs/SNAPSHOT.md
 	 * https://openweathermap.org/api/one-call-api
 	 * https://openweathermap.org/api
+	 * http://api.openweathermap.org/data/2.5/onecall?lat=43.4900093&lon=5.49108076&APPID=xxxx
 	 * 
 	 */
 	@GetMapping("/meteo/{rucherId}")
@@ -638,27 +632,7 @@ public class RucherController {
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
 			model.addAttribute(Const.RUCHER, rucher);
-			OpenWeatherMapClient openWeatherClient = new OpenWeatherMapClient(openweathermapKey);
-			/*
-			final CurrentWeatherData currentWeatherData = openWeatherClient
-			        .oneCall()
-			        .current()
-			        .byCoordinate(Coordinate.of(rucher.getLatitude(), rucher.getLongitude()))
-			        .language(Language.FRENCH)
-			        .unitSystem(UnitSystem.METRIC)
-			        .retrieve()
-			        .asJava();
-			model.addAttribute("currentWeatherData", currentWeatherData);
-			*/
-			final Weather weather = openWeatherClient
-			        .currentWeather()
-			        .single()
-			        .byCoordinate(Coordinate.of(rucher.getLatitude(), rucher.getLongitude()))
-			        .language(Language.FRENCH)
-			        .unitSystem(UnitSystem.METRIC)
-			        .retrieve()
-			        .asJava();
-			model.addAttribute("weather", weather);
+			model.addAttribute("openweathermapKey", openweathermapKey);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE, 
