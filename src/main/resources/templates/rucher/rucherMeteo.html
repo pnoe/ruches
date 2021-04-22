@@ -23,7 +23,7 @@ $().ready(function() {
 	*/
 	const optionsDate={day: "numeric", month: "numeric", hour: "numeric", minute: "numeric"};
 	$.ajax({
-    	url: "http://api.openweathermap.org/data/2.5/onecall?lat=" +
+    	url: "https://api.openweathermap.org/data/2.5/onecall?lat=" +
 			[[${rucher.latitude}]] + "&lon=" + [[${rucher.longitude}]] +
 			"&units=metric" +
 			"&lang=fr" +
