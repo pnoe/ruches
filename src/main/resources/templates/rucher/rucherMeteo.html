@@ -32,17 +32,18 @@ $().ready(function() {
     }).done(function (data) {
        	$('#date').html(fdate(data.current.dt));
        	$('#description').html(data.current.weather[0].description);
-       	$('#temperature').html(data.current.temp);
-       	$('#humidite').html(data.current.humidity);
-       	$('#rosee').html(data.current.dew_point);
-       	$('#pression').html(data.current.pressure);
-       	$('#ventVitesse').html(data.current.wind_speed);
-       	$('#ventDirection').html(data.current.wind_deg);
-       	$('#ventRafales').html(data.current.hasOwnProperty('wind_gust')?data.current.wind_gust:'0');
-       	$('#nuages').html(data.current.clouds);
-       	$('#visibilite').html(data.current.visibility);       	
-       	$('#pluieVol3h').html(data.current.hasOwnProperty('rain')?data.current.rain['1h']:'0');
-       	$('#neigeVol3h').html(data.current.hasOwnProperty('snow')?data.current.snow['1h']:'0');
+       	$('#temperature').html(data.current.temp.toFixed(1) + '°C');
+       	$('#humidite').html(data.current.humidity + '%');
+       	$('#rosee').html(data.current.dew_point.toFixed(1) + '°C');
+       	$('#pression').html(data.current.pressure + 'hPa');
+       	$('#uvi').html(data.current.uvi);
+       	$('#ventVitesse').html((data.current.wind_speed * 3.6).toFixed(1) + 'km/h');
+       	$('#ventDirection').html(data.current.wind_deg + '°');
+       	$('#ventRafales').html((data.current.hasOwnProperty('wind_gust')?(data.current.wind_gust * 3.6):'0') + 'km/h');
+       	$('#nuages').html(data.current.clouds + '%');
+       	$('#visibilite').html(data.current.visibility + 'm');       	
+       	$('#pluieVol1h').html((data.current.hasOwnProperty('rain')?(data.current.rain['1h']):'0') + 'mm');
+       	$('#neigeVol1h').html((data.current.hasOwnProperty('snow')?(data.current.snow['1h']):'0') + 'mm');
        	$('#leverSoleil').html(fdate(data.current.sunrise));
        	$('#coucherSoleil').html(fdate(data.current.sunset));
        	$('#leverLune').html(fdate(data.daily[0].moonrise));
@@ -54,6 +55,9 @@ $().ready(function() {
 	}
 });
 </script>
+<style>
+	th {background-color:aliceblue;}
+</style>
 </head>
 <body>
 	<nav th:replace="include :: navbar"></nav>
@@ -95,6 +99,7 @@ $().ready(function() {
 		<table class="table table-bordered">
 			<thead>
 				<tr>
+					<th th:text="#{uvi}"></th>
 					<th th:text="#{ventVitesse}"></th>
 					<th th:text="#{ventDirection}"></th>
 					<th th:text="#{ventRafales}"></th>	
@@ -102,6 +107,7 @@ $().ready(function() {
 			</thead>
 			<tbody>
 				<tr>
+					<td id="uvi"></td>
 					<td id="ventVitesse"></td>
 					<td id="ventDirection"></td>
 					<td id="ventRafales"></td>	
@@ -114,8 +120,8 @@ $().ready(function() {
 					<th th:text="#{description}"></th>
 					<th th:text="#{nuages}"></th>
 					<th th:text="#{visibilite}"></th>
-					<th th:text="#{pluieVol3h}"></th>
-					<th th:text="#{neigeVol3h}"></th>
+					<th th:text="#{pluieVol1h}"></th>
+					<th th:text="#{neigeVol1h}"></th>
 					
 				</tr>
 			</thead>
@@ -124,8 +130,8 @@ $().ready(function() {
 					<td id="description"></td>
 				    <td id="nuages"></td>
 					<td id="visibilite"></td>
-					<td id="pluieVol3h"></td>
-					<td id="neigeVol3h"></td>
+					<td id="pluieVol1h"></td>
+					<td id="neigeVol1h"></td>
 				</tr>
 			</tbody>
 		</table>
