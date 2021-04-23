@@ -12,13 +12,16 @@ function rucherMeteo() {
 	});
 	const optDateTime = { day: "numeric", month: "numeric", hour: "numeric", minute: "numeric" };
 	const optDate = { day: "numeric", month: "numeric" };
-	$.ajax({
-		url: urlPrefix + '?lat=' +
+	let urlOneCall = urlPrefix + '?lat=' +
 			latitude + '&lon=' + longitude +
 			'&units=metric' +
 			'&lang=fr' +
-			'&APPID=' + openweathermapKey +
-			'&exclude=minutely,hourly,alerts'
+			'&APPID=' + openweathermapKey;
+	$('#date').on('click', function() {
+		window.open(urlOneCall);
+	});	
+	$.ajax({
+		url: urlOneCall + '&exclude=minutely,hourly,alerts'
 	}).done(function(data) {
 		const dt = data.current.dt;
 		$('#date').html(fdt(dt));
