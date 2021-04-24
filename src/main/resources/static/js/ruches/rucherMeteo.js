@@ -17,16 +17,14 @@ function rucherMeteo() {
 			'&units=metric' +
 			'&lang=fr' +
 			'&APPID=' + openweathermapKey;
-	$('#date').on('click', function() {
-		window.open(urlOneCall);
-	});	
 	$.ajax({
 		url: urlOneCall + '&exclude=minutely,hourly,alerts'
 	}).done(function(data) {
 		const dt = data.current.dt;
-		$('#date').html(fdt(dt));
+		$('#date').html('<a href="' + urlOneCall + '" target="_blank">' + fdt(dt) + '</a>');
 		$('#description').html(data.current.weather[0].description);
 		$('#temperature').html(data.current.temp.toFixed(1) + '°C');
+		$('#tempRessentie').html(data.current.feels_like.toFixed(1) + '°C');
 		$('#humidite').html(data.current.humidity + '%');
 		$('#rosee').html(data.current.dew_point.toFixed(1) + '°C');
 		$('#pression').html(data.current.pressure + 'hPa');
@@ -50,12 +48,18 @@ function rucherMeteo() {
 		);
 		let htmlPrev = '';
 		data.daily.forEach(function(day) {
-			htmlPrev += '<tr><td>' + fd(day.dt) + '</td><td>'
-				+ day.temp.min.toFixed(1) + '°C</td><td>'
-				+ day.temp.max.toFixed(1) + '°C</td><td>'
-				+ day.clouds + '%' + '</td><td>'
-				+ (day.rain ? day.rain : 0) + 'mm' + '</td><td>'
-				+ day.pop + '</td></tr>';
+			htmlPrev += '<tr><td>' + fd(day.dt) + '</td><td>' +
+				day.temp.min.toFixed(1) + '°C</td><td>' +
+				day.temp.max.toFixed(1) + '°C</td><td>' +
+				day.clouds + '%' + '</td><td>' +
+				(day.rain ? day.rain : 0) + 'mm' + '</td><td>' +
+				day.pop + '</td><td>' +
+				fdt(day.sunrise) + '</td><td>' +
+				fdt(day.sunset) + '</td><td>' +
+				fdt(day.moonrise) + '</td><td>' +
+				fdt(day.moonset) + '</td><td>' +
+				day.moon_phase + '&nbsp<i class="wi wi-moon-' + 
+					moonIcon(day.moon_phase) + '"></i></td></tr>';
 		});
 		$('#previsions').append(htmlPrev);
 		let urlHistoPref = urlPrefix + '/timemachine?lat=' +
@@ -72,15 +76,17 @@ function rucherMeteo() {
 			$('#historique').append(htmlHisto);
 			return;
 		}
+		let urlHisto = pref + time;
 		$.ajax({
-			url: pref + time
+			url: urlHisto
 		}).done(function(data) {
-			htmlHisto += '<tr><td>' + fdt(data.current.dt) + '</td><td>'
+			htmlHisto += '<tr><td>' + '<a href="' + urlHisto + '" target="_blank">' + 
+					fdt(data.current.dt) + '</a></td><td>'
 				+ data.current.temp.toFixed(1) + '°C</td><td>'
 				+ data.current.clouds + '%' + '</td><td>'
 				+ (data.current.wind_speed * 3.6).toFixed(1) + 'km/h</td><td>'
 				+ data.current.wind_deg + '° ' + degToCard(data.current.wind_deg) +
-				'&nbsp<i class="wi wi-wind from-' + data.current.wind_deg + '-deg"></i></td></tr>';
+					'&nbsp<i class="wi wi-wind from-' + data.current.wind_deg + '-deg"></i></td></tr>';
 			histo(pref, time - 86400, n - 1, htmlHisto);
 		});
 	}
