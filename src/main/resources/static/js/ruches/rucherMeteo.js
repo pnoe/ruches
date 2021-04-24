@@ -81,11 +81,11 @@ function rucherMeteo() {
 			url: urlHisto
 		}).done(function(data) {
 			htmlHisto += '<tr><td>' + '<a href="' + urlHisto + '" target="_blank">' + 
-					fdt(data.current.dt) + '</a></td><td>'
-				+ data.current.temp.toFixed(1) + '°C</td><td>'
-				+ data.current.clouds + '%' + '</td><td>'
-				+ (data.current.wind_speed * 3.6).toFixed(1) + 'km/h</td><td>'
-				+ data.current.wind_deg + '° ' + degToCard(data.current.wind_deg) +
+					fdt(data.current.dt) + '</a></td><td>' +
+				data.current.temp.toFixed(1) + '°C</td><td>' +
+				data.current.clouds + '%' + '</td><td>' +
+				(data.current.wind_speed * 3.6).toFixed(1) + 'km/h</td><td>' +
+				data.current.wind_deg + '° ' + degToCard(data.current.wind_deg) +
 					'&nbsp<i class="wi wi-wind from-' + data.current.wind_deg + '-deg"></i></td></tr>';
 			histo(pref, time - 86400, n - 1, htmlHisto);
 		});
