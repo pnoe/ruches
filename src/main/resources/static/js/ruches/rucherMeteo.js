@@ -13,27 +13,25 @@ function rucherMeteo() {
 	const optDateTime = { day: "numeric", month: "numeric", hour: "numeric", minute: "numeric" };
 	const optDate = { day: "numeric", month: "numeric" };
 	let urlOneCall = urlPrefix + '?lat=' +
-			latitude + '&lon=' + longitude +
-			'&units=metric' +
-			'&lang=fr' +
-			'&APPID=' + openweathermapKey;
+		latitude + '&lon=' + longitude +
+		'&units=metric' +
+		'&lang=fr' +
+		'&APPID=' + openweathermapKey;
 	$.ajax({
-		url: urlOneCall + '&exclude=minutely,hourly,alerts'
+		url: urlOneCall + '&exclude=minutely,alerts'
 	}).done(function(data) {
 		const dt = data.current.dt;
 		$('#date').html('<a href="' + urlOneCall + '" target="_blank">' + fdt(dt) + '</a>');
 		$('#description').html(data.current.weather[0].description);
 		$('#temperature').html(data.current.temp.toFixed(1) + '°C');
-		$('#tempRessentie').html(data.current.feels_like.toFixed(1) + '°C');
 		$('#humidite').html(data.current.humidity + '%');
 		$('#rosee').html(data.current.dew_point.toFixed(1) + '°C');
 		$('#pression').html(data.current.pressure + 'hPa');
-		$('#tempRessent').html(data.current.feels_like.toFixed(1) + '°C');
+		$('#tempRessentie').html(data.current.feels_like.toFixed(1) + '°C');
 		$('#uvi').html(data.current.uvi);
 		$('#ventVitesse').html((data.current.wind_speed * 3.6).toFixed(1) + 'km/h');
 		$('#ventDirection').html(data.current.wind_deg + '° ' + degToCard(data.current.wind_deg) +
-			'&nbsp<i class="wi wi-wind from-' + data.current.wind_deg + '-deg"></i>'
-		);
+			'&nbsp<i class="wi wi-wind from-' + data.current.wind_deg + '-deg"></i>');
 		$('#ventRafales').html((data.current.hasOwnProperty('wind_gust') ? (data.current.wind_gust * 3.6).toFixed(1) : '0') + 'km/h');
 		$('#nuages').html(data.current.clouds + '%');
 		$('#visibilite').html(data.current.visibility + 'm');
@@ -44,8 +42,7 @@ function rucherMeteo() {
 		$('#leverLune').html(fdt(data.daily[0].moonrise));
 		$('#coucherLune').html(fdt(data.daily[0].moonset));
 		$('#phaseLune').html(data.daily[0].moon_phase +
-			'&nbsp<i class="wi wi-moon-' + moonIcon(data.daily[0].moon_phase) + '"></i>'
-		);
+			'&nbsp<i class="wi wi-moon-alt-' + moonIcon(data.daily[0].moon_phase) + '"></i>');
 		let htmlPrev = '';
 		data.daily.forEach(function(day) {
 			htmlPrev += '<tr><td>' + fd(day.dt) + '</td><td>' +
@@ -58,10 +55,11 @@ function rucherMeteo() {
 				fdt(day.sunset) + '</td><td>' +
 				fdt(day.moonrise) + '</td><td>' +
 				fdt(day.moonset) + '</td><td>' +
-				day.moon_phase + '&nbsp<i class="wi wi-moon-' + 
-					moonIcon(day.moon_phase) + '"></i></td></tr>';
+				day.moon_phase + '&nbsp<i class="wi wi-moon-' +
+				moonIcon(day.moon_phase) + '"></i></td></tr>';
 		});
 		$('#previsions').append(htmlPrev);
+		tempChart(data.hourly);
 		let urlHistoPref = urlPrefix + '/timemachine?lat=' +
 			latitude + '&lon=' + longitude +
 			'&units=metric' +
@@ -70,6 +68,26 @@ function rucherMeteo() {
 			'&dt=';
 		histo(urlHistoPref, parseInt(dt) - 86400, 5, '');
 	});
+
+	function tempChart(dh) {
+		new Chart('tempGraphe', {
+			type: 'line',
+			data: {
+				labels: dh.map(x => new Date(x.dt * 1000).toLocaleString(undefined,
+					{ day: "numeric", hour: "numeric" })),
+				datasets: [{
+					data: dh.map(x => x.temp)
+				}]
+			},
+			options: {
+				plugins: {
+					legend: {
+						display: false
+					}
+				}
+			}
+		});
+	}
 
 	function histo(pref, time, n, htmlHisto) {
 		if (n == 0) {
@@ -80,13 +98,13 @@ function rucherMeteo() {
 		$.ajax({
 			url: urlHisto
 		}).done(function(data) {
-			htmlHisto += '<tr><td>' + '<a href="' + urlHisto + '" target="_blank">' + 
-					fdt(data.current.dt) + '</a></td><td>' +
+			htmlHisto += '<tr><td>' + '<a href="' + urlHisto + '" target="_blank">' +
+				fdt(data.current.dt) + '</a></td><td>' +
 				data.current.temp.toFixed(1) + '°C</td><td>' +
 				data.current.clouds + '%' + '</td><td>' +
 				(data.current.wind_speed * 3.6).toFixed(1) + 'km/h</td><td>' +
 				data.current.wind_deg + '° ' + degToCard(data.current.wind_deg) +
-					'&nbsp<i class="wi wi-wind from-' + data.current.wind_deg + '-deg"></i></td></tr>';
+				'&nbsp<i class="wi wi-wind from-' + data.current.wind_deg + '-deg"></i></td></tr>';
 			histo(pref, time - 86400, n - 1, htmlHisto);
 		});
 	}
@@ -94,11 +112,11 @@ function rucherMeteo() {
 	function fdt(t) {
 		return new Date(t * 1000).toLocaleString(undefined, optDateTime).replace(' à', '');
 	}
-	
+
 	function fd(t) {
 		return new Date(t * 1000).toLocaleString(undefined, optDate);
 	}
-	
+
 	function degToCard(deg) {
 		if (deg > 11.25 && deg <= 33.75) return "NNE";
 		if (deg > 33.75 && deg <= 56.25) return "NE";
@@ -117,7 +135,7 @@ function rucherMeteo() {
 		if (deg > 326.25 && deg <= 348.75) return "NNW";
 		return "N";
 	}
-	
+
 	function moonIcon(phase) {
 		if (phase < 1 / 28) return 'new';
 		if (phase < 2 / 28) return 'waxing-crescent-1';

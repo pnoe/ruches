@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:replace="include :: jsChart"></script>
 <script th:src="@{/js/ruches/rucherMeteo.js}"></script>
 <script th:inline="javascript">
 	const longitude = [[${rucher.longitude}]];
@@ -36,6 +37,8 @@
 			</div>
 		</div>
 	</div>
+	
+	
 	<div class="container-fluid" id="accordion">
 		<h1 class="item" th:text="#{aujourdhui}"></h1>
 		<div>
@@ -44,7 +47,6 @@
 				<tr>
 					<th th:text="#{date}"></th>
 					<th th:text="#{temperature}"></th>
-					<th th:text="#{tempRessentie}"></th>
 					<th th:text="#{humidite}"></th>
 					<th th:text="#{rosee}"></th>
 					<th th:text="#{pression}"></th>
@@ -54,8 +56,7 @@
 				<tr>
 				    <td id="date"></td>
 				    <td id="temperature"></td>
-				    <td id="tempRessentie"></td>
-					<td id="humidite"></td>
+				    <td id="humidite"></td>
 					<td id="rosee"></td>
 					<td id="pression"></td>
 				</tr>
@@ -64,7 +65,7 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th th:text="#{tempRessent}"></th>
+						<th th:text="#{tempRessentie}"></th>
 						<th th:text="#{uvi}"></th>
 						<th th:text="#{ventVitesse}"></th>
 						<th th:text="#{ventDirection}"></th>
@@ -73,7 +74,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td id="tempRessent"></td>
+						<td id="tempRessentie"></td>
 						<td id="uvi"></td>
 						<td id="ventVitesse"></td>
 						<td id="ventDirection"></td>
@@ -123,6 +124,8 @@
 				</tbody>
 			</table>
 		</div>
+		<h1 class="item" th:text="'Températures'"></h1>
+		<canvas id="tempGraphe"></canvas>
 		<h1 class="item" th:text="#{previsions}"></h1>
 		<div>
 			<table class="table table-bordered">
