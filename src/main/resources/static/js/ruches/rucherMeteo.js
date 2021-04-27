@@ -71,26 +71,21 @@ function rucherMeteo() {
 
 	const CHART_COLORS = {
 		red: 'rgb(255, 99, 132)',
-		orange: 'rgb(255, 159, 64)',
-		yellow: 'rgb(255, 205, 86)',
-		green: 'rgb(75, 192, 192)',
-		blue: 'rgb(54, 162, 235)',
-		purple: 'rgb(153, 102, 255)',
-		grey: 'rgb(201, 203, 207)'
+		blue: 'rgb(54, 162, 235)'
 	};
 
 	function tempChart(dh) {
-		let ljj = 'xx';
-		let labelsxx = dh.map(x => {
+		let jour = 'xx';
+		let labels = dh.map(x => {
 				const txt = new Date(x.dt * 1000).toLocaleString(undefined,	{ day: "numeric", hour: "numeric" });
-				const ret = (ljj === txt.substring(0, 2)) ? txt.substring(5) : txt;
-				ljj = txt.substring(0, 2);
+				const ret = (jour === txt.substring(0, 2)) ? txt.substring(5) : txt;
+				jour = txt.substring(0, 2);
 				return ret;
 		});
 		new Chart('tempGraphe', {
 			type: 'line',
 			data: {
-				labels: labelsxx,
+				labels: labels,
 				datasets: [
 					{
 						data: dh.map(x => x.temp),

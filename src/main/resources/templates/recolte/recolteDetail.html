@@ -77,7 +77,7 @@ $(document).ready(function() {
 	</div>
 	<div class="container-fluid" th:with="pdsMiel=(${nbruches}==0) ? 0.00 : 
 			${#aggregates.sum(detailsRecolte.![poidsAvant])} - ${#aggregates.sum(detailsRecolte.![poidsApres])}">
-		<table class="table table-responsive table-bordered">
+		<table class="table table-bordered">
 			<thead>
 				<tr>
 					<th th:text="#{typeMiel}"></th>
@@ -85,6 +85,7 @@ $(document).ready(function() {
 					<th style="background-color:LemonChiffon" th:text="#{poidsMielHausses}"></th>
 					<th style="background-color:LemonChiffon" th:text="#{poidsMielPot}"></th>
 					<th th:text="#{commentaire}"></th>
+					<th th:text="#{lesHausses}"></th>
 					<th th:text="#{lesRuches}"></th>
 					<th th:text="#{poidsMielMoyen}"></th>
 				</tr>
@@ -98,6 +99,7 @@ $(document).ready(function() {
 					 th:text="${#numbers.formatDecimal(pdsMiel,1,2,'DEFAULT')}"></td>
 					<td class="num" th:text="${#numbers.formatDecimal(recolte.poidsMiel,1,2,'DEFAULT')}"></td>
 					<td th:text="${recolte.commentaire}"></td>
+					<td th:text="${#arrays.length(detailsRecolte)}"></td>
 					<td th:text="${nbruches}"></td>
 					<td th:text="(${nbruches}==0) ? '' : ${#numbers.formatDecimal(pdsMiel/nbruches,1,3,'DEFAULT')}"></td>
 				</tr>
