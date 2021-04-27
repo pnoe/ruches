@@ -69,20 +69,68 @@ function rucherMeteo() {
 		histo(urlHistoPref, parseInt(dt) - 86400, 5, '');
 	});
 
+	const CHART_COLORS = {
+		red: 'rgb(255, 99, 132)',
+		orange: 'rgb(255, 159, 64)',
+		yellow: 'rgb(255, 205, 86)',
+		green: 'rgb(75, 192, 192)',
+		blue: 'rgb(54, 162, 235)',
+		purple: 'rgb(153, 102, 255)',
+		grey: 'rgb(201, 203, 207)'
+	};
+
 	function tempChart(dh) {
+		let labelsx = dh.map(x => new Date(x.dt * 1000).toLocaleString(undefined,
+			{ day: "numeric", hour: "numeric" }));
+		let labelsxx = [];
+		let lj = 'xx';
+		for (var i = 0; i < labelsx.length; i++) {
+			if (lj === labelsx[i].substring(0, 2)) {
+				labelsxx.push(labelsx[i].substring(5));
+			} else {
+				labelsxx.push(labelsx[i]);
+			}
+			lj = labelsx[i].substring(0, 2);
+		}
 		new Chart('tempGraphe', {
 			type: 'line',
 			data: {
-				labels: dh.map(x => new Date(x.dt * 1000).toLocaleString(undefined,
-					{ day: "numeric", hour: "numeric" })),
-				datasets: [{
-					data: dh.map(x => x.temp)
-				}]
+				labels: labelsxx,
+				datasets: [
+					{
+						data: dh.map(x => x.temp),
+						label: 'Température',
+						borderColor: CHART_COLORS.red,
+						yAxisID: 'ytemp'
+					},
+					{
+						data: dh.map(x => x.pressure),
+						label: 'Pression',
+						borderColor: CHART_COLORS.blue,
+						yAxisID: 'ypress'
+					}
+				]
 			},
 			options: {
 				plugins: {
 					legend: {
 						display: false
+					}
+				},
+				interaction: {
+					intersect: false,
+					mode: 'index'
+				},
+				scales: {
+					y: {
+						type: 'linear',
+						display: true,
+						position: 'left'
+					},
+					y1: {
+						type: 'linear',
+						display: true,
+						position: 'right'
 					}
 				}
 			}
