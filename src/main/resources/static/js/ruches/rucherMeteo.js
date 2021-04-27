@@ -1,5 +1,5 @@
 /* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
-/* globals longitude,latitude,openweathermapKey,urlPrefix */
+/* globals longitude,latitude,openweathermapKey,urlPrefix,Chart */
 // "use strict"
 
 function rucherMeteo() {
@@ -80,18 +80,13 @@ function rucherMeteo() {
 	};
 
 	function tempChart(dh) {
-		let labelsx = dh.map(x => new Date(x.dt * 1000).toLocaleString(undefined,
-			{ day: "numeric", hour: "numeric" }));
-		let labelsxx = [];
-		let lj = 'xx';
-		for (var i = 0; i < labelsx.length; i++) {
-			if (lj === labelsx[i].substring(0, 2)) {
-				labelsxx.push(labelsx[i].substring(5));
-			} else {
-				labelsxx.push(labelsx[i]);
-			}
-			lj = labelsx[i].substring(0, 2);
-		}
+		let ljj = 'xx';
+		let labelsxx = dh.map(x => {
+				const txt = new Date(x.dt * 1000).toLocaleString(undefined,	{ day: "numeric", hour: "numeric" });
+				const ret = (ljj === txt.substring(0, 2)) ? txt.substring(5) : txt;
+				ljj = txt.substring(0, 2);
+				return ret;
+		});
 		new Chart('tempGraphe', {
 			type: 'line',
 			data: {
@@ -122,15 +117,18 @@ function rucherMeteo() {
 					mode: 'index'
 				},
 				scales: {
-					y: {
+					ytemp: {
 						type: 'linear',
 						display: true,
 						position: 'left'
 					},
-					y1: {
+					ypress: {
 						type: 'linear',
 						display: true,
-						position: 'right'
+						position: 'right',
+						grid: {
+          					drawOnChartArea: false
+        				}
 					}
 				}
 			}
