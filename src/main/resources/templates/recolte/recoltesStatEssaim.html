@@ -11,7 +11,7 @@ $(document).ready(function() {
         ],
     	"footerCallback": function ( row, data, start, end, display ) {
              let api = this.api();
-             // Remove the formatting to get integer data for summation
+             /*[- Remove the formatting to get integer data for summation -]*/
              let valPoids = function ( p ) {
                  return typeof p === 'string' ?
                      p.replace(/[,]/, '.')*1 :

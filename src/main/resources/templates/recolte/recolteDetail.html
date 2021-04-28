@@ -22,7 +22,6 @@ $(document).ready(function() {
 		$.post( [[@{/recolte/haussesDepot/}]] + [[${recolte.id}]],
 				requestData).done(function (data) { 
 					alert( data );
-					// document.location.reload(true);
 		});		
 	});
 	$('.confirmationsupprime').on('click', function () {
@@ -42,7 +41,6 @@ $(document).ready(function() {
                     }, 0.00);
                 return $('<tr/>')
                     .append( '<td colspan="4">'+[[#{totalPourLaRuche}]]+' '+group+'<\/td>' )
-                    //.append( '<td class="num">'+mielTotal.toFixed(2)+'<\/td>' )
                     .append( '<td class="num">'+new Intl.NumberFormat(navigator.language, 
                     	{minimumFractionDigits:2}).format(mielTotal)+'<\/td>' )
                     .append( '<td colspan="2"><\/td>' );

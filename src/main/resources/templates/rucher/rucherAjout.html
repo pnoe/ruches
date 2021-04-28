@@ -16,8 +16,7 @@ $().ready(function() {
             	rucheNoms += value + ",";
             });
             if (rucheNoms) { 
-                // on enlève la dernière virgule et met à jour l'url de
-				// traitement
+            	/*[- On enlève la dernière virgule et met à jour l'url de traitement -]*/
             	rucheNoms = rucheNoms.substring(0, rucheNoms.length-1);
             	$('#actionAjoutRuches').attr('href',
             			[[@{/rucher/ruches/ajouter/}]] +

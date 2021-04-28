@@ -19,13 +19,13 @@ $(document).ready(function() {
     	if ( type === 'row' ) {
     		let hausseNoms = "";
     		table.rows( { selected: true } ).data().pluck( 0 ).each(function (value, index) {
-            	// on récupère le nom de l'essaim dans le texte de la balise <a ...>
+    			/*[- le code suivant permet de gérer les caractères tels que < > ... -]*/
             	const a = document.createElement('a');
             	a.innerHTML = value;
             	hausseNoms += a.textContent + ",";
             });
             if (hausseNoms) { 
-                // on enlève la dernière virgule et met à jour l'url de traitement
+            	/*[- on enlève la dernière virgule et met à jour l'url de traitement -]*/
             	hausseNoms = hausseNoms.substring(0, hausseNoms.length-1);
             	id.attr('href', href + [[${recolte.id}+'/']] + hausseNoms);
             } else {
@@ -82,16 +82,6 @@ $(document).ready(function() {
 			</thead>
 			<tbody>
 				<tr th:each="hausseRecolte : ${haussesRecolte}">
-				<!--/*  
-					<td><a th:href="@{'/hausse/'+${hausseRecolte.id}}"
-						th:text="${hausseRecolte.nom}"></a></td>
-					<td><a th:href="@{'/rucher/'+${hausseRecolte.ruche?.rucher?.id}}"  
-						th:text="${hausseRecolte.ruche?.rucher?.nom}"></a></td>
-					<td><a th:href="@{'/ruche/'+${hausseRecolte.ruche?.id}}" 
-						th:text="${hausseRecolte.ruche?.nom}"></a></td>
-					<td><a th:href="@{'/essaim/'+${hausseRecolte.ruche?.essaim?.id}}" 
-						th:text="${hausseRecolte.ruche?.essaim?.nom}"></a></td>
-				*/-->
 					<td th:text="${hausseRecolte.nom}"></td>
 					<td th:text="${hausseRecolte.ruche?.rucher?.nom}"></td>
 					<td th:text="${hausseRecolte.ruche?.nom}"></td>
@@ -113,16 +103,6 @@ $(document).ready(function() {
 			</thead>
 			<tbody>
 				<tr th:each="hausseNotInRecolte : ${haussesNotInRecolte}">
-				<!--/*  
-					<td><a th:href="@{'/hausse/'+${hausseNotInRecolte.id}}"
-						th:text="${hausseNotInRecolte.nom}"></a></td>
-					<td><a th:href="@{'/rucher/'+${hausseNotInRecolte.ruche?.rucher?.id}}"  
-						th:text="${hausseNotInRecolte.ruche?.rucher?.nom}"></a></td>
-					<td><a th:href="@{'/ruche/'+${hausseNotInRecolte.ruche?.id}}" 
-						th:text="${hausseNotInRecolte.ruche?.nom}"></a></td>
-					<td><a th:href="@{'/essaim/'+${hausseNotInRecolte.ruche?.essaim?.id}}" 
-						th:text="${hausseNotInRecolte.ruche?.essaim?.nom}"></a></td>
-				*/-->
 					<td th:text="${hausseNotInRecolte.nom}"></td>
 					<td th:text="${hausseNotInRecolte.ruche?.rucher?.nom}"></td>
 					<td th:text="${hausseNotInRecolte.ruche?.nom}"></td>
@@ -130,7 +110,6 @@ $(document).ready(function() {
 				</tr>
 			</tbody>
 		</table>
-	
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
