@@ -2,6 +2,8 @@
 /* globals d3, Chart
 */
 
+let barChart;
+
 // https://github.com/code-nebula/chart-color-generator
 function calculatePoint(i, intervalSize, colorRangeInfo) {
 	const { colorStart, colorEnd, useEndAsStart } = colorRangeInfo;
@@ -40,7 +42,7 @@ function graphe() {
 		}],
 		labels: labels
 	};
-	new Chart('ctx', {
+	barChart = new Chart('ctx', {
 		type: 'bar',
 		data: data,
 		options: {
@@ -51,4 +53,6 @@ function graphe() {
 		    }
 		  },
 	});
+
+	
 }

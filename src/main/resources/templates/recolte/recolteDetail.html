@@ -67,7 +67,7 @@ $(document).ready(function() {
 				  class="oi oi-menu" th:title="#{choixHausesRecolte}" aria-hidden="true"></a>
 				<span id="enlevehausses" class="oi oi-minus" th:title="#{recolteHausseDepot}" aria-hidden="true"></span>
        			<a th:href="@{'/recolte/statistiques/essaim/'+${recolte.id}}"
-       			  class="oi oi-bar-chart" th:title="#{statistiquesessaims}" aria-hidden="true"></a>
+       			  class="oi oi-pie-chart" th:title="#{statistiquesessaims}" aria-hidden="true"></a>
        			<a id="supprime" th:href="@{'/recolte/supprime/'+${recolte.id}}"
        			  class="confirmationsupprime oi oi-trash" th:title="#{supprimer}" aria-hidden="true"></a>
 			</div>
