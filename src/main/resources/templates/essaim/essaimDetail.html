@@ -31,24 +31,24 @@ $(document).ready(function() {
 				nr = arr[1].trim();
 			}
 			if ($.inArray(ne, [[${essaimnoms}]]) != -1) {
-				// l'essaim ne existe déjà 
+				/*[- l'essaim ne existe déjà -]*/
 				tabNomExiste.push(ne);
 				if ((nr != "") && ($.inArray(nr, [[${ruchesvidesnoms}]]) == -1)) {
-					// ruche nr incorrecte
+					/*[- ruche nr incorrecte -]*/
 					tabNomRucheIncorrect.push(nr);
 				}
 			} else {
-				// on crée l'essaim ne
+				/*[- on crée l'essaim ne -]*/
 				tabNomOk.push(ne);
 				if (nr == "") {
-					// pas de ruche
+					/*[- pas de ruche -]*/
 					tabNomRucheOk.push("");
 				} else if ($.inArray(nr, [[${ruchesvidesnoms}]]) == -1) {
-					// ruche nr incorrecte
+					/*[- ruche nr incorrecte -]*/
 					tabNomRucheOk.push("");
 					tabNomRucheIncorrect.push(nr);
 				} else {
-					// on met l'essaim ne dans la ruche nr
+					/*[- on met l'essaim ne dans la ruche nr -]*/
 					tabNomRucheOk.push(nr);
 				}
 			}

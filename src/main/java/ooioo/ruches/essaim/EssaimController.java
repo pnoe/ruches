@@ -1,6 +1,7 @@
 package ooioo.ruches.essaim;
 
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -83,6 +84,58 @@ public class EssaimController {
 
 	@Value("${accueil.titre}")
 	private String accueilTitre;
+	
+	/*
+	 * Statistiques âges des reines
+	 */
+	@RequestMapping("/statistiquesage")
+	public String statistiquesage(Model model) {
+		Iterable<Essaim> essaims = essaimRepository.findByActif(true);
+		int[] ages = new int[200];
+		int indexMaxAges = 0;
+		long ageMaxJours = 0;
+		long ageTotalJours = 0;
+		int ageMoyenJours;
+		int nb = 1;
+		LocalDate dateNow = LocalDate.now();
+		double M = 0;
+		double S = 0;
+		for (Essaim essaim : essaims) {
+			if (essaim.getReineDateNaissance() != null) {
+				long ageJours = ChronoUnit.DAYS.between(essaim.getReineDateNaissance(), dateNow);
+				if (ageJours > 2920) {
+					// Si la reine à plus de 8 ans on ne la prends pas en compte
+					logger.info("Essaim {}, âge supérieur à huit ans", essaim.getNom());
+					continue;
+				}
+				long ageMois = ChronoUnit.MONTHS.between(essaim.getReineDateNaissance(), dateNow);
+				int indexAge = (int)(ageMois/6);
+				ages[indexAge]++;
+				indexMaxAges = Math.max(indexMaxAges, indexAge);
+				ageMaxJours = Math.max(ageMaxJours, ageJours);
+				ageTotalJours += ageJours;		
+				// Variance Welford's algorithm
+				double tmpM = M;
+				double ageJ = ageJours;
+		        M += (ageJ - tmpM) / nb;
+		        S += (ageJ - tmpM) * (ageJ - M);
+		        nb++;
+			}
+		}
+		List<Integer> agesHisto = new ArrayList<Integer>();
+		for (int i = 0; i <= indexMaxAges; i++) {
+			agesHisto.add(ages[i]);
+		}
+		ageMoyenJours = (int)(ageTotalJours/(nb - 1));
+		// Variance sur population entière (nb est incrémenté avant la sortie de la boucle)
+		long ageVarianceJours = Math.round(Math.sqrt(S / (nb - 1)));
+		model.addAttribute("ageMoyenJours", ageMoyenJours);
+		model.addAttribute("agesHisto", agesHisto);
+		model.addAttribute("ageVarianceJours", ageVarianceJours);
+		return "essaim/essaimsStatAges";
+	}
+	
+	
 	
 	/**
 	 * Statistiques tableau poids de miel par essaim

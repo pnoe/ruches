@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:replace="include :: jsChart"></script>
+<script th:replace="include :: d3-color"></script>
+<script th:replace="include :: d3-interpolate"></script>
+<script th:replace="include :: d3-scale-chromatic"></script>
+<script th:src="@{/js/ruches/essaimsStatAge.js}"></script>
+<script th:inline="javascript">
+	const agesHisto = [[${agesHisto}]];
+	$(document).ready(function() { graphe(); });
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+			<h1 class="item" th:text="#{statistiquesage}"></h1>
+			</div>
+			
+			<div class="col">
+			  <span th:text="'Moyenne' + ' ' + 
+			  	${ageMoyenJours} + ' jours'">
+			  </span>
+			</div>
+			<div class="col">
+			  <span th:text="'Écart type' + ' ' + 
+			  	${ageVarianceJours} + ' jours'">
+			  </span>
+			</div>
+			
+        </div>
+    </div>
+	<div class="container-fluid">
+		<canvas id="ctx"></canvas>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>
