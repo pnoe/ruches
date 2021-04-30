@@ -102,7 +102,8 @@ $(document).ready(function() {
        			<a th:href="@{'/essaim/associe/'+${essaim.id}}"
        			  class="oi oi-loop-square" th:title="#{associationruche}" aria-hidden="true"></a>
        			<a id="supprime" th:href="@{'/essaim/supprime/'+${essaim.id}}"
-       			  class="confirmation oi oi-trash" th:title="#{supprimer}" aria-hidden="true"></a>
+       			  class="confirmation oi oi-trash" style="color:red" 
+       			  th:title="#{supprimer}" aria-hidden="true"></a>
        			<a th:href="@{'/essaim/descendance/'+${essaim.id}}"
        			  class="oi oi-fork" th:title="#{graphedescendance}" aria-hidden="true"></a>
        			  <a th:href="@{'/evenement/essaim/dispersion/'+${essaim.id}}"

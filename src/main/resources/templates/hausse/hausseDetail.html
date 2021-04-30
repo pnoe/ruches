@@ -70,7 +70,8 @@ $().ready(function() {
 					  class="oi oi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
 					<span id="clone" class="oi oi-layers" th:title="#{cloner}" aria-hidden="true"></span>
        				<a id="supprime" th:href="@{'/hausse/supprime/'+${hausse.id}}"
-       				  class="confirmation oi oi-trash" th:title="#{supprimer}" aria-hidden="true"></a>&nbsp;
+       				  class="confirmation oi oi-trash" style="color:red" 
+       				  th:title="#{supprimer}" aria-hidden="true"></a>&nbsp;
 					<a th:href="@{'/evenement/hausse/'+${hausse.id}}"
 					  class="padicons oi oi-list-rich" th:title="#{evenements}" aria-hidden="true"></a>
 					<a th:href="@{'/evenement/hausse/commentaire/'+${hausse.id}}"

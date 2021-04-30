@@ -69,7 +69,7 @@ $().ready(function() {
        			<a th:href="@{'/ruche/rucher/'+${ruche.id}}"
        			  class="oi oi-home" th:title="#{changerDeRucher}" aria-hidden="true"></a>
 				<a id="supprime" th:href="@{'/ruche/supprime/'+${ruche.id}}"
-				  class="confirmation oi oi-trash" th:title="#{supprimer}" aria-hidden="true"></a>&nbsp;
+				  class="confirmation oi oi-trash" style="color:red" th:title="#{supprimer}" aria-hidden="true"></a>&nbsp;
 				<a th:href="@{'/evenement/ruche/'+${ruche.id}}"
 				  class="padicons oi oi-list-rich" th:title="#{evenements}" aria-hidden="true"></a>
 				<a th:href="@{'/evenement/ruche/commentaire/'+${ruche.id}}"

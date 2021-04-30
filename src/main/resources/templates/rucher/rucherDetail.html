@@ -55,7 +55,8 @@
        			<a th:href="@{'/rucher/ruches/'+${rucher.id}}" 
        			  class="oi oi-align-center" th:title="#{ajoutRuches}" aria-hidden="true"></a>
        			<a id="supprime" th:href="@{'/rucher/supprime/'+${rucher.id}}" 
-       			  class="confirmationsupp oi oi-trash" th:title="#{supprimer}" aria-hidden="true"></a>&nbsp;
+       			  class="confirmationsupp oi oi-trash" style="color:red" 
+       			  th:title="#{supprimer}" aria-hidden="true"></a>&nbsp;
        			<a th:href="@{'/evenement/rucher/'+${rucher.id}}"
        			  class="padicons oi oi-list-rich" th:title="#{evenements}" aria-hidden="true"></a>
 				<a th:href="@{'/evenement/rucher/commentaire/'+${rucher.id}}"

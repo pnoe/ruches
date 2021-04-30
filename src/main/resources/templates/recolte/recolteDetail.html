@@ -69,7 +69,8 @@ $(document).ready(function() {
        			<a th:href="@{'/recolte/statistiques/essaim/'+${recolte.id}}"
        			  class="oi oi-pie-chart" th:title="#{statistiquesessaims}" aria-hidden="true"></a>
        			<a id="supprime" th:href="@{'/recolte/supprime/'+${recolte.id}}"
-       			  class="confirmationsupprime oi oi-trash" th:title="#{supprimer}" aria-hidden="true"></a>
+       			  class="confirmationsupprime oi oi-trash" style="color:red" 
+       			  th:title="#{supprimer}" aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
