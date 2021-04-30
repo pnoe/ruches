@@ -22,6 +22,11 @@ function interpolateColors(dataLength, colorScale, colorRangeInfo) {
 }
 
 function graphe() {
+	$('[data-toggle="popover"]').popover({
+	});
+	$('.popover-dismiss').popover({
+		trigger: 'focus'
+	});
 	const colorScale = d3.interpolateRainbow;
 	const colorRangeInfo = {
 		colorStart: 0,

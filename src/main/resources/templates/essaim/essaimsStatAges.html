@@ -19,7 +19,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<h1 class="item" th:text="#{statistiquesage}"></h1>
+				<h1 class="item" th:text="#{ageReines}"></h1>
 			</div>
 			<div class="col">
 			  	<span th:text="#{Moyenne} + ' ' + ${ageMoyenJours} + ' jours'">
@@ -30,13 +30,17 @@
 			  	</span>
 			</div>
 			<div th:if="${nbCouveuse}" class="col">
-			  	<span th:text="#{EnCouveuse} + ' ' + ${nbCouveuse}">
+			  	<span th:attr="data-content=#{aideReineIgnorees}" 
+			  		data-toggle="popover" data-trigger="hover" 
+			  		th:text="#{EnCouveuse} + ' ' + ${nbCouveuse}">
 			  	</span>
 			</div>
 			<div th:if="${horsRuche}" class="col">
-			  	<span th:text="#{horsRuche} + ' ' + ${horsRuche}">
+			  	<span  th:attr="data-content=#{aideReineIgnorees}" 
+			  		data-toggle="popover" data-trigger="hover" 
+			  		th:text="#{horsRuche} + ' ' + ${horsRuche}">
 			  	</span>
-			</div>
+			</div>	
         </div>
     </div>
 	<div class="container-fluid">
