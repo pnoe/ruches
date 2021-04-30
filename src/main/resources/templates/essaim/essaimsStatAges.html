@@ -29,8 +29,12 @@
 			  	<span th:text="#{EcartType} + ' ' + ${ageVarianceJours} + ' jours'">
 			  	</span>
 			</div>
-			<div class="col">
+			<div th:if="${nbCouveuse}" class="col">
 			  	<span th:text="#{EnCouveuse} + ' ' + ${nbCouveuse}">
+			  	</span>
+			</div>
+			<div th:if="${horsRuche}" class="col">
+			  	<span th:text="#{horsRuche} + ' ' + ${horsRuche}">
 			  	</span>
 			</div>
         </div>

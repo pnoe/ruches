@@ -97,6 +97,7 @@ public class EssaimController {
 		long ageTotalJours = 0;
 		int ageMoyenJours;
 		int nb = 1;
+		int horsRuche = 0;
 		LocalDate dateNow = LocalDate.now();
 		double m = 0;
 		double s = 0;
@@ -112,6 +113,11 @@ public class EssaimController {
 				if (ageJours > 2920) {
 					// Si la reine à plus de 8 ans on ne la prends pas en compte
 					logger.info("Essaim {}, âge supérieur à huit ans", essaim.getNom());
+					continue;
+				}
+				if (rucheRepository.findByEssaimId(essaim.getId()) == null) {
+					// Si la reine n'est pas dans une ruche on ne la prends pas en compte
+					horsRuche++;
 					continue;
 				}
 				long ageMois = ChronoUnit.MONTHS.between(essaim.getReineDateNaissance(), dateNow);
@@ -139,6 +145,7 @@ public class EssaimController {
 		model.addAttribute("agesHisto", agesHisto);
 		model.addAttribute("nbCouveuse", nbCouveuse);
 		model.addAttribute("ageVarianceJours", ageVarianceJours);
+		model.addAttribute("horsRuche", horsRuche);
 		return "essaim/essaimsStatAges";
 	}
 	
