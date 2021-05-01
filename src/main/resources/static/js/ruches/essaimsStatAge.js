@@ -59,14 +59,29 @@ function graphe() {
 					display: true,
 					title: {
 						display: true,
-						text: 'Âge des reines',
+						text: 'Âge des reines - ' + 
+							Min + ' ' + ageMinJours + ' ' +
+							Max + ' ' + ageMaxJours + ' ' +
+							Moyenne + ' ' + ageMoyenJours + ' ' +
+							EcartType + ' ' + ageVarianceJours + ' jours',
+							// +
+							//EnCouveuse + ' ' + nbCouveuse + ' - ' +
+							//horsRucheTxt + ' ' + horsRuche,
+						color: 'black',
+						font: {
+							size: 14,
+						},
 					}
 				},
 				y: {
 					display: true,
 					title: {
 						display: true,
-						text: 'Nombre de reines',
+						text: 'Nombre de reines. Total = ' + agesHisto.reduce((a, c) => a + c, 0),
+						color: 'black',
+						font: {
+							size: 14,
+						},
 					}
 				}
 			}

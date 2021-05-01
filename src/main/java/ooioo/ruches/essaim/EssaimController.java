@@ -94,6 +94,8 @@ public class EssaimController {
 		int[] ages = new int[200];
 		int indexMaxAges = 0;
 		long ageMaxJours = 0;
+		long ageMinJours = 0;
+		boolean premier = true;
 		long ageTotalJours = 0;
 		int ageMoyenJours;
 		int nb = 1;
@@ -125,6 +127,15 @@ public class EssaimController {
 				ages[indexAge]++;
 				indexMaxAges = Math.max(indexMaxAges, indexAge);
 				ageMaxJours = Math.max(ageMaxJours, ageJours);
+				
+				ageMinJours = (ageMinJours == 0) ? ageJours : Math.min(ageMinJours, ageJours);
+				if (premier) {
+					ageMinJours = ageJours;
+					premier = false;
+				} else {
+					ageMinJours = Math.min(ageMinJours, ageJours);
+				}
+				
 				ageTotalJours += ageJours;		
 				// Variance Welford's algorithm
 				double tmpM = m;
@@ -146,6 +157,8 @@ public class EssaimController {
 		model.addAttribute("nbCouveuse", nbCouveuse);
 		model.addAttribute("ageVarianceJours", ageVarianceJours);
 		model.addAttribute("horsRuche", horsRuche);
+		model.addAttribute("ageMaxJours", ageMaxJours);
+		model.addAttribute("ageMinJours", ageMinJours);
 		return "essaim/essaimsStatAges";
 	}
 	
