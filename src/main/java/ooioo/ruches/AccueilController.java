@@ -86,9 +86,7 @@ public class AccueilController {
 	
 	@GetMapping(path = "/infos")
 	public String infos(Model model) {
-		
 		model.addAttribute("rayonsButinage", rayonsButinage);
-		
 		long nbRuches = rucheRepository.countByActiveTrue();
 		long nbRuchesAvecEssaim = rucheRepository.countByEssaimNotNullAndActiveTrue();
 		long nbHaussesSurRuchesAvecEssaim = hausseRepository.countByActiveTrueAndRucheNotNullAndRucheActiveTrueAndRucheEssaimNotNull();

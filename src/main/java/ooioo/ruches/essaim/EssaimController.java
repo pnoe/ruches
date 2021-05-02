@@ -91,7 +91,8 @@ public class EssaimController {
 	@RequestMapping("/statistiquesage")
 	public String statistiquesage(Model model) {
 		Iterable<Essaim> essaims = essaimRepository.findByActif(true);
-		int[] ages = new int[200];
+		int[] ages = new int[95]; // âge < 8 ans
+		int pas = 6;
 		int indexMaxAges = 0;
 		long ageMaxJours = 0;
 		long ageMinJours = 0;
@@ -111,8 +112,8 @@ public class EssaimController {
 					nbCouveuse++;
 					continue;
 				}
-				long ageJours = ChronoUnit.DAYS.between(essaim.getReineDateNaissance(), dateNow);
-				if (ageJours > 2920) {
+				long ageMois = ChronoUnit.MONTHS.between(essaim.getReineDateNaissance(), dateNow);
+				if (ageMois > 95) {
 					// Si la reine à plus de 8 ans on ne la prends pas en compte
 					logger.info("Essaim {}, âge supérieur à huit ans", essaim.getNom());
 					continue;
@@ -122,20 +123,17 @@ public class EssaimController {
 					horsRuche++;
 					continue;
 				}
-				long ageMois = ChronoUnit.MONTHS.between(essaim.getReineDateNaissance(), dateNow);
-				int indexAge = (int)(ageMois/6);
+				int indexAge = (int)ageMois/pas;
 				ages[indexAge]++;
 				indexMaxAges = Math.max(indexMaxAges, indexAge);
+				long ageJours = ChronoUnit.DAYS.between(essaim.getReineDateNaissance(), dateNow);
 				ageMaxJours = Math.max(ageMaxJours, ageJours);
-				
-				ageMinJours = (ageMinJours == 0) ? ageJours : Math.min(ageMinJours, ageJours);
 				if (premier) {
 					ageMinJours = ageJours;
 					premier = false;
 				} else {
 					ageMinJours = Math.min(ageMinJours, ageJours);
 				}
-				
 				ageTotalJours += ageJours;		
 				// Variance Welford's algorithm
 				double tmpM = m;
@@ -159,6 +157,7 @@ public class EssaimController {
 		model.addAttribute("horsRuche", horsRuche);
 		model.addAttribute("ageMaxJours", ageMaxJours);
 		model.addAttribute("ageMinJours", ageMinJours);
+		model.addAttribute("pas", pas);
 		return "essaim/essaimsStatAges";
 	}
 	

@@ -36,7 +36,7 @@ function graphe() {
 	const colors = interpolateColors(agesHisto.length, colorScale, colorRangeInfo);
 	let labels = [];
 	for (let i = 0; i < agesHisto.length; i++) {
-		labels[i] = (i * 6) + '-' + ((i + 1) * 6) + 'mois';
+		labels[i] = (i * pas) + '-' + ((i + 1) * pas) + 'mois';
 	}
 	const data = {
 		datasets: [{

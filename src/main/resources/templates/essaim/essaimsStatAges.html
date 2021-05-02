@@ -7,6 +7,7 @@
 <script th:replace="include :: d3-scale-chromatic"></script>
 <script th:src="@{/js/ruches/essaimsStatAge.js}"></script>
 <script th:inline="javascript">
+	const pas = [[${pas}]];
 	const agesHisto = [[${agesHisto}]];
 	// const nbCouveuse = [[${nbCouveuse}]];
 	const ageMoyenJours = [[${ageMoyenJours}]];
