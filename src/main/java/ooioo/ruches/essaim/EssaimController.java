@@ -109,7 +109,7 @@ public class EssaimController {
 			if (essaim.getReineDateNaissance() != null) {
 				if (essaim.getReineDateNaissance().isAfter(dateNow)) {
 					// Si la reine n'est pas encore née on ne la prends pas en compte !
-					nbCouveuse++;
+					// nbCouveuse++;
 					continue;
 				}
 				long ageMois = ChronoUnit.MONTHS.between(essaim.getReineDateNaissance(), dateNow);
@@ -120,7 +120,7 @@ public class EssaimController {
 				}
 				if (rucheRepository.findByEssaimId(essaim.getId()) == null) {
 					// Si la reine n'est pas dans une ruche on ne la prends pas en compte
-					horsRuche++;
+					// horsRuche++;
 					continue;
 				}
 				int indexAge = (int)ageMois/pas;
@@ -152,9 +152,9 @@ public class EssaimController {
 		long ageVarianceJours = Math.round(Math.sqrt(s / (nb - 1)));
 		model.addAttribute("ageMoyenJours", ageMoyenJours);
 		model.addAttribute("agesHisto", agesHisto);
-		model.addAttribute("nbCouveuse", nbCouveuse);
+		// model.addAttribute("nbCouveuse", nbCouveuse);
 		model.addAttribute("ageVarianceJours", ageVarianceJours);
-		model.addAttribute("horsRuche", horsRuche);
+		// model.addAttribute("horsRuche", horsRuche);
 		model.addAttribute("ageMaxJours", ageMaxJours);
 		model.addAttribute("ageMinJours", ageMinJours);
 		model.addAttribute("pas", pas);
