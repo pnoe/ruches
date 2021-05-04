@@ -40,6 +40,24 @@ public class RecolteController {
 	@Autowired
 	private EssaimRepository essaimRepository;
 
+	@GetMapping("/statprod")
+	public String statprod(Model model) {
+		int debutAnnee = recolteRepository.findFirstByOrderByDateAsc().getDate().getYear();
+		int finAnnee = recolteRepository.findFirstByOrderByDateDesc().getDate().getYear();
+		int dureeAns = finAnnee - debutAnnee + 1;
+		int[] poidsMielHausses = new int[dureeAns];
+		int[] poidsMielPots = new int[dureeAns];
+		
+		for (int i = 0; i < dureeAns; i++) {
+			poidsMielHausses[i] = recolteRepository.findPoidsHaussesByYear(Double.valueOf(debutAnnee + i))/1000;
+			poidsMielPots[i] = recolteRepository.findPoidsMielByYear(Double.valueOf(debutAnnee + i)).intValue()/1000;
+		}
+		model.addAttribute("poidsMielHausses", poidsMielHausses);
+		model.addAttribute("poidsMielPots", poidsMielPots);
+		model.addAttribute("debutAnnee", debutAnnee);
+		return "recolte/recoltesStatProd";
+	}
+	
 	/**
 	 * Liste des récoltes
 	 */

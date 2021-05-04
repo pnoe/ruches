@@ -22,11 +22,6 @@ function interpolateColors(dataLength, colorScale, colorRangeInfo) {
 }
 
 function graphe() {
-	$('[data-toggle="popover"]').popover({
-	});
-	$('.popover-dismiss').popover({
-		trigger: 'focus'
-	});
 	const colorScale = d3.interpolateRainbow;
 	const colorRangeInfo = {
 		colorStart: 0,
@@ -41,7 +36,8 @@ function graphe() {
 	const data = {
 		datasets: [{
 			data: agesHisto,
-			backgroundColor: colors
+			backgroundColor: colors,
+			label: 'Reines',
 		}],
 		labels: labels
 	};

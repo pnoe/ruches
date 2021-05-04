@@ -91,8 +91,11 @@ public class EssaimController {
 	@RequestMapping("/statistiquesage")
 	public String statistiquesage(Model model) {
 		Iterable<Essaim> essaims = essaimRepository.findByActif(true);
-		int[] ages = new int[95]; // âge < 8 ans
 		int pas = 6;
+		int maxAgeMois = 95; // reine ignorée si plus ancienne (96 mois, 8 ans)
+		// ages : classes d'âge de largeur "pas" en mois
+		// voir https://stackoverflow.com/questions/7139382/java-rounding-up-to-an-int-using-math-ceil/21830188
+		int[] ages = new int[(maxAgeMois + pas - 1)/pas];
 		int indexMaxAges = 0;
 		long ageMaxJours = 0;
 		long ageMinJours = 0;
@@ -100,11 +103,11 @@ public class EssaimController {
 		long ageTotalJours = 0;
 		int ageMoyenJours;
 		int nb = 1;
-		int horsRuche = 0;
+		// int horsRuche = 0;
 		LocalDate dateNow = LocalDate.now();
 		double m = 0;
 		double s = 0;
-		int nbCouveuse = 0;
+		// int nbCouveuse = 0;
 		for (Essaim essaim : essaims) {
 			if (essaim.getReineDateNaissance() != null) {
 				if (essaim.getReineDateNaissance().isAfter(dateNow)) {
@@ -113,8 +116,9 @@ public class EssaimController {
 					continue;
 				}
 				long ageMois = ChronoUnit.MONTHS.between(essaim.getReineDateNaissance(), dateNow);
-				if (ageMois > 95) {
-					// Si la reine à plus de 8 ans on ne la prends pas en compte
+				if (ageMois > maxAgeMois) {
+					// Si la reine à plus de maxAgeMois on ne la prends pas en compte
+					// TODO afficher un message en haut de la page de stat
 					logger.info("Essaim {}, âge supérieur à huit ans", essaim.getNom());
 					continue;
 				}

@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:replace="include :: jsChart"></script>
+<script th:replace="include :: d3-color"></script>
+<script th:replace="include :: d3-interpolate"></script>
+<script th:replace="include :: d3-scale-chromatic"></script>
+<script th:src="@{/js/ruches/recoltesStatProd.js}"></script>
+<script th:inline="javascript">
+	const poidsMielHausses = [[${poidsMielHausses}]];
+	const poidsMielPots = [[${poidsMielPots}]];
+	const debutAnnee = [[${debutAnnee}]];
+	
+	const Min = [[#{Min}]];
+	$(document).ready(function() { grapheRecolte(); });
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<canvas id="ctx"></canvas>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>
