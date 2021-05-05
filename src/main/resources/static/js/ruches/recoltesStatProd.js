@@ -12,19 +12,26 @@ function grapheRecolte() {
 			data: poidsMielHausses,
 			backgroundColor: '#40f373',
 			label: 'Hausses',
-			
-		},{
+			yAxisID: 'ypoids',
+		},
+		{
 			data: poidsMielPots,
 			backgroundColor: '#1ac7c2',
 			label: 'Pots',
-			
+			yAxisID: 'ypoids',
+		},
+		{
+			data: nbIEssaims,
+			backgroundColor: '#ff596b',
+			label: 'Hausses/Essaim',
+			yAxisID: 'ypoidsessaim',
 		},
 		],
 		labels: labels
 	};
 	new Chart('ctx', {
 		type: 'bar',
-		data: data,	
+		data: data,
 		options: {
 			plugins: {
 				title: {
@@ -35,9 +42,23 @@ function grapheRecolte() {
 				legend: {
 					display: true,
 					position: 'bottom',
-					// title: 'Hello !',
 				},
 			},
+			scales: {
+					ypoids: {
+						type: 'linear',
+						display: true,
+						position: 'left'
+					},
+					ypoidsessaim: {
+						type: 'linear',
+						display: true,
+						position: 'right',
+						grid: {
+          					drawOnChartArea: false
+        				}
+					}
+				}
 		},
 	});
 }
