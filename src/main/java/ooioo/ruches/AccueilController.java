@@ -227,6 +227,10 @@ public class AccueilController {
 		model.addAttribute("ruchesPasDEvenement", ruchesPasDEvenement);
 		model.addAttribute("retardRucheEvenement", retardRucheEvenement);
 		
+		
+		Iterable<Essaim> essaimDateNaissSupAcquis = essaimRepository.findEssaimDateNaissSupAcquis();
+		model.addAttribute("essaimDateNaissSupAcquis", essaimDateNaissSupAcquis);
+		
 		return "infos";
 	}
 

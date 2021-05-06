@@ -48,5 +48,10 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 	
 	Essaim findFirstByOrderByDateAcquisition();
 	Essaim findFirstByOrderByDateAcquisitionDesc();
+	
+	@Query(value = "select essaim from Essaim essaim where essaim.reineDateNaissance > essaim.dateAcquisition")
+	Iterable<Essaim> findEssaimDateNaissSupAcquis();
+	
+	
 
 }

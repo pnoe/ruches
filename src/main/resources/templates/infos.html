@@ -249,20 +249,44 @@
 			th:text="${#arrays.length(ruchesPasDEvenement)} + ' ' +
 				#{ruchesSansEven(${retardRucheEvenement})}"></h1>
 		<div>
+			<table class="table table-bordered table-striped datatable-tri">
+				<thead>
+					<tr>
+						<th scope="col" th:text="#{nom}"></th>
+						<th scope="col" th:text="#{rucher}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="ruchePasDEvenement : ${ruchesPasDEvenement}">
+						<td><a th:href="@{'/ruche/'+${ruchePasDEvenement.id}}"
+							th:text="${ruchePasDEvenement.nom}"></a></td>
+						<td><a
+							th:href="@{'/rucher/'+${ruchePasDEvenement.rucher?.id}}"
+							th:text="${ruchePasDEvenement.rucher?.nom}"></a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div th:if="${#arrays.length(essaimDateNaissSupAcquis)} &gt; 0"
+		class="container-fluid accordion">
+		<h1 class="item" th:text="${#arrays.length(essaimDateNaissSupAcquis)} + ' ' +
+			#{essaimDateNaissSupAcquis}"></h1>
+		<div>
 		<table class="table table-bordered table-striped datatable-tri">
 			<thead>
 				<tr>
 					<th scope="col" th:text="#{nom}"></th>
-					<th scope="col" th:text="#{rucher}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{reineDateNaissance}"></th>
+					<th th:text="#{dateAcquisition}"></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="ruchePasDEvenement : ${ruchesPasDEvenement}">
-					<td><a th:href="@{'/ruche/'+${ruchePasDEvenement.id}}"
-						th:text="${ruchePasDEvenement.nom}"></a></td>
-					<td><a
-						th:href="@{'/rucher/'+${ruchePasDEvenement.rucher?.id}}"
-						th:text="${ruchePasDEvenement.rucher?.nom}"></a></td>
+				<tr th:each="essaim : ${essaimDateNaissSupAcquis}">
+					<td><a th:href="@{'/essaim/'+${essaim.id}}"
+						th:text="${essaim.nom}"></a></td>
+					<td th:text="${essaim.reineDateNaissance}"></td>
+					<td th:text="${essaim.dateAcquisition}"></td>	
 				</tr>
 			</tbody>
 		</table>
