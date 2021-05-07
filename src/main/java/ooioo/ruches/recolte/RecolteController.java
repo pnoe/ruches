@@ -63,15 +63,17 @@ public class RecolteController {
 		LocalDate dateFirstEssaim = essaimRepository.findFirstByOrderByDateAcquisition().getDateAcquisition();
 		LocalDate maintenant = LocalDate.now();
 		for (Essaim essaim : essaims) {
-			// LocalDate dateAcquisition = essaim.getDateAcquisition();
+			LocalDate dateProduction = essaim.getDateAcquisition();
 			// dateProduction : le max de ReineDateNaissance et DateAcquisition
 			//   car pour une reine élevée, DateAcquisition est le jour G voir
 			//   https://fr.wikipedia.org/wiki/%C3%89levage_de_reines
 			//    DateAcquisition est non null à priori (dans formulaire essaimForm)
+			/*
 			LocalDate dateProduction = essaim.getReineDateNaissance() == null ? 
 					essaim.getDateAcquisition() : 
 						(essaim.getReineDateNaissance().isBefore(essaim.getDateAcquisition()) ?
 								essaim.getDateAcquisition() : essaim.getReineDateNaissance());
+			*/
 			Evenement dispersion = evenementRepository.findFirstByEssaimAndType(essaim, TypeEvenement.ESSAIMDISPERSION);
 			LocalDate dateFin = (dispersion == null)?maintenant:dispersion.getDate().toLocalDate();
 			// l'essaim est actif de dateProduction à dateFin
