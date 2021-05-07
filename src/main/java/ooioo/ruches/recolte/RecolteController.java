@@ -55,26 +55,33 @@ public class RecolteController {
 		int[] poidsMielHausses = new int[dureeAns];
 		int[] poidsMielPots = new int[dureeAns];
 		for (int i = 0; i < dureeAns; i++) {
-			poidsMielHausses[i] = recolteRepository.findPoidsHaussesByYear(Double.valueOf(debutAnnee + i))/1000;
-			poidsMielPots[i] = recolteRepository.findPoidsMielByYear(Double.valueOf(debutAnnee + i)).intValue()/1000;
+			poidsMielHausses[i] = recolteRepository.findPoidsHaussesByYear(Double.valueOf((double)debutAnnee + i))/1000;
+			poidsMielPots[i] = recolteRepository.findPoidsMielByYear(Double.valueOf((double)debutAnnee + i)).intValue()/1000;
 		}
 		float[] nbEssaims = new float[dureeAns]; // nombre d'essaims actifs par année de production
 		Iterable<Essaim> essaims = essaimRepository.findAll();
 		LocalDate dateFirstEssaim = essaimRepository.findFirstByOrderByDateAcquisition().getDateAcquisition();
-		// System.out.println(dateFirstEssaim);
 		LocalDate maintenant = LocalDate.now();
 		for (Essaim essaim : essaims) {
-			LocalDate dateAcquisition = essaim.getDateAcquisition();
+			// LocalDate dateAcquisition = essaim.getDateAcquisition();
+			// dateProduction : le max de ReineDateNaissance et DateAcquisition
+			//   car pour une reine élevée, DateAcquisition est le jour G voir
+			//   https://fr.wikipedia.org/wiki/%C3%89levage_de_reines
+			//    DateAcquisition est non null à priori (dans formulaire essaimForm)
+			LocalDate dateProduction = essaim.getReineDateNaissance() == null ? 
+					essaim.getDateAcquisition() : 
+						(essaim.getReineDateNaissance().isBefore(essaim.getDateAcquisition()) ?
+								essaim.getDateAcquisition() : essaim.getReineDateNaissance());
 			Evenement dispersion = evenementRepository.findFirstByEssaimAndType(essaim, TypeEvenement.ESSAIMDISPERSION);
 			LocalDate dateFin = (dispersion == null)?maintenant:dispersion.getDate().toLocalDate();
-			// l'essaim est actif de dateAcquisition à dateFin
+			// l'essaim est actif de dateProduction à dateFin
 			boolean premier = true;
-			for (int annee = dateAcquisition.getYear(); annee <= dateFin.getYear(); annee++) {
+			for (int annee = dateProduction.getYear(); annee <= dateFin.getYear(); annee++) {
 				// trouver le nombre de jours où l'essaim était actif dans l'année
 				//   de dDebut à dFin
 				// dDebut = date acquisition pour la première année, sinon 1er janvier
 				//    de l'année
-				LocalDate dDebut = premier ? dateAcquisition : LocalDate.of(annee, 1, 1);
+				LocalDate dDebut = premier ? dateProduction : LocalDate.of(annee, 1, 1);
 				premier = false;
 				if (annee < debutAnnee) {
 					// si l'annee est inférieur à l'année de début de production
@@ -87,8 +94,6 @@ public class RecolteController {
 					// l'année + 1 de la boucle, on retient cette fin de l'essaim
 					dFin = dateFin;
 				}
-				float diff = (float)ChronoUnit.DAYS.between(dDebut, dFin);
-				// float nbJoursAnnee = (float)ChronoUnit.DAYS.between(LocalDate.of(annee, 1, 1), LocalDate.of(annee + 1, 1, 1));
 				float nbJoursAnnee;
 				// Si la date courante est entre annee et annee + 1
 				//   on ne garde comme durée de l'année que le nombre de jour jusqu'à now()
@@ -107,20 +112,7 @@ public class RecolteController {
 						nbJoursAnnee = (float)ChronoUnit.DAYS.between(LocalDate.of(annee, 1, 1), maintenant);
 					}
 				}
-				nbEssaims[annee - debutAnnee] += diff/(nbJoursAnnee);
-				/*
-				if ("Val-2.1.20-7-03".equals(essaim.getNom())) {
-					System.out.println(annee);
-					System.out.println(dDebut);
-					System.out.println(dFin);
-					System.out.println(diff);
-					System.out.println(nbJoursAnnee);
-					System.out.println("-------------");
-					
-				}
-				*/
-				// System.out.println(diff);
-				// System.out.println(nbJoursAnnee);
+				nbEssaims[annee - debutAnnee] += (float)ChronoUnit.DAYS.between(dDebut, dFin)/(nbJoursAnnee);
 			}
 		}
 		// faire l'arrondi de nbEssaims dans un tableau d'int nbIEssaims
@@ -128,7 +120,6 @@ public class RecolteController {
 		int[] nbIEssaims = new int[dureeAns];
 		for (int i = 0; i < dureeAns; i++) {
 			nbIEssaims[i] = Math.round(poidsMielHausses[i]/nbEssaims[i]);
-			// System.out.println(nbIEssaims[i]);
 		}	
 		model.addAttribute("poidsMielHausses", poidsMielHausses);
 		model.addAttribute("poidsMielPots", poidsMielPots);
