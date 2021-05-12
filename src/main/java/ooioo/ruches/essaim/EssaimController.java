@@ -342,7 +342,7 @@ public class EssaimController {
 				ruche.getRucher(), null, null, commentaire); 
 		evenementRepository.save(evenement);	
 		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
-		return Const.REDIRECT_ESSAIM_ESSAIMID;
+		return "redirect:/essaim/" + nouvelEssaim.getId();
 	}
 	
 	/**
