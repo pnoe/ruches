@@ -165,8 +165,6 @@ public class EssaimController {
 		return "essaim/essaimsStatAges";
 	}
 	
-	
-	
 	/**
 	 * Statistiques tableau poids de miel par essaim
 	 * 
@@ -251,7 +249,102 @@ public class EssaimController {
 		model.addAttribute("masquerInactif", masquerInactif);
 		return "essaim/essaimStatistiques";
 	}
-		
+
+	/**
+	 * Essaimer appel du formulaire d'essaimage
+	 */
+	@GetMapping("/essaime/{essaimId}")
+	public String essaimer(HttpSession session, Model model, @PathVariable long essaimId) {
+		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
+		if (essaimOpt.isPresent()) {
+			Ruche ruche = rucheRepository.findByEssaimId(essaimId);
+			// if (ruche = null) ?
+			List<String> noms = new ArrayList<>();
+			for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
+				noms.add(essaimNom.getNom());
+			}
+			model.addAttribute(Const.ESSAIMNOMS, noms);
+			model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
+			model.addAttribute(Const.ESSAIM, essaimOpt.get());
+			model.addAttribute(Const.RUCHE, ruche);
+		} else {
+			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
+			model.addAttribute(Const.MESSAGE, 
+					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
+			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
+			return Const.INDEX;
+		}
+		return "essaim/essaimEssaimerForm";
+	}
+	
+	@PostMapping("/essaime/sauve/{essaimId}")
+	public String essaimeSauve(Model model, @PathVariable long essaimId,
+			@RequestParam String date, @RequestParam String nom, @RequestParam String commentaire) {
+		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
+		if (essaimOpt.isEmpty()) {
+			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
+			model.addAttribute(Const.MESSAGE, 
+					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
+			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
+			return Const.INDEX;
+		}
+		// L'essaim à disperser
+		Essaim essaim = essaimOpt.get();
+		// La ruche dans laquelle on va mettre le nouvel essaim à créer
+		Ruche ruche = rucheRepository.findByEssaimId(essaimId);
+		LocalDateTime dateEveAjout = LocalDateTime.parse(date,
+				DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
+		// On vérifie aussi côté serveur que le nom est libre
+		List<String> noms = new ArrayList<>();
+		for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
+			noms.add(essaimNom.getNom());
+		}
+		if (noms.contains(nom)) {
+			// TODO remplacer null par un tableau d'objet avec le nom de l'essaim ?
+			// tester
+			model.addAttribute(Const.MESSAGE, 
+					messageSource.getMessage("LeNomXXExiste", new Object[] {nom}, LocaleContextHolder.getLocale()));
+			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
+			return Const.INDEX;
+		}
+		// On crée l'essaim : nom saisi dans le formulaire, date acquisition et naissance reine 
+		//   = date formulaire, souche = essaim dispersé
+		Essaim nouvelEssaim = new Essaim(nom, 
+				true, // actif
+				dateEveAjout.toLocalDate(), // acquisition
+				commentaire, // Le champ commentaire du formulaire ? essaim ou événement dispersion ?
+				dateEveAjout.toLocalDate(), // reineDateNaissance
+				false, // reineMarquee
+				essaim, // souche, 
+				essaim.getAgressivite(), // agressivite
+				essaim.getProprete()); // proprete
+		essaimRepository.save(nouvelEssaim);
+		// On met cet essaim dans la ruche
+		ruche.setEssaim(nouvelEssaim);
+		Evenement evenementAjout = new Evenement(dateEveAjout, TypeEvenement.AJOUTESSAIMRUCHE, ruche, nouvelEssaim,
+				ruche.getRucher(), null, null, commentaire); 
+		evenementRepository.save(evenementAjout);
+		rucheRepository.save(ruche);
+		/*  evenement.EvenementEssaimController.sauveDispersion()
+		if (evencadre) {
+			// Evénement cadre : valeur 0 pour zéro cadre, essaim null, commentaire "Dispersion essaim xx"
+			Evenement eveCadre = new Evenement(dateEve, TypeEvenement.RUCHECADRE, ruche, null,
+				ruche.getRucher(), null, "0", "Dispersion essaim " + essaim.getNom());
+			evenementRepository.save(eveCadre);
+		}
+		*/
+		// On inactive l'essaim dispersé
+		essaim.setActif(false);
+		essaimRepository.save(essaim);
+		// On crée l'événement dispersion
+		LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
+		Evenement evenement = new Evenement(dateEve, TypeEvenement.ESSAIMDISPERSION, ruche, essaim,
+				ruche.getRucher(), null, null, commentaire); 
+		evenementRepository.save(evenement);	
+		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
+		return Const.REDIRECT_ESSAIM_ESSAIMID;
+	}
+	
 	/**
 	 * Clonage multiple d'un essaim (appel XMLHttpRequest)
 	 *   avec mise en ruche

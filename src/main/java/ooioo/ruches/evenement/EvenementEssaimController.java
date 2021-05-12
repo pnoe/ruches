@@ -293,6 +293,9 @@ public class EvenementEssaimController {
 	/**
 	 * Enregistrement de la dispersion
 	 * Crée un événement dispersion, enlève l'essaim de la ruche et inactive l'essaim
+	 *   met cette ruche au dépôt si option choisie, crée événement RUCHEAJOUTRUCHER
+	 * Option remérage : met l'essaim choisi dans la ruche et crée l'événement
+	 *   AJOUTESSAIMRUCHE
 	 */
 	@PostMapping("/sauve/dispersion/{essaimId}")
 	public String sauveDispersion(Model model, @PathVariable long essaimId, @RequestParam(defaultValue = "false") boolean depot,
@@ -302,6 +305,7 @@ public class EvenementEssaimController {
 			@RequestParam(defaultValue = "false") boolean evencadre) {
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isPresent()) {
+			LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 			Essaim essaim = essaimOpt.get();
 			Ruche ruche = rucheRepository.findByEssaimId(essaimId);
 			Rucher rucher = null;
@@ -317,6 +321,9 @@ public class EvenementEssaimController {
 					Optional<Essaim> essaimOptRemerage = essaimRepository.findById(remerageId);
 					if (essaimOptRemerage.isPresent()) {
 						Essaim essaimRemerage = essaimOptRemerage.get();
+						Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, ruche, essaimRemerage,
+								ruche.getRucher(), null, null, commentaire); 
+						evenementRepository.save(evenementAjout);
 						ruche.setEssaim(essaimRemerage);
 					} else {
 						logger.error(Const.IDESSAIMXXINCONNU, remerageId);
@@ -334,18 +341,16 @@ public class EvenementEssaimController {
 							"Dispersion essaim " + essaim.getNom() + ". " + commentaire);
 				}
 			}
-			LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
+			// LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 			Evenement evenement = new Evenement(dateEve, TypeEvenement.ESSAIMDISPERSION, ruche, essaim, rucher, null,
 					null, commentaire); // valeur
 			evenementRepository.save(evenement);
-			
 			if (evencadre) {
 				// Evénement cadre : valeur 0 pour zéro cadre, essaim null, commentaire "Dispersion essaim xx"
 				Evenement eveCadre = new Evenement(dateEve, TypeEvenement.RUCHECADRE, ruche, null,
 					(depot)?rucherDepot:rucher, null, "0", "Dispersion essaim " + essaim.getNom());
 				evenementRepository.save(eveCadre);
 			}
-			
 			// On inactive l'essaim
 			essaim.setActif(false);
 			essaimRepository.save(essaim);

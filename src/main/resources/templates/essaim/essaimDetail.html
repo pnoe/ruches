@@ -99,6 +99,10 @@ $(document).ready(function() {
 				<a th:href="@{'/essaim/modifie/'+${essaim.id}}"
 				  class="oi oi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
 				<span id="clone" class="oi oi-layers" th:title="#{cloner}" aria-hidden="true"></span>
+				
+				<a th:href="@{'/essaim/essaime/'+${essaim.id}}"
+				  class="oi oi-account-logout" th:title="#{essaimer}" aria-hidden="true"></a>
+				  
        			<a th:href="@{'/essaim/associe/'+${essaim.id}}"
        			  class="oi oi-loop-square" th:title="#{associationruche}" aria-hidden="true"></a>
        			<a id="supprime" th:href="@{'/essaim/supprime/'+${essaim.id}}"

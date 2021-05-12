@@ -33,6 +33,20 @@ public class Essaim {
 		this.agressivite = essaim.getAgressivite();
 		this.proprete = essaim.getProprete();
 	}
+	
+	public Essaim(String nom, boolean actif, LocalDate dateAcquisition,
+			String commentaire, LocalDate reineDateNaissance, boolean reineMarquee,
+			Essaim souche, Integer agressivite, Integer proprete) {
+		this.nom = nom;
+		this.actif = actif;
+		this.dateAcquisition = dateAcquisition;
+		this.commentaire = commentaire;
+		this.reineDateNaissance = reineDateNaissance;
+		this.reineMarquee = reineMarquee;
+		this.souche = souche;
+		this.agressivite = agressivite;
+		this.proprete = proprete;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

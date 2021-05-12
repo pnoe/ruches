@@ -406,7 +406,6 @@ public class RucheController {
 		return "ruche/rucheAjoutRetrait";
 	}
 	
-	
 	/**
 	 * Enregistrer en base l'ordre des hausses modifié par drag and drop (appel XMLHttpRequest)
 	 */

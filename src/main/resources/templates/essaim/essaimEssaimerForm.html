@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:replace="include :: jsdatetimepicker"></script>
+<link th:replace="include :: cssdatetimepicker"/>
+<script th:replace="include :: localejsdatetimepicker"></script>
+<script th:inline="javascript">
+	$().ready(function() {
+		$("#nom").focus();
+		$("#commentaire").val([[#{Essaimage}]] + ' ' + [[${essaim.nom}]]);
+		jQuery.validator.addMethod("nomExiste", function(value) {   
+    		return $.inArray(value, [[${essaimNoms}]]) == -1;
+			}, [[#{nomexiste}]]);
+		$("#essaimeForm").validate({
+			rules : {
+				nom : {
+					required : true,
+					nomExiste : true
+				},
+				date : {
+					required : true
+				},
+				commentaire : {
+					maxlength : 255
+				},
+			}
+		});
+	});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br/><br/><br/>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					<th:block
+						th:text="#{Essaimage}+' '"></th:block>
+					<a th:href="@{'/essaim/'+${essaimId}}"
+						th:text="#{essaim}+' '+${essaim.nom}"></a>
+					<th:block
+						th:text="#{ruche} + ' ' + ${ruche.nom}"></th:block>
+				</h1>
+			</div>
+		</div>
+	</div>
+	<form action="#"
+		th:action="@{'/essaim/essaime/sauve/' + ${essaim.id}}"
+		method="post" id="essaimeForm">
+		<div th:replace="includeForm :: date"></div>
+		<div class="form-group">
+			<label for="nom" th:text="#{NomNouvelEssaim}"></label>
+			<input class="form-control" type="text" 
+				id="nom" name="nom"	maxlength="92" />
+		</div>
+		<div th:replace="includeForm :: commentaire"></div>    
+		<div th:replace="includeForm :: BtnForm"></div>
+	</form>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>
