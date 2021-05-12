@@ -333,9 +333,9 @@ public class EvenementEssaimController {
 					}
 				}
 				rucheRepository.save(ruche);
-				if ((depot) && (!rucher.getId().equals(rucherDepot.getId()))) {
-					// Met la ruche au dépôt et créer l'événement RUCHEAJOUTRUCHER
-					// Si la ruche est déjà au dépôt on ne fait rien
+				if ((depot) && (remerageId == null) && (!rucher.getId().equals(rucherDepot.getId()))) {
+					// Met la ruche au dépôt et crée l'événement RUCHEAJOUTRUCHER
+					// Si la ruche est déjà au dépôt ou un remérage a été fait, on ne fait rien
 					String[] ruchesNoms = new String[] { ruche.getNom() };
 					rucherService.sauveAjouterRuches(rucherDepot, ruchesNoms, date, 
 							"Dispersion essaim " + essaim.getNom() + ". " + commentaire);
@@ -345,7 +345,7 @@ public class EvenementEssaimController {
 			Evenement evenement = new Evenement(dateEve, TypeEvenement.ESSAIMDISPERSION, ruche, essaim, rucher, null,
 					null, commentaire); // valeur
 			evenementRepository.save(evenement);
-			if (evencadre) {
+			if ((evencadre) && (remerageId == null)) {
 				// Evénement cadre : valeur 0 pour zéro cadre, essaim null, commentaire "Dispersion essaim xx"
 				Evenement eveCadre = new Evenement(dateEve, TypeEvenement.RUCHECADRE, ruche, null,
 					(depot)?rucherDepot:rucher, null, "0", "Dispersion essaim " + essaim.getNom());
