@@ -8,6 +8,7 @@
 	$().ready(function() {
 		$("#nom").focus();
 		$("#commentaire").val([[#{Essaimage}]] + ' ' + [[${essaim.nom}]]);
+		$("#nom").val([[${essaim.nom}]] + [[${essaimeSuffix}]]);
 		jQuery.validator.addMethod("nomExiste", function(value) {   
     		return $.inArray(value, [[${essaimNoms}]]) == -1;
 			}, [[#{nomexiste}]]);

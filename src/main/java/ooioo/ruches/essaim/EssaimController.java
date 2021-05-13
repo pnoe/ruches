@@ -84,6 +84,8 @@ public class EssaimController {
 
 	@Value("${accueil.titre}")
 	private String accueilTitre;
+	@Value("${essaime.suffix}")
+	private String essaimeSuffix;
 	
 	/*
 	 * Statistiques âges des reines
@@ -263,6 +265,8 @@ public class EssaimController {
 			for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
 				noms.add(essaimNom.getNom());
 			}
+			
+			model.addAttribute("essaimeSuffix", essaimeSuffix);
 			model.addAttribute(Const.ESSAIMNOMS, noms);
 			model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
 			model.addAttribute(Const.ESSAIM, essaimOpt.get());
