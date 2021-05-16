@@ -13,9 +13,34 @@ $(document).ready(function() {
 			return confirm([[#{supprimeressaim}]]);
 		}
     });
-    $('#associerRucheEssaim').DataTable();
-});
+	const table = $('#associerRucheEssaim').DataTable({
+        "dom": '<"toolbar">lftip',
+        fnInitComplete: function(){
+            $('div.toolbar').html(
+            	'<label for="avecEssaim">Avec Essaim</label> <input type="checkbox" id="avecEssaim"/> ');
+            $("#avecEssaim").click(function() {
+            	table.draw();
+        	});
+          }
+    } );
+    $.fn.dataTable.ext.search.push(
+    	    function (settings, searchData, index, rowData, counter) {   	      
+    	      var checked = $('#avecEssaim').is(':checked');
+    	      // If checked and Position column is blank don't display the row
+    	      if (checked && searchData[1] !== '') {
+    	        return true;
+    	      } else if (!checked && searchData[1] === '') {
+      	        return true;
+      	      }
+    	      return false;
+    });  
+ });
 </script>
+<style>
+.toolbar {
+    float: left;
+}
+</style>
 </head>
 <body>
 	<nav th:replace="include :: navbar"></nav>
@@ -37,19 +62,24 @@ $(document).ready(function() {
 	<div class="container-fluid">
 		<h6 th:if="${rucheEssaim}" th:text="#{essaimdanslaruche}+' '+${rucheEssaim.nom}"></h6>
 		<h6 th:text="#{mettreessaimdanslaruche}"></h6>
-		<table class="table table-bordered" id="associerRucheEssaim">
+		<!-- 
+		<input type="checkbox" name="avecEssaim" id="avecEssaim" /> <label for="avecEssaim" th:text="#{AvecEssaim}"></label>
+		 -->
+		<table class="table table-bordered" id="associerRucheEssaim" >
 			<thead>
 				<tr>
 					<th th:text="#{ruche}"></th>
+					<th th:text="#{essaim}"></th>
 				    <th th:text="#{dateAcquisition}"></th>
 					<th th:text="#{type}"></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="ruche : ${ruchesEssaimNull}">
+				<tr th:each="ruche : ${ruches}">
 					<td><a  data-toggle="tooltip" th:title="#{mettreessaimdansruche}"
 						th:href="@{'/essaim/ruche/associe/'+${ruche.id}+'/'+${essaim.id}}"
 						th:text="${ruche.nom}"></a></td>
+					<td th:text="${ruche.essaim?.nom}"></td>	
 					<td th:text="${ruche.dateAcquisition}"></td>
 					<td th:text="${ruche.type?.nom}"></td>
 				</tr>

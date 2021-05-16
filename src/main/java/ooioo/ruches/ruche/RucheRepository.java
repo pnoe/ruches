@@ -26,6 +26,8 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	Ruche findByEssaimId(Long id);
 
 	Iterable<Ruche> findByEssaimIsNullOrderByNom();
+	// is et all cosmétiques
+	Iterable<Ruche> findByEssaimNotNullOrderByNom();
 
 	Collection<Nom> findAllProjectedBy();
 

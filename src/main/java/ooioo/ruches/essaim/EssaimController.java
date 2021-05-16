@@ -304,8 +304,6 @@ public class EssaimController {
 			noms.add(essaimNom.getNom());
 		}
 		if (noms.contains(nom)) {
-			// TODO remplacer null par un tableau d'objet avec le nom de l'essaim ?
-			// tester
 			model.addAttribute(Const.MESSAGE, 
 					messageSource.getMessage("LeNomXXExiste", new Object[] {nom}, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
@@ -329,14 +327,6 @@ public class EssaimController {
 				ruche.getRucher(), null, null, commentaire); 
 		evenementRepository.save(evenementAjout);
 		rucheRepository.save(ruche);
-		/*  evenement.EvenementEssaimController.sauveDispersion()
-		if (evencadre) {
-			// Evénement cadre : valeur 0 pour zéro cadre, essaim null, commentaire "Dispersion essaim xx"
-			Evenement eveCadre = new Evenement(dateEve, TypeEvenement.RUCHECADRE, ruche, null,
-				ruche.getRucher(), null, "0", "Dispersion essaim " + essaim.getNom());
-			evenementRepository.save(eveCadre);
-		}
-		*/
 		// On inactive l'essaim dispersé
 		essaim.setActif(false);
 		essaimRepository.save(essaim);
@@ -636,8 +626,7 @@ public class EssaimController {
 			Essaim essaim = essaimOpt.get();
 			model.addAttribute(Const.ESSAIM, essaim);
 			model.addAttribute("rucheEssaim", rucheRepository.findByEssaimId(essaimId));
-			// on n'affiche que les ruches sans essaim
-			model.addAttribute("ruchesEssaimNull", rucheRepository.findByEssaimIsNullOrderByNom());
+			model.addAttribute("ruches", rucheRepository.findByActiveOrderByNom(true));
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 			model.addAttribute(Const.MESSAGE, 
@@ -686,6 +675,8 @@ public class EssaimController {
 
 	/**
 	 * Change un essaim de ruche
+	 * Il faut mettre l'essaim essaimId dans le ruche rucheId
+	 *    si la ruche contient un essaim, le disperser
 	 */
 	@PostMapping("/ruche/associe/sauve/{rucheId}/{essaimId}")
 	public String associeRucheSauve(Model model, @PathVariable long rucheId, @PathVariable long essaimId,
@@ -710,9 +701,21 @@ public class EssaimController {
 		Essaim essaim = essaimOpt.get();
 		// La ruche dans laquelle on va mettre l'essaim
 		Ruche ruche = rucheOpt.get();
+		LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
+		// Si la ruche contient un essaim, le disperser
+		Essaim essaimDisperse = ruche.getEssaim();
+		if (essaimDisperse != null) {
+			// On inactive l'essaim dispersé
+			essaimDisperse.setActif(false);
+			essaimRepository.save(essaimDisperse);
+			// On crée l'événement dispersion
+			// TODO quel commentaire ?
+			Evenement eveDisperse = new Evenement(dateEve, TypeEvenement.ESSAIMDISPERSION, ruche, essaimDisperse,
+					ruche.getRucher(), null, null, commentaire); 
+			evenementRepository.save(eveDisperse);	
+			logger.info(Const.EVENEMENTXXENREGISTRE, eveDisperse.getId());
+		}
 		Rucher rucher = ruche.getRucher();
-		LocalDateTime dateEveAjout = LocalDateTime.parse(date,
-				DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 		// La ruche dans laquelle est l'essaim
 		Ruche rucheActuelle = rucheRepository.findByEssaimId(essaimId);
 		if (rucheActuelle != null) {
@@ -730,10 +733,10 @@ public class EssaimController {
 				//  on peut avoir demandé d'échanger les positions des ruches alors qu'elles sont dans
 				//  les mêmes ruchers !
 				if (!rucheActuelle.getRucher().getId().equals(ruche.getRucher().getId())) {
-					Evenement eveRuche = new Evenement(dateEveAjout.minusSeconds(1), TypeEvenement.RUCHEAJOUTRUCHER,
+					Evenement eveRuche = new Evenement(dateEve.minusSeconds(1), TypeEvenement.RUCHEAJOUTRUCHER,
 							ruche, ruche.getEssaim(), ruche.getRucher(), null, null, "");
 					evenementRepository.save(eveRuche);
-					Evenement eveRucheActuelle = new Evenement(dateEveAjout.minusSeconds(1), TypeEvenement.RUCHEAJOUTRUCHER,
+					Evenement eveRucheActuelle = new Evenement(dateEve.minusSeconds(1), TypeEvenement.RUCHEAJOUTRUCHER,
 							rucheActuelle, rucheActuelle.getEssaim(), rucheActuelle.getRucher(), null, null, "");
 					evenementRepository.save(eveRucheActuelle);
 				}
@@ -744,10 +747,9 @@ public class EssaimController {
 		ruche.setEssaim(essaimOpt.get());
 		rucheRepository.save(ruche);
 		// on met dans l'événement le rucher ruche.getRucher car la position des ruches a pu être échangée
-		Evenement evenementAjout = new Evenement(dateEveAjout, TypeEvenement.AJOUTESSAIMRUCHE, ruche, essaim,
+		Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, ruche, essaim,
 				ruche.getRucher(), null, null, commentaire); // valeur commentaire
 		evenementRepository.save(evenementAjout);
 		return Const.REDIRECT_ESSAIM_ESSAIMID;
 	}
-
 }

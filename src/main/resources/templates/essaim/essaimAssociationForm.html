@@ -33,6 +33,11 @@
 				</h1>
 			</div>
 		</div>
+		<div th:if="${ruche.essaim}" class="row">
+			<div class="col">
+				<h1 class="item" style="color: red;" th:text="#{AttentionDipersion(${ruche.essaim.nom})}"></h1>
+			</div>
+		</div>
 	</div>
 	<form action="#"
 		th:action="@{'/essaim/ruche/associe/sauve/' + ${ruche.id} + '/' + ${essaim.id}}"
