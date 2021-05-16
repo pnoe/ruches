@@ -265,7 +265,6 @@ public class EssaimController {
 			for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
 				noms.add(essaimNom.getNom());
 			}
-			
 			model.addAttribute("essaimeSuffix", essaimeSuffix);
 			model.addAttribute(Const.ESSAIMNOMS, noms);
 			model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
@@ -281,6 +280,9 @@ public class EssaimController {
 		return "essaim/essaimEssaimerForm";
 	}
 	
+	/*
+	 * Enregistrement de l'essaimage
+	 */
 	@PostMapping("/essaime/sauve/{essaimId}")
 	public String essaimeSauve(Model model, @PathVariable long essaimId,
 			@RequestParam String date, @RequestParam String nom, @RequestParam String commentaire) {
@@ -326,6 +328,7 @@ public class EssaimController {
 		Evenement evenementAjout = new Evenement(dateEveAjout, TypeEvenement.AJOUTESSAIMRUCHE, ruche, nouvelEssaim,
 				ruche.getRucher(), null, null, commentaire); 
 		evenementRepository.save(evenementAjout);
+		logger.info(Const.EVENEMENTXXENREGISTRE, evenementAjout.getId());
 		rucheRepository.save(ruche);
 		// On inactive l'essaim dispersé
 		essaim.setActif(false);
@@ -650,12 +653,10 @@ public class EssaimController {
 				model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
 				model.addAttribute(Const.ESSAIM, essaimOpt.get());
 				model.addAttribute(Const.RUCHE, rucheOpt.get());
-				
 				// Si l'essaim est dans une ruche envoyer le nom de la ruche
 				//  pour proposer l'échange du postionnment des deux ruches
 				Ruche rucheSource = rucheRepository.findByEssaimId(essaimOpt.get().getId());
-				model.addAttribute("rucheSource", rucheSource);
-				
+				model.addAttribute("rucheSource", rucheSource);	
 			} else {
 				logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 				model.addAttribute(Const.MESSAGE, 
@@ -734,11 +735,13 @@ public class EssaimController {
 				//  les mêmes ruchers !
 				if (!rucheActuelle.getRucher().getId().equals(ruche.getRucher().getId())) {
 					Evenement eveRuche = new Evenement(dateEve.minusSeconds(1), TypeEvenement.RUCHEAJOUTRUCHER,
-							ruche, ruche.getEssaim(), ruche.getRucher(), null, null, "");
+							ruche, ruche.getEssaim(), ruche.getRucher(), null, null, commentaire);
 					evenementRepository.save(eveRuche);
+					logger.info(Const.EVENEMENTXXENREGISTRE, eveRuche.getId());
 					Evenement eveRucheActuelle = new Evenement(dateEve.minusSeconds(1), TypeEvenement.RUCHEAJOUTRUCHER,
-							rucheActuelle, rucheActuelle.getEssaim(), rucheActuelle.getRucher(), null, null, "");
+							rucheActuelle, rucheActuelle.getEssaim(), rucheActuelle.getRucher(), null, null, commentaire);
 					evenementRepository.save(eveRucheActuelle);
+					logger.info(Const.EVENEMENTXXENREGISTRE, eveRucheActuelle.getId());
 				}
 			}
 			rucheActuelle.setEssaim(null);
