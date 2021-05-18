@@ -81,7 +81,7 @@ public class RucherService {
 	 * https://www.geeksforgeeks.org/traveling-salesman-problem-using-branch-and-
 	 * bound-2/
 	 */
-	public double cheminRuchesRucherBandB(List<RucheParcours> chemin, int cheminSize) {
+	private double cheminRuchesRucherBandB(List<RucheParcours> chemin, int cheminSize) {
 		this.nBandB = cheminSize;
 		// Initialisation d'un tableau contenant les distances entre ruches
 		int[][] adj = new int[this.nBandB][this.nBandB];
@@ -250,7 +250,7 @@ public class RucherService {
 	 * recuit simulé http://www.tangentex.com/RecuitSimule.htm
 	 * 	https://en.wikipedia.org/wiki/Simulated_annealing
 	 */
-	public double cheminRuchesRucherRecuit(List<RucheParcours> chemin, int cheminSize) {
+	private double cheminRuchesRucherRecuit(List<RucheParcours> chemin, int cheminSize) {
 		// Initialisation d'un tableau contenant les distances entre ruches
 		double[][] distRuches = new double[cheminSize][cheminSize];
 		double dist;
@@ -301,7 +301,7 @@ public class RucherService {
 	 * Calcul de la distance totale pour parcourir les ruches d'un rucher selon un
 	 * chemin donné
 	 */
-	public double cheminDistance(List<RucheParcours> chemin, double[][] distRuches, int cheminSize) {
+	private double cheminDistance(List<RucheParcours> chemin, double[][] distRuches, int cheminSize) {
 		double dist = distRuches[chemin.get(0).getOrdre()][chemin.get(1).getOrdre()];
 		for (int i = 2; i < cheminSize; i++) {
 			dist += distRuches[chemin.get(i - 1).getOrdre()][chemin.get(i).getOrdre()];

@@ -42,7 +42,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	Iterable<Evenement> findByTypeOrderByDateAsc(TypeEvenement typeEvenement);
 	
 	
-	Iterable<Evenement> findByEssaimIdAndTypeOrderByDateDesc(Long essaimId, TypeEvenement typeEvenement);
+	// Iterable<Evenement> findByEssaimIdAndTypeOrderByDateDesc(Long essaimId, TypeEvenement typeEvenement);
 	
 	Evenement findFirstByEssaimAndType(Essaim essaim, TypeEvenement typeEvenement);
 	
@@ -50,7 +50,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 	Evenement findFirstByRucheAndTypeOrderByDateDesc(Ruche ruche, TypeEvenement typeEvenement);
 	
-	Evenement findFirstByRucheOrderByDateDesc(Ruche ruche);	
+	// Evenement findFirstByRucheOrderByDateDesc(Ruche ruche);	
 	
 	Evenement findFirstByHausseAndTypeOrderByDateDesc(Hausse hausse, TypeEvenement typeEvenement);
 	

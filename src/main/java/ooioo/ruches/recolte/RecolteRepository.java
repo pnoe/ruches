@@ -13,11 +13,13 @@ public interface RecolteRepository extends CrudRepository<Recolte, Long> {
 	/*
 	 * Renvoie un iterable d'objets : (année, poids de miel mis en pot en kg)
 	 */
+	/* Inutilisée d'après UCDetector
 	@Query(value = 
 	"select date_part('year', date) as date, sum(poids_miel) as poids from recolte " +
 	"group by date_part('year', date) order by date_part('year', date)", nativeQuery = true)
 	Iterable<Object[]> findPoidsMielByYear();
-
+	*/
+	
 	Recolte findFirstByOrderByDateDesc();
 
 	Recolte findFirstByOrderByDateAsc();
