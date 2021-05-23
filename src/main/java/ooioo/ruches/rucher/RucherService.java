@@ -48,6 +48,8 @@ public class RucherService {
 	// Stores the final minimum weight of shortest tour.
 	private int finalResBandB;
 	
+	private final Random random = new Random();
+	
 	/*
 	 * Calcul du chemin le plus court de visite des ruches du rucher
 	 */
@@ -273,12 +275,12 @@ public class RucherService {
 		int iRuche;
 		int jRuche;
 		int nbRuches = cheminSize - 2;
-		Random r = new Random();
+		// Random random = new Random();
 		while (tCurr > tMin) {
-			iRuche = r.nextInt(nbRuches) + 1;
-			jRuche = r.nextInt(nbRuches) + 1;
+			iRuche = random.nextInt(nbRuches) + 1;
+			jRuche = random.nextInt(nbRuches) + 1;
 			while (jRuche == iRuche) {
-				jRuche = r.nextInt(nbRuches) + 1;
+				jRuche = random.nextInt(nbRuches) + 1;
 			}
 			Collections.swap(chemin, iRuche, jRuche);
 			ef = this.cheminDistance(chemin, distRuches, cheminSize);

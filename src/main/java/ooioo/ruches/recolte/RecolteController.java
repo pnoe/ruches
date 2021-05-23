@@ -47,6 +47,12 @@ public class RecolteController {
 	@Autowired
 	private	EvenementRepository evenementRepository;
 	
+	/*
+	 * Statistiques de production de miel par année
+	 * Miel pesé dans les hausses, miel mis en pot et miel dans les hausses
+	 *  rapporté au nombre d'essaims moyen actifs dans l'année
+	 * Diagramme à barres
+	 */
 	@GetMapping("/statprod")
 	public String statprod(Model model) {
 		int debutAnnee = recolteRepository.findFirstByOrderByDateAsc().getDate().getYear();

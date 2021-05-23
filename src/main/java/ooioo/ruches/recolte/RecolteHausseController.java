@@ -2,6 +2,7 @@ package ooioo.ruches.recolte;
 
 import java.math.BigDecimal;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -266,7 +267,8 @@ public class RecolteHausseController {
 						rucher = ruche.getRucher();
 					}
 					// TODO date de l'événement modifiable dans un formulaire ?
-					String commentaireEve = "Récolte " + recolte.getDate().toString(); 
+					String commentaireEve = "Récolte " + recolte.getDate().
+							format(DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 					Evenement evenementRetrait = new Evenement(Utils.dateTimeDecal(session),
 							TypeEvenement.HAUSSERETRAITRUCHE, ruche, essaim, rucher, hausse,
 							hausse.getOrdreSurRuche().toString(), commentaireEve);
