@@ -27,11 +27,18 @@
 <script th:src="@{/js/jquery-ui-v1.12.1/jquery-ui.min.js}"></script>
 <script th:src="@{/js/jquery.validate.min-1.19.3.js}"></script>
 
+<!-- 
 <script th:src="@{/js/bootstrap-4.6.0-dist/js/bootstrap.bundle.min.js}"></script>
 <link rel="stylesheet" type="text/css" media="all"
 	th:href="@{/js/bootstrap-4.6.0-dist/css/bootstrap.min.css}" />
+ -->	
+<script th:src="@{/js/bootstrap-5.0.1-dist/js/bootstrap.bundle.min.js}"></script>
+<link rel="stylesheet" type="text/css" media="all"
+	th:href="@{/js/bootstrap-5.0.1-dist/css/bootstrap.min.css}" />
  
 <script th:src="@{/js/datatables-1.10.24.1/datatables.min.js}"></script>
+<script th:src="@{/js/dataTables.bootstrap5.min.js}"></script>
+
 <script th:inline="javascript">
 $().ready(function() {
   $('.confirmdeploie').on('click', function() {
@@ -97,30 +104,31 @@ if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('f
 	
 <body>
 	<!--/*    https://getbootstrap.com/docs/4.4/components/navbar/    */-->
-	<nav th:fragment="navbar"
-		class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+	<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+	  <div class="container-fluid"> 
 		<a class="navbar-brand" href="#" th:href="@{/}"> <img
 			th:src="@{/images/ruche.png}" alt="Logo" style="width: 20px;">
 		</a>
-		<button class="navbar-toggler navbar-toggler-icon" type="button" data-toggle="collapse"
-			data-target="#navbarSupportedContent"
-			aria-controls="navbarSupportedContent" aria-expanded="false"
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+			data-bs-target="#navbarSupportedContent" 
+			aria-controls="navbarSupportedContent" aria-expanded="false" 
 			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<ul class="navbar-nav mr-auto">
+			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" 
-					  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="#{ruche}">
-					</a>  
-					<div class="dropdown-menu" aria-labelledby="navbarDropdown1">
-						<a class="dropdown-item" th:text="#{liste}"
-							th:href="@{/ruche/liste}"></a>
-						<a class="dropdown-item" th:text="#{rucheTypes}"
-							th:href="@{/rucheType/liste}"></a> 
-						<a class="dropdown-item"
-							th:text="#{listedetail}" th:href="@{/ruche/listeplus}"></a>
-					</div>
+					  data-bs-toggle="dropdown" aria-expanded="false" th:text="#{ruche}">
+					</a>
+					<ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+						<li><a class="dropdown-item" th:text="#{liste}"
+							th:href="@{/ruche/liste}"></a></li>
+						<li><a class="dropdown-item" th:text="#{rucheTypes}"
+							th:href="@{/rucheType/liste}"></a></li>
+						<li><a class="dropdown-item"
+							th:text="#{listedetail}" th:href="@{/ruche/listeplus}"></a></li>
+					</ul>
 				</li>
 				<li class="nav-item"><a class="nav-link" th:text="#{hausse}"
 					th:href="@{/hausse/liste}"></a></li>
@@ -133,52 +141,53 @@ if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('f
 				<li class="nav-item"><a class="nav-link" th:text="#{recolte}"
 					th:href="@{/recolte/liste}"></a></li>
 				<li class="nav-item dropdown">
-				    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" 
-					  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="#{evenement}">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" 
+					  data-bs-toggle="dropdown" aria-expanded="false" th:text="#{evenement}">
 					</a>  
-					<div class="dropdown-menu" aria-labelledby="navbarDropdown2">
-						<a class="dropdown-item" th:text="#{tous}"
-							th:href="@{/evenement/liste}"></a>
-						<a class="dropdown-item" th:text="#{actionSucre}"
-							th:href="@{/evenement/essaim/listeSucre}"></a>
-						<a class="dropdown-item" th:text="#{traitement}"
-							th:href="@{/evenement/essaim/listeTraitement}"></a>
-						<a class="dropdown-item" th:text="#{poidsruche}"
-							th:href="@{/evenement/ruche/listePoidsRuche}"></a>
-						<a class="dropdown-item" th:text="#{cadreruche}"
-							th:href="@{/evenement/ruche/listeCadreRuche}"></a>
-						<a class="dropdown-item" th:text="#{HAUSSEREMPLISSAGE}"
-							th:href="@{/evenement/hausse/listeRemplissageHausse}"></a>
-						<a class="dropdown-item" th:text="#{rucherucher}"
-							th:href="@{/evenement/rucher/listeRucheAjout}"></a>
-					</div>
+					<ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
+						<li><a class="dropdown-item" th:text="#{tous}"
+							th:href="@{/evenement/liste}"></a></li>
+						<li><a class="dropdown-item" th:text="#{actionSucre}"
+							th:href="@{/evenement/essaim/listeSucre}"></a></li>
+						<li><a class="dropdown-item" th:text="#{traitement}"
+							th:href="@{/evenement/essaim/listeTraitement}"></a></li>
+						<li><a class="dropdown-item" th:text="#{poidsruche}"
+							th:href="@{/evenement/ruche/listePoidsRuche}"></a></li>
+						<li><a class="dropdown-item" th:text="#{cadreruche}"
+							th:href="@{/evenement/ruche/listeCadreRuche}"></a></li>
+						<li><a class="dropdown-item" th:text="#{HAUSSEREMPLISSAGE}"
+							th:href="@{/evenement/hausse/listeRemplissageHausse}"></a></li>
+						<li><a class="dropdown-item" th:text="#{rucherucher}"
+							th:href="@{/evenement/rucher/listeRucheAjout}"></a></li>
+					</ul>
 				</li>
 				<li class="nav-item dropdown">	
 					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" 
-					  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="#{Admin}">
+					  data-bs-toggle="dropdown" aria-expanded="false" th:text="#{Admin}">
 					</a>					
-					<div class="dropdown-menu" aria-labelledby="navbarDropdown3">
-						<a class="dropdown-item" th:text="#{preferences}"
-							th:href="@{/parametres}"></a>
+					<ul class="dropdown-menu" aria-labelledby="navbarDropdown3">
+						<li><a class="dropdown-item" th:text="#{preferences}"
+							th:href="@{/parametres}"></a></li>
+						<li><a class="dropdown-item" sec:authorize="hasRole('ROLE_admin')"
+							th:text="#{apiRest}" th:target="_blank" th:href="@{/rest}"></a></li>
+						<li><a class="confirmdeploie dropdown-item" sec:authorize="hasRole('ROLE_admin')"
+							th:text="#{deploie}" th:href="@{/deploie}"></a></li>
+						<li><a class="dropdown-item" sec:authorize="hasRole('ROLE_admin')"
+							th:text="#{downloaddump}" th:href="@{/dump/ruches.sql.xz}"></a></li>
 						<a class="dropdown-item" sec:authorize="hasRole('ROLE_admin')"
-							th:text="#{apiRest}" th:target="_blank" th:href="@{/rest}"></a>
-						<a class="confirmdeploie dropdown-item" sec:authorize="hasRole('ROLE_admin')"
-							th:text="#{deploie}" th:href="@{/deploie}"></a>
-						<a class="dropdown-item" sec:authorize="hasRole('ROLE_admin')"
-							th:text="#{downloaddump}" th:href="@{/dump/ruches.sql.xz}"></a>
-						<a class="dropdown-item" sec:authorize="hasRole('ROLE_admin')"
-							th:text="#{downloadschema}" th:href="@{/dump/ruches_schema.sql}"></a>
-						<a class="dropdown-item" sec:authorize="hasRole('ROLE_admin')"
-							th:text="#{logs}" th:href="@{/admin/logs/logfile}" target="_blank"></a>
-						<a class="dropdown-item"
-							th:text="#{infos}" th:href="@{/infos}"></a>
-					</div>
+							th:text="#{downloadschema}" th:href="@{/dump/ruches_schema.sql}"></a></li>
+						<li><a class="dropdown-item" sec:authorize="hasRole('ROLE_admin')"
+							th:text="#{logs}" th:href="@{/admin/logs/logfile}" target="_blank"></a></li>
+						<li><a class="dropdown-item"
+							th:text="#{infos}" th:href="@{/infos}"></a></li>
+					</ul>
 				</li>
 			</ul>
 		</div>
 		<ul th:if="${currentDate} != ''" class="nav navbar-nav navbar-right">
 			<li th:text="${currentDate}"></li>
 		</ul>
+	  </div>	
 	</nav>
 	<footer th:fragment="footer">
 		<small
