@@ -119,7 +119,7 @@ $(document).ready(function() {
 			</thead>
 			<tbody>
 				<tr th:each="detailRecolte : ${detailsRecolte}">
-					<td><a data-toggle="tooltip" th:title="#{saisirpoids}" 
+					<td><a data-bs-toggle="tooltip" th:title="#{saisirpoids}" 
 						th:href="@{'/recolte/modifie/hausse/'+${recolte.id}+'/'+${detailRecolte.id}}"
 						th:text="${detailRecolte.hausse.nom}"></a></td>
 					<td><a th:href="@{'/ruche/'+${detailRecolte.ruche?.id}}"

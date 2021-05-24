@@ -70,7 +70,7 @@
 			<tbody>
 				<tr th:each="hausseRuche : ${haussesRuche}">
 					<td th:text="${hausseRuche.ordreSurRuche}"></td>
-					<td><a data-toggle="tooltip" th:title="#{retirerhausse}"
+					<td><a data-bs-toggle="tooltip" th:title="#{retirerhausse}"
 						th:href="@{'/evenement/ruche/hausse/retrait/'+${ruche.id}+'/'+${hausseRuche.id}}"
 						th:text="${hausseRuche.nom}"></a></td>
 				</tr>
@@ -86,13 +86,13 @@
 			</thead>
 			<tbody>
 				<tr th:each="hausseRucheNull : ${haussesRucheNull}">
-					<td><a data-toggle="tooltip" th:title="#{ajouterhausse}"
+					<td><a data-bs-toggle="tooltip" th:title="#{ajouterhausse}"
 						th:href="@{'/evenement/ruche/hausse/ajout/'+${ruche.id}+'/'+${hausseRucheNull.id}}"
 						th:text="${hausseRucheNull.nom}"></a></td>
 					<td></td>
 				</tr>
 				<tr th:each="hausseRucheNot : ${haussesRucheNot}">
-					<td><a data-toggle="tooltip" th:title="#{ajouterhausse}"
+					<td><a data-bs-toggle="tooltip" th:title="#{ajouterhausse}"
 						th:href="@{'/evenement/ruche/hausse/ajout/'+${ruche.id}+'/'+${hausseRucheNot.id}}"
 						th:text="${hausseRucheNot.nom}"></a></td>
 					<td th:text="${hausseRucheNot.ruche?.nom}"></td>

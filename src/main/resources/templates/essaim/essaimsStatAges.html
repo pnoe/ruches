@@ -44,14 +44,14 @@
 			  	</span>
 			</div>
 			<div th:if="${nbCouveuse}" class="col">
-			  	<span th:attr="data-content=#{aideReineIgnorees}" 
-			  		data-toggle="popover" data-trigger="hover" 
+			  	<span th:attr="data-bs-content=#{aideReineIgnorees}" 
+			  		data-bs-toggle="popover" data-bs-trigger="hover" 
 			  		th:text="#{EnCouveuse} + ' ' + ${nbCouveuse}">
 			  	</span>
 			</div>
 			<div th:if="${horsRuche}" class="col">
-			  	<span  th:attr="data-content=#{aideReineIgnorees}" 
-			  		data-toggle="popover" data-trigger="hover" 
+			  	<span  th:attr="data-bs-content=#{aideReineIgnorees}" 
+			  		data-bs-toggle="popover" data-bs-trigger="hover" 
 			  		th:text="#{horsRuche} + ' ' + ${horsRuche}">
 			  	</span>
 			</div>	

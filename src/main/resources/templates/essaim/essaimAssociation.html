@@ -76,7 +76,7 @@ $(document).ready(function() {
 			</thead>
 			<tbody>
 				<tr th:each="ruche : ${ruches}">
-					<td><a  data-toggle="tooltip" th:title="#{mettreessaimdansruche}"
+					<td><a  data-bs-toggle="tooltip" th:title="#{mettreessaimdansruche}"
 						th:href="@{'/essaim/ruche/associe/'+${ruche.id}+'/'+${essaim.id}}"
 						th:text="${ruche.nom}"></a></td>
 					<td th:text="${ruche.essaim?.nom}"></td>	
