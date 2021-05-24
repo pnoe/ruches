@@ -64,8 +64,8 @@
 		<div th:insert="includeForm :: date"></div>
 		<div th:insert="includeForm :: commentaire"></div>
 		<th:block th:if="${nomRuche}">
-			<div class="form-group">
-				<label for="remerageId" th:text="#{nouvellereine} + ' ' + ${nomRuche}"></label> <select
+			<div class="mb-3">
+				<label class="form-label" for="remerageId" th:text="#{nouvellereine} + ' ' + ${nomRuche}"></label> <select
 					class="form-control" id="remerageId" name="remerageId">
 					<option th:text="#{aucune}" value=""></option>
 					<option th:each="essaimopt : ${essaimsRemerage}" th:value="${essaimopt[0]}"

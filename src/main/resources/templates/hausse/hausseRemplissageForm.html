@@ -49,8 +49,8 @@
 		<input type="hidden" id="typeEvenement" name="typeEvenement"
 			value="HAUSSEREMPLISSAGE" />
 		<div th:insert="includeForm :: date"></div>
-		<div class="form-group">
-			<label th:text="#{remplissage}" for="valeur"></label> <input
+		<div class="mb-3">
+			<label class="form-label" th:text="#{remplissage}" for="valeur"></label> <input
 				class="form-control" type="number" id="valeur" name="valeur" />
 		</div>
 		<div th:insert="includeForm :: commentaire"></div>

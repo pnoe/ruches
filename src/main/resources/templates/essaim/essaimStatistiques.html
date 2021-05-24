@@ -39,7 +39,7 @@ $(document).ready(function() {
     <div class="container-fluid">
 	    <form action="#" th:action="@{/essaim/statistiques}"
 			method="post" id="evenementForm">
-			<div class="form-group row">
+			<div class="mb-3 row">
 				<label for="rucherId" th:text="#{rucher}"
 				  class="col-sm-2 col-form-label"></label>
 				<select class="form-control col-sm-10" id="rucherId" name="rucherId">
@@ -50,12 +50,12 @@ $(document).ready(function() {
 				</select>
 			</div>
 			<div class="input-group mb-3 row">
-  			  <div class="form-group form-check col-sm-2 ">
+  			  <div class="form-check col-sm-2 ">
 			    <input class="form-check-input" type="checkbox" id="masquerInactif" 
 			      name="masquerInactif" th:checked="${masquerInactif}"/>
 			    <label class="form-check-label" for="masquerInactif" th:text="#{masquerInactif}"></label>
 		      </div>
-			  <input class="col-sm-1 btn input-group-append btn-outline-primary btn-sm" type="submit"
+			  <input class="col-sm-1 btn btn-outline-primary btn-sm" type="submit"
 				th:value="#{filtrer}" /> 
 		    </div>
 		</form>

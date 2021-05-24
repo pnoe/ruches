@@ -40,21 +40,21 @@
 	<form action="#" th:action="@{/recolte/sauve}"
 		th:object="${recolte}" method="post" id="recolteForm">
 		<input type="hidden" th:field="*{id}" />
-		<div class="form-group">
-			<label th:text="#{date}" for="date"></label>
+		<div class="mb-3">
+			<label class="form-label" th:text="#{date}" for="date"></label>
 			<input class="form-control" type="text" th:field="*{date}"
 				th:errorclass="fieldError" />
 		</div>
-		<div class="form-group">
-			<label th:text="#{typeMiel}" for="typeMiel"></label>
+		<div class="mb-3">
+			<label class="form-label" th:text="#{typeMiel}" for="typeMiel"></label>
 			<select class="form-control" th:field="*{typeMiel}">
 				<option th:each="type : ${T(ooioo.ruches.recolte.TypeMiel).values()}"
 				  th:value="${type}" th:text="#{${type}}">
 				</option>
 			</select>
 		</div>		
-		<div class="form-group">
-			<label th:text="#{poidsMiel}" for="poidsMiel"></label>
+		<div class="mb-3">
+			<label class="form-label" th:text="#{poidsMiel}" for="poidsMiel"></label>
 			<input class="form-control" 
 				type="number" step="0.001" min="0"
 			th:field="*{poidsMiel}"	th:errorclass="fieldError" />
