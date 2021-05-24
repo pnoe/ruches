@@ -37,9 +37,9 @@
     </div>
 	<form action="#" th:action="@{'/rucher/ruches/ajouter/sauve/' + ${rucherId}} + '/' + ${ruchesNoms}"
 		method="post" id="evenementForm">
-		<div th:insert="includeForm :: date"></div>
-		<div th:insert="includeForm :: commentaire"></div>
-		<div th:insert="includeForm :: BtnForm"></div>
+		<div th:replace="includeForm :: date"></div>
+		<div th:replace="includeForm :: commentaire"></div>
+		<div th:replace="includeForm :: BtnForm"></div>
 	</form>
 	<footer th:replace="include::footer"></footer>
 </body>

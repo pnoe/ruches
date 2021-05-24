@@ -42,43 +42,43 @@
 		th:object="${personne}" method="post" id="personneForm">
 		<input type="hidden" th:field="*{id}" /> 
 		<input type="hidden" sec:authorize="!hasRole('ROLE_admin')" th:field="*{roles}" /> 
-		<div th:insert="includeForm :: nomField"></div>
-		<div class="mb-3">
-			<label class="form-label" th:text="#{prenom}" for="prenom"></label>
-			<input class="form-control" type="text" th:field="*{prenom}"
+		<div th:replace="includeForm :: nomField"></div>
+		<div class="form-floating mb-3">
+			<input class="form-control" type="text" th:field="*{prenom}" placeholder=""
 				th:errorclass="fieldError" maxlength="35" />
+			<label class="form-label" th:text="#{prenom}" for="prenom"></label>
 		</div>
-		<div class="mb-3">		
-			<label class="form-label" th:text="#{email}" for="email"></label>
-			<input class="form-control"
+		<div class="form-floating mb-3">		
+			<input class="form-control" placeholder=""
 				type="text" th:field="*{email}" th:errorclass="fieldError" maxlength="255" />
+			<label class="form-label" th:text="#{email}" for="email"></label>
 		</div>
-		<div class="mb-3">					
-			<label class="form-label" th:text="#{adresse}" for="adresse"></label>
-			<input
+		<div class="form-floating mb-3">					
+			<input placeholder=""
 				class="form-control" type="text" th:field="*{adresse}"
 				th:errorclass="fieldError" maxlength="255" />
+			<label class="form-label" th:text="#{adresse}" for="adresse"></label>
 		</div>
-		<div class="mb-3">					
-			<label class="form-label" th:text="#{login}" for="login"></label>
-			<input
+		<div class="form-floating mb-3">					
+			<input placeholder=""
 				class="form-control" type="text" th:field="*{login}"
 				th:errorclass="fieldError" maxlength="35" />
+			<label class="form-label" th:text="#{login}" for="login"></label>
 		</div>
-		<div class="mb-3">					
-			<label class="form-label" th:text="#{motDePasse}" for="password"></label>
-			<input
+		<div class="form-floating mb-3">					
+			<input placeholder=""
 				class="form-control" type="password" th:field="*{password}"
 				th:errorclass="fieldError" maxlength="35" />
+			<label class="form-label" th:text="#{motDePasse}" for="password"></label>
 		</div>
-		<div class="mb-3" sec:authorize="hasRole('ROLE_admin')">					
-			<label class="form-label" th:text="#{roles}" for="roles"></label>
-			<input
+		<div class="form-floating mb-3" sec:authorize="hasRole('ROLE_admin')">					
+			<input placeholder=""
 				class="form-control" type="text" th:field="*{roles}"
 				th:errorclass="fieldError" maxlength="35" />
+			<label class="form-label" th:text="#{roles}" for="roles"></label>
 		</div>
-		<div th:insert="includeForm :: activeField"></div>
-		<div th:insert="includeForm :: BtnForm"></div>
+		<div th:replace="includeForm :: activeField"></div>
+		<div th:replace="includeForm :: BtnForm"></div>
 	</form>
 	<footer th:replace="include::footer"></footer>
 </body>

@@ -50,10 +50,10 @@
 		method="post" id="evenementForm">
 		<input type="hidden" id="valeur" name="valeur"/>
 		<input type="hidden" id="typeEvenement" name="typeEvenement" value="ESSAIMTRAITEMENT" />
-		<div th:insert="includeForm :: date"></div>
-		<div th:insert="includeForm :: finTraitement"></div>
-		<div th:insert="includeForm :: commentaire"></div>
-		<div th:insert="includeForm :: BtnForm"></div>
+		<div th:replace="includeForm :: date"></div>
+		<div th:replace="includeForm :: finTraitement"></div>
+		<div th:replace="includeForm :: commentaire"></div>
+		<div th:replace="includeForm :: BtnForm"></div>
 	</form>
 	<footer th:replace="include::footer"></footer>
 </body>

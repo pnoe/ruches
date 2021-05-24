@@ -43,35 +43,38 @@
 		method="post" id="rucherForm">
 		<input type="hidden" th:field="*{id}" /> <input type="hidden"
 			th:field="*{depot}" />
-		<div th:insert="includeForm :: nomField"></div>
-		<div th:insert="includeForm :: actifField"></div>
-		<div class="mb-3">
-			<label class="form-label" for="contact" th:text="#{contact}"></label> <select
+		<div th:replace="includeForm :: nomField"></div>
+		<div th:replace="includeForm :: actifField"></div>
+		<div class="form-floating mb-3">
+			<select
 				class="form-control" th:field="*{contact}">
 				<option th:each="personne : ${personnes}" th:value="${personne.id}"
 					th:text="${personne.nom}"></option>
 			</select>
+			<label class="form-label" for="contact" th:text="#{contact}"></label>
 		</div>
-		<div th:insert="includeForm :: latitudeField"></div>
-		<div th:insert="includeForm :: longitudeField"></div>
-		<div class="mb-3">
-			<label class="form-label" for="altitude" th:text="#{altitude}"></label>
-			<input class="form-control"
+		<div th:replace="includeForm :: latitudeField"></div>
+		<div th:replace="includeForm :: longitudeField"></div>
+		<div class="form-floating mb-3">
+			<input class="form-control" placeholder="100"
 				type="number" step="1" min="-200" max="4000"
 				th:field="*{altitude}" th:errorclass="fieldError" />
+			<label class="form-label" for="altitude" th:text="#{altitude}"></label>
 		</div>
-		<div class="mb-3">
-			<label class="form-label" for="adresse" th:text="#{adresse}"></label> <input type="text"
+		<div class="form-floating mb-3">
+			<input type="text" placeholder="xx"
 				class="form-control" th:field="*{adresse}"
 				th:errorclass="fieldError" maxlength="255" />
+			<label class="form-label" for="adresse" th:text="#{adresse}"></label>
 		</div>
-		<div class="mb-3">
-			<label class="form-label" for="ressource" th:text="#{ressource}"></label> <input
+		<div class="form-floating mb-3">
+			<input placeholder="xx"
 				type="text" class="form-control" th:field="*{ressource}"
 				th:errorclass="fieldError" />
+			<label class="form-label" for="ressource" th:text="#{ressource}"></label> 
 		</div>
-		<div th:insert="includeForm :: commentaireField"></div>
-		<div th:insert="includeForm :: BtnForm"></div>
+		<div th:replace="includeForm :: commentaireField"></div>
+		<div th:replace="includeForm :: BtnForm"></div>
 	</form>
 	<footer th:replace="include::footer"></footer>
 </body>

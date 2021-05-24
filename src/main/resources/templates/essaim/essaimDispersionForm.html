@@ -61,8 +61,8 @@
 			<label class="form-check-label"
 				for="evencadre" th:text="#{creationevecadrezero}"></label>
 		</div>
-		<div th:insert="includeForm :: date"></div>
-		<div th:insert="includeForm :: commentaire"></div>
+		<div th:replace="includeForm :: date"></div>
+		<div th:replace="includeForm :: commentaire"></div>
 		<th:block th:if="${nomRuche}">
 			<div class="mb-3">
 				<label class="form-label" for="remerageId" th:text="#{nouvellereine} + ' ' + ${nomRuche}"></label> <select
@@ -73,7 +73,7 @@
 				</select>
 			</div>
 		</th:block>
-		<div th:insert="includeForm :: BtnForm"></div>
+		<div th:replace="includeForm :: BtnForm"></div>
 	</form>
 	<footer th:include="include::footer"></footer>
 </body>

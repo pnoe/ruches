@@ -40,27 +40,27 @@
 	<form action="#" th:action="@{/recolte/sauve}"
 		th:object="${recolte}" method="post" id="recolteForm">
 		<input type="hidden" th:field="*{id}" />
-		<div class="mb-3">
-			<label class="form-label" th:text="#{date}" for="date"></label>
+		<div class="form-floating mb-3">
 			<input class="form-control" type="text" th:field="*{date}"
-				th:errorclass="fieldError" />
+				th:errorclass="fieldError" placeholder="" />
+			<label class="form-label" th:text="#{date}" for="date"></label>
 		</div>
-		<div class="mb-3">
-			<label class="form-label" th:text="#{typeMiel}" for="typeMiel"></label>
+		<div class="form-floating mb-3">
 			<select class="form-control" th:field="*{typeMiel}">
 				<option th:each="type : ${T(ooioo.ruches.recolte.TypeMiel).values()}"
 				  th:value="${type}" th:text="#{${type}}">
 				</option>
 			</select>
+			<label class="form-label" th:text="#{typeMiel}" for="typeMiel"></label>
 		</div>		
-		<div class="mb-3">
-			<label class="form-label" th:text="#{poidsMiel}" for="poidsMiel"></label>
-			<input class="form-control" 
+		<div class="form-floating mb-3">
+			<input class="form-control" placeholder=""
 				type="number" step="0.001" min="0"
 			th:field="*{poidsMiel}"	th:errorclass="fieldError" />
+			<label class="form-label" th:text="#{poidsMiel}" for="poidsMiel"></label>
 		</div>		
-		<div th:insert="includeForm :: commentaireField"></div>
-		<div th:insert="includeForm :: BtnForm"></div>
+		<div th:replace="includeForm :: commentaireField"></div>
+		<div th:replace="includeForm :: BtnForm"></div>
 	</form>
 	<footer th:replace="include::footer"></footer>
 </body>

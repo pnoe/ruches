@@ -45,14 +45,14 @@
 	<form action="#" th:action="@{'/evenement/essaim/sauve/'+${ruche.essaim.id}}"
 		method="post" id="evenementForm">
 		<input type="hidden" id="typeEvenement" name="typeEvenement" value="RUCHECADRE"/>
-		<div th:insert="includeForm :: date"></div>
+		<div th:replace="includeForm :: date"></div>
 		<div class="mb-3">
 			<label class="form-label" th:text="#{nbCadres}+' ('+${ruche.type.nbCadresMax}+'max)'" for="valeur"></label>
 			<input class="form-control" type="text" id="valeur" name="valeur"/>
   		</div>
-		<div th:insert="includeForm :: commentaire"></div>
+		<div th:replace="includeForm :: commentaire"></div>
 		<small id="textHelp" class="form-text text-muted" th:text="#{evenruchercadreaide}"></small><br/>
-		<div th:insert="includeForm :: BtnForm"></div>
+		<div th:replace="includeForm :: BtnForm"></div>
 	</form>
 	<footer th:include="include::footer"></footer>
 </body>

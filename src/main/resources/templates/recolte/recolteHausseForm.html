@@ -98,7 +98,7 @@
 					th:text="${rucheropt.nom}"></option>
 			</select>
 		</div>
-		<div th:insert="includeForm :: BtnForm"></div>
+		<div th:replace="includeForm :: BtnForm"></div>
 	</form>
 	<footer th:replace="include::footer"></footer>
 </body>

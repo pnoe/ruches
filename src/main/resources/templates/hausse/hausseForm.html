@@ -78,26 +78,29 @@
 		<input type="hidden" th:field="*{id}" /> <input type="hidden"
 			th:field="*{ruche}" /> <input type="hidden"
 			th:field="*{ordreSurRuche}" />
-		<div th:insert="includeForm :: nomField"></div>
-		<div th:insert="includeForm :: activeField"></div>
-		<div th:insert="includeForm :: dateAcquisitionField"></div>
-		<div class="mb-3">
-			<label class="form-label" for="poidsVide" th:text="#{poidskg}"></label> <input
+		<div th:replace="includeForm :: nomField"></div>
+		<div th:replace="includeForm :: activeField"></div>
+		<div th:replace="includeForm :: dateAcquisitionField"></div>
+		<div class="form-floating mb-3">
+			<input placeholder="5.000"
 				class="form-control" type="number" step="0.001" min="0" max="20"
 				th:field="*{poidsVide}" th:errorclass="fieldError" />
+			<label class="form-label" for="poidsVide" th:text="#{poidskg}"></label>
 		</div>
-		<div class="mb-3">
-			<label class="form-label" for="nbCadres" th:text="#{nombredecadres}"></label> <input
+		<div class="form-floating mb-3">
+			<input placeholder="9"
 				class="form-control" type="number" th:field="*{nbCadres}"
 				th:errorclass="fieldError" />
+			<label class="form-label" for="nbCadres" th:text="#{nombredecadres}"></abel> 
 		</div>
-		<div class="mb-3">
-			<label class="form-label" for="nbCadresMax" th:text="#{nombredecadresmax}"></label> <input
+		<div class="form-floating mb-3">
+			<input placeholder="9"
 				class="form-control" type="number" th:field="*{nbCadresMax}"
 				th:errorclass="fieldError" />
+			<label class="form-label" for="nbCadresMax" th:text="#{nombredecadresmax}"></label>
 		</div>
-		<div th:insert="includeForm :: commentaireField"></div>
-		<div th:insert="includeForm :: BtnForm"></div>
+		<div th:replace="includeForm :: commentaireField"></div>
+		<div th:replace="includeForm :: BtnForm"></div>
 	</form>
 	<footer th:replace="include::footer"></footer>
 </body>
