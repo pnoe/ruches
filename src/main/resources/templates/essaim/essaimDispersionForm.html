@@ -27,6 +27,15 @@
 				}
 			}
 		});
+		$('#remerageId').on('change', function (e) {
+			if(e.target.value === '') {
+				$('#depot').prop('disabled', false);
+				$('#evencadre').prop('disabled', false);
+			} else {
+				$('#depot').prop('disabled', true);
+				$('#evencadre').prop('disabled', true);
+			}
+		});
 	});
 </script>
 </head>
