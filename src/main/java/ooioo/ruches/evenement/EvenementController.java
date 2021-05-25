@@ -120,8 +120,8 @@ public class EvenementController {
 
 	/*
 	 * Appel du formulaire de création d'un événement appel du formulaire complet
-	 * avec tous les champs Un bouton "Plus" permet de choisir ruche, rucher, hausse
-	 * et essaim librement
+	 * avec tous les champs. Une case à cocher permet de choisir ruche, rucher, hausse
+	 * et essaim librement.
 	 */
 	@GetMapping("/cree")
 	public String cree(HttpSession session, Model model) {

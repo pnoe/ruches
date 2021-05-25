@@ -46,9 +46,9 @@
 		method="post" id="evenementForm">
 		<input type="hidden" id="typeEvenement" name="typeEvenement" value="RUCHECADRE"/>
 		<div th:replace="includeForm :: date"></div>
-		<div class="mb-3">
+		<div class="form-floating mb-3">
+			<input placeholder="" class="form-control" type="text" id="valeur" name="valeur"/>
 			<label class="form-label" th:text="#{nbCadres}+' ('+${ruche.type.nbCadresMax}+'max)'" for="valeur"></label>
-			<input class="form-control" type="text" id="valeur" name="valeur"/>
   		</div>
 		<div th:replace="includeForm :: commentaire"></div>
 		<small id="textHelp" class="form-text text-muted" th:text="#{evenruchercadreaide}"></small><br/>

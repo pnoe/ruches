@@ -60,43 +60,46 @@
 		th:object="${detailRecolte}" method="post" id="recolteHausseForm">
 		<input type="hidden" th:field="*{id}" /> <input type="hidden"
 			th:field="*{recolte}" /> <input type="hidden" th:field="*{hausse}" />
-		<div class="mb-3">
-			<label class="form-label" th:text="#{poidsAvant}" for="poidsAvant"></label>
-			<input class="form-control" 
+		<div class="form-floating mb-3">
+			<input class="form-control" placeholder=""
 				type="number" th:min="${detailRecolte.hausse.poidsVide}" max="80" step="0.001"
 				th:field="*{poidsAvant}" th:errorclass="fieldError" />
+			<label class="form-label" th:text="#{poidsAvant}" for="poidsAvant"></label>
 		</div>
-		<div class="mb-3">
-			<label class="form-label" th:text="#{poidsApres}" for="poidsApres"></label>
-			<input class="form-control" 
+		<div class="form-floating mb-3">
+			<input class="form-control" placeholder=""
 				type="number" th:min="${detailRecolte.hausse.poidsVide}" max="80" step="0.001"
 				th:field="*{poidsApres}" th:errorclass="fieldError" />
+			<label class="form-label" th:text="#{poidsApres}" for="poidsApres"></label>
 		</div>
 		<button type="button" id="toggleplus" th:text="#{plus}" ></button>
 		<br/><br/>
-		<div class="mb-3 toggleplus">
-			<label class="form-label" for="essaim" th:text="#{essaim}"></label> <select
+		<div class="form-floating mb-3 toggleplus">
+			<select
 				class="form-control" th:field="*{essaim}">
 				<option value="" th:text="#{aucun}">;</option>
 				<option th:each="essaimopt : ${essaims}" th:value="${essaimopt.id}"
 					th:text="${essaimopt.nom}"></option>
 			</select>
+			<label class="form-label" for="essaim" th:text="#{essaim}"></label>
 		</div>
-		<div class="mb-3 toggleplus">
-			<label class="form-label" for="ruche" th:text="#{ruche}"></label> <select
+		<div class="form-floating mb-3 toggleplus">
+			<select
 				class="form-control" th:field="*{ruche}">
 				<option value="" th:text="#{aucune}"></option>
 				<option th:each="rucheopt : ${ruches}" th:value="${rucheopt.id}"
 					th:text="${rucheopt.nom}"></option>
 			</select>
+			<label class="form-label" for="ruche" th:text="#{ruche}"></label>
 		</div>
-		<div class="mb-3 toggleplus">
-			<label class="form-label" for="rucher" th:text="#{rucher}"></label> <select
+		<div class="form-floating mb-3 toggleplus">
+			<select
 				class="form-control" th:field="*{rucher}">
 				<option value="" th:text="#{aucun}"></option>
 				<option th:each="rucheropt : ${ruchers}" th:value="${rucheropt.id}"
 					th:text="${rucheropt.nom}"></option>
 			</select>
+			<label class="form-label" for="rucher" th:text="#{rucher}"></label>
 		</div>
 		<div th:replace="includeForm :: BtnForm"></div>
 	</form>

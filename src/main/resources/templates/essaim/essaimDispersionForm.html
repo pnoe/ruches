@@ -64,13 +64,14 @@
 		<div th:replace="includeForm :: date"></div>
 		<div th:replace="includeForm :: commentaire"></div>
 		<th:block th:if="${nomRuche}">
-			<div class="mb-3">
-				<label class="form-label" for="remerageId" th:text="#{nouvellereine} + ' ' + ${nomRuche}"></label> <select
+			<div class="form-floating mb-3">
+				<select
 					class="form-control" id="remerageId" name="remerageId">
 					<option th:text="#{aucune}" value=""></option>
 					<option th:each="essaimopt : ${essaimsRemerage}" th:value="${essaimopt[0]}"
 						th:text="${essaimopt[1]}"></option>
 				</select>
+				<label class="form-label" for="remerageId" th:text="#{nouvellereine} + ' ' + ${nomRuche}"></label>
 			</div>
 		</th:block>
 		<div th:replace="includeForm :: BtnForm"></div>

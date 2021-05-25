@@ -50,10 +50,10 @@
 		th:action="@{'/essaim/essaime/sauve/' + ${essaim.id}}"
 		method="post" id="essaimeForm">
 		<div th:replace="includeForm :: date"></div>
-		<div class="mb-3">
-			<label class="form-label" for="nom" th:text="#{NomNouvelEssaim}"></label>
-			<input class="form-control" type="text" 
+		<div class="form-floating mb-3">
+			<input class="form-control" type="text" placeholder=""
 				id="nom" name="nom"	maxlength="92" />
+			<label class="form-label" for="nom" th:text="#{NomNouvelEssaim}"></label>
 		</div>
 		<div th:replace="includeForm :: commentaire"></div>    
 		<div th:replace="includeForm :: BtnForm"></div>

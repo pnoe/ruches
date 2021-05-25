@@ -44,10 +44,11 @@
 		th:object="${rucheType}" method="post" id="rucheTypeForm">
 		<input type="hidden" th:field="*{id}" />
 		<div th:replace="includeForm :: nomField"></div>
-		<div class="mb-3">
-			<label class="form-label" for="nbCadresMax" th:text="#{nbCadresMax}"></label> <input
+		<div class="form-floating mb-3">
+			<input placeholder=""
 				class="form-control" type="number" th:field="*{nbCadresMax}"
 				th:errorclass="fieldError" id="nbCadresMax" name="nbCadresMax" />
+			<label class="form-label" for="nbCadresMax" th:text="#{nbCadresMax}"></label>
 		</div>
 		<div th:replace="includeForm :: BtnForm"></div>
 	</form>

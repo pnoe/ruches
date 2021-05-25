@@ -49,9 +49,10 @@
 		<input type="hidden" id="typeEvenement" name="typeEvenement"
 			value="HAUSSEREMPLISSAGE" />
 		<div th:replace="includeForm :: date"></div>
-		<div class="mb-3">
-			<label class="form-label" th:text="#{remplissage}" for="valeur"></label> <input
+		<div class="form-floating mb-3">
+			<input placeholder=""
 				class="form-control" type="number" id="valeur" name="valeur" />
+			<label class="form-label" th:text="#{remplissage}" for="valeur"></label> 
 		</div>
 		<div th:replace="includeForm :: commentaire"></div>
 		<div th:replace="includeForm :: BtnForm"></div>

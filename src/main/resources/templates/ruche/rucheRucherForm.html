@@ -43,13 +43,13 @@
 	<form action="#" th:action="@{'/ruche/sauverucher/'+${rucheId}}"
 		method="post" id="evenementForm">
 		<div th:replace="includeForm :: date"></div>
-		<div class="mb-3">
-			<label class="form-label" for="rucher" th:text="#{rucher}"></label>
+		<div class="form-floating mb-3">
 			<select class="form-control"
 				id="rucherId" name="rucherId" th:field="${ruche.rucher}">
 				<option th:each="rucheropt : ${ruchers}" th:value="${rucheropt.id}"
 							th:text="${rucheropt.nom}"></option>
 			</select>
+			<label class="form-label" for="rucher" th:text="#{rucher}"></label>
 		</div>
 		<div th:replace="includeForm :: commentaire"></div>
 		<div th:replace="includeForm :: BtnForm"></div>
