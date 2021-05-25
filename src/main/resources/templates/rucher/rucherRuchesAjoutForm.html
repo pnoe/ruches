@@ -7,6 +7,10 @@
 <script>
 	$().ready(function() {
 		$("#evenementForm").validate({
+			errorClass: 'erreur-form',
+			errorPlacement: function(error, element) {
+			    error.insertBefore(element.closest('div'));
+			},
 			rules : {
 				date : {
 					required : true
