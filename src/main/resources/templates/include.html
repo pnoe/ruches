@@ -154,15 +154,15 @@ if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('f
 					<ul class="dropdown-menu" aria-labelledby="navbarDropdown3">
 						<li><a class="dropdown-item" th:text="#{preferences}"
 							th:href="@{/parametres}"></a></li>
-						<li><a class="dropdown-item" sec:authorize="hasRole('ROLE_admin')"
+						<li sec:authorize="hasRole('ROLE_admin')"><a class="dropdown-item"
 							th:text="#{apiRest}" th:target="_blank" th:href="@{/rest}"></a></li>
-						<li><a class="confirmdeploie dropdown-item" sec:authorize="hasRole('ROLE_admin')"
+						<li sec:authorize="hasRole('ROLE_admin')"><a class="confirmdeploie dropdown-item"
 							th:text="#{deploie}" th:href="@{/deploie}"></a></li>
-						<li><a class="dropdown-item" sec:authorize="hasRole('ROLE_admin')"
+						<li sec:authorize="hasRole('ROLE_admin')"><a class="dropdown-item"
 							th:text="#{downloaddump}" th:href="@{/dump/ruches.sql.xz}"></a></li>
-						<a class="dropdown-item" sec:authorize="hasRole('ROLE_admin')"
+						<li sec:authorize="hasRole('ROLE_admin')"><a class="dropdown-item"
 							th:text="#{downloadschema}" th:href="@{/dump/ruches_schema.sql}"></a></li>
-						<li><a class="dropdown-item" sec:authorize="hasRole('ROLE_admin')"
+						<li sec:authorize="hasRole('ROLE_admin')"><a class="dropdown-item"
 							th:text="#{logs}" th:href="@{/admin/logs/logfile}" target="_blank"></a></li>
 						<li><a class="dropdown-item"
 							th:text="#{infos}" th:href="@{/infos}"></a></li>
