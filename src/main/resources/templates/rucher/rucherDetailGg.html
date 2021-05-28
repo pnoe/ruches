@@ -46,17 +46,17 @@
        			<span class="padicons">
        				<input type="checkbox" id="dragMarker" th:title="#{markerFixes}" checked/>
 				</span>
-				<span id="liste" class="liste oi oi-list" th:title="#{listeRuchesOrdonnees}" aria-hidden="true"></span>
-		 		<span id="listeplus" class="liste oi oi-list-rich" th:title="#{listePlusRuchesOrdonnees}" aria-hidden="true"></span>					
-				<span id="export-gpx" class="oi oi-globe" th:title="#{exportGPX}"
+				<span id="liste" class="liste bi bi-list-ul" th:title="#{listeRuchesOrdonnees}" aria-hidden="true"></span>
+		 		<span id="listeplus" class="liste bi bi-list-stars" th:title="#{listePlusRuchesOrdonnees}" aria-hidden="true"></span>					
+				<span id="export-gpx" class="bi bi-arrow-up-right-circle" th:title="#{exportGPX}"
 					aria-hidden="true"></span>
 				<a id="gpx-download"></a>
-				<span id="export-kml" class="oi oi-contrast" th:title="#{exportKML}"
+				<span id="export-kml" class="bi bi-arrow-up-right-square" th:title="#{exportKML}"
 					aria-hidden="true"></span>
 				<a id="kml-download"></a>
-				<span th:if="${ruches.size()} > ${rucherParcoursNbruches}" id="parcours-redraw" class="oi oi-reload" th:title="#{parcoursRecalcul}"
+				<span th:if="${ruches.size()} > ${rucherParcoursNbruches}" id="parcours-redraw" class="bi bi-arrow-clockwise" th:title="#{parcoursRecalcul}"
 					aria-hidden="true"></span>
-				<span id="cercles" class="oi oi-rss" aria-hidden="true"></span>
+				<span id="cercles" class="bi bi-wifi" aria-hidden="true"></span>
 			</div>
 		</div>
 	</div>

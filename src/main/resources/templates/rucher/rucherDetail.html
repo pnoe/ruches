@@ -43,29 +43,29 @@
 			</div>
 			<div class="col">
 				<a th:href="@{'/rucher/modifie/'+${rucher.id}}" 
-				  class="oi oi-pencil" th:title="#{modifier}" aria-hidden="true"></a> 
+				  class="bi bi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
+				&nbsp;
 				<a th:href="@{'/rucher/Gg/'+${rucher.id}}" 
-				  class="oi oi-globe" th:title="#{carteGg}" aria-hidden="true"></a> 
+				  class="bi bi-google" th:title="#{carteGg}" aria-hidden="true"></a> 
 				<a th:href="@{'/rucher/Ign/'+${rucher.id}}" 
-				  class="oi oi-signpost" th:title="#{carteIgn}" aria-hidden="true"></a>	
+				  class="bi bi-map" th:title="#{carteIgn}" aria-hidden="true"></a>	
 				<a th:href="@{'/rucher/Osm/'+${rucher.id}}" 
-				  class="oi oi-flag" th:title="#{carteOsm}" aria-hidden="true"></a>
+				  class="bi bi-globe" th:title="#{carteOsm}" aria-hidden="true"></a>
+				&nbsp;
 				<a th:href="@{'/rucher/meteo/'+${rucher.id}}" 
-				  class="oi oi-cloud" th:title="#{meteo}" aria-hidden="true"></a> 
+				  class="bi bi-sun" th:title="#{meteo}" aria-hidden="true"></a> 
        			<a th:href="@{'/rucher/ruches/'+${rucher.id}}" 
-       			  class="oi oi-align-center" th:title="#{ajoutRuches}" aria-hidden="true"></a>
+       			  class="bi bi-grid-3x2-gap" th:title="#{ajoutRuches}" aria-hidden="true"></a>
        			<a id="supprime" th:href="@{'/rucher/supprime/'+${rucher.id}}" 
-       			  class="confirmationsupp oi oi-trash" style="color:red" 
+       			  class="confirmationsupp bi bi-trash" style="color:red" 
        			  th:title="#{supprimer}" aria-hidden="true"></a>&nbsp;
        			<a th:href="@{'/evenement/rucher/'+${rucher.id}}"
-       			  class="padicons oi oi-list-rich" th:title="#{evenements}" aria-hidden="true"></a>
+       			  class="padicons bi bi-list-ul" th:title="#{evenements}" aria-hidden="true"></a>
 				<a th:href="@{'/evenement/rucher/commentaire/'+${rucher.id}}"
-				  class="oi oi-info" th:title="#{evenementCommentaire}" aria-hidden="true"></a>
-				  
-				  &nbsp;
+				  class="bi bi-chat-text" th:title="#{evenementCommentaire}" aria-hidden="true"></a>  
+				&nbsp;
 				<a th:href="@{'/rucher/historique/'+${rucher.id}}"
-				  class="oi oi-calendar" th:title="#{historique}" aria-hidden="true"></a>
-				  
+				  class="bi bi-calendar-check" th:title="#{historique}" aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>

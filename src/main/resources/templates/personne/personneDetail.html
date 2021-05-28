@@ -27,9 +27,9 @@ $().ready(function() {
 			</div>
 			<div class="col">
 				<a th:href="@{'/personne/modifie/'+${personne.id}}"
-				 class="oi oi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
+				 class="bi bi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
 			    <a id="supprime" th:href="@{'/personne/supprime/'+${personne.id}}"
-			      class="confirmation oi oi-trash" th:title="#{supprimer}" 
+			      class="confirmation bi bi-trash" th:title="#{supprimer}" 
 			      style="color:red" aria-hidden="true"></a>
 			</div>
 		</div>

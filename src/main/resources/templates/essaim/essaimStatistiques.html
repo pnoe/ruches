@@ -3,7 +3,7 @@
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
 $(document).ready(function() {
-    $('.oi-question-mark').popover({
+    $('.bi-question-lg').popover({
         html: true
     });
     $('.popover-dismiss').popover({
@@ -30,7 +30,7 @@ $(document).ready(function() {
 				<h1 class="item" th:text="#{ProductionEssaim}"></h1>
 			</div>
 			<div class="col">
-				<a href="#" class="oi oi-question-mark" data-bs-toggle="popover"
+				<a href="#" class="bi bi-question-lg" data-bs-toggle="popover"
 					data-bs-trigger="focus" tabindex="0" role="button"
 					th:attr="data-bs-content=#{aideStatistiqueEssaim}"></a>
 			</div>

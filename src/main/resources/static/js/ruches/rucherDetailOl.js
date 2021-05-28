@@ -10,7 +10,7 @@ function rucherDetail(ign) {
 	$('.rapproche').on('click', function() {
 		return confirm(rapprochertxt);
 	});
-	$('.oi-question-mark').popover({
+	$('.bi-question-lg').popover({
 		html: true
 	});
 	$('.popover-dismiss').popover({

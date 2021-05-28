@@ -27,12 +27,15 @@ $(document).ready(function() {
 			<h1 class="item" th:text="#{lesRuchers}"></h1>
 			</div>
 			<div class="col">
-       		 <a id="cree" th:href="@{/rucher/cree}" class="oi oi-plus" th:title="#{ajouterRucher}" aria-hidden="true"></a>
-			 <a th:href="@{/rucher/Gg/}" class="oi oi-globe" th:title="#{carteGg}" aria-hidden="true"></a>
-       		 <a th:href="@{/rucher/Ign/}" class="oi oi-signpost" th:title="#{carteIgn}" aria-hidden="true"></a>
-			 <a th:href="@{/rucher/Osm/}" class="oi oi-flag" th:title="#{carteOsm}" aria-hidden="true"></a>
+       		 <a id="cree" th:href="@{/rucher/cree}" class="bi bi-plus-lg"
+       		 	th:title="#{ajouterRucher}" aria-hidden="true"></a>
+			 &nbsp;
+			 <a th:href="@{/rucher/Gg/}" class="bi bi-google" th:title="#{carteGg}" aria-hidden="true"></a>
+       		 <a th:href="@{/rucher/Ign/}" class="bi bi-map" th:title="#{carteIgn}" aria-hidden="true"></a>
+			 <a th:href="@{/rucher/Osm/}" class="bi bi-globe" th:title="#{carteOsm}" aria-hidden="true"></a>
+			 &nbsp;
 			 <a th:href="@{/rucher/statistiques}"
-				  class="oi oi-bar-chart" th:title="#{statistiquesruchers}" aria-hidden="true"></a>
+				  class="bi bi-table" th:title="#{statistiquesruchers}" aria-hidden="true"></a>
         	</div>
         </div>
     </div>

@@ -62,18 +62,20 @@ $().ready(function() {
 			</div>
 			<div class="col">
 				<a th:href="@{'/ruche/modifie/'+${ruche.id}}"
-				  class="oi oi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
-        		<span id="clone" class="oi oi-layers" th:title="#{cloner}" aria-hidden="true"></span>
+				  class="bi bi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
+				&nbsp;
+        		<span id="clone" class="bi bi-collection" th:title="#{cloner}" aria-hidden="true"></span>
 				<a th:href="@{'/ruche/hausses/'+${ruche.id}}"
-				  class="oi oi-align-center" th:title="#{ajoutRetraitHausses}" aria-hidden="true"></a>
+				  class="bi bi-justify" th:title="#{ajoutRetraitHausses}" aria-hidden="true"></a>
        			<a th:href="@{'/ruche/rucher/'+${ruche.id}}"
-       			  class="oi oi-home" th:title="#{changerDeRucher}" aria-hidden="true"></a>
+       			  class="bi bi-house" th:title="#{changerDeRucher}" aria-hidden="true"></a>
 				<a id="supprime" th:href="@{'/ruche/supprime/'+${ruche.id}}"
-				  class="confirmation oi oi-trash" style="color:red" th:title="#{supprimer}" aria-hidden="true"></a>&nbsp;
+				  class="confirmation bi bi-trash" style="color:red" th:title="#{supprimer}" aria-hidden="true"></a>
+				&nbsp;
 				<a th:href="@{'/evenement/ruche/'+${ruche.id}}"
-				  class="padicons oi oi-list-rich" th:title="#{evenements}" aria-hidden="true"></a>
+				  class="padicons bi bi-list-ul" th:title="#{evenements}" aria-hidden="true"></a>
 				<a th:href="@{'/evenement/ruche/commentaire/'+${ruche.id}}"
-				  class="oi oi-info" th:title="#{evenementCommentaire}" aria-hidden="true"></a>
+				  class="bi bi-chat-text" th:title="#{evenementCommentaire}" aria-hidden="true"></a>
         	</div>
         </div>
     </div>

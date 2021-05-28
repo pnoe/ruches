@@ -62,14 +62,15 @@ $(document).ready(function() {
 			</div>
 			<div class="col">
 				<a th:href="@{'/recolte/modifie/'+${recolte.id}}"
-				  class="oi oi-pencil" th:title="#{modifier}" aria-hidden="true"></a> 
+				  class="bi bi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
+				&nbsp;
 				<a th:href="@{'/recolte/choixHausses/'+${recolte.id}}"
-				  class="oi oi-menu" th:title="#{choixHausesRecolte}" aria-hidden="true"></a>
-				<span id="enlevehausses" class="oi oi-minus" th:title="#{recolteHausseDepot}" aria-hidden="true"></span>
+				  class="bi bi-justify" th:title="#{choixHausesRecolte}" aria-hidden="true"></a>
+				<span id="enlevehausses" class="bi bi-reply-all" th:title="#{recolteHausseDepot}" aria-hidden="true"></span>
        			<a th:href="@{'/recolte/statistiques/essaim/'+${recolte.id}}"
-       			  class="oi oi-pie-chart" th:title="#{statistiquesessaims}" aria-hidden="true"></a>
+       			  class="bi bi-pie-chart" th:title="#{statistiquesessaims}" aria-hidden="true"></a>
        			<a id="supprime" th:href="@{'/recolte/supprime/'+${recolte.id}}"
-       			  class="confirmationsupprime oi oi-trash" style="color:red" 
+       			  class="confirmationsupprime bi bi-trash" style="color:red" 
        			  th:title="#{supprimer}" aria-hidden="true"></a>
 			</div>
 		</div>

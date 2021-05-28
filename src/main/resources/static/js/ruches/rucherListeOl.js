@@ -8,7 +8,7 @@ function rucherListeIgn(ign) {
 	$('.recentre').on('click', function () {
         return confirm(recentertxt);
     });
-	$('.oi-question-mark').popover({html: true});
+	$('.bi-question-lg').popover({html: true});
 	$('.popover-dismiss').popover({
 		  trigger: 'focus'
 		});

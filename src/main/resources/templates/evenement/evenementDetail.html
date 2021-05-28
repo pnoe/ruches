@@ -23,10 +23,10 @@ $(document).ready(function() {
 			</div>
 			<div class="col">
 				<a th:href="@{'/evenement/modifie/'+${evenement.id}}"> <span
-					class="oi oi-pencil" th:title="#{modifier}" aria-hidden="true"></span>
+					class="bi bi-pencil" th:title="#{modifier}" aria-hidden="true"></span>
 				</a> 
 				<a id="supprime" th:href="@{'/evenement/supprime/'+${evenement.id}}"> <span
-					class="confirmation oi oi-trash" style="color:red" th:title="#{supprimer}"
+					class="confirmation bi bi-trash" style="color:red" th:title="#{supprimer}"
 					aria-hidden="true"></span>
 				</a>
 			</div>

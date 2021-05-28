@@ -97,35 +97,34 @@ $(document).ready(function() {
 			</div>
 			<div class="col">
 				<a th:href="@{'/essaim/modifie/'+${essaim.id}}"
-				  class="oi oi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
-				<span id="clone" class="oi oi-layers" th:title="#{cloner}" aria-hidden="true"></span>
-				
+				  class="bi bi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
+				&nbsp;
+				<span id="clone" class="bi bi-collection" th:title="#{cloner}" aria-hidden="true"></span>
 				<a th:href="@{'/essaim/essaime/'+${essaim.id}}"
-				  class="oi oi-account-logout" th:title="#{essaimer}" aria-hidden="true"></a>
-				  
+				  class="bi bi-box-arrow-left" th:title="#{essaimer}" aria-hidden="true"></a>
        			<a th:href="@{'/essaim/associe/'+${essaim.id}}"
-       			  class="oi oi-loop-square" th:title="#{associationruche}" aria-hidden="true"></a>
+       			  class="bi bi-box-arrow-in-down-right" th:title="#{associationruche}" aria-hidden="true"></a>
        			<a id="supprime" th:href="@{'/essaim/supprime/'+${essaim.id}}"
-       			  class="confirmation oi oi-trash" style="color:red" 
+       			  class="confirmation bi bi-trash" style="color:red" 
        			  th:title="#{supprimer}" aria-hidden="true"></a>
        			<a th:href="@{'/essaim/descendance/'+${essaim.id}}"
-       			  class="oi oi-fork" th:title="#{graphedescendance}" aria-hidden="true"></a>
+       			  class="bi bi-diagram-3" th:title="#{graphedescendance}" aria-hidden="true"></a>
        			  <a th:href="@{'/evenement/essaim/dispersion/'+${essaim.id}}"
-				  class="oi oi-delete" th:title="#{evenementDispersion}" aria-hidden="true"></a>
+				  class="bi bi-box-arrow-up-left" th:title="#{evenementDispersion}" aria-hidden="true"></a>
 				&nbsp;
        			<a th:href="@{'/evenement/essaim/'+${essaim.id}}"
-       			  class="padicons oi oi-list-rich" th:title="#{evenements}" aria-hidden="true"></a>
+       			  class="padicons bi bi-list-ul" th:title="#{evenements}" aria-hidden="true"></a>
 				<a th:href="@{'/evenement/essaim/commentaire/'+${essaim.id}}"
-				  class="oi oi-info" th:title="#{evenementCommentaireEssaim}" aria-hidden="true"></a>
+				  class="bi bi-chat-text" th:title="#{evenementCommentaireEssaim}" aria-hidden="true"></a>
 				<a th:href="@{'/evenement/essaim/sucre/'+${essaim.id}}"
-				  class="oi oi-beaker" th:title="#{evenementSucre}" aria-hidden="true"></a>
+				  class="bi bi-bucket" th:title="#{evenementSucre}" aria-hidden="true"></a>
 				<a th:href="@{'/evenement/essaim/traitement/'+${essaim.id}}"
-				  class="oi oi-bug" th:title="#{evenementTraitement}" aria-hidden="true"></a>
+				  class="bi bi-bug" th:title="#{evenementTraitement}" aria-hidden="true"></a>
 				<th:block th:if="${rucheEssaim}">
 					<a th:href="@{'/evenement/ruche/pesee/'+${rucheEssaim?.id}+'?retourEssaim=true'}"
-					  class="oi oi-data-transfer-download" th:title="#{evenementPesee}" aria-hidden="true"></a>
+					  class="bi bi-chevron-bar-down" th:title="#{evenementPesee}" aria-hidden="true"></a>
        				<a th:href="@{'/evenement/ruche/cadre/'+${rucheEssaim?.id}+'?retourEssaim=true'}"
-       				  class="oi oi-grid-four-up" th:title="#{evenementCadres}" aria-hidden="true"></a>
+       				  class="bi bi-layout-three-columns" th:title="#{evenementCadres}" aria-hidden="true"></a>
 				</th:block>
 			</div>
 		</div>

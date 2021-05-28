@@ -57,27 +57,28 @@
 				</h1>
 			</div>
 			<div class="col">
-				<a href="#" class="oi oi-question-mark" data-bs-toggle="popover" data-bs-trigger="focus" tabindex="0" role="button"
-					th:attr="data-bs-content=#{aiderucherdetailignmarkers}"></a>&nbsp;&nbsp;
+				<a href="#" class="bi bi-question-lg" data-bs-toggle="popover" data-bs-trigger="focus" tabindex="0" role="button"
+					th:attr="data-bs-content=#{aiderucherdetailignmarkers}"></a>
+				&nbsp;
 		 		<input type="text" th:placeholder="#{recherche}" id="searchtext" />
 		 		<span class="padicons">
        				<input type="checkbox" id="dragMarker" th:title="#{markerFixes}" checked/>
 				</span>
 		 		<a th:href="@{'/rucher/rapproche/Ign/'+${rucher.id}}"
-		 		  class="rapproche oi oi-aperture" th:title="#{rapprocher}" aria-hidden="true">
+		 		  class="rapproche bi bi-arrows-angle-contract" th:title="#{rapprocher}" aria-hidden="true">
        			</a>
-				<span id="sauve-dessin" class="oi oi-pencil"
+				<span id="sauve-dessin" class="bi bi-pencil"
 					th:title="#{enregistreDessin}" aria-hidden="true"></span>
-       			<span id="liste" class="liste oi oi-list" th:title="#{listeRuchesOrdonnees}" aria-hidden="true"></span>
-		 		<span id="listeplus" class="liste oi oi-list-rich" th:title="#{listePlusRuchesOrdonnees}" aria-hidden="true"></span>
-				<span id="export-gpx" class="oi oi-globe" th:title="#{exportGPX}"
+       			<span id="liste" class="liste bi bi-list-ul" th:title="#{listeRuchesOrdonnees}" aria-hidden="true"></span>
+		 		<span id="listeplus" class="liste bi bi-list-stars" th:title="#{listePlusRuchesOrdonnees}" aria-hidden="true"></span>
+				<span id="export-gpx" class="bi bi-arrow-up-right-circle" th:title="#{exportGPX}"
 					aria-hidden="true"></span>
 				<a id="gpx-download"></a>
-				<span id="export-kml" class="oi oi-contrast" th:title="#{exportKML}"
+				<span id="export-kml" class="bi bi-arrow-up-right-square" th:title="#{exportKML}"
 					aria-hidden="true"></span>
 				<a id="kml-download"></a>
-				<span th:if="${ruches.size()} > ${rucherParcoursNbruches}" id="parcours-redraw" class="oi oi-reload" th:title="#{parcoursRecalcul}"
-					aria-hidden="true"></span>	
+				<span th:if="${ruches.size()} > ${rucherParcoursNbruches}" id="parcours-redraw" class="bi bi-arrow-clockwise" th:title="#{parcoursRecalcul}"
+					aria-hidden="true"></span>
 			</div>
 		</div>
 	</div>
