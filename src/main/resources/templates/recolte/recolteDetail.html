@@ -75,9 +75,9 @@ $(document).ready(function() {
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid" th:with="pdsMiel=(${nbruches}==0) ? 0.00 : 
+	<div class="container-fluid table-responsive" th:with="pdsMiel=(${nbruches}==0) ? 0.00 : 
 			${#aggregates.sum(detailsRecolte.![poidsAvant])} - ${#aggregates.sum(detailsRecolte.![poidsApres])}">
-		<table class="table table-bordered">
+		<table class="table table-sm table-bordered">
 			<thead>
 				<tr>
 					<th th:text="#{typeMiel}"></th>
@@ -106,7 +106,7 @@ $(document).ready(function() {
 			</tbody>
 		</table>
 		<h6 th:text="#{haussesRecolte}"></h6>
-		<table class="table table-bordered" id="hausses">
+		<table class="table table-sm table-bordered" id="hausses">
 			<thead>
 				<tr>
 					<th style="background-color:PaleGoldenRod" th:text="#{hausse}"></th>

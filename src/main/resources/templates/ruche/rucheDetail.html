@@ -79,8 +79,8 @@ $().ready(function() {
         	</div>
         </div>
     </div>
-	<div class="container-fluid">
-		<table class="table table-responsive table-bordered">			
+	<div class="container-fluid table-responsive">
+		<table class="table table-sm table-bordered">			
 		<thead>
 			<tr>
 				<th th:if="${session.voirInactif}" th:text="#{active}"></th>
@@ -106,7 +106,7 @@ $().ready(function() {
 			</tr>
 		</tbody>
 	</table>
-	<table class="table table-responsive table-bordered">			
+	<table class="table table-sm table-bordered">			
 		<thead>
 			<tr>
 				<th style="background-color:PaleGoldenRod" th:text="#{rucher}"></th>
@@ -132,7 +132,7 @@ $().ready(function() {
 	</table>
 	<th:block th:if="${commentaireCOMMENTAIRERUCHE}">
 		<h6 th:text="#{evenements}" ></h6>
-	<table class="table table-responsive table-bordered">			
+	<table class="table table-sm table-bordered">			
 		<thead>
 			<tr>
 				<th style="background-color:PaleGoldenRod" th:text="#{commentaire}"></th>
@@ -150,7 +150,7 @@ $().ready(function() {
 	<h6 th:if="${#lists.isEmpty(haussesRuche)}" th:text="#{Pasdehausse}"></h6>
 	<th:block th:if="${not #lists.isEmpty(haussesRuche)}">
 		<h6 th:text="#{listeHausses}" ></h6>
-		<table class="table table-responsive table-bordered">			
+		<table class="table table-sm table-bordered">			
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>

@@ -129,8 +129,8 @@ $(document).ready(function() {
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid">
-		<table class="table table-responsive table-bordered">
+	<div class="container-fluid table-responsive">
+		<table class="table table-sm table-bordered">
 			<thead>
 				<tr>
 					<th th:if="${session.voirInactif}" th:text="#{actif}"></th>
@@ -160,102 +160,101 @@ $(document).ready(function() {
 				</tr>
 			</tbody>
 		</table>
-		<table class="table table-responsive table-bordered">			
-		<thead>
-			<tr>		
-				<th style="background-color:PaleGoldenRod" th:text="#{ruche}"></th>
-				<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>
-				<th style="background-color:PaleGoldenRod" th:text="#{commentaire}"></th>
-				<th style="background-color:LemonChiffon" th:text="#{rucher}"></th>
-				<th style="background-color:LemonChiffon" th:text="#{date}"></th>
-				<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td><a th:href="@{'/ruche/'+${rucheEssaim?.id}}"
-						th:text="${rucheEssaim?.nom}"></a></td>						
-				<td th:text="${#temporals.format(dateAJOUTESSAIMRUCHE, 'yyyy/MM/dd')}"></td>
-				<td th:text="${commentaireAJOUTESSAIMRUCHE}"></td>
-				<td><a th:href="@{'/rucher/'+${rucheEssaim?.rucher?.id}}"
-						th:text="${rucheEssaim?.rucher?.nom}"></a></td>
-				<td th:text="${#temporals.format(dateRUCHEAJOUTRUCHER, 'yyyy/MM/dd')}"></td>
-				<td th:text="${commentaireRUCHEAJOUTRUCHER}"></td>
-			</tr>
-		</tbody>
-	</table>
-	<h6 th:text="#{evenements}" 
-		th:if="${(dateTraitement != null) or (dateESSAIMSUCRE != null) or 
-		(dateCOMMENTAIREESSAIM != null) or (dateRUCHEPESEE != null) or (dateRUCHECADRE != null)}">
-	</h6>
-	<table class="table table-responsive table-bordered" 
-		th:if="${(dateTraitement != null) or (dateESSAIMSUCRE != null) or (dateCOMMENTAIREESSAIM != null)}">			
-		<thead>
-			<tr>		
-				<th style="background-color:PaleGoldenRod" th:text="#{traitement}"></th>
-				<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>
-				<th style="background-color:PaleGoldenRod" th:text="#{commentaire}"></th>
-				<th style="background-color:LemonChiffon" th:text="#{actionSucre}"></th>
-				<th style="background-color:LemonChiffon" th:text="#{date}"></th>
-				<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
-				<th style="background-color:PaleGoldenRod" th:text="#{commentaire}"></th>
-				<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td th:text="${typeTraitement}"></td>
-				<td th:text="${#temporals.format(dateTraitement, 'yyyy/MM/dd')}"></td>
-				<td th:text="${commentaireTraitement}"></td>
-				<td class="num" th:text="${#numbers.formatDecimal(valeurESSAIMSUCRE,1,2,'COMMA')}"></td>
-				<td th:text="${#temporals.format(dateESSAIMSUCRE, 'yyyy/MM/dd')}"></td>
-				<td th:text="${commentaireESSAIMSUCRE}"></td>
-				<td th:text="${commentaireCOMMENTAIREESSAIM}"></td>
-				<td th:text="${#temporals.format(dateCOMMENTAIREESSAIM, 'yyyy/MM/dd')}"></td>
-			</tr>
-		</tbody>
-	</table>
-	<table class="table table-responsive table-bordered" th:if="${(dateRUCHEPESEE != null) or (dateRUCHECADRE != null)}">			
-		<thead>
-			<tr>
-				<th style="background-color:PaleGoldenRod" th:text="#{poidsVide}"></th>
-				<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>
-				<th style="background-color:PaleGoldenRod" th:text="#{commentaire}"></th>				
-				<th style="background-color:LemonChiffon" th:text="#{nbCadres}"></th>
-				<th style="background-color:LemonChiffon" th:text="#{date}"></th>
-				<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td th:text="${#numbers.formatDecimal(valeurRUCHEPESEE,1,2)}"></td>
-				<td th:text="${#temporals.format(dateRUCHEPESEE, 'yyyy/MM/dd')}"></td>
-				<td th:text="${commentaireRUCHEPESEE}"></td>
-				<td class="num" th:text="${valeurRUCHECADRE}"></td>
-				<td th:text="${#temporals.format(dateRUCHECADRE, 'yyyy/MM/dd')}"></td>
-				<td th:text="${commentaireRUCHECADRE}"></td>
-			</tr>
-		</tbody>
-	</table>
-	
-	<table th:if="${#arrays.length(poidsListe)} &gt; 0" class="table table-responsive table-bordered">			
-		<thead>
-			<tr>
-				<th style="background-color:LightCyan" th:text="#{recolte}"></th>
-				<td th:each="recolte : ${recoltesListe}">
-					<a th:href="@{'/recolte/'+${recolte.id}}" th:text="${#temporals.format(recolte.date, 'yyyy/MM/dd')}"></a>
-				</td>
-				<th style="background-color:LightCyan" th:text="#{Total}"></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<th style="background-color:LightCyan" th:text="#{poidskg}"></th>
-				<td th:each="poids : ${poidsListe}" th:text="${#numbers.formatDecimal(poids/1000.0,1,2,'DEFAULT')}"></td>
-				<td th:text="${#numbers.formatDecimal(poidsTotal/1000.0,1,2,'DEFAULT')}"></td>		
-			</tr>
-		</tbody>
-	</table>
+		<table class="table table-sm table-bordered">			
+			<thead>
+				<tr>		
+					<th style="background-color:PaleGoldenRod" th:text="#{ruche}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{commentaire}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{rucher}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{date}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><a th:href="@{'/ruche/'+${rucheEssaim?.id}}"
+							th:text="${rucheEssaim?.nom}"></a></td>						
+					<td th:text="${#temporals.format(dateAJOUTESSAIMRUCHE, 'yyyy/MM/dd')}"></td>
+					<td th:text="${commentaireAJOUTESSAIMRUCHE}"></td>
+					<td><a th:href="@{'/rucher/'+${rucheEssaim?.rucher?.id}}"
+							th:text="${rucheEssaim?.rucher?.nom}"></a></td>
+					<td th:text="${#temporals.format(dateRUCHEAJOUTRUCHER, 'yyyy/MM/dd')}"></td>
+					<td th:text="${commentaireRUCHEAJOUTRUCHER}"></td>
+				</tr>
+			</tbody>
+		</table>
+		<h6 th:text="#{evenements}" 
+			th:if="${(dateTraitement != null) or (dateESSAIMSUCRE != null) or 
+			(dateCOMMENTAIREESSAIM != null) or (dateRUCHEPESEE != null) or (dateRUCHECADRE != null)}">
+		</h6>
+		<table class="table table-sm table-bordered" 
+			th:if="${(dateTraitement != null) or (dateESSAIMSUCRE != null) or (dateCOMMENTAIREESSAIM != null)}">			
+			<thead>
+				<tr>		
+					<th style="background-color:PaleGoldenRod" th:text="#{traitement}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{commentaire}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{actionSucre}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{date}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{commentaire}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td th:text="${typeTraitement}"></td>
+					<td th:text="${#temporals.format(dateTraitement, 'yyyy/MM/dd')}"></td>
+					<td th:text="${commentaireTraitement}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(valeurESSAIMSUCRE,1,2,'COMMA')}"></td>
+					<td th:text="${#temporals.format(dateESSAIMSUCRE, 'yyyy/MM/dd')}"></td>
+					<td th:text="${commentaireESSAIMSUCRE}"></td>
+					<td th:text="${commentaireCOMMENTAIREESSAIM}"></td>
+					<td th:text="${#temporals.format(dateCOMMENTAIREESSAIM, 'yyyy/MM/dd')}"></td>
+				</tr>
+			</tbody>
+		</table>
+		<table class="table table-sm table-bordered" th:if="${(dateRUCHEPESEE != null) or (dateRUCHECADRE != null)}">			
+			<thead>
+				<tr>
+					<th style="background-color:PaleGoldenRod" th:text="#{poidsVide}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{commentaire}"></th>				
+					<th style="background-color:LemonChiffon" th:text="#{nbCadres}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{date}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td th:text="${#numbers.formatDecimal(valeurRUCHEPESEE,1,2)}"></td>
+					<td th:text="${#temporals.format(dateRUCHEPESEE, 'yyyy/MM/dd')}"></td>
+					<td th:text="${commentaireRUCHEPESEE}"></td>
+					<td class="num" th:text="${valeurRUCHECADRE}"></td>
+					<td th:text="${#temporals.format(dateRUCHECADRE, 'yyyy/MM/dd')}"></td>
+					<td th:text="${commentaireRUCHECADRE}"></td>
+				</tr>
+			</tbody>
+		</table>
+		<table th:if="${#arrays.length(poidsListe)} &gt; 0" class="table table-sm table-bordered">			
+			<thead>
+				<tr>
+					<th style="background-color:LightCyan" th:text="#{recolte}"></th>
+					<td th:each="recolte : ${recoltesListe}">
+						<a th:href="@{'/recolte/'+${recolte.id}}" th:text="${#temporals.format(recolte.date, 'yyyy/MM/dd')}"></a>
+					</td>
+					<th style="background-color:LightCyan" th:text="#{Total}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th style="background-color:LightCyan" th:text="#{poidskg}"></th>
+					<td th:each="poids : ${poidsListe}" th:text="${#numbers.formatDecimal(poids/1000.0,1,2,'DEFAULT')}"></td>
+					<td th:text="${#numbers.formatDecimal(poidsTotal/1000.0,1,2,'DEFAULT')}"></td>		
+				</tr>
+			</tbody>
+		</table>
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
