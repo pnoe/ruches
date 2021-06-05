@@ -62,10 +62,7 @@ $(document).ready(function() {
 	<div class="container-fluid">
 		<h6 th:if="${rucheEssaim}" th:text="#{essaimdanslaruche}+' '+${rucheEssaim.nom}"></h6>
 		<h6 th:text="#{mettreessaimdanslaruche}"></h6>
-		<!-- 
-		<input type="checkbox" name="avecEssaim" id="avecEssaim" /> <label class="form-label" for="avecEssaim" th:text="#{AvecEssaim}"></label>
-		 -->
-		<table class="table table-bordered" id="associerRucheEssaim" >
+		<table class="table table-bordered table-striped dt-responsive" id="associerRucheEssaim" >
 			<thead>
 				<tr>
 					<th th:text="#{ruche}"></th>
