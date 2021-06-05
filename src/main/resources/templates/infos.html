@@ -38,9 +38,9 @@
 			</ul>
 		</div>
 	</div>
-	<div class="container-fluid accordion">
+	<div class="container-fluid table-responsive accordion">
 		<h1 class="item" th:text="#{distButinage}"></h1>
-		<table class="table table-responsive table-bordered table-striped" id="ruches">
+		<table class="table table-bordered table-striped">
 			<thead>
 				<tr>
 					<th scope="col" th:text="#{rayonkm}"></th>
@@ -56,9 +56,9 @@
 			</tbody>
 		</table>
 	</div>
-	<div class="container-fluid accordion">
+	<div class="container-fluid table-responsive accordion">
 		<h1 class="item" th:text="#{valeursParAnnee}"></h1>
-		<table class="table table-responsive table-bordered table-striped" id="ruches">
+		<table class="table table-bordered table-striped">
 			<thead>
 				<tr>
 					<th scope="col" th:text="#{date}"></th>
@@ -113,7 +113,7 @@
 		<h1 class="item" th:text="${#arrays.length(ruchesDepotEssaim)} + ' ' +
 			#{ruchesAvecEssaimDepot}"></h1>
 		<div>
-		<table class="table table-bordered table-striped datatable-tri">
+		<table class="table table-bordered table-striped datatable-tri dt-responsive">
 			<thead>
 				<tr>
 					<th scope="col" th:text="#{nom}"></th>
@@ -136,7 +136,7 @@
 		<h1 class="item" th:text="${#arrays.length(ruchesDepotHausses)} + ' ' +
 			#{ruchesAvecHaussesDepot}"></h1>
 		<div>
-		<table class="table table-bordered table-striped datatable-tri">
+		<table class="table table-bordered table-striped datatable-tri dt-responsive">
 			<thead>
 				<tr>
 					<th scope="col" th:text="#{nom}"></th>
@@ -157,7 +157,7 @@
 			th:text="${#arrays.length(ruchesPasDepotSansEssaim)} + ' ' + 
 				#{ruchesSansEssaimPasDepot}"></h1>
 		<div>
-		<table class="table table-bordered table-striped datatable-tri">
+		<table class="table table-bordered table-striped datatable-tri dt-responsive">
 			<thead>
 				<tr>
 					<th scope="col" th:text="#{nom}"></th>
@@ -181,7 +181,7 @@
 		<h1 class="item" th:text="${#arrays.length(essaimsActifSansRuche)} + ' ' +
 			#{essaimsActifsHorsRuche}"></h1>
 		<div>
-		<table class="table table-bordered table-striped datatable-tri">
+		<table class="table table-bordered table-striped datatable-tri dt-responsive">
 			<thead>
 				<tr>
 					<th scope="col" th:text="#{nom}"></th>
@@ -202,7 +202,7 @@
 			th:text="${#arrays.length(ruchersMalCales)} + ' ' +
 			#{ruchersLoinDeLeursRuches(${#numbers.formatDecimal(distRuchersTropLoins,1,0)})}"></h1>
 		<div>
-		<table class="table table-bordered table-striped datatable-tri">
+		<table class="table table-bordered table-striped datatable-tri dt-responsive">
 			<thead>
 				<tr>
 					<th scope="col" th:text="#{nom}"></th>
@@ -225,7 +225,7 @@
 		<h1 class="item" th:text="${#arrays.length(ruchesTropLoins)} + ' ' +
 			#{ruchesAPlusde(${#numbers.formatDecimal(distRuchesTropLoins,1,0)})}"></h1>
 		<div>
-		<table class="table table-bordered table-striped datatable-tri">
+		<table class="table table-bordered table-striped datatable-tri dt-responsive">
 			<thead>
 				<tr>
 					<th scope="col" th:text="#{nom}"></th>
@@ -249,7 +249,7 @@
 			th:text="${#arrays.length(ruchesPasDEvenement)} + ' ' +
 				#{ruchesSansEven(${retardRucheEvenement})}"></h1>
 		<div>
-			<table class="table table-bordered table-striped datatable-tri">
+			<table class="table table-bordered table-striped datatable-tri dt-responsive">
 				<thead>
 					<tr>
 						<th scope="col" th:text="#{nom}"></th>
@@ -273,7 +273,7 @@
 		<h1 class="item" th:text="${#arrays.length(essaimDateNaissSupAcquis)} + ' ' +
 			#{essaimDateNaissSupAcquis}"></h1>
 		<div>
-		<table class="table table-bordered table-striped datatable-tri">
+		<table class="table table-bordered table-striped datatable-tri dt-responsive">
 			<thead>
 				<tr>
 					<th scope="col" th:text="#{nom}"></th>
