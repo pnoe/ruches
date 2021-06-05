@@ -52,7 +52,7 @@ $().ready(function() {
 		</div>
 	</div>
 	<div class="container-fluid " id="ajouterRetirerRuches">
-		<table class="table table-bordered" id="retraitRuches">
+		<table class="table table-bordered table-striped" id="retraitRuches">
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>
@@ -64,11 +64,12 @@ $().ready(function() {
 				</tr>
 			</tbody>
 		</table>
+		<br/>
 		<h6>
 			<a id="actionAjoutRuches" href="#actionAjoutRuches"
 				th:text="#{ajoutRuches}"></a>
 		</h6>
-		<table class="table table-bordered" id="ajoutRuches">
+		<table class="table table-bordered table-striped" id="ajoutRuches">
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>
