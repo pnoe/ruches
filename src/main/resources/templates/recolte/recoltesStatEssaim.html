@@ -51,12 +51,12 @@ $(document).ready(function() {
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-			<h1 class="item" th:text="#{ProductionEssaimRecolte}"></h1>
+				<h1 class="item" th:text="#{ProductionEssaimRecolte}"></h1>
 			</div>
         </div>
     </div>
-	<div class="container-fluid">
-	<table class="table table-bordered table-striped" id="recoltes">
+	<div class="container-fluid table-responsive">
+		<table class="table table-bordered table-striped" id="recoltes">
 			<thead>
 				<tr>
 					<th th:text="#{essaim}"></th>
@@ -90,7 +90,6 @@ $(document).ready(function() {
 					<td></td>
 				</tr>
 			</tfoot>
-
 		</table>
 	</div>
 	<footer th:replace="include::footer"></footer>
