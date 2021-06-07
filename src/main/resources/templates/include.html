@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="common_header(scripts,styles,links)">
-<title th:text="#{lesRuches}"></title>
+<title th:text="#{Ruches}"></title>
 <meta charset="UTF-8" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1">
@@ -107,7 +107,7 @@ if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('f
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" 
-					  data-bs-toggle="dropdown" aria-expanded="false" th:text="#{ruche}">
+					  data-bs-toggle="dropdown" aria-expanded="false" th:text="#{Ruches}">
 					</a>
 					<ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
 						<li><a class="dropdown-item" th:text="#{liste}"
@@ -118,19 +118,19 @@ if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('f
 							th:text="#{listedetail}" th:href="@{/ruche/listeplus}"></a></li>
 					</ul>
 				</li>
-				<li class="nav-item"><a class="nav-link" th:text="#{hausse}"
+				<li class="nav-item"><a class="nav-link" th:text="#{Hausses}"
 					th:href="@{/hausse/liste}"></a></li>
-				<li class="nav-item"><a class="nav-link" th:text="#{rucher}"
+				<li class="nav-item"><a class="nav-link" th:text="#{Ruchers}"
 					th:href="@{/rucher/liste}">Liste des ruchers</a></li>
-				<li class="nav-item"><a class="nav-link" th:text="#{personne}"
+				<li class="nav-item"><a class="nav-link" th:text="#{Personnes}"
 					th:href="@{/personne/liste}"></a></li>
-				<li class="nav-item"><a class="nav-link" th:text="#{essaim}"
+				<li class="nav-item"><a class="nav-link" th:text="#{Essaims}"
 					th:href="@{/essaim/liste}"></a></li>
-				<li class="nav-item"><a class="nav-link" th:text="#{recolte}"
+				<li class="nav-item"><a class="nav-link" th:text="#{Recoltes}"
 					th:href="@{/recolte/liste}"></a></li>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" 
-					  data-bs-toggle="dropdown" aria-expanded="false" th:text="#{evenement}">
+					  data-bs-toggle="dropdown" aria-expanded="false" th:text="#{evenements}">
 					</a>  
 					<ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
 						<li><a class="dropdown-item" th:text="#{tous}"

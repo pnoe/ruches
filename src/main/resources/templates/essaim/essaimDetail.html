@@ -55,11 +55,11 @@ $(document).ready(function() {
 		}
 		let prompterreur = "";
 		if (tabNomRucheIncorrect.length > 0) {
-			prompterreur = [[#{lesRuches}]] + ' : ' + tabNomRucheIncorrect.join(',') + ' ' + [[#{nexistentPasOuPasVides}]];
+			prompterreur = [[#{Ruches}]] + ' : ' + tabNomRucheIncorrect.join(',') + ' ' + [[#{nexistentPasOuPasVides}]];
 		}
 		if (tabNomExiste.length > 0) {
 			if (prompterreur != "") { prompterreur += '\n'; }		
-			prompterreur += [[#{lesEssaims}]] + ' : ' + tabNomExiste.join(',') + ' ' + [[#{nomexistentdeja}]];
+			prompterreur += [[#{Essaims}]] + ' : ' + tabNomExiste.join(',') + ' ' + [[#{nomexistentdeja}]];
 			if (tabNomOk.length == 0) {
 				alert(prompterreur);
 				return false;					
