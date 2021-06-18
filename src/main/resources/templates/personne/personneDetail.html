@@ -47,7 +47,8 @@ $().ready(function() {
 			</thead>
 			<tbody>
 				<tr>
-					<td th:text="${personne.email}"></td>
+					<td><a th:href=
+			"@{'mailto:'+${personne.email}(subject=Ruches,body=${personne.prenom})}" th:text="${personne.email}"></a></td>
 					<td th:text="${personne.adresse}"></td>
 					<td th:text="${personne.login}"></td>
 					<td th:text="${personne.roles}"></td>
