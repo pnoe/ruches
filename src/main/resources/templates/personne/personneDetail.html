@@ -56,27 +56,31 @@ $().ready(function() {
 						th:text="${personne.active}? #{oui} : #{non}"></td>
 				</tr>
 			</tbody>
-		</table>
-		<h6 th:text="#{listeRuchers}"></h6>
-		<table class="table table-sm table-bordered table-striped" id="ruchers">
-			<thead>
-				<tr>
-					<th th:text="#{nom}"></th>
-					<th th:if="${session.voirInactif}" th:text="#{actif}"></th>
-					<th th:text="#{adresse}"></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="rucher : ${ruchers}">
-					<td><a th:href="@{'/rucher/'+${rucher.id}}"
-						th:text="${rucher.nom}"></a></td>
-					<td th:if="${session.voirInactif}"
-						th:text="${rucher.actif}? #{oui} : #{non}"></td>
-					<td th:text="${rucher.adresse}"></td>
-				</tr>
-			</tbody>
-		</table>
+		</table>	
+		<h6	th:unless="${#arrays.length(ruchers)}" th:text="#{Pasderucher}"></h6>
+		<th:block th:if="${#arrays.length(ruchers)}">	
+			<h6 th:text="#{listeRuchers}"></h6>
+			<table class="table table-sm table-bordered table-striped" id="ruchers">
+				<thead>
+					<tr>
+						<th th:text="#{nom}"></th>
+						<th th:if="${session.voirInactif}" th:text="#{actif}"></th>
+						<th th:text="#{adresse}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="rucher : ${ruchers}">
+						<td><a th:href="@{'/rucher/'+${rucher.id}}"
+							th:text="${rucher.nom}"></a></td>
+						<td th:if="${session.voirInactif}"
+							th:text="${rucher.actif}? #{oui} : #{non}"></td>
+						<td th:text="${rucher.adresse}"></td>
+					</tr>
+				</tbody>
+			</table>	
+		</th:block>
 	</div>
+	<br/>
 	<footer th:replace="include::footer"></footer>
 </body>
 </html>
