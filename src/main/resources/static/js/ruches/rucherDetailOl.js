@@ -3,7 +3,7 @@
    rucheParcours, distParcours, longitudeCentre, latitudeCentre, rayonsButinage, cercles, distButinage, ruches, 
    rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
    ruchetxt, lesHausses, pasdehaussetxt, parcourstxt,
-   parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token  */
+   parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token dessinEnregistretxt */
 // "use strict"
 
 function rucherDetail(ign) {
@@ -348,17 +348,10 @@ function rucherDetail(ign) {
 			'&plus=' + (e.target.id != 'liste');
 	});
 
-	$('#export-png').click(function() {
-		map.once('rendercomplete', function() {
-			domtoimage.toPng(map.getTargetElement().getElementsByClassName("ol-layers")[0])
-				.then(function(dataURL) {
-					let link = document.getElementById('image-download');
-					link.href = dataURL;
-					link.click();
-				});
-		});
-		map.renderSync();
-	});
+
+
+
+
 
 	$('#export-gpx').click(function() {
 		exportGpx();
@@ -377,44 +370,60 @@ function rucherDetail(ign) {
 	$('#dragMarker').change(function() {
 	  	translate.setActive(!this.checked);
 	});
-
-	const { jsPDF } = window.jspdf;
-	const exportPdf = $('#export-pdf');
-	exportPdf.click(function() {
-		exportPdf.disabled = true;
-		document.body.style.cursor = 'progress';
-		const format = document.getElementById('format').value;
-		const resolution = document.getElementById('resolution').value;
-		const dims = {
-			a3: [420, 297],
-			a4: [297, 210]
-		};
-		const dim = dims[format];
-		const width = Math.round(dim[0] * resolution / 25.4);
-		const height = Math.round(dim[1] * resolution / 25.4);
-		const size = map.getSize();
-		const viewResolution = map.getView().getResolution();
-		map.once('rendercomplete', function() {
-			let exportOptions = {};
-			exportOptions.width = width;
-			exportOptions.height = height;
-			domtoimage.toJpeg(map.getTargetElement().getElementsByClassName("ol-layers")[0], exportOptions)
-				.then(function(dataURL) {
-					let pdf = new jsPDF('landscape', undefined, format);
-					pdf.addImage(dataURL, 'JPEG', 0, 0, dim[0], dim[1]);
-					pdf.save('map.pdf');
-					// Reset original map size
-					map.setSize(size);
-					map.getView().setResolution(viewResolution);
-					exportPdf.disabled = false;
-					document.body.style.cursor = 'auto';
-				});
+	
+	if (!ign) {
+		// export png
+		$('#export-png').click(function() {
+			map.once('rendercomplete', function() {
+				domtoimage.toPng(map.getTargetElement().getElementsByClassName("ol-layers")[0])
+					.then(function(dataURL) {
+						let link = document.getElementById('image-download');
+						link.href = dataURL;
+						link.click();
+					});
+			});
+			map.renderSync();
 		});
-		const printSize = [width, height];
-		map.setSize(printSize);
-		const scaling = Math.min(width / size[0], height / size[1]);
-		map.getView().setResolution(viewResolution / scaling);
-	});
+		
+		// export pdf
+		const { jsPDF } = window.jspdf;
+		const exportPdf = $('#export-pdf');
+		exportPdf.click(function() {
+			exportPdf.disabled = true;
+			document.body.style.cursor = 'progress';
+			const format = document.getElementById('format').value;
+			const resolution = document.getElementById('resolution').value;
+			const dims = {
+				a3: [420, 297],
+				a4: [297, 210]
+			};
+			const dim = dims[format];
+			const width = Math.round(dim[0] * resolution / 25.4);
+			const height = Math.round(dim[1] * resolution / 25.4);
+			const size = map.getSize();
+			const viewResolution = map.getView().getResolution();
+			map.once('rendercomplete', function() {
+				let exportOptions = {};
+				exportOptions.width = width;
+				exportOptions.height = height;
+				domtoimage.toJpeg(map.getTargetElement().getElementsByClassName("ol-layers")[0], exportOptions)
+					.then(function(dataURL) {
+						let pdf = new jsPDF('landscape', undefined, format);
+						pdf.addImage(dataURL, 'JPEG', 0, 0, dim[0], dim[1]);
+						pdf.save('map.pdf');
+						// Reset original map size
+						map.setSize(size);
+						map.getView().setResolution(viewResolution);
+						exportPdf.disabled = false;
+						document.body.style.cursor = 'auto';
+					});
+			});
+			const printSize = [width, height];
+			map.setSize(printSize);
+			const scaling = Math.min(width / size[0], height / size[1]);
+			map.getView().setResolution(viewResolution / scaling);
+		});
+	}
 
 	function newVectorLineLayer() {
 		const coordsLineString = [];
@@ -436,9 +445,6 @@ function rucherDetail(ign) {
 		});
 	}
 	
-	
-	
-	
 	$('#sauve-dessin').click(function() {
 		sauveDessin();
 	});
@@ -452,7 +458,7 @@ function rucherDetail(ign) {
 	                if (req.responseText !== "OK") {
 	                    alert(req.responseText);	
 	                } else {
-	                	alert("Dessin enregistré");
+	                	alert(dessinEnregistretxt);
 	                }
 	            }
 	        }
@@ -460,9 +466,6 @@ function rucherDetail(ign) {
 	    req.send(formatKML.writeFeatures(drawLayer.getSource().getFeatures()));
 	}
 	
-	
-	
-
 	function parcoursRedraw(redraw = false) {
 		const req2 = new XMLHttpRequest();
 		req2.open('GET', ruchesurl + 'rucher/parcours/' + rucher.id, true);
