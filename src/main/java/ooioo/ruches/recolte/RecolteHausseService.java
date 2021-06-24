@@ -19,7 +19,7 @@ public class RecolteHausseService {
 				nomRuchers.add(recolteHausse.getRucher().getNom());
 			}
 		}
-		return String.join(",", nomRuchers);
+		return String.join(", ", nomRuchers);
 	}
 	
 	/**

@@ -46,6 +46,8 @@ public class RecolteController {
 	private EssaimRepository essaimRepository;
 	@Autowired
 	private	EvenementRepository evenementRepository;
+	@Autowired
+	private RecolteHausseService recolteHausseService;
 	
 	/*
 	 * Statistiques de production de miel par année
@@ -145,16 +147,8 @@ public class RecolteController {
 		model.addAttribute("recoltes", recoltes);
 		List<String> rucherListe = new ArrayList<>();
 		for (Recolte recolte : recoltes) {
-			List<String> rucher = new ArrayList<>();
 			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByRecolte(recolte);
-			for (RecolteHausse recolteHausse : recolteHausses) {
-				if ((recolteHausse.getRucher() != null) &&
-					(!rucher.contains(recolteHausse.getRucher().getNom()))
-					) {
-					rucher.add(recolteHausse.getRucher().getNom());
-				}
-			}
-			rucherListe.add(String.join(",", rucher));	
+			rucherListe.add(recolteHausseService.nomsRuchers(recolteHausses));			
 		}
 		model.addAttribute(Const.RUCHERS, rucherListe);
 		return "recolte/recoltesListe";
