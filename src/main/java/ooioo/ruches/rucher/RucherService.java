@@ -347,13 +347,16 @@ public class RucherService {
 
 	/**
 	 * Calcul de la distance entre deux points donnés en latitude, longitude
+	 * Méthode de Haversine, distance orhodromique avec rayon de la terre moyen 6371km
 	 */
 	public double distance(double lat1, double lat2, double lon1, double lon2) {
-		double latDistance = Math.toRadians(lat2 - lat1);
-		double lonDistance = Math.toRadians(lon2 - lon1);
-		double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2) + Math.cos(Math.toRadians(lat1))
-				* Math.cos(Math.toRadians(lat2)) * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
-		return 12742000d * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); // 12742000d diamètre de la terre en mètres
+		double sinLatDistance2 = Math.sin(Math.toRadians(lat2 - lat1) / 2d);
+		double sinLonDistance2 = Math.sin(Math.toRadians(lon2 - lon1) / 2d);
+		double a = sinLatDistance2 * sinLatDistance2 + Math.cos(Math.toRadians(lat1))
+				* Math.cos(Math.toRadians(lat2)) * sinLonDistance2 * sinLonDistance2;
+		return 12742000d * Math.asin(Math.sqrt(a));
+		// ou encore : return 12742000d * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); 
+		// 12742000d diamètre de la terre en mètres
 	}
 
 }
