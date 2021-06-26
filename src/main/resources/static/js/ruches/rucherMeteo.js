@@ -55,7 +55,7 @@ function rucherMeteo() {
 				fdt(day.sunset) + '</td><td>' +
 				fdt(day.moonrise) + '</td><td>' +
 				fdt(day.moonset) + '</td><td>' +
-				day.moon_phase + '&nbsp<i class="wi wi-moon-' +
+				day.moon_phase + '&nbsp<i class="wi wi-moon-alt-' +
 				moonIcon(day.moon_phase) + '"></i></td></tr>';
 		});
 		$('#previsions').append(htmlPrev);
