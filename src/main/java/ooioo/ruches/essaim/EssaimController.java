@@ -1,6 +1,7 @@
 package ooioo.ruches.essaim;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -183,7 +184,7 @@ public class EssaimController {
 		Iterable<Essaim> essaims = masquerInactif ? essaimRepository.findByActif(true) 
 				: essaimRepository.findAll();
 		List<Map<String, String>> essaimsPoids = new ArrayList<>();
-		DecimalFormat decimalFormat = new DecimalFormat("0.00");
+		DecimalFormat decimalFormat = new DecimalFormat("0.00", new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
 		Integer pTotal; // poids de miel total produit par l'essaim
 		Integer pMax; // poids de miel max lors d'une récolte
 		Integer pMin; // poids de miel min lors d'une récolte
@@ -230,8 +231,7 @@ public class EssaimController {
 						essaimPoids.put("pMoyen", "Erreur durée");
 					} else {
 						float pMoyen = pTotal*0.365242f/(float)duree;
-						DecimalFormat df = new DecimalFormat("0.00");
-						essaimPoids.put("pMoyen", df.format(pMoyen));
+						essaimPoids.put("pMoyen", decimalFormat.format(pMoyen));
 					}
 					essaimPoids.put("duree", Long.toString(duree));
 				}

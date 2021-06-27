@@ -76,12 +76,12 @@ $(document).ready(function() {
 			</thead>
 			<tbody>
 				<tr th:each="essaimPoids : ${essaimsPoids}">
-				   <td><a th:href="@{'/essaim/'+${essaimPoids.id}}"
+				  	<td><a th:href="@{'/essaim/'+${essaimPoids.id}}"
 						th:text="${essaimPoids.nom}"></a></td>
-				   <td th:text="${essaimPoids.dateAcquisition}"></td>
-				   <td th:unless="${masquerInactif}"  th:text="${essaimPoids.dateDispersion}"></td>	
+				  	<td th:text="${essaimPoids.dateAcquisition}"></td>
+				  	<td th:unless="${masquerInactif}"  th:text="${essaimPoids.dateDispersion}"></td>	
 					<td th:if="${rucherId == null}" th:text="${essaimPoids.duree}"></td>
-				   <td th:text="${essaimPoids.pTotal}"></td>	
+				  	<td th:text="${essaimPoids.pTotal}"></td>	
 					<td th:text="${essaimPoids.pMax}"></td>	
 					<td th:text="${essaimPoids.pMin}"></td>
 					<td th:if="${rucherId == null}" th:text="${essaimPoids.pMoyen}"></td>

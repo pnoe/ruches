@@ -1,6 +1,7 @@
 package ooioo.ruches.rucher;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -181,7 +182,7 @@ public class RucherController {
 		Iterable<Recolte> recoltes = recolteRepository.findAllByOrderByDateAsc();
 		Iterable<Rucher> ruchers = rucherRepository.findAll();
 		List<Map<String, String>> ruchersPoids = new ArrayList<>();
-		DecimalFormat decimalFormat = new DecimalFormat("0.00");
+		DecimalFormat decimalFormat = new DecimalFormat("0.00", new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
 		Integer pTotal; // poids de miel total produit par le rucher
 		Integer pMax; // poids de miel max lors d'une récolte
 		Integer pMin; // poids de miel min lors d'une récolte
@@ -211,8 +212,7 @@ public class RucherController {
 				rucherPoids.put("pMoyen", "");
 			} else {
 				float pMoyen = pTotal/(float)nbRecoltes;
-				DecimalFormat df = new DecimalFormat("0.00");
-				rucherPoids.put("pMoyen", df.format(pMoyen/1000));
+				rucherPoids.put("pMoyen", decimalFormat.format(pMoyen/1000));
 			}
 			rucherPoids.put("nbRecoltes", Integer.toString(nbRecoltes));
 			ruchersPoids.add(rucherPoids);

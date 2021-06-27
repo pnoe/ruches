@@ -2,6 +2,7 @@ package ooioo.ruches.recolte;
 
 import java.math.BigInteger;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -223,7 +225,7 @@ public class RecolteController {
 		Iterable<Recolte> recoltes = recolteRepository.findAllByOrderByDateAsc();
 		Iterable<Essaim> essaims = essaimRepository.findAll();
 		List<List<String>> essaimsRecoltes = new ArrayList<>();
-		DecimalFormat decimalFormat = new DecimalFormat("0.00");
+		DecimalFormat decimalFormat = new DecimalFormat("0.00", new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
 		for (Essaim essaim : essaims) {
 			List<String> poidsListe = new ArrayList<>();
 			poidsListe.add(essaim.getNom());
