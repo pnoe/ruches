@@ -12,6 +12,11 @@ function rucherMeteo() {
 	});
 	const optDateTime = { day: "numeric", month: "numeric", hour: "numeric", minute: "numeric" };
 	const optDate = { day: "numeric", month: "numeric" };
+	
+	const lang = navigator.language;
+	const digits1 = {maximumFractionDigits:1};
+	const digits2 = {maximumFractionDigits:2};
+	
 	let urlOneCall = urlPrefix + '?lat=' +
 		latitude + '&lon=' + longitude +
 		'&units=metric' +
@@ -23,16 +28,16 @@ function rucherMeteo() {
 		const dt = data.current.dt;
 		$('#date').html('<a href="' + urlOneCall + '" target="_blank">' + fdt(dt) + '</a>');
 		$('#description').html(data.current.weather[0].description);
-		$('#temperature').html(data.current.temp.toFixed(1) + '°C');
+		$('#temperature').html(data.current.temp.toLocaleString(lang, digits1) + '°C');
 		$('#humidite').html(data.current.humidity + '%');
-		$('#rosee').html(data.current.dew_point.toFixed(1) + '°C');
+		$('#rosee').html(data.current.dew_point.toLocaleString(lang, digits1) + '°C');
 		$('#pression').html(data.current.pressure + 'hPa');
-		$('#tempRessentie').html(data.current.feels_like.toFixed(1) + '°C');
-		$('#uvi').html(data.current.uvi);
-		$('#ventVitesse').html((data.current.wind_speed * 3.6).toFixed(1) + 'km/h');
+		$('#tempRessentie').html(data.current.feels_like.toLocaleString(lang, digits1) + '°C');
+		$('#uvi').html(data.current.uvi.toLocaleString(lang, digits2));
+		$('#ventVitesse').html((data.current.wind_speed * 3.6).toLocaleString(lang, digits1) + 'km/h');
 		$('#ventDirection').html(data.current.wind_deg + '° ' + degToCard(data.current.wind_deg) +
 			'&nbsp<i class="wi wi-wind from-' + data.current.wind_deg + '-deg"></i>');
-		$('#ventRafales').html((data.current.hasOwnProperty('wind_gust') ? (data.current.wind_gust * 3.6).toFixed(1) : '0') + 'km/h');
+		$('#ventRafales').html((data.current.hasOwnProperty('wind_gust') ? (data.current.wind_gust * 3.6).toLocaleString(lang, digits1) : '0') + 'km/h');
 		$('#nuages').html(data.current.clouds + '%');
 		$('#visibilite').html(data.current.visibility + 'm');
 		$('#pluieVol1h').html((data.current.hasOwnProperty('rain') ? (data.current.rain['1h']) : '0') + 'mm');
@@ -41,21 +46,21 @@ function rucherMeteo() {
 		$('#coucherSoleil').html(fdt(data.current.sunset));
 		$('#leverLune').html(fdt(data.daily[0].moonrise));
 		$('#coucherLune').html(fdt(data.daily[0].moonset));
-		$('#phaseLune').html(data.daily[0].moon_phase +
+		$('#phaseLune').html(data.daily[0].moon_phase.toLocaleString(lang, digits1) +
 			'&nbsp<i class="wi wi-moon-alt-' + moonIcon(data.daily[0].moon_phase) + '"></i>');
 		let htmlPrev = '';
 		data.daily.forEach(function(day) {
 			htmlPrev += '<tr><td>' + fd(day.dt) + '</td><td>' +
-				day.temp.min.toFixed(1) + '°C</td><td>' +
-				day.temp.max.toFixed(1) + '°C</td><td>' +
+				day.temp.min.toLocaleString(lang, digits1) + '°C</td><td>' +
+				day.temp.max.toLocaleString(lang, digits1) + '°C</td><td>' +
 				day.clouds + '%' + '</td><td>' +
 				(day.rain ? day.rain : 0) + 'mm' + '</td><td>' +
-				day.pop + '</td><td>' +
+				day.pop.toLocaleString(lang, digits2) + '</td><td>' +
 				fdt(day.sunrise) + '</td><td>' +
 				fdt(day.sunset) + '</td><td>' +
 				fdt(day.moonrise) + '</td><td>' +
 				fdt(day.moonset) + '</td><td>' +
-				day.moon_phase + '&nbsp<i class="wi wi-moon-alt-' +
+				day.moon_phase.toLocaleString(lang, digits2) + '&nbsp<i class="wi wi-moon-alt-' +
 				moonIcon(day.moon_phase) + '"></i></td></tr>';
 		});
 		$('#previsions').append(htmlPrev);
@@ -141,9 +146,9 @@ function rucherMeteo() {
 		}).done(function(data) {
 			htmlHisto += '<tr><td>' + '<a href="' + urlHisto + '" target="_blank">' +
 				fdt(data.current.dt) + '</a></td><td>' +
-				data.current.temp.toFixed(1) + '°C</td><td>' +
+				data.current.temp.toLocaleString(lang, digits1) + '°C</td><td>' +
 				data.current.clouds + '%' + '</td><td>' +
-				(data.current.wind_speed * 3.6).toFixed(1) + 'km/h</td><td>' +
+				(data.current.wind_speed * 3.6).toLocaleString(lang, digits1) + 'km/h</td><td>' +
 				data.current.wind_deg + '° ' + degToCard(data.current.wind_deg) +
 				'&nbsp<i class="wi wi-wind from-' + data.current.wind_deg + '-deg"></i></td></tr>';
 			histo(pref, time - 86400, n - 1, htmlHisto);
