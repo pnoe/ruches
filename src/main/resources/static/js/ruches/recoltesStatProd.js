@@ -47,12 +47,12 @@ function grapheRecolte() {
 			scales: {
 					ypoids: {
 						type: 'linear',
-						display: true,
+						display: 'auto',
 						position: 'left'
 					},
 					ypoidsessaim: {
 						type: 'linear',
-						display: true,
+						display: 'auto',
 						position: 'right',
 						grid: {
           					drawOnChartArea: false
