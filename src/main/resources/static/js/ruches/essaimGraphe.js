@@ -60,6 +60,22 @@ function essaimGraphe() {
 		.attr("xlink:href", function(d) {
 			return urlessaim + d.data.id;
 		})
+		.attr('class', "nodepopup")			
+		.attr('data-bs-toggle', "popover")			
+		.attr('data-bs-trigger', "hover")
+		.attr('data-html', true)
+		.attr('data-bs-content', function(d) {		
+			const l1 = essaimtxt + ' ' + d.data.name + "<br/>",
+				l2 = ruchetxt + ' ' +
+					((d.data.nomRuche != 'null') ? d.data.nomRuche : "-") + "<br/>",
+				l3 = ruchertxt + ' ' +
+					((d.data.nomRucher != 'null') ? d.data.nomRucher : "-") + "<br/>",
+				l4 = MielKgtxt + ' ' +
+					((d.data.poidsMiel != 0) ? (d.data.poidsMiel / 1000.0).toFixed(2) : "") + "<br/>",
+				l5 = MielDescKgtxt + ' ' +
+					((d.data.poidsMielDescendance != 0) ? (d.data.poidsMielDescendance / 1000.0).toFixed(2) : "") + "<br/>";	
+			return l1 + l2 + l3 + l4 + l5;	
+		})	
 		.append("circle")
 		.attr("r", 10)
 		.style("fill", function(d) {
@@ -88,4 +104,11 @@ function essaimGraphe() {
 					((d.data.poidsMielDescendance != 0) ? (d.data.poidsMielDescendance / 1000.0).toFixed(2) : "") + "</tspan>";
 			return l1 + l2 + l3 + l4 + l5;
 		});
+	$('.nodepopup').popover({
+		html: true
+	});
+	$('.popover-dismiss').popover({
+		trigger: 'focus'
+	});
+		
 }
