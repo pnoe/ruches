@@ -10,7 +10,7 @@ function essaimGraphe() {
 	}, {});
 	const treeData = [];
 	data.forEach(function(node) {
-		let parent = dataMap[node.parent];
+		const parent = dataMap[node.parent];
 		if (parent) {
 			(parent.children || (parent.children = []))
 				.push(node);
@@ -30,10 +30,10 @@ function essaimGraphe() {
 		.size([width, height]);
 	let nodes = d3.hierarchy(treeData[0]);
 	nodes = treemap(nodes);
-	let svg = d3.select("#graph").append("svg")
+	const svg = d3.select("#graph").append("svg")
 		.attr("width", width + margin.left + margin.right)
-		.attr("height", height + margin.top + margin.bottom),
-		g = svg.append("g")
+		.attr("height", height + margin.top + margin.bottom);
+	const g = svg.append("g")
 			.attr("transform",
 				"translate(" + margin.left + "," + margin.top + ")");
 	g.selectAll(".link")
@@ -46,7 +46,7 @@ function essaimGraphe() {
 				" " + d.parent.x + "," + (d.y + d.parent.y) / 2 +
 				" " + d.parent.x + "," + d.parent.y;
 		});
-	let node = g.selectAll(".node")
+	const node = g.selectAll(".node")
 		.data(nodes.descendants())
 		.enter().append("g")
 		.attr("class", function(d) {
@@ -55,6 +55,18 @@ function essaimGraphe() {
 		})
 		.attr("transform", function(d) {
 			return "translate(" + d.x + "," + d.y + ")";
+		});		
+	node.append("text")
+		.attr("dy", ".35em")
+		.attr("y", function(d) {
+			return d.children ? -87 : 10;
+		})
+		.attr('transform', function(d) {
+			return 'rotate(' + ((d.data.parent == "null") ? 0 : -70) +')';
+		})
+		.style("text-anchor", "middle")
+		.html(function(d) {
+			return "<tspan x='0' y='0.1em'>" + ((d.data.parent == "null") ? essaimtxt + " " : "") + d.data.name + "</tspan>";
 		});
 	node.append("a")
 		.attr("xlink:href", function(d) {
@@ -65,45 +77,24 @@ function essaimGraphe() {
 		.attr('data-bs-trigger', "hover")
 		.attr('data-html', true)
 		.attr('data-bs-content', function(d) {		
-			const l1 = essaimtxt + ' ' + d.data.name + "<br/>",
-				l2 = ruchetxt + ' ' +
-					((d.data.nomRuche != 'null') ? d.data.nomRuche : "-") + "<br/>",
-				l3 = ruchertxt + ' ' +
-					((d.data.nomRucher != 'null') ? d.data.nomRucher : "-") + "<br/>",
-				l4 = MielKgtxt + ' ' +
-					((d.data.poidsMiel != 0) ? (d.data.poidsMiel / 1000.0).toFixed(2) : "") + "<br/>",
-				l5 = MielDescKgtxt + ' ' +
-					((d.data.poidsMielDescendance != 0) ? (d.data.poidsMielDescendance / 1000.0).toFixed(2) : "") + "<br/>";	
-			return l1 + l2 + l3 + l4 + l5;	
+			return essaimtxt + ' ' + d.data.name + "<br/>" +
+				ruchetxt + ' ' + ((d.data.nomRuche != 'null') ? d.data.nomRuche : "-") + "<br/>" +
+				ruchertxt + ' ' + ((d.data.nomRucher != 'null') ? d.data.nomRucher : "-") + "<br/>" +
+				MielKgtxt + ' ' + ((d.data.poidsMiel != 0) ? (d.data.poidsMiel / 1000.0).toFixed(2) : "") + "<br/>" +
+				MielDescKgtxt + ' ' + ((d.data.poidsMielDescendance != 0) ? (d.data.poidsMielDescendance / 1000.0).toFixed(2) : "") + "<br/>";		
 		})	
 		.append("circle")
 		.attr("r", 10)
 		.style("fill", function(d) {
 			return d.data.couleurReine;
 		})
+		.style("opacity", 0.6)
 		.style("stroke", function(d) {
 			if (d.data.name == essaimnom) {
 				return "black";
 			}
 		});
-	node.append("text")
-		.attr("dy", ".35em")
-		.attr("y", function(d) {
-			return d.children ? -87 : 10;
-		})
-		.style("text-anchor", "middle")
-		.html(function(d) {
-			const l1 = "<tspan x='0' dy='1.2em'>" + ((d.data.parent == "null") ? essaimtxt + " " : "") + d.data.name + "</tspan>",
-				l2 = "<tspan x='0' dy='1.2em'>" + ((d.data.parent == "null") ? ruchetxt + " " : "") +
-					((d.data.nomRuche != 'null') ? d.data.nomRuche : "-") + "</tspan>",
-				l3 = "<tspan x='0' dy='1.2em'>" + ((d.data.parent == "null") ? ruchertxt + " " : "") +
-					((d.data.nomRucher != 'null') ? d.data.nomRucher : "-") + "</tspan>",
-				l4 = "<tspan x='0' dy='1.2em'>" + ((d.data.parent == "null") ? MielKgtxt + " " : "") +
-					((d.data.poidsMiel != 0) ? (d.data.poidsMiel / 1000.0).toFixed(2) : "") + "</tspan>",
-				l5 = "<tspan x='0' dy='1.2em'>" + ((d.data.parent == "null") ? MielDescKgtxt + " " : "") +
-					((d.data.poidsMielDescendance != 0) ? (d.data.poidsMielDescendance / 1000.0).toFixed(2) : "") + "</tspan>";
-			return l1 + l2 + l3 + l4 + l5;
-		});
+	
 	$('.nodepopup').popover({
 		html: true
 	});
