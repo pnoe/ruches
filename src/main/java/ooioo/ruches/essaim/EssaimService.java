@@ -99,6 +99,10 @@ public class EssaimService {
 		resultat.add(new EssaimTree(essaim.getNom(),
 				(essaim.getSouche() == null) ? "null" : essaim.getSouche().getNom(),
 				essaim.getId(),
+				essaim.getActif(),
+				// le parser json de essaim.EssaimController.graphedescendance
+				//  plante sur la date
+				// essaim.getDateAcquisition(),
 				essaim.getReineCouleurMarquage().toString(),
 				(ruche == null) ? "null" : ruche.getNom(),
 				(ruche == null) ? "null" : ruche.getRucher().getNom(),

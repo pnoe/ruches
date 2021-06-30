@@ -1,9 +1,11 @@
 /* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals d3,
 	data, essaimnom, essaimtxt,	ruchetxt, ruchertxt,
-	MielKgtxt, MielDescKgtxt, urlessaim	*/
+	MielKgtxt, MielDescKgtxt, Actif, Inactif, urlessaim	*/
 
 function essaimGraphe() {
+	const lang = navigator.language;
+	const digits2 = {maximumFractionDigits:2};
 	const dataMap = data.reduce(function(map, node) {
 		map[node.name] = node;
 		return map;
@@ -62,7 +64,7 @@ function essaimGraphe() {
 			return d.children ? -87 : 10;
 		})
 		.attr('transform', function(d) {
-			return 'rotate(' + ((d.data.parent == "null") ? 0 : -70) +')';
+			return 'rotate(' + ((d.data.parent == "null") ? 0 : -50) +')';
 		})
 		.style("text-anchor", "middle")
 		.html(function(d) {
@@ -78,10 +80,12 @@ function essaimGraphe() {
 		.attr('data-html', true)
 		.attr('data-bs-content', function(d) {		
 			return essaimtxt + ' ' + d.data.name + "<br/>" +
-				ruchetxt + ' ' + ((d.data.nomRuche != 'null') ? d.data.nomRuche : "-") + "<br/>" +
+			    '&nbsp;&nbsp;&nbsp;' + (d.data.actif ? Actif : Inactif) + "<br/>" +
+			    '&nbsp;&nbsp;&nbsp;' + d.data.dateAcquisition + "<br/>" +				
+			    ruchetxt + ' ' + ((d.data.nomRuche != 'null') ? d.data.nomRuche : "-") + "<br/>" +
 				ruchertxt + ' ' + ((d.data.nomRucher != 'null') ? d.data.nomRucher : "-") + "<br/>" +
-				MielKgtxt + ' ' + ((d.data.poidsMiel != 0) ? (d.data.poidsMiel / 1000.0).toFixed(2) : "") + "<br/>" +
-				MielDescKgtxt + ' ' + ((d.data.poidsMielDescendance != 0) ? (d.data.poidsMielDescendance / 1000.0).toFixed(2) : "") + "<br/>";		
+				MielKgtxt + ' ' + ((d.data.poidsMiel != 0) ? (d.data.poidsMiel / 1000.0).toLocaleString(lang, digits2) : "") + "<br/>" +
+				MielDescKgtxt + ' ' + ((d.data.poidsMielDescendance != 0) ? (d.data.poidsMielDescendance / 1000.0).toLocaleString(lang, digits2) : "") + "<br/>";		
 		})	
 		.append("circle")
 		.attr("r", 10)
