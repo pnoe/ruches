@@ -36,6 +36,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import ooioo.ruches.Const;
 import ooioo.ruches.IdNom;
@@ -399,6 +401,8 @@ public class EssaimController {
 				}
 				List<EssaimTree> essaimTree = essaimService.listeEssaimsFils(essaimRoot);
 				ObjectMapper objectMapper = new ObjectMapper();
+				objectMapper.registerModule(new JavaTimeModule());
+				objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 				String essaimTreeJson = objectMapper.writeValueAsString(essaimTree);
 				model.addAttribute("essaimTree", essaimTreeJson);
 			} catch (JsonProcessingException e) {

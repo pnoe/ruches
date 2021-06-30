@@ -10,14 +10,14 @@ public class EssaimTree {
 	}
 
 	public EssaimTree(String name, String parent, Long id, boolean actif,
-			// LocalDate dateAcquisition,
+			LocalDate dateAcquisition,
 			String couleurReine, String nomRuche, String nomRucher,
 			Integer poidsMiel, Integer poidsMielDescendance) {
 		this.name = name;
 		this.parent = parent;
 		this.id = id;
 		this.actif = actif;
-		// this.dateAcquisition = dateAcquisition;
+		this.dateAcquisition = dateAcquisition;
 		this.couleurReine = couleurReine;
 		this.nomRuche = nomRuche;
 		this.nomRucher = nomRucher;
@@ -48,10 +48,8 @@ public class EssaimTree {
 	/**
 	 * Date d'acquisition de l'essaim
 	 */
-	/*
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dateAcquisition;
-	*/
 	
 	/*
 	 * Couleur du marquage de la reine
@@ -149,6 +147,14 @@ public class EssaimTree {
 
 	public void setActif(boolean actif) {
 		this.actif = actif;
+	}
+
+	public LocalDate getDateAcquisition() {
+		return dateAcquisition;
+	}
+
+	public void setDateAcquisition(LocalDate dateAcquisition) {
+		this.dateAcquisition = dateAcquisition;
 	}
 
 }

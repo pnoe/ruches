@@ -102,7 +102,7 @@ public class EssaimService {
 				essaim.getActif(),
 				// le parser json de essaim.EssaimController.graphedescendance
 				//  plante sur la date
-				// essaim.getDateAcquisition(),
+				essaim.getDateAcquisition(),
 				essaim.getReineCouleurMarquage().toString(),
 				(ruche == null) ? "null" : ruche.getNom(),
 				(ruche == null) ? "null" : ruche.getRucher().getNom(),
