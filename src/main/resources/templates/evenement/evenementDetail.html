@@ -17,9 +17,21 @@ $(document).ready(function() {
 	<br />
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col">
-				<h1 class="item" id="titre"
-					th:text="#{evenement}+' '+${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"></h1>
+			<div class="col">			
+				<h1 class="item">
+					<a th:if="${type}==''" th:href="@{'/evenement/liste'}" th:text="#{evenement}"></a>
+					<a th:if="${type}=='ruche'" th:href="@{'/evenement/ruche/'+${itemId}}" th:text="#{evenement}"></a>					
+					<a th:if="${type}=='rucher'" th:href="@{'/evenement/rucher/'+${itemId}}" th:text="#{evenement}"></a>					
+					<a th:if="${type}=='essaim'" th:href="@{'/evenement/essaim/'+${itemId}}" th:text="#{evenement}"></a>					
+					<a th:if="${type}=='hausse'" th:href="@{'/evenement/hausse/'+${itemId}}" th:text="#{evenement}"></a>							
+					<a th:if="${type=='sucre'}" th:href="@{'/evenement/essaim/listeSucre'}" th:text="#{evenementssucre}"></a>
+					<a th:if="${type=='traitement'}" th:href="@{'/evenement/essaim/listeTraitement'}" th:text="#{evenementstraitement}"></a>
+					<a th:if="${type=='poids'}" th:href="@{'/evenement/ruche/listePoidsRuche'}" th:text="#{evenementspoidsruche}"></a>
+					<a th:if="${type=='cadre'}" th:href="@{'/evenement/ruche/listeCadreRuche'}" th:text="#{evenementcadreruche}"></a>
+					<a th:if="${type=='remplissage'}" th:href="@{'/evenement/hausse/listeRemplissageHausse'}" th:text="#{evenementremplissagehausse}"></a>
+					<a th:if="${type=='ajoutruche'}" th:href="@{'/evenement/rucher/listeRucheAjout'}" th:text="#{evenementsrucheajout}"></a>
+					<th:block th:text="' '+${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"></th:block>
+				</h1>
 			</div>
 			<div class="col">
 				<a th:href="@{'/evenement/modifie/'+${evenement.id}}"> <span

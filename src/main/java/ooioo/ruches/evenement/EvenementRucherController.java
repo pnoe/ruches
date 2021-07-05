@@ -32,7 +32,6 @@ import ooioo.ruches.rucher.RucherRepository;
 @RequestMapping("/evenement/rucher")
 public class EvenementRucherController {
 
-	private static final String RUCHERID = "rucherId";
 	private final Logger logger = LoggerFactory.getLogger(EvenementRucherController.class);
 
 	@Autowired
@@ -136,9 +135,10 @@ public class EvenementRucherController {
 	@GetMapping("/{rucherId}")
 	public String listeEvenementRucher(Model model, @PathVariable long rucherId) {
 		model.addAttribute(Const.EVENEMENTS, evenementRepository.findByRucherId(rucherId));
-		model.addAttribute(RUCHERID, rucherId);
+		model.addAttribute("itemId", rucherId);
 		Iterable<RecolteHausse> recolteHausses = recolteHausseRepository.findByRucherId(rucherId);
 		model.addAttribute("recoltehausses", recolteHausses);
+		model.addAttribute("type", "rucher");
 		ArrayList<LocalDateTime> datesRecolteHausses = new ArrayList<>();
 		for (RecolteHausse recolteHausse : recolteHausses) {
 			datesRecolteHausses.add(recolteHausse.getRecolte().getDate());

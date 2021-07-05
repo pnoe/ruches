@@ -82,7 +82,7 @@ $(document).ready(function() {
 				<tr th:each="evenement : ${evenements}">
 					<td>
 						<a th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
-							th:href="@{'/evenement/'+${evenement.id}}"></a>
+							th:href="@{'/evenement/'+${evenement.id}}+'?type=sucre'"></a>
 					</td>
 					<td th:text="${evenement.ruche?.nom}"></td>
 					<td th:text="${evenement.essaim?.nom}"></td>

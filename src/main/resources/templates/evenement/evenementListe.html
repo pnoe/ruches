@@ -24,17 +24,17 @@
 			<div class="col">
 				<h1 class="item">
 					<th:block th:text="#{evenements}+ ' '"></th:block>
-	     			<a th:if="${rucheId}"
-						th:href="@{'/ruche/'+${rucheId}}"
+	     			<a th:if="${type}=='ruche'"
+						th:href="@{'/ruche/'+${itemId}}"
 						th:text="#{ruche} + ' ' + ${rucheNom}"></a>
-					<a th:if="${rucherId}"
-						th:href="@{'/rucher/'+${rucherId}}"
+					<a th:if="${type}=='rucher'"
+						th:href="@{'/rucher/'+${itemId}}"
 						th:text="#{rucher} + ' ' + ${rucherNom}"></a>
-					<a th:if="${essaimId}"
-						th:href="@{'/essaim/'+${essaimId}}"
+					<a th:if="${type}=='essaim'"
+						th:href="@{'/essaim/'+${itemId}}"
 						th:text="#{essaim} + ' ' + ${essaimNom}"></a>
-					<a th:if="${hausseId}"
-						th:href="@{'/hausse/'+${hausseId}}"
+					<a th:if="${type}=='hausse'"
+						th:href="@{'/hausse/'+${itemId}}"
 						th:text="#{hausse} + ' ' + ${hausseNom}"></a>
 				</h1>			
 			</div>
@@ -67,7 +67,9 @@
 				<tr th:each="evenement : ${evenements}">
 					<td>
 						<a th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
-							th:href="@{'/evenement/'+${evenement.id}}"></a>
+							th:with="url='/evenement/'+${evenement.id}+
+								(${type}?('?type='+${type}+'&itemId='+${itemId}):'')"
+							th:href="@{${url}}"></a>		
 					</td>
 					<td th:text="#{${evenement.type}}"></td>
 					<td th:unless="${rucheId}" th:text="${evenement.ruche?.nom}"></td>

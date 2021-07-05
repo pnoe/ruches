@@ -93,7 +93,10 @@ $(document).ready(function() {
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<h1 class="item" id="titre" th:text="#{essaim}+' '+${essaim.nom}"></h1>
+				<h1 class="item">
+					<a th:href="@{'/essaim/liste'}" th:text="#{essaim}"></a>
+					<th:block th:text="' '+${essaim.nom}"></th:block>
+				</h1>
 			</div>
 			<div class="col">
 				<a th:href="@{'/essaim/modifie/'+${essaim.id}}"

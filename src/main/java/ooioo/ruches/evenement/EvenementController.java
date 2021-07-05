@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -88,6 +89,27 @@ public class EvenementController {
 	 * Détail d'un événement
 	 */
 	@GetMapping("/{evenementId}")
+	public String evenement(Model model, @PathVariable long evenementId,
+			@RequestParam(defaultValue = "") @Nullable String type, 
+			
+			@RequestParam(defaultValue = "0") @Nullable Long itemId) {		
+		
+		Optional<Evenement> evenementOpt = evenementRepository.findById(evenementId);
+		if (evenementOpt.isPresent()) {
+			model.addAttribute(Const.EVENEMENT, evenementOpt.get());
+			model.addAttribute("type", type);
+			
+			model.addAttribute("itemId", itemId);
+			
+		} else {
+			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
+			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
+			return Const.INDEX;
+		}
+		return "evenement/evenementDetail";
+	}
+/*
+	@GetMapping("/{evenementId}")
 	public String evenement(Model model, @PathVariable long evenementId) {
 		Optional<Evenement> evenementOpt = evenementRepository.findById(evenementId);
 		if (evenementOpt.isPresent()) {
@@ -99,7 +121,7 @@ public class EvenementController {
 		}
 		return "evenement/evenementDetail";
 	}
-
+*/
 	/*
 	 * Suppression d'un événement
 	 */

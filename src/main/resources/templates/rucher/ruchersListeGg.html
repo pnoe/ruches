@@ -21,7 +21,10 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-			<h1 class="item" th:text="#{rucherscarteggmaps}"></h1>
+				<h1 class="item">
+					<a th:href="@{'/rucher/liste'}" th:text="#{Ruchers}"></a>
+					<th:block th:text="' '+#{carteGg}"></th:block>
+				</h1>
 			</div>
 			<div class="col">
 				<input type="text" th:placeholder="#{recherche}" id="searchtext"/>

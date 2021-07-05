@@ -39,7 +39,10 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<h1 class="item" id="titre" th:text="#{rucher}+' '+${rucher.nom}"></h1>
+				<h1 class="item">
+					<a th:href="@{'/rucher/liste'}" th:text="#{rucher}"></a>
+					<th:block th:text="' '+${rucher.nom}"></th:block>
+				</h1>
 			</div>
 			<div class="col">
 				<a th:href="@{'/rucher/modifie/'+${rucher.id}}" 
@@ -59,8 +62,10 @@
        			<a id="supprime" th:href="@{'/rucher/supprime/'+${rucher.id}}" 
        			  class="confirmationsupp bi bi-trash" style="color:red" 
        			  th:title="#{supprimer}" aria-hidden="true"></a>&nbsp;
+       			  
        			<a th:href="@{'/evenement/rucher/'+${rucher.id}}"
        			  class="padicons bi bi-list-ul" th:title="#{evenements}" aria-hidden="true"></a>
+       			  
 				<a th:href="@{'/evenement/rucher/commentaire/'+${rucher.id}}"
 				  class="bi bi-chat-text" th:title="#{evenementCommentaire}" aria-hidden="true"></a>  
 				&nbsp;
