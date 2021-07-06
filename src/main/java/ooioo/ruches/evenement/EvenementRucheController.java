@@ -28,8 +28,6 @@ import ooioo.ruches.Utils;
 import ooioo.ruches.essaim.EssaimService;
 import ooioo.ruches.hausse.Hausse;
 import ooioo.ruches.hausse.HausseRepository;
-import ooioo.ruches.recolte.RecolteHausse;
-import ooioo.ruches.recolte.RecolteHausseRepository;
 import ooioo.ruches.ruche.Ruche;
 import ooioo.ruches.ruche.RucheRepository;
 import ooioo.ruches.ruche.RucheService;
@@ -45,13 +43,9 @@ public class EvenementRucheController {
 	@Autowired
 	private RucheRepository rucheRepository;
 	@Autowired
-	private RecolteHausseRepository recolteHausseRepository;
-	@Autowired
 	private HausseRepository hausseRepository;
-	
 	@Autowired
 	MessageSource messageSource;
-	
 	@Autowired
 	private RucheService rucheService;
 	@Autowired
@@ -294,14 +288,7 @@ public class EvenementRucheController {
 	public String liste(Model model, @PathVariable long rucheId) {
 		model.addAttribute(Const.EVENEMENTS, evenementRepository.findByRucheId(rucheId));
 		model.addAttribute("itemId", rucheId);
-		Iterable<RecolteHausse> recolteHausses = recolteHausseRepository.findByRucheId(rucheId);
-		model.addAttribute("recoltehausses", recolteHausses);
 		model.addAttribute("type", "ruche");
-		ArrayList<LocalDateTime> datesRecolteHausses = new ArrayList<>();
-		for (RecolteHausse recolteHausse : recolteHausses) {
-			datesRecolteHausses.add(recolteHausse.getRecolte().getDate());
-		}
-		model.addAttribute("datesRecolteHausses", datesRecolteHausses);
 		// pour lien retour dans la liste vers détail ruche
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 		if (rucheOpt.isPresent()) {

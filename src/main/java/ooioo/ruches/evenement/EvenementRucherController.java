@@ -2,7 +2,6 @@ package ooioo.ruches.evenement;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
@@ -23,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import ooioo.ruches.Const;
 import ooioo.ruches.Utils;
-import ooioo.ruches.recolte.RecolteHausse;
-import ooioo.ruches.recolte.RecolteHausseRepository;
 import ooioo.ruches.rucher.Rucher;
 import ooioo.ruches.rucher.RucherRepository;
 
@@ -38,9 +35,6 @@ public class EvenementRucherController {
 	private EvenementRepository evenementRepository;
 	@Autowired
 	private RucherRepository rucherRepository;
-	@Autowired
-	private RecolteHausseRepository recolteHausseRepository;
-	
 	@Autowired
 	MessageSource messageSource;
 	
@@ -136,14 +130,7 @@ public class EvenementRucherController {
 	public String listeEvenementRucher(Model model, @PathVariable long rucherId) {
 		model.addAttribute(Const.EVENEMENTS, evenementRepository.findByRucherId(rucherId));
 		model.addAttribute("itemId", rucherId);
-		Iterable<RecolteHausse> recolteHausses = recolteHausseRepository.findByRucherId(rucherId);
-		model.addAttribute("recoltehausses", recolteHausses);
 		model.addAttribute("type", "rucher");
-		ArrayList<LocalDateTime> datesRecolteHausses = new ArrayList<>();
-		for (RecolteHausse recolteHausse : recolteHausses) {
-			datesRecolteHausses.add(recolteHausse.getRecolte().getDate());
-		}
-		model.addAttribute("datesRecolteHausses", datesRecolteHausses);
 		// pour lien retour dans la liste vers détail rucher
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {

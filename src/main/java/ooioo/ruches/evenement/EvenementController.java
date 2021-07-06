@@ -25,7 +25,6 @@ import ooioo.ruches.Const;
 import ooioo.ruches.Utils;
 import ooioo.ruches.essaim.EssaimRepository;
 import ooioo.ruches.hausse.HausseRepository;
-import ooioo.ruches.recolte.RecolteHausseRepository;
 import ooioo.ruches.ruche.RucheRepository;
 import ooioo.ruches.rucher.RucherRepository;
 
@@ -49,8 +48,6 @@ public class EvenementController {
 	private EssaimRepository essaimRepository;
 	@Autowired
 	private RucherRepository rucherRepository;
-	@Autowired
-	private RecolteHausseRepository recolteHausseRepository;
 
 	/*
 	 * Liste événements
@@ -66,28 +63,22 @@ public class EvenementController {
 		switch (periode) {
 		case 1: // toute période
 			model.addAttribute(Const.EVENEMENTS, evenementRepository.findAll());
-			// model.addAttribute("recolteHausses", recolteHausseRepository.findAll());
 			break;
 		case 2: // moins d'un an
 			model.addAttribute(Const.EVENEMENTS, evenementRepository.findPeriode(LocalDateTime.now().minusYears(1)));
-			// model.addAttribute("recolteHausses", recolteHausseRepository.findPeriode(LocalDateTime.now().minusYears(1)));
 			break;
 		case 3: // moins d'un mois
 			model.addAttribute(Const.EVENEMENTS, evenementRepository.findPeriode(LocalDateTime.now().minusMonths(1)));
-			// model.addAttribute("recolteHausses", recolteHausseRepository.findPeriode(LocalDateTime.now().minusMonths(1)));
 			break;
 		case 4: // moins d'une semaine
 			model.addAttribute(Const.EVENEMENTS, evenementRepository.findPeriode(LocalDateTime.now().minusWeeks(1)));
-			// model.addAttribute("recolteHausses", recolteHausseRepository.findPeriode(LocalDateTime.now().minusWeeks(1)));
 			break;
 		case 5: // moins d'un jour
 			model.addAttribute(Const.EVENEMENTS, evenementRepository.findPeriode(LocalDateTime.now().minusDays(1)));
-			// model.addAttribute("recolteHausses", recolteHausseRepository.findPeriode(LocalDateTime.now().minusDays(1)));
 			break;
 		default:
 			// ajouter tests date1 et date2 non null
 			model.addAttribute(Const.EVENEMENTS, evenementRepository.findPeriode(date1, date2));
-			// model.addAttribute("recolteHausses", recolteHausseRepository.findPeriode(date1, date2));
 			model.addAttribute("datestext", datestext);
 		}	
 		model.addAttribute("periode", periode);

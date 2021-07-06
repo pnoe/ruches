@@ -1,6 +1,5 @@
 package ooioo.ruches.recolte;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -12,14 +11,6 @@ import ooioo.ruches.hausse.Hausse;
 
 @Repository("recolteHausseRepository")
 public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, Long> {
-	
-	/*
-	@Query(value = "select recoltehausse from RecolteHausse recoltehausse where recoltehausse.recolte.date > ?1")
-	Iterable<RecolteHausse> findPeriode(LocalDateTime date);
-	
-	@Query(value = "select recoltehausse from RecolteHausse recoltehausse where recoltehausse.recolte.date > ?1 and recoltehausse.recolte.date < ?2")
-	Iterable<RecolteHausse> findPeriode(LocalDateTime date1, LocalDateTime date2);
-	*/
 	
 	RecolteHausse findByRecolteAndHausse(Recolte recolte, Hausse hausse);
 	

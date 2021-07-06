@@ -2,7 +2,6 @@ package ooioo.ruches.evenement;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
@@ -26,8 +25,6 @@ import ooioo.ruches.Utils;
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.essaim.EssaimRepository;
 import ooioo.ruches.essaim.EssaimService;
-import ooioo.ruches.recolte.RecolteHausse;
-import ooioo.ruches.recolte.RecolteHausseRepository;
 import ooioo.ruches.ruche.Ruche;
 import ooioo.ruches.ruche.RucheRepository;
 import ooioo.ruches.rucher.Rucher;
@@ -50,8 +47,6 @@ public class EvenementEssaimController {
 	private RucherRepository rucherRepository;
 	@Autowired
 	private EssaimRepository essaimRepository;
-	@Autowired
-	private RecolteHausseRepository recolteHausseRepository;
 
 	@Autowired
 	MessageSource messageSource;
@@ -371,14 +366,7 @@ public class EvenementEssaimController {
 	public String liste(Model model, @PathVariable long essaimId) {
 		model.addAttribute(Const.EVENEMENTS, evenementRepository.findByEssaimId(essaimId));
 		model.addAttribute("itemId", essaimId);
-		Iterable<RecolteHausse> recolteHausses = recolteHausseRepository.findByEssaimId(essaimId);
-		model.addAttribute("recoltehausses", recolteHausses);
 		model.addAttribute("type", "essaim");
-		ArrayList<LocalDateTime> datesRecolteHausses = new ArrayList<>();
-		for (RecolteHausse recolteHausse : recolteHausses) {
-			datesRecolteHausses.add(recolteHausse.getRecolte().getDate());
-		}
-		model.addAttribute("datesRecolteHausses", datesRecolteHausses);
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isPresent()) {
 			model.addAttribute("essaimNom", essaimOpt.get().getNom());
