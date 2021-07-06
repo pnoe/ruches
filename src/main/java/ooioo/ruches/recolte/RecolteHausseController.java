@@ -1,6 +1,8 @@
 package ooioo.ruches.recolte;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -236,6 +238,7 @@ public class RecolteHausseController {
 		StringBuilder retHausses =  new StringBuilder();
 		StringBuilder retRuches = new StringBuilder();
 		if (recolteOpt.isPresent()) {
+			DecimalFormat decimalFormat = new DecimalFormat("0.00", new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
 			Recolte recolte = recolteOpt.get();
 			model.addAttribute(Const.RECOLTE, recolte);
 			Iterable<Hausse> hausses = hausseRepository.findHaussesInRecolteId(recolteId);
@@ -268,7 +271,9 @@ public class RecolteHausseController {
 					}
 					// TODO date de l'événement modifiable dans un formulaire ?
 					String commentaireEve = "Récolte " + recolte.getDate().
-							format(DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
+							format(DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM)) + " " +
+							decimalFormat.format(recolteHausse.getPoidsAvant().subtract(recolteHausse.getPoidsApres())) +
+							"kg";
 					Evenement evenementRetrait = new Evenement(Utils.dateTimeDecal(session),
 							TypeEvenement.HAUSSERETRAITRUCHE, ruche, essaim, rucher, hausse,
 							hausse.getOrdreSurRuche().toString(), commentaireEve);
