@@ -82,7 +82,22 @@
 						<td class="num" th:case="*" th:text="${evenement.valeur}"></td>						
 					</th:block>
 					<td th:text="${evenement.commentaire}"></td>
-				</tr>	
+				</tr>
+				
+				<!--[*  
+				<tr th:each="recolteHausse : ${recolteHausses}">
+					<td>
+						<a th:text="${#temporals.format(recolteHausse.recolte.date, 'yyyy/MM/dd HH:mm')}"></a>		
+					</td>
+					<td th:text="#{Hausserecolte}"></td>
+					<td th:unless="${rucheId}" th:text="${recolteHausse.ruche?.nom}"></td>
+					<td th:unless="${essaimId}" th:text="${recolteHausse.essaim?.nom}"></td>
+					<td th:unless="${rucherId}" th:text="${recolteHausse.rucher?.nom}"></td>
+					<td th:unless="${hausseId}" th:text="${recolteHausse.hausse?.nom}"></td>
+					<td th:text="${#numbers.formatDecimal(recolteHausse.poidsAvant - recolteHausse.poidsApres,1,2,'COMMA')}"></td>
+				</tr>					
+				*]-->
+					
 			</tbody>
 		</table>
 	</div>
