@@ -27,7 +27,10 @@ $(document).ready(function() {
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<h1 class="item" th:text="#{ProductionEssaim}"></h1>
+				<h1 class="item">
+					<a th:href="@{'/essaim/liste'}" th:text="#{Essaims}"></a>
+					<th:block th:text="' '+#{Production}"></th:block>
+				</h1>
 			</div>
 			<div class="col">
 				<a href="#" class="bi bi-question-lg" data-bs-toggle="popover"
