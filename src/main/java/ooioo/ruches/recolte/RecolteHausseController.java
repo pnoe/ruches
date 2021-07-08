@@ -3,6 +3,7 @@ package ooioo.ruches.recolte;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -233,7 +236,12 @@ public class RecolteHausseController {
 	 */
 	@PostMapping("/haussesDepot/{recolteId}")
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody String haussesDepot(HttpSession session, Model model, @PathVariable long recolteId) {
+	public @ResponseBody String haussesDepot(HttpSession session, Model model, @PathVariable long recolteId,
+		
+			// @RequestParam String date) {
+			@RequestParam @DateTimeFormat(pattern="yyyy/MM/dd HH:mm") LocalDateTime date) {
+		// System.out.println(date);
+		
 		Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
 		StringBuilder retHausses =  new StringBuilder();
 		StringBuilder retRuches = new StringBuilder();
@@ -269,18 +277,25 @@ public class RecolteHausseController {
 						essaim = ruche.getEssaim();
 						rucher = ruche.getRucher();
 					}
-					// TODO date de l'événement modifiable dans un formulaire ?
+					
 					String commentaireEve = "Récolte " + recolte.getDate().
 							format(DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM)) + " " +
 							decimalFormat.format(recolteHausse.getPoidsAvant().subtract(recolteHausse.getPoidsApres())) +
 							"kg";
-					Evenement evenementRetrait = new Evenement(Utils.dateTimeDecal(session),
+					
+					Evenement evenementRetrait = new Evenement(date,
+							
+					// Evenement evenementRetrait = new Evenement(Utils.dateTimeDecal(session),
 							TypeEvenement.HAUSSERETRAITRUCHE, ruche, essaim, rucher, hausse,
 							hausse.getOrdreSurRuche().toString(), commentaireEve);
 					evenementRepository.save(evenementRetrait);
+					
+					// Evenement evenementRemplissage = new Evenement(date,
+
 					Evenement evenementRemplissage = new Evenement(Utils.dateTimeDecal(session),
 							TypeEvenement.HAUSSEREMPLISSAGE, ruche, essaim, rucher, hausse,
 							"0", commentaireEve);
+					
 					evenementRepository.save(evenementRemplissage);
 					hausse.setRuche(null);
 					hausse.setOrdreSurRuche(null);

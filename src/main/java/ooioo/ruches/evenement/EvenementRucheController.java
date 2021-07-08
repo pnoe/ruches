@@ -59,7 +59,7 @@ public class EvenementRucheController {
 			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext) {
 		if (periode == null) {
-			periode = 3;
+			periode = 1;
 		}
 		Iterable<Evenement> evenements;
 		switch (periode) {
@@ -108,7 +108,7 @@ public class EvenementRucheController {
 			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext) {
 		if (periode == null) {
-			periode = 3;
+			periode = 1;
 		}
 		Iterable<Evenement> evenements;
 		switch (periode) {

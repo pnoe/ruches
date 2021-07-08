@@ -58,7 +58,7 @@ public class EvenementController {
 			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext) {
 		if (periode == null) {
-			periode = 3;
+			periode = 2;
 		}
 		switch (periode) {
 		case 1: // toute période
