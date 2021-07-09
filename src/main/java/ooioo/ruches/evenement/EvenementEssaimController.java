@@ -14,6 +14,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,9 +64,19 @@ public class EvenementEssaimController {
 	public String listeSucre(Model model, @RequestParam(required = false) Integer periode,
 			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1, 
 			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
-			@RequestParam(required = false) String datestext) {
+			@RequestParam(required = false) String datestext,
+			@CookieValue(value = "p", defaultValue = "1") Integer pCookie,
+			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
+			@CookieValue(value = "d1", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie, 
+			@CookieValue(value = "d2", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie	
+			) {
 		if (periode == null) {
-			periode = 1;
+			periode = pCookie;
+			if (pCookie == 6) {
+				date1 = d1Cookie;
+				date2 = d2Cookie;
+				datestext = dxCookie;
+			}
 		}
 		switch (periode) {
 		case 1: // toute période
@@ -102,11 +113,21 @@ public class EvenementEssaimController {
 	 */
 	@GetMapping("/listeTraitement")
 	public String listeTraitement(Model model, @RequestParam(required = false) Integer periode,
-	@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1, 
-	@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
-	@RequestParam(required = false) String datestext) {
+		@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1, 
+		@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
+		@RequestParam(required = false) String datestext,
+		@CookieValue(value = "p", defaultValue = "1") Integer pCookie,
+		@CookieValue(value = "dx", defaultValue = "") String dxCookie,
+		@CookieValue(value = "d1", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie, 
+		@CookieValue(value = "d2", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie	
+		) {
 		if (periode == null) {
-			periode = 1;
+			periode = pCookie;
+			if (pCookie == 6) {
+				date1 = d1Cookie;
+				date2 = d2Cookie;
+				datestext = dxCookie;
+			}
 		}
 		switch (periode) {
 		case 1: // toute période

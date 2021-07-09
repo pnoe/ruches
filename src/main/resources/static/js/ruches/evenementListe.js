@@ -2,6 +2,7 @@
 /* globals listeEvenements, buttontextprint, buttontextcol */
 
 function evenementListe(initDatatable) {
+	const cookieOpt = ";SameSite=Strict;path=" + window.location.pathname;
 	if (initDatatable) {
 		$('#evenements').DataTable({
 			order: [[0, 'desc']],
@@ -19,6 +20,7 @@ function evenementListe(initDatatable) {
 	}
 	$('#periode').on('change', function() {
 		if ($(this).val() !== '6') {
+			document.cookie = "p=" + $(this).val() + cookieOpt;
 			this.form.submit();
 		}
 	});
@@ -33,10 +35,15 @@ function evenementListe(initDatatable) {
 				}
 			}).bind('datepicker-change', function(evt, obj) {
 				evt.stopPropagation();
-				$(this).data('dateRangePicker');
-				$('#date1').val(obj.date1.toISOString());
-				$('#date2').val(obj.date2.toISOString());
-				$('#datestext').val($(this).parent().find("option:selected").text());
+				const d1 = obj.date1.toISOString();
+				const d2 = obj.date2.toISOString();
+				window.document.cookie = "p=6" + cookieOpt;
+				window.document.cookie = "d1=" + d1 + cookieOpt;
+				window.document.cookie = "d2=" + d2 + cookieOpt;
+				window.document.cookie = "dx=" +  encodeURIComponent(obj.value) + cookieOpt;
+				$('#date1').val(d1);
+				$('#date2').val(d2);
+				$('#datestext').val(obj.value);
 				this.form.submit();
 			});
 		}
