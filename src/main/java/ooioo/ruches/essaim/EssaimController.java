@@ -124,7 +124,7 @@ public class EssaimController {
 				if (ageMois > maxAgeMois) {
 					// Si la reine à plus de maxAgeMois on ne la prends pas en compte
 					// TODO afficher un message en haut de la page de stat
-					logger.info("Essaim {}, âge supérieur à huit ans", essaim.getNom());
+					logger.info("Essaim {}, âge supérieur à {} mois", essaim.getNom(), maxAgeMois);
 					continue;
 				}
 				if (rucheRepository.findByEssaimId(essaim.getId()) == null) {
