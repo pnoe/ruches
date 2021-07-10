@@ -51,7 +51,10 @@ $(document).ready(function() {
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<h1 class="item" th:text="#{ProductionEssaimRecolte}"></h1>
+				<h1 class="item">
+					<th:block th:text="#{ProductionEssaims}"></th:block>
+					<a th:href="@{'/recolte/liste'}" th:text="#{Recoltes}"></a>
+				</h1>
 			</div>
         </div>
     </div>

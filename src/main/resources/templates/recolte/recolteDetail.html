@@ -10,11 +10,9 @@
 
 
 <script th:inline="javascript">
-$(document).ready(function() {
-	
+$(document).ready(function() {	
 	$('#date').hide();
 	$('#dateOK').hide();
-	
 	$("#enlevehausses").click(function() {
 		/*[- */ 
 			La fonction est désactivée après 30 jours 
@@ -27,43 +25,25 @@ $(document).ready(function() {
 		if (!confirm([[#{enlevertoutesleshaussesrecolte}]])) {
 			return;
 		}
-		
 		$('#date').show();
 		$('#dateOK').show();
 		$('#date').attr('value', moment().format("MM/DD/YYYY HH:mm"));
 		$('#date').focus();
-		
-		/*
-		let requestData = {};
-		const _csrf_token = [[${_csrf.token}]];
-	    const _csrf_param_name = [[${_csrf.parameterName}]];
-	    requestData[_csrf_param_name] = _csrf_token;
-		$.post( [[@{/recolte/haussesDepot/}]] + [[${recolte.id}]],
-				requestData).done(function (data) { 
-					alert( data );
-		});
-		*/
 	});
-	
 	$('#dateOK').on('click', function() {
 		const date = $('#date').val();
 		$('#date').hide();
 		$('#dateOK').hide();
-		
 		let requestData = {};
 		const _csrf_token = [[${_csrf.token}]];
 	    const _csrf_param_name = [[${_csrf.parameterName}]];
 	    requestData[_csrf_param_name] = _csrf_token;
-		
 	    requestData['date'] = date;
-	    
 	    $.post( [[@{/recolte/haussesDepot/}]] + [[${recolte.id}]],
 				requestData).done(function (data) { 
 					alert( data );
 		});		
 	});
-	
-	
 	$('.confirmationsupprime').on('click', function () {
         return confirm([[#{supprimerrecolteethausses}]]);
     });
