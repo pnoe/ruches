@@ -443,6 +443,9 @@ public class EssaimController {
 	@GetMapping("/cree")
 	public String cree(HttpSession session, Model model) {
 		Iterable <IdNom> idNoms = essaimRepository.findAllProjectedIdNomByOrderByNom();
+		// Liste des noms des essaims pour nom essaim unique
+		//   en modification il faudra retirer le nom de l'essaim à modifier
+		//   de cette liste
 		List<String> noms = new ArrayList<>();
 		for ( IdNom idNom : idNoms) {
 			noms.add(idNom.getNom());
@@ -463,13 +466,15 @@ public class EssaimController {
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isPresent()) {
 			Essaim essaim = essaimOpt.get();
+			Iterable<IdNom> essaimIdNom = essaimRepository.findAllProjectedIdNomByOrderByNom();
+			// Liste des noms des essaims pour nom essaim unique
+			//   on retire le nom de l'essaim à modifier de cette liste
 			List<String> noms = new ArrayList<>();
-			for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
-				noms.add(essaimNom.getNom());
+			for ( IdNom idNom : essaimIdNom) {
+				noms.add(idNom.getNom());
 			}
 			noms.remove(essaim.getNom());
 			model.addAttribute(Const.ESSAIMNOMS, noms);
-			Iterable<IdNom> essaimIdNom = essaimRepository.findAllProjectedIdNomByOrderByNom();
 			// Il faut enlever les essaims qui génèrent une boucle de descendance
 			//  ainsi que l'essaim à modifier pour qu'ils ne soient pas dans la
 			//  liste des essaims pour le choix de la souche
