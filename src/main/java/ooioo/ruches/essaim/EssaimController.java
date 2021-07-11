@@ -387,6 +387,8 @@ public class EssaimController {
 	
 	/**
 	 * Graphe de descendance
+	 *
+	 * @param essaimId l'id de l'essaim dont on veut tracer le graphe de descendance
 	 */
 	@GetMapping("/descendance/{essaimId}")
 	public String graphedescendance(Model model, @PathVariable long essaimId) {
@@ -395,10 +397,13 @@ public class EssaimController {
 			Essaim essaim = essaimOpt.get();
 			model.addAttribute(Const.ESSAIM, essaim);
 			try {
+				// Recherche de l'essaim racine du graphe de descendance
+				//  dans lequel est l'essaim passé en paramètre
 				Essaim essaimRoot = essaim;
 				while (essaimRoot.getSouche() != null) {
 					essaimRoot = essaimRoot.getSouche();
 				}
+				// Liste des essaims du graphe dans des objets EssaimTree
 				List<EssaimTree> essaimTree = essaimService.listeEssaimsFils(essaimRoot);
 				ObjectMapper objectMapper = new ObjectMapper();
 				objectMapper.registerModule(new JavaTimeModule());
@@ -423,6 +428,7 @@ public class EssaimController {
 		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
 		if (voirInactif != null && (boolean) voirInactif) {
 			model.addAttribute(Const.ESSAIMS, essaimRepository.findAllByOrderByNom());
+			// Recherche des ruches et ruchers associés aux essaims
 			model.addAttribute(Const.RUCHES, essaimRepository.findRucheIdNomOrderByNom());
 		} else {
 			model.addAttribute(Const.ESSAIMS, essaimRepository.findByActifOrderByNom(true));
@@ -436,13 +442,13 @@ public class EssaimController {
 	 */
 	@GetMapping("/cree")
 	public String cree(HttpSession session, Model model) {
-		// A supprimer et retrouver les noms en javascript dans Const.ESSAIMS
+		Iterable <IdNom> idNoms = essaimRepository.findAllProjectedIdNomByOrderByNom();
 		List<String> noms = new ArrayList<>();
-		for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
-			noms.add(essaimNom.getNom());
+		for ( IdNom idNom : idNoms) {
+			noms.add(idNom.getNom());
 		}
 		model.addAttribute(Const.ESSAIMNOMS, noms);
-		model.addAttribute(Const.ESSAIMS, essaimRepository.findAllProjectedIdNomByOrderByNom());
+		model.addAttribute(Const.ESSAIMS, idNoms);
 		Essaim essaim = new Essaim();
 		essaim.setDateAcquisition(Utils.dateDecal(session));
 		model.addAttribute(Const.ESSAIM, essaim);

@@ -94,7 +94,7 @@ $(document).ready(function() {
 			<tbody>
 				<tr th:each="essaim : ${essaims}">
 					<td><a th:href="@{'/essaim/'+${essaim.id}}"
-						th:text="${essaim.nom}"></a></td>												
+						th:text="${essaim.nom}"></a></td>										
 					<td><a th:href="@{'/ruche/'+${ruches[essaimStat.index][0]}}"
 						th:text="${ruches[essaimStat.index][1]}"></a></td>
 					<td><a th:href="@{'/rucher/'+${ruches[essaimStat.index][2]}}"
