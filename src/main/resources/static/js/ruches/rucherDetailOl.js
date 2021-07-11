@@ -3,7 +3,7 @@
    rucheParcours, distParcours, longitudeCentre, latitudeCentre, rayonsButinage, cercles, distButinage, ruches, 
    rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
    ruchetxt, lesHausses, pasdehaussetxt, parcourstxt,
-   parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token dessinEnregistretxt */
+   parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token, dessinEnregistretxt */
 // "use strict"
 
 function rucherDetail(ign) {

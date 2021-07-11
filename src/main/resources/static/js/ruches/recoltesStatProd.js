@@ -1,5 +1,6 @@
 /* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
-/* globals Chart PoidsMielAnneeKg Hausses Pots HaussesEssaim
+/* globals Chart, PoidsMielAnneeKg, Hausses, Pots, HaussesEssaim,
+      poidsMielHausses, poidsMielPots, debutAnnee, nbIEssaims
 */
 
 function grapheRecolte() {
