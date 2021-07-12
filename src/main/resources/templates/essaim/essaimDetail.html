@@ -3,6 +3,8 @@
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
 $(document).ready(function() {
+	let essaimnoms = [[${essaimnoms}]];
+	let ruchesvidesnoms = [[${ruchesvidesnoms}]];
 	$('.confirmation').on('click', function () {
 		if([[${recolteHausses}]]) {
 			alert([[#{essaimsupprimerecolte}]]);
@@ -14,6 +16,7 @@ $(document).ready(function() {
 		}
     });
 	$( "#clone" ).click(function() {
+		/*[- Saisie des couples nomEssaim;nomRuche séparés par une "," -]*/
 		const noms = prompt([[#{nomessaimsvirgule}]]);
 		if (noms == null || noms == "") {
 		    return;
@@ -25,31 +28,37 @@ $(document).ready(function() {
 		const nomsarr = noms.split(',');
 		for (const item of nomsarr) {
 			const arr = item.split(';');
+			/*[- ne nom de l'essaim -]*/
 			const ne = arr[0].trim();
 			let nr = "";
+			/*[- nr nom de la ruche -]*/
 			if (arr.length > 1) {
 				nr = arr[1].trim();
-			}
-			if ($.inArray(ne, [[${essaimnoms}]]) != -1) {
+			}		
+			if ($.inArray(ne, essaimnoms) != -1) {
 				/*[- l'essaim ne existe déjà -]*/
 				tabNomExiste.push(ne);
-				if ((nr != "") && ($.inArray(nr, [[${ruchesvidesnoms}]]) == -1)) {
+				if ((nr != "") && ($.inArray(nr, ruchesvidesnoms) == -1)) {
 					/*[- ruche nr incorrecte -]*/
 					tabNomRucheIncorrect.push(nr);
 				}
 			} else {
 				/*[- on crée l'essaim ne -]*/
 				tabNomOk.push(ne);
+				/*[- ce nom ne doit pas être réutilisé -]*/
+				essaimnoms.push(ne);
 				if (nr == "") {
 					/*[- pas de ruche -]*/
 					tabNomRucheOk.push("");
-				} else if ($.inArray(nr, [[${ruchesvidesnoms}]]) == -1) {
+				} else if ($.inArray(nr, ruchesvidesnoms) == -1) {
 					/*[- ruche nr incorrecte -]*/
 					tabNomRucheOk.push("");
 					tabNomRucheIncorrect.push(nr);
 				} else {
 					/*[- on met l'essaim ne dans la ruche nr -]*/
 					tabNomRucheOk.push(nr);
+					/*[- ce nom ne doit pas être réutilisé -]*/
+					ruchesvidesnoms.push(nr);
 				}
 			}
 		}

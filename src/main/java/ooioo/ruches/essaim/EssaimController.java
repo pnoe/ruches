@@ -369,11 +369,16 @@ public class EssaimController {
 					Essaim clone = new Essaim(essaim, nomarray[i]);
 					essaimRepository.save(clone);
 					nomsCrees.add(nomarray[i]);
+					// pour éviter clone "a,a" : 2 fois le même nom dans la liste
+					noms.add(nomarray[i]);
 					if (i < nomruchesarray.length && !"".contentEquals(nomruchesarray[i])) {
 						Ruche ruche = rucheRepository.findByNom(nomruchesarray[i]);
-						// vérifier qu'il n'y a pas déjà un essaim
-						ruche.setEssaim(clone);
-						rucheRepository.save(ruche);
+						if (ruche.getEssaim() == null) {
+							ruche.setEssaim(clone);
+							rucheRepository.save(ruche);
+						} else {
+							logger.error("Clone d'un essaim : {} la ruche {} n'est pas vide", nomarray[i], nomruchesarray[i]);
+						}
 					}
 				}
 			}
@@ -443,6 +448,7 @@ public class EssaimController {
 	@GetMapping("/cree")
 	public String cree(HttpSession session, Model model) {
 		Iterable <IdNom> idNoms = essaimRepository.findAllProjectedIdNomByOrderByNom();
+		model.addAttribute(Const.ESSAIMS, idNoms);
 		// Liste des noms des essaims pour nom essaim unique
 		//   en modification il faudra retirer le nom de l'essaim à modifier
 		//   de cette liste
@@ -451,7 +457,6 @@ public class EssaimController {
 			noms.add(idNom.getNom());
 		}
 		model.addAttribute(Const.ESSAIMNOMS, noms);
-		model.addAttribute(Const.ESSAIMS, idNoms);
 		Essaim essaim = new Essaim();
 		essaim.setDateAcquisition(Utils.dateDecal(session));
 		model.addAttribute(Const.ESSAIM, essaim);
