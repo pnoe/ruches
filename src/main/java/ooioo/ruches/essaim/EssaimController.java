@@ -362,6 +362,7 @@ public class EssaimController {
 			String[] nomarray = nomclones.split(",");
 			String[] nomruchesarray = nomruches.split(",");
 			List<String> nomsCrees = new ArrayList<>();
+			LocalDateTime dateEve = Utils.dateTimeDecal(session);
 			for (int i = 0; i < nomarray.length; i++) {
 				if (noms.contains(nomarray[i])) {
 					logger.error("Clone d'un essaim : {} nom existant", nomarray[i]);
@@ -376,6 +377,10 @@ public class EssaimController {
 						if (ruche.getEssaim() == null) {
 							ruche.setEssaim(clone);
 							rucheRepository.save(ruche);
+							Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, ruche, clone,
+									ruche.getRucher(), null, null, "Clone essaim " + essaim.getNom()); 
+							evenementRepository.save(evenementAjout);
+							logger.info(Const.EVENEMENTXXENREGISTRE, evenementAjout.getId());
 						} else {
 							logger.error("Clone d'un essaim : {} la ruche {} n'est pas vide", nomarray[i], nomruchesarray[i]);
 						}
