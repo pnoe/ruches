@@ -447,6 +447,7 @@ public class EssaimController {
 	 */
 	@GetMapping("/cree")
 	public String cree(HttpSession session, Model model) {
+		// Pour le choix de la souche de l'essaim à créer
 		Iterable <IdNom> idNoms = essaimRepository.findAllProjectedIdNomByOrderByNom();
 		model.addAttribute(Const.ESSAIMS, idNoms);
 		// Liste des noms des essaims pour nom essaim unique
@@ -471,6 +472,7 @@ public class EssaimController {
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isPresent()) {
 			Essaim essaim = essaimOpt.get();
+			// Pour le choix de la souche de l'essaim à modifier
 			Iterable<IdNom> essaimIdNom = essaimRepository.findAllProjectedIdNomByOrderByNom();
 			// Liste des noms des essaims pour nom essaim unique
 			//   on retire le nom de l'essaim à modifier de cette liste

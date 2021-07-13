@@ -3,6 +3,9 @@
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
 $().ready(function() {
+	const _csrf_token = [[${_csrf.token}]];
+    const _csrf_param_name = [[${_csrf.parameterName}]];
+	let ruchenoms = [[${ruchenoms}]];
 	$('.confirmation').on('click', function () {
 		if([[${recolteHausses}]]) {
 			alert([[#{ruchenepeutetresupprimeerecolte}]]);
@@ -21,10 +24,13 @@ $().ready(function() {
 		let tabNomExiste=[];
 		let tabNomOk=[];
 		noms.split(',').map(item => item.trim()).forEach(function(item){
-			if ($.inArray(item, [[${ruchenoms}]]) !== -1) {
+			if ($.inArray(item, ruchenoms) !== -1) {
 				tabNomExiste.push(item);
 			} else {
+				/*[- on crée la ruche item -]*/
 				tabNomOk.push(item);
+				/*[- ce nom ne doit pas être réutilisé -]*/
+				ruchenoms.push(item);
 			}
 		});
 		if (tabNomExiste.length > 0) {
@@ -38,8 +44,6 @@ $().ready(function() {
 			}
 		}
 	    let requestData = {nomclones : tabNomOk.join(',')};
-		const _csrf_token = [[${_csrf.token}]];
-	    const _csrf_param_name = [[${_csrf.parameterName}]];
 	    requestData[_csrf_param_name] = _csrf_token;
 		$.post( [[@{/ruche/clone/}]] + [[${ruche.id}]],
 				requestData).done(function (data) { 

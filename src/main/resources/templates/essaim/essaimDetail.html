@@ -3,6 +3,8 @@
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
 $(document).ready(function() {
+	const _csrf_token = [[${_csrf.token}]];
+    const _csrf_param_name = [[${_csrf.parameterName}]];
 	let essaimnoms = [[${essaimnoms}]];
 	let ruchesvidesnoms = [[${ruchesvidesnoms}]];
 	$('.confirmation').on('click', function () {
@@ -82,8 +84,6 @@ $(document).ready(function() {
 			}
 		}
 	    let requestData = {nomclones : tabNomOk.join(','), nomruches : tabNomRucheOk.join(',')};
-		const _csrf_token = [[${_csrf.token}]];
-	    const _csrf_param_name = [[${_csrf.parameterName}]];
 	    requestData[_csrf_param_name] = _csrf_token;
 		$.post( [[@{/essaim/clone/}]] + [[${essaim.id}]],
 				requestData).done(function (data) { 

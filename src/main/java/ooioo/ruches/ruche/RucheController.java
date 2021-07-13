@@ -111,6 +111,8 @@ public class RucheController {
 							clone, null, ruche.getRucher(), null, null, "");
 					evenementRepository.save(eveAjout);
 					nomsCrees.add(nom);
+					// pour éviter clone "a,a" : 2 fois le même nom dans la liste
+					noms.add(nom);
 				}
 			}
 			String nomsJoin = String.join(",", nomsCrees);

@@ -86,6 +86,8 @@ public class HausseController {
 					Hausse hausseclone = new Hausse(hausse, nomhausse);
 					hausseRepository.save(hausseclone);
 					nomsCrees.add(nomhausse);
+					// pour éviter clone "a,a" : 2 fois le même nom dans la liste
+					noms.add(nomhausse);
 				}
 			}
 			String nomsJoin = String.join(",", nomsCrees);
