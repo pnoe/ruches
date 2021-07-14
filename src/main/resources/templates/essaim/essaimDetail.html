@@ -59,8 +59,12 @@ $(document).ready(function() {
 				} else {
 					/*[- on met l'essaim ne dans la ruche nr -]*/
 					tabNomRucheOk.push(nr);
-					/*[- ce nom ne doit pas être réutilisé -]*/
-					ruchesvidesnoms.push(nr);
+					/*[- ce nom ne doit pas être réutilisé, on l'enlève de la
+						liste des ruches vides -]*/
+					const index = ruchesvidesnoms.indexOf(nr);
+					if (index > -1) {
+						ruchesvidesnoms.splice(index, 1);
+					}
 				}
 			}
 		}
