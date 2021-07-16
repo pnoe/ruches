@@ -11,7 +11,6 @@
 	const poidsMielPots = [[${poidsMielPots}]];
 	const debutAnnee = [[${debutAnnee}]];
 	const nbIEssaims = [[${nbIEssaims}]];	
-	const PoidsMielAnneeKg = [[#{PoidsMielAnneeKg}]];
 	const Hausses = [[#{Hausses}]];
 	const Pots = [[#{Pots}]];
 	const HaussesEssaim = [[#{HaussesEssaim}]];
@@ -25,6 +24,14 @@
 	<br />
 	<div class="container-fluid">
 		<canvas id="ctx"></canvas>
+		<div class="row">
+			<div class="col text-center">
+				<h1 class="item">
+					<a th:href="@{'/recolte/liste'}" th:text="#{Recoltes}"></a>
+					<th:block th:text="' '+#{PoidsMielAnneeKg}"></th:block>
+				</h1>
+			</div>
+		</div>
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>

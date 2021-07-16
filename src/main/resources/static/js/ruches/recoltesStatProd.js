@@ -35,11 +35,6 @@ function grapheRecolte() {
 		data: data,
 		options: {
 			plugins: {
-				title: {
-					display: true,
-					text: PoidsMielAnneeKg,
-					position: 'bottom',
-				},
 				legend: {
 					display: true,
 					position: 'bottom',
