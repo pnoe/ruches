@@ -68,7 +68,10 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<h1 class="item" th:unless="${hausse.id}" th:text="#{ajouterHausse}"></h1>
+				<h1 class="item" th:unless="${hausse.id}">
+					<th:block th:text="#{ajouterUne} + ' '"></th:block>
+					<a th:href="@{'/hausse/liste'}" th:text="#{hausse}"></a>
+				</h1>
 				<h1 class="item" th:if="${hausse.id}">
 					<th:block th:text="#{modification}"></th:block>
 					<a th:href="@{'/hausse/'+${hausse.id}}"

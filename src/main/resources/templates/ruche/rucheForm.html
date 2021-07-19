@@ -52,7 +52,10 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<h1 class="item" th:unless="${ruche.id}" th:text="#{ajouterRuche}"></h1>
+				<h1 class="item" th:unless="${ruche.id}">
+					<th:block th:text="#{ajouterUne} + ' '"></th:block>
+					<a th:href="@{'/ruche/liste'}" th:text="#{ruche}"></a>
+				</h1>
 				<h1 class="item" th:if="${ruche.id}">
 					<th:block th:text="#{modification}"></th:block>
 					<a th:href="@{'/ruche/'+${ruche.id}}"

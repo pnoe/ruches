@@ -32,7 +32,10 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<h1 class="item" th:unless="${recolte.id}" th:text="#{ajouterRecolte}"></h1>
+				<h1 class="item" th:unless="${recolte.id}">
+					<th:block th:text="#{ajouterUne} + ' '"></th:block>
+					<a th:href="@{'/recolte/liste'}" th:text="#{recolte}"></a>
+				</h1>
 				<h1 class="item" th:if="${recolte.id}">
 					<th:block th:text="#{modification}"></th:block>
 					<a th:href="@{'/recolte/'+${recolte.id}}"

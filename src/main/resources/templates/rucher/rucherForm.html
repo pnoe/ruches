@@ -22,9 +22,6 @@
 		});
 	});
 </script>
-<script async defer
-	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTw9rDK4VaXs22ESK8zy31TFk0Wp4Q9fQ&callback=initMap">
-</script>
 </head>
 <body>
 	<nav th:replace="include :: navbar"></nav>
@@ -34,7 +31,10 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<h1 class="item" th:unless="${rucher.id}" th:text="#{ajouterRucher}"></h1>
+				<h1 class="item" th:unless="${rucher.id}">
+					<th:block th:text="#{ajouterUn} + ' '"></th:block>
+					<a th:href="@{'/rucher/liste'}" th:text="#{rucher}"></a>
+				</h1>
 				<h1 class="item" th:if="${rucher.id}">
 					<th:block th:text="#{modification}"></th:block>
 					<a th:href="@{'/rucher/'+${rucher.id}}"
