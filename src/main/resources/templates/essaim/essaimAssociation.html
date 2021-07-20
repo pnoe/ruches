@@ -25,8 +25,7 @@ $(document).ready(function() {
     } );
     $.fn.dataTable.ext.search.push(
     	    function (settings, searchData, index, rowData, counter) {   	      
-    	      var checked = $('#avecEssaim').is(':checked');
-    	      // If checked and Position column is blank don't display the row
+    	      const checked = $('#avecEssaim').is(':checked');
     	      if (checked && searchData[1] !== '') {
     	        return true;
     	      } else if (!checked && searchData[1] === '') {

@@ -655,8 +655,9 @@ public class EssaimController {
 		if (essaimOpt.isPresent()) {
 			Essaim essaim = essaimOpt.get();
 			model.addAttribute(Const.ESSAIM, essaim);
-			model.addAttribute("rucheEssaim", rucheRepository.findByEssaimId(essaimId));
-			model.addAttribute("ruches", rucheRepository.findByActiveOrderByNom(true));
+			Ruche ruche = rucheRepository.findByEssaimId(essaimId);
+			model.addAttribute("rucheEssaim", ruche);
+			model.addAttribute("ruches", rucheRepository.findActiveIdDiffOrderByNom(ruche.getId()));
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 			model.addAttribute(Const.MESSAGE, 
