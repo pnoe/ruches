@@ -135,53 +135,6 @@ function sauveRucherPosition(e) {
 	req.send(null);
 }
 
-function parcoursRedraw(redraw = false) {
-	// requete xmlhttp pour actualiser le parcours
-	const req2 = new XMLHttpRequest();
-	if (redraw) {
-		if (infowindowp === undefined) {
-			infowindowp = new google.maps.InfoWindow();
-		}
-		infowindowp.close();
-		infowindowp.setContent('Calcul en cours...');
-		infowindowp.open(map, markerRucher);
-	}
-	req2.open('GET', urlruches + 'rucher/parcours/' + rucher.id, true);
-	req2.onload = function() {
-		if (req2.readyState === 4) {
-			if (req2.status === 200) {
-				let response = JSON.parse(req2.responseText);
-				// distParcours et rucheParcours var globales             
-				if (redraw && (response.distParcours + 0.1 > distParcours)) {
-					infowindowp.close();
-					infowindowp.setContent(
-						"Pas d'amélioration<br/>" +
-						distancedeparcourstxt + ' ' + distParcours.toFixed(2) + 'm'
-					);
-					infowindowp.open(map, markerRucher);
-					return;
-				}
-				if (redraw) { parcours.setMap(null); }
-				let dist = distParcours;
-				distParcours = response.distParcours;
-				rucheParcours = response.rucheParcours;
-				newParcours();
-				// Pour affichage de la longueur du parcours après re-calcul sur popup Entrée
-				if (redraw) {
-					infowindowp.close();
-					infowindowp.setContent(
-						'La distance est diminuée de ' + (dist - distParcours).toFixed(2) +
-						'm<br/>' + distancedeparcourstxt +
-						' ' + distParcours.toFixed(2) + 'm'
-					);
-					infowindowp.open(map, markerRucher);
-				}
-			}
-		}
-	};
-	req2.send();
-}
-
 function sauveRuchePosition(e, markerRuche) {
 	const req = new XMLHttpRequest();
 	req.open('POST',
@@ -236,9 +189,6 @@ $(document).ready(function() {
 	});
 	$('#export-kml').click(function() {
 		exportKml();
-	});
-	$('#parcours-redraw').click(function() {
-		parcoursRedraw(true);
 	});
 	$("#searchtext").keyup(function(event) {
 		if (event.keyCode === 13) {

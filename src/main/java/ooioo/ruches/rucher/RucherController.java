@@ -97,8 +97,6 @@ public class RucherController {
 	private String accueilTitre;
 	@Value("${openweathermap.key}")
 	private String openweathermapKey;
-	@Value("${rucher.parcours.nbruches}")
-	private int rucherParcoursNbruches;
 	@Value("${rucher.butinage.rayons}")
 	private int[] rayonsButinage;
 	
@@ -482,7 +480,7 @@ public class RucherController {
 			Rucher rucher = rucherOpt.get();
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
 			List<RucheParcours> chemin = new ArrayList<>();
-			double retParcours = rucherService.cheminRuchesRucher(chemin, rucher, ruches, rucherParcoursNbruches);
+			double retParcours = rucherService.cheminRuchesRucher(chemin, rucher, ruches);
 			model.addAttribute("distParcours", retParcours);
 			model.addAttribute("rucheParcours", chemin);
 			List<String> nomHausses = new ArrayList<>();
@@ -523,7 +521,6 @@ public class RucherController {
 		}		
 		model.addAttribute("ggMapsUrl", ggMapsUrl);
 		model.addAttribute("ignDataKey", ignDataKey);
-		model.addAttribute("rucherParcoursNbruches", rucherParcoursNbruches);
 		return "rucher/rucherDetail" + servletPath;
 	}
 
@@ -683,28 +680,6 @@ public class RucherController {
 					rucher.getNom(), nf.format(longitudeAvant), nf.format(latitudeAvant), nf.format(longitude), nf.format(latitude));
 		}
 		return "redirect:/rucher/Ign";
-	}
-	
-	/**
-	 * Calcul du parcours d'un rucher (appel XMLHttpRequest)
-	 */
-	@GetMapping("/parcours/{rucherId}")
-	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody Map<String, Object> parcours(@PathVariable Long rucherId) {
-		Map<String, Object> map = new HashMap<>(); 
-		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
-		if (rucherOpt.isPresent()) {
-			Rucher rucher = rucherOpt.get();
-			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
-			List<RucheParcours> chemin = new ArrayList<>();			
-			double retParcours = rucherService.cheminRuchesRucher(chemin, rucher, ruches, rucherParcoursNbruches);
-			map.put("distParcours", retParcours);
-			map.put("rucheParcours", chemin);
-			return map;
-		}
-		logger.error(Const.IDRUCHERXXINCONNU, rucherId);
-		map.put("erreur", "Id rucher inconnu");
-		return map;
 	}
 	
 	/**
