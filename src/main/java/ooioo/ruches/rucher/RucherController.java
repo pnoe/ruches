@@ -475,7 +475,6 @@ public class RucherController {
 	@GetMapping({"/Gg/{rucherId}", "/Ign/{rucherId}", "/Osm/{rucherId}"})
 	public String rucheMap(Model model, @PathVariable long rucherId, HttpServletRequest request) {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
-		String servletPath = request.getServletPath().split("/")[2];
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
@@ -521,7 +520,7 @@ public class RucherController {
 		}		
 		model.addAttribute("ggMapsUrl", ggMapsUrl);
 		model.addAttribute("ignDataKey", ignDataKey);
-		return "rucher/rucherDetail" + servletPath;
+		return "rucher/rucherDetail" + request.getServletPath().split("/")[2];
 	}
 
 	/**
@@ -681,6 +680,28 @@ public class RucherController {
 		}
 		return "redirect:/rucher/Ign";
 	}
+	
+	/**
+	 * Calcul du parcours d'un rucher (appel XMLHttpRequest)
+	 */
+	@GetMapping("/parcours/{rucherId}")
+	@ResponseStatus(value = HttpStatus.OK)
+	public @ResponseBody Map<String, Object> parcours(@PathVariable Long rucherId) {
+		Map<String, Object> map = new HashMap<>(); 
+		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
+		if (rucherOpt.isPresent()) {
+			Rucher rucher = rucherOpt.get();
+			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
+			List<RucheParcours> chemin = new ArrayList<>();			
+			double retParcours = rucherService.cheminRuchesRucher(chemin, rucher, ruches);
+			map.put("distParcours", retParcours);
+			map.put("rucheParcours", chemin);
+			return map;
+		}
+		logger.error(Const.IDRUCHERXXINCONNU, rucherId);
+		map.put("erreur", "Id rucher inconnu");
+		return map;
+	}	
 	
 	/**
 	 * Sauvegarde d'un dessin sur carte ign ou osm (appel XMLHttpRequest)

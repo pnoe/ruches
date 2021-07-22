@@ -459,5 +459,31 @@ function rucherDetail(ign) {
 	    };
 	    req.send(formatKML.writeFeatures(drawLayer.getSource().getFeatures()));
 	}
+	
+	function parcoursRedraw() {
+		const req2 = new XMLHttpRequest();
+		req2.open('GET', ruchesurl + 'rucher/parcours/' + rucher.id, true);
+		req2.onload = function() {
+			if (req2.readyState === 4) {
+				if (req2.status === 200) {
+					const response = JSON.parse(req2.responseText);
+					// distParcours et rucheParcours var globales
+					distParcours = response.distParcours;
+					rucheParcours = response.rucheParcours;
+					let visible = vectorLineLayer.getVisible();
+					map.removeLayer(vectorLineLayer);
+					layerSwitcher.removeLayer(vectorLineLayer);
+					vectorLineLayer = newVectorLineLayer();
+					map.addLayer(vectorLineLayer);
+					vectorLineLayer.setVisible(visible);
+					layerSwitcher.addLayer(vectorLineLayer, {
+						title: parcourstxt,
+						description: parcoursoptimumtxt
+					});
+				}
+			}
+		};
+		req2.send();
+	}
 
 }
