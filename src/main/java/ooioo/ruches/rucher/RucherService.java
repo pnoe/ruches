@@ -60,7 +60,7 @@ public class RucherService {
 			chemin.add(new RucheParcours(ruche.getId(), ordre, ruche.getLongitude(), ruche.getLatitude()));
 		}
 		int cheminSize = chemin.size();
-		// return cheminRuchesRucherOrTools(chemin, cheminSize);
+		if (cheminSize == 0) { return 0d; }
 		// Initialisation d'un tableau contenant les distances entre ruches
 		chSize = cheminSize;
 		final DataModel data = new DataModel();
