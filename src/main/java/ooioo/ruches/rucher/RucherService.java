@@ -42,14 +42,20 @@ public class RucherService {
 	
 	private static int chSize;
 	
+	/*
+	 * Inner class static pour les distances entre ruches
+	 */
 	private static class DataModel {
 		  public final long[][] distanceMatrix = new long[chSize][chSize];
+		  // le nombre de personnes à parcourir les ruches
 		  public final int vehicleNumber = 1;
+		  // l'indice du point de départ
 		  public final int depot = 0;
 	}
 
 	/*
 	 * Calcul du chemin le plus court de visite des ruches du rucher
+	 *   https://developers.google.com/optimization/routing/tsp
 	 */
 	public double cheminRuchesRucher(List<RucheParcours> chemin, Rucher rucher, Iterable<Ruche> ruches) {
 		RucheParcours entree = new RucheParcours(0l, 0, rucher.getLongitude(), rucher.getLatitude());
@@ -64,6 +70,8 @@ public class RucherService {
 		// Initialisation d'un tableau contenant les distances entre ruches
 		chSize = cheminSize;
 		final DataModel data = new DataModel();
+		// Initialisation de la matrice d'int des distances entre les ruches
+		//  les distances sont en mm
 		double dist;
 		for (int i = 1; i < cheminSize; i++) {
 			for (int j = 0; j < i; j++) {
@@ -74,13 +82,17 @@ public class RucherService {
 				data.distanceMatrix[j][i] = data.distanceMatrix[i][j];
 			}
 		}
+		// Initialistion de la diagonale à 0
 		for (int i = 0; i < cheminSize; i++) {
 			data.distanceMatrix[i][i] = 0;
 		}
 		Loader.loadNativeLibraries();
+		// Création du modèle de routage
 		RoutingIndexManager manager =
 		    new RoutingIndexManager(data.distanceMatrix.length, data.vehicleNumber, data.depot);
 		RoutingModel routing = new RoutingModel(manager);
+		// création de la callback de calcul de distance utilisant
+		//   la matrice des distances
 		final int transitCallbackIndex =
 			    routing.registerTransitCallback((long fromIndex, long toIndex) -> {
 			      // Convert from routing variable Index to user NodeIndex.
@@ -88,12 +100,17 @@ public class RucherService {
 			      int toNode = manager.indexToNode(toIndex);
 			      return data.distanceMatrix[fromNode][toNode];
 			    });
+		// Coût du déplacement. Ici le coût est la distance entre deux ruches.
 		routing.setArcCostEvaluatorOfAllVehicles(transitCallbackIndex);
+		// Méthode pour calculer le premier parcours 
+		//   PATH_CHEAPEST_ARC recherche la ruche la plus proche
+		//   https://developers.google.com/optimization/routing/routing_options#first_sol_options
 		RoutingSearchParameters searchParameters =
 				com.google.ortools.constraintsolver.main.defaultRoutingSearchParameters()
 			        .toBuilder()
 			        .setFirstSolutionStrategy(FirstSolutionStrategy.Value.PATH_CHEAPEST_ARC)
 			        .build();
+		// Appelle le solver
 		Assignment solution = routing.solveWithParameters(searchParameters);
 		List<RucheParcours> cheminRet = new ArrayList<>();
 		long routeDistance = 0;
