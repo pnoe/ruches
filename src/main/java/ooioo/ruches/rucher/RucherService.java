@@ -14,9 +14,12 @@ import org.springframework.stereotype.Service;
 import com.google.ortools.Loader;
 import com.google.ortools.constraintsolver.Assignment;
 import com.google.ortools.constraintsolver.FirstSolutionStrategy;
+import com.google.ortools.constraintsolver.LocalSearchMetaheuristic;
 import com.google.ortools.constraintsolver.RoutingIndexManager;
 import com.google.ortools.constraintsolver.RoutingModel;
 import com.google.ortools.constraintsolver.RoutingSearchParameters;
+import com.google.ortools.constraintsolver.main;
+import com.google.protobuf.Duration;
 
 import ooioo.ruches.Const;
 import ooioo.ruches.LatLon;
@@ -57,7 +60,7 @@ public class RucherService {
 	 * Calcul du chemin le plus court de visite des ruches du rucher
 	 *   https://developers.google.com/optimization/routing/tsp
 	 */
-	public double cheminRuchesRucher(List<RucheParcours> chemin, Rucher rucher, Iterable<Ruche> ruches) {
+	public double cheminRuchesRucher(List<RucheParcours> chemin, Rucher rucher, Iterable<Ruche> ruches, int redraw) {
 		RucheParcours entree = new RucheParcours(0l, 0, rucher.getLongitude(), rucher.getLatitude());
 		chemin.add(entree);
 		int ordre = 0;
@@ -105,11 +108,21 @@ public class RucherService {
 		// Méthode pour calculer le premier parcours 
 		//   PATH_CHEAPEST_ARC recherche la ruche la plus proche
 		//   https://developers.google.com/optimization/routing/routing_options#first_sol_options
-		RoutingSearchParameters searchParameters =
-				com.google.ortools.constraintsolver.main.defaultRoutingSearchParameters()
-			        .toBuilder()
-			        .setFirstSolutionStrategy(FirstSolutionStrategy.Value.PATH_CHEAPEST_ARC)
-			        .build();
+		RoutingSearchParameters searchParameters = (redraw == 0) ? main.defaultRoutingSearchParameters()
+		        .toBuilder()
+		        .setFirstSolutionStrategy(FirstSolutionStrategy.Value.PATH_CHEAPEST_ARC)
+	            .build()
+            : main.defaultRoutingSearchParameters()
+		        .toBuilder()
+		        .setFirstSolutionStrategy(FirstSolutionStrategy.Value.PATH_CHEAPEST_ARC)
+		        // advanced search strategy : guided local search
+		        //  pour sortir d'un minimum local
+		        // https://developers.google.com/optimization/routing/routing_options#local_search_options
+		        .setLocalSearchMetaheuristic(LocalSearchMetaheuristic.Value.GUIDED_LOCAL_SEARCH)
+	            // timeLimit obligatoire sinon recherche infinie
+		        //   la recherche durera 30s dans tous les cas
+		        .setTimeLimit(Duration.newBuilder().setSeconds(30).build())
+	            .build();
 		// Appelle le solver
 		Assignment solution = routing.solveWithParameters(searchParameters);
 		List<RucheParcours> cheminRet = new ArrayList<>();

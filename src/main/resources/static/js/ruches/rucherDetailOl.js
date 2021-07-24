@@ -361,6 +361,12 @@ function rucherDetail(ign) {
 		exportKml();
 	});
 
+	$('#parcours-redraw').click(function() {
+		document.getElementById('popup-content').innerHTML = 'Calcul en cours...';
+		overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());
+		parcoursRedraw(true);
+	});
+	
 	$('#dragMarker').change(function() {
 	  	translate.setActive(!this.checked);
 	});
@@ -460,14 +466,23 @@ function rucherDetail(ign) {
 	    req.send(formatKML.writeFeatures(drawLayer.getSource().getFeatures()));
 	}
 	
-	function parcoursRedraw() {
+	function parcoursRedraw(redraw = false) {
 		const req2 = new XMLHttpRequest();
-		req2.open('GET', ruchesurl + 'rucher/parcours/' + rucher.id, true);
+		const redrawX = redraw?'1':'0';
+		req2.open('GET', ruchesurl + 'rucher/parcours/' + rucher.id + '/' + redrawX, true);
 		req2.onload = function() {
 			if (req2.readyState === 4) {
 				if (req2.status === 200) {
 					const response = JSON.parse(req2.responseText);
 					// distParcours et rucheParcours var globales
+					if (redraw && (response.distParcours + 0.1 > distParcours)) {
+						document.getElementById('popup-content').innerHTML =
+							"Pas d'amélioration<br/>" + 
+							 distancedeparcourstxt + ' ' + distParcours.toFixed(2) + 'm';
+						overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());
+						return;
+					}
+					let dist = distParcours;
 					distParcours = response.distParcours;
 					rucheParcours = response.rucheParcours;
 					let visible = vectorLineLayer.getVisible();
@@ -480,6 +495,13 @@ function rucherDetail(ign) {
 						title: parcourstxt,
 						description: parcoursoptimumtxt
 					});
+					if (redraw) {
+						document.getElementById('popup-content').innerHTML =
+							'La distance est diminuée de ' + (dist - distParcours).toFixed(2) +
+							'm<br/>' + distancedeparcourstxt +
+							' ' + distParcours.toFixed(2) + 'm';
+						overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());
+					}
 				}
 			}
 		};

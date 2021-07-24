@@ -479,7 +479,7 @@ public class RucherController {
 			Rucher rucher = rucherOpt.get();
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
 			List<RucheParcours> chemin = new ArrayList<>();
-			double retParcours = rucherService.cheminRuchesRucher(chemin, rucher, ruches);
+			double retParcours = rucherService.cheminRuchesRucher(chemin, rucher, ruches, 0);
 			model.addAttribute("distParcours", retParcours);
 			model.addAttribute("rucheParcours", chemin);
 			List<String> nomHausses = new ArrayList<>();
@@ -683,17 +683,19 @@ public class RucherController {
 	
 	/**
 	 * Calcul du parcours d'un rucher (appel XMLHttpRequest)
+	 *   redraw = 0  recalcul si l'utilisateur déplace une ruche sur la carte
+	 *   redraw = 1  recalcul si l'utilisateur le demande pour améliore de parcours
 	 */
-	@GetMapping("/parcours/{rucherId}")
+	@GetMapping("/parcours/{rucherId}/{redraw}")
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody Map<String, Object> parcours(@PathVariable Long rucherId) {
+	public @ResponseBody Map<String, Object> parcours(@PathVariable Long rucherId, @PathVariable int redraw) {
 		Map<String, Object> map = new HashMap<>(); 
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
 			List<RucheParcours> chemin = new ArrayList<>();			
-			double retParcours = rucherService.cheminRuchesRucher(chemin, rucher, ruches);
+			double retParcours = rucherService.cheminRuchesRucher(chemin, rucher, ruches, redraw);
 			map.put("distParcours", retParcours);
 			map.put("rucheParcours", chemin);
 			return map;
