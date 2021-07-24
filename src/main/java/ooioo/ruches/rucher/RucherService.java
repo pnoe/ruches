@@ -120,8 +120,8 @@ public class RucherService {
 		        // https://developers.google.com/optimization/routing/routing_options#local_search_options
 		        .setLocalSearchMetaheuristic(LocalSearchMetaheuristic.Value.GUIDED_LOCAL_SEARCH)
 	            // timeLimit obligatoire sinon recherche infinie
-		        //   la recherche durera 30s dans tous les cas
-		        .setTimeLimit(Duration.newBuilder().setSeconds(30).build())
+		        //   la recherche durera 10s dans tous les cas
+		        .setTimeLimit(Duration.newBuilder().setSeconds(10).build())
 	            .build();
 		// Appelle le solver
 		Assignment solution = routing.solveWithParameters(searchParameters);
