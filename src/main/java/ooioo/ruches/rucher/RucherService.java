@@ -60,7 +60,7 @@ public class RucherService {
 	 * Calcul du chemin le plus court de visite des ruches du rucher
 	 *   https://developers.google.com/optimization/routing/tsp
 	 */
-	public double cheminRuchesRucher(List<RucheParcours> chemin, Rucher rucher, Iterable<Ruche> ruches, int redraw) {
+	public double cheminRuchesRucher(List<RucheParcours> chemin, Rucher rucher, Iterable<Ruche> ruches, boolean redraw) {
 		RucheParcours entree = new RucheParcours(0l, 0, rucher.getLongitude(), rucher.getLatitude());
 		chemin.add(entree);
 		int ordre = 0;
@@ -108,11 +108,7 @@ public class RucherService {
 		// Méthode pour calculer le premier parcours 
 		//   PATH_CHEAPEST_ARC recherche la ruche la plus proche
 		//   https://developers.google.com/optimization/routing/routing_options#first_sol_options
-		RoutingSearchParameters searchParameters = (redraw == 0) ? main.defaultRoutingSearchParameters()
-		        .toBuilder()
-		        .setFirstSolutionStrategy(FirstSolutionStrategy.Value.PATH_CHEAPEST_ARC)
-	            .build()
-            : main.defaultRoutingSearchParameters()
+		RoutingSearchParameters searchParameters = redraw ? main.defaultRoutingSearchParameters()
 		        .toBuilder()
 		        .setFirstSolutionStrategy(FirstSolutionStrategy.Value.PATH_CHEAPEST_ARC)
 		        // advanced search strategy : guided local search
@@ -122,6 +118,10 @@ public class RucherService {
 	            // timeLimit obligatoire sinon recherche infinie
 		        //   la recherche durera 10s dans tous les cas
 		        .setTimeLimit(Duration.newBuilder().setSeconds(10).build())
+	            .build()
+			: main.defaultRoutingSearchParameters()
+		        .toBuilder()
+		        .setFirstSolutionStrategy(FirstSolutionStrategy.Value.PATH_CHEAPEST_ARC)
 	            .build();
 		// Appelle le solver
 		Assignment solution = routing.solveWithParameters(searchParameters);

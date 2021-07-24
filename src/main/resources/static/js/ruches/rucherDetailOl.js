@@ -468,8 +468,8 @@ function rucherDetail(ign) {
 	
 	function parcoursRedraw(redraw = false) {
 		const req2 = new XMLHttpRequest();
-		const redrawX = redraw?'1':'0';
-		req2.open('GET', ruchesurl + 'rucher/parcours/' + rucher.id + '/' + redrawX, true);
+		// const redrawX = redraw?'1':'0';
+		req2.open('GET', ruchesurl + 'rucher/parcours/' + rucher.id + '/' + redraw, true);
 		req2.onload = function() {
 			if (req2.readyState === 4) {
 				if (req2.status === 200) {

@@ -138,7 +138,7 @@ function sauveRucherPosition(e) {
 function parcoursRedraw(redraw = false) {
 	// requete xmlhttp pour actualiser le parcours
 	const req2 = new XMLHttpRequest();
-	const redrawX = redraw?'1':'0';
+	// const redrawX = redraw?'1':'0';
 	if (redraw) {
 		if (infowindowp === undefined) {
 			infowindowp = new google.maps.InfoWindow();
@@ -147,7 +147,7 @@ function parcoursRedraw(redraw = false) {
 		infowindowp.setContent('Calcul en cours...');
 		infowindowp.open(map, markerRucher);
 	}
-	req2.open('GET', urlruches + 'rucher/parcours/' + rucher.id + '/' + redrawX, true);
+	req2.open('GET', urlruches + 'rucher/parcours/' + rucher.id + '/' + redraw, true);
 	req2.onload = function() {
 		if (req2.readyState === 4) {
 			if (req2.status === 200) {
