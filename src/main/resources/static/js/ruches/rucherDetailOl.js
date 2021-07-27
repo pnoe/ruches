@@ -97,21 +97,21 @@ function rucherDetail(ign) {
 	const sourceCercles = new ol.source.Vector();
 	const resol = ol.proj.getPointResolution('EPSG:3857', 1, ol.proj.fromLonLat(coordsCentre));
 	for (const r of rayonsButinage) {
-		sourceCercles.addFeature(new ol.Feature(new ol.geom.Circle(olProjCentre, r/resol)));
+		sourceCercles.addFeature(new ol.Feature(new ol.geom.Circle(olProjCentre, r / resol)));
 	}
 	const styleCercles = new ol.style.Style({
-	      stroke: new ol.style.Stroke({
-	        color: 'blue',
-	        width: 1
-	      }),
-	      fill: new ol.style.Fill({
-	        color: 'rgba(0, 0, 255, 0.02)'
-	      })
-	    });
+		stroke: new ol.style.Stroke({
+			color: 'blue',
+			width: 1
+		}),
+		fill: new ol.style.Fill({
+			color: 'rgba(0, 0, 255, 0.02)'
+		})
+	});
 	const cerclesLayer = new ol.layer.Vector({
 		visible: false,
 		source: sourceCercles,
-	    style: styleCercles
+		style: styleCercles
 	});
 	cerclesLayer.on('change:visible', function() {
 		let view = map.getView();
@@ -139,18 +139,18 @@ function rucherDetail(ign) {
 		layers: [vectorLayer]
 	});
 	translate.setActive(!$('#dragMarker')[0].checked);
-	
+
 	// Utiliser KMLExtended pour sauver et lire les textes	
 	const formatKML = new ol.format.KMLExtended({});
 	// Ne fonctionne pas avec ol 6 pour le moment
-    // const formatKML = new ol.format.KML({});
-	const dessinsFeatures = (rucher.dessin === null)?new ol.Collection():new ol.Collection(formatKML.readFeatures(rucher.dessin));
+	// const formatKML = new ol.format.KML({});
+	const dessinsFeatures = (rucher.dessin === null) ? new ol.Collection() : new ol.Collection(formatKML.readFeatures(rucher.dessin));
 	const drawLayer = new ol.layer.Vector({
 		source: new ol.source.Vector({
 			features: dessinsFeatures
 		})
 	});
-	
+
 	const map = new ol.Map({
 		interactions: ol.interaction.defaults({ doubleClickZoom: false }).extend([select, translate]),
 		controls: ol.control.defaults({
@@ -159,11 +159,11 @@ function rucherDetail(ign) {
 		target: 'map',
 		layers: [
 			vectorLayer,
-			vectorLineLayer, 
+			vectorLineLayer,
 			cerclesLayer,
-			
+
 			drawLayer
-			
+
 		],
 		overlays: [overlay],
 		view: new ol.View({
@@ -171,29 +171,29 @@ function rucherDetail(ign) {
 			zoom: 19
 		})
 	});
-	
-			
-	
+
+
+
 	const drawControl = new ol.control.Drawing({
 		layer: drawLayer,
 		tools: {
 			text: false
 		}
-	});	
+	});
 	map.addControl(drawControl);
-	
+
 	const gfi = new ol.control.GetFeatureInfo({
-            layers: [{
-                    obj : drawLayer,
-                    event: 'contextmenu'
-            }],
-            options : {
-            	hidden: true,
-                auto: false
-            }
-    });
-    map.addControl(gfi);
-	
+		layers: [{
+			obj: drawLayer,
+			event: 'contextmenu'
+		}],
+		options: {
+			hidden: true,
+			auto: false
+		}
+	});
+	map.addControl(gfi);
+
 	const layerSwitcher = new ol.control.LayerSwitcher({
 		layers: [{
 			layer: vectorLayer,
@@ -202,7 +202,7 @@ function rucherDetail(ign) {
 				description: couchemarqueursruches
 			}
 		},
-		
+
 		{
 			layer: drawLayer,
 			config: {
@@ -210,8 +210,8 @@ function rucherDetail(ign) {
 				description: 'Dessin manuels'
 			}
 		},
-		
-		
+
+
 		{
 			layer: vectorLineLayer,
 			config: {
@@ -266,13 +266,13 @@ function rucherDetail(ign) {
 		tipLabel: pleinecran
 	}));
 	document.getElementsByClassName('ol-full-screen')[0].style.left = '43px';
-	document.getElementsByClassName('ol-full-screen')[0].style.right = 'unset';	
+	document.getElementsByClassName('ol-full-screen')[0].style.right = 'unset';
 	const selectDoubleClick = new ol.interaction.Select({
 		condition: ol.events.condition.doubleClick,
 		layers: [vectorLayer]
 	});
 	map.addInteraction(selectDoubleClick);
-	
+
 	selectDoubleClick.on('select', function(e) {
 		const feature = e.target.getFeatures().getArray()[0];
 		if (feature.get("rucheid") === 'entree') {
@@ -294,7 +294,7 @@ function rucherDetail(ign) {
 		overlay.setPosition(feature.getGeometry().getCoordinates());
 		selectDoubleClick.getFeatures().clear();
 	});
-	
+
 	translate.on('translateend', function(evt) {
 		const coord = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
 		const req = new XMLHttpRequest();
@@ -322,7 +322,7 @@ function rucherDetail(ign) {
 		};
 		req.send(null);
 	});
-	
+
 	$("#searchtext").keyup(function(event) {
 		if (event.keyCode === 13) {
 			let searchtext = $("#searchtext").val().toUpperCase();
@@ -348,11 +348,6 @@ function rucherDetail(ign) {
 			'&plus=' + (e.target.id != 'liste');
 	});
 
-
-
-
-
-
 	$('#export-gpx').click(function() {
 		exportGpx();
 	});
@@ -366,11 +361,11 @@ function rucherDetail(ign) {
 		overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());
 		parcoursRedraw(true);
 	});
-	
+
 	$('#dragMarker').change(function() {
-	  	translate.setActive(!this.checked);
+		translate.setActive(!this.checked);
 	});
-	
+
 	if (!ign) {
 		// export png
 		$('#export-png').click(function() {
@@ -384,7 +379,7 @@ function rucherDetail(ign) {
 			});
 			map.renderSync();
 		});
-		
+
 		// export pdf
 		const { jsPDF } = window.jspdf;
 		const exportPdf = $('#export-pdf');
@@ -444,28 +439,28 @@ function rucherDetail(ign) {
 			source: lineSource
 		});
 	}
-	
+
 	$('#sauve-dessin').click(function() {
 		sauveDessin();
 	});
 	function sauveDessin() {
 		const req = new XMLHttpRequest();
-    	req.open('POST', ruchesurl + 'rucher/sauveDessin/' + rucher.id, true);
-	    req.setRequestHeader('x-csrf-token', _csrf_token);
-	    req.onload = function() {
-	        if (req.readyState === 4) {
-	            if (req.status === 200) {
-	                if (req.responseText !== "OK") {
-	                    alert(req.responseText);	
-	                } else {
-	                	alert(dessinEnregistretxt);
-	                }
-	            }
-	        }
-	    };
-	    req.send(formatKML.writeFeatures(drawLayer.getSource().getFeatures()));
+		req.open('POST', ruchesurl + 'rucher/sauveDessin/' + rucher.id, true);
+		req.setRequestHeader('x-csrf-token', _csrf_token);
+		req.onload = function() {
+			if (req.readyState === 4) {
+				if (req.status === 200) {
+					if (req.responseText !== "OK") {
+						alert(req.responseText);
+					} else {
+						alert(dessinEnregistretxt);
+					}
+				}
+			}
+		};
+		req.send(formatKML.writeFeatures(drawLayer.getSource().getFeatures()));
 	}
-	
+
 	function parcoursRedraw(redraw = false) {
 		const req2 = new XMLHttpRequest();
 		// const redrawX = redraw?'1':'0';
@@ -477,15 +472,15 @@ function rucherDetail(ign) {
 					// distParcours et rucheParcours var globales
 					if (redraw && (response.distParcours + 0.1 > distParcours)) {
 						document.getElementById('popup-content').innerHTML =
-							"Pas d'amélioration<br/>" + 
-							 distancedeparcourstxt + ' ' + distParcours.toFixed(2) + 'm';
+							"Pas d'amélioration<br/>" +
+							distancedeparcourstxt + ' ' + distParcours.toFixed(2) + 'm';
 						overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());
 						return;
 					}
-					let dist = distParcours;
+					const dist = distParcours;
 					distParcours = response.distParcours;
 					rucheParcours = response.rucheParcours;
-					let visible = vectorLineLayer.getVisible();
+					const visible = vectorLineLayer.getVisible();
 					map.removeLayer(vectorLineLayer);
 					layerSwitcher.removeLayer(vectorLineLayer);
 					vectorLineLayer = newVectorLineLayer();
@@ -495,6 +490,7 @@ function rucherDetail(ign) {
 						title: parcourstxt,
 						description: parcoursoptimumtxt
 					});
+					
 					if (redraw) {
 						document.getElementById('popup-content').innerHTML =
 							'La distance est diminuée de ' + (dist - distParcours).toFixed(2) +
@@ -507,5 +503,51 @@ function rucherDetail(ign) {
 		};
 		req2.send();
 	}
+
+
+	/* Convex hull
+	function clockwise(a, b, o) {
+		return ((a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]) <= 0);
+	}
+	// https://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain
+	function coordConvexHull(points) {
+		let i;
+		points.sort(function(a, b) {
+			return a[0] == b[0] ? a[1] - b[1] : a[0] - b[0];
+		});
+		let lower = [];
+		for (i = 0; i < points.length; i++) {
+			while (lower.length >= 2 && clockwise(lower[lower.length - 2], lower[lower.length - 1], points[i])) {
+				lower.pop();
+			}
+			lower.push(points[i]);
+		}
+		let upper = [];
+		for (i = points.length - 1; i >= 0; i--) {
+			while (upper.length >= 2 && clockwise(upper[upper.length - 2], upper[upper.length - 1], points[i])) {
+				upper.pop();
+			}
+			upper.push(points[i]);
+		}
+		upper.pop();
+		lower.pop();
+		return lower.concat(upper);
+	}
+	const hullLayer = new ol.layer.Vector({ source: new ol.source.Vector() })
+	map.addLayer(hullLayer);
+	// ajouter cette layer au layerSwitcher
+	const hull = new ol.Feature(new ol.geom.Polygon([[0, 0]]));
+	hullLayer.getSource().addFeature(hull);
+	function convexHull() {
+		const pts = [];
+		for (const rucheP of rucheParcours) {
+			const coords = [rucheP.longitude, rucheP.latitude];
+			pts.push(ol.proj.fromLonLat(coords));
+		}
+		const geom = new ol.geom.Polygon([coordConvexHull(pts)]);
+		hull.setGeometry(geom);
+	}
+	convexHull();
+	*/				
 
 }

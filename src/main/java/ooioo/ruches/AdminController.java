@@ -45,6 +45,9 @@ public class AdminController {
 	private String gitUrl;
 	@Value("${tomcat.webapps.path}")
 	private String tomcatWebappsPath;
+	@Value("${tomcat.oldwebapps.path}")
+	private String tomcatOldWebappsPath;
+	
 	
 	/*
 	 * Download des dumps de la base
@@ -131,7 +134,9 @@ public class AdminController {
 			// pas de version dans le nom du war, voir finalname dans pom.xml
 			Path sourcePath      = Paths.get(tempDir + "/ruches/target/ruches.war.original");
 			Path destinationPath = Paths.get(tomcatWebappsPath + "ruches.war");
-			Files.copy(sourcePath, destinationPath,
+			// Copie de sauvevegarde de l'ancien ruches.war
+			Files.move(destinationPath, Paths.get(tomcatOldWebappsPath), StandardCopyOption.REPLACE_EXISTING);
+			Files.copy(destinationPath, destinationPath,
 			            StandardCopyOption.REPLACE_EXISTING);
 			destinationPath = Paths.get(tomcatWebappsPath + "ruchestest.war");
 			Files.copy(sourcePath, destinationPath,
