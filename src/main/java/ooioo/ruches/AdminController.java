@@ -52,6 +52,7 @@ public class AdminController {
 	/*
 	 * Download des dumps de la base
 	 * fichiers ruches_schema.sql et ruches.sql.xz
+	 *  ces fichiers dump sont créés par un cron sur le serveur
 	 */
 	@GetMapping(path = "/dump/{fichier}")
 	@ResponseStatus(value = HttpStatus.OK)

@@ -171,6 +171,9 @@ $.extend( $.fn.dataTable.defaults, {
 							th:text="#{logs}" th:href="@{/admin/logs/logfile}" target="_blank"></a></li>
 						<li><a class="dropdown-item"
 							th:text="#{infos}" th:href="@{/infos}"></a></li>
+						<li><a class="dropdown-item"
+							th:text="#{Doc}" th:target="_blank"
+							th:href="@{${#servletContext.getAttribute('docpath')}}"></a></li>
 					</ul>
 				</li>
 			</ul>
