@@ -135,10 +135,16 @@ public class AdminController {
 			// pas de version dans le nom du war, voir finalname dans pom.xml
 			Path sourcePath      = Paths.get(tempDir + "/ruches/target/ruches.war.original");
 			Path destinationPath = Paths.get(tomcatWebappsPath + "ruches.war");
+			
+			// Pas réussi à résoudre :
+			/// [2021-07-28 15:55:27] [info] java.nio.file.FileSystemException: /var/lib/tomcat9/oldWebapps: Read-only file system
 			// Copie de sauvevegarde de l'ancien ruches.war
-			Files.move(destinationPath, Paths.get(tomcatOldWebappsPath), StandardCopyOption.REPLACE_EXISTING);
+			//  Attention Tomcat est sandboxed par systemd et n'a accès qu'à certains répertoires
+			//   https://salsa.debian.org/java-team/tomcat9/blob/master/debian/README.Debian
+			// Files.move(destinationPath, Paths.get(tomcatOldWebappsPath), StandardCopyOption.REPLACE_EXISTING);
 			Files.copy(destinationPath, destinationPath,
 			            StandardCopyOption.REPLACE_EXISTING);
+			
 			destinationPath = Paths.get(tomcatWebappsPath + "ruchestest.war");
 			Files.copy(sourcePath, destinationPath,
 			            StandardCopyOption.REPLACE_EXISTING);
