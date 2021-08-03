@@ -139,7 +139,7 @@ public class AdminController {
 			// Pas réussi à résoudre :
 			/// [2021-07-28 15:55:27] [info] java.nio.file.FileSystemException: /var/lib/tomcat9/oldWebapps: Read-only file system
 			// Copie de sauvevegarde de l'ancien ruches.war
-			//  Attention Tomcat est sandboxed par systemd et n'a accès qu'à certains répertoires
+			//  Attention Tomcat est sandboxé par systemd et n'a accès qu'à certains répertoires
 			//   https://salsa.debian.org/java-team/tomcat9/blob/master/debian/README.Debian
 			// Files.move(destinationPath, Paths.get(tomcatOldWebappsPath), StandardCopyOption.REPLACE_EXISTING);
 			Files.copy(destinationPath, destinationPath,
