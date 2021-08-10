@@ -318,9 +318,21 @@ public class RucherController {
 			// liste des ruches de ce rucher
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
 			model.addAttribute(Const.RUCHES, ruches);
+			
+			// si rucher.depot == true alors ajouter les hausses ou hausse.ruche == null
+			Integer nbHausses = hausseRepository.countHausseInRucher(rucherId);
+			if (rucher.getDepot()) {
+				// on ajoute les hausses qui ne sont pas sur des ruches
+				// à la somme pour le dépôt
+				nbHausses += hausseRepository.countByActiveAndRucheIsNull(true);
+			}
+			model.addAttribute("nbHausses", nbHausses);
+			List<Integer> listNbHausses = new ArrayList<>();
 			// Nonmbre de cadres dans le dernier événement cadre
 			Collection<String> nbCadres = new ArrayList<>();
 			for (Ruche ruche : ruches) {
+				// Compte du nombre de hausses de chaque ruche
+				listNbHausses.add(hausseRepository.countByRucheId(ruche.getId()));
 				Evenement evenCadres = evenementRepository
 						.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.RUCHECADRE);
 				if (evenCadres == null) {
@@ -330,6 +342,7 @@ public class RucherController {
 				}
 			}
 			model.addAttribute("nbCadres", nbCadres);
+			model.addAttribute("listNbHausses", listNbHausses);
 			// Si des hausses de récolte référencent ce rucher, on ne pourra la supprimer
 			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByRucherId(rucherId);
 			model.addAttribute("recolteHausses", recolteHausses.iterator().hasNext());
