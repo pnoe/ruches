@@ -106,7 +106,7 @@
 		</table>
 		<h6	th:unless="${#arrays.length(ruches)}" th:text="#{Pasderuche}"></h6>
 		<th:block th:if="${#arrays.length(ruches)}">
-			<h6	th:if="${nbHausses}" th:text="#{listeXRuches(${#arrays.length(ruches)})} + ' ' + #{nbXHausses(${nbHausses})}"></h6>
+			<h6	th:if="${nbHausses}" th:text="#{listeXRuches(${#arrays.length(ruches)})} + '. ' + #{nbXHausses(${nbHausses})}"></h6>
 			<h6	th:unless="${nbHausses}" th:text="#{listeXRuches(${#arrays.length(ruches)})}"></h6>
 			<table class="table table-sm table-bordered table-striped" id="ruches">
 				<thead>
