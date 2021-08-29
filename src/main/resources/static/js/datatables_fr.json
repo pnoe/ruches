@@ -1,30 +1,50 @@
 {
-    "sEmptyTable":     "Aucune donnée disponible dans le tableau",
-    "sInfo":           "Affichage de _START_ à _END_ sur _TOTAL_",
-    "sInfoEmpty":      "Affichage de 0 à 0 sur 0",
-    "sInfoFiltered":   "(filtré à partir de _MAX_ éléments au total)",
-    "sInfoPostFix":    "",
-    "sInfoThousands":  ",",
-    "sLengthMenu":     "Afficher _MENU_ éléments",
-    "sLoadingRecords": "Chargement...",
-    "sProcessing":     "Traitement...",
-    "sSearch":         "Rechercher",
-    "sZeroRecords":    "Aucun élément correspondant trouvé",
-    "oPaginate": {
-        "sFirst":    "Premier",
-        "sLast":     "Dernier",
-        "sNext":     ">",
-        "sPrevious": "<"
+    "emptyTable": "Aucune donnée disponible dans le tableau",
+    "lengthMenu": "Afficher _MENU_ éléments",
+    "loadingRecords": "Chargement...",
+    "processing": "Traitement...",
+    "zeroRecords": "Aucun élément correspondant trouvé",
+    "paginate": {
+        "first": "Premier",
+        "last": "Dernier",
+        "previous": "<",
+        "next": ">"
     },
-    "oAria": {
-        "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
-        "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+    "aria": {
+        "sortAscending": ": activer pour trier la colonne par ordre croissant",
+        "sortDescending": ": activer pour trier la colonne par ordre décroissant"
     },
     "select": {
-            "rows": {
-                "_": "&nbsp;- %d sélectionnés",
-                "0": "&nbsp;- 0 sélectionné",
-                "1": "&nbsp;- 1 sélectionné"
-            } 
-    }
-}
+        "rows": {
+            "_": "&nbsp; %d sélectionnés",
+            "1": "&nbsp; 1 sélectionné"
+        }
+    },
+    "buttons": {
+        "copyKeys": "Appuyer sur ctrl ou u2318 + C pour copier les données du tableau dans votre presse-papier.",
+        "collection": "Collection",
+        "colvis": "Visibilité colonnes",
+        "colvisRestore": "Rétablir visibilité",
+        "copy": "Copier",
+        "copySuccess": {
+            "1": "1 ligne copiée dans le presse-papier",
+            "_": "%ds lignes copiées dans le presse-papier"
+        },
+        "copyTitle": "Copier dans le presse-papier",
+        "csv": "CSV",
+        "excel": "Excel",
+        "pageLength": {
+            "-1": "Afficher toutes les lignes",
+            "_": "Afficher %d lignes"
+        },
+        "pdf": "PDF",
+        "print": "Imprimer"
+    },
+    "decimal": ",",
+    "info": "Affichage de _START_ à _END_ sur _TOTAL_",
+    "infoEmpty": "Affichage de 0 à 0 sur 0",
+    "infoThousands": ".",
+    "search": "Rechercher",
+    "thousands": ".",
+    "infoFiltered": "(filtrés depuis un total de _MAX_ éléments)"
+}  
