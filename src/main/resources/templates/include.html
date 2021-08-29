@@ -43,8 +43,8 @@ if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('f
 }
 $.extend( $.fn.dataTable.defaults, {
 	stateSave: true,
-	lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, [[#{tousLes}]] ] ],
-	pageLength: [[${@environment.getProperty('datatables.pageLength')}]],
+	lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, [[#{Tout}]] ] ],
+	pageLength: 25, // [[${@environment.getProperty('datatables.pageLength')}]],
 });
 </script>
 <th:block th:replace="${scripts} ?: ~{}" />
