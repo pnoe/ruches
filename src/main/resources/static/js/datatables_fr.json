@@ -40,7 +40,7 @@
         "pdf": "PDF",
         "print": "Imprimer"
     },
-    "language.decimal": ",",
+    "decimal": ",",
     "info": "Affichage de _START_ à _END_ sur _TOTAL_",
     "infoEmpty": "Affichage de 0 à 0 sur 0",
     "infoThousands": ".",

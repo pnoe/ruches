@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+	<!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="common_header(scripts,styles,links)">
 <title th:text="#{Ruches}"></title>
@@ -15,7 +15,7 @@
 <link rel="stylesheet" type="text/css" media="all"
 	th:href="@{/css/ruches.css}" />
 <link rel="stylesheet" type="text/css" media="all"
-	th:href="@{/js/datatables-1.11.0/datatables.min.css}" />
+	th:href="@{/js/datatables-1.11.1/datatables.min.css}" />
 	
 <link rel="stylesheet" type="text/css" media="all"
 	th:href="@{/bootstrap-icons-1.5.0/bootstrap-icons.css}" />	
@@ -26,7 +26,7 @@
 <script th:src="@{/js/bootstrap-5.1.0-dist/js/bootstrap.bundle.min.js}"></script>
 <link rel="stylesheet" type="text/css" media="all"
 	th:href="@{/js/bootstrap-5.1.0-dist/css/bootstrap.min.css}" />
-<script th:src="@{/js/datatables-1.11.0/datatables.min.js}"></script>
+<script th:src="@{/js/datatables-1.11.1/datatables.min.js}"></script>
 <script th:inline="javascript">
 $().ready(function() {
   $('.confirmdeploie').on('click', function() {
@@ -35,13 +35,13 @@ $().ready(function() {
 });
 if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('fr') != -1)) {
 	jQuery.getScript([[@{/js/jquery.validate-1.19.3-messages_fr.min.js}]]);
-	$.extend( $.fn.dataTable.defaults, {
+	$.extend( true, $.fn.dataTable.defaults, {
 		language: {
         	url: [[@{/js/datatables_fr.json}]]
     	},
 	});
 }
-$.extend( $.fn.dataTable.defaults, {
+$.extend( true, $.fn.dataTable.defaults, {
 	stateSave: true,
 	lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, [[#{Tout}]] ] ],
 	pageLength: 25, // [[${@environment.getProperty('datatables.pageLength')}]],
