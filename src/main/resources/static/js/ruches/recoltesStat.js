@@ -23,6 +23,8 @@ function interpolateColors(dataLength, colorScale, colorRangeInfo) {
 }
 
 function graphe() {
+	const lang = navigator.language;
+	const digits2 = {maximumFractionDigits:2};
 	const colorScale = d3.interpolateRainbow;
 	const colorRangeInfo = {
 		colorStart: 0,
@@ -49,8 +51,8 @@ function graphe() {
 					callbacks: {
 						label: function(tooltipItem) {
 							const poids = tooltipItem.dataset.data[tooltipItem.dataIndex];
-							return tooltipItem.label + ' ' + (poids / 1000).toFixed(2) + 'kg ' +
-								(poids * 100 / poidsTotal).toFixed(2) + '%';
+							return tooltipItem.label + ' ' + (poids / 1000).toLocaleString(lang, digits2) + 'kg ' +
+								(poids * 100 / poidsTotal).toLocaleString(lang, digits2) + '%';
 						}
 					}
 				}

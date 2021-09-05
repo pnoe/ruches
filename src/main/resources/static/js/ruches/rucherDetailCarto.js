@@ -4,6 +4,8 @@
    ruchestxt, distancedeparcourstxt  */
 
 function exportGpx() {
+	const lang = navigator.language;
+	const digits2 = {maximumFractionDigits:2};
 	let gpxcontent = '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>' +
 		'<gpx xmlns="http://www.topografix.com/GPX/1/1" ' +
 		'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
@@ -29,7 +31,7 @@ function exportGpx() {
 	gpxcontent +=
 		'<trk><name><![CDATA[Rucher ' + rucher.nom + ']]></name><desc>' +
 		ruches.length + ' ' + ruchestxt + ', ' + distancedeparcourstxt + ' ' +
-		distParcours.toFixed(2) + 'm</desc><trkseg>';
+		distParcours.toLocaleString(lang, digits2) + 'm</desc><trkseg>';
 	for (const rucheP of rucheParcours) {
 		gpxcontent += '<trkpt lat="' + rucheP.latitude +
 			'" lon="' + rucheP.longitude + '"></trkpt>';
@@ -44,6 +46,8 @@ function exportGpx() {
 }
 
 function exportKml() {
+	const lang = navigator.language;
+	const digits2 = {maximumFractionDigits:2};
 	let styleStrBegin = '<IconStyle><Icon>' +
 		'<href>http://maps.google.com/mapfiles/kml/pushpin/wht-pushpin.png</href>' +
 		'</Icon><scale>1</scale><color>';
@@ -68,7 +72,7 @@ function exportKml() {
 		if (rucheParcours[i].id === 0) {
 			nom = '<![CDATA[Entrée';
 			description = '<![CDATA[Entrée : ' + ruches.length + ' ' + ruchestxt + '<br/>' + distancedeparcourstxt + ' ' +
-				distParcours.toFixed(2) + 'm';
+				distParcours.toLocaleString(lang, digits2) + 'm';
 			couleur = '#iconwhite';
 		} else {
 			let rucheidx = ruches.findIndex(x => x.id === rucheParcours[i].id);
@@ -114,7 +118,7 @@ function exportKml() {
 		'<color>7f00ffff</color><width>4</width></LineStyle></Style>' +
 		'<Placemark><name>Parcours</name><description>' +
 		ruches.length + ' ' + ruchestxt + ', ' +
-		distancedeparcourstxt + ' ' + distParcours.toFixed(2) + 'm' +
+		distancedeparcourstxt + ' ' + distParcours.toLocaleString(lang, digits2) + 'm' +
 		'</description><styleUrl>#yellowLineGreenPoly</styleUrl><LineString><coordinates> ';
 	for (const rucheP of rucheParcours) {
 		kmlcontent += rucheP.longitude + ',' +

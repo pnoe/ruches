@@ -11,6 +11,8 @@ const markersRuche = [];
 let markerRucher;
 let infowindowp;
 const circlesButinage = [];
+const lang = navigator.language;
+const digits2 = {maximumFractionDigits:2};
 
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
@@ -91,7 +93,7 @@ function initMap() {
 	google.maps.event.addListener(markerRucher, 'click', function() {
 		infowindow.setContent(
 			ruches.length + ' ' + ruchestxt + '<br/>' + distancedeparcourstxt +
-			' ' + distParcours.toFixed(2) + 'm');
+			' ' + distParcours.toLocaleString(lang, digits2) + 'm');
 		infowindow.open(map, markerRucher);
 	});
 	markersRuche.push(markerRucher);
@@ -157,7 +159,7 @@ function parcoursRedraw(redraw = false) {
 					infowindowp.close();
 					infowindowp.setContent(
 						"Pas d'amélioration<br/>" +
-						distancedeparcourstxt + ' ' + distParcours.toFixed(2) + 'm'
+						distancedeparcourstxt + ' ' + distParcours.toLocaleString(lang, digits2) + 'm'
 					);
 					infowindowp.open(map, markerRucher);
 					return;
@@ -171,9 +173,9 @@ function parcoursRedraw(redraw = false) {
 				if (redraw) {
 					infowindowp.close();
 					infowindowp.setContent(
-						'La distance est diminuée de ' + (dist - distParcours).toFixed(2) +
+						'La distance est diminuée de ' + (dist - distParcours).toLocaleString(lang, digits2) +
 						'm<br/>' + distancedeparcourstxt +
-						' ' + distParcours.toFixed(2) + 'm'
+						' ' + distParcours.toLocaleString(lang, digits2) + 'm'
 					);
 					infowindowp.open(map, markerRucher);
 				}
