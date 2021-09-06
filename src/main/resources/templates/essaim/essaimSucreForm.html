@@ -42,7 +42,7 @@
 					th:text="#{essaim} + ' ' + ${essaim.nom}"></a>
 				</h1>			
 				<th:block th:text="${valeurESSAIMSUCRE}?
-					${valeurESSAIMSUCRE}+'kg le '+${#temporals.format(dateESSAIMSUCRE, 'dd/MM/yyyy')}:''">
+					${#numbers.formatDecimal(valeurESSAIMSUCRE,1,2)}+'kg le '+${#temporals.format(dateESSAIMSUCRE, 'dd/MM/yyyy')}:''">
 		        </th:block>
         	</div>
         </div>

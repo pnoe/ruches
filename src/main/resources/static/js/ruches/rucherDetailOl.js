@@ -54,7 +54,7 @@ function rucherDetail(ign) {
 					})
 				}),
 				text: new ol.style.Text({
-					text: (((ruches[i].essaim != null) && (ruches[i].essaim.reineMarquee == true)) ? '*' : '') + ruches[i].nom,
+					text: (((ruches[i].essaim != null) && ruches[i].essaim.reineMarquee) ? '*' : '') + ruches[i].nom,
 					font: '14px sans-serif'
 				})
 			})

@@ -40,9 +40,9 @@ function initMap() {
 				scale: 0.70
 			},
 			label: {
-				text: (((ruches[i].essaim != null) && (ruches[i].essaim.reineMarquee == true)) ? '*' : '') + ruches[i].nom,
+				text: (((ruches[i].essaim != null) && ruches[i].essaim.reineMarquee) ? '*' : '') + ruches[i].nom,
 				fontSize: '15px',
-				fontWeight: ((ruches[i].essaim != null) && (ruches[i].essaim.reineMarquee == true)) ? 'bold' : 'normal'
+				fontWeight: ((ruches[i].essaim != null) && ruches[i].essaim.reineMarquee) ? 'bold' : 'normal'
 			},
 			rucheid: ruches[i].id,
 			essaimnom: (ruches[i].essaim == null) ? '' : ruches[i].essaim.nom,
