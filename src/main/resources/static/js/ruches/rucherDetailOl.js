@@ -8,7 +8,7 @@
 
 function rucherDetail(ign) {
 	const lang = navigator.language;
-	const digits2 = {maximumFractionDigits:2};
+	const digits2 = { maximumFractionDigits: 2 };
 	$('.rapproche').on('click', function() {
 		return confirm(rapprochertxt);
 	});
@@ -173,17 +173,33 @@ function rucherDetail(ign) {
 			zoom: 19
 		})
 	});
-
-
-
 	const drawControl = new ol.control.Drawing({
 		layer: drawLayer,
 		tools: {
 			text: false
-		}
+		},
+		labels: {
+			export: 'Enregistrer'
+		},
 	});
 	map.addControl(drawControl);
-
+	ol.control.Drawing.prototype.onExportFeatureClick = function() {
+		const req = new XMLHttpRequest();
+		req.open('POST', ruchesurl + 'rucher/sauveDessin/' + rucher.id, true);
+		req.setRequestHeader('x-csrf-token', _csrf_token);
+		req.onload = function() {
+			if (req.readyState === 4) {
+				if (req.status === 200) {
+					if (req.responseText !== "OK") {
+						alert(req.responseText);
+					} else {
+						alert(dessinEnregistretxt);
+					}
+				}
+			}
+		};
+		req.send(formatKML.writeFeatures(drawLayer.getSource().getFeatures()));
+	};
 	const gfi = new ol.control.GetFeatureInfo({
 		layers: [{
 			obj: drawLayer,
@@ -442,30 +458,8 @@ function rucherDetail(ign) {
 		});
 	}
 
-	$('#sauve-dessin').click(function() {
-		sauveDessin();
-	});
-	function sauveDessin() {
-		const req = new XMLHttpRequest();
-		req.open('POST', ruchesurl + 'rucher/sauveDessin/' + rucher.id, true);
-		req.setRequestHeader('x-csrf-token', _csrf_token);
-		req.onload = function() {
-			if (req.readyState === 4) {
-				if (req.status === 200) {
-					if (req.responseText !== "OK") {
-						alert(req.responseText);
-					} else {
-						alert(dessinEnregistretxt);
-					}
-				}
-			}
-		};
-		req.send(formatKML.writeFeatures(drawLayer.getSource().getFeatures()));
-	}
-
 	function parcoursRedraw(redraw = false) {
 		const req2 = new XMLHttpRequest();
-		// const redrawX = redraw?'1':'0';
 		req2.open('GET', ruchesurl + 'rucher/parcours/' + rucher.id + '/' + redraw, true);
 		req2.onload = function() {
 			if (req2.readyState === 4) {
@@ -492,7 +486,7 @@ function rucherDetail(ign) {
 						title: parcourstxt,
 						description: parcoursoptimumtxt
 					});
-					
+
 					if (redraw) {
 						document.getElementById('popup-content').innerHTML =
 							'La distance est diminuée de ' + (dist - distParcours).toLocaleString(lang, digits2) +
@@ -550,6 +544,6 @@ function rucherDetail(ign) {
 		hull.setGeometry(geom);
 	}
 	convexHull();
-	*/				
+	*/
 
 }
