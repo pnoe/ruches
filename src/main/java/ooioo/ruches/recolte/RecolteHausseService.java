@@ -21,7 +21,7 @@ public class RecolteHausseService {
 		}
 		return String.join(", ", nomRuchers);
 	}
-	
+
 	/**
 	 * Retourne une liste des noms des ruches de la récolte
 	 */

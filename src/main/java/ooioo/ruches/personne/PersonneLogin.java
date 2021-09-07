@@ -14,9 +14,9 @@ public class PersonneLogin {
 	public void setLogin(String login) {
 		this.login = login;
 	}
-	
+
 	public PersonneLogin(String login) {
 		this.login = login;
 	}
-	
+
 }

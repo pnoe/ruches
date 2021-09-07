@@ -23,7 +23,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 		UserBuilder builder = null;
 		if (personne == null) {
 			throw new UsernameNotFoundException("Login ou mot de passe incorrect.");
-		}	
+		}
 		builder = org.springframework.security.core.userdetails.User.withUsername(login);
 //		builder.password(new BCryptPasswordEncoder().encode(personne.getPassword()));
 		builder.password(personne.getPassword());

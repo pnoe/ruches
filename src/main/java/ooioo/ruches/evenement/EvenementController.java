@@ -55,13 +55,13 @@ public class EvenementController {
 	 */
 	@GetMapping("/liste")
 	public String liste(Model model, @RequestParam(required = false) Integer periode,
-			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1, 
+			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
 			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext,
 			@CookieValue(value = "p", defaultValue = "3") Integer pCookie,
 			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
-			@CookieValue(value = "d1", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie, 
-			@CookieValue(value = "d2", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie	
+			@CookieValue(value = "d1", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
+			@CookieValue(value = "d2", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie
 			) {
 		if (periode == null) {
 			periode = pCookie;
@@ -91,7 +91,7 @@ public class EvenementController {
 			// ajouter tests date1 et date2 non null
 			model.addAttribute(Const.EVENEMENTS, evenementRepository.findPeriode(date1, date2));
 			model.addAttribute("datestext", datestext);
-		}	
+		}
 		model.addAttribute("periode", periode);
 		return Const.EVEN_EVENLISTE;
 	}
@@ -101,17 +101,17 @@ public class EvenementController {
 	 */
 	@GetMapping("/{evenementId}")
 	public String evenement(Model model, @PathVariable long evenementId,
-			@RequestParam(defaultValue = "") @Nullable String type, 
-			
-			@RequestParam(defaultValue = "0") @Nullable Long itemId) {		
-		
+			@RequestParam(defaultValue = "") @Nullable String type,
+
+			@RequestParam(defaultValue = "0") @Nullable Long itemId) {
+
 		Optional<Evenement> evenementOpt = evenementRepository.findById(evenementId);
 		if (evenementOpt.isPresent()) {
 			model.addAttribute(Const.EVENEMENT, evenementOpt.get());
 			model.addAttribute("type", type);
-			
+
 			model.addAttribute("itemId", itemId);
-			
+
 		} else {
 			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
 			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);

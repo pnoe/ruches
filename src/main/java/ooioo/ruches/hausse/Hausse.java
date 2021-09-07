@@ -16,10 +16,10 @@ import ooioo.ruches.ruche.Ruche;
 
 @Entity
 public class Hausse {
-	
+
 	public Hausse() {
 	}
-	
+
 	/**
 	 * Clonage d'une hausse
 	 */
@@ -29,7 +29,7 @@ public class Hausse {
 		this.nom = nom;
 		// champs identiques
 		this.active = hausse.getActive();
-		this.dateAcquisition = hausse.getDateAcquisition();		
+		this.dateAcquisition = hausse.getDateAcquisition();
 		this.nbCadres = hausse.getNbCadres();
 		this.nbCadresMax = hausse.getNbCadresMax();
 		this.setPoidsVide(hausse.getPoidsVide());
@@ -152,7 +152,7 @@ public class Hausse {
 	public BigDecimal getPoidsVide() {
 		return new BigDecimal(poidsVide).movePointLeft(3);
 	}
-	
+
 	public void setPoidsVide(BigDecimal poidsVide) {
 		this.poidsVide = poidsVide.movePointRight(3).intValue();
 	}

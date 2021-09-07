@@ -78,7 +78,7 @@ public class RucherController {
 	private RucherService rucherService;
 	@Autowired
 	private RecolteRepository recolteRepository;
-	
+
 	@Autowired
 	MessageSource messageSource;
 
@@ -99,8 +99,8 @@ public class RucherController {
 	private String openweathermapKey;
 	@Value("${rucher.butinage.rayons}")
 	private int[] rayonsButinage;
-	
-	
+
+
 	/**
 	 * Historique d'un rucher
 	 *  Liste les événements correspondant à l'ajout ou le retrait de ruche
@@ -127,10 +127,10 @@ public class RucherController {
 					itemHisto.put("ruche", (eve.getRuche() == null) ? "" : eve.getRuche().getNom());
 					itemHisto.put(Const.NBRUCHES, Integer.toString(ruches.size()));
 					itemHisto.put("etat", "");
-					itemHisto.put("eveid", eve.getId().toString());					
+					itemHisto.put("eveid", eve.getId().toString());
 					histo.add(itemHisto);
 					continue;
-				}			
+				}
 				if (eve.getRucher().getId().equals(rucherId)) {
 					// si l'événement est un ajout dans le rucher
 					// on ajoute la ruche de l'événement dans la liste des ruches du rucher
@@ -141,7 +141,7 @@ public class RucherController {
 					itemHisto.put("type", "Ajout");
 					itemHisto.put("ruche", eve.getRuche().getNom());
 					itemHisto.put(Const.NBRUCHES, Integer.toString(ruches.size()));
-					itemHisto.put("etat", String.join(" ", ruches)); 
+					itemHisto.put("etat", String.join(" ", ruches));
 					itemHisto.put("eveid", eve.getId().toString());
 					histo.add(itemHisto);
 				} else {
@@ -164,14 +164,14 @@ public class RucherController {
  			model.addAttribute("histo", histo);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "rucher/rucherHisto";
 	}
-	
+
 	/**
 	 * Statistiques tableau poids de miel par rucher
 	*/
@@ -197,7 +197,7 @@ public class RucherController {
 					pTotal += poids;
 					pMax = Math.max(pMax, poids);
 					pMin = Math.min(pMin, poids);
-				} 
+				}
 			}
 			if (pMin == 1000000) { pMin = 0; }
 			Map<String, String> rucherPoids = new HashMap<>();
@@ -285,7 +285,7 @@ public class RucherController {
 			model.addAttribute(Const.PERSONNES, personneRepository.findAll());
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -318,7 +318,7 @@ public class RucherController {
 			// liste des ruches de ce rucher
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
 			model.addAttribute(Const.RUCHES, ruches);
-			
+
 			// si rucher.depot == true alors ajouter les hausses ou hausse.ruche == null
 			Integer nbHausses = hausseRepository.countHausseInRucher(rucherId);
 			if (rucher.getDepot()) {
@@ -371,7 +371,7 @@ public class RucherController {
 			model.addAttribute("poidsTotal", poidsTotal);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -403,7 +403,7 @@ public class RucherController {
 			}
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -428,7 +428,7 @@ public class RucherController {
 			model.addAttribute("ruchesNot", ruchesNot);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -473,14 +473,14 @@ public class RucherController {
 			}
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "redirect:/rucher/liste";
 	}
-	
+
 	/**
 	 * Affiche la carte avec les ruches du rucher
 	 * Gg google maps, Ign ou OpenStreetMap
@@ -498,7 +498,7 @@ public class RucherController {
 			List<String> nomHausses = new ArrayList<>();
 			// Pour calcul du barycentre des ruches, centre des cercles de butinage
 			Float longitude;
-			Float latitude = 0f;		
+			Float latitude = 0f;
 			int nbRuches = 0;
 			double xlon = 0d;
 			double ylon = 0d;
@@ -526,11 +526,11 @@ public class RucherController {
 			model.addAttribute(Const.RUCHES, ruches);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
-		}		
+		}
 		model.addAttribute("ggMapsUrl", ggMapsUrl);
 		model.addAttribute("ignDataKey", ignDataKey);
 		return "rucher/rucherDetail" + request.getServletPath().split("/")[2];
@@ -560,7 +560,7 @@ public class RucherController {
 		model.addAttribute("ignDataKey", ignDataKey);
 		return RUCHER_RUCHERLISTE + request.getServletPath().split("/")[2];
 	}
-	
+
 	/**
 	 * Appel du formulaire pour ajouter une liste de ruches dans un rucher
 	 */
@@ -576,7 +576,7 @@ public class RucherController {
 			model.addAttribute("ruchesNoms", ruchesNoms);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -585,7 +585,7 @@ public class RucherController {
 	}
 
 	/**
-	 * Ajoute une liste de ruches dans un rucher 
+	 * Ajoute une liste de ruches dans un rucher
 	 * Création de l'événement RUCHEAJOUTRUCHER par ruche
 	 */
 	@PostMapping("/ruches/ajouter/sauve/{rucherId}/{ruchesNoms}")
@@ -597,7 +597,7 @@ public class RucherController {
 			rucherService.sauveAjouterRuches(rucher, ruchesNoms, date, commentaire);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -623,17 +623,17 @@ public class RucherController {
 		}
 		logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 		return "Id rucher inconnu";
-		
+
 	}
-	
+
 	/**
 	 * Météo d'un rucher
-	 * 
+	 *
 	 * https://github.com/Prominence/openweathermap-java-api/blob/master/docs/SNAPSHOT.md
 	 * https://openweathermap.org/api/one-call-api
 	 * https://openweathermap.org/api
 	 * http://api.openweathermap.org/data/2.5/onecall?lat=43.4900093&lon=5.49108076&APPID=xxxx
-	 * 
+	 *
 	 */
 	@GetMapping("/meteo/{rucherId}")
 	public String meteo(Model model, @PathVariable long rucherId) {
@@ -644,7 +644,7 @@ public class RucherController {
 			model.addAttribute("openweathermapKey", openweathermapKey);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -663,10 +663,10 @@ public class RucherController {
 			ruchers = rucherRepository.findAllByOrderByNom();
 		} else {
 			ruchers = rucherRepository.findByActifOrderByNom(true);
-		}		
+		}
 		for (Rucher rucher : ruchers) {
 			Float longitude;
-			Float latitude = 0f;		
+			Float latitude = 0f;
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucher.getId());
 			Float longitudeAvant =rucher.getLongitude();
 			Float latitudeAvant = rucher.getLatitude();
@@ -688,12 +688,12 @@ public class RucherController {
 			rucher.setLongitude(longitude);
 			rucher.setLatitude(latitude);
 			rucherRepository.save(rucher);
-			logger.info("Repositionnement du rucher {} au centre de ses ruches. Avant long {} lat {}. Après long {} lat {}.", 
+			logger.info("Repositionnement du rucher {} au centre de ses ruches. Avant long {} lat {}. Après long {} lat {}.",
 					rucher.getNom(), nf.format(longitudeAvant), nf.format(latitudeAvant), nf.format(longitude), nf.format(latitude));
 		}
 		return "redirect:/rucher/Ign";
 	}
-	
+
 	/**
 	 * Calcul du parcours d'un rucher (appel XMLHttpRequest)
 	 *   redraw = 0  recalcul si l'utilisateur déplace une ruche sur la carte
@@ -702,12 +702,12 @@ public class RucherController {
 	@GetMapping("/parcours/{rucherId}/{redraw}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody Map<String, Object> parcours(@PathVariable Long rucherId, @PathVariable boolean redraw) {
-		Map<String, Object> map = new HashMap<>(); 
+		Map<String, Object> map = new HashMap<>();
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
-			List<RucheParcours> chemin = new ArrayList<>();			
+			List<RucheParcours> chemin = new ArrayList<>();
 			double retParcours = rucherService.cheminRuchesRucher(chemin, rucher, ruches, redraw);
 			map.put("distParcours", retParcours);
 			map.put("rucheParcours", chemin);
@@ -716,8 +716,8 @@ public class RucherController {
 		logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 		map.put("erreur", "Id rucher inconnu");
 		return map;
-	}	
-	
+	}
+
 	/**
 	 * Sauvegarde d'un dessin sur carte ign ou osm (appel XMLHttpRequest)
 	 */
@@ -734,6 +734,6 @@ public class RucherController {
 		logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 		return "error";
 	}
-	
+
 
 }

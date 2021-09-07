@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EmailService {
-	
+
 	private final Logger logger = LoggerFactory.getLogger(EmailService.class);
-	
+
 	@Value("${email.from}")
 	private String emailFrom;
 

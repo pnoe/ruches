@@ -15,9 +15,9 @@ public class HausseService {
 
 	@Autowired
 	private EvenementRepository evenementRepository;
-	
+
 	/*
-	 * Ajoute au model Spring les chaînes date, valeur et commentaire du 
+	 * Ajoute au model Spring les chaînes date, valeur et commentaire du
 	 * dernier événement de type typeEvenement
 	 */
 	public void modelAddEvenement(Model model, Hausse hausse, TypeEvenement typeEvenement) {
@@ -36,7 +36,7 @@ public class HausseService {
 	}
 
 	/*
-	 * Ajoute au model Spring la chaînes "dateHAUSSEPOSERUCHE" du 
+	 * Ajoute au model Spring la chaînes "dateHAUSSEPOSERUCHE" du
 	 * dernier événement de type HAUSSEPOSERUCHE
 	 */
 	public void modelAddEvenPoseHausse(Model model, Ruche ruche, Hausse hausse) {

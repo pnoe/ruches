@@ -76,7 +76,7 @@ public class EssaimController {
 	private RecolteRepository recolteRepository;
 	@Autowired
 	private RecolteHausseRepository recolteHausseRepository;
-	
+
 	@Autowired
 	MessageSource messageSource;
 
@@ -89,7 +89,7 @@ public class EssaimController {
 	private String accueilTitre;
 	@Value("${essaime.suffix}")
 	private String essaimeSuffix;
-	
+
 	/*
 	 * Statistiques âges des reines
 	 */
@@ -143,10 +143,10 @@ public class EssaimController {
 				} else {
 					ageMinJours = Math.min(ageMinJours, ageJours);
 				}
-				ageTotalJours += ageJours;		
+				ageTotalJours += ageJours;
 				// Variance Welford's algorithm
 				double tmpM = m;
-				double ageJ = (double)ageJours;
+				double ageJ = ageJours;
 		        m += (ageJ - tmpM) / nb;
 		        s += (ageJ - tmpM) * (ageJ - m);
 		        nb++;
@@ -169,10 +169,10 @@ public class EssaimController {
 		model.addAttribute("pas", pas);
 		return "essaim/essaimsStatAges";
 	}
-	
+
 	/**
 	 * Statistiques tableau poids de miel par essaim
-	 * 
+	 *
 	 * @param rucherId optionnel pour ne prendre en compte que les hausses de récolte dans ce rucher
 	 * @param masquerInactif pour masquer les essaims inactifs
 	*/
@@ -183,7 +183,7 @@ public class EssaimController {
 		// pour équivalence appel Get ou Post avec rucherId = 0
 		if ((rucherId != null) && rucherId.equals(0L)) { rucherId = null; }
 		Iterable<Recolte> recoltes = recolteRepository.findAllByOrderByDateAsc();
-		Iterable<Essaim> essaims = masquerInactif ? essaimRepository.findByActif(true) 
+		Iterable<Essaim> essaims = masquerInactif ? essaimRepository.findByActif(true)
 				: essaimRepository.findAll();
 		List<Map<String, String>> essaimsPoids = new ArrayList<>();
 		DecimalFormat decimalFormat = new DecimalFormat("0.00", new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
@@ -212,7 +212,7 @@ public class EssaimController {
 					pTotal += poids;
 					pMax = Math.max(pMax, poids);
 					pMin = Math.min(pMin, poids);
-				} 
+				}
 			}
 			if (pMin == 1000000) { pMin = 0; }
 			// si rucherId non null
@@ -232,7 +232,7 @@ public class EssaimController {
 					if (duree <= 0) {
 						essaimPoids.put("pMoyen", "Erreur durée");
 					} else {
-						float pMoyen = pTotal*0.365242f/(float)duree;
+						float pMoyen = pTotal*0.365242f/duree;
 						essaimPoids.put("pMoyen", decimalFormat.format(pMoyen));
 					}
 					essaimPoids.put("duree", Long.toString(duree));
@@ -274,14 +274,14 @@ public class EssaimController {
 			model.addAttribute(Const.RUCHE, ruche);
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "essaim/essaimEssaimerForm";
 	}
-	
+
 	/*
 	 * Enregistrement de l'essaimage
 	 */
@@ -291,7 +291,7 @@ public class EssaimController {
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isEmpty()) {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -308,27 +308,27 @@ public class EssaimController {
 			noms.add(essaimNom.getNom());
 		}
 		if (noms.contains(nom)) {
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage("LeNomXXExiste", new Object[] {nom}, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
-		// On crée l'essaim : nom saisi dans le formulaire, date acquisition et naissance reine 
+		// On crée l'essaim : nom saisi dans le formulaire, date acquisition et naissance reine
 		//   = date formulaire, souche = essaim dispersé
-		Essaim nouvelEssaim = new Essaim(nom, 
+		Essaim nouvelEssaim = new Essaim(nom,
 				true, // actif
 				dateEveAjout.toLocalDate(), // acquisition
 				commentaire, // Le champ commentaire du formulaire ? essaim ou événement dispersion ?
 				dateEveAjout.toLocalDate(), // reineDateNaissance
 				false, // reineMarquee
-				essaim, // souche, 
+				essaim, // souche,
 				essaim.getAgressivite(), // agressivite
 				essaim.getProprete()); // proprete
 		essaimRepository.save(nouvelEssaim);
 		// On met cet essaim dans la ruche
 		ruche.setEssaim(nouvelEssaim);
 		Evenement evenementAjout = new Evenement(dateEveAjout, TypeEvenement.AJOUTESSAIMRUCHE, ruche, nouvelEssaim,
-				ruche.getRucher(), null, null, commentaire); 
+				ruche.getRucher(), null, null, commentaire);
 		evenementRepository.save(evenementAjout);
 		logger.info(Const.EVENEMENTXXENREGISTRE, evenementAjout.getId());
 		rucheRepository.save(ruche);
@@ -338,12 +338,12 @@ public class EssaimController {
 		// On crée l'événement dispersion
 		LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 		Evenement evenement = new Evenement(dateEve, TypeEvenement.ESSAIMDISPERSION, ruche, essaim,
-				ruche.getRucher(), null, null, commentaire); 
-		evenementRepository.save(evenement);	
+				ruche.getRucher(), null, null, commentaire);
+		evenementRepository.save(evenement);
 		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
 		return "redirect:/essaim/" + nouvelEssaim.getId();
 	}
-	
+
 	/**
 	 * Clonage multiple d'un essaim (appel XMLHttpRequest)
 	 *   avec mise en ruche
@@ -378,7 +378,7 @@ public class EssaimController {
 							ruche.setEssaim(clone);
 							rucheRepository.save(ruche);
 							Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, ruche, clone,
-									ruche.getRucher(), null, null, "Clone essaim " + essaim.getNom()); 
+									ruche.getRucher(), null, null, "Clone essaim " + essaim.getNom());
 							evenementRepository.save(evenementAjout);
 							logger.info(Const.EVENEMENTXXENREGISTRE, evenementAjout.getId());
 						} else {
@@ -394,7 +394,7 @@ public class EssaimController {
 		logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 		return "Erreur : id essaim inconnu";
 	}
-	
+
 	/**
 	 * Graphe de descendance
 	 *
@@ -490,7 +490,7 @@ public class EssaimController {
 			// Il faut enlever les essaims qui génèrent une boucle de descendance
 			//  ainsi que l'essaim à modifier pour qu'ils ne soient pas dans la
 			//  liste des essaims pour le choix de la souche
-			List<IdNom> essaimIdNomClean = new ArrayList<>();  
+			List<IdNom> essaimIdNomClean = new ArrayList<>();
 			for (IdNom essaimIdNomItem : essaimIdNom) {
 				boolean soucheok = true;
 				if (essaimIdNomItem.getId() != essaimId) {
@@ -512,7 +512,7 @@ public class EssaimController {
 			model.addAttribute(Const.ESSAIM, essaim);
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -549,7 +549,7 @@ public class EssaimController {
 			}
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -638,7 +638,7 @@ public class EssaimController {
 			model.addAttribute("poidsTotal", poidsTotal);
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -660,7 +660,7 @@ public class EssaimController {
 			model.addAttribute("ruches", rucheRepository.findActiveIdDiffOrderByNom(ruche.getId()));
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -684,17 +684,17 @@ public class EssaimController {
 				// Si l'essaim est dans une ruche envoyer le nom de la ruche
 				//  pour proposer l'échange du postionnment des deux ruches
 				Ruche rucheSource = rucheRepository.findByEssaimId(essaimOpt.get().getId());
-				model.addAttribute("rucheSource", rucheSource);	
+				model.addAttribute("rucheSource", rucheSource);
 			} else {
 				logger.error(Const.IDESSAIMXXINCONNU, essaimId);
-				model.addAttribute(Const.MESSAGE, 
+				model.addAttribute(Const.MESSAGE,
 						messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
 				model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 			}
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -714,7 +714,7 @@ public class EssaimController {
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 		if (rucheOpt.isEmpty()) {
 			logger.error(Const.IDRUCHEINCONNU, rucheId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -722,7 +722,7 @@ public class EssaimController {
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isEmpty()) {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -740,8 +740,8 @@ public class EssaimController {
 			// On crée l'événement dispersion
 			// TODO quel commentaire ?
 			Evenement eveDisperse = new Evenement(dateEve, TypeEvenement.ESSAIMDISPERSION, ruche, essaimDisperse,
-					ruche.getRucher(), null, null, commentaire); 
-			evenementRepository.save(eveDisperse);	
+					ruche.getRucher(), null, null, commentaire);
+			evenementRepository.save(eveDisperse);
 			logger.info(Const.EVENEMENTXXENREGISTRE, eveDisperse.getId());
 		}
 		Rucher rucher = ruche.getRucher();
@@ -773,8 +773,8 @@ public class EssaimController {
 				}
 			}
 			rucheActuelle.setEssaim(null);
-			rucheRepository.save(rucheActuelle);			
-		}				
+			rucheRepository.save(rucheActuelle);
+		}
 		ruche.setEssaim(essaimOpt.get());
 		rucheRepository.save(ruche);
 		// on met dans l'événement le rucher ruche.getRucher car la position des ruches a pu être échangée

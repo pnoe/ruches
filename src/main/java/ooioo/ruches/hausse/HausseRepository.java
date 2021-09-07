@@ -13,7 +13,7 @@ import ooioo.ruches.Nom;
 
 @RepositoryRestResource(collectionResourceRel = "hausseRepository")
 public interface HausseRepository extends CrudRepository<Hausse, Long> {
-	
+
 	Optional<Hausse> findByNom(String hausseNom);
 
 	// correction spring boot 2.2.0 iterable -> list
@@ -26,15 +26,15 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 	Iterable<Hausse> findAllByOrderByNom();
 
 	Iterable<Hausse> findByActiveOrderByNom(boolean actif);
-	
-	
+
+
 	Integer countByActiveAndRucheIsNull(boolean active);
 
 	// Liste des hausses qui ne sont pas dans la récolte recolteId :
 	// hausses non référencées dans les détails de la récolte recolteId
 //	@Query(value = "select * from hausse where id not in (select hausse_id from recolte_hausse where recolte_id = ?1)", nativeQuery = true)
 //  ajout de "hausse.ruche is not null and " pour ne pas afficher des hausses qui n'aurait
-//  pas de ruche/essaim/rucher associé	
+//  pas de ruche/essaim/rucher associé
 	@Query(value = "select hausse from Hausse hausse where " +
     "hausse.ruche is not null and hausse.id not in (select recoltehausse.hausse.id " +
 	"from RecolteHausse recoltehausse where recoltehausse.recolte.id = ?1)")
@@ -44,7 +44,7 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 	@Query(value =	"select hausse from Hausse hausse where hausse.id in (select "
 	  + "recoltehausse.hausse.id from RecolteHausse recoltehausse where recoltehausse.recolte.id = ?1)")
 	Iterable<Hausse> findHaussesInRecolteId(Long recolteId);
-	
+
 	@Query(value =	"select count(h) from Hausse h, Ruche r, Rucher rr where " +
 			"h.ruche.id = r.id and r.rucher.id = rr.id and rr.id = ?1")
 			Integer countHausseInRucher(Long rucherId);
@@ -52,22 +52,22 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 	Integer countByRucheId(Long id);
 
 	Collection<Nom> findAllProjectedBy();
-	
+
 	Collection<Nom> findByRucheId(Long rucherId);
 
 	Collection<Hausse> findCompletByRucheId(Long rucherId);
 
 	Collection<IdNom> findAllProjectedIdNomByOrderByNom();
-	
+
 	// en nativeQuery à cause de string_agg
 	@Query(value = "select string_agg(nom, ', ') from Hausse where ruche_id = ?1", nativeQuery = true)
 	String hausseNomsByRucheId(Long rucheId);
-	
+
 	long countByActiveTrue();
-	
+
 	long countByActiveTrueAndRucheNotNullAndRucheActiveTrueAndRucheEssaimNotNull();
-	
+
 	long countByActiveTrueAndRucheNull();
-	
+
 
 }

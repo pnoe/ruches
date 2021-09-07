@@ -74,7 +74,7 @@ public class RucheController {
 	private RucheService rucheService;
 	@Autowired
 	private RucherService rucherService;
-	
+
 	@Autowired
 	MessageSource messageSource;
 
@@ -145,7 +145,7 @@ public class RucheController {
 	 * Liste des ruches d'un rucher
 	 *  paramètres
 	 *   parcours : pour l'ordre des ruches
-	 *   plus : liste détaillée si true         
+	 *   plus : liste détaillée si true
 	 */
 	@GetMapping("/liste/{rucherId}")
 	public String listeRucher(HttpSession session, Model model, @PathVariable long rucherId,
@@ -166,16 +166,16 @@ public class RucheController {
 			rucheService.listePlusRucher(session, model, rucher, chemin, plus);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		if (plus) {
 			return "ruche/ruchesListePlusRucher";
-		} 
+		}
 		return "ruche/ruchesListeRucher";
-		
+
 	}
 
 	/**
@@ -214,7 +214,7 @@ public class RucheController {
 			model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -223,7 +223,7 @@ public class RucheController {
 	}
 
 	/**
-	 * Changement de rucher d'une ruche 
+	 * Changement de rucher d'une ruche
 	 * Création de l'événement RUCHEAJOUTRUCHER
 	 */
 	@PostMapping("/sauverucher/{rucheId}")
@@ -240,7 +240,7 @@ public class RucheController {
 			}
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -263,7 +263,7 @@ public class RucheController {
 			model.addAttribute(Const.RUCHETYPES, rucheTypes);
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -301,7 +301,7 @@ public class RucheController {
 			}
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -375,7 +375,7 @@ public class RucheController {
 			rucheService.modelAddEvenement(model, ruche, TypeEvenement.COMMENTAIRERUCHE);
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -400,14 +400,14 @@ public class RucheController {
 			model.addAttribute("haussesRucheNot", haussesRucheNot);
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "ruche/rucheAjoutRetrait";
 	}
-	
+
 	/**
 	 * Enregistrer en base l'ordre des hausses modifié par drag and drop (appel XMLHttpRequest)
 	 */
@@ -417,7 +417,7 @@ public class RucheController {
 			@RequestParam(value="hausses[]") Long[] hausses,
 			@RequestParam(value="ordre[]") Integer[] ordre
 			) {
-		for (int i = 0; i < hausses.length; i++) { 
+		for (int i = 0; i < hausses.length; i++) {
 			Optional<Hausse> hausseOpt = hausseRepository.findById(hausses[i]);
 			if (hausseOpt.isPresent()) {
 				Hausse hausse = hausseOpt.get();
@@ -433,7 +433,7 @@ public class RucheController {
 		}
 		return "OK";
 	}
-	
+
 	/**
 	 * Ajouter une hausse sur une ruche
 	 */
@@ -469,14 +469,14 @@ public class RucheController {
 				logger.info("Hause {} posée sur le ruche {}", hausse.getNom(), ruche.getNom());
 			} else {
 				logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
-				model.addAttribute(Const.MESSAGE, 
+				model.addAttribute(Const.MESSAGE,
 						messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
 				model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 			}
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -516,14 +516,14 @@ public class RucheController {
 				logger.info("Hause {} retirée de le ruche {}", hausse.getNom(), rucheNom);
 			} else {
 				logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
-				model.addAttribute(Const.MESSAGE, 
+				model.addAttribute(Const.MESSAGE,
 						messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
 				model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 			}
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;

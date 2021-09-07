@@ -35,7 +35,7 @@ import ooioo.ruches.evenement.TypeEvenement;
 @Controller
 @RequestMapping("/recolte")
 public class RecolteController {
-	
+
 	private static final String RECOLTERECOLTEFORM = "recolte/recolteForm";
 
 	private final Logger logger = LoggerFactory.getLogger(RecolteController.class);
@@ -50,7 +50,7 @@ public class RecolteController {
 	private	EvenementRepository evenementRepository;
 	@Autowired
 	private RecolteHausseService recolteHausseService;
-	
+
 	/*
 	 * Statistiques de production de miel par année
 	 * Miel pesé dans les hausses, miel mis en pot et miel dans les hausses
@@ -79,8 +79,8 @@ public class RecolteController {
 			//   https://fr.wikipedia.org/wiki/%C3%89levage_de_reines
 			//    DateAcquisition est non null à priori (dans formulaire essaimForm)
 			/*
-			LocalDate dateProduction = essaim.getReineDateNaissance() == null ? 
-					essaim.getDateAcquisition() : 
+			LocalDate dateProduction = essaim.getReineDateNaissance() == null ?
+					essaim.getDateAcquisition() :
 						(essaim.getReineDateNaissance().isBefore(essaim.getDateAcquisition()) ?
 								essaim.getDateAcquisition() : essaim.getReineDateNaissance());
 			*/
@@ -113,18 +113,18 @@ public class RecolteController {
 				//      on débute le compte du nombre de jour à cette date
 				if (LocalDate.of(annee + 1, 1, 1).isBefore(maintenant)) {
 					if (LocalDate.of(annee, 1, 1).isBefore(dateFirstEssaim)) {
-						nbJoursAnnee = (float)ChronoUnit.DAYS.between(dateFirstEssaim, LocalDate.of(annee + 1, 1, 1));
+						nbJoursAnnee = ChronoUnit.DAYS.between(dateFirstEssaim, LocalDate.of(annee + 1, 1, 1));
 					} else {
-						nbJoursAnnee = (float)ChronoUnit.DAYS.between(LocalDate.of(annee, 1, 1), LocalDate.of(annee + 1, 1, 1));
+						nbJoursAnnee = ChronoUnit.DAYS.between(LocalDate.of(annee, 1, 1), LocalDate.of(annee + 1, 1, 1));
 					}
 				} else {
 					if (LocalDate.of(annee, 1, 1).isBefore(dateFirstEssaim)) {
-						nbJoursAnnee = (float)ChronoUnit.DAYS.between(dateFirstEssaim, maintenant);
+						nbJoursAnnee = ChronoUnit.DAYS.between(dateFirstEssaim, maintenant);
 					} else {
-						nbJoursAnnee = (float)ChronoUnit.DAYS.between(LocalDate.of(annee, 1, 1), maintenant);
+						nbJoursAnnee = ChronoUnit.DAYS.between(LocalDate.of(annee, 1, 1), maintenant);
 					}
 				}
-				nbEssaims[annee - debutAnnee] += (float)ChronoUnit.DAYS.between(dDebut, dFin)/(nbJoursAnnee);
+				nbEssaims[annee - debutAnnee] += ChronoUnit.DAYS.between(dDebut, dFin)/(nbJoursAnnee);
 			}
 		}
 		// faire l'arrondi de nbEssaims dans un tableau d'int nbIEssaims
@@ -132,14 +132,14 @@ public class RecolteController {
 		int[] nbIEssaims = new int[dureeAns];
 		for (int i = 0; i < dureeAns; i++) {
 			nbIEssaims[i] = Math.round(poidsMielHausses[i]/nbEssaims[i]);
-		}	
+		}
 		model.addAttribute("poidsMielHausses", poidsMielHausses);
 		model.addAttribute("poidsMielPots", poidsMielPots);
 		model.addAttribute("debutAnnee", debutAnnee);
 		model.addAttribute("nbIEssaims", nbIEssaims);
 		return "recolte/recoltesStatProd";
 	}
-	
+
 	/**
 	 * Liste des récoltes
 	 */
@@ -150,7 +150,7 @@ public class RecolteController {
 		List<String> rucherListe = new ArrayList<>();
 		for (Recolte recolte : recoltes) {
 			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByRecolte(recolte);
-			rucherListe.add(recolteHausseService.nomsRuchers(recolteHausses));			
+			rucherListe.add(recolteHausseService.nomsRuchers(recolteHausses));
 		}
 		model.addAttribute(Const.RUCHERS, rucherListe);
 		return "recolte/recoltesListe";
@@ -166,7 +166,7 @@ public class RecolteController {
 		model.addAttribute(Const.RECOLTE, recolte);
 		return RECOLTERECOLTEFORM;
 	}
-	
+
 	/**
 	 * Appel du formulaire pour modifier une récolte
 	 */
@@ -195,7 +195,7 @@ public class RecolteController {
 		logger.info("Récolte {} enregistrée", recolte.getId());
 		return "redirect:/recolte/" + recolte.getId();
 	}
-	
+
 	/**
 	 * Supprimer une récolte et ses hausses de récolte
 	 */
@@ -216,7 +216,7 @@ public class RecolteController {
 			return Const.INDEX;
 		}
 		return "redirect:/recolte/liste";	}
-	
+
 	/**
 	 * Statistiques tableau poids de miel par essaim et par récolte
 	 */
@@ -229,7 +229,7 @@ public class RecolteController {
 		for (Essaim essaim : essaims) {
 			List<String> poidsListe = new ArrayList<>();
 			poidsListe.add(essaim.getNom());
-			Integer poidsTotal = 0;
+			int poidsTotal = 0;
 			for (Recolte recolte : recoltes) {
 				Integer poids = recolteHausseRepository.findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId());
 				if (poids != null) {
@@ -246,7 +246,7 @@ public class RecolteController {
 		model.addAttribute("essaimsRecoltes", essaimsRecoltes);
 		return "recolte/recoltesStatEssaim";
 	}
-	
+
 	/**
 	 * Statistiques graphique poids de miel par essaim pour une récolte
 	 */

@@ -66,7 +66,7 @@ public class PersonneController {
 			}
 		}
 		model.addAttribute("personneLogins", logins);
-		
+
 		List<String> emails = new ArrayList<>();
 		for (PersonneEmail personneEmail : personneRepository.findAllProjectedEmailBy()) {
 			if (!"".equals(personneEmail.getEmail())) {
@@ -74,7 +74,7 @@ public class PersonneController {
 			}
 		}
 		model.addAttribute("personneEmails", emails);
-		
+
 		model.addAttribute(Const.PERSONNE, new Personne());
 		return PERSONNE_PERSONNEFORM;
 	}
@@ -127,7 +127,7 @@ public class PersonneController {
 		}
 		return "redirect:/personne/liste";
 	}
-	
+
 	/**
 	 * Enregistrement de la personne
 	 */

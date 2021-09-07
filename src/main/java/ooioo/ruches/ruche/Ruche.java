@@ -19,7 +19,7 @@ import ooioo.ruches.rucher.Rucher;
 
 @Entity
 public class Ruche {
-	
+
 	public Ruche() {
 	}
 
@@ -129,11 +129,11 @@ public class Ruche {
 	public void setDateAcquisition(LocalDate dateAcquisition) {
 		this.dateAcquisition = dateAcquisition;
 	}
-	
+
 	public Integer getPoidsVideInt() {
 		return poidsVide;
 	}
-	
+
 	public void setPoidsVideInt(Integer poidsVide) {
 		this.poidsVide = poidsVide;
 	}
@@ -141,7 +141,7 @@ public class Ruche {
 	public BigDecimal getPoidsVide() {
 		return new BigDecimal(poidsVide).movePointLeft(3);
 	}
-	
+
 	public void setPoidsVide(BigDecimal poidsVide) {
 		this.poidsVide = poidsVide.movePointRight(3).intValue();
 	}

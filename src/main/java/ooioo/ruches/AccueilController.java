@@ -40,7 +40,7 @@ import ooioo.ruches.rucher.RucherService;
 
 @Controller
 public class AccueilController {
-	
+
 	private final Logger logger = LoggerFactory.getLogger(AccueilController.class);
 
 	@Autowired
@@ -63,7 +63,7 @@ public class AccueilController {
 	private RucherService rucherService;
 	@Autowired
 	private PersonneRepository personneRepository;
-	
+
 	@Value("${accueil.titre}")
 	private String accueilTitre;
 	@Value("${dist.ruches.loins}")
@@ -74,7 +74,7 @@ public class AccueilController {
 	private int retardRucheEvenement;
 	@Value("${rucher.butinage.rayons}")
 	private int[] rayonsButinage;
-	
+
 	/**
 	 * Page d'accueil
 	 */
@@ -83,7 +83,7 @@ public class AccueilController {
 		model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 		return Const.INDEX;
 	}
-	
+
 	@GetMapping(path = "/infos")
 	public String infos(Model model) {
 		model.addAttribute("rayonsButinage", rayonsButinage);
@@ -144,11 +144,11 @@ public class AccueilController {
 			if (sucreAnneeEssaims == null) { sucreAnneeEssaims = 0.0; }
 			sucreEssaimsTotal += sucreAnneeEssaims;
 			sucreEssaims.add(sucreAnneeEssaims);
-			
+
 			Integer nbTraitements = evenementRepository.countTraitementsEssaimParAnnee(date);
 			nbTraitementsEssaimsTotal += nbTraitements;
 			nbTraitementsEssaims.add(nbTraitements);
-			
+
 		}
 		pdsMiel.add(pdsMielTotal);
 		nbCreationEssaims.add(nbCreationEssaimsTotal);
@@ -197,7 +197,7 @@ public class AccueilController {
 		List<Double> distances =  new ArrayList<>();
 		for (Rucher rucher : ruchers) {
 			Float longitude;
-			Float latitude = 0f;		
+			Float latitude = 0f;
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucher.getId());
 			int nbRuches2 = 0;
 			double xlon = 0d;
@@ -221,16 +221,16 @@ public class AccueilController {
 		model.addAttribute("ruchersMalCales", ruchersMalCales);
 		model.addAttribute("distances", distances);
 		model.addAttribute("distRuchersTropLoins", distRuchersTropLoins);
-		
+
 		LocalDateTime date = LocalDateTime.now().minus(retardRucheEvenement, ChronoUnit.WEEKS);
 		Iterable<Ruche> ruchesPasDEvenement = rucheRepository.findPasDEvenementAvant(date);
 		model.addAttribute("ruchesPasDEvenement", ruchesPasDEvenement);
 		model.addAttribute("retardRucheEvenement", retardRucheEvenement);
-		
-		
+
+
 		Iterable<Essaim> essaimDateNaissSupAcquis = essaimRepository.findEssaimDateNaissSupAcquis();
 		model.addAttribute("essaimDateNaissSupAcquis", essaimDateNaissSupAcquis);
-		
+
 		return "infos";
 	}
 
@@ -244,18 +244,18 @@ public class AccueilController {
 		model.addAttribute("loginError", true);
 		return "login";
 	}
-	
+
 	/**
 	 * Appel du formulaire de saisie des préférences
-	 *  Affichages inactifs et décalage de date 
+	 *  Affichages inactifs et décalage de date
 	 */
 	@GetMapping("/parametres")
 	public String parametres() {
 		return "parametresForm";
 	}
-	
+
 	/**
-	 * Sauvegarde en session des préférences 
+	 * Sauvegarde en session des préférences
 	 */
 	@PostMapping("/sauveParametres")
 	public String sauveParametres(HttpSession session, @RequestParam(defaultValue = "false") boolean voirInactif,
@@ -265,19 +265,19 @@ public class AccueilController {
 		session.setAttribute(Const.VOIRLATLON,voirLatLon);
 		if (date.equals("")) {
 			session.removeAttribute(Const.DECALAGETEMPS);
-		} else { 
+		} else {
 			LocalDateTime dateSaisieDecalage = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 			Duration decalage = Duration.between(LocalDateTime.now(), dateSaisieDecalage);
 			session.setAttribute(Const.DECALAGETEMPS, decalage);
 			}
 		return "redirect:/";
 	}
-	
+
 	@GetMapping("/forgotPassword")
 	public String forgotPassword() {
 		return "passwordResetForm";
 	}
-	
+
 	@PostMapping("/resetPassword")
 	public String resetPassword(@RequestParam String email, HttpServletRequest request, Model model) {
 		final long tokenValidite = 60;
@@ -299,11 +299,11 @@ public class AccueilController {
 			return Const.INDEX;
 		} else {
 			String token = UUID.randomUUID().toString();
-			personne.setToken(token);			
+			personne.setToken(token);
 	        personne.setTokenExpiration(LocalDateTime.now().plusMinutes(tokenValidite));
 			personneRepository.save(personne);
 			StringBuffer appUrl = request.getRequestURL();
-			emailService.sendSimpleMessage(email, "Réinitialisation du mot de passe", 
+			emailService.sendSimpleMessage(email, "Réinitialisation du mot de passe",
 					"Pour réinitialiser votre mot de passe, cliquez sur le lien ci-dessous:\n" +
 			         appUrl + "?token=" + token);
 		}
@@ -311,11 +311,11 @@ public class AccueilController {
 		model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 		return Const.INDEX;
 	}
-	
+
 	@GetMapping("/resetPassword")
 	public String resetPasswordGet(@RequestParam String token, HttpServletRequest request, Model model) {
 		Personne personne = personneRepository.findByToken(token);
-		if ((personne == null) || ("".contentEquals(personne.getLogin())) || 
+		if ((personne == null) || ("".contentEquals(personne.getLogin())) ||
 				personne.getTokenexpiration().isBefore(LocalDateTime.now())) {
 			logger.error("Réinitialisation du mot de passe, token {} invalide", token);
 			model.addAttribute(Const.MESSAGE, "Token invalide");
@@ -325,11 +325,11 @@ public class AccueilController {
 		model.addAttribute("token", token);
 		return "resetPasswordForm";
 	}
-	
+
 	@PostMapping("/resetPasswordFin")
 	public String resetPasswordFin(@RequestParam String token, @RequestParam String password, HttpServletRequest request, Model model) {
 		Personne personne = personneRepository.findByToken(token);
-		if ((personne == null) || ("".contentEquals(personne.getLogin())) || 
+		if ((personne == null) || ("".contentEquals(personne.getLogin())) ||
 				personne.getTokenexpiration().isBefore(LocalDateTime.now())) {
 			logger.error("Réinitialisation du mot de passe, token {} invalide", token);
 			model.addAttribute(Const.MESSAGE, "Token invalide");

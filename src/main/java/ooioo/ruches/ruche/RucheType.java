@@ -15,7 +15,7 @@ public class RucheType {
 
 	@Column(nullable = false, unique = true)
 	private String nom;
-	
+
 	/**
 	 * Nombre de cadres maxi
 	 */

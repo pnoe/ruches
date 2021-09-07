@@ -43,22 +43,22 @@ public class EvenementHausseController {
 	private HausseRepository hausseRepository;
 	@Autowired
 	private HausseService hausseService;
-	
+
 	@Autowired
 	MessageSource messageSource;
-	
+
 	/*
 	 * Liste événements remplissage hausse
 	 */
 	@GetMapping("/listeRemplissageHausse")
 	public String listeRemplissageHausse(Model model, @RequestParam(required = false) Integer periode,
-			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1, 
+			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
 			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext,
 			@CookieValue(value = "p", defaultValue = "1") Integer pCookie,
 			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
-			@CookieValue(value = "d1", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie, 
-			@CookieValue(value = "d2", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie	
+			@CookieValue(value = "d1", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
+			@CookieValue(value = "d2", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie
 			) {
 		if (periode == null) {
 			periode = pCookie;
@@ -74,24 +74,24 @@ public class EvenementHausseController {
 			evenements = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.HAUSSEREMPLISSAGE);
 			break;
 		case 2: // moins d'un an
-			evenements =  
+			evenements =
 					evenementRepository.findTypePeriode(TypeEvenement.HAUSSEREMPLISSAGE, LocalDateTime.now().minusYears(1));
 			break;
 		case 3: // moins d'un mois
-			evenements = 
+			evenements =
 					evenementRepository.findTypePeriode(TypeEvenement.HAUSSEREMPLISSAGE, LocalDateTime.now().minusMonths(1));
 			break;
 		case 4: // moins d'une semaine
-			evenements = 
+			evenements =
 					evenementRepository.findTypePeriode(TypeEvenement.HAUSSEREMPLISSAGE, LocalDateTime.now().minusWeeks(1));
 			break;
 		case 5: // moins d'un jour
-			evenements = 
+			evenements =
 					evenementRepository.findTypePeriode(TypeEvenement.HAUSSEREMPLISSAGE, LocalDateTime.now().minusDays(1));
 			break;
 		default:
 			// ajouter tests date1 et date2 non null
-			evenements = 
+			evenements =
 					evenementRepository.findTypePeriode(TypeEvenement.HAUSSEREMPLISSAGE, date1, date2);
 			model.addAttribute("datestext", datestext);
 		}
@@ -117,7 +117,7 @@ public class EvenementHausseController {
 		model.addAttribute("haussesNoms", haussesNoms);
 		return "hausse/hausseCommentaireLotForm";
 	}
-	
+
 	/**
 	 * Créations des événements pour un lot de hausses
 	 */
@@ -167,7 +167,7 @@ public class EvenementHausseController {
 			model.addAttribute(Const.HAUSSE, hausse);
 		} else {
 			logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
 			return Const.INDEX;
 		}
@@ -197,7 +197,7 @@ public class EvenementHausseController {
 			logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
 		} else {
 			logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
 			return Const.INDEX;
 		}
@@ -217,7 +217,7 @@ public class EvenementHausseController {
 			model.addAttribute("hausseNom", hausseOpt.get().getNom());
 		} else {
 			logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
 			return Const.INDEX;
 		}

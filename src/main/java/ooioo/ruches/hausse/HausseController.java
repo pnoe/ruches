@@ -52,7 +52,7 @@ public class HausseController {
 	private EvenementRepository evenementRepository;
 	@Autowired
 	private RecolteHausseRepository recolteHausseRepository;
-	
+
 	@Autowired
 	MessageSource messageSource;
 
@@ -60,7 +60,7 @@ public class HausseController {
 	private RucheService rucheService;
 	@Autowired
 	private HausseService hausseService;
-	
+
 	@Value("${accueil.titre}")
 	private String accueilTitre;
 
@@ -95,7 +95,7 @@ public class HausseController {
 			return messageSource.getMessage("clonehaussecreees", new Object[] {nomsJoin}, LocaleContextHolder.getLocale());
 		}
 		logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
-		model.addAttribute(Const.MESSAGE, 
+		model.addAttribute(Const.MESSAGE,
 				messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
 		return Const.INDEX;
 	}
@@ -145,7 +145,7 @@ public class HausseController {
 			model.addAttribute(Const.HAUSSE, hausseOpt.get());
 		} else {
 			logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -182,7 +182,7 @@ public class HausseController {
 			}
 		} else {
 			logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
@@ -234,7 +234,7 @@ public class HausseController {
 			hausseService.modelAddEvenement(model, hausse, TypeEvenement.COMMENTAIREHAUSSE);
 		} else {
 			logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;

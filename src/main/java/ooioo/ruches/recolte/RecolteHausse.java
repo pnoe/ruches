@@ -19,7 +19,7 @@ public class RecolteHausse {
 	public RecolteHausse() {
 		// constructeur par défaut nécessaire pour recolteDetail
 	}
-	
+
 	public RecolteHausse(Recolte recolte, Hausse hausse,
 			BigDecimal poidsAvant, BigDecimal poidsApres) {
 		this.recolte = recolte;
@@ -85,11 +85,11 @@ public class RecolteHausse {
 	public void setRecolte(Recolte recolte) {
 		this.recolte = recolte;
 	}
-	
+
 	public BigDecimal getPoidsAvant() {
 		return new BigDecimal(poidsAvant).movePointLeft(3);
 	}
-	
+
 	public void setPoidsAvant(BigDecimal poidsAvant) {
 		this.poidsAvant = poidsAvant.movePointRight(3).intValue();
 	}

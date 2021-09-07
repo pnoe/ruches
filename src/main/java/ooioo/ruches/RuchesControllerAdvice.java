@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 /**
- * Pour affichage de la date décalée en-tête de chaque page 
+ * Pour affichage de la date décalée en-tête de chaque page
  */
 @ControllerAdvice
 public class RuchesControllerAdvice {
 	@Autowired
 	MessageSource messageSource;
-	
+
 	@ModelAttribute("currentDate")
 	public String getCurrentDate(HttpSession session) {
 		if ((session == null) || (session.getAttribute("decalagetemps") == null)) {

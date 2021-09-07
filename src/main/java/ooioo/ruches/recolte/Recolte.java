@@ -73,7 +73,7 @@ public class Recolte {
 	public Integer getIntPoidsMiel() {
 		return this.poidsMiel;
 	}
-	
+
 	public void setPoidsMiel(BigDecimal poidsMiel) {
 		this.poidsMiel = poidsMiel.movePointRight(3).intValue();
 	}

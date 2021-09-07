@@ -4,7 +4,7 @@ package ooioo.ruches.ruche;
  * Pour la fonction de recherche du parcours des ruches d'un rucher
  */
 public class RucheParcours {
-	
+
 	public RucheParcours() {
 	}
 
@@ -14,7 +14,7 @@ public class RucheParcours {
 		this.longitude = longitude;
 		this.latitude = latitude;
 	}
-	
+
 	/**
 	 * Id de la ruche ou 0 pour les points entrée/sortie du rucher
 	 */
@@ -34,7 +34,7 @@ public class RucheParcours {
 	 * Latitude de la ruche
 	 */
 	private Float latitude;
-	
+
 	public Long getId() {
 		return id;
 	}

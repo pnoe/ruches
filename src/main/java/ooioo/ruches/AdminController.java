@@ -31,9 +31,9 @@ import ooioo.ruches.personne.PersonneService;
 
 @Controller
 public class AdminController {
-	
+
 	private final Logger logger = LoggerFactory.getLogger(AdminController.class);
-	
+
 	@Autowired
 	private PersonneService personneService;
 
@@ -47,8 +47,8 @@ public class AdminController {
 	private String tomcatWebappsPath;
 	@Value("${tomcat.oldwebapps.path}")
 	private String tomcatOldWebappsPath;
-	
-	
+
+
 	/*
 	 * Download des dumps de la base
 	 * fichiers ruches_schema.sql et ruches.sql.xz
@@ -59,7 +59,7 @@ public class AdminController {
     public ResponseEntity<Resource> download(Model model, @PathVariable String fichier, Authentication authentication) throws IOException {
 		ByteArrayResource resource = null;
 		long fileLength = 0l;
-		if (personneService.personneAdmin(authentication, model)) { 
+		if (personneService.personneAdmin(authentication, model)) {
 			File file = new File(dumpPath + fichier);
 			Path path = Paths.get(file.getAbsolutePath());
 	        resource = new ByteArrayResource(Files.readAllBytes(path));
@@ -76,7 +76,7 @@ public class AdminController {
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(resource);
     }
-	
+
 	/*
 	 * Déploiement de l'application
 	 * git clone, maven package et copie du war sous webapps
@@ -92,14 +92,14 @@ public class AdminController {
 		}
 		model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 		ProcessBuilder processBuilder = new ProcessBuilder();
-		String tempDir = "/tmp"; 
+		String tempDir = "/tmp";
 		// System.getProperty("java.io.tmpdir"); donne le répertoire temp de tomcat
 		processBuilder.directory(new File(tempDir));
 		processBuilder.redirectErrorStream(true);
 		FileSystemUtils.deleteRecursively(new File(tempDir + "/ruches"));
 		try {
 			processBuilder.command("bash", "-c", "git clone " + gitUrl);
-			Process process = processBuilder.start();		
+			Process process = processBuilder.start();
 			BufferedReader reader = new BufferedReader(
 					new InputStreamReader(process.getInputStream()));
 			StringBuilder output = new StringBuilder();
@@ -135,7 +135,7 @@ public class AdminController {
 			// pas de version dans le nom du war, voir finalname dans pom.xml
 			Path sourcePath      = Paths.get(tempDir + "/ruches/target/ruches.war.original");
 			Path destinationPath = Paths.get(tomcatWebappsPath + "ruches.war");
-			
+
 			// Pas réussi à résoudre :
 			/// [2021-07-28 15:55:27] [info] java.nio.file.FileSystemException: /var/lib/tomcat9/oldWebapps: Read-only file system
 			// Copie de sauvevegarde de l'ancien ruches.war
@@ -144,7 +144,7 @@ public class AdminController {
 			// Files.move(destinationPath, Paths.get(tomcatOldWebappsPath), StandardCopyOption.REPLACE_EXISTING);
 			Files.copy(destinationPath, destinationPath,
 			            StandardCopyOption.REPLACE_EXISTING);
-			
+
 			destinationPath = Paths.get(tomcatWebappsPath + "ruchestest.war");
 			Files.copy(sourcePath, destinationPath,
 			            StandardCopyOption.REPLACE_EXISTING);
@@ -162,5 +162,5 @@ public class AdminController {
 		//  model n'est pas conservé après un redirect
 		return "redirect:/";
 	}
-	
+
 }

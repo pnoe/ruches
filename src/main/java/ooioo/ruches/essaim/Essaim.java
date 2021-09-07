@@ -13,7 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Essaim {
-	
+
 	public Essaim() {
 	}
 
@@ -33,7 +33,7 @@ public class Essaim {
 		this.agressivite = essaim.getAgressivite();
 		this.proprete = essaim.getProprete();
 	}
-	
+
 	public Essaim(String nom, boolean actif, LocalDate dateAcquisition,
 			String commentaire, LocalDate reineDateNaissance, boolean reineMarquee,
 			Essaim souche, Integer agressivite, Integer proprete) {
@@ -84,29 +84,29 @@ public class Essaim {
 	 * La reine est-elle marquée ?
 	 */
 	private boolean reineMarquee = false;
-	
+
 	/**
 	 * Souche (parent) de l'essaim
 	 */
 	@ManyToOne
 	private Essaim souche;
-	
+
 	/**
 	 * Agressivité de l'essaim
 	 *   de 1 à 5
 	 */
 	private Integer agressivite;
-	
+
 	/**
 	 * Propreté de l'essaim
 	 *   de 1 à 5
 	 */
 	private Integer proprete;
-	
+
 
 	/**
 	 * Calcule la couleur de marquage de la reine d'après sa date de naissance
-	 * 
+	 *
 	 * @return
 	 */
 	public ReineCouleurMarquage getReineCouleurMarquage() {

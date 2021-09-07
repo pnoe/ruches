@@ -29,17 +29,17 @@ public class EssaimTree {
 	 * Nom de l'essaim
 	 */
 	private String name;
-	
+
 	/**
 	 * Nom de l'essaim parent (souche)
 	 */
 	private String parent;
-	
+
 	/*
 	 * Id de l'essaim
 	 */
 	private Long id;
-	
+
 	/**
 	 * Essaim actif
 	 */
@@ -50,17 +50,17 @@ public class EssaimTree {
 	 */
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dateAcquisition;
-	
+
 	/*
 	 * Couleur du marquage de la reine
 	 */
 	private String couleurReine;
-	
+
 	/**
 	 * Nom de la ruche
 	 */
 	private String nomRuche;
-	
+
 	/**
 	 * Nom du rucher
 	 */

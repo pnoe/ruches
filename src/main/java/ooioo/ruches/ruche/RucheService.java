@@ -31,7 +31,7 @@ public class RucheService {
 	private HausseRepository hausseRepository;
 	@Autowired
 	private RucheRepository rucheRepository;
-	
+
 	/*
 	 * Ré-ordonne les hausses d'une ruche utilisé après retrait ou suppression d'une
 	 * hausse
@@ -39,7 +39,7 @@ public class RucheService {
 	public void ordonneHaussesRuche(long rucheId) {
 
 		Iterable<Hausse> haussesRuche = hausseRepository.findByRucheIdOrderByOrdreSurRuche(rucheId);
-		Integer i = 1;
+		int i = 1;
 		for (Hausse hausseRuche : haussesRuche) {
 			Integer ordre = hausseRuche.getOrdreSurRuche();
 			if (ordre == null) {
@@ -51,7 +51,7 @@ public class RucheService {
 	}
 
 	/*
-	 * Ajoute au model Spring les chaînes date, valeur et commentaire du 
+	 * Ajoute au model Spring les chaînes date, valeur et commentaire du
 	 * dernier événement de type typeEvenement
 	 */
 	public void modelAddEvenement(Model model, Ruche ruche, TypeEvenement typeEvenement) {
@@ -93,7 +93,7 @@ public class RucheService {
 			if (plus) {
 				nomHausses.add(hausseRepository.hausseNomsByRucheId(ruche.getId()));
 				listeEvensCommentaireEssaim.add(evenementRepository
-						.findFirst3ByEssaimAndTypeOrderByDateDesc(ruche.getEssaim(), TypeEvenement.COMMENTAIREESSAIM));			
+						.findFirst3ByEssaimAndTypeOrderByDateDesc(ruche.getEssaim(), TypeEvenement.COMMENTAIREESSAIM));
 				// il faut trouver le dernier evenement hausseposeruche dont la hausse est effectivement
 				//  présente sur la ruche
 				// correction spring boot 2.2.0
@@ -116,7 +116,7 @@ public class RucheService {
 		model.addAttribute(Const.HAUSSENOMS, nomHausses);
 		model.addAttribute(Const.RUCHES, ruches);
 	}
-	
+
 	/*
 	 * Liste détaillée des ruches d(un rucher
 	 *  avec ordre de parcours
@@ -151,7 +151,7 @@ public class RucheService {
 			if (plus) {
 				nomHausses.add(hausseRepository.hausseNomsByRucheId(ruche.getId()));
 				listeEvensCommentaireEssaim.add(evenementRepository
-						.findFirst3ByEssaimAndTypeOrderByDateDesc(ruche.getEssaim(), TypeEvenement.COMMENTAIREESSAIM));			
+						.findFirst3ByEssaimAndTypeOrderByDateDesc(ruche.getEssaim(), TypeEvenement.COMMENTAIREESSAIM));
 				// il faut trouver le dernier evenement hausseposeruche dont la hausse est effectivement
 				//  présente sur la ruche
 				// correction spring boot 2.2.0 iterable -> list

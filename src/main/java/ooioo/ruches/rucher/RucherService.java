@@ -42,9 +42,9 @@ public class RucherService {
 
 	@Value("${rucher.ruche.dispersion}")
 	private String dispersion;
-	
+
 	private static int chSize;
-	
+
 	/*
 	 * Inner class static pour les distances entre ruches
 	 */
@@ -105,7 +105,7 @@ public class RucherService {
 			    });
 		// Coût du déplacement. Ici le coût est la distance entre deux ruches.
 		routing.setArcCostEvaluatorOfAllVehicles(transitCallbackIndex);
-		// Méthode pour calculer le premier parcours 
+		// Méthode pour calculer le premier parcours
 		//   PATH_CHEAPEST_ARC recherche la ruche la plus proche
 		//   https://developers.google.com/optimization/routing/routing_options#first_sol_options
 		RoutingSearchParameters searchParameters = redraw ? main.defaultRoutingSearchParameters()
@@ -143,7 +143,7 @@ public class RucherService {
 	}
 
 	/**
-	 * Ajoute une liste de ruches dans un rucher. 
+	 * Ajoute une liste de ruches dans un rucher.
 	 * Création de l'événement RUCHEAJOUTRUCHER
 	 */
 	public void sauveAjouterRuches(Rucher rucher, String[] ruchesNoms, String date, String commentaire) {
@@ -186,7 +186,7 @@ public class RucherService {
 		double a = sinLatDistance2 * sinLatDistance2 + Math.cos(Math.toRadians(lat1))
 				* Math.cos(Math.toRadians(lat2)) * sinLonDistance2 * sinLonDistance2;
 		return 12742000d * Math.asin(Math.sqrt(a));
-		// ou encore : return 12742000d * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); 
+		// ou encore : return 12742000d * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 		// 12742000d diamètre de la terre en mètres
 	}
 

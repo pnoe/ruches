@@ -56,19 +56,19 @@ public class EvenementEssaimController {
 	private RucherService rucherService;
 	@Autowired
 	private EssaimService essaimService;
-	
+
 	/*
 	 * Liste événements essaim sucre
 	 */
 	@GetMapping("/listeSucre")
 	public String listeSucre(Model model, @RequestParam(required = false) Integer periode,
-			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1, 
+			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
 			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext,
 			@CookieValue(value = "p", defaultValue = "1") Integer pCookie,
 			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
-			@CookieValue(value = "d1", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie, 
-			@CookieValue(value = "d2", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie	
+			@CookieValue(value = "d1", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
+			@CookieValue(value = "d2", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie
 			) {
 		if (periode == null) {
 			periode = pCookie;
@@ -83,43 +83,43 @@ public class EvenementEssaimController {
 			model.addAttribute(Const.EVENEMENTS, evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.ESSAIMSUCRE));
 			break;
 		case 2: // moins d'un an
-			model.addAttribute(Const.EVENEMENTS, 
+			model.addAttribute(Const.EVENEMENTS,
 					evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusYears(1)));
 			break;
 		case 3: // moins d'un mois
-			model.addAttribute(Const.EVENEMENTS, 
+			model.addAttribute(Const.EVENEMENTS,
 					evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusMonths(1)));
 			break;
 		case 4: // moins d'une semaine
-			model.addAttribute(Const.EVENEMENTS, 
+			model.addAttribute(Const.EVENEMENTS,
 					evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusWeeks(1)));
 			break;
 		case 5: // moins d'un jour
-			model.addAttribute(Const.EVENEMENTS, 
+			model.addAttribute(Const.EVENEMENTS,
 					evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusDays(1)));
 			break;
 		default:
 			// ajouter tests date1 et date2 non null
-			model.addAttribute(Const.EVENEMENTS, 
+			model.addAttribute(Const.EVENEMENTS,
 					evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, date1, date2));
 			model.addAttribute("datestext", datestext);
-		}	
+		}
 		model.addAttribute("periode", periode);
 		return "evenement/evenementSucreListe";
 	}
-	
+
 	/*
 	 * Liste événements essaim traitement
 	 */
 	@GetMapping("/listeTraitement")
 	public String listeTraitement(Model model, @RequestParam(required = false) Integer periode,
-		@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1, 
+		@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
 		@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 		@RequestParam(required = false) String datestext,
 		@CookieValue(value = "p", defaultValue = "1") Integer pCookie,
 		@CookieValue(value = "dx", defaultValue = "") String dxCookie,
-		@CookieValue(value = "d1", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie, 
-		@CookieValue(value = "d2", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie	
+		@CookieValue(value = "d1", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
+		@CookieValue(value = "d2", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie
 		) {
 		if (periode == null) {
 			periode = pCookie;
@@ -134,31 +134,31 @@ public class EvenementEssaimController {
 			model.addAttribute(Const.EVENEMENTS, evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.ESSAIMTRAITEMENT));
 			break;
 		case 2: // moins d'un an
-			model.addAttribute(Const.EVENEMENTS, 
+			model.addAttribute(Const.EVENEMENTS,
 					evenementRepository.findTypePeriode(TypeEvenement.ESSAIMTRAITEMENT, LocalDateTime.now().minusYears(1)));
 			break;
 		case 3: // moins d'un mois
-			model.addAttribute(Const.EVENEMENTS, 
+			model.addAttribute(Const.EVENEMENTS,
 					evenementRepository.findTypePeriode(TypeEvenement.ESSAIMTRAITEMENT, LocalDateTime.now().minusMonths(1)));
 			break;
 		case 4: // moins d'une semaine
-			model.addAttribute(Const.EVENEMENTS, 
+			model.addAttribute(Const.EVENEMENTS,
 					evenementRepository.findTypePeriode(TypeEvenement.ESSAIMTRAITEMENT, LocalDateTime.now().minusWeeks(1)));
 			break;
 		case 5: // moins d'un jour
-			model.addAttribute(Const.EVENEMENTS, 
+			model.addAttribute(Const.EVENEMENTS,
 					evenementRepository.findTypePeriode(TypeEvenement.ESSAIMTRAITEMENT, LocalDateTime.now().minusDays(1)));
 			break;
 		default:
 			// ajouter tests date1 et date2 non null
-			model.addAttribute(Const.EVENEMENTS, 
+			model.addAttribute(Const.EVENEMENTS,
 					evenementRepository.findTypePeriode(TypeEvenement.ESSAIMTRAITEMENT, date1, date2));
 			model.addAttribute("datestext", datestext);
-		}	
+		}
 		model.addAttribute("periode", periode);
 		return "evenement/evenementTraitementListe";
 	}
-	
+
 	/**
 	 * Appel du formulaire pour l'ajout de sucre pour un lot d'essaims
 	 */
@@ -178,7 +178,7 @@ public class EvenementEssaimController {
 		model.addAttribute("essaimsNoms", essaimsNoms);
 		return "essaim/essaimTraitementLotForm";
 	}
-	
+
 	/**
 	 * Appel du formulaire pour créer des commentaires pour un lot d'essaims
 	 */
@@ -214,7 +214,7 @@ public class EvenementEssaimController {
 	 * Appel du formulaire pour la création d'un événement COMMENTAIREESSAIM
 	 */
 	@GetMapping("/commentaire/{essaimId}")
-	public String commentaire(HttpSession session, Model model, @PathVariable long essaimId, 
+	public String commentaire(HttpSession session, Model model, @PathVariable long essaimId,
 			@RequestParam(defaultValue = "false") boolean retourRuche) {
 		model.addAttribute(Const.RETOURRUCHE, retourRuche);
 		return prepareAppelFormulaire(session, model, essaimId, "essaim/essaimCommentaireForm");
@@ -224,7 +224,7 @@ public class EvenementEssaimController {
 	 * Appel du formulaire de création d'un événement essaim sucre
 	 */
 	@GetMapping("/sucre/{essaimId}")
-	public String sucre(HttpSession session, Model model, @PathVariable long essaimId, 
+	public String sucre(HttpSession session, Model model, @PathVariable long essaimId,
 			@RequestParam(defaultValue = "false") boolean retourRuche) {
 		model.addAttribute(Const.RETOURRUCHE, retourRuche);
 		String template = prepareAppelFormulaire(session, model, essaimId, "essaim/essaimSucreForm");
@@ -236,7 +236,7 @@ public class EvenementEssaimController {
 	 * Appel du formulaire de création d'un événement essaim traitement
 	 */
 	@GetMapping("/traitement/{essaimId}")
-	public String traitement(HttpSession session, Model model, @PathVariable long essaimId, 
+	public String traitement(HttpSession session, Model model, @PathVariable long essaimId,
 			@RequestParam(defaultValue = "false") boolean retourRuche) {
 		model.addAttribute(Const.RETOURRUCHE, retourRuche);
 		String template = prepareAppelFormulaire(session, model, essaimId, "essaim/essaimTraitementForm");
@@ -256,7 +256,7 @@ public class EvenementEssaimController {
 			return template;
 		}
 		logger.error(Const.IDESSAIMXXINCONNU, essaimId);
-		model.addAttribute(Const.MESSAGE, 
+		model.addAttribute(Const.MESSAGE,
 				messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
 		return Const.INDEX;
 	}
@@ -283,7 +283,7 @@ public class EvenementEssaimController {
 			return Const.REDIRECT_ESSAIM_ESSAIMID;
 		}
 		logger.error(Const.IDESSAIMXXINCONNU, essaimId);
-		model.addAttribute(Const.MESSAGE, 
+		model.addAttribute(Const.MESSAGE,
 				messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
 		return Const.INDEX;
 	}
@@ -292,7 +292,7 @@ public class EvenementEssaimController {
 	 * Appel du formulaire de dispersion d'un essaim
 	 */
 	@GetMapping("/dispersion/{essaimId}")
-	public String dispersion(HttpSession session, Model model, @PathVariable long essaimId) {		
+	public String dispersion(HttpSession session, Model model, @PathVariable long essaimId) {
 		// ajouter liste des essaims qui ne sont pas dans des ruches triés par date création décroissante
 		//  pour remérage
 		Ruche ruche = rucheRepository.findByEssaimId(essaimId);
@@ -338,12 +338,12 @@ public class EvenementEssaimController {
 					if (essaimOptRemerage.isPresent()) {
 						Essaim essaimRemerage = essaimOptRemerage.get();
 						Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, ruche, essaimRemerage,
-								ruche.getRucher(), null, null, commentaire); 
+								ruche.getRucher(), null, null, commentaire);
 						evenementRepository.save(evenementAjout);
 						ruche.setEssaim(essaimRemerage);
 					} else {
 						logger.error(Const.IDESSAIMXXINCONNU, remerageId);
-						model.addAttribute(Const.MESSAGE, 
+						model.addAttribute(Const.MESSAGE,
 								messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
 						return Const.INDEX;
 					}
@@ -353,7 +353,7 @@ public class EvenementEssaimController {
 					// Met la ruche au dépôt et crée l'événement RUCHEAJOUTRUCHER
 					// Si la ruche est déjà au dépôt ou un remérage a été fait, on ne fait rien
 					String[] ruchesNoms = new String[] { ruche.getNom() };
-					rucherService.sauveAjouterRuches(rucherDepot, ruchesNoms, date, 
+					rucherService.sauveAjouterRuches(rucherDepot, ruchesNoms, date,
 							"Dispersion essaim " + essaim.getNom() + ". " + commentaire);
 				}
 			}
@@ -375,7 +375,7 @@ public class EvenementEssaimController {
 			return "redirect:/essaim/liste";
 		}
 		logger.error(Const.IDESSAIMXXINCONNU, essaimId);
-		model.addAttribute(Const.MESSAGE, 
+		model.addAttribute(Const.MESSAGE,
 				messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
 		return Const.INDEX;
 	}
@@ -393,7 +393,7 @@ public class EvenementEssaimController {
 			model.addAttribute("essaimNom", essaimOpt.get().getNom());
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
 			return Const.INDEX;
 		}

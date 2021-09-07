@@ -69,13 +69,13 @@ public class RecolteHausseController {
 	private EssaimRepository essaimRepository;
 	@Autowired
 	private RucherRepository rucherRepository;
-	
+
 	@Autowired
 	MessageSource messageSource;
-	
+
 	@Value("${hausse.reste.miel}")
 	private BigDecimal hausseResteMiel;
-	
+
 
 	@Autowired
 	private RecolteHausseService recolteHausseService;
@@ -159,7 +159,7 @@ public class RecolteHausseController {
 		}
 		return RECOLTECHOIXHAUSSES;
 	}
-	
+
 	/**
 	 * Ajout d'une série de hausses dans la récolte
 	 */
@@ -227,9 +227,9 @@ public class RecolteHausseController {
 		}
 		return "redirect:/recolte/choixHausses/" + recolteId;
 	}
-		
+
 	/**
-	 * Enlève les hausses de la récolte des ruches 
+	 * Enlève les hausses de la récolte des ruches
 	 *  crée les événements retraits des hausses
 	 *   et remplissage à 0
 	 *   (appel XMLHttpRequest)
@@ -237,11 +237,11 @@ public class RecolteHausseController {
 	@PostMapping("/haussesDepot/{recolteId}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody String haussesDepot(HttpSession session, Model model, @PathVariable long recolteId,
-		
+
 			// @RequestParam String date) {
 			@RequestParam @DateTimeFormat(pattern="yyyy/MM/dd HH:mm") LocalDateTime date) {
 		// System.out.println(date);
-		
+
 		Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
 		StringBuilder retHausses =  new StringBuilder();
 		StringBuilder retRuches = new StringBuilder();
@@ -277,25 +277,25 @@ public class RecolteHausseController {
 						essaim = ruche.getEssaim();
 						rucher = ruche.getRucher();
 					}
-					
+
 					String commentaireEve = "Récolte " + recolte.getDate().
 							format(DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM)) + " " +
 							decimalFormat.format(recolteHausse.getPoidsAvant().subtract(recolteHausse.getPoidsApres())) +
 							"kg";
-					
+
 					Evenement evenementRetrait = new Evenement(date,
-							
+
 					// Evenement evenementRetrait = new Evenement(Utils.dateTimeDecal(session),
 							TypeEvenement.HAUSSERETRAITRUCHE, ruche, essaim, rucher, hausse,
 							hausse.getOrdreSurRuche().toString(), commentaireEve);
 					evenementRepository.save(evenementRetrait);
-					
+
 					// Evenement evenementRemplissage = new Evenement(date,
 
 					Evenement evenementRemplissage = new Evenement(Utils.dateTimeDecal(session),
 							TypeEvenement.HAUSSEREMPLISSAGE, ruche, essaim, rucher, hausse,
 							"0", commentaireEve);
-					
+
 					evenementRepository.save(evenementRemplissage);
 					hausse.setRuche(null);
 					hausse.setOrdreSurRuche(null);

@@ -56,13 +56,13 @@ public class EvenementRucheController {
 	 */
 	@GetMapping("/listePoidsRuche")
 	public String listePoidsRuche(Model model, @RequestParam(required = false) Integer periode,
-			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1, 
+			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
 			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext,
 			@CookieValue(value = "p", defaultValue = "1") Integer pCookie,
 			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
-			@CookieValue(value = "d1", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie, 
-			@CookieValue(value = "d2", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie	
+			@CookieValue(value = "d1", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
+			@CookieValue(value = "d2", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie
 			) {
 		if (periode == null) {
 			periode = pCookie;
@@ -78,24 +78,24 @@ public class EvenementRucheController {
 			evenements = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEPESEE);
 			break;
 		case 2: // moins d'un an
-			evenements =  
+			evenements =
 					evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE, LocalDateTime.now().minusYears(1));
 			break;
 		case 3: // moins d'un mois
-			evenements = 
+			evenements =
 					evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE, LocalDateTime.now().minusMonths(1));
 			break;
 		case 4: // moins d'une semaine
-			evenements = 
+			evenements =
 					evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE, LocalDateTime.now().minusWeeks(1));
 			break;
 		case 5: // moins d'un jour
-			evenements = 
+			evenements =
 					evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE, LocalDateTime.now().minusDays(1));
 			break;
 		default:
 			// ajouter tests date1 et date2 non null
-			evenements = 
+			evenements =
 					evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE, date1, date2);
 			model.addAttribute("datestext", datestext);
 		}
@@ -115,13 +115,13 @@ public class EvenementRucheController {
 	 */
 	@GetMapping("/listeCadreRuche")
 	public String listeCadreRuche(Model model, @RequestParam(required = false) Integer periode,
-			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1, 
+			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
 			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext,
 			@CookieValue(value = "p", defaultValue = "1") Integer pCookie,
 			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
-			@CookieValue(value = "d1", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie, 
-			@CookieValue(value = "d2", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie	
+			@CookieValue(value = "d1", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
+			@CookieValue(value = "d2", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie
 			) {
 		if (periode == null) {
 			periode = pCookie;
@@ -137,24 +137,24 @@ public class EvenementRucheController {
 			evenements = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHECADRE);
 			break;
 		case 2: // moins d'un an
-			evenements =  
+			evenements =
 					evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE, LocalDateTime.now().minusYears(1));
 			break;
 		case 3: // moins d'un mois
-			evenements = 
+			evenements =
 					evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE, LocalDateTime.now().minusMonths(1));
 			break;
 		case 4: // moins d'une semaine
-			evenements = 
+			evenements =
 					evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE, LocalDateTime.now().minusWeeks(1));
 			break;
 		case 5: // moins d'un jour
-			evenements = 
+			evenements =
 					evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE, LocalDateTime.now().minusDays(1));
 			break;
 		default:
 			// ajouter tests date1 et date2 non null
-			evenements = 
+			evenements =
 					evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE, date1, date2);
 			model.addAttribute("datestext", datestext);
 		}
@@ -162,12 +162,12 @@ public class EvenementRucheController {
 		model.addAttribute("periode", periode);
 		return "evenement/evenementCadreRucheListe";
 	}
-	
+
 	/**
 	 * Appel du formulaire pour la création d'un événement COMMENTAIRERUCHE
 	 */
 	@GetMapping("/commentaire/{rucheId}")
-	public String creeCommentaire(HttpSession session, Model model, @PathVariable long rucheId) { 
+	public String creeCommentaire(HttpSession session, Model model, @PathVariable long rucheId) {
 			// noe retourEssaim ,@RequestParam(defaultValue = "false") boolean retourEssaim) {
 		// model.addAttribute(Const.RETOURESSAIM, retourEssaim);
 		return prepareAppelFormulaire(session, model, rucheId, "ruche/rucheCommentaireForm");
@@ -198,12 +198,12 @@ public class EvenementRucheController {
 		}
 		return "redirect:/ruche/liste";
 	}
-	
+
 	/**
 	 * Appel du formulaire pour un événement Cadres
 	 */
 	@GetMapping("/cadre/{rucheId}")
-	public String creeCadres(HttpSession session, Model model, @PathVariable long rucheId, 
+	public String creeCadres(HttpSession session, Model model, @PathVariable long rucheId,
 			@RequestParam(defaultValue = "false") boolean retourEssaim) {
 		model.addAttribute(Const.RETOURESSAIM, retourEssaim);
 		String template = prepareAppelFormulaire(session, model, rucheId, "ruche/rucheCadreForm");
@@ -216,7 +216,7 @@ public class EvenementRucheController {
 	 * Appel du formulaire pour un événement Pesée
 	 */
 	@GetMapping("/pesee/{rucheId}")
-	public String creePesee(HttpSession session, Model model, @PathVariable long rucheId, 
+	public String creePesee(HttpSession session, Model model, @PathVariable long rucheId,
 			@RequestParam(defaultValue = "false") boolean retourEssaim) {
 		model.addAttribute(Const.RETOURESSAIM, retourEssaim);
 		String template = prepareAppelFormulaire(session, model, rucheId, "ruche/ruchePeseeForm");
@@ -236,7 +236,7 @@ public class EvenementRucheController {
 			model.addAttribute("hausse", hausse);
 		} else {
 			logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
 			return Const.INDEX;
 		}
@@ -255,7 +255,7 @@ public class EvenementRucheController {
 			model.addAttribute("hausse", hausse);
 		} else {
 			logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
 			return Const.INDEX;
 		}
@@ -273,7 +273,7 @@ public class EvenementRucheController {
 			model.addAttribute(Const.RUCHE, ruche);
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
 			return Const.INDEX;
 		}
@@ -297,7 +297,7 @@ public class EvenementRucheController {
 			return "redirect:/ruche/" + rucheId;
 		}
 		logger.error(Const.IDRUCHEXXINCONNU, rucheId);
-		model.addAttribute(Const.MESSAGE, 
+		model.addAttribute(Const.MESSAGE,
 				messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
 		return Const.INDEX;
 	}
@@ -317,7 +317,7 @@ public class EvenementRucheController {
 			model.addAttribute("rucheNom", ruche.getNom());
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
-			model.addAttribute(Const.MESSAGE, 
+			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
 			return Const.INDEX;
 		}

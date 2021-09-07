@@ -14,12 +14,12 @@ public class Personne {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	@Column(nullable = false, unique = true)
 	private String login;
-	
+
 	private String password;
-	
+
 	/**
 	 * Si roles = "admin" la personne peut modifier les autres personnes,
 	 *   re-déployer l'application, charger des dumps database
@@ -59,12 +59,12 @@ public class Personne {
 	 * Persoone active ?
 	 */
 	private boolean active = true;
-	
+
 	/**
 	 * Token pour mot de passe oublié
 	 */
 	private String token;
-	
+
 	/**
 	 * Date d'expiration du token
 	 */

@@ -67,7 +67,7 @@ public class Rucher {
 	 * Rucher actif ?
 	 */
 	private boolean actif = true;
-	
+
 	/**
 	 * Dessin créé dans une carte ign ou osm au format kml
 	 */

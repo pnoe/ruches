@@ -80,13 +80,13 @@ public class EssaimService {
 	}
 
 	/**
-	 * Calcul de la liste EssaimTree par appels récursifs 
+	 * Calcul de la liste EssaimTree par appels récursifs
 	 */
 	private Integer calculeEssaimsFils(List<EssaimTree> resultat, Essaim essaim) {
 		Integer poidsMielDescendance = 0;
 		for (Essaim essaimSouche : essaimRepository.findBySouche(essaim)) {
 			poidsMielDescendance += calculeEssaimsFils(resultat, essaimSouche);
-		}			
+		}
 		Integer poidsMielEssaim = 0;
 		for (Recolte recolte : recolteRepository.findAllByOrderByDateAsc()) {
 			Integer poids = recolteHausseRepository.findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId());

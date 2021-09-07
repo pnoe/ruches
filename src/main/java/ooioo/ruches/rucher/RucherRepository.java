@@ -10,7 +10,7 @@ import ooioo.ruches.Nom;
 
 @RepositoryRestResource(collectionResourceRel = "rucherRepository")
 public interface RucherRepository extends CrudRepository<Rucher, Long> {
-	
+
 	Rucher findByDepotIsTrue();
 
 	Iterable<Rucher> findAllByOrderByNom();
@@ -20,10 +20,10 @@ public interface RucherRepository extends CrudRepository<Rucher, Long> {
 	Iterable<Rucher> findByActifOrderByNom(boolean actif);
 
 	Collection<Nom> findAllProjectedBy();
-	
+
 	Collection<IdNom> findAllProjectedIdNomByOrderByNom();
 
 	Collection<IdNom> findProjectedIdNomByActifOrderByNom(boolean actif);
-	
+
 	long countByActifTrue();
 }

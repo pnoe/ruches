@@ -56,7 +56,7 @@ public class UserServletFilter implements Filter {
 
 	/**
 	 * Register the user in the MDC under USER_KEY.
-	 * 
+	 *
 	 * @return true id the user can be successfully registered
 	 */
 	private boolean registerUsername(String username) {

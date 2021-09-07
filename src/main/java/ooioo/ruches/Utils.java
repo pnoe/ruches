@@ -10,7 +10,7 @@ public final class Utils {
 
 	/*
 	 * Renvoie la date et heure LocalDateTime.now() décalée éventuellement du décalage
-	 *  demandé par le menu préférences mémorisé en session 
+	 *  demandé par le menu préférences mémorisé en session
 	 */
 	public static final LocalDateTime dateTimeDecal(HttpSession session) {
 		return (session.getAttribute(Const.DECALAGETEMPS) != null)
@@ -20,7 +20,7 @@ public final class Utils {
 
 	/*
 	 * Renvoie la date LocalDate.now() décalée éventuellement du décalage
-	 *  demandé par le menu préférences mémorisé en session 
+	 *  demandé par le menu préférences mémorisé en session
 	 */
 	public static final LocalDate dateDecal(HttpSession session) {
 		return (session.getAttribute(Const.DECALAGETEMPS) != null)

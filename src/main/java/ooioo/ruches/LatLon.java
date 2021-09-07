@@ -1,7 +1,7 @@
 package ooioo.ruches;
 
 /**
- * Latitude et longitude 
+ * Latitude et longitude
  */
 public class LatLon {
 	private Float lat;

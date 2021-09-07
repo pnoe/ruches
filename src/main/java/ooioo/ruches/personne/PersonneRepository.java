@@ -12,11 +12,11 @@ public interface PersonneRepository extends CrudRepository<Personne, Long> {
 	Iterable<Personne> findByActiveOrderByNom(boolean actif);
 
 	Personne findByLogin(String login);
-	
+
 	Personne findByEmail(String email);
-	
+
 	Personne findByToken(String token);
-	
+
 	Collection<PersonneLogin> findAllProjectedBy();
 
 	Collection<PersonneEmail> findAllProjectedEmailBy();

@@ -19,11 +19,11 @@ import ooioo.ruches.rucher.Rucher;
 
 @Entity
 public class Evenement {
-	
+
 	public Evenement() {
 	}
-	
-	public Evenement(LocalDateTime date, TypeEvenement typeEvenement, Ruche ruche, 
+
+	public Evenement(LocalDateTime date, TypeEvenement typeEvenement, Ruche ruche,
 			Essaim essaim, Rucher rucher, Hausse hausse, String valeur,	String commentaire) {
 		this.date = date;
 		this.type = typeEvenement;
@@ -71,12 +71,12 @@ public class Evenement {
 	 */
 	@ManyToOne
 	private Hausse hausse;
-	
+
 	/**
 	 * La valeur de l'événement :
 	 *   poids de sucre ajouté, taux de remplissage d'une hausse,
 	 *    nombre de languettes pour le traitement varoa,
-	 *    ... 
+	 *    ...
 	 */
 	@Column(length = 64)
 	private String valeur;

@@ -14,5 +14,5 @@ public class Nom {
 	public Nom(String nom) {
 		this.nom = nom;
 	}
-	
+
 }

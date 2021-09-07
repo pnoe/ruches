@@ -25,7 +25,7 @@ public class Application extends SpringBootServletInitializer {
 
 	@Autowired
 	BuildProperties buildProperties;
-	
+
 	@Value("${doc.path}")
 	private String docpath;
 
