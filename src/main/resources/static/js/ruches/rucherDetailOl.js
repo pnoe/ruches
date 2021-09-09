@@ -143,9 +143,10 @@ function rucherDetail(ign) {
 	translate.setActive(!$('#dragMarker')[0].checked);
 
 	// Utiliser KMLExtended pour sauver et lire les textes	
-	const formatKML = new ol.format.KMLExtended({});
-	// Ne fonctionne pas avec ol 6 pour le moment
-	// const formatKML = new ol.format.KML({});
+	/// const formatKML = new ol.format.KMLExtended({});
+	// Ne fonctionne pas
+	const formatKML = new ol.format.KML({});
+	
 	const dessinsFeatures = (rucher.dessin === null) ? new ol.Collection() : new ol.Collection(formatKML.readFeatures(rucher.dessin));
 	const drawLayer = new ol.layer.Vector({
 		source: new ol.source.Vector({
