@@ -42,7 +42,10 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<h1 class="item" th:text="#{traitementLot} + ${essaimsNoms}"></h1>
+				<h1 class="item">
+					<a th:href="@{'/essaim/liste'}" th:text="#{Essaims}"></a>
+					<th:block th:text="' ' + #{traitementLot} + ' ' + ${essaimsNoms}">
+				</h1>
 			</div>
 		</div>
 	</div>

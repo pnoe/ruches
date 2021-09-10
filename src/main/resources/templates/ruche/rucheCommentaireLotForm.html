@@ -33,7 +33,10 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<h1 class="item" th:text="#{commentaireLotRuche} + ' ' + ${ruchesNoms}"></h1>
+				<h1 class="item">
+					<a th:href="@{'/ruche/liste'}" th:text="#{Ruches}"></a>
+					<th:block th:text="' ' + #{commentaireLot} + ' ' + ${ruchesNoms}">
+				</h1>
 			</div>
 		</div>
     </div> 

@@ -32,9 +32,10 @@
 	<br />
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col">
-				<h1 class="item" th:text="#{commentaireLotHausses} + ' ' + ${haussesNoms}"></h1>
-			</div>
+			<h1 class="item">
+					<a th:href="@{'/hausse/liste'}" th:text="#{Hausses}"></a>
+					<th:block th:text="' ' + #{commentaireLot} + ' ' + ${haussesNoms}">
+			</h1>
 		</div>
 	</div>
 	<form action="#" th:action="@{'/evenement/hausse/sauve/lot/'+${haussesNoms}}"
