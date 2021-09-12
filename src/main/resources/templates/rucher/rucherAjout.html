@@ -29,7 +29,7 @@ $().ready(function() {
     tableajout.on( 'select deselect', updateLinkAjout);
     $('#actionAjoutRuches').on('click', function () {
     	if ($(this).attr("href") == "#actionAjoutRuches") {
-    		return confirm([[#{selectruchesajout}]]);	
+    		alert([[#{selectruchesajout}]]);	
     	}
     });
 });

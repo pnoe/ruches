@@ -39,7 +39,7 @@ $(document).ready(function() {
 	tableRetrait.on( 'select deselect', updateLinks);
 	function selectHausses() {
     	if ($(this).attr("href") == "#") {
-    		return confirm([[#{selecthaussestraiter}]]);	
+    		alert([[#{selecthaussestraiter}]]);	
     	}      
     }
     $('#retirerHausses').on('click', selectHausses);
