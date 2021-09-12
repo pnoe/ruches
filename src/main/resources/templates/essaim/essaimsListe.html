@@ -39,7 +39,7 @@ $(document).ready(function() {
     table.on( 'select deselect', updateLinks);
     $('.selection').on('click', function () {
     	if ($(this).attr("href") == "#") {
-    		return confirm([[#{selectessaimstraiter}]]);	
+    		alert([[#{selectessaimstraiter}]]);	
     	}      
     });
 });
