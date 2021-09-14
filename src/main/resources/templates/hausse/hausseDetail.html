@@ -139,7 +139,11 @@ $().ready(function() {
 				</tr>
 			</tbody>
 		</table>
-		<table class="table table-sm table-bordered">			
+		<h6 th:text="#{evenements}" 
+			th:if="${(dateHAUSSEREMPLISSAGE != null) or (dateCOMMENTAIREHAUSSE != null)}">
+		</h6>
+		<table class="table table-sm table-bordered" 
+			th:if="${(dateHAUSSEREMPLISSAGE != null) or (dateCOMMENTAIREHAUSSE != null)}">			
 			<thead>
 				<tr>
 					<th style="background-color:PaleGoldenRod" th:text="#{remplissage}"></th>
