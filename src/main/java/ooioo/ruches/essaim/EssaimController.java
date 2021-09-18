@@ -108,16 +108,13 @@ public class EssaimController {
 		long ageTotalJours = 0;
 		int ageMoyenJours;
 		int nb = 1;
-		// int horsRuche = 0;
 		LocalDate dateNow = LocalDate.now();
 		double m = 0;
 		double s = 0;
-		// int nbCouveuse = 0;
 		for (Essaim essaim : essaims) {
 			if (essaim.getReineDateNaissance() != null) {
 				if (essaim.getReineDateNaissance().isAfter(dateNow)) {
 					// Si la reine n'est pas encore née on ne la prends pas en compte !
-					// nbCouveuse++;
 					continue;
 				}
 				long ageMois = ChronoUnit.MONTHS.between(essaim.getReineDateNaissance(), dateNow);
@@ -129,7 +126,6 @@ public class EssaimController {
 				}
 				if (rucheRepository.findByEssaimId(essaim.getId()) == null) {
 					// Si la reine n'est pas dans une ruche on ne la prends pas en compte
-					// horsRuche++;
 					continue;
 				}
 				int indexAge = (int)ageMois/pas;
@@ -161,9 +157,7 @@ public class EssaimController {
 		long ageVarianceJours = Math.round(Math.sqrt(s / (nb - 1)));
 		model.addAttribute("ageMoyenJours", ageMoyenJours);
 		model.addAttribute("agesHisto", agesHisto);
-		// model.addAttribute("nbCouveuse", nbCouveuse);
 		model.addAttribute("ageVarianceJours", ageVarianceJours);
-		// model.addAttribute("horsRuche", horsRuche);
 		model.addAttribute("ageMaxJours", ageMaxJours);
 		model.addAttribute("ageMinJours", ageMinJours);
 		model.addAttribute("pas", pas);
@@ -217,7 +211,7 @@ public class EssaimController {
 			if (pMin == 1000000) { pMin = 0; }
 			// si rucherId non null
 			//  et rucherOK false ignorer cet essaim, il n'a pas produit dans le rucher rucherId
-			if ((rucherId == null) || rucherOK) {  // (!pTotal.equals(0))) {
+			if ((rucherId == null) || rucherOK) {
 				Map<String, String> essaimPoids = new HashMap<>();
 				essaimPoids.put("nom", essaim.getNom());
 				essaimPoids.put("id", essaim.getId().toString());

@@ -36,8 +36,6 @@ import ooioo.ruches.rucher.RucherService;
 @RequestMapping("/evenement/essaim")
 public class EvenementEssaimController {
 
-	// private static final String ESSAIMID = "essaimId";
-
 	final Logger logger = LoggerFactory.getLogger(EvenementEssaimController.class);
 
 	@Autowired
@@ -228,7 +226,7 @@ public class EvenementEssaimController {
 			@RequestParam(defaultValue = "false") boolean retourRuche) {
 		model.addAttribute(Const.RETOURRUCHE, retourRuche);
 		String template = prepareAppelFormulaire(session, model, essaimId, "essaim/essaimSucreForm");
-		essaimService.modelAddEvenement(model, (Essaim)model.asMap().get("essaim"), TypeEvenement.ESSAIMSUCRE);
+		essaimService.modelAddEvenement(model, (Essaim)model.asMap().get(Const.ESSAIM), TypeEvenement.ESSAIMSUCRE);
 		return template;
 	}
 
@@ -240,7 +238,7 @@ public class EvenementEssaimController {
 			@RequestParam(defaultValue = "false") boolean retourRuche) {
 		model.addAttribute(Const.RETOURRUCHE, retourRuche);
 		String template = prepareAppelFormulaire(session, model, essaimId, "essaim/essaimTraitementForm");
-		essaimService.modelAddEvenement(model, (Essaim)model.asMap().get("essaim"), TypeEvenement.ESSAIMTRAITEMENT);
+		essaimService.modelAddEvenement(model, (Essaim)model.asMap().get(Const.ESSAIM), TypeEvenement.ESSAIMTRAITEMENT);
 		return template;
 	}
 
@@ -357,7 +355,6 @@ public class EvenementEssaimController {
 							"Dispersion essaim " + essaim.getNom() + ". " + commentaire);
 				}
 			}
-			// LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 			Evenement evenement = new Evenement(dateEve, TypeEvenement.ESSAIMDISPERSION, ruche, essaim, rucher, null,
 					null, commentaire); // valeur
 			evenementRepository.save(evenement);
@@ -387,7 +384,7 @@ public class EvenementEssaimController {
 	public String liste(Model model, @PathVariable long essaimId) {
 		model.addAttribute(Const.EVENEMENTS, evenementRepository.findByEssaimId(essaimId));
 		model.addAttribute("itemId", essaimId);
-		model.addAttribute("type", "essaim");
+		model.addAttribute("type", Const.ESSAIM);
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isPresent()) {
 			model.addAttribute("essaimNom", essaimOpt.get().getNom());

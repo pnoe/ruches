@@ -237,11 +237,7 @@ public class RecolteHausseController {
 	@PostMapping("/haussesDepot/{recolteId}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody String haussesDepot(HttpSession session, Model model, @PathVariable long recolteId,
-
-			// @RequestParam String date) {
 			@RequestParam @DateTimeFormat(pattern="yyyy/MM/dd HH:mm") LocalDateTime date) {
-		// System.out.println(date);
-
 		Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
 		StringBuilder retHausses =  new StringBuilder();
 		StringBuilder retRuches = new StringBuilder();

@@ -140,7 +140,6 @@ function sauveRucherPosition(e) {
 function parcoursRedraw(redraw = false) {
 	// requete xmlhttp pour actualiser le parcours
 	const req2 = new XMLHttpRequest();
-	// const redrawX = redraw?'1':'0';
 	if (redraw) {
 		if (infowindowp === undefined) {
 			infowindowp = new google.maps.InfoWindow();

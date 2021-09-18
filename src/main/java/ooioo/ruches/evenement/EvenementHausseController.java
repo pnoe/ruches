@@ -34,7 +34,6 @@ import ooioo.ruches.rucher.Rucher;
 @RequestMapping("/evenement/hausse")
 public class EvenementHausseController {
 
-	// private static final String HAUSSEID = "hausseId";
 	final Logger logger = LoggerFactory.getLogger(EvenementHausseController.class);
 
 	@Autowired

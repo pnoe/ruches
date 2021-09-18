@@ -207,7 +207,7 @@ public class EvenementRucheController {
 			@RequestParam(defaultValue = "false") boolean retourEssaim) {
 		model.addAttribute(Const.RETOURESSAIM, retourEssaim);
 		String template = prepareAppelFormulaire(session, model, rucheId, "ruche/rucheCadreForm");
-		Ruche ruche = (Ruche)model.asMap().get("ruche");
+		Ruche ruche = (Ruche)model.asMap().get(Const.RUCHE);
 		essaimService.modelAddEvenement(model, ruche.getEssaim(), TypeEvenement.RUCHECADRE);
 		return template;
 	}
@@ -220,7 +220,7 @@ public class EvenementRucheController {
 			@RequestParam(defaultValue = "false") boolean retourEssaim) {
 		model.addAttribute(Const.RETOURESSAIM, retourEssaim);
 		String template = prepareAppelFormulaire(session, model, rucheId, "ruche/ruchePeseeForm");
-		rucheService.modelAddEvenement(model, (Ruche)model.asMap().get("ruche"), TypeEvenement.RUCHEPESEE);
+		rucheService.modelAddEvenement(model, (Ruche)model.asMap().get(Const.RUCHE), TypeEvenement.RUCHEPESEE);
 		return template;
 	}
 
@@ -309,7 +309,7 @@ public class EvenementRucheController {
 	public String liste(Model model, @PathVariable long rucheId) {
 		model.addAttribute(Const.EVENEMENTS, evenementRepository.findByRucheId(rucheId));
 		model.addAttribute("itemId", rucheId);
-		model.addAttribute("type", "ruche");
+		model.addAttribute("type", Const.RUCHE);
 		// pour lien retour dans la liste vers détail ruche
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 		if (rucheOpt.isPresent()) {

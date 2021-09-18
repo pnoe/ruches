@@ -102,37 +102,20 @@ public class EvenementController {
 	@GetMapping("/{evenementId}")
 	public String evenement(Model model, @PathVariable long evenementId,
 			@RequestParam(defaultValue = "") @Nullable String type,
-
 			@RequestParam(defaultValue = "0") @Nullable Long itemId) {
-
 		Optional<Evenement> evenementOpt = evenementRepository.findById(evenementId);
 		if (evenementOpt.isPresent()) {
 			model.addAttribute(Const.EVENEMENT, evenementOpt.get());
 			model.addAttribute("type", type);
-
 			model.addAttribute("itemId", itemId);
+		} else {
+			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
+			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
+			return Const.INDEX;
+		}
+		return "evenement/evenementDetail";
+	}
 
-		} else {
-			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
-			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
-			return Const.INDEX;
-		}
-		return "evenement/evenementDetail";
-	}
-/*
-	@GetMapping("/{evenementId}")
-	public String evenement(Model model, @PathVariable long evenementId) {
-		Optional<Evenement> evenementOpt = evenementRepository.findById(evenementId);
-		if (evenementOpt.isPresent()) {
-			model.addAttribute(Const.EVENEMENT, evenementOpt.get());
-		} else {
-			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
-			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
-			return Const.INDEX;
-		}
-		return "evenement/evenementDetail";
-	}
-*/
 	/*
 	 * Suppression d'un événement
 	 */
