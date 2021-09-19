@@ -273,25 +273,17 @@ public class RecolteHausseController {
 						essaim = ruche.getEssaim();
 						rucher = ruche.getRucher();
 					}
-
 					String commentaireEve = "Récolte " + recolte.getDate().
 							format(DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM)) + " " +
 							decimalFormat.format(recolteHausse.getPoidsAvant().subtract(recolteHausse.getPoidsApres())) +
 							"kg";
-
 					Evenement evenementRetrait = new Evenement(date,
-
-					// Evenement evenementRetrait = new Evenement(Utils.dateTimeDecal(session),
 							TypeEvenement.HAUSSERETRAITRUCHE, ruche, essaim, rucher, hausse,
 							hausse.getOrdreSurRuche().toString(), commentaireEve);
 					evenementRepository.save(evenementRetrait);
-
-					// Evenement evenementRemplissage = new Evenement(date,
-
 					Evenement evenementRemplissage = new Evenement(Utils.dateTimeDecal(session),
 							TypeEvenement.HAUSSEREMPLISSAGE, ruche, essaim, rucher, hausse,
 							"0", commentaireEve);
-
 					evenementRepository.save(evenementRemplissage);
 					hausse.setRuche(null);
 					hausse.setOrdreSurRuche(null);
