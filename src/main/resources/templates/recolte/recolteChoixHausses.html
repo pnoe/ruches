@@ -37,17 +37,20 @@ $(document).ready(function() {
 		select: {style: 'multi+shift'}
     });
 	tableRetrait.on( 'select deselect', updateLinks);
-	function selectHausses() {
-    	if ($(this).attr("href") == "#") {
-    		alert([[#{selecthaussestraiter}]]);	
-    	}      
-    }
-    $('#retirerHausses').on('click', selectHausses);
+	$('#retirerHausses').on('click', function () {
+		if ($(this).attr("href") == "#") {
+    		alert([[#{selecthaussesretirer}]]);	
+    	}  
+	});
 	const tableAjout = $('#ajoutHausseRecolte').DataTable({
 		select: {style: 'multi+shift'}
     });
 	tableAjout.on( 'select deselect', updateLinks);
-    $('#ajouterHausses').on('click', selectHausses);
+    $('#ajouterHausses').on('click', function () {
+		if ($(this).attr("href") == "#") {
+    		alert([[#{selecthaussesajouter}]]);	
+    	}  
+	});
 });
 </script>
 </head>

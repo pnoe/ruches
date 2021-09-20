@@ -168,8 +168,6 @@ public class EvenementRucheController {
 	 */
 	@GetMapping("/commentaire/{rucheId}")
 	public String creeCommentaire(HttpSession session, Model model, @PathVariable long rucheId) {
-			// noe retourEssaim ,@RequestParam(defaultValue = "false") boolean retourEssaim) {
-		// model.addAttribute(Const.RETOURESSAIM, retourEssaim);
 		return prepareAppelFormulaire(session, model, rucheId, "ruche/rucheCommentaireForm");
 	}
 
