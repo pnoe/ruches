@@ -35,11 +35,15 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<h1 class="item" th:unless="${rucheType.id}" th:text="#{ajouterRucheType}"></h1>
+				<h1 class="item" th:unless="${rucheType.id}">
+					<th:block th:text="#{ajouterUne} + ' '"></th:block>
+					<a th:href="@{'/rucheType/liste'}" th:text="#{rucheType}"></a>
+				</h1>
 				<h1 class="item" th:if="${rucheType.id}">
 					<th:block th:text="#{modification}"></th:block>
 					<a th:href="@{/rucheType/liste}"
-					th:text="#{rucheType} + ' ' + ${rucheType.nom}"></a>
+					th:text="#{rucheType}"></a>
+					<th:block th:text="' ' + ${rucheType.nom}"></th:block>
 				</h1>
 			</div>
 		</div>
