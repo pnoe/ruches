@@ -132,8 +132,10 @@ $(document).ready(function() {
 				</tr>
 			</tbody>
 		</table>
-		<h6 th:text="#{haussesRecolte}"></h6>
-		<table class="table table-sm table-bordered" id="hausses">
+
+		<h6 th:text="#{PasDeHausses}" th:if="${#lists.isEmpty(detailsRecolte)}"></h6>	
+		<h6 th:text="#{haussesRecolte}" th:unless="${#lists.isEmpty(detailsRecolte)}"></h6>
+		<table class="table table-sm table-bordered" id="hausses" th:unless="${#lists.isEmpty(detailsRecolte)}">
 			<thead>
 				<tr>
 					<th style="background-color:PaleGoldenRod" th:text="#{hausse}"></th>
@@ -163,6 +165,7 @@ $(document).ready(function() {
 			</tbody>
 		</table>
 	</div>
+	<br/>
 	<footer th:replace="include::footer"></footer>
 </body>
 </html>
