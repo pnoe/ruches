@@ -99,6 +99,16 @@
 			<version>9.0.9048</version>
 		</dependency>
 
+
+		<!-- https://mvnrepository.com/artifact/com.google.ortools/ortools-java -->
+<!-- 
+		<dependency>
+			<groupId>com.google.ortools</groupId>
+			<artifactId>ortools-java</artifactId>
+			<version>9.1.9490</version>
+		</dependency>
+ -->
+
 	</dependencies>
 	<properties>
 		<java.version>11</java.version>
