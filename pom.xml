@@ -92,15 +92,11 @@
 			<artifactId>jaxb-api</artifactId>
 		</dependency>
 
-		<!-- search maven ortools 
-		https://mvnrepository.com/artifact/com.google.ortools/ortools-java/9.1.9490
-					<artifactId>ortools-linux-x86-64</artifactId>
-					<version>9.1.9491</version>
-		-->
+		<!-- https://mvnrepository.com/artifact/com.google.ortools/ortools-java -->
 		<dependency>
 			<groupId>com.google.ortools</groupId>
 			<artifactId>ortools-java</artifactId>
-			<version>9.0.9048</version>
+			<version>9.1.9490</version>
 		</dependency>
 
 	</dependencies>
