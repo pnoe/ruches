@@ -82,6 +82,7 @@ public class RucheService {
 		List<Iterable<Evenement>> listeEvensCommentaireEssaim = new ArrayList<>();
 		List<Evenement> listeEvenCadre = new ArrayList<>();
 		List<Evenement> evensHaussesRuches = new ArrayList<>();
+		List<Evenement> evensPoidsRuches = new ArrayList<>();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		if (voirInactif != null && (boolean) voirInactif) {
 			ruches = rucheRepository.findAllByOrderByNom();
@@ -96,9 +97,9 @@ public class RucheService {
 						.findFirst3ByEssaimAndTypeOrderByDateDesc(ruche.getEssaim(), TypeEvenement.COMMENTAIREESSAIM));
 				// il faut trouver le dernier evenement hausseposeruche dont la hausse est effectivement
 				//  présente sur la ruche
-				// correction spring boot 2.2.0
 				List<Hausse> hausses = hausseRepository.findByRucheIdOrderByOrdreSurRuche(ruche.getId());
 				evensHaussesRuches.add(evenementRepository.findFirstByRucheAndHausseInAndTypeOrderByDateDesc(ruche, hausses, TypeEvenement.HAUSSEPOSERUCHE));
+				evensPoidsRuches.add(evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.RUCHEPESEE));
 			}
 			Evenement evenAjoutRucher = evenementRepository
 					.findFirstByRucheAndRucherAndTypeOrderByDateDesc(ruche, ruche.getRucher(),
@@ -110,11 +111,14 @@ public class RucheService {
 		}
 		model.addAttribute("dateAjoutRucher", dateAjoutRucher);
 		model.addAttribute("listeEvenCadre", listeEvenCadre);
-		model.addAttribute("listeEvensCommentaireEsaim", listeEvensCommentaireEssaim);
-		model.addAttribute("evensHaussesRuches", evensHaussesRuches);
 		model.addAttribute(Const.NBHAUSSES, nbHausses);
-		model.addAttribute(Const.HAUSSENOMS, nomHausses);
 		model.addAttribute(Const.RUCHES, ruches);
+		if (plus) {
+			model.addAttribute(Const.HAUSSENOMS, nomHausses);
+			model.addAttribute("listeEvensCommentaireEsaim", listeEvensCommentaireEssaim);
+			model.addAttribute("evensHaussesRuches", evensHaussesRuches);
+			model.addAttribute("evensPoidsRuches", evensPoidsRuches);
+		}				
 	}
 
 	/*
@@ -130,6 +134,7 @@ public class RucheService {
 		List<Iterable<Evenement>> listeEvensCommentaireEssaim = new ArrayList<>();
 		List<Evenement> listeEvenCadre = new ArrayList<>();
 		List<Evenement> evensHaussesRuches = new ArrayList<>();
+		List<Evenement> evensPoidsRuches = new ArrayList<>();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		if (voirInactif != null && (boolean) voirInactif) {
 			ruches = rucheRepository.findByRucherIdOrderById(rucher.getId());
@@ -154,9 +159,9 @@ public class RucheService {
 						.findFirst3ByEssaimAndTypeOrderByDateDesc(ruche.getEssaim(), TypeEvenement.COMMENTAIREESSAIM));
 				// il faut trouver le dernier evenement hausseposeruche dont la hausse est effectivement
 				//  présente sur la ruche
-				// correction spring boot 2.2.0 iterable -> list
 				List<Hausse> hausses = hausseRepository.findByRucheIdOrderByOrdreSurRuche(ruche.getId());
 				evensHaussesRuches.add(evenementRepository.findFirstByRucheAndHausseInAndTypeOrderByDateDesc(ruche, hausses, TypeEvenement.HAUSSEPOSERUCHE));
+				evensPoidsRuches.add(evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.RUCHEPESEE));
 			}
 			Evenement evenAjoutRucher = evenementRepository
 					.findFirstByRucheAndRucherAndTypeOrderByDateDesc(ruche, ruche.getRucher(),
@@ -169,12 +174,15 @@ public class RucheService {
 		model.addAttribute("ordreRuche", ordreRuche);
 		model.addAttribute("dateAjoutRucher", dateAjoutRucher);
 		model.addAttribute("listeEvenCadre", listeEvenCadre);
-		model.addAttribute("listeEvensCommentaireEsaim", listeEvensCommentaireEssaim);
-		model.addAttribute("evensHaussesRuches", evensHaussesRuches);
 		model.addAttribute(Const.NBHAUSSES, nbHausses);
-		model.addAttribute(Const.HAUSSENOMS, nomHausses);
 		model.addAttribute(Const.RUCHES, ruches);
 		model.addAttribute(Const.RUCHER, rucher);
+		if (plus) {
+			model.addAttribute(Const.HAUSSENOMS, nomHausses);
+			model.addAttribute("listeEvensCommentaireEsaim", listeEvensCommentaireEssaim);
+			model.addAttribute("evensHaussesRuches", evensHaussesRuches);
+			model.addAttribute("evensPoidsRuches", evensPoidsRuches);
+		}				
 	}
 
 }

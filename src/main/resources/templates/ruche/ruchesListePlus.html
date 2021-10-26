@@ -41,6 +41,9 @@
 					<th th:if="${session.voirInactif}" th:text="#{active}"></th>
 					<th th:text="#{dateAcquisition}"></th>
 					<th th:text="#{poidsVide}"></th>
+
+					<th th:text="'Poids pesé'"></th>
+					
 					<th style="background-color:Tomato" th:text="#{nbCadres}"></th>
 					<th style="background-color:Tomato" th:text="#{nbCadresMax}"></th>
 					<th th:text="#{type}"></th>
@@ -61,7 +64,10 @@
 				</tr>
 			</thead>
 			<tbody th:with="f='dd/MM/yyyy'">
-				<tr th:with="e=${listeEvensCommentaireEsaim[rucheStat.index]}, eh=${evensHaussesRuches[rucheStat.index]}, ec=${listeEvenCadre[rucheStat.index]}"
+				<tr th:with="e=${listeEvensCommentaireEsaim[rucheStat.index]}, 
+						eh=${evensHaussesRuches[rucheStat.index]}, 
+						ec=${listeEvenCadre[rucheStat.index]},
+						ep=${evensPoidsRuches[rucheStat.index]}"
 					th:each="ruche : ${ruches}">
 					<td><a th:href="@{'/ruche/'+${ruche.id}}"
 						th:text="${ruche.nom}"></a></td>
@@ -76,6 +82,9 @@
 						th:text="${ruche.active}? #{oui} : #{non}"></td>
 					<td th:text="${ruche.dateAcquisition}"></td>
 					<td class="num" th:text="${#numbers.formatDecimal(ruche.poidsVide,1,1,'DEFAULT')}"></td>
+					
+					<td class="num" th:text="${ep == null}?'':${#numbers.formatDecimal(ep.valeur,1,1,'DEFAULT')}+' '+${#temporals.format(ep.date, f)}+' '+${ep.commentaire}"></td>					
+					
 					<td class="num" th:text="${ec == null}?'':${ec.valeur}+' '+${#temporals.format(ec.date, f)}+' '+${ec.commentaire}"></td>
 					<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
 					<td th:text="${ruche.type?.nom}"></td>

@@ -65,7 +65,6 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	Evenement findFirstByRucheAndRucherAndTypeOrderByDateDesc(Ruche ruche, Rucher rucher,
 			TypeEvenement typeEvenement);
 
-	// correction spring boot 2.2.0 iterable -> list
 	Evenement findFirstByRucheAndHausseInAndTypeOrderByDateDesc(Ruche ruche, List<Hausse> hausse, TypeEvenement typeEvenement);
 
 	@Query(value = "select count(*) as nbeven from Evenement where type=ooioo.ruches.evenement.TypeEvenement.ESSAIMDISPERSION and date_part('year', date)=?1")
