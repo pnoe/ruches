@@ -41,14 +41,11 @@
 					<th th:if="${session.voirInactif}" th:text="#{active}"></th>
 					<th th:text="#{dateAcquisition}"></th>
 					<th th:text="#{poidsVide}"></th>
-
-					<th th:text="'Poids pesé'"></th>
-					
+					<th th:text="#{PoidsTotal}"></th>
 					<th style="background-color:Tomato" th:text="#{nbCadres}"></th>
 					<th style="background-color:Tomato" th:text="#{nbCadresMax}"></th>
 					<th th:text="#{type}"></th>
 					<th style="background-color:PaleGoldenRod" th:text="#{Hausses}"></th>
-					<th style="background-color:PaleGoldenRod"></th>										
 					<th style="background-color:PaleGoldenRod" >Commentaire hausse</th>
 					<th:block th:if="${session.voirLatLon}">
 						<th style="background-color: LemonChiffon" th:text="#{latitude}"></th>
@@ -82,14 +79,11 @@
 						th:text="${ruche.active}? #{oui} : #{non}"></td>
 					<td th:text="${ruche.dateAcquisition}"></td>
 					<td class="num" th:text="${#numbers.formatDecimal(ruche.poidsVide,1,1,'DEFAULT')}"></td>
-					
 					<td class="num" th:text="${ep == null}?'':${#numbers.formatDecimal(ep.valeur,1,1,'DEFAULT')}+' '+${#temporals.format(ep.date, f)}+' '+${ep.commentaire}"></td>					
-					
 					<td class="num" th:text="${ec == null}?'':${ec.valeur}+' '+${#temporals.format(ec.date, f)}+' '+${ec.commentaire}"></td>
 					<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
 					<td th:text="${ruche.type?.nom}"></td>
 					<td th:text="${hausseNoms[rucheStat.index]}"></td>
-					<td class="num" th:text="${nbHausses[rucheStat.index]}"></td>
 					<td th:text="${eh == null}?'':(${nbHausses[rucheStat.index]} &gt; 1 ? ${eh.hausse.nom} + '  ':'') + ${#temporals.format(eh.date, f)} + ' ' + ${eh.commentaire}"></td>
 					<th:block th:if="${session.voirLatLon}">
 						<td class="num" th:text="${#numbers.formatDecimal(ruche.latitude,1,5)}"></td>
