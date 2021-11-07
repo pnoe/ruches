@@ -221,7 +221,6 @@ function rucherDetail(ign) {
 				description: couchemarqueursruches
 			}
 		},
-
 		{
 			layer: drawLayer,
 			config: {
@@ -229,8 +228,6 @@ function rucherDetail(ign) {
 				description: 'Dessin manuels'
 			}
 		},
-
-
 		{
 			layer: vectorLineLayer,
 			config: {

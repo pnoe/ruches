@@ -61,6 +61,17 @@ function rucherListeIgn(ign) {
             features: markerRuchers
         })
     });
+	const brgm = new ol.layer.Tile ({
+		visible: false,
+	    source: new ol.source.TileWMS({
+		    url: 'https://geoservices.brgm.fr/geologie',
+		    params: {
+		        layers: 'geologie',
+		        format: 'png',
+		        version: '1.3.0'
+		    }
+	    })
+	  });
 	const select = new ol.interaction.Select({
 			layers: [vectorLayer],
 	        toggleCondition: ol.events.condition.never,
@@ -85,7 +96,7 @@ function rucherListeIgn(ign) {
 	        attribution : false
 	    }),
         target: 'map',
-        layers: [vectorLayer],        	
+        layers: [vectorLayer,brgm  ],        	
         overlays: [overlay],
         view: new ol.View({
             center: ol.proj.fromLonLat(mapcenter),
@@ -94,11 +105,17 @@ function rucherListeIgn(ign) {
     });
 	let layerSwitcher = new ol.control.LayerSwitcher({
 	    layers : [{
+		    layer: brgm,
+		    	config: {
+		            title: 'Géologie',
+		            description: 'Géologie BRGM',
+		            legends: [{url:'http://mapsref.brgm.fr/legendes/geoservices/Geologie1000_legende.jpg'}]}
+	      }, {
 	        layer: vectorLayer,
 	        config: {
 	            title: lesRucherstxt,
 	            description: couchemarqueursrucherstxt
-	        }	        
+	        }        
     	}]
 	});
 	let layersMap = map.getLayers();

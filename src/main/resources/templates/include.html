@@ -185,8 +185,7 @@ $.extend( true, $.fn.dataTable.defaults, {
 	</nav>
 	<footer th:fragment="footer">
 		<small
-			th:text="#{include.footer} + ' Version ' + ${#servletContext.getAttribute('buildversion')} + 
-    		' - ' + ${#servletContext.getAttribute('buildtime')}"></small>
+			th:text="#{include.footer} + ' Version ' + ${#servletContext.getAttribute('buildtime')}"></small>
 	</footer>
 </body>
 </html>
