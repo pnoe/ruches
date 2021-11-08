@@ -1,6 +1,7 @@
 /* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals ol,
-	ruchers, nomRuches,	recentertxt, lesRucherstxt,	lesRuchestxt, ruchertxt, couchemarqueursrucherstxt,
+	ruchers, nomRuches,	recentertxt, lesRucherstxt,	lesRuchestxt, pasderuchetxt, 
+	ruchertxt, couchemarqueursrucherstxt,
 	pleinecrantxt, urlruches, _csrf_token
 */
 
@@ -171,7 +172,9 @@ function rucherListeIgn(ign) {
 			'<a href="' + urlruches + 'rucher/' + 
 			(ign?'Ign/':'Osm/') + feature.get('rucherid') + '">' +
 			ruchertxt + ' ' + feature.get("ruchernom") + 
-			'</a><br/>' + lesRuchestxt + ' ' + feature.get("ruchesnom");
+			'</a><br/>' +
+			((feature.get("ruchesnom") === '') ? pasderuchetxt :
+			lesRuchestxt + ' ' + feature.get("ruchesnom"));
 		overlay.setPosition(feature.getGeometry().getCoordinates());
 		selectDoubleClick.getFeatures().clear();
       });

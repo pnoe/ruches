@@ -39,7 +39,9 @@ function initMap() {
 		google.maps.event.addListener(markerRucher, 'click', function() {
 		    infowindow.setContent(
 		    		'<a href="' + urlruches + 'rucher/Gg/' + markerRucher.rucherid + '">' +
-		    		ruchertxt + ' ' + markerRucher.label + "</a><br/>" + lesRuchestxt + ' ' + markerRucher.ruchesnom);
+		    		ruchertxt + ' ' + markerRucher.label + "</a><br/>" +
+		    		((markerRucher.ruchesnom === '') ? pasderuchetxt :
+						lesRuchestxt + ' ' + markerRucher.ruchesnom));
 		    infowindow.open(map, markerRucher);
 		  });
 		markersRucher.push(markerRucher);
