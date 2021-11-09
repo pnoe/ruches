@@ -6,6 +6,8 @@
 */
 
 function rucherListeIgn(ign) {
+	const urlbrgm = 'https://geoservices.brgm.fr/geologie';
+	const urlbrgmlegend = 'http://mapsref.brgm.fr/legendes/geoservices/Geologie1000_legende.jpg';
 	$('.recentre').on('click', function () {
         return confirm(recentertxt);
     });
@@ -65,7 +67,7 @@ function rucherListeIgn(ign) {
 	const brgm = new ol.layer.Tile ({
 		visible: false,
 	    source: new ol.source.TileWMS({
-		    url: 'https://geoservices.brgm.fr/geologie',
+		    url: urlbrgm,
 		    params: {
 		        layers: 'geologie',
 		        format: 'png',
@@ -115,7 +117,7 @@ function rucherListeIgn(ign) {
 		    	config: {
 		            title: 'Géologie',
 		            description: 'Géologie BRGM',
-		            legends: [{url:'http://mapsref.brgm.fr/legendes/geoservices/Geologie1000_legende.jpg'}]}
+		            legends: [{url: urlbrgmlegend}]}
 	      }       
     	]
 	});
