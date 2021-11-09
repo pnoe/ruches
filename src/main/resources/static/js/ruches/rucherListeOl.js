@@ -97,7 +97,7 @@ function rucherListeIgn(ign) {
 	        attribution : false
 	    }),
         target: 'map',
-        layers: [vectorLayer,brgm  ],        	
+        layers: [brgm, vectorLayer],        	
         overlays: [overlay],
         view: new ol.View({
             center: ol.proj.fromLonLat(mapcenter),
@@ -105,19 +105,19 @@ function rucherListeIgn(ign) {
         })
     });
 	let layerSwitcher = new ol.control.LayerSwitcher({
-	    layers : [{
-		    layer: brgm,
+	    layers : [
+		  {layer: vectorLayer,
+	        config: {
+	            title: lesRucherstxt,
+	            description: couchemarqueursrucherstxt}
+	      },
+	      {layer: brgm,
 		    	config: {
 		            title: 'Géologie',
 		            description: 'Géologie BRGM',
 		            legends: [{url:'http://mapsref.brgm.fr/legendes/geoservices/Geologie1000_legende.jpg'}]}
-	      }, {
-	        layer: vectorLayer,
-	        config: {
-	            title: lesRucherstxt,
-	            description: couchemarqueursrucherstxt
-	        }        
-    	}]
+	      }       
+    	]
 	});
 	let layersMap = map.getLayers();
     if (ign) {
