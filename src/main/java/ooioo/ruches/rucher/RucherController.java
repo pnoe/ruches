@@ -161,7 +161,10 @@ public class RucherController {
 					itemHisto.put("etat", String.join(" ", ruches));
 					itemHisto.put("eveid", eve.getId().toString());
 					histo.add(itemHisto);
-					ruches.remove(eve.getRuche().getNom());
+					if (!ruches.remove(eve.getRuche().getNom())) {
+						logger.error("Événement {} le rucher {} ne contient pas la ruche {}", 
+								eve.getDate(), eve.getRucher().getNom(), eve.getRuche().getNom());
+					}
 				} else {
 					// l'événenemt ajoute une ruche dans un autre rucher
 					if (!evenPrecs.isEmpty()) {
