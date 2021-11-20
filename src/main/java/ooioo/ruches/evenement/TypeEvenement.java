@@ -3,6 +3,7 @@ package ooioo.ruches.evenement;
 /**
  * Le type d'événement
  * Attention ne pas changer l'ordre. Il est utilisé en base de donnée.
+ *   0 RUCHEAJOUTRUCHER, 1 AJOUTESSAIMRUCHE ... 14 RUCHECADRE
  */
 public enum TypeEvenement {
 	RUCHEAJOUTRUCHER, AJOUTESSAIMRUCHE,
