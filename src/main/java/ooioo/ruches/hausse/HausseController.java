@@ -141,7 +141,8 @@ public class HausseController {
 		if (hausseOpt.isPresent()) {
 			Hausse hausse = hausseOpt.get();
 			model.addAttribute(Const.HAUSSENOMS, hausseRepository.findAllProjectedBy().stream().map(Nom::getNom)
-					.filter(nom -> !nom.equals(hausse.getNom())).collect(Collectors.toList()));
+					.filter(nom -> !nom.equals(hausse.getNom())).toList());
+//					.filter(nom -> !nom.equals(hausse.getNom())).collect(Collectors.toList()));
 			model.addAttribute(Const.HAUSSE, hausseOpt.get());
 		} else {
 			logger.error(Const.IDHAUSSEXXINCONNU, hausseId);

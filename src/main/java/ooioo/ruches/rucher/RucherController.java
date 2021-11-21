@@ -393,7 +393,8 @@ public class RucherController {
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
 			model.addAttribute(Const.RUCHERNOMS, rucherRepository.findAllProjectedBy().stream().map(Nom::getNom)
-					.filter(nom -> !nom.equals(rucher.getNom())).collect(Collectors.toList()));
+					.filter(nom -> !nom.equals(rucher.getNom())).toList());
+			//		.filter(nom -> !nom.equals(rucher.getNom())).collect(Collectors.toList()));
 			model.addAttribute(Const.RUCHER, rucher);
 			model.addAttribute(Const.PERSONNES, personneRepository.findAll());
 		} else {

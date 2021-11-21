@@ -258,7 +258,8 @@ public class RucheController {
 		if (rucheOpt.isPresent()) {
 			Ruche ruche = rucheOpt.get();
 			model.addAttribute(Const.RUCHENOMS, rucheRepository.findAllProjectedBy().stream().map(Nom::getNom)
-					.filter(nom -> !nom.equals(ruche.getNom())).collect(Collectors.toList()));
+					.filter(nom -> !nom.equals(ruche.getNom())).toList());
+			//		.filter(nom -> !nom.equals(ruche.getNom())).collect(Collectors.toList()));
 			model.addAttribute(Const.RUCHE, ruche);
 			Iterable<RucheType> rucheTypes = rucheTypeRepository.findAll();
 			model.addAttribute(Const.RUCHETYPES, rucheTypes);

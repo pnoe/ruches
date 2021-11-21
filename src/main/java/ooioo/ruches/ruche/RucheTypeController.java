@@ -64,7 +64,8 @@ public class RucheTypeController {
 			RucheType rucheType = rucheTypeOpt.get();
 			model.addAttribute("rucheTypeNoms",
 					StreamSupport.stream(rucheTypeRepository.findAll().spliterator(), false).map(RucheType::getNom)
-							.filter(nom -> !nom.equals(rucheType.getNom())).collect(Collectors.toList()));
+							.filter(nom -> !nom.equals(rucheType.getNom())).toList());
+			//				.filter(nom -> !nom.equals(rucheType.getNom())).collect(Collectors.toList()));
 			model.addAttribute("rucheType", rucheType);
 		} else {
 			logger.error("IdRucheType {} inconnu.", rucheTypeId);
