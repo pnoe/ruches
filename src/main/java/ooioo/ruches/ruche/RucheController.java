@@ -1,4 +1,4 @@
-package ooioo.ruches.ruche;
+	package ooioo.ruches.ruche;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -99,6 +99,7 @@ public class RucheController {
 			}
 			Float longitude = ruche.getLongitude();
 			String[] nomarray = nomclones.split(",");
+			String commentaire = "Clône ruche " + ruche.getNom();
 			List<String> nomsCrees = new ArrayList<>();
 			for (String nom : nomarray) {
 				if (noms.contains(nom)) {
@@ -108,7 +109,7 @@ public class RucheController {
 					Ruche clone = new Ruche(ruche, nom, longitude);
 					rucheRepository.save(clone);
 					Evenement eveAjout = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.RUCHEAJOUTRUCHER,
-							clone, null, ruche.getRucher(), null, null, "");
+							clone, null, ruche.getRucher(), null, null, commentaire);
 					evenementRepository.save(eveAjout);
 					nomsCrees.add(nom);
 					// pour éviter clone "a,a" : 2 fois le même nom dans la liste
