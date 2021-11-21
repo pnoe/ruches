@@ -35,6 +35,7 @@
 					<th style="background-color:PaleGoldenRod" th:text="#{ruche}"></th>
 					<th style="background-color:PaleGoldenRod" th:text="#{rucher}"></th>
 					<th style="background-color:PaleGoldenRod" th:text="#{essaim}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{provenance}"></th>
 					<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
 				</tr>
 			</thead>
@@ -47,6 +48,7 @@
 					<td th:text="${evenement.ruche?.nom}"></td>
 					<td th:text="${evenement.rucher?.nom}"></td>
 					<td th:text="${evenement.essaim?.nom}"></td>
+					<td th:text="${evenement.valeur}"></td>
 					<td th:text="${evenement.commentaire}"></td>
 				</tr>				
 			</tbody>
