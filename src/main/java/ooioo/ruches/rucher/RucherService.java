@@ -141,12 +141,16 @@ public class RucherService {
 
 	/**
 	 * Ajoute une liste de ruches dans un rucher. Création de l'événement
-	 * RUCHEAJOUTRUCHER
+	 * RUCHEAJOUTRUCHER.
+	 * Le nom du rucher de provenance est mis dans le champ valeur.
+	 * Le commentaire est le commentaire saisi dans le formulaire
 	 */
 	public void sauveAjouterRuches(Rucher rucher, String[] ruchesNoms, String date, String commentaire) {
 		LocalDateTime dateEveAjout = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
+		String provenance = "";
 		for (String rucheNom : ruchesNoms) {
 			Ruche ruche = rucheRepository.findByNom(rucheNom);
+			provenance = (ruche.getRucher() == null) ? "" : ruche.getRucher().getNom();
 			ruche.setRucher(rucher);
 			// Mettre les coord. de la ruche à celles du rucher
 			// dans un rayon égal à dispersion
@@ -156,9 +160,9 @@ public class RucherService {
 			rucheRepository.save(ruche);
 			// Créer un événement ajout dans le rucher rucherId
 			Evenement eveAjout = new Evenement(dateEveAjout, TypeEvenement.RUCHEAJOUTRUCHER, ruche, ruche.getEssaim(),
-					rucher, null, null, commentaire); // valeur commentaire
+					rucher, null, provenance, commentaire); // valeur commentaire
 			evenementRepository.save(eveAjout);
-			logger.info("Ruches {} déplacées dans le rucher {}", ruchesNoms, rucher.getNom());
+			logger.info("Ruche {} déplacée dans le rucher {}", rucheNom, rucher.getNom());
 		}
 	}
 
