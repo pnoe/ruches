@@ -209,13 +209,11 @@ public class RucheController {
 		if (rucheOpt.isPresent()) {
 			Ruche ruche = rucheOpt.get();
 			model.addAttribute(Const.RUCHE, ruche);
-//			model.addAttribute(Const.RUCHERS, rucherRepository.findProjectedIdNomByActifOrderByNom(true));
 			model.addAttribute(Const.RUCHERS, 
 					rucherRepository.findProjectedIdNomByActifAndIdNotOrderByNom(true, 
 							 (ruche.getRucher() == null) ? null : ruche.getRucher().getId()));
 			model.addAttribute("depotId", rucherRepository.findByDepotIsTrue().getId());
 			model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
-			
 			Evenement evenFirst = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, 
 					ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER);
 			DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -224,7 +222,6 @@ public class RucheController {
 			LocalDateTime dateTimeFirst = evenFirst.getDate().plusMinutes(1);
 			model.addAttribute("dateFirst",dateTimeFirst.format(dateFormat));
 			model.addAttribute("timeFirst", dateTimeFirst.format(timeFormat));
-			
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 			model.addAttribute(Const.MESSAGE,

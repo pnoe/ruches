@@ -3,6 +3,7 @@ package ooioo.ruches.rucher;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -694,6 +695,28 @@ public class RucherController {
 			model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
 			model.addAttribute(Const.RUCHER, rucherOpt.get());
 			model.addAttribute("ruchesNoms", ruchesNoms);
+			
+			// On cherche la date du dernier événement RUCHEAJOUTRUCHER
+			//   pour imposer cette date comme min dans le formulaire
+			LocalDateTime dateTimeMin = LocalDateTime.MIN;
+			String[] ruchesNomsSplit = ruchesNoms.split(",");
+			for (String rucheNom : ruchesNomsSplit) {
+				Ruche ruche = rucheRepository.findByNom(rucheNom);
+				if (ruche != null) {
+					Evenement evenFirst = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, 
+						ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER);
+					if (dateTimeMin.isBefore(evenFirst.getDate())) {
+						dateTimeMin = evenFirst.getDate();
+					}
+				}
+			}
+			DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
+			model.addAttribute("dateTime", dateTimeMin);
+			LocalDateTime dateTimeFirst = dateTimeMin.plusMinutes(1);
+			model.addAttribute("dateFirst",dateTimeFirst.format(dateFormat));
+			model.addAttribute("timeFirst", dateTimeFirst.format(timeFormat));
+			
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
