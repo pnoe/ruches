@@ -3,7 +3,6 @@ package ooioo.ruches.evenement;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -19,6 +18,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	// Recherche de l'événement "ajout ruche" précédent un "ajout ruche"
 	//   pour une ruche donnée en paramètre (pour historique rucher)
 	// pas de limit 1 en jpql : utiliser Pageable et appel avec PageRequest.of(0,1)
+	/*
 	@Query(value = """
 			select evenement from Evenement evenement
 			where evenement.type=ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER
@@ -27,8 +27,8 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			order by evenement.date desc
 			"""
 			)
-	List<Evenement> findAjoutRucheIdAndDate(Long rucheId, LocalDateTime date, Pageable pageable);
-	
+	List<Evenement> findAjoutRuchePrec(Long rucheId, LocalDateTime date, Pageable pageable);
+	*/
 	
 	// liste de la date, nom ruche, nom rucher des événements ajout ruche
 	//    dans le rucher rucherId
@@ -128,7 +128,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 	Iterable<Evenement> findByRucherId(Long rucherId);
 
-	Iterable<Evenement> findByTypeOrderByDateDesc(TypeEvenement typeEvenement);
+	List<Evenement> findByTypeOrderByDateDesc(TypeEvenement typeEvenement);
 
 	Iterable<Evenement> findByTypeOrderByDateAsc(TypeEvenement typeEvenement);
 

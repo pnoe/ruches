@@ -6,6 +6,10 @@
 <script th:replace="include :: localejsdatetimepicker"></script>
 <script th:inline="javascript">
 	$().ready(function() {
+		// https://jqueryvalidation.org/category/validator/
+		$.validator.addMethod( "greaterThanEqual", function( value, element, param ) {
+		    return Date.parse(value) > Date.parse(param);
+		}, [[#{doitEtreSupA}]] + ' {0}');		
 		$("#rucherId").focus();
 		$("#evenementForm").validate({
 			errorClass: 'erreur-form',
@@ -14,16 +18,18 @@
 			},
 			rules : {
 				date : {
-					required : true
+					required : true,
+					greaterThanEqual : [[${dateFirst}]] + ' ' + [[${timeFirst}]]
 				},
 				commentaire : {
 					maxlength : 255
 				}
 			}
 		});
-		$("#rucherId").change(function() {
-			showHideEven();
-		});
+		$('#date').datetimepicker({
+			minDate: [[${dateFirst}]],
+			minTime: [[${timeFirst}]]
+			});  
 	});
 
 </script>
@@ -40,7 +46,10 @@
 				<th:block th:text="#{changerDeRucher} + ' '"></th:block>
 				  <a th:href="@{'/ruche/'+${rucheId}}"
 					th:text="#{ruche} + ' ' + ${ruche.nom}"></a>
-				</h1>
+				</h1>	
+				<th:block th:text=
+		        	"#{ajouteeAuRucher(${#temporals.format(dateTime, 'dd/MM/yyyy HH:mm')}, ${ruche.rucher.nom})}"
+		        </th:block>
         	</div>
         </div>
     </div>

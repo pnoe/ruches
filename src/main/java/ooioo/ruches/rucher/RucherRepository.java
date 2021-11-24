@@ -23,7 +23,7 @@ public interface RucherRepository extends CrudRepository<Rucher, Long> {
 
 	Collection<IdNom> findAllProjectedIdNomByOrderByNom();
 
-	Collection<IdNom> findProjectedIdNomByActifOrderByNom(boolean actif);
+	Collection<IdNom> findProjectedIdNomByActifAndIdNotOrderByNom(boolean actif, Long id);
 
 	long countByActifTrue();
 }

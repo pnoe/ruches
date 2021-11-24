@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -114,7 +113,7 @@ public class RucherController {
 			Rucher rucher = rucherOpt.get();
 			model.addAttribute(Const.RUCHER, rucher);
 			// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date descendante
-			Iterable<Evenement> evensRucheAjout = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEAJOUTRUCHER);
+			List<Evenement> evensRucheAjout = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEAJOUTRUCHER);
 			// Les nom des ruches présentes dans le rucher
 			Collection<Nom> nomRuchesX = rucheRepository.findNomsByRucherId(rucherId);
  			List<String> ruches = new ArrayList<>();
@@ -124,10 +123,19 @@ public class RucherController {
 			List<Map<String, String>> histo = new ArrayList<>();
 			Map<String, String> itemHisto;
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
- 			for (Evenement eve : evensRucheAjout) {
+			int levens = evensRucheAjout.size();
+			for (int i = 0; i < levens; i++) {
+				Evenement eve = evensRucheAjout.get(i);
 				// On cherche l'événement précédent ajout de cette ruche
-				List<Evenement> evenPrecs = evenementRepository.findAjoutRucheIdAndDate(eve.getRuche().getId(),		
-						eve.getDate(), PageRequest.of(0,1));
+				Evenement evePrec = null;
+				for (int j = i + 1; j < levens; j++) {
+					if ((evensRucheAjout.get(j).getType() == 
+							ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER) &&
+						(evensRucheAjout.get(j).getRuche().getId() == eve.getRuche().getId())) {
+						evePrec = evensRucheAjout.get(j);
+						break;
+					}
+				}
  				if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
 					logger.error("Événement RUCHEAJOUTRUCHER {} incomplet", eve.getDate());
 					itemHisto = new HashMap<>();
@@ -148,12 +156,12 @@ public class RucherController {
 					itemHisto = new HashMap<>();
 					itemHisto.put("date", eve.getDate().format(formatter));
 					itemHisto.put("type", "Ajout");					
-					if (evenPrecs.isEmpty()) {
+					if (evePrec == null) {
 						itemHisto.put("destProv", "Inconnue");
-					} else if (evenPrecs.get(0).getRucher() == null) {
+					} else if (evePrec.getRucher() == null) {
 						itemHisto.put("destProv", "Événement incomplet");
 					} else {
-						itemHisto.put("destProv", evenPrecs.get(0).getRucher().getNom());	
+						itemHisto.put("destProv", evePrec.getRucher().getNom());	
 					}
 					itemHisto.put(Const.RUCHE, eve.getRuche().getNom());
 					itemHisto.put(Const.NBRUCHES, Integer.toString(ruches.size()));
@@ -166,13 +174,12 @@ public class RucherController {
 					}
 				} else {
 					// l'événenemt ajoute une ruche dans un autre rucher
-					if (!evenPrecs.isEmpty()) {
-						Evenement evenPrec = evenPrecs.get(0);
+					if (evePrec != null) {
 						//   si c'est un ajout dans le rucher rucherId
-						if (evenPrec.getRucher() == null) {
+						if (evePrec.getRucher() == null) {
 							continue;
 						}
-						if (evenPrec.getRucher().getId().equals(rucherId)) {
+						if (evePrec.getRucher().getId().equals(rucherId)) {
 							itemHisto = new HashMap<>();
 							itemHisto.put("date", eve.getDate().format(formatter));
 							itemHisto.put("type", "Retrait");
