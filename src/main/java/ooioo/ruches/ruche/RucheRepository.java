@@ -67,8 +67,8 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 			+ "and r not in (select distinct r from Ruche r, Evenement e where e.ruche = r and e.date > ?1)")
 	Iterable<Ruche> findPasDEvenementAvant(LocalDateTime date);
 
-	// Les ruches actives dont l'id est différent de id, triées par nom
-	@Query(value = "select r from Ruche r where r.active = 'true' and r.id != ?1")
+	// Les ruches actives dont l'id est différent de id triées par nom
+	@Query(value = "select r from Ruche r where r.active = 'true' and r.id != ?1 order by r.nom")
 	Iterable<Ruche> findActiveIdDiffOrderByNom(Long id);
 
 
