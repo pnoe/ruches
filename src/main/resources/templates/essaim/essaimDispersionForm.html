@@ -42,7 +42,7 @@
 				minTime: isChk ? [[${timeFirst}]] : false
 			});
 		}
-		$('#depot').on('change', depotOnChange());
+		$('#depot').on('change', depotOnChange);
 		$('#remerageId').on('change', function (e) {	
 			if (e.target.value === '') {
 				$('#depot').prop('disabled', false);

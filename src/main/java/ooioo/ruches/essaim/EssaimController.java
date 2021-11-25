@@ -671,14 +671,32 @@ public class EssaimController {
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (rucheOpt.isPresent()) {
+			Ruche ruche = rucheOpt.get();
 			if (essaimOpt.isPresent()) {
 				model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
 				model.addAttribute(Const.ESSAIM, essaimOpt.get());
-				model.addAttribute(Const.RUCHE, rucheOpt.get());
+				model.addAttribute(Const.RUCHE, ruche);
 				// Si l'essaim est dans une ruche envoyer le nom de la ruche
 				//  pour proposer l'échange du postionnment des deux ruches
 				Ruche rucheSource = rucheRepository.findByEssaimId(essaimOpt.get().getId());
 				model.addAttribute("rucheSource", rucheSource);
+				
+				
+				// envoyer la date max événements ajout ruchers
+				Evenement evenRuche = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, 
+						ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER);
+				Evenement evenRucheSource = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(rucheSource, 
+						ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER);
+				LocalDateTime dateTime = evenRuche.getDate().isBefore(evenRucheSource.getDate()) ?
+						evenRucheSource.getDate() : evenRuche.getDate();		
+				DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
+				model.addAttribute("dateTime", dateTime);
+				LocalDateTime dateTimeFirst = dateTime.plusMinutes(1);
+				model.addAttribute("dateFirst",dateTimeFirst.format(dateFormat));
+				model.addAttribute("timeFirst", dateTimeFirst.format(timeFormat));
+				
+				
 			} else {
 				logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 				model.addAttribute(Const.MESSAGE,
