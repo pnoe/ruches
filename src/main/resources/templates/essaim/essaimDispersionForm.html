@@ -4,8 +4,11 @@
 <script th:replace="include :: jsdatetimepicker"></script>
 <link th:replace="include :: cssdatetimepicker"/>
 <script th:replace="include :: localejsdatetimepicker"></script>
-<script>
+<script th:inline="javascript">
 	$().ready(function() {
+		$.validator.addMethod( "greaterThanEqual", function( value, element, param ) {
+			return $('#depot').is(":checked") ? (Date.parse(value) > Date.parse(param)) : true;
+		}, [[#{doitEtreSupA}]] + ' {0}');
 	    $('.bi-question-lg').popover({
 	        html: true
 	    });
@@ -20,21 +23,39 @@
 			},
 			rules : {
 				date : {
-					required : true
+					required : true,
+					greaterThanEqual : [[${dateFirst}]] + ' ' + [[${timeFirst}]]
 				},
 				commentaire : {
 					maxlength : 255
 				}
 			}
 		});
-		$('#remerageId').on('change', function (e) {
-			if(e.target.value === '') {
+		$('#date').datetimepicker({
+			minDate: [[${dateFirst}]],
+			minTime: [[${timeFirst}]]
+		});
+		function depotOnChange() {
+			const isChk =  $('#depot').is(":checked");
+			$('#date').datetimepicker({
+				minDate: isChk ? [[${dateFirst}]] : false,
+				minTime: isChk ? [[${timeFirst}]] : false
+			});
+		}
+		$('#depot').on('change', depotOnChange());
+		$('#remerageId').on('change', function (e) {	
+			if (e.target.value === '') {
 				$('#depot').prop('disabled', false);
 				$('#evencadre').prop('disabled', false);
+				$('#depot').prop('checked', true);
+				$('#evencadre').prop('checked', true);
 			} else {
 				$('#depot').prop('disabled', true);
 				$('#evencadre').prop('disabled', true);
+				$('#depot').prop('checked', false);
+				$('#evencadre').prop('checked', false);
 			}
+			depotOnChange();
 		});
 	});
 </script>
@@ -58,6 +79,12 @@
 					data-bs-trigger="focus" tabindex="0" role="button"
 					th:attr="data-bs-content=#{aideessaimdspersionform}"></a>
 			</div>
+        </div>
+        <div class="row">
+			<div class="col">
+				<p th:text="#{rucheAjouteeAuRucher(${ruche.nom},${#temporals.format(dateTime,'dd/MM/yyyy HH:mm')},${ruche.rucher.nom})}">
+		        </p>
+		    </div>
         </div>
     </div>
     <form action="#" th:action="@{'/evenement/essaim/sauve/dispersion/'+${essaim.id}}"

@@ -28,7 +28,7 @@
 		$('#date').datetimepicker({
 			minDate: [[${dateFirst}]],
 			minTime: [[${timeFirst}]]
-			});  
+		});  
 	});
 
 </script>
@@ -46,9 +46,8 @@
 				  <a th:href="@{'/ruche/'+${rucheId}}"
 					th:text="#{ruche} + ' ' + ${ruche.nom}"></a>
 				</h1>	
-				<th:block th:text=
-		        	"#{ajouteeAuRucher(${#temporals.format(dateTime, 'dd/MM/yyyy HH:mm')}, ${ruche.rucher.nom})}"
-		        </th:block>
+				<p th:text="#{ajouteeAuRucher(${#temporals.format(dateTime,'dd/MM/yyyy HH:mm')},${ruche.rucher.nom})}">
+		        </p>
         	</div>
         </div>
     </div>

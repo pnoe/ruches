@@ -300,6 +300,23 @@ public class EvenementEssaimController {
 				model.addAttribute("nomRuche", ruche.getNom());
 				model.addAttribute("essaimsRemerage", essaimsRemerage);
 			}
+			
+			
+			model.addAttribute(Const.RUCHE, ruche);
+			
+			// Si le retour au dépôt est demandé dans le formulaire, il faudra
+			//   que la date choisie soit postérieure à celle du dernier ajout
+			//   de la ruche dans son rucher
+			Evenement evenFirst = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, 
+					ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER);
+			DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
+			model.addAttribute("dateTime", evenFirst.getDate());
+			LocalDateTime dateTimeFirst = evenFirst.getDate().plusMinutes(1);
+			model.addAttribute("dateFirst",dateTimeFirst.format(dateFormat));
+			model.addAttribute("timeFirst", dateTimeFirst.format(timeFormat));
+			
+			
 		}
 		return prepareAppelFormulaire(session, model, essaimId, "essaim/essaimDispersionForm");
 	}
