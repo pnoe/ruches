@@ -33,9 +33,6 @@
 		function swapChange() {
 			const isChk =  $('#swapPositions').is(":checked") &&
 				([[${ruche.rucher?.id}]] != [[${rucheSource.rucher?.id}]]);
-			
-			alert(isChk);
-			
 			$('#date').datetimepicker({
 				minDate: isChk ? [[${dateFirst}]] : false,
 				minTime: isChk ? [[${timeFirst}]] : false
