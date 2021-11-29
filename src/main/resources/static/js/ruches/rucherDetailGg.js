@@ -93,7 +93,7 @@ function initMap() {
 	google.maps.event.addListener(markerRucher, 'click', function() {
 		infowindow.setContent(
 			ruches.length + ' ' + ruchestxt + '<br/>' + distancedeparcourstxt +
-			' ' + distParcours.toLocaleString(lang, digits2) + 'm');
+			' ' + distParcours.toLocaleString(lang, digits2) + ' m');
 		infowindow.open(map, markerRucher);
 	});
 	markersRuche.push(markerRucher);
@@ -158,7 +158,7 @@ function parcoursRedraw(redraw = false) {
 					infowindowp.close();
 					infowindowp.setContent(
 						"Pas d'amélioration<br/>" +
-						distancedeparcourstxt + ' ' + distParcours.toLocaleString(lang, digits2) + 'm'
+						distancedeparcourstxt + ' ' + distParcours.toLocaleString(lang, digits2) + ' m'
 					);
 					infowindowp.open(map, markerRucher);
 					return;
@@ -174,7 +174,7 @@ function parcoursRedraw(redraw = false) {
 					infowindowp.setContent(
 						'La distance est diminuée de ' + (dist - distParcours).toLocaleString(lang, digits2) +
 						'm<br/>' + distancedeparcourstxt +
-						' ' + distParcours.toLocaleString(lang, digits2) + 'm'
+						' ' + distParcours.toLocaleString(lang, digits2) + ' m'
 					);
 					infowindowp.open(map, markerRucher);
 				}
@@ -254,7 +254,7 @@ $(document).ready(function() {
 			}
 		}
 	});
-	$('#cercles').attr("title", distButinage + ' ' + rayonsButinage.join(', ') + 'm');
+	$('#cercles').attr("title", distButinage + ' ' + rayonsButinage.join(', ') + ' m');
 	$('#cercles').click(function() {
 		const visi = !circlesButinage[0].getVisible();
 		for (const c of circlesButinage) {

@@ -239,7 +239,7 @@ function rucherDetail(ign) {
 			layer: cerclesLayer,
 			config: {
 				title: cercles,
-				description: distButinage + ' ' + rayonsButinage.join(', ') + 'm'
+				description: distButinage + ' ' + rayonsButinage.join(', ') + ' m'
 			}
 		}]
 	});
@@ -294,7 +294,7 @@ function rucherDetail(ign) {
 		if (feature.get("rucheid") === 'entree') {
 			document.getElementById('popup-content').innerHTML =
 				ruches.length + ' ' + ruchestxt + '<br/>' + distancedeparcourstxt +
-				' ' + distParcours.toLocaleString(lang, digits2) + 'm';
+				' ' + distParcours.toLocaleString(lang, digits2) + ' m';
 		} else {
 			document.getElementById('popup-content').innerHTML =
 				'<a href="' + ruchesurl + 'ruche/' + feature.get('rucheid') + '">' +
@@ -467,7 +467,7 @@ function rucherDetail(ign) {
 					if (redraw && (response.distParcours + 0.1 > distParcours)) {
 						document.getElementById('popup-content').innerHTML =
 							"Pas d'amélioration<br/>" +
-							distancedeparcourstxt + ' ' + distParcours.toLocaleString(lang, digits2) + 'm';
+							distancedeparcourstxt + ' ' + distParcours.toLocaleString(lang, digits2) + ' m';
 						overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());
 						return;
 					}
@@ -489,7 +489,7 @@ function rucherDetail(ign) {
 						document.getElementById('popup-content').innerHTML =
 							'La distance est diminuée de ' + (dist - distParcours).toLocaleString(lang, digits2) +
 							'm<br/>' + distancedeparcourstxt +
-							' ' + distParcours.toLocaleString(lang, digits2) + 'm';
+							' ' + distParcours.toLocaleString(lang, digits2) + ' m';
 						overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());
 					}
 				}

@@ -72,7 +72,7 @@ function exportKml() {
 		if (rucheParcours[i].id === 0) {
 			nom = '<![CDATA[Entrée';
 			description = '<![CDATA[Entrée : ' + ruches.length + ' ' + ruchestxt + '<br/>' + distancedeparcourstxt + ' ' +
-				distParcours.toLocaleString(lang, digits2) + 'm';
+				distParcours.toLocaleString(lang, digits2) + ' m';
 			couleur = '#iconwhite';
 		} else {
 			let rucheidx = ruches.findIndex(x => x.id === rucheParcours[i].id);
@@ -118,7 +118,7 @@ function exportKml() {
 		'<color>7f00ffff</color><width>4</width></LineStyle></Style>' +
 		'<Placemark><name>Parcours</name><description>' +
 		ruches.length + ' ' + ruchestxt + ', ' +
-		distancedeparcourstxt + ' ' + distParcours.toLocaleString(lang, digits2) + 'm' +
+		distancedeparcourstxt + ' ' + distParcours.toLocaleString(lang, digits2) + ' m' +
 		'</description><styleUrl>#yellowLineGreenPoly</styleUrl><LineString><coordinates> ';
 	for (const rucheP of rucheParcours) {
 		kmlcontent += rucheP.longitude + ',' +

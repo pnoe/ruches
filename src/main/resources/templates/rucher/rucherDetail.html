@@ -62,21 +62,13 @@
        			<a id="supprime" th:href="@{'/rucher/supprime/'+${rucher.id}}" 
        			  class="confirmationsupp bi bi-trash" style="color:red" 
        			  th:title="#{supprimer}" aria-hidden="true"></a>&nbsp;
-       			  
        			<a th:href="@{'/evenement/rucher/'+${rucher.id}}"
        			  class="padicons bi bi-list-ul" th:title="#{evenements}" aria-hidden="true"></a>
-       			  
 				<a th:href="@{'/evenement/rucher/commentaire/'+${rucher.id}}"
 				  class="bi bi-chat-text" th:title="#{evenementCommentaire}" aria-hidden="true"></a>  
 				&nbsp;
-				<a th:href="@{'/rucher/historique/'+${rucher.id}}"
+				<a th:href="@{'/rucher/historique2/'+${rucher.id}+'/1'}"
 				  class="bi bi-calendar-check" th:title="#{historique}" aria-hidden="true"></a>
-				
-				
-				<a th:href="@{'/rucher/historique2/'+${rucher.id}}"
-				  class="bi bi-calendar-check" th:title="#{historique}" aria-hidden="true"></a>
-				  
-				  
 			</div>
 		</div>
 	</div>

@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -179,8 +181,10 @@ public class RucherController {
 	 *  Liste les événements correspondant à l'ajout ou le retrait de ruche
 	 *  de ce rucher
 	 */
-	@GetMapping("/historique2/{rucherId}")
-	public String historique2(Model model, @PathVariable long rucherId) {
+	@GetMapping("/historique2/{rucherId}/{group}")
+	public String historique2(Model model, @PathVariable long rucherId
+			, @PathVariable boolean group
+			) {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
@@ -273,11 +277,74 @@ public class RucherController {
 						}
 					}
 				}
+				model.addAttribute("group", group);
 			}
+			// TODO option pour regrouper les événements qui ont une date identique (au jour près)
+			//    un type (ajout/retrait) et destProv identique
+			//      List<Map<String, String>> histo = new ArrayList<>();
+			//      Map<String, String> itemHisto;
+			
+			// boolean group = true;
+			if (group) {
+				List<Map<String, String>> histoGroup = new ArrayList<>();
+				int lhisto = histo.size();		
+				String ruchesGroup = "";
+				// String destProvGroup = "";
+				int i = 0;
+				Map<String, String> itemHistoN;
+				Map<String, String> itemHistoG;
+				Set<String> destP;
+				while (i < lhisto) {	
+					itemHisto = histo.get(i);
+					ruchesGroup = itemHisto.get(Const.RUCHE);
+					// destProvGroup = itemHisto.get("destProv");
+					destP =  new HashSet<String>();
+					destP.add( itemHisto.get("destProv"));
+					int j = i + 1;
+					while (j < lhisto) {
+						itemHistoN = histo.get(j);
+						if (itemHisto.get("date").equals(itemHistoN.get("date")) &&
+								itemHisto.get("type").equals(itemHistoN.get("type")) 
+								// && itemHisto.get("destProv").equals(itemHistoN.get("destProv"))
+								) {
+							// si regroupables
+							// regrouper en concaténant les "Const.RUCHES"
+							ruchesGroup += " " + itemHistoN.get(Const.RUCHE);
+							// destProvGroup += " " + itemHistoN.get("destProv");
+							if (!destP.contains(itemHistoN.get("destProv"))) {
+								destP.add(itemHistoN.get("destProv"));
+							}
+							// Ajouter le nombre de ruches
+							j += 1;
+						} else {
+							break;
+						}
+					}
+					if (i == j - 1) {
+						histoGroup.add(itemHisto);
+					} else {
+						// enregistrer groupe dans histoGroup
+						itemHistoG = new HashMap<>();
+						itemHistoG.put("date", itemHisto.get("date"));
+						itemHistoG.put("type", itemHisto.get("type"));
+						itemHistoG.put("destProv", String.join(" ", destP));
+						itemHistoG.put(Const.RUCHE, ruchesGroup);
+						itemHistoG.put(Const.NBRUCHES, itemHisto.get(Const.NBRUCHES));
+						itemHistoG.put("etat", itemHisto.get("etat"));
+						itemHistoG.put("eveid", itemHisto.get("eveid"));
+						histoGroup.add(itemHistoG);
+					}
+					i = j;
+				}
+				model.addAttribute("histo", histoGroup);
+			} else {
+				model.addAttribute("histo", histo);
+			}
+			
+			
 			if (ruches.size() != 0) {
 				logger.error("Historique : après traitement des événements en reculant dans le temps, le rucher n'est pas vide");
 			} 			
-			model.addAttribute("histo", histo);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
