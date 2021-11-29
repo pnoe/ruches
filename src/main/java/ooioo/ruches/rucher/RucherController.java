@@ -182,9 +182,8 @@ public class RucherController {
 	 *  de ce rucher
 	 */
 	@GetMapping("/historique2/{rucherId}/{group}")
-	public String historique2(Model model, @PathVariable long rucherId
-			, @PathVariable boolean group
-			) {
+	public String historique2(Model model, @PathVariable long rucherId,
+			@PathVariable boolean group) {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
@@ -279,47 +278,42 @@ public class RucherController {
 				}
 				model.addAttribute("group", group);
 			}
-			// TODO option pour regrouper les événements qui ont une date identique (au jour près)
-			//    un type (ajout/retrait) et destProv identique
-			//      List<Map<String, String>> histo = new ArrayList<>();
-			//      Map<String, String> itemHisto;
-			
-			// boolean group = true;
 			if (group) {
 				List<Map<String, String>> histoGroup = new ArrayList<>();
 				int lhisto = histo.size();		
 				String ruchesGroup = "";
-				// String destProvGroup = "";
-				int i = 0;
 				Map<String, String> itemHistoN;
 				Map<String, String> itemHistoG;
+				// pour stockage des provenances/destinations et suppression de doublons
 				Set<String> destP;
+				int i = 0;
+				int j;
 				while (i < lhisto) {	
 					itemHisto = histo.get(i);
 					ruchesGroup = itemHisto.get(Const.RUCHE);
-					// destProvGroup = itemHisto.get("destProv");
 					destP =  new HashSet<String>();
 					destP.add( itemHisto.get("destProv"));
-					int j = i + 1;
+					// on recherche si les événements suivants peuvent être groupés
+					//  même date et même type (Ajout/Retrait)
+					//  par contre les destinations provenances peuvent être différentes
+					j = i + 1;
 					while (j < lhisto) {
 						itemHistoN = histo.get(j);
 						if (itemHisto.get("date").equals(itemHistoN.get("date")) &&
-								itemHisto.get("type").equals(itemHistoN.get("type")) 
-								// && itemHisto.get("destProv").equals(itemHistoN.get("destProv"))
-								) {
+								itemHisto.get("type").equals(itemHistoN.get("type"))) {
 							// si regroupables
-							// regrouper en concaténant les "Const.RUCHES"
+							// regrouper en concaténant les ruches et en stocant les dest/prov
 							ruchesGroup += " " + itemHistoN.get(Const.RUCHE);
-							// destProvGroup += " " + itemHistoN.get("destProv");
 							if (!destP.contains(itemHistoN.get("destProv"))) {
 								destP.add(itemHistoN.get("destProv"));
 							}
-							// Ajouter le nombre de ruches
 							j += 1;
 						} else {
 							break;
 						}
 					}
+					// le nombre de ruches ajoutées ou retirées est j - i
+					//  on pourrait l'afficher en l'ajoutant dans itemHistoG
 					if (i == j - 1) {
 						histoGroup.add(itemHisto);
 					} else {
@@ -331,6 +325,8 @@ public class RucherController {
 						itemHistoG.put(Const.RUCHE, ruchesGroup);
 						itemHistoG.put(Const.NBRUCHES, itemHisto.get(Const.NBRUCHES));
 						itemHistoG.put("etat", itemHisto.get("etat"));
+						// l'id eve est l'id du premier événements, on perd les
+						//  des autres événements
 						itemHistoG.put("eveid", itemHisto.get("eveid"));
 						histoGroup.add(itemHistoG);
 					}
@@ -340,8 +336,6 @@ public class RucherController {
 			} else {
 				model.addAttribute("histo", histo);
 			}
-			
-			
 			if (ruches.size() != 0) {
 				logger.error("Historique : après traitement des événements en reculant dans le temps, le rucher n'est pas vide");
 			} 			
@@ -356,7 +350,8 @@ public class RucherController {
 	}
 
 	/**
-	 * Historique d'un rucher
+	 * Historique d'un rucher : remplacé par historique2.
+	 *  A supprimer.
 	 *  Les événements sont utilisés par date croissante : du plus
 	 *   ancien au plus récent.
 	 *  Liste les événements correspondant à l'ajout ou le retrait de ruche
