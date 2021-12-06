@@ -297,9 +297,11 @@ public class RucherController {
 					//  même date et même type (Ajout/Retrait)
 					//  par contre les destinations provenances peuvent être différentes
 					j = i + 1;
+					String itemHistoJour = itemHisto.get("date").substring(0, 10);
 					while (j < lhisto) {
 						itemHistoN = histo.get(j);
-						if (itemHisto.get("date").equals(itemHistoN.get("date")) &&
+						if (itemHistoJour
+								.equals(itemHistoN.get("date").substring(0, 10)) &&
 								itemHisto.get("type").equals(itemHistoN.get("type"))) {
 							// si regroupables
 							// regrouper en concaténant les ruches et en stocant les dest/prov
@@ -319,6 +321,9 @@ public class RucherController {
 					} else {
 						// enregistrer groupe dans histoGroup
 						itemHistoG = new HashMap<>();
+						// la date est la date du premier événement
+						//   les autres peuvent avoir des heures et minutes
+						//   différentes
 						itemHistoG.put("date", itemHisto.get("date"));
 						itemHistoG.put("type", itemHisto.get("type"));
 						itemHistoG.put("destProv", String.join(" ", destP));
