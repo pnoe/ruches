@@ -181,8 +181,8 @@ public class RucherController {
 	 *  Liste les événements correspondant à l'ajout ou le retrait de ruche
 	 *  de ce rucher
 	 */
-	@GetMapping("/historique2/{rucherId}/{group}")
-	public String historique2(Model model, @PathVariable long rucherId,
+	@GetMapping("/historique/{rucherId}/{group}")
+	public String historique(Model model, @PathVariable long rucherId,
 			@PathVariable boolean group) {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
@@ -339,93 +339,6 @@ public class RucherController {
 			if (ruches.size() != 0) {
 				logger.error("Historique : après traitement des événements en reculant dans le temps, le rucher n'est pas vide");
 			} 			
-		} else {
-			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
-			model.addAttribute(Const.MESSAGE,
-					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
-			return Const.INDEX;
-		}
-		return "rucher/rucherHisto2";
-	}
-
-	/**
-	 * Historique d'un rucher : remplacé par historique2.
-	 *  A supprimer.
-	 *  Les événements sont utilisés par date croissante : du plus
-	 *   ancien au plus récent.
-	 *  Liste les événements correspondant à l'ajout ou le retrait de ruche
-	 *  de ce rucher
-	 */
-	@GetMapping("/historique/{rucherId}")
-	public String historique(Model model, @PathVariable long rucherId) {
-		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
-		if (rucherOpt.isPresent()) {
-			Rucher rucher = rucherOpt.get();
-			model.addAttribute(Const.RUCHER, rucher);
-			// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date ascendante
-			Iterable<Evenement> evensRucheAjout = evenementRepository.findByTypeOrderByDateAsc(TypeEvenement.RUCHEAJOUTRUCHER);
-			List<String> ruches = new ArrayList<>(); // Les nom des ruches présentes dans le rucher
-			List<Map<String, String>> histo = new ArrayList<>();
-			Map<String, String> itemHisto;
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
- 			for (Evenement eve : evensRucheAjout) {
-				if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
-					logger.error("Événement RUCHEAJOUTRUCHER {} incomplet", eve.getDate());
-					itemHisto = new HashMap<>();
-					itemHisto.put("date", eve.getDate().format(formatter));
-					itemHisto.put("type", "Événement incomplet");
-					itemHisto.put(Const.RUCHE, (eve.getRuche() == null) ? "" : eve.getRuche().getNom());
-					itemHisto.put(Const.NBRUCHES, Integer.toString(ruches.size()));
-					itemHisto.put("etat", "");
-					itemHisto.put("eveid", eve.getId().toString());
-					histo.add(itemHisto);
-					continue;
-				}
-				if (eve.getRucher().getId().equals(rucherId)) {
-					// si l'événement est un ajout dans le rucher
-					// on ajoute la ruche de l'événement dans la liste des ruches du rucher
-					ruches.add(eve.getRuche().getNom());
-					Collections.sort(ruches);
-					itemHisto = new HashMap<>();
-					itemHisto.put("date", eve.getDate().format(formatter));
-					itemHisto.put("type", "Ajout");
-					itemHisto.put(Const.RUCHE, eve.getRuche().getNom());
-					itemHisto.put(Const.NBRUCHES, Integer.toString(ruches.size()));
-					itemHisto.put("etat", String.join(" ", ruches));
-					itemHisto.put("eveid", eve.getId().toString());
-					histo.add(itemHisto);
-				} else {
-					// l'événenemt ajoute une ruche dans un autre rucher
-					if (ruches.contains(eve.getRuche().getNom())) {
-						// La ruche est une ruche actuellement dans le rucher
-						//  on retire cette ruche du rucher
-						ruches.remove(eve.getRuche().getNom());
-						itemHisto = new HashMap<>();
-						itemHisto.put("date", eve.getDate().format(formatter));
-						itemHisto.put("type", "Retrait");
-						itemHisto.put(Const.RUCHE, eve.getRuche().getNom());
-						itemHisto.put(Const.NBRUCHES, Integer.toString(ruches.size()));
-						itemHisto.put("etat", String.join(" ", ruches));
-						itemHisto.put("eveid", eve.getId().toString());
-						histo.add(itemHisto);
-					}
-				}
-			}
- 			model.addAttribute("histo", histo);
- 			Collection<Nom> nomRuchesX = rucheRepository.findNomsByRucherId(rucherId);
- 			List<String> ruchesActuel = new ArrayList<>();
- 			for (Nom nomR : nomRuchesX) {
- 				ruchesActuel.add(nomR.getNom());
- 			}
- 			Collections.sort(ruches);
- 			Collections.sort(ruchesActuel);
- 			boolean etatOK = ruches.equals(ruchesActuel);
- 			model.addAttribute("etatOK", etatOK);
- 			if (!etatOK) {
- 				model.addAttribute("nomsHisto", String.join(" ", ruches));
- 				model.addAttribute("nomsActuel", String.join(" ", ruchesActuel));
- 			} 			
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
