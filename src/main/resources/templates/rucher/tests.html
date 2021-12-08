@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+	<script>
+		$(document).ready(function() {
+			$( ".accordion" ).accordion({
+				active : false,
+				collapsible : true
+			});
+		});
+	</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					Tests
+				</h1>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid table-responsive accordion">
+		<h1 class="item" th:if="${#strings.isEmpty(histoLog)}" th:text="#{HistRuchers}"></h1>
+		<h1 class="item" th:unless="${#strings.isEmpty(histoLog)}" style="background-color: red;" th:text="#{HistRuchers}"></h1>
+		<p th:utext="${histoLog}"></p>
+		<h1 class="item" th:if="${#strings.isEmpty(evenInc)}" th:text="#{EvenIncomplets}"></h1>
+		<h1 class="item" th:unless="${#strings.isEmpty(evenInc)}" style="background-color: red;" th:text="#{EvenIncomplets}"></h1>
+		<p th:utext="${evenInc}"></p>
+	</div>
+	<br/>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

@@ -5,18 +5,13 @@
 
 <script th:inline="javascript">
 	$().ready(function() {
+		const url = [[@{'/rucher/historique/'}+${rucher.id}+'/']] ;
 		$('#groupe').on('change', function () {
-			if ($(this).is(':checked')) {
-				location =  [[@{'/rucher/historique2/'}+${rucher.id}+'/1']] ;
-			} else {		
-				location = [[@{'/rucher/historique2/'}+${rucher.id}+'/0']] ;	
-			}
+			location = url + ($(this).is(':checked'));
 		});
 	});
 </script>
-
 </head>
-
 <body>
 	<nav th:replace="include :: navbar"></nav>
 	<br />

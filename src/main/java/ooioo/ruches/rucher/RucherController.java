@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -123,6 +124,11 @@ public class RucherController {
  			}
 			for (int i = 0; i < levens; i++) {
 				Evenement eve = evensRucheAjout.get(i);
+				
+				if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
+					continue;
+				}
+				
 				// On cherche l'événement précédent ajout de cette ruche
 				Evenement evePrec = null;
 				for (int j = i + 1; j < levens; j++) {
@@ -133,9 +139,8 @@ public class RucherController {
 						break;
 					}
 				}
- 				if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
-					continue;
-				}
+ 				
+				
 				if (eve.getRucher().getId().equals(rucherId)) {
 					// si l'événement est un ajout dans le rucher
 					// on retire après l'affichage la ruche de l'événement 
@@ -175,6 +180,99 @@ public class RucherController {
 	}
 	
 	/**
+	 * Tests erreurs
+	 *  résultat dans la page tests.html
+	 */
+	@GetMapping("/tests")
+	public String tests(Model model) {
+		Iterable<Rucher> ruchers = rucherRepository.findAll();
+		// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date descendante
+		List<Evenement> evensRucheAjout = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEAJOUTRUCHER);
+		int levens = evensRucheAjout.size();
+		StringBuilder histoLog = new StringBuilder();
+		Formatter histoFormat = new Formatter(histoLog);
+		for (Rucher rucher : ruchers) {
+			Long rucherId = rucher.getId();
+			// Les nom des ruches présentes dans le rucher
+			Collection<Nom> nomRuchesX = rucheRepository.findNomsByRucherId(rucherId);
+ 			List<String> ruches = new ArrayList<>();
+ 			for (Nom nomR : nomRuchesX) {
+ 				ruches.add(nomR.getNom());
+ 			}
+			for (int i = 0; i < levens; i++) {
+				Evenement eve = evensRucheAjout.get(i);
+				
+				if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
+					// si événement incorrect, on l'ignore
+					continue;
+				}
+				
+				
+				
+				
+ 				if (eve.getRucher().getId().equals(rucherId)) {
+					// si l'événement est un ajout dans le rucher
+					// on retire la ruche de l'événement 
+					//  de la liste des ruches du rucher
+					if (!ruches.remove(eve.getRuche().getNom())) {
+						histoFormat.format("Événement %s le rucher %s ne contient pas la ruche %s <br/>", 
+								eve.getDate(), eve.getRucher().getNom(), eve.getRuche().getNom());
+							
+					}
+				} else {
+					// l'événenemt eve ajoute une ruche dans un autre rucher
+					
+					// On cherche l'événement précédent ajout de cette ruche
+					Evenement evePrec = null;
+					for (int j = i + 1; j < levens; j++) {
+						if ((evensRucheAjout.get(j).getType() == 
+								ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER) &&
+								(evensRucheAjout.get(j).getRuche() != null) &&
+							(evensRucheAjout.get(j).getRuche().getId().equals(eve.getRuche().getId()))) {
+							evePrec = evensRucheAjout.get(j);
+							break;
+						}
+					}
+					
+					if (evePrec != null) {
+						//   si c'est un ajout dans le rucher rucherId
+						if (evePrec.getRucher() == null) {
+							continue;
+						}
+						if (evePrec.getRucher().getId().equals(rucherId)) {
+							// si l'événement précédent evePrec était un ajout dans le
+							//   rucher, alors eve retire la ruche du rucher
+							ruches.add(eve.getRuche().getNom());
+						}
+					}
+				}
+			}
+			if (ruches.size() != 0) {
+				histoFormat.format("Rucher %s après traitement des événements, le rucher n'est pas vide<br/>",
+						rucher.getNom());
+			} 			
+		}
+		histoFormat.close();
+		model.addAttribute("histoLog", histoLog);
+		
+		StringBuilder evenInc = new StringBuilder();
+		Formatter evenIncFormat = new Formatter(evenInc);
+		for (int i = 0; i < levens; i++) {
+			Evenement eve = evensRucheAjout.get(i);
+			if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
+				String nomRuche = eve.getRuche() == null ? "Null" : eve.getRuche().getNom();
+				String nomRucher = eve.getRucher() == null ? "Null" : eve.getRucher().getNom();
+				evenIncFormat.format("Événement RUCHEAJOUTRUCHER %s incomplet. Ruche %s rucher %s",
+						eve.getDate(), nomRuche, nomRucher);
+			}
+		}
+		evenIncFormat.close();
+		model.addAttribute("evenInc", evenInc);
+		
+		return "rucher/tests";
+	}
+	
+	/**
 	 * Historique d'un rucher
 	 *  Les événements sont utilisés par date décroissante : du plus
 	 *   récent au plus ancien.
@@ -202,19 +300,10 @@ public class RucherController {
 			int levens = evensRucheAjout.size();
 			for (int i = 0; i < levens; i++) {
 				Evenement eve = evensRucheAjout.get(i);
-				// On cherche l'événement précédent ajout de cette ruche
-				Evenement evePrec = null;
-				for (int j = i + 1; j < levens; j++) {
-					if ((evensRucheAjout.get(j).getType() == 
-							ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER) &&
-						(evensRucheAjout.get(j).getRuche().getId().equals(eve.getRuche().getId()))) {
-						evePrec = evensRucheAjout.get(j);
-						break;
-					}
-				}
- 				if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
+				
+				if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
  					// Événement RUCHEAJOUTRUCHER incomplet le rucher ou la ruche
- 					//   n'est pas renseigné
+ 					//   n'est pas renseigné, on l'ignore pour l'historique
 					logger.error("Événement RUCHEAJOUTRUCHER {} incomplet", eve.getDate());
 					itemHisto = new HashMap<>();
 					itemHisto.put("date", eve.getDate().format(formatter));
@@ -227,6 +316,17 @@ public class RucherController {
 					histo.add(itemHisto);
 					continue;
 				}
+				// On cherche l'événement précédent ajout de cette ruche
+				Evenement evePrec = null;
+				for (int j = i + 1; j < levens; j++) {
+					if ((evensRucheAjout.get(j).getType() == 
+							ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER) &&
+							(evensRucheAjout.get(j).getRuche() != null) &&
+						(evensRucheAjout.get(j).getRuche().getId().equals(eve.getRuche().getId()))) {
+						evePrec = evensRucheAjout.get(j);
+						break;
+					}
+				}	
 				if (eve.getRucher().getId().equals(rucherId)) {
 					// si l'événement est un ajout dans le rucher
 					// on retire après l'affichage la ruche de l'événement 
@@ -281,7 +381,7 @@ public class RucherController {
 			if (group) {
 				List<Map<String, String>> histoGroup = new ArrayList<>();
 				int lhisto = histo.size();		
-				String ruchesGroup = "";
+				StringBuilder ruchesGroup;
 				Map<String, String> itemHistoN;
 				Map<String, String> itemHistoG;
 				// pour stockage des provenances/destinations et suppression de doublons
@@ -290,7 +390,7 @@ public class RucherController {
 				int j;
 				while (i < lhisto) {	
 					itemHisto = histo.get(i);
-					ruchesGroup = itemHisto.get(Const.RUCHE);
+					ruchesGroup = new StringBuilder(itemHisto.get(Const.RUCHE));
 					destP =  new HashSet<String>();
 					destP.add( itemHisto.get("destProv"));
 					// on recherche si les événements suivants peuvent être groupés
@@ -305,7 +405,8 @@ public class RucherController {
 								itemHisto.get("type").equals(itemHistoN.get("type"))) {
 							// si regroupables
 							// regrouper en concaténant les ruches et en stocant les dest/prov
-							ruchesGroup += " " + itemHistoN.get(Const.RUCHE);
+							ruchesGroup.append(" ");
+							ruchesGroup.append(itemHistoN.get(Const.RUCHE));
 							if (!destP.contains(itemHistoN.get("destProv"))) {
 								destP.add(itemHistoN.get("destProv"));
 							}
@@ -327,7 +428,7 @@ public class RucherController {
 						itemHistoG.put("date", itemHisto.get("date"));
 						itemHistoG.put("type", itemHisto.get("type"));
 						itemHistoG.put("destProv", String.join(" ", destP));
-						itemHistoG.put(Const.RUCHE, ruchesGroup);
+						itemHistoG.put(Const.RUCHE, ruchesGroup.toString());
 						itemHistoG.put(Const.NBRUCHES, itemHisto.get(Const.NBRUCHES));
 						itemHistoG.put("etat", itemHisto.get("etat"));
 						// l'id eve est l'id du premier événements, on perd les
