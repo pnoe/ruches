@@ -72,8 +72,8 @@ public class AdminController {
 	public String tests(Model model) {
 		Iterable<Rucher> ruchers = rucherRepository.findAll();
 		// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date descendante
-		List<Evenement> evensRucheAjout = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEAJOUTRUCHER);
-		int levens = evensRucheAjout.size();
+		List<Evenement> evensListe = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEAJOUTRUCHER);
+		int levens = evensListe.size();
 		StringBuilder histoLog = new StringBuilder();
 		Formatter histoFormat = new Formatter(histoLog);
 		for (Rucher rucher : ruchers) {
@@ -85,7 +85,7 @@ public class AdminController {
  				ruches.add(nomR.getNom());
  			}
 			for (int i = 0; i < levens; i++) {
-				Evenement eve = evensRucheAjout.get(i);
+				Evenement eve = evensListe.get(i);
 				if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
 					// si événement incorrect, on l'ignore
 					continue;
@@ -97,7 +97,6 @@ public class AdminController {
 					if (!ruches.remove(eve.getRuche().getNom())) {
 						histoFormat.format("Événement %s le rucher %s ne contient pas la ruche %s <br/>", 
 								eve.getDate(), eve.getRucher().getNom(), eve.getRuche().getNom());
-							
 					}
 				} else {
 					// l'événenemt eve ajoute une ruche dans un autre rucher
@@ -105,11 +104,11 @@ public class AdminController {
 					// On cherche l'événement précédent ajout de cette ruche
 					Evenement evePrec = null;
 					for (int j = i + 1; j < levens; j++) {
-						if ((evensRucheAjout.get(j).getType() == 
+						if ((evensListe.get(j).getType() == 
 								ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER) &&
-								(evensRucheAjout.get(j).getRuche() != null) &&
-							(evensRucheAjout.get(j).getRuche().getId().equals(eve.getRuche().getId()))) {
-							evePrec = evensRucheAjout.get(j);
+								(evensListe.get(j).getRuche() != null) &&
+							(evensListe.get(j).getRuche().getId().equals(eve.getRuche().getId()))) {
+							evePrec = evensListe.get(j);
 							break;
 						}
 					}
@@ -126,18 +125,17 @@ public class AdminController {
 					}
 				}
 			}
-			if (ruches.size() != 0) {
-				histoFormat.format("Rucher %s après traitement des événements, le rucher n'est pas vide<br/>",
+			if (!ruches.isEmpty()) {
+				histoFormat.format("Après traitement des événements, le rucher %s n'est pas vide<br/>",
 						rucher.getNom());
 			} 			
 		}
 		histoFormat.close();
 		model.addAttribute("histoLog", histoLog);
-		
+		// evenInc événements incorrects
 		StringBuilder evenInc = new StringBuilder();
 		Formatter evenIncFormat = new Formatter(evenInc);
-		for (int i = 0; i < levens; i++) {
-			Evenement eve = evensRucheAjout.get(i);
+		for (Evenement eve : evensListe) {
 			if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
 				String nomRuche = eve.getRuche() == null ? "Null" : eve.getRuche().getNom();
 				String nomRucher = eve.getRucher() == null ? "Null" : eve.getRucher().getNom();
@@ -145,10 +143,26 @@ public class AdminController {
 						eve.getDate(), nomRuche, nomRucher);
 			}
 		}
+		
+		evensListe = evenementRepository.findByTypeOrderByDateDesc(
+				TypeEvenement.HAUSSEPOSERUCHE);
+		for (Evenement eve : evensListe) {
+			if (eve.getRuche() == null) {
+				evenIncFormat.format("Événement HAUSSEPOSERUCHE %s incomplet. Ruche non renseignée",
+						eve.getDate());
+			}
+		}
+		evensListe = evenementRepository.findByTypeOrderByDateDesc(
+				TypeEvenement.HAUSSERETRAITRUCHE);
+		for (Evenement eve : evensListe) {
+			if (eve.getRuche() == null) {
+				evenIncFormat.format("Événement HAUSSERETRAITRUCHE %s incomplet. Ruche non renseignée",
+						eve.getDate());
+			}
+		}
 		evenIncFormat.close();
 		model.addAttribute("evenInc", evenInc);
-
-		return "rucher/tests";
+		return "tests";
 	}
 
 	/*

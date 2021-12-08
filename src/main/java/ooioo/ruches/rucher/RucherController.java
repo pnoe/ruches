@@ -61,6 +61,7 @@ public class RucherController {
 
 	private static final String RUCHER_RUCHERFORM = "rucher/rucherForm";
 	private static final String RUCHER_RUCHERLISTE = "rucher/ruchersListe";
+	private static final String destProv = "destProv";
 
 	private final Logger logger = LoggerFactory.getLogger(RucherController.class);
 
@@ -215,7 +216,7 @@ public class RucherController {
 					itemHisto = new HashMap<>();
 					itemHisto.put("date", eve.getDate().format(formatter));
 					itemHisto.put("type", "Événement incomplet");
-					itemHisto.put("destProv","");
+					itemHisto.put(destProv,"");
 					itemHisto.put(Const.RUCHE, (eve.getRuche() == null) ? "" : eve.getRuche().getNom());
 					itemHisto.put(Const.NBRUCHES, Integer.toString(ruches.size()));
 					itemHisto.put("etat", "");
@@ -245,11 +246,11 @@ public class RucherController {
 					if (evePrec == null) {
 						// il n'y a pas d'événement précédent d'ajout de cette
 						//  ruche dans un rucher
-						itemHisto.put("destProv", "Inconnue");
+						itemHisto.put(destProv, "Inconnue");
 					} else if (evePrec.getRucher() == null) {
-						itemHisto.put("destProv", "Événement incomplet");
+						itemHisto.put(destProv, "Événement incomplet");
 					} else {
-						itemHisto.put("destProv", evePrec.getRucher().getNom());	
+						itemHisto.put(destProv, evePrec.getRucher().getNom());	
 					}
 					itemHisto.put(Const.RUCHE, eve.getRuche().getNom());
 					itemHisto.put(Const.NBRUCHES, Integer.toString(ruches.size()));
@@ -273,7 +274,7 @@ public class RucherController {
 							itemHisto = new HashMap<>();
 							itemHisto.put("date", eve.getDate().format(formatter));
 							itemHisto.put("type", "Retrait");
-							itemHisto.put("destProv", eve.getRucher().getNom());
+							itemHisto.put(destProv, eve.getRucher().getNom());
 							itemHisto.put(Const.RUCHE, eve.getRuche().getNom());
 							itemHisto.put(Const.NBRUCHES, Integer.toString(ruches.size()));
 							itemHisto.put("etat", String.join(" ", ruches));
@@ -300,8 +301,8 @@ public class RucherController {
 				while (i < lhisto) {	
 					itemHisto = histo.get(i);
 					ruchesGroup = new StringBuilder(itemHisto.get(Const.RUCHE));
-					destP =  new HashSet<String>();
-					destP.add( itemHisto.get("destProv"));
+					destP =  new HashSet<>();
+					destP.add( itemHisto.get(destProv));
 					// on recherche si les événements suivants peuvent être groupés
 					//  même date et même type (Ajout/Retrait)
 					//  par contre les destinations provenances peuvent être différentes
@@ -316,8 +317,8 @@ public class RucherController {
 							// regrouper en concaténant les ruches et en stocant les dest/prov
 							ruchesGroup.append(" ");
 							ruchesGroup.append(itemHistoN.get(Const.RUCHE));
-							if (!destP.contains(itemHistoN.get("destProv"))) {
-								destP.add(itemHistoN.get("destProv"));
+							if (!destP.contains(itemHistoN.get(destProv))) {
+								destP.add(itemHistoN.get(destProv));
 							}
 							j += 1;
 						} else {
@@ -336,7 +337,7 @@ public class RucherController {
 						//   différentes
 						itemHistoG.put("date", itemHisto.get("date"));
 						itemHistoG.put("type", itemHisto.get("type"));
-						itemHistoG.put("destProv", String.join(" ", destP));
+						itemHistoG.put(destProv, String.join(" ", destP));
 						itemHistoG.put(Const.RUCHE, ruchesGroup.toString());
 						itemHistoG.put(Const.NBRUCHES, itemHisto.get(Const.NBRUCHES));
 						itemHistoG.put("etat", itemHisto.get("etat"));
@@ -351,7 +352,7 @@ public class RucherController {
 			} else {
 				model.addAttribute("histo", histo);
 			}
-			if (ruches.size() != 0) {
+			if (!ruches.isEmpty()) {
 				logger.error("Historique : après traitement des événements en reculant dans le temps, le rucher n'est pas vide");
 			} 			
 		} else {
