@@ -8,6 +8,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Formatter;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,13 +31,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import ooioo.ruches.evenement.Evenement;
+import ooioo.ruches.evenement.EvenementRepository;
+import ooioo.ruches.evenement.TypeEvenement;
 import ooioo.ruches.personne.PersonneService;
+import ooioo.ruches.ruche.RucheRepository;
+import ooioo.ruches.rucher.Rucher;
+import ooioo.ruches.rucher.RucherRepository;
 
 @Controller
 public class AdminController {
 
 	private final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
+	@Autowired
+	private RucherRepository rucherRepository;
+	@Autowired
+	private EvenementRepository evenementRepository;
+	@Autowired
+	private RucheRepository rucheRepository;
 	@Autowired
 	private PersonneService personneService;
 
@@ -48,6 +64,92 @@ public class AdminController {
 	@Value("${tomcat.oldwebapps.path}")
 	private String tomcatOldWebappsPath;
 
+	/**
+	 * Tests erreurs
+	 *  résultat dans la page tests.html
+	 */
+	@GetMapping("/tests")
+	public String tests(Model model) {
+		Iterable<Rucher> ruchers = rucherRepository.findAll();
+		// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date descendante
+		List<Evenement> evensRucheAjout = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEAJOUTRUCHER);
+		int levens = evensRucheAjout.size();
+		StringBuilder histoLog = new StringBuilder();
+		Formatter histoFormat = new Formatter(histoLog);
+		for (Rucher rucher : ruchers) {
+			Long rucherId = rucher.getId();
+			// Les nom des ruches présentes dans le rucher
+			Collection<Nom> nomRuchesX = rucheRepository.findNomsByRucherId(rucherId);
+ 			List<String> ruches = new ArrayList<>();
+ 			for (Nom nomR : nomRuchesX) {
+ 				ruches.add(nomR.getNom());
+ 			}
+			for (int i = 0; i < levens; i++) {
+				Evenement eve = evensRucheAjout.get(i);
+				if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
+					// si événement incorrect, on l'ignore
+					continue;
+				}
+ 				if (eve.getRucher().getId().equals(rucherId)) {
+					// si l'événement est un ajout dans le rucher
+					// on retire la ruche de l'événement 
+					//  de la liste des ruches du rucher
+					if (!ruches.remove(eve.getRuche().getNom())) {
+						histoFormat.format("Événement %s le rucher %s ne contient pas la ruche %s <br/>", 
+								eve.getDate(), eve.getRucher().getNom(), eve.getRuche().getNom());
+							
+					}
+				} else {
+					// l'événenemt eve ajoute une ruche dans un autre rucher
+					
+					// On cherche l'événement précédent ajout de cette ruche
+					Evenement evePrec = null;
+					for (int j = i + 1; j < levens; j++) {
+						if ((evensRucheAjout.get(j).getType() == 
+								ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER) &&
+								(evensRucheAjout.get(j).getRuche() != null) &&
+							(evensRucheAjout.get(j).getRuche().getId().equals(eve.getRuche().getId()))) {
+							evePrec = evensRucheAjout.get(j);
+							break;
+						}
+					}
+					if (evePrec != null) {
+						//   si c'est un ajout dans le rucher rucherId
+						if (evePrec.getRucher() == null) {
+							continue;
+						}
+						if (evePrec.getRucher().getId().equals(rucherId)) {
+							// si l'événement précédent evePrec était un ajout dans le
+							//   rucher, alors eve retire la ruche du rucher
+							ruches.add(eve.getRuche().getNom());
+						}
+					}
+				}
+			}
+			if (ruches.size() != 0) {
+				histoFormat.format("Rucher %s après traitement des événements, le rucher n'est pas vide<br/>",
+						rucher.getNom());
+			} 			
+		}
+		histoFormat.close();
+		model.addAttribute("histoLog", histoLog);
+		
+		StringBuilder evenInc = new StringBuilder();
+		Formatter evenIncFormat = new Formatter(evenInc);
+		for (int i = 0; i < levens; i++) {
+			Evenement eve = evensRucheAjout.get(i);
+			if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
+				String nomRuche = eve.getRuche() == null ? "Null" : eve.getRuche().getNom();
+				String nomRucher = eve.getRucher() == null ? "Null" : eve.getRucher().getNom();
+				evenIncFormat.format("Événement RUCHEAJOUTRUCHER %s incomplet. Ruche %s rucher %s",
+						eve.getDate(), nomRuche, nomRucher);
+			}
+		}
+		evenIncFormat.close();
+		model.addAttribute("evenInc", evenInc);
+
+		return "rucher/tests";
+	}
 
 	/*
 	 * Download des dumps de la base
