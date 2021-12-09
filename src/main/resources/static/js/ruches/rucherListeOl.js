@@ -130,7 +130,7 @@ function rucherListeIgn(ign) {
             }
     	}));
     	layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
-    		layer: "GEOGRAPHICALGRIDSYSTEMS.MAPS.SCAN-EXPRESS.STANDARD"
+    		layer: "GEOGRAPHICALGRIDSYSTEMS.MAPS"
     	}));
     	layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
     		layer: "ORTHOIMAGERY.ORTHOPHOTOS"
