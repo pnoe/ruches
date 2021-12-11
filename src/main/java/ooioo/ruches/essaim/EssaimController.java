@@ -101,13 +101,13 @@ public class EssaimController {
 			Essaim essaim = essaimOpt.get();
 			model.addAttribute(Const.ESSAIM, essaim);
 			// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date descendante
-			Iterable<Evenement> evensRucheAjout = 
+			Iterable<Evenement> evensEssaimAjout = 
 					evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
 							TypeEvenement.RUCHEAJOUTRUCHER);
 			
-			model.addAttribute("evensRucheAjout", evensRucheAjout);
+			model.addAttribute("evensEssaimAjout", evensEssaimAjout);
 			
-			// for (Evenement eve : evensRucheAjout) {
+			// for (Evenement eve : evensEssaimAjouts) {
 			//    Pour calcul de la durée de séjour dans le rucher
 			// }
 			
@@ -118,7 +118,7 @@ public class EssaimController {
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
-		return "essaim/historique";
+		return "essaim/essaimHisto";
 	}
 	
 	

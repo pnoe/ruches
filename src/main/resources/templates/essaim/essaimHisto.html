@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					<th:block th:text="#{historique} + ' '"></th:block>
+					<a th:href="@{'/essaim/'+${essaim.id}}"
+						th:text="#{essaim} + ' ' + ${essaim.nom}"></a>
+				</h1>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th th:text="#{date}"></th>
+					<th th:text="#{rucher}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="eve : ${evensEssaimAjout}">
+					<td><a th:text="${#temporals.format(eve.date, 'yyyy/MM/dd HH:mm')}"
+						th:href="@{'/evenement/'+${eve.id}}"></a></td>
+					<td th:text="${eve.rucher?.nom}"></td>
+				</tr>
+		</table>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

@@ -67,6 +67,9 @@
        				<a th:href="@{'/evenement/ruche/cadre/'+${rucheEssaim?.id}+'?retourEssaim=true'}"
        				  class="bi bi-layout-three-columns" th:title="#{evenementCadres}" aria-hidden="true"></a>
 				</th:block>
+				&nbsp;
+				<a th:href="@{'/essaim/historique/'+${essaim.id}}"
+				  class="bi bi-calendar-check" th:title="#{historique}" aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
