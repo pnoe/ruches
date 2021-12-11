@@ -123,6 +123,10 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	Iterable<Evenement> findByRucheId(Long rucheId);
 
 	Iterable<Evenement> findByEssaimId(Long essaimId);
+	
+	
+	Iterable<Evenement> findByEssaimIdAndTypeOrderByDateAsc(Long essaimId, TypeEvenement typeEvenement);
+	
 
 	Iterable<Evenement> findByHausseId(Long hausseId);
 

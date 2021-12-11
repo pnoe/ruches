@@ -89,7 +89,39 @@ public class EssaimController {
 	private String accueilTitre;
 	@Value("${essaime.suffix}")
 	private String essaimeSuffix;
-
+	
+	
+	/*
+	 * Historique de la mise en ruchers d'un essaim
+	 */
+	@GetMapping("/historique/{essaimId}")
+	public String historique(Model model, @PathVariable long essaimId) {
+		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
+		if (essaimOpt.isPresent()) {
+			Essaim essaim = essaimOpt.get();
+			model.addAttribute(Const.ESSAIM, essaim);
+			// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date descendante
+			Iterable<Evenement> evensRucheAjout = 
+					evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
+							TypeEvenement.RUCHEAJOUTRUCHER);
+			
+			model.addAttribute("evensRucheAjout", evensRucheAjout);
+			
+			// for (Evenement eve : evensRucheAjout) {
+			//    Pour calcul de la durée de séjour dans le rucher
+			// }
+			
+		} else {
+			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
+			model.addAttribute(Const.MESSAGE,
+					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
+			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
+			return Const.INDEX;
+		}
+		return "essaim/historique";
+	}
+	
+	
 	/*
 	 * Statistiques âges des reines
 	 */
