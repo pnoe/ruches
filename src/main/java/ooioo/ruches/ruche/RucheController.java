@@ -335,7 +335,9 @@ public class RucheController {
 			Rucher rucher = rucherRepository.findByDepotIsTrue();
 			ruche.setRucher(rucher);
 			rucheRepository.save(ruche);
-			// date mis au dépôt = date acqusition de la ruche
+			// date mis au dépôt = date acquisition de la ruche
+			// la date d'acquisition est un LocalDate d'ou le asStartOfDay
+			// pour renseigner le heure, minutes...
 			Evenement eveAjout = new Evenement(ruche.getDateAcquisition().atStartOfDay(),
 					TypeEvenement.RUCHEAJOUTRUCHER, ruche, null, rucher, null, null, "");
 			evenementRepository.save(eveAjout);
