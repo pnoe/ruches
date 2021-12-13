@@ -2,6 +2,7 @@ package ooioo.ruches.essaim;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -101,16 +102,28 @@ public class EssaimController {
 			Essaim essaim = essaimOpt.get();
 			model.addAttribute(Const.ESSAIM, essaim);
 			// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date descendante
-			Iterable<Evenement> evensEssaimAjout = 
+			List<Evenement> evensEssaimAjout = 
 					evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
 							TypeEvenement.RUCHEAJOUTRUCHER);
-			
 			model.addAttribute("evensEssaimAjout", evensEssaimAjout);
-			
-			// for (Evenement eve : evensEssaimAjouts) {
-			//    Pour calcul de la durée de séjour dans le rucher
-			// }
-			
+			List<Long> durees = new ArrayList<>();
+			if ((evensEssaimAjout != null) && (evensEssaimAjout.size() > 0)) {
+				int i = 0;
+				while (i < evensEssaimAjout.size() - 1) {
+				// calcul de la durée de séjour dans le rucher
+					durees.add(Duration.between(
+							evensEssaimAjout.get(i).getDate(),
+							evensEssaimAjout.get(i + 1).getDate()
+							).toDays()
+							);
+					i++;
+				}
+				durees.add(Duration.between(
+						evensEssaimAjout.get(i).getDate(),
+						LocalDateTime.now()
+						).toDays());
+				model.addAttribute("durees", durees);
+			}
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 			model.addAttribute(Const.MESSAGE,
