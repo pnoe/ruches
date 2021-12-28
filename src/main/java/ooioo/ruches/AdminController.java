@@ -70,6 +70,7 @@ public class AdminController {
 	 */
 	@GetMapping("/tests")
 	public String tests(Model model) {
+		// Recherche des erreurs dans l'historique des ajouts de ruches dans les ruchers
 		Iterable<Rucher> ruchers = rucherRepository.findAll();
 		// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date descendante
 		List<Evenement> evensListe = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEAJOUTRUCHER);
@@ -143,7 +144,6 @@ public class AdminController {
 						eve.getDate(), nomRuche, nomRucher);
 			}
 		}
-		
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.HAUSSEPOSERUCHE);
 		for (Evenement eve : evensListe) {
@@ -170,6 +170,7 @@ public class AdminController {
 	 * fichiers ruches_schema.sql et ruches.sql.xz
 	 *  ces fichiers dump sont créés par un cron sur le serveur
 	 */
+	/*
 	@GetMapping(path = "/dump/{fichier}")
 	@ResponseStatus(value = HttpStatus.OK)
     public ResponseEntity<Resource> download(Model model, @PathVariable String fichier, Authentication authentication) throws IOException {
@@ -192,11 +193,13 @@ public class AdminController {
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(resource);
     }
-
+	*/
+	
 	/*
 	 * Déploiement de l'application
 	 * git clone, maven package et copie du war sous webapps
 	 */
+	/*
 	@GetMapping(path = "/deploie")
 	public String deploie(Model model, Authentication authentication) {
 		if (!personneService.personneAdmin(authentication, model)) {
@@ -251,24 +254,11 @@ public class AdminController {
 			// pas de version dans le nom du war, voir finalname dans pom.xml
 			Path sourcePath      = Paths.get(tempDir + "/ruches/target/ruches.war.original");
 			Path destinationPath = Paths.get(tomcatWebappsPath + "ruches.war");
-
-			// Pas réussi à résoudre :
-			/// [2021-07-28 15:55:27] [info] java.nio.file.FileSystemException: /var/lib/tomcat9/oldWebapps: Read-only file system
-			// Copie de sauvevegarde de l'ancien ruches.war
-			//  Attention Tomcat est sandboxé par systemd et n'a accès qu'à certains répertoires
-			//   https://salsa.debian.org/java-team/tomcat9/blob/master/debian/README.Debian
-			// Files.move(destinationPath, Paths.get(tomcatOldWebappsPath), StandardCopyOption.REPLACE_EXISTING);
 			Files.copy(destinationPath, destinationPath,
 			            StandardCopyOption.REPLACE_EXISTING);
-
 			destinationPath = Paths.get(tomcatWebappsPath + "ruchestest.war");
 			Files.copy(sourcePath, destinationPath,
 			            StandardCopyOption.REPLACE_EXISTING);
-			/*
-			destinationPath = Paths.get(tomcatWebappsPath + "ruchesmarion.war");
-			Files.copy(sourcePath, destinationPath,
-			            StandardCopyOption.REPLACE_EXISTING);
-			*/
 		} catch (IOException|InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -278,5 +268,6 @@ public class AdminController {
 		//  model n'est pas conservé après un redirect
 		return "redirect:/";
 	}
+	*/
 
 }
