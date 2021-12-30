@@ -15,7 +15,7 @@ public class PersonneService {
 	private final Logger logger = LoggerFactory.getLogger(PersonneService.class);
 
 	/**
-	 * Vérification des droits utiliteurs pour modifier une "personne"
+	 * Vérification des droits utiliteurs pour créer ou modifier une "personne"
 	 */
 	public boolean personneDroitsInsuffisants(Personne personne, Authentication authentication, Model model) {
 		// si l'utilisateur connecté n'est pas administrateur
@@ -25,7 +25,7 @@ public class PersonneService {
 			return false;
 		}
 		if (!"ROLE_admin".equals(role) && !authentication.getName().equals(personne.getLogin())) {
-			// si l'utilisateur connecté tente de modifier un autre utilisateur
+			// si l'utilisateur connecté n'est pas admin et tente de modifier un autre utilisateur
 			logger.error("Erreur /personne/... Droits insuffisants.");
 			model.addAttribute(Const.MESSAGE, "Droits insuffisants.");
 			return true;

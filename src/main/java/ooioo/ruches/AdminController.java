@@ -1,40 +1,19 @@
 package ooioo.ruches;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Formatter;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileSystemUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
-import ooioo.ruches.personne.PersonneService;
 import ooioo.ruches.ruche.RucheRepository;
 import ooioo.ruches.rucher.Rucher;
 import ooioo.ruches.rucher.RucherRepository;
@@ -42,16 +21,12 @@ import ooioo.ruches.rucher.RucherRepository;
 @Controller
 public class AdminController {
 
-	private final Logger logger = LoggerFactory.getLogger(AdminController.class);
-
 	@Autowired
 	private RucherRepository rucherRepository;
 	@Autowired
 	private EvenementRepository evenementRepository;
 	@Autowired
 	private RucheRepository rucheRepository;
-	@Autowired
-	private PersonneService personneService;
 
 	@Value("${accueil.titre}")
 	private String accueilTitre;
@@ -138,33 +113,178 @@ public class AdminController {
 		Formatter evenIncFormat = new Formatter(evenInc);
 		for (Evenement eve : evensListe) {
 			if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
-				String nomRuche = eve.getRuche() == null ? "Null" : eve.getRuche().getNom();
-				String nomRucher = eve.getRucher() == null ? "Null" : eve.getRucher().getNom();
-				evenIncFormat.format("Événement RUCHEAJOUTRUCHER %s incomplet. Ruche %s rucher %s",
-						eve.getDate(), nomRuche, nomRucher);
+				evenIncFormat.format("Événement RUCHEAJOUTRUCHER %s incomplet. Ruche %s Rucher %s<br/>",
+						eve.getDate(), eve.getRuche() == null ? "Null" : eve.getRuche().getNom(),
+								eve.getRucher() == null ? "Null" : eve.getRucher().getNom());
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.HAUSSEPOSERUCHE);
 		for (Evenement eve : evensListe) {
-			if (eve.getRuche() == null) {
-				evenIncFormat.format("Événement HAUSSEPOSERUCHE %s incomplet. Ruche non renseignée",
-						eve.getDate());
+			if (eve.getHausse() == null || eve.getRuche() == null) {
+				evenIncFormat.format("Événement HAUSSEPOSERUCHE %s incomplet. Hausse %s Ruche %s<br/>",
+						eve.getDate(), eve.getHausse() == null ? "null" : 
+							eve.getHausse().getNom(),eve.getRuche());
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.HAUSSERETRAITRUCHE);
 		for (Evenement eve : evensListe) {
-			if (eve.getRuche() == null) {
-				evenIncFormat.format("Événement HAUSSERETRAITRUCHE %s incomplet. Ruche non renseignée",
-						eve.getDate());
+			if (eve.getHausse() == null || eve.getRuche() == null) {
+				evenIncFormat.format("Événement HAUSSERETRAITRUCHE %s incomplet. Hausse %s Ruche %s<br/>",
+						eve.getDate(), eve.getHausse() == null ? "null" :
+							eve.getHausse().getNom(), eve.getRuche());
 			}
 		}
+
+		evensListe = evenementRepository.findByTypeOrderByDateDesc(
+				TypeEvenement.AJOUTESSAIMRUCHE);
+		for (Evenement eve : evensListe) {
+			if (eve.getEssaim() == null || eve.getRuche() == null) {
+				evenIncFormat.format("Événement AJOUTESSAIMRUCHE %s incomplet. Essaim %s Ruche %s<br/>",
+						eve.getDate(), eve.getEssaim() == null ? "null" :
+							eve.getEssaim().getNom(), eve.getRuche());
+			}
+		}
+
+		evensListe = evenementRepository.findByTypeOrderByDateDesc(
+				TypeEvenement.HAUSSEREMPLISSAGE);
+		for (Evenement eve : evensListe) {
+			if (eve.getHausse() == null || !isPourCent(eve.getValeur())) {
+				evenIncFormat.format("Événement HAUSSEREMPLISSAGE %s incorrect. Hausse %s Valeur %s<br/>",
+						eve.getDate(), eve.getHausse() == null ? "null" :
+							eve.getHausse().getNom(), eve.getValeur());
+			}
+		}
+		
+		evensListe = evenementRepository.findByTypeOrderByDateDesc(
+				TypeEvenement.ESSAIMTRAITEMENT);
+		for (Evenement eve : evensListe) {
+			if (eve.getEssaim() == null) {
+				evenIncFormat.format("Événement ESSAIMTRAITEMENT %s incomplet. Essaim %s<br/>",
+						eve.getDate(), eve.getEssaim() == null ? "null" :
+							eve.getEssaim().getNom());
+			}
+		}
+		
+		evensListe = evenementRepository.findByTypeOrderByDateDesc(
+				TypeEvenement.ESSAIMTRAITEMENTFIN);
+		for (Evenement eve : evensListe) {
+			if (eve.getEssaim() == null) {
+				evenIncFormat.format("Événement ESSAIMTRAITEMENTFIN %s incomplet. Essaim %s<br/>",
+						eve.getDate(), eve.getEssaim() == null ? "null" :
+							eve.getEssaim().getNom());
+			}
+		}
+		
+		evensListe = evenementRepository.findByTypeOrderByDateDesc(
+				TypeEvenement.ESSAIMSUCRE);
+		for (Evenement eve : evensListe) {
+			if (eve.getEssaim() == null || !isNum(eve.getValeur())) {
+				evenIncFormat.format("Événement ESSAIMSUCRE %s incorrect. Essaim %s Valeur %s<br/>",
+						eve.getDate(), eve.getEssaim() == null ? "null" :
+							eve.getEssaim().getNom(),
+					eve.getValeur());
+			}
+		}
+		
+		evensListe = evenementRepository.findByTypeOrderByDateDesc(
+				TypeEvenement.COMMENTAIRERUCHE);
+		for (Evenement eve : evensListe) {
+			if (eve.getRuche() == null) {
+				evenIncFormat.format("Événement COMMENTAIRERUCHE %s incomplet. Ruche %s<br/>",
+						eve.getDate(), "null");
+			}
+		}
+		evensListe = evenementRepository.findByTypeOrderByDateDesc(
+				TypeEvenement.COMMENTAIREHAUSSE);
+		for (Evenement eve : evensListe) {
+			if (eve.getHausse() == null) {
+				evenIncFormat.format("Événement COMMENTAIREHAUSSE %s incomplet. Hausse %s<br/>",
+						eve.getDate(), "null");
+			}
+		}
+		evensListe = evenementRepository.findByTypeOrderByDateDesc(
+				TypeEvenement.COMMENTAIREESSAIM);
+		for (Evenement eve : evensListe) {
+			if (eve.getEssaim() == null) {
+				evenIncFormat.format("Événement COMMENTAIREESSAIM %s incomplet. Essaim %s<br/>",
+						eve.getDate(), "null");
+			}
+		}
+		evensListe = evenementRepository.findByTypeOrderByDateDesc(
+				TypeEvenement.COMMENTAIRERUCHER);
+		for (Evenement eve : evensListe) {
+			if (eve.getRucher() == null) {
+				evenIncFormat.format("Événement COMMENTAIRERUCHER %s incomplet. Rucher %s<br/>",
+						eve.getDate(), "null");
+			}
+		}
+		
+		evensListe = evenementRepository.findByTypeOrderByDateDesc(
+				TypeEvenement.ESSAIMDISPERSION);
+		for (Evenement eve : evensListe) {
+			if (eve.getEssaim() == null) {
+				evenIncFormat.format("Événement ESSAIMDISPERSION %s incomplet. Essaim %s<br/>",
+						eve.getDate(), "null");
+			}
+		}
+		
+		evensListe = evenementRepository.findByTypeOrderByDateDesc(
+				TypeEvenement.RUCHEPESEE);
+		for (Evenement eve : evensListe) {
+			if (eve.getRuche() == null || eve.getEssaim() == null || !isNum(eve.getValeur())) {
+				evenIncFormat.format("Événement RUCHEPESEE %s incomplet. Ruche %s Essaim %s Valeur %s<br/>",
+						eve.getDate(),
+						eve.getRuche() == null ? "null" :
+							eve.getRuche().getNom(),
+						eve.getEssaim() == null ? "null" :
+								eve.getEssaim().getNom(),
+						eve.getValeur());
+			}
+		}
+		
+		evensListe = evenementRepository.findByTypeOrderByDateDesc(
+				TypeEvenement.RUCHECADRE);
+		for (Evenement eve : evensListe) {
+			if (eve.getRuche() == null) {
+				evenIncFormat.format("Événement RUCHECADRE %s incorrect. Ruche %s<br/>",
+						eve.getDate(), "null");
+			}
+		}
+		
 		evenIncFormat.close();
 		model.addAttribute("evenInc", evenInc);
 		return "tests";
 	}
 
+	public static boolean isPourCent(String str) {
+	    if (str == null) {
+	        return false;
+	    }
+	    try {
+	        int d = Integer.parseInt(str);
+	        if (d < 0 || d > 100) {
+		    	return false;
+		    }
+	    } catch (NumberFormatException nfe) {
+	        return false;
+	    }
+	    return true;
+	}
+	
+	public static boolean isNum(String str) {
+	    if (str == null) {
+	        return false;
+	    }
+	    try {
+	    	Double.parseDouble(str);
+	    } catch (NumberFormatException nfe) {
+	        return false;
+	    }
+	    return true;
+	}
+	
 	/*
 	 * Download des dumps de la base
 	 * fichiers ruches_schema.sql et ruches.sql.xz

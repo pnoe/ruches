@@ -101,8 +101,12 @@ public class EvenementRucheController {
 		}
 		List<BigDecimal> diff = new ArrayList<>();
 		for (Evenement evenement : evenements) {
-			BigDecimal d = new BigDecimal(evenement.getValeur()).subtract(evenement.getRuche().getPoidsVide());
-			diff.add(d);
+			try {
+				BigDecimal d = new BigDecimal(evenement.getValeur()).subtract(evenement.getRuche().getPoidsVide());
+				diff.add(d);
+			} catch (NumberFormatException e) {
+				diff.add(BigDecimal.ZERO);
+			}
 		}
 		model.addAttribute(Const.EVENEMENTS, evenements);
 		model.addAttribute("diff", diff);

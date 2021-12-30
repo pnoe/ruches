@@ -134,7 +134,7 @@ public class PersonneController {
 	@PostMapping("/sauve")
 	public String sauve(@ModelAttribute Personne personne, BindingResult bindingResult, Model model,
 			Authentication authentication) {
-		// Il faut être admin pour modifier une autre Personne
+		// Il faut être admin pour créer une Personne ou pour modifier une autre Personne que soi-même
 		if (personneService.personneDroitsInsuffisants(personne, authentication, model)) {
 			return Const.INDEX;
 		}
