@@ -63,6 +63,8 @@ public final class Const {
 	public static final String VALEUR = "valeur";
 
 	public static final String ACCUEILTITRE = "accueilTitre";
+	
+	public static final String NULL = "Null";
 
 	private Const() {
 	    throw new IllegalStateException("Constant class");

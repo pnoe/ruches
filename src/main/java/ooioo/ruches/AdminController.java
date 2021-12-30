@@ -114,8 +114,9 @@ public class AdminController {
 		for (Evenement eve : evensListe) {
 			if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
 				evenIncFormat.format("Événement RUCHEAJOUTRUCHER %s incomplet. Ruche %s Rucher %s<br/>",
-						eve.getDate(), eve.getRuche() == null ? "Null" : eve.getRuche().getNom(),
-								eve.getRucher() == null ? "Null" : eve.getRucher().getNom());
+						eve.getDate(),
+						eve.getRuche() == null ? Const.NULL : eve.getRuche().getNom(),
+						eve.getRucher() == null ? Const.NULL : eve.getRucher().getNom());
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
@@ -123,8 +124,9 @@ public class AdminController {
 		for (Evenement eve : evensListe) {
 			if (eve.getHausse() == null || eve.getRuche() == null) {
 				evenIncFormat.format("Événement HAUSSEPOSERUCHE %s incomplet. Hausse %s Ruche %s<br/>",
-						eve.getDate(), eve.getHausse() == null ? "null" : 
-							eve.getHausse().getNom(),eve.getRuche());
+						eve.getDate(),
+						eve.getHausse() == null ? Const.NULL : eve.getHausse().getNom(),
+						eve.getRuche());
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
@@ -132,68 +134,65 @@ public class AdminController {
 		for (Evenement eve : evensListe) {
 			if (eve.getHausse() == null || eve.getRuche() == null) {
 				evenIncFormat.format("Événement HAUSSERETRAITRUCHE %s incomplet. Hausse %s Ruche %s<br/>",
-						eve.getDate(), eve.getHausse() == null ? "null" :
-							eve.getHausse().getNom(), eve.getRuche());
+						eve.getDate(),
+						eve.getHausse() == null ? Const.NULL : eve.getHausse().getNom(),
+						eve.getRuche());
 			}
 		}
-
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.AJOUTESSAIMRUCHE);
 		for (Evenement eve : evensListe) {
 			if (eve.getEssaim() == null || eve.getRuche() == null) {
 				evenIncFormat.format("Événement AJOUTESSAIMRUCHE %s incomplet. Essaim %s Ruche %s<br/>",
-						eve.getDate(), eve.getEssaim() == null ? "null" :
-							eve.getEssaim().getNom(), eve.getRuche());
+						eve.getDate(),
+						eve.getEssaim() == null ? Const.NULL : eve.getEssaim().getNom(),
+						eve.getRuche() == null ? Const.NULL : eve.getRuche().getNom());
 			}
 		}
-
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.HAUSSEREMPLISSAGE);
 		for (Evenement eve : evensListe) {
-			if (eve.getHausse() == null || !isPourCent(eve.getValeur())) {
+			if (eve.getHausse() == null || !Utils.isPourCent(eve.getValeur())) {
 				evenIncFormat.format("Événement HAUSSEREMPLISSAGE %s incorrect. Hausse %s Valeur %s<br/>",
-						eve.getDate(), eve.getHausse() == null ? "null" :
-							eve.getHausse().getNom(), eve.getValeur());
+						eve.getDate(),
+						eve.getHausse() == null ? Const.NULL : eve.getHausse().getNom(),
+						eve.getValeur());
 			}
 		}
-		
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.ESSAIMTRAITEMENT);
 		for (Evenement eve : evensListe) {
 			if (eve.getEssaim() == null) {
 				evenIncFormat.format("Événement ESSAIMTRAITEMENT %s incomplet. Essaim %s<br/>",
-						eve.getDate(), eve.getEssaim() == null ? "null" :
-							eve.getEssaim().getNom());
+						eve.getDate(),
+						eve.getEssaim() == null ? Const.NULL : eve.getEssaim().getNom());
 			}
 		}
-		
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.ESSAIMTRAITEMENTFIN);
 		for (Evenement eve : evensListe) {
 			if (eve.getEssaim() == null) {
 				evenIncFormat.format("Événement ESSAIMTRAITEMENTFIN %s incomplet. Essaim %s<br/>",
-						eve.getDate(), eve.getEssaim() == null ? "null" :
-							eve.getEssaim().getNom());
+						eve.getDate(),
+						eve.getEssaim() == null ? Const.NULL : eve.getEssaim().getNom());
 			}
 		}
-		
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.ESSAIMSUCRE);
 		for (Evenement eve : evensListe) {
-			if (eve.getEssaim() == null || !isNum(eve.getValeur())) {
+			if (eve.getEssaim() == null || !Utils.isNum(eve.getValeur())) {
 				evenIncFormat.format("Événement ESSAIMSUCRE %s incorrect. Essaim %s Valeur %s<br/>",
-						eve.getDate(), eve.getEssaim() == null ? "null" :
-							eve.getEssaim().getNom(),
-					eve.getValeur());
+						eve.getDate(),
+						eve.getEssaim() == null ? Const.NULL : eve.getEssaim().getNom(),
+						eve.getValeur());
 			}
 		}
-		
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.COMMENTAIRERUCHE);
 		for (Evenement eve : evensListe) {
 			if (eve.getRuche() == null) {
 				evenIncFormat.format("Événement COMMENTAIRERUCHE %s incomplet. Ruche %s<br/>",
-						eve.getDate(), "null");
+						eve.getDate(), Const.NULL);
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
@@ -201,7 +200,7 @@ public class AdminController {
 		for (Evenement eve : evensListe) {
 			if (eve.getHausse() == null) {
 				evenIncFormat.format("Événement COMMENTAIREHAUSSE %s incomplet. Hausse %s<br/>",
-						eve.getDate(), "null");
+						eve.getDate(), Const.NULL);
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
@@ -209,7 +208,7 @@ public class AdminController {
 		for (Evenement eve : evensListe) {
 			if (eve.getEssaim() == null) {
 				evenIncFormat.format("Événement COMMENTAIREESSAIM %s incomplet. Essaim %s<br/>",
-						eve.getDate(), "null");
+						eve.getDate(), Const.NULL);
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
@@ -217,72 +216,41 @@ public class AdminController {
 		for (Evenement eve : evensListe) {
 			if (eve.getRucher() == null) {
 				evenIncFormat.format("Événement COMMENTAIRERUCHER %s incomplet. Rucher %s<br/>",
-						eve.getDate(), "null");
+						eve.getDate(), Const.NULL);
 			}
 		}
-		
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.ESSAIMDISPERSION);
 		for (Evenement eve : evensListe) {
 			if (eve.getEssaim() == null) {
 				evenIncFormat.format("Événement ESSAIMDISPERSION %s incomplet. Essaim %s<br/>",
-						eve.getDate(), "null");
+						eve.getDate(), Const.NULL);
 			}
 		}
-		
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.RUCHEPESEE);
 		for (Evenement eve : evensListe) {
-			if (eve.getRuche() == null || eve.getEssaim() == null || !isNum(eve.getValeur())) {
-				evenIncFormat.format("Événement RUCHEPESEE %s incomplet. Ruche %s Essaim %s Valeur %s<br/>",
+			if (eve.getRuche() == null || eve.getEssaim() == null || !Utils.isNum(eve.getValeur())) {
+				evenIncFormat.format("Événement RUCHEPESEE %s incorrect. Ruche %s Essaim %s Valeur %s<br/>",
 						eve.getDate(),
-						eve.getRuche() == null ? "null" :
+						eve.getRuche() == null ? Const.NULL :
 							eve.getRuche().getNom(),
-						eve.getEssaim() == null ? "null" :
+						eve.getEssaim() == null ? Const.NULL :
 								eve.getEssaim().getNom(),
 						eve.getValeur());
 			}
 		}
-		
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.RUCHECADRE);
 		for (Evenement eve : evensListe) {
 			if (eve.getRuche() == null) {
 				evenIncFormat.format("Événement RUCHECADRE %s incorrect. Ruche %s<br/>",
-						eve.getDate(), "null");
+						eve.getDate(), Const.NULL);
 			}
 		}
-		
 		evenIncFormat.close();
 		model.addAttribute("evenInc", evenInc);
 		return "tests";
-	}
-
-	public static boolean isPourCent(String str) {
-	    if (str == null) {
-	        return false;
-	    }
-	    try {
-	        int d = Integer.parseInt(str);
-	        if (d < 0 || d > 100) {
-		    	return false;
-		    }
-	    } catch (NumberFormatException nfe) {
-	        return false;
-	    }
-	    return true;
-	}
-	
-	public static boolean isNum(String str) {
-	    if (str == null) {
-	        return false;
-	    }
-	    try {
-	    	Double.parseDouble(str);
-	    } catch (NumberFormatException nfe) {
-	        return false;
-	    }
-	    return true;
 	}
 	
 	/*

@@ -27,6 +27,40 @@ public final class Utils {
 				? LocalDate.now().plusDays(((Duration) session.getAttribute(Const.DECALAGETEMPS)).toDays())
 				: LocalDate.now();
 	}
+	
+	/*
+	 * Pourcentage ?
+	 * Renvoie true si str est un int compris entre 0 et 100
+	 */
+	public static boolean isPourCent(String str) {
+	    if (str == null) {
+	        return false;
+	    }
+	    try {
+	        int d = Integer.parseInt(str);
+	        if (d < 0 || d > 100) {
+		    	return false;
+		    }
+	    } catch (NumberFormatException nfe) {
+	        return false;
+	    }
+	    return true;
+	}
+	
+	/*
+	 * Renvoie true si str est numérique
+	 */
+	public static boolean isNum(String str) {
+	    if (str == null) {
+	        return false;
+	    }
+	    try {
+	    	Double.parseDouble(str);
+	    } catch (NumberFormatException nfe) {
+	        return false;
+	    }
+	    return true;
+	}
 
 	private Utils() {
 		throw new IllegalStateException("Constant class");
