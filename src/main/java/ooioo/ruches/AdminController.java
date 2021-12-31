@@ -2,11 +2,9 @@ package ooioo.ruches;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Formatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,17 +26,6 @@ public class AdminController {
 	@Autowired
 	private RucheRepository rucheRepository;
 
-	@Value("${accueil.titre}")
-	private String accueilTitre;
-	@Value("${dump.path}")
-	private String dumpPath;
-	@Value("${git.url}")
-	private String gitUrl;
-	@Value("${tomcat.webapps.path}")
-	private String tomcatWebappsPath;
-	@Value("${tomcat.oldwebapps.path}")
-	private String tomcatOldWebappsPath;
-
 	/**
 	 * Tests erreurs
 	 *  résultat dans la page tests.html
@@ -50,8 +37,12 @@ public class AdminController {
 		// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date descendante
 		List<Evenement> evensListe = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEAJOUTRUCHER);
 		int levens = evensListe.size();
-		StringBuilder histoLog = new StringBuilder();
-		Formatter histoFormat = new Formatter(histoLog);
+		// StringBuilder histoLog = new StringBuilder();
+		// Formatter histoFormat = new Formatter(histoLog);
+		
+		List<Evenement> eveRucherRuche = new ArrayList<>();
+		List<Rucher> rucherNonVide = new ArrayList<>();
+		
 		for (Rucher rucher : ruchers) {
 			Long rucherId = rucher.getId();
 			// Les nom des ruches présentes dans le rucher
@@ -71,12 +62,15 @@ public class AdminController {
 					// on retire la ruche de l'événement 
 					//  de la liste des ruches du rucher
 					if (!ruches.remove(eve.getRuche().getNom())) {
+						/*
 						histoFormat.format("Événement %s le rucher %s ne contient pas la ruche %s <br/>", 
 								eve.getDate(), eve.getRucher().getNom(), eve.getRuche().getNom());
+						*/
+						eveRucherRuche.add(eve);
+						
 					}
 				} else {
-					// l'événenemt eve ajoute une ruche dans un autre rucher
-					
+					// L'événenemt eve ajoute une ruche dans un autre rucher
 					// On cherche l'événement précédent ajout de cette ruche
 					Evenement evePrec = null;
 					for (int j = i + 1; j < levens; j++) {
@@ -102,260 +96,127 @@ public class AdminController {
 				}
 			}
 			if (!ruches.isEmpty()) {
+				/*
 				histoFormat.format("Après traitement des événements, le rucher %s n'est pas vide<br/>",
 						rucher.getNom());
+				*/
+				rucherNonVide.add(rucher);
+				
 			} 			
 		}
-		histoFormat.close();
-		model.addAttribute("histoLog", histoLog);
-		// evenInc événements incorrects
-		StringBuilder evenInc = new StringBuilder();
-		Formatter evenIncFormat = new Formatter(evenInc);
+		// histoFormat.close();
+		// model.addAttribute("histoLog", histoLog);
+		
+		model.addAttribute("eveRucherRuche", eveRucherRuche);
+		model.addAttribute("rucherNonVide", rucherNonVide);
+		
+		List<Evenement> eveInc = new ArrayList<>();
+		// événements RUCHEAJOUTRUCHER incomplets
 		for (Evenement eve : evensListe) {
 			if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
-				evenIncFormat.format("Événement RUCHEAJOUTRUCHER %s incomplet. Ruche %s Rucher %s<br/>",
-						eve.getDate(),
-						eve.getRuche() == null ? Const.NULL : eve.getRuche().getNom(),
-						eve.getRucher() == null ? Const.NULL : eve.getRucher().getNom());
+				eveInc.add(eve);
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.HAUSSEPOSERUCHE);
 		for (Evenement eve : evensListe) {
 			if (eve.getHausse() == null || eve.getRuche() == null) {
-				evenIncFormat.format("Événement HAUSSEPOSERUCHE %s incomplet. Hausse %s Ruche %s<br/>",
-						eve.getDate(),
-						eve.getHausse() == null ? Const.NULL : eve.getHausse().getNom(),
-						eve.getRuche());
+				eveInc.add(eve);
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.HAUSSERETRAITRUCHE);
 		for (Evenement eve : evensListe) {
 			if (eve.getHausse() == null || eve.getRuche() == null) {
-				evenIncFormat.format("Événement HAUSSERETRAITRUCHE %s incomplet. Hausse %s Ruche %s<br/>",
-						eve.getDate(),
-						eve.getHausse() == null ? Const.NULL : eve.getHausse().getNom(),
-						eve.getRuche());
+				eveInc.add(eve);
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.AJOUTESSAIMRUCHE);
 		for (Evenement eve : evensListe) {
 			if (eve.getEssaim() == null || eve.getRuche() == null) {
-				evenIncFormat.format("Événement AJOUTESSAIMRUCHE %s incomplet. Essaim %s Ruche %s<br/>",
-						eve.getDate(),
-						eve.getEssaim() == null ? Const.NULL : eve.getEssaim().getNom(),
-						eve.getRuche() == null ? Const.NULL : eve.getRuche().getNom());
+				eveInc.add(eve);
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.HAUSSEREMPLISSAGE);
 		for (Evenement eve : evensListe) {
 			if (eve.getHausse() == null || !Utils.isPourCent(eve.getValeur())) {
-				evenIncFormat.format("Événement HAUSSEREMPLISSAGE %s incorrect. Hausse %s Valeur %s<br/>",
-						eve.getDate(),
-						eve.getHausse() == null ? Const.NULL : eve.getHausse().getNom(),
-						eve.getValeur());
+				eveInc.add(eve);
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.ESSAIMTRAITEMENT);
 		for (Evenement eve : evensListe) {
 			if (eve.getEssaim() == null) {
-				evenIncFormat.format("Événement ESSAIMTRAITEMENT %s incomplet. Essaim %s<br/>",
-						eve.getDate(),
-						eve.getEssaim() == null ? Const.NULL : eve.getEssaim().getNom());
+				eveInc.add(eve);
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.ESSAIMTRAITEMENTFIN);
 		for (Evenement eve : evensListe) {
 			if (eve.getEssaim() == null) {
-				evenIncFormat.format("Événement ESSAIMTRAITEMENTFIN %s incomplet. Essaim %s<br/>",
-						eve.getDate(),
-						eve.getEssaim() == null ? Const.NULL : eve.getEssaim().getNom());
+				eveInc.add(eve);
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.ESSAIMSUCRE);
 		for (Evenement eve : evensListe) {
 			if (eve.getEssaim() == null || !Utils.isNum(eve.getValeur())) {
-				evenIncFormat.format("Événement ESSAIMSUCRE %s incorrect. Essaim %s Valeur %s<br/>",
-						eve.getDate(),
-						eve.getEssaim() == null ? Const.NULL : eve.getEssaim().getNom(),
-						eve.getValeur());
+				eveInc.add(eve);
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.COMMENTAIRERUCHE);
 		for (Evenement eve : evensListe) {
-			if (eve.getRuche() == null) {
-				evenIncFormat.format("Événement COMMENTAIRERUCHE %s incomplet. Ruche %s<br/>",
-						eve.getDate(), Const.NULL);
+			if (eve.getRuche() == null || eve.getCommentaire().isBlank()) {
+				eveInc.add(eve);
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.COMMENTAIREHAUSSE);
 		for (Evenement eve : evensListe) {
-			if (eve.getHausse() == null) {
-				evenIncFormat.format("Événement COMMENTAIREHAUSSE %s incomplet. Hausse %s<br/>",
-						eve.getDate(), Const.NULL);
+			if (eve.getHausse() == null || eve.getCommentaire().isBlank()) {
+				eveInc.add(eve);
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.COMMENTAIREESSAIM);
 		for (Evenement eve : evensListe) {
-			if (eve.getEssaim() == null) {
-				evenIncFormat.format("Événement COMMENTAIREESSAIM %s incomplet. Essaim %s<br/>",
-						eve.getDate(), Const.NULL);
+			if (eve.getEssaim() == null || eve.getCommentaire().isBlank()) {
+				eveInc.add(eve);
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.COMMENTAIRERUCHER);
 		for (Evenement eve : evensListe) {
-			if (eve.getRucher() == null) {
-				evenIncFormat.format("Événement COMMENTAIRERUCHER %s incomplet. Rucher %s<br/>",
-						eve.getDate(), Const.NULL);
+			if (eve.getRucher() == null || eve.getCommentaire().isBlank()) {
+				eveInc.add(eve);
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.ESSAIMDISPERSION);
 		for (Evenement eve : evensListe) {
 			if (eve.getEssaim() == null) {
-				evenIncFormat.format("Événement ESSAIMDISPERSION %s incomplet. Essaim %s<br/>",
-						eve.getDate(), Const.NULL);
+				eveInc.add(eve);
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.RUCHEPESEE);
 		for (Evenement eve : evensListe) {
 			if (eve.getRuche() == null || eve.getEssaim() == null || !Utils.isNum(eve.getValeur())) {
-				evenIncFormat.format("Événement RUCHEPESEE %s incorrect. Ruche %s Essaim %s Valeur %s<br/>",
-						eve.getDate(),
-						eve.getRuche() == null ? Const.NULL :
-							eve.getRuche().getNom(),
-						eve.getEssaim() == null ? Const.NULL :
-								eve.getEssaim().getNom(),
-						eve.getValeur());
+				eveInc.add(eve);
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.RUCHECADRE);
 		for (Evenement eve : evensListe) {
 			if (eve.getRuche() == null) {
-				evenIncFormat.format("Événement RUCHECADRE %s incorrect. Ruche %s<br/>",
-						eve.getDate(), Const.NULL);
+				eveInc.add(eve);
 			}
 		}
-		evenIncFormat.close();
-		model.addAttribute("evenInc", evenInc);
+		model.addAttribute("eveInc", eveInc);
 		return "tests";
 	}
-	
-	/*
-	 * Download des dumps de la base
-	 * fichiers ruches_schema.sql et ruches.sql.xz
-	 *  ces fichiers dump sont créés par un cron sur le serveur
-	 */
-	/*
-	@GetMapping(path = "/dump/{fichier}")
-	@ResponseStatus(value = HttpStatus.OK)
-    public ResponseEntity<Resource> download(Model model, @PathVariable String fichier, Authentication authentication) throws IOException {
-		ByteArrayResource resource = null;
-		long fileLength = 0l;
-		if (personneService.personneAdmin(authentication, model)) {
-			File file = new File(dumpPath + fichier);
-			Path path = Paths.get(file.getAbsolutePath());
-	        resource = new ByteArrayResource(Files.readAllBytes(path));
-	        fileLength = file.length();
-		}
-        HttpHeaders header = new HttpHeaders();
-        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fichier);
-        header.add("Cache-Control", "no-cache, no-store, must-revalidate");
-        header.add("Pragma", "no-cache");
-        header.add("Expires", "0");
-        return ResponseEntity.ok()
-                .headers(header)
-                .contentLength(fileLength)
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .body(resource);
-    }
-	*/
-	
-	/*
-	 * Déploiement de l'application
-	 * git clone, maven package et copie du war sous webapps
-	 */
-	/*
-	@GetMapping(path = "/deploie")
-	public String deploie(Model model, Authentication authentication) {
-		if (!personneService.personneAdmin(authentication, model)) {
-			return Const.INDEX;
-		}
-		if (gitUrl.contentEquals("")) {
-			model.addAttribute(Const.MESSAGE, "Déploiement de l'application non disponible.");
-			return Const.INDEX;
-		}
-		model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
-		ProcessBuilder processBuilder = new ProcessBuilder();
-		String tempDir = "/tmp";
-		// System.getProperty("java.io.tmpdir"); donne le répertoire temp de tomcat
-		processBuilder.directory(new File(tempDir));
-		processBuilder.redirectErrorStream(true);
-		FileSystemUtils.deleteRecursively(new File(tempDir + "/ruches"));
-		try {
-			processBuilder.command("bash", "-c", "git clone " + gitUrl);
-			Process process = processBuilder.start();
-			BufferedReader reader = new BufferedReader(
-					new InputStreamReader(process.getInputStream()));
-			StringBuilder output = new StringBuilder();
-			String line;
-			while ((line = reader.readLine()) != null) {
-				output.append(line + " ");
-			}
-			int exitVal = process.waitFor();
-			if (exitVal != 0) {
-				logger.error(output.toString());
-				model.addAttribute(Const.MESSAGE, "Erreur git clone : " + output);
-					//	messageSource.getMessage(Const.ERREURGITCLONE, null, LocaleContextHolder.getLocale()));
-				return Const.INDEX;
-			}
-			// Création du war avec maven
-			processBuilder.directory(new File(tempDir + "/ruches"));
-			processBuilder.command("bash", "-c", "mvn clean package -DskipTests");
-			process = processBuilder.start();
-			reader = new BufferedReader(
-					new InputStreamReader(process.getInputStream()));
-			output = new StringBuilder();
-			while ((line = reader.readLine()) != null) {
-				output.append(line + "\n");
-			}
-			exitVal = process.waitFor();
-			if (exitVal != 0) {
-				logger.error(output.toString());
-				model.addAttribute(Const.MESSAGE, "Erreur maven package : " + output);
-				//	messageSource.getMessage(Const.ERREURMAVENPACKAGE, null, LocaleContextHolder.getLocale()));
-				return Const.INDEX;
-			}
-			// Copie du war dans le répertoire webapps de tomcat pour autodéploiement
-			// pas de version dans le nom du war, voir finalname dans pom.xml
-			Path sourcePath      = Paths.get(tempDir + "/ruches/target/ruches.war.original");
-			Path destinationPath = Paths.get(tomcatWebappsPath + "ruches.war");
-			Files.copy(destinationPath, destinationPath,
-			            StandardCopyOption.REPLACE_EXISTING);
-			destinationPath = Paths.get(tomcatWebappsPath + "ruchestest.war");
-			Files.copy(sourcePath, destinationPath,
-			            StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException|InterruptedException e) {
-			e.printStackTrace();
-		}
-		// redirect pour réécriture de l'url sans /deploie
-		// sinon F5 relance le déploiement
-		// model.addAttribute(Const.MESSAGE, "Application mise à jour, attendre quelques minutes son redémarrage.");
-		//  model n'est pas conservé après un redirect
-		return "redirect:/";
-	}
-	*/
 
 }

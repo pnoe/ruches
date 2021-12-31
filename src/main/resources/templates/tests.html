@@ -2,14 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-	<script>
-		$(document).ready(function() {
-			$( ".accordion" ).accordion({
-				active : false,
-				collapsible : true
-			});
+<script>
+	$(document).ready(function() {
+		$(".accordion").accordion({
+			active : false,
+			collapsible : true
 		});
-	</script>
+	});
+</script>
 </head>
 <body>
 	<nav th:replace="include :: navbar"></nav>
@@ -19,21 +19,111 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<h1 class="item">
-					Tests
-				</h1>
+				<h1 class="item">Tests</h1>
 			</div>
 		</div>
 	</div>
 	<div class="container-fluid table-responsive accordion">
-		<h1 class="item" th:if="${#strings.isEmpty(histoLog)}" th:text="#{HistRuchers}"></h1>
-		<h1 class="item" th:unless="${#strings.isEmpty(histoLog)}" style="background-color: red;" th:text="#{HistRuchers}"></h1>
-		<p th:utext="${histoLog}"></p>
-		<h1 class="item" th:if="${#strings.isEmpty(evenInc)}" th:text="#{EvenIncomplets}"></h1>
-		<h1 class="item" th:unless="${#strings.isEmpty(evenInc)}" style="background-color: red;" th:text="#{EvenIncomplets}"></h1>
-		<p th:utext="${evenInc}"></p>
+		<h1 class="item" th:if="${#lists.isEmpty(eveRucherRuche)}"
+			th:text="#{HistRuchersEveOK}"></h1>
+		<h1 class="item" th:unless="${#lists.isEmpty(eveRucherRuche)}"
+			style="background-color: red;" th:text="#{HistRuchersEveKO}"></h1>
+		<div class="container-fluid table-responsive">
+			<table class="table table-sm table-bordered table-striped" th:unless="${#lists.isEmpty(eveRucherRuche)}">
+				<thead>
+					<tr>
+						<th th:text="#{date}"></th>
+						<th th:text="#{evenement}"></th>
+						<th th:unless="${rucheId}" style="background-color: PaleGoldenRod"
+							th:text="#{ruche}"></th>
+						<th th:unless="${rucherId}"
+							style="background-color: PaleGoldenRod" th:text="#{rucher}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="evenement : ${eveRucherRuche}">
+						<td><a
+							th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
+							th:with="url='/evenement/'+${evenement.id}+
+								(${type}?('?type='+${type}+'&itemId='+${itemId}):'')"
+							th:href="@{${url}}"></a></td>
+						<td th:text="#{${evenement.type}}"></td>
+						<td th:unless="${rucheId}" th:text="${evenement.ruche?.nom}"></td>
+						<td th:unless="${rucherId}" th:text="${evenement.rucher?.nom}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<h1 class="item" th:if="${#lists.isEmpty(rucherNonVide)}"
+			th:text="#{HistRuchersFinOK}"></h1>
+		<h1 class="item" th:unless="${#lists.isEmpty(rucherNonVide)}"
+			style="background-color: red;" th:text="#{HistRuchersFinKO}"></h1>
+		<div class="container-fluid table-responsive">
+			<table class="table table-sm table-bordered table-striped" th:unless="${#lists.isEmpty(rucherNonVide)}">
+				<thead>
+					<tr>
+						<th th:text="#{nom}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="rucher : ${rucherNonVide}">
+						<td><a th:href="@{'/rucher/'+${rucher.id}}"
+						th:text="${rucher.nom}"></a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<h1 class="item" th:if="${#lists.isEmpty(eveInc)}"
+			th:text="#{EvenIncomplets}"></h1>
+		<h1 class="item" th:unless="${#lists.isEmpty(eveInc)}"
+			style="background-color: red;" th:text="#{EvenIncomplets}"></h1>
+		<div class="container-fluid table-responsive">
+			<table class="table table-sm table-bordered table-striped" th:unless="${#lists.isEmpty(eveInc)}">
+				<thead>
+					<tr>
+						<th th:text="#{date}"></th>
+						<th th:text="#{evenement}"></th>
+						<th th:unless="${rucheId}" style="background-color: PaleGoldenRod"
+							th:text="#{ruche}"></th>
+						<th th:unless="${essaimId}"
+							style="background-color: PaleGoldenRod" th:text="#{essaim}"></th>
+						<th th:unless="${rucherId}"
+							style="background-color: PaleGoldenRod" th:text="#{rucher}"></th>
+						<th th:unless="${hausseId}"
+							style="background-color: PaleGoldenRod" th:text="#{hausse}"></th>
+						<th style="background-color: LemonChiffon" th:text="#{valeur}"></th>
+						<th style="background-color: LemonChiffon"
+							th:text="#{commentaire}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="evenement : ${eveInc}">
+						<td><a
+							th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
+							th:with="url='/evenement/'+${evenement.id}+
+								(${type}?('?type='+${type}+'&itemId='+${itemId}):'')"
+							th:href="@{${url}}"></a></td>
+						<td th:text="#{${evenement.type}}"></td>
+						<td th:unless="${rucheId}" th:text="${evenement.ruche?.nom}"></td>
+						<td th:unless="${essaimId}" th:text="${evenement.essaim?.nom}"></td>
+						<td th:unless="${rucherId}" th:text="${evenement.rucher?.nom}"></td>
+						<td th:unless="${hausseId}" th:text="${evenement.hausse?.nom}"></td>
+						<th:block th:switch="${evenement.type}">
+							<td class="num"
+								th:case="${T(ooioo.ruches.evenement.TypeEvenement).ESSAIMSUCRE}"
+								th:text="${#numbers.formatDecimal(evenement.valeur,1,2,'COMMA')}"></td>
+							<td class="num"
+								th:case="${T(ooioo.ruches.evenement.TypeEvenement).RUCHEPESEE}"
+								th:text="${#numbers.formatDecimal(evenement.valeur,1,2,'COMMA')}"></td>
+							<td class="num" th:case="*" th:text="${evenement.valeur}"></td>
+						</th:block>
+						<td th:text="${evenement.commentaire}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
-	<br/>
+	<br />
 	<footer th:replace="include::footer"></footer>
 </body>
 </html>
