@@ -19,7 +19,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<h1 class="item">Tests</h1>
+				<h1 class="item" th:text="#{testsEven}"></h1>
 			</div>
 		</div>
 	</div>
@@ -74,7 +74,7 @@
 			</table>
 		</div>
 		<h1 class="item" th:if="${#lists.isEmpty(eveInc)}"
-			th:text="#{EvenIncomplets}"></h1>
+			th:text="#{PasEvenIncomplets}"></h1>
 		<h1 class="item" th:unless="${#lists.isEmpty(eveInc)}"
 			style="background-color: red;" th:text="#{EvenIncomplets}"></h1>
 		<div class="container-fluid table-responsive">
