@@ -37,12 +37,8 @@ public class AdminController {
 		// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date descendante
 		List<Evenement> evensListe = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEAJOUTRUCHER);
 		int levens = evensListe.size();
-		// StringBuilder histoLog = new StringBuilder();
-		// Formatter histoFormat = new Formatter(histoLog);
-		
 		List<Evenement> eveRucherRuche = new ArrayList<>();
 		List<Rucher> rucherNonVide = new ArrayList<>();
-		
 		for (Rucher rucher : ruchers) {
 			Long rucherId = rucher.getId();
 			// Les nom des ruches présentes dans le rucher
@@ -62,12 +58,8 @@ public class AdminController {
 					// on retire la ruche de l'événement 
 					//  de la liste des ruches du rucher
 					if (!ruches.remove(eve.getRuche().getNom())) {
-						/*
-						histoFormat.format("Événement %s le rucher %s ne contient pas la ruche %s <br/>", 
-								eve.getDate(), eve.getRucher().getNom(), eve.getRuche().getNom());
-						*/
+						// le rucher ne contient pas la ruches désignée par l'événement
 						eveRucherRuche.add(eve);
-						
 					}
 				} else {
 					// L'événenemt eve ajoute une ruche dans un autre rucher
@@ -96,20 +88,12 @@ public class AdminController {
 				}
 			}
 			if (!ruches.isEmpty()) {
-				/*
-				histoFormat.format("Après traitement des événements, le rucher %s n'est pas vide<br/>",
-						rucher.getNom());
-				*/
+				// Après traitement des événements, le rucher n'est pas vide
 				rucherNonVide.add(rucher);
-				
 			} 			
 		}
-		// histoFormat.close();
-		// model.addAttribute("histoLog", histoLog);
-		
 		model.addAttribute("eveRucherRuche", eveRucherRuche);
 		model.addAttribute("rucherNonVide", rucherNonVide);
-		
 		List<Evenement> eveInc = new ArrayList<>();
 		// événements RUCHEAJOUTRUCHER incomplets
 		for (Evenement eve : evensListe) {
