@@ -325,6 +325,7 @@ public class EvenementEssaimController {
 	 * Enregistrement de la dispersion
 	 * Crée un événement dispersion, enlève l'essaim de la ruche et inactive l'essaim
 	 *   met cette ruche au dépôt si option choisie, crée événement RUCHEAJOUTRUCHER
+	 *   et crée un événement 0 cadre si demandé
 	 * Option remérage : met l'essaim choisi dans la ruche et crée l'événement
 	 *   AJOUTESSAIMRUCHE
 	 */

@@ -134,7 +134,6 @@ public class EssaimController {
 		return "essaim/essaimHisto";
 	}
 	
-	
 	/*
 	 * Statistiques âges des reines
 	 */
