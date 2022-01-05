@@ -8,6 +8,8 @@
 	const essaimnoms = [[${essaimnoms}]];
 	const ruchesvidesnoms = [[${ruchesvidesnoms}]];
 	const recolteHausses = [[${recolteHausses}]];
+	const rucheEssaim = [[${rucheEssaim}]];
+	const PasDeRuche = [[${PasDeRuche}]];
 	const essaimsupprecolttxt =[[#{essaimsupprimerecolte}]];
 	const suppessaimevetxt = [[#{supprimeressaimevenements}]];
 	const suppessaimtxt = [[#{supprimeressaim}]];
@@ -50,7 +52,7 @@
        			  th:title="#{supprimer}" aria-hidden="true"></a>
        			<a th:href="@{'/essaim/descendance/'+${essaim.id}}"
        			  class="bi bi-diagram-3" th:title="#{graphedescendance}" aria-hidden="true"></a>
-       			  <a th:href="@{'/evenement/essaim/dispersion/'+${essaim.id}}"
+       			  <a th:href="@{'/evenement/essaim/dispersion/'+${essaim.id}}" id="dispersion"
 				  class="bi bi-box-arrow-up-left" th:title="#{evenementDispersion}" aria-hidden="true"></a>
 				&nbsp;
        			<a th:href="@{'/evenement/essaim/'+${essaim.id}}"

@@ -4,6 +4,13 @@
     nexistPasOuPasVidtxt, nomexistdejatxt, Ruchestxt, Essaimstxt, creertxt, urlessaimclone, essaimid
 */
 function essaimDetail() {
+	$('#dispersion').on('click', function () {
+		if(!rucheEssaim) {
+			alert(pasderuchetxt);
+			return false;
+		}
+		return true;
+    });
 	$('.confirmation').on('click', function () {
 		if(recolteHausses) {
 			alert(essaimsupprecolttxt);

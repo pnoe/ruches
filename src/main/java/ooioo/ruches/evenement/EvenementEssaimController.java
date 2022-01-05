@@ -315,10 +315,14 @@ public class EvenementEssaimController {
 			LocalDateTime dateTimeFirst = evenFirst.getDate().plusMinutes(1);
 			model.addAttribute("dateFirst",dateTimeFirst.format(dateFormat));
 			model.addAttribute("timeFirst", dateTimeFirst.format(timeFormat));
+			return prepareAppelFormulaire(session, model, essaimId, "essaim/essaimDispersionForm");
 			
-			
+		} else {
+			logger.error("Essaimage : l'essaim n'est pas dans une ruche !");
+			model.addAttribute(Const.MESSAGE, "Essaimage : l'essaim n'est pas dans une ruche !");
+			return Const.INDEX;
 		}
-		return prepareAppelFormulaire(session, model, essaimId, "essaim/essaimDispersionForm");
+		
 	}
 
 	/**
@@ -372,22 +376,29 @@ public class EvenementEssaimController {
 					rucherService.sauveAjouterRuches(rucherDepot, ruchesNoms, date,
 							"Dispersion essaim " + essaim.getNom() + ". " + commentaire);
 				}
+				
+				Evenement evenement = new Evenement(dateEve, TypeEvenement.ESSAIMDISPERSION, ruche, essaim, rucher, null,
+						null, commentaire); // valeur
+				evenementRepository.save(evenement);
+				if ((evencadre) && (remerageId == null)) {
+					// Evénement cadre : valeur 0 pour zéro cadre, essaim null, commentaire "Dispersion essaim xx"
+					Evenement eveCadre = new Evenement(dateEve, TypeEvenement.RUCHECADRE, ruche, null,
+						(depot)?rucherDepot:rucher, null, "0", "Dispersion essaim " + essaim.getNom());
+					evenementRepository.save(eveCadre);
+				}
+				// On inactive l'essaim
+				essaim.setActif(false);
+				essaimRepository.save(essaim);
+				logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
+				// essaim inactivé on affiche la liste des essaims
+				return "redirect:/essaim/liste";
+			} else {
+				// TODO il faudrait rester sur le détail essaim et afficher
+				//   le message d'erreur dans cette page
+				logger.error("Essaimage : l'essaim n'est pas dans une ruche !");
+				model.addAttribute(Const.MESSAGE, "Essaimage : l'essaim n'est pas dans une ruche !");
+				return Const.INDEX;
 			}
-			Evenement evenement = new Evenement(dateEve, TypeEvenement.ESSAIMDISPERSION, ruche, essaim, rucher, null,
-					null, commentaire); // valeur
-			evenementRepository.save(evenement);
-			if ((evencadre) && (remerageId == null)) {
-				// Evénement cadre : valeur 0 pour zéro cadre, essaim null, commentaire "Dispersion essaim xx"
-				Evenement eveCadre = new Evenement(dateEve, TypeEvenement.RUCHECADRE, ruche, null,
-					(depot)?rucherDepot:rucher, null, "0", "Dispersion essaim " + essaim.getNom());
-				evenementRepository.save(eveCadre);
-			}
-			// On inactive l'essaim
-			essaim.setActif(false);
-			essaimRepository.save(essaim);
-			logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
-			// essaim inactivé on affiche la liste des essaims
-			return "redirect:/essaim/liste";
 		}
 		logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 		model.addAttribute(Const.MESSAGE,

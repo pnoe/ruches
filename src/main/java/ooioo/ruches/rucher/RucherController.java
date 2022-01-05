@@ -102,91 +102,14 @@ public class RucherController {
 	private String openweathermapKey;
 	@Value("${rucher.butinage.rayons}")
 	private int[] rayonsButinage;
-
-	/**
-	 * Test erreurs dans les historiques de tous les ruchers
-	 *   résultats dans les logs !
-	 */
-	/*
-	@GetMapping("/testhisto")
-	public String testhisto() {
-		Iterable<Rucher> ruchers = rucherRepository.findAll();
-		// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date descendante
-		List<Evenement> evensRucheAjout = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEAJOUTRUCHER);
-		int levens = evensRucheAjout.size();
-		for (Rucher rucher : ruchers) {
-			Long rucherId = rucher.getId();
-			logger.info("********** Historique rucher : {}", rucher.getNom());
-			// Les nom des ruches présentes dans le rucher
-			Collection<Nom> nomRuchesX = rucheRepository.findNomsByRucherId(rucherId);
- 			List<String> ruches = new ArrayList<>();
- 			for (Nom nomR : nomRuchesX) {
- 				ruches.add(nomR.getNom());
- 			}
-			for (int i = 0; i < levens; i++) {
-				Evenement eve = evensRucheAjout.get(i);
-				
-				if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
-					continue;
-				}
-				
-				// On cherche l'événement précédent ajout de cette ruche
-				Evenement evePrec = null;
-				for (int j = i + 1; j < levens; j++) {
-					if ((evensRucheAjout.get(j).getType() == 
-							ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER) &&
-						(evensRucheAjout.get(j).getRuche().getId().equals(eve.getRuche().getId()))) {
-						evePrec = evensRucheAjout.get(j);
-						break;
-					}
-				}
- 				
-				
-				if (eve.getRucher().getId().equals(rucherId)) {
-					// si l'événement est un ajout dans le rucher
-					// on retire après l'affichage la ruche de l'événement 
-					//  de la liste des ruches du rucher
-					Collections.sort(ruches);
-					if (!ruches.remove(eve.getRuche().getNom())) {
-						logger.error("Événement {} le rucher {} ne contient pas la ruche {}", 
-								eve.getDate(), eve.getRucher().getNom(), eve.getRuche().getNom());
-					}
-				} else {
-					// l'événenemt eve ajoute une ruche dans un autre rucher
-					if (evePrec != null) {
-						//   si c'est un ajout dans le rucher rucherId
-						if (evePrec.getRucher() == null) {
-							continue;
-						}
-						if (evePrec.getRucher().getId().equals(rucherId)) {
-							// si l'événement précédent evePrec était un ajout dans le
-							//   rucher, alors eve retire la ruche du rucher
-							ruches.add(eve.getRuche().getNom());
-						}
-					}
-				}
-			}
-			if (ruches.size() != 0) {
-				logger.error("Historique : après traitement des événements en reculant dans le temps, le rucher n'est pas vide");
-			} 			
-		}
-		for (int i = 0; i < levens; i++) {
-			Evenement eve = evensRucheAjout.get(i);
-			if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
-				logger.error("Événement RUCHEAJOUTRUCHER {} incomplet. Ruche {} rucher {}",
-						eve.getDate(), eve.getRuche(), eve.getRucher());
-			}
-		}
-		return "redirect:/rucher/liste";
-	}
-	*/
 	
 	/**
 	 * Historique d'un rucher
 	 *  Les événements sont utilisés par date décroissante : du plus
 	 *   récent au plus ancien.
 	 *  Liste les événements correspondant à l'ajout ou le retrait de ruche
-	 *  de ce rucher
+	 *  dans ce rucher
+	 *  Option group pour grouper les événements de même date (année mois et jour)
 	 */
 	@GetMapping("/historique/{rucherId}/{group}")
 	public String historique(Model model, @PathVariable long rucherId,
@@ -354,7 +277,14 @@ public class RucherController {
 			}
 			if (!ruches.isEmpty()) {
 				logger.error("Historique : après traitement des événements en reculant dans le temps, le rucher n'est pas vide");
-			} 			
+			}
+			
+			// Pour ajouter les récoltes dans l'historique type = "Récolte"
+			// Iterable<Recolte> evenRecolte = recolteRepository.findByRucher(rucher);
+			
+			
+			
+			
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,

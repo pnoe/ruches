@@ -23,7 +23,7 @@ public interface RecolteRepository extends CrudRepository<Recolte, Long> {
 	Recolte findFirstByOrderByDateDesc();
 
 	Recolte findFirstByOrderByDateAsc();
-
+	
 	/*
 	 * Renvoie le poids de miel mis en pot en kg pour l'année passée en paramètre
 	 */
