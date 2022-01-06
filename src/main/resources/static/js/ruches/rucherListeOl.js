@@ -80,6 +80,7 @@ function rucherListeIgn(ign) {
 	        toggleCondition: ol.events.condition.never,
 	        style: false
 	});
+	select.setActive(!$('#dragMarker')[0].checked);
 	select.on('select', function(e) {   	  
 	    	e.selected.forEach(function(feature) { let style = feature.getStyle(); let txt = style.getText().getText(); 
 	    		style.getText().setText('['+txt+']'); feature.setStyle(style); });
@@ -208,6 +209,7 @@ function rucherListeIgn(ign) {
     	}
     });
     $('#dragMarker').change(function() {
+		select.setActive(!this.checked);
 	  	translate.setActive(!this.checked);
 	});
   }
