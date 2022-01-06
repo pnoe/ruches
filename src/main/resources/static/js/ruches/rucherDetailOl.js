@@ -126,6 +126,7 @@ function rucherDetail(ign) {
 		toggleCondition: ol.events.condition.never,
 		style: false
 	});
+	select.setActive(!$('#dragMarker')[0].checked);
 	select.on('select', function(e) {
 		e.selected.forEach(function(feature) {
 			let style = feature.getStyle(); let txt = style.getText().getText();
@@ -141,7 +142,6 @@ function rucherDetail(ign) {
 		layers: [vectorLayer]
 	});
 	translate.setActive(!$('#dragMarker')[0].checked);
-
 	// Utiliser KMLExtended pour sauver et lire les textes	
 	/// const formatKML = new ol.format.KMLExtended({});
 	// Ne fonctionne pas
@@ -153,7 +153,6 @@ function rucherDetail(ign) {
 			features: dessinsFeatures
 		})
 	});
-
 	const map = new ol.Map({
 		interactions: ol.interaction.defaults({ doubleClickZoom: false }).extend([select, translate]),
 		controls: ol.control.defaults({
@@ -212,7 +211,6 @@ function rucherDetail(ign) {
 		}
 	});
 	map.addControl(gfi);
-
 	const layerSwitcher = new ol.control.LayerSwitcher({
 		layers: [{
 			layer: vectorLayer,
@@ -288,7 +286,6 @@ function rucherDetail(ign) {
 		layers: [vectorLayer]
 	});
 	map.addInteraction(selectDoubleClick);
-
 	selectDoubleClick.on('select', function(e) {
 		const feature = e.target.getFeatures().getArray()[0];
 		if (feature.get("rucheid") === 'entree') {
@@ -338,7 +335,6 @@ function rucherDetail(ign) {
 		};
 		req.send(null);
 	});
-
 	$("#searchtext").keyup(function(event) {
 		if (event.keyCode === 13) {
 			let searchtext = $("#searchtext").val().toUpperCase();
@@ -363,25 +359,21 @@ function rucherDetail(ign) {
 			'?parcours=' + encodeURIComponent(JSON.stringify(rucheParcours)) +
 			'&plus=' + (e.target.id != 'liste');
 	});
-
 	$('#export-gpx').click(function() {
 		exportGpx();
 	});
-
 	$('#export-kml').click(function() {
 		exportKml();
 	});
-
 	$('#parcours-redraw').click(function() {
 		document.getElementById('popup-content').innerHTML = 'Calcul en cours...';
 		overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());
 		parcoursRedraw(true);
 	});
-
 	$('#dragMarker').change(function() {
+		select.setActive(!this.checked);
 		translate.setActive(!this.checked);
 	});
-
 	if (!ign) {
 		// export png
 		$('#export-png').click(function() {
@@ -395,7 +387,6 @@ function rucherDetail(ign) {
 			});
 			map.renderSync();
 		});
-
 		// export pdf
 		const { jsPDF } = window.jspdf;
 		const exportPdf = $('#export-pdf');
