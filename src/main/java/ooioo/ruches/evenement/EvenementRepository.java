@@ -122,7 +122,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 	Iterable<Evenement> findByRucheId(Long rucheId);
 	
-	Iterable<Evenement> findByRucheIdAndTypeOrderByDateDesc(TypeEvenement typeEvenement, Long rucheId);
+	// Iterable<Evenement> findByRucheIdAndTypeOrderByDateDesc(TypeEvenement typeEvenement, Long rucheId);
 
 	Iterable<Evenement> findByEssaimId(Long essaimId);
 	
@@ -134,6 +134,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 		order by e.date desc""")
 	List<Evenement> findEveRucheHausseDesc(Long rucheId);
 	
+	List<Evenement> findByEssaimIdAndTypeOrderByDateAsc(Long essaimId, TypeEvenement typeEvenement);
 	
 
 	Iterable<Evenement> findByHausseId(Long hausseId);
