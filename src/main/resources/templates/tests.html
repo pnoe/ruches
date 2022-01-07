@@ -117,17 +117,12 @@
 				</tbody>
 			</table>
 		</div>
-	</div>
-	
-	
-	
-		<div class="container-fluid table-responsive accordion">
 		<h1 class="item" th:if="${#lists.isEmpty(eveRucheHausseErr)}"
 			th:text="#{HistHaussesEveOK}"></h1>
 		<h1 class="item" th:unless="${#lists.isEmpty(eveRucheHausseErr)}"
 			style="background-color: red;" th:text="#{HistHaussesEveKO}"></h1>
 		<div class="container-fluid table-responsive">
-			<table class="table table-sm table-bordered table-striped" th:unless="${#lists.isEmpty(eveRucherRuche)}">
+			<table class="table table-sm table-bordered table-striped" th:unless="${#lists.isEmpty(eveRucheHausseErr)}">
 				<thead>
 					<tr>
 						<th th:text="#{date}"></th>
@@ -169,6 +164,7 @@
 				</tbody>
 			</table>
 		</div>
+	</div>
 	<br />
 	<footer th:replace="include::footer"></footer>
 </body>
