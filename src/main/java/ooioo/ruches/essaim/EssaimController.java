@@ -107,7 +107,7 @@ public class EssaimController {
 							TypeEvenement.RUCHEAJOUTRUCHER);
 			model.addAttribute("evensEssaimAjout", evensEssaimAjout);
 			List<Long> durees = new ArrayList<>();
-			if ((evensEssaimAjout != null) && (evensEssaimAjout.size() > 0)) {
+			if ((evensEssaimAjout != null) && (!evensEssaimAjout.isEmpty())) {
 				int i = 0;
 				while (i < evensEssaimAjout.size() - 1) {
 				// calcul de la durée de séjour dans le rucher

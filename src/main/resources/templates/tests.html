@@ -32,24 +32,24 @@
 			<table class="table table-sm table-bordered table-striped" th:unless="${#lists.isEmpty(eveRucherRuche)}">
 				<thead>
 					<tr>
+						<th th:text="#{historique}"></th>
 						<th th:text="#{date}"></th>
 						<th th:text="#{evenement}"></th>
-						<th th:unless="${rucheId}" style="background-color: PaleGoldenRod"
-							th:text="#{ruche}"></th>
-						<th th:unless="${rucherId}"
-							style="background-color: PaleGoldenRod" th:text="#{rucher}"></th>
+						<th style="background-color: PaleGoldenRod" th:text="#{ruche}"></th>
+						<th	style="background-color: PaleGoldenRod" th:text="#{rucher}"></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="evenement : ${eveRucherRuche}">
+						<td th:text="${evenement.valeur}"></td>
 						<td><a
 							th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
 							th:with="url='/evenement/'+${evenement.id}+
 								(${type}?('?type='+${type}+'&itemId='+${itemId}):'')"
 							th:href="@{${url}}"></a></td>
 						<td th:text="#{${evenement.type}}"></td>
-						<td th:unless="${rucheId}" th:text="${evenement.ruche?.nom}"></td>
-						<td th:unless="${rucherId}" th:text="${evenement.rucher?.nom}"></td>
+						<td th:text="${evenement.ruche?.nom}"></td>
+						<td th:text="${evenement.rucher?.nom}"></td>
 					</tr>
 				</tbody>
 			</table>
@@ -62,7 +62,7 @@
 			<table class="table table-sm table-bordered table-striped" th:unless="${#lists.isEmpty(rucherNonVide)}">
 				<thead>
 					<tr>
-						<th th:text="#{nom}"></th>
+						<th th:text="#{rucher}"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -83,17 +83,12 @@
 					<tr>
 						<th th:text="#{date}"></th>
 						<th th:text="#{evenement}"></th>
-						<th th:unless="${rucheId}" style="background-color: PaleGoldenRod"
-							th:text="#{ruche}"></th>
-						<th th:unless="${essaimId}"
-							style="background-color: PaleGoldenRod" th:text="#{essaim}"></th>
-						<th th:unless="${rucherId}"
-							style="background-color: PaleGoldenRod" th:text="#{rucher}"></th>
-						<th th:unless="${hausseId}"
-							style="background-color: PaleGoldenRod" th:text="#{hausse}"></th>
+						<th style="background-color: PaleGoldenRod" th:text="#{ruche}"></th>
+						<th	style="background-color: PaleGoldenRod" th:text="#{essaim}"></th>
+						<th	style="background-color: PaleGoldenRod" th:text="#{rucher}"></th>
+						<th	style="background-color: PaleGoldenRod" th:text="#{hausse}"></th>
 						<th style="background-color: LemonChiffon" th:text="#{valeur}"></th>
-						<th style="background-color: LemonChiffon"
-							th:text="#{commentaire}"></th>
+						<th style="background-color: LemonChiffon" th:text="#{commentaire}"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -104,10 +99,10 @@
 								(${type}?('?type='+${type}+'&itemId='+${itemId}):'')"
 							th:href="@{${url}}"></a></td>
 						<td th:text="#{${evenement.type}}"></td>
-						<td th:unless="${rucheId}" th:text="${evenement.ruche?.nom}"></td>
-						<td th:unless="${essaimId}" th:text="${evenement.essaim?.nom}"></td>
-						<td th:unless="${rucherId}" th:text="${evenement.rucher?.nom}"></td>
-						<td th:unless="${hausseId}" th:text="${evenement.hausse?.nom}"></td>
+						<td th:text="${evenement.ruche?.nom}"></td>
+						<td th:text="${evenement.essaim?.nom}"></td>
+						<td th:text="${evenement.rucher?.nom}"></td>
+						<td th:text="${evenement.hausse?.nom}"></td>
 						<th:block th:switch="${evenement.type}">
 							<td class="num"
 								th:case="${T(ooioo.ruches.evenement.TypeEvenement).ESSAIMSUCRE}"
@@ -123,6 +118,57 @@
 			</table>
 		</div>
 	</div>
+	
+	
+	
+		<div class="container-fluid table-responsive accordion">
+		<h1 class="item" th:if="${#lists.isEmpty(eveRucheHausseErr)}"
+			th:text="#{HistHaussesEveOK}"></h1>
+		<h1 class="item" th:unless="${#lists.isEmpty(eveRucheHausseErr)}"
+			style="background-color: red;" th:text="#{HistHaussesEveKO}"></h1>
+		<div class="container-fluid table-responsive">
+			<table class="table table-sm table-bordered table-striped" th:unless="${#lists.isEmpty(eveRucherRuche)}">
+				<thead>
+					<tr>
+						<th th:text="#{date}"></th>
+						<th th:text="#{evenement}"></th>
+						<th style="background-color: PaleGoldenRod" th:text="#{ruche}"></th>
+						<th	style="background-color: PaleGoldenRod" th:text="#{hausse}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="evenement : ${eveRucheHausseErr}">
+						<td><a
+							th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
+							th:with="url='/evenement/'+${evenement.id}+
+								(${type}?('?type='+${type}+'&itemId='+${itemId}):'')"
+							th:href="@{${url}}"></a></td>
+						<td th:text="#{${evenement.type}}"></td>
+						<td th:text="${evenement.ruche?.nom}"></td>
+						<td th:text="${evenement.hausse?.nom}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<h1 class="item" th:if="${#lists.isEmpty(rucheNonVide)}"
+			th:text="#{HistRuchesFinOK}"></h1>
+		<h1 class="item" th:unless="${#lists.isEmpty(rucheNonVide)}"
+			style="background-color: red;" th:text="#{HistRuchesFinKO}"></h1>
+		<div class="container-fluid table-responsive">
+			<table class="table table-sm table-bordered table-striped" th:unless="${#lists.isEmpty(rucheNonVide)}">
+				<thead>
+					<tr>
+						<th th:text="#{ruche}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="ruche : ${rucheNonVide}">
+						<td><a th:href="@{'/rucher/'+${ruche.id}}"
+						th:text="${ruche.nom}"></a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	<br />
 	<footer th:replace="include::footer"></footer>
 </body>

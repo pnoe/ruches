@@ -44,9 +44,9 @@
 					th:text="#{ajoutruches} + ' ' + ${rucher.nom}"></a>
 				<th:block th:text="' ' + #{Ruches} + ' ' + ${ruchesNoms}"></th:block>
 				</h1>
-				<th:block th:text=
-		        	"#{dateDernierAjout} + ' ' + ${#temporals.format(dateTime, 'dd/MM/yyyy HH:mm')}"
-		        </th:block>
+				<p th:text=
+		        	"#{dateDernierAjout} + ' ' + ${#temporals.format(dateTime, 'dd/MM/yyyy HH:mm')}">
+		        </p>
         	</div>
         </div>
     </div>

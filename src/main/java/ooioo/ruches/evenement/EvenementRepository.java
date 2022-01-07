@@ -121,11 +121,19 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 
 	Iterable<Evenement> findByRucheId(Long rucheId);
+	
+	Iterable<Evenement> findByRucheIdAndTypeOrderByDateDesc(TypeEvenement typeEvenement, Long rucheId);
 
 	Iterable<Evenement> findByEssaimId(Long essaimId);
 	
+	@Query(value = """	
+		select e from Evenement e
+		where e.ruche.id = ?1 and
+		  (e.type = ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE
+		  or e.type = ooioo.ruches.evenement.TypeEvenement.HAUSSERETRAITRUCHE)
+		order by e.date desc""")
+	List<Evenement> findEveRucheHausseDesc(Long rucheId);
 	
-	List<Evenement> findByEssaimIdAndTypeOrderByDateAsc(Long essaimId, TypeEvenement typeEvenement);
 	
 
 	Iterable<Evenement> findByHausseId(Long hausseId);

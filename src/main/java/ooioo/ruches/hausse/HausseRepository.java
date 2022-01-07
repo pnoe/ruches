@@ -17,9 +17,9 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 	Optional<Hausse> findByNom(String hausseNom);
 
 	// correction spring boot 2.2.0 iterable -> list
-	List<Hausse> findByRucheIdOrderByOrdreSurRuche(Long id);
+	List<Hausse> findByRucheIdOrderByOrdreSurRuche(Long rucheId);
 
-	Iterable<Hausse> findByActiveAndRucheIdNot(boolean active, Long id);
+	Iterable<Hausse> findByActiveAndRucheIdNot(boolean active, Long rucheId);
 
 	Iterable<Hausse> findByActiveAndRucheIsNull(boolean active);
 
