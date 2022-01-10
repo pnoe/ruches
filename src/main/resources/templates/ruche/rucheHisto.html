@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+</head>
+<body>
+	<nav th:replace="include :: navbar">Menu</nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					<th:block th:text="#{historique} + ' '"></th:block>
+					<a th:href="@{'/ruche/'+${ruche.id}}"
+						th:text="#{ruche} + ' ' + ${ruche.nom}"></a>
+				</h1>		
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<table class="table table-bordered table-striped dt-responsive" id="evenements">
+			<thead>
+				<tr>
+					<th th:text="#{date}"></th>
+					<th th:text="#{evenement}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{essaim}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{rucher}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{hausse}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{etat}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="evenement : ${evenements}">
+					<td>
+						<a th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
+							th:with="url='/evenement/'+${evenement.id}+
+								(${type}?('?type='+${type}+'&itemId='+${itemId}):'')"
+							th:href="@{${url}}"></a>		
+					</td>
+					<td th:text="#{${evenement.type}}"></td>
+					<td th:text="${evenement.essaim?.nom}"></td>
+					<td th:text="${evenement.rucher?.nom}"></td>
+					<td th:text="${evenement.hausse?.nom}"></td>
+					<td th:text="${evenement.commentaire}"></td>
+					<td th:text="${evenement.valeur}"></td>						
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

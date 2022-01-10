@@ -1,4 +1,4 @@
-	package ooioo.ruches.ruche;
+package ooioo.ruches.ruche;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -83,6 +83,56 @@ public class RucheController {
 	private String accueilTitre;
 
 	/**
+	 * Historique de l'ajout des hausses sur une ruche
+	 */
+	@GetMapping("/historique/{rucheId}")
+	public String historique(Model model, @PathVariable long rucheId) {
+		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
+		if (rucheOpt.isPresent()) {
+			Ruche ruche = rucheOpt.get();
+			// Les événements ajout/retrait des hausses de la ruche
+			List<Evenement> eveRucheHausse = evenementRepository.findEveRucheHausseDesc(rucheId);
+			// Les hausses actuellement sur la ruche
+			List<Hausse> hausses = hausseRepository.findByRucheIdOrderByOrdreSurRuche(rucheId);
+			List<String> haussesNom = new ArrayList<>();
+			for (Hausse hausse : hausses) {
+				haussesNom.add(hausse.getNom());
+			}
+			for (Evenement eve : eveRucheHausse) {
+				eve.setValeur(String.join(" ", haussesNom));
+				if (eve.getHausse() != null) {
+					if (eve.getType() == TypeEvenement.HAUSSERETRAITRUCHE) {
+						if (haussesNom.contains(eve.getHausse().getNom())) {
+							// La hausse est déjà dans la liste
+							// erreur
+						} else {
+							haussesNom.add(eve.getHausse().getNom());
+						}
+					} else { // eve.getType() est TypeEvenement.HAUSSEPOSERUCHE
+						if (!haussesNom.remove(eve.getHausse().getNom())) {
+							// La hausse ne peut être enlevée de la liste
+							// il y a une erreur dans la pose des hausses
+							// erreur
+						}
+					}
+				}
+			}
+			// if (!hausses.isEmpty()) {
+				// erreur
+			// }
+			model.addAttribute("ruche", ruche);
+			model.addAttribute("evenements", eveRucheHausse);
+		} else {
+			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
+			model.addAttribute(Const.MESSAGE,
+					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
+			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
+			return Const.INDEX;
+		}
+		return "ruche/rucheHisto";
+	}
+
+	/**
 	 * Clonage multiple d'une ruche (appel XMLHttpRequest)
 	 */
 	@PostMapping("/clone/{rucheId}")
@@ -117,7 +167,8 @@ public class RucheController {
 			}
 			String nomsJoin = String.join(",", nomsCrees);
 			logger.info("Ruches {} créée(s)", nomsJoin);
-			return messageSource.getMessage("cloneruchecreees", new Object[] {nomsJoin}, LocaleContextHolder.getLocale());
+			return messageSource.getMessage("cloneruchecreees", new Object[] { nomsJoin },
+					LocaleContextHolder.getLocale());
 		}
 		logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 		return "Erreur : id ruche inconnu";
@@ -142,18 +193,17 @@ public class RucheController {
 	}
 
 	/**
-	 * Liste des ruches d'un rucher
-	 *  paramètres
-	 *   parcours : pour l'ordre des ruches
-	 *   plus : liste détaillée si true
+	 * Liste des ruches d'un rucher paramètres parcours : pour l'ordre des ruches
+	 * plus : liste détaillée si true
 	 */
 	@GetMapping("/liste/{rucherId}")
-	public String listeRucher(HttpSession session, Model model, @PathVariable long rucherId,
-			@RequestParam boolean plus, @RequestParam String parcours) {
+	public String listeRucher(HttpSession session, Model model, @PathVariable long rucherId, @RequestParam boolean plus,
+			@RequestParam String parcours) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		List<RucheParcours> chemin;
 		try {
-			chemin = objectMapper.readValue(parcours, new TypeReference<List<RucheParcours>>(){});
+			chemin = objectMapper.readValue(parcours, new TypeReference<List<RucheParcours>>() {
+			});
 		} catch (IOException e) {
 			logger.error("Paramètre parcours incorrect");
 			model.addAttribute(Const.MESSAGE, "Paramètre incorect");
@@ -209,18 +259,17 @@ public class RucheController {
 		if (rucheOpt.isPresent()) {
 			Ruche ruche = rucheOpt.get();
 			model.addAttribute(Const.RUCHE, ruche);
-			model.addAttribute(Const.RUCHERS, 
-					rucherRepository.findProjectedIdNomByActifAndIdNotOrderByNom(true, 
-							 (ruche.getRucher() == null) ? null : ruche.getRucher().getId()));
+			model.addAttribute(Const.RUCHERS, rucherRepository.findProjectedIdNomByActifAndIdNotOrderByNom(true,
+					(ruche.getRucher() == null) ? null : ruche.getRucher().getId()));
 			model.addAttribute("depotId", rucherRepository.findByDepotIsTrue().getId());
 			model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
-			Evenement evenFirst = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, 
+			Evenement evenFirst = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
 					ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER);
 			DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
 			model.addAttribute("dateTime", evenFirst.getDate());
 			LocalDateTime dateTimeFirst = evenFirst.getDate().plusMinutes(1);
-			model.addAttribute("dateFirst",dateTimeFirst.format(dateFormat));
+			model.addAttribute("dateFirst", dateTimeFirst.format(dateFormat));
 			model.addAttribute("timeFirst", dateTimeFirst.format(timeFormat));
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
@@ -233,8 +282,7 @@ public class RucheController {
 	}
 
 	/**
-	 * Changement de rucher d'une ruche
-	 * Création de l'événement RUCHEAJOUTRUCHER
+	 * Changement de rucher d'une ruche Création de l'événement RUCHEAJOUTRUCHER
 	 */
 	@PostMapping("/sauverucher/{rucheId}")
 	public String sauveRucher(Model model, @RequestParam String date, @PathVariable long rucheId,
@@ -268,7 +316,7 @@ public class RucheController {
 			Ruche ruche = rucheOpt.get();
 			model.addAttribute(Const.RUCHENOMS, rucheRepository.findAllProjectedBy().stream().map(Nom::getNom)
 					.filter(nom -> !nom.equals(ruche.getNom())).toList());
-			//		.filter(nom -> !nom.equals(ruche.getNom())).collect(Collectors.toList()));
+			// .filter(nom -> !nom.equals(ruche.getNom())).collect(Collectors.toList()));
 			model.addAttribute(Const.RUCHE, ruche);
 			Iterable<RucheType> rucheTypes = rucheTypeRepository.findAll();
 			model.addAttribute(Const.RUCHETYPES, rucheTypes);
@@ -308,7 +356,7 @@ public class RucheController {
 			} else {
 				model.addAttribute(Const.MESSAGE, "Cette ruche ne peut être supprimée");
 				model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
-			return Const.INDEX;
+				return Const.INDEX;
 			}
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
@@ -368,16 +416,16 @@ public class RucheController {
 			List<LocalDateTime> datesPoseHausse = new ArrayList<>();
 			for (Hausse hausse : haussesRuche) {
 				// trouver la date d'ajout de la hausse sur la ruche
-				Evenement evenPoseHausse = evenementRepository
-						.findFirstByRucheAndHausseAndTypeOrderByDateDesc(ruche, hausse,
-								TypeEvenement.HAUSSEPOSERUCHE);
+				Evenement evenPoseHausse = evenementRepository.findFirstByRucheAndHausseAndTypeOrderByDateDesc(ruche,
+						hausse, TypeEvenement.HAUSSEPOSERUCHE);
 				datesPoseHausse.add((evenPoseHausse == null) ? null : evenPoseHausse.getDate());
 			}
 			model.addAttribute("datesPoseHausse", datesPoseHausse);
 			// Si des hausses de récolte référencent cette ruche, on ne pourra la supprimer
 			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByRucheId(rucheId);
 			model.addAttribute("recolteHausses", recolteHausses.iterator().hasNext());
-			// Si des événements référencent cette ruche, il faudra les supprimer si on la supprime
+			// Si des événements référencent cette ruche, il faudra les supprimer si on la
+			// supprime
 			Iterable<Evenement> evenements = evenementRepository.findByRucheId(rucheId);
 			model.addAttribute(Const.EVENEMENTS, evenements.iterator().hasNext());
 			// Trouver l'événement association essaim ruche
@@ -422,14 +470,13 @@ public class RucheController {
 	}
 
 	/**
-	 * Enregistrer en base l'ordre des hausses modifié par drag and drop (appel XMLHttpRequest)
+	 * Enregistrer en base l'ordre des hausses modifié par drag and drop (appel
+	 * XMLHttpRequest)
 	 */
 	@PostMapping("/ordreHausses/{rucheId}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody String ordreHausses(@PathVariable long rucheId,
-			@RequestParam(value="hausses[]") Long[] hausses,
-			@RequestParam(value="ordre[]") Integer[] ordre
-			) {
+			@RequestParam(value = "hausses[]") Long[] hausses, @RequestParam(value = "ordre[]") Integer[] ordre) {
 		for (int i = 0; i < hausses.length; i++) {
 			Optional<Hausse> hausseOpt = hausseRepository.findById(hausses[i]);
 			if (hausseOpt.isPresent()) {
@@ -451,8 +498,8 @@ public class RucheController {
 	 * Ajouter une hausse sur une ruche
 	 */
 	@PostMapping("/hausse/ajout/{rucheId}/{hausseId}")
-	public String ajoutHausse(Model model, @PathVariable long rucheId,
-			@PathVariable long hausseId, @RequestParam String date, @RequestParam String commentaire) {
+	public String ajoutHausse(Model model, @PathVariable long rucheId, @PathVariable long hausseId,
+			@RequestParam String date, @RequestParam String commentaire) {
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 		Optional<Hausse> hausseOpt = hausseRepository.findById(hausseId);
 		if (rucheOpt.isPresent()) {
@@ -463,8 +510,9 @@ public class RucheController {
 				Ruche rucheHausse = hausse.getRuche();
 				LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 				if (rucheHausse != null) {
-					evenementRetrait = new Evenement(dateEve, TypeEvenement.HAUSSERETRAITRUCHE,
-							rucheHausse, rucheHausse.getEssaim(), rucheHausse.getRucher(), hausse, hausse.getOrdreSurRuche().toString(), commentaire);
+					evenementRetrait = new Evenement(dateEve, TypeEvenement.HAUSSERETRAITRUCHE, rucheHausse,
+							rucheHausse.getEssaim(), rucheHausse.getRucher(), hausse,
+							hausse.getOrdreSurRuche().toString(), commentaire);
 					evenementRepository.save(evenementRetrait);
 				}
 				hausse.setRuche(ruche);
@@ -472,11 +520,11 @@ public class RucheController {
 				Integer nbHausses = hausseRepository.countByRucheId(rucheId);
 				hausse.setOrdreSurRuche(nbHausses + 1);
 				hausseRepository.save(hausse);
-				Evenement evenementPose = new Evenement(dateEve, TypeEvenement.HAUSSEPOSERUCHE,
-						ruche, ruche.getEssaim(), ruche.getRucher(), hausse, hausse.getOrdreSurRuche().toString(), commentaire);
+				Evenement evenementPose = new Evenement(dateEve, TypeEvenement.HAUSSEPOSERUCHE, ruche,
+						ruche.getEssaim(), ruche.getRucher(), hausse, hausse.getOrdreSurRuche().toString(),
+						commentaire);
 				if (evenementRetrait != null) {
-					evenementPose.setDate(
-							evenementRetrait.getDate().withSecond(0).withNano(0).plusMinutes(1L));
+					evenementPose.setDate(evenementRetrait.getDate().withSecond(0).withNano(0).plusMinutes(1L));
 				}
 				evenementRepository.save(evenementPose);
 				logger.info("Hause {} posée sur le ruche {}", hausse.getNom(), ruche.getNom());
@@ -485,7 +533,7 @@ public class RucheController {
 				model.addAttribute(Const.MESSAGE,
 						messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
 				model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
-			return Const.INDEX;
+				return Const.INDEX;
 			}
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
@@ -501,8 +549,8 @@ public class RucheController {
 	 * Retirer une hausse de sa ruche recalcule l'ordre des hausses de cette ruche
 	 */
 	@PostMapping("/hausse/retrait/{rucheId}/{hausseId}")
-	public String retraitHausse(Model model, @PathVariable long rucheId,
-			@PathVariable long hausseId, @RequestParam String date, @RequestParam String commentaire) {
+	public String retraitHausse(Model model, @PathVariable long rucheId, @PathVariable long hausseId,
+			@RequestParam String date, @RequestParam String commentaire) {
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 		Optional<Hausse> hausseOpt = hausseRepository.findById(hausseId);
 		if (rucheOpt.isPresent()) {
@@ -519,8 +567,8 @@ public class RucheController {
 					rucher = ruche.getRucher();
 					rucheNom = ruche.getNom();
 				}
-				Evenement evenementRetrait = new Evenement(dateEve,
-						TypeEvenement.HAUSSERETRAITRUCHE, ruche, essaim, rucher, hausse, hausse.getOrdreSurRuche().toString(), commentaire);
+				Evenement evenementRetrait = new Evenement(dateEve, TypeEvenement.HAUSSERETRAITRUCHE, ruche, essaim,
+						rucher, hausse, hausse.getOrdreSurRuche().toString(), commentaire);
 				evenementRepository.save(evenementRetrait);
 				hausse.setRuche(null);
 				hausse.setOrdreSurRuche(null);
@@ -532,7 +580,7 @@ public class RucheController {
 				model.addAttribute(Const.MESSAGE,
 						messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
 				model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
-			return Const.INDEX;
+				return Const.INDEX;
 			}
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
@@ -549,8 +597,7 @@ public class RucheController {
 	 */
 	@PostMapping("/deplace/{rucheId}/{lat}/{lng}")
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody String deplace(@PathVariable Long rucheId, @PathVariable Float lat,
-			@PathVariable Float lng) {
+	public @ResponseBody String deplace(@PathVariable Long rucheId, @PathVariable Float lat, @PathVariable Float lng) {
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 		if (rucheOpt.isPresent()) {
 			Ruche ruche = rucheOpt.get();

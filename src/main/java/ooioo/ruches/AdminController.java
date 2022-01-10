@@ -68,7 +68,7 @@ public class AdminController {
 			}
 			// Les nom des ruches présentes dans le rucher
 			Collection<Ruche> ruchesRucher = rucheRepository.findCollByRucherId(rucher.getId());
-			Set<Ruche> ruchesRucherSet = new HashSet<Ruche>(ruchesRucher);
+			Set<Ruche> ruchesRucherSet = new HashSet<>(ruchesRucher);
 			if (!ruches.equals(ruchesRucherSet)) {
 				// Après traitement des événements, le rucher ne contient pas
 				//  les ruches en accord avec les événements 
