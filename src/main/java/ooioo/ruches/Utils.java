@@ -48,6 +48,26 @@ public final class Utils {
 	}
 	
 	/*
+	 * Pour test nb hausses correct
+	 * Renvoie true si str est un int compris entre 0 et 10
+	 */
+	public static boolean isIntInf10(String str) {
+	    if (str == null) {
+	        return false;
+	    }
+	    try {
+	        int d = Integer.parseInt(str);
+	        if (d < 0 || d > 10) {
+		    	return false;
+		    }
+	    } catch (NumberFormatException nfe) {
+	        return false;
+	    }
+	    return true;
+	}
+	
+	
+	/*
 	 * Renvoie true si str est numérique
 	 */
 	public static boolean isNum(String str) {

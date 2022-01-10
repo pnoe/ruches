@@ -2,7 +2,9 @@ package ooioo.ruches;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,12 +37,59 @@ public class AdminController {
 	 * Tests erreurs
 	 *  résultat dans la page tests.html
 	 */
+	@GetMapping("/tests2")
+	public String tests2(Model model) {
+		// Recherche des erreurs dans l'historique des ajouts de ruches dans les ruchers
+		Iterable<Rucher> ruchers = rucherRepository.findAll();
+		// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date descendante
+		Iterable<Evenement> evesRucheAjoutRucher = evenementRepository.findByTypeOrderByDateAsc(TypeEvenement.RUCHEAJOUTRUCHER);
+		List<Evenement> evesErrRucherRuche = new ArrayList<>();
+		List<Rucher> rucherRuchesDiff = new ArrayList<>();
+		for (Rucher rucher : ruchers) {
+			Set<Ruche> ruches =  new HashSet<>();
+			for (Evenement eve : evesRucheAjoutRucher) {
+				if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
+					// si événement incorrect, on l'ignore
+					continue;
+				}
+				if (eve.getRucher().getId().equals(rucher.getId())) {
+					// si l'événement est un ajout dans le rucher on ajoute la ruche de l'événement 
+					//  à la liste des ruches du rucher
+					if (!ruches.add(eve.getRuche())) {
+						// erreur le rucher contient la ruche désignée par l'événement
+						eve.setValeur(rucher.getNom());
+						evesErrRucherRuche.add(eve);
+					}
+				} else {
+					// l'événement est un ajout dans un autre rucher
+					// si cette ruche est dans le rucher, on la retire
+					ruches.remove(eve.getRuche());
+				}
+			}
+			// Les nom des ruches présentes dans le rucher
+			Collection<Ruche> ruchesRucher = rucheRepository.findCollByRucherId(rucher.getId());
+			Set<Ruche> ruchesRucherSet = new HashSet<Ruche>(ruchesRucher);
+			if (!ruches.equals(ruchesRucherSet)) {
+				// Après traitement des événements, le rucher ne contient pas
+				//  les ruches en accord avec les événements 
+				rucherRuchesDiff.add(rucher);
+			} 
+		}
+		model.addAttribute("eveRucherRuche", evesErrRucherRuche);
+		model.addAttribute("rucherNonVide", rucherRuchesDiff);
+		return "tests";
+	}
+	
+	/**
+	 * Tests erreurs
+	 *  résultat dans la page tests.html
+	 */
 	@GetMapping("/tests")
 	public String tests(Model model) {
 		// Recherche des erreurs dans l'historique des ajouts de ruches dans les ruchers
 		Iterable<Rucher> ruchers = rucherRepository.findAll();
 		// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date descendante
-		List<Evenement> evensListe = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEAJOUTRUCHER);
+		List<Evenement> evensListe = evenementRepository.findAjoutRucheOK();
 		int levens = evensListe.size();
 		List<Evenement> eveRucherRuche = new ArrayList<>();
 		List<Rucher> rucherNonVide = new ArrayList<>();
@@ -54,48 +103,42 @@ public class AdminController {
  			}
 			for (int i = 0; i < levens; i++) {
 				Evenement eve = evensListe.get(i);
-				if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
-					// si événement incorrect, on l'ignore
-					continue;
-				}
  				if (eve.getRucher().getId().equals(rucherId)) {
 					// si l'événement est un ajout dans le rucher
 					// on retire la ruche de l'événement 
 					//  de la liste des ruches du rucher
 					if (!ruches.remove(eve.getRuche().getNom())) {
-						// le rucher ne contient pas la ruches désignée par l'événement
+						// erreur le rucher ne contient pas la ruche désignée par l'événement
 						eve.setValeur(rucher.getNom());
 						eveRucherRuche.add(eve);
 					}
 				} else {
 					// L'événenemt eve ajoute une ruche dans un autre rucher
 					// On cherche l'événement précédent ajout de cette ruche
-					Evenement evePrec = null;
+					//   dans le rucher
 					for (int j = i + 1; j < levens; j++) {
-						if ((evensListe.get(j).getType() == 
-								ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER) &&
-								(evensListe.get(j).getRuche() != null) &&
-							(evensListe.get(j).getRuche().getId().equals(eve.getRuche().getId()))) {
-							evePrec = evensListe.get(j);
-							break;
-						}
-					}
-					if (evePrec != null) {
-						//   si c'est un ajout dans le rucher rucherId
-						if (evePrec.getRucher() == null) {
-							continue;
-						}
-						if (evePrec.getRucher().getId().equals(rucherId)) {
-							// si l'événement précédent evePrec était un ajout dans le
-							//   rucher, alors eve retire la ruche du rucher
-							if (ruches.contains(eve.getRuche().getNom())) {
-								// la ruche est déjà dans le rucher !
-								//   valeur va indiquer dans quel rucher l'erreur a eu lieu
-								eve.setValeur(rucher.getNom());
-								eveRucherRuche.add(eve);
+						Evenement eveJ = evensListe.get(j);
+						if (eveJ.getRuche().getId().equals(eve.getRuche().getId())) {
+							if (eveJ.getRucher().getId().equals(rucherId)) {
+								// si l'événement précédent evePrec était un ajout dans le
+								//   rucher, alors eve retire la ruche du rucher
+								if (ruches.contains(eve.getRuche().getNom())) {
+									// la ruche est déjà dans le rucher !
+									//   valeur va indiquer dans quel rucher l'erreur a eu lieu
+									eve.setValeur(rucher.getNom());
+									eveRucherRuche.add(eve);
+								} else {
+									ruches.add(eve.getRuche().getNom());
+								}
+								break;
 							} else {
-								ruches.add(eve.getRuche().getNom());
-							}
+								// c'est un événement ajout dans la ruche mais
+								//   dans un autre rucher. IL y a deux événements 
+								//   successifs ajout de la ruche dans un autre rucher
+								//   on revient à la boucle principale qui traitera
+								//   ce deuxième événement
+								break;
+							}	
 						}
 					}
 				}
@@ -117,14 +160,16 @@ public class AdminController {
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.HAUSSEPOSERUCHE);
 		for (Evenement eve : evensListe) {
-			if (eve.getHausse() == null || eve.getRuche() == null) {
+			if (eve.getHausse() == null || eve.getRuche() == null 
+					|| !Utils.isIntInf10(eve.getValeur())) {
 				eveInc.add(eve);
 			}
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.HAUSSERETRAITRUCHE);
 		for (Evenement eve : evensListe) {
-			if (eve.getHausse() == null || eve.getRuche() == null) {
+			if (eve.getHausse() == null || eve.getRuche() == null
+					|| !Utils.isIntInf10(eve.getValeur())) {
 				eveInc.add(eve);
 			}
 		}
@@ -218,7 +263,7 @@ public class AdminController {
 		List<Evenement> eveRucheHausseErr = new ArrayList<>();
 		List<Ruche> rucheNonVide = new ArrayList<>();
 		for (Ruche ruche : ruches) {
-			// Les événements ajout/retrait de la ruche
+			// Les événements ajout/retrait des hausses de la ruche
 			List<Evenement> eveRucheHausse = evenementRepository.findEveRucheHausseDesc(ruche.getId());
 			// Les hausses actuellement sur la ruche
 			List<Hausse> hausses = hausseRepository.findByRucheIdOrderByOrdreSurRuche(ruche.getId());

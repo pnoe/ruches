@@ -102,78 +102,58 @@ public class RucherController {
 	private String openweathermapKey;
 	@Value("${rucher.butinage.rayons}")
 	private int[] rayonsButinage;
-	
+
 	/**
-	 * Historique d'un rucher
-	 *  Les événements sont utilisés par date décroissante : du plus
-	 *   récent au plus ancien.
-	 *  Liste les événements correspondant à l'ajout ou le retrait de ruche
-	 *  dans ce rucher
-	 *  Option group pour grouper les événements de même date (année mois et jour)
+	 * Historique d'un rucher Les événements sont utilisés par date décroissante :
+	 * du plus récent au plus ancien. Liste les événements correspondant à l'ajout
+	 * ou le retrait de ruche dans ce rucher Option group pour grouper les
+	 * événements de même date (année mois et jour)
 	 */
 	@GetMapping("/historique/{rucherId}/{group}")
-	public String historique(Model model, @PathVariable long rucherId,
-			@PathVariable boolean group) {
+	public String historique(Model model, @PathVariable long rucherId, @PathVariable boolean group) {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
 			model.addAttribute(Const.RUCHER, rucher);
-			// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date descendante
-			List<Evenement> evensRucheAjout = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEAJOUTRUCHER);
+			// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date
+			// descendante
+			List<Evenement> evensRucheAjout = evenementRepository.findAjoutRucheOK();
 			// Les nom des ruches présentes dans le rucher
 			Collection<Nom> nomRuchesX = rucheRepository.findNomsByRucherId(rucherId);
- 			List<String> ruches = new ArrayList<>();
- 			for (Nom nomR : nomRuchesX) {
- 				ruches.add(nomR.getNom());
- 			}
+			List<String> ruches = new ArrayList<>();
+			for (Nom nomR : nomRuchesX) {
+				ruches.add(nomR.getNom());
+			}
 			List<Map<String, String>> histo = new ArrayList<>();
 			Map<String, String> itemHisto;
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
 			int levens = evensRucheAjout.size();
 			for (int i = 0; i < levens; i++) {
 				Evenement eve = evensRucheAjout.get(i);
-				if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
- 					// Événement RUCHEAJOUTRUCHER incomplet le rucher ou la ruche
- 					//   n'est pas renseigné
-					logger.error("Événement RUCHEAJOUTRUCHER {} incomplet", eve.getDate());
-					itemHisto = new HashMap<>();
-					itemHisto.put("date", eve.getDate().format(formatter));
-					itemHisto.put("type", "Événement incomplet");
-					itemHisto.put(destProv,"");
-					itemHisto.put(Const.RUCHE, (eve.getRuche() == null) ? "" : eve.getRuche().getNom());
-					itemHisto.put(Const.NBRUCHES, Integer.toString(ruches.size()));
-					itemHisto.put("etat", "");
-					itemHisto.put("eveid", eve.getId().toString());
-					histo.add(itemHisto);
-					continue;
-				}
-				// On cherche l'événement précédent ajout de cette ruche
-				Evenement evePrec = null;
-				for (int j = i + 1; j < levens; j++) {
-					if ((evensRucheAjout.get(j).getType() == 
-							ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER) &&
-							(evensRucheAjout.get(j).getRuche() != null) &&
-						(evensRucheAjout.get(j).getRuche().getId().equals(eve.getRuche().getId()))) {
-						evePrec = evensRucheAjout.get(j);
-						break;
-					}
-				}	
 				if (eve.getRucher().getId().equals(rucherId)) {
 					// si l'événement est un ajout dans le rucher
-					// on retire après l'affichage la ruche de l'événement 
-					//  de la liste des ruches du rucher
+					// on retire après l'affichage la ruche de l'événement
+					// de la liste des ruches du rucher
 					Collections.sort(ruches);
 					itemHisto = new HashMap<>();
 					itemHisto.put("date", eve.getDate().format(formatter));
-					itemHisto.put("type", "Ajout");					
+					itemHisto.put("type", "Ajout");
+					// On cherche l'événement précédent ajout de cette ruche
+					Evenement evePrec = null;
+					for (int j = i + 1; j < levens; j++) {
+						if ((evensRucheAjout.get(j).getRuche().getId().equals(eve.getRuche().getId()))) {
+							evePrec = evensRucheAjout.get(j);
+							break;
+						}
+					}
 					if (evePrec == null) {
 						// il n'y a pas d'événement précédent d'ajout de cette
-						//  ruche dans un rucher
+						// ruche dans un rucher
 						itemHisto.put(destProv, "Inconnue");
-					} else if (evePrec.getRucher() == null) {
-						itemHisto.put(destProv, "Événement incomplet");
 					} else {
-						itemHisto.put(destProv, evePrec.getRucher().getNom());	
+						// TODO si evePrec.getRucher().getNom() == eve.getRucher().getNom()
+						// erreur deux ajouts successifs dans le même rucher !
+						itemHisto.put(destProv, evePrec.getRucher().getNom());
 					}
 					itemHisto.put(Const.RUCHE, eve.getRuche().getNom());
 					itemHisto.put(Const.NBRUCHES, Integer.toString(ruches.size()));
@@ -181,39 +161,51 @@ public class RucherController {
 					itemHisto.put("eveid", eve.getId().toString());
 					histo.add(itemHisto);
 					if (!ruches.remove(eve.getRuche().getNom())) {
-						logger.error("Événement {} le rucher {} ne contient pas la ruche {}", 
-								eve.getDate(), eve.getRucher().getNom(), eve.getRuche().getNom());
+						logger.error("Événement {} le rucher {} ne contient pas la ruche {}", eve.getDate(),
+								eve.getRucher().getNom(), eve.getRuche().getNom());
 					}
 				} else {
 					// l'événenemt eve ajoute une ruche dans un autre rucher
-					if (evePrec != null) {
-						//   si c'est un ajout dans le rucher rucherId
-						if (evePrec.getRucher() == null) {
-							continue;
-						}
-						if (evePrec.getRucher().getId().equals(rucherId)) {
-							// si l'événement précédent evePrec était un ajout dans le
-							//   rucher, alors eve retire la ruche du rucher
-							itemHisto = new HashMap<>();
-							itemHisto.put("date", eve.getDate().format(formatter));
-							itemHisto.put("type", "Retrait");
-							itemHisto.put(destProv, eve.getRucher().getNom());
-							itemHisto.put(Const.RUCHE, eve.getRuche().getNom());
-							itemHisto.put(Const.NBRUCHES, Integer.toString(ruches.size()));
-							itemHisto.put("etat", String.join(" ", ruches));
-							itemHisto.put("eveid", eve.getId().toString());
-							histo.add(itemHisto);
-							ruches.add(eve.getRuche().getNom());
+					// On cherche l'événement précédent ajout de cette ruche
+					for (int j = i + 1; j < levens; j++) {
+						Evenement eveJ = evensRucheAjout.get(j);
+						if (eveJ.getRuche().getId().equals(eve.getRuche().getId())) {
+							if (eveJ.getRucher().getId().equals(rucherId)) {
+								// si l'événement précédent evePrec était un ajout dans le
+								// rucher, alors eve retire la ruche du rucher
+								if (!ruches.contains(eve.getRuche().getNom())) {
+									// si l'événement précédent evePrec était un ajout dans le
+									// rucher, alors eve retire la ruche du rucher
+									Collections.sort(ruches);
+									itemHisto = new HashMap<>();
+									itemHisto.put("date", eve.getDate().format(formatter));
+									itemHisto.put("type", "Retrait");
+									itemHisto.put(destProv, eve.getRucher().getNom());
+									itemHisto.put(Const.RUCHE, eve.getRuche().getNom());
+									itemHisto.put(Const.NBRUCHES, Integer.toString(ruches.size()));
+									itemHisto.put("etat", String.join(" ", ruches));
+									itemHisto.put("eveid", eve.getId().toString());
+									histo.add(itemHisto);
+									ruches.add(eve.getRuche().getNom());
+								}
+								break;
+							} else {
+								// c'est un événement ajout dans la ruche mais
+								// dans un autre rucher. IL y a deux événements
+								// successifs ajout de la ruche dans un autre rucher
+								// on revient à la boucle principale qui traitera
+								// ce deuxième événement
+								break;
+							}
 						}
 					}
 				}
-				model.addAttribute("group", group);
 			}
 			if (group) {
 				// Si le groupement est demandé, on boucle sur histo
-				//  pour créer histoGroup
+				// pour créer histoGroup
 				List<Map<String, String>> histoGroup = new ArrayList<>();
-				int lhisto = histo.size();		
+				int lhisto = histo.size();
 				StringBuilder ruchesGroup;
 				Map<String, String> itemHistoN;
 				Map<String, String> itemHistoG;
@@ -221,21 +213,20 @@ public class RucherController {
 				Set<String> destP;
 				int i = 0;
 				int j;
-				while (i < lhisto) {	
+				while (i < lhisto) {
 					itemHisto = histo.get(i);
 					ruchesGroup = new StringBuilder(itemHisto.get(Const.RUCHE));
-					destP =  new HashSet<>();
-					destP.add( itemHisto.get(destProv));
+					destP = new HashSet<>();
+					destP.add(itemHisto.get(destProv));
 					// on recherche si les événements suivants peuvent être groupés
-					//  même date et même type (Ajout/Retrait)
-					//  par contre les destinations provenances peuvent être différentes
+					// même date et même type (Ajout/Retrait)
+					// par contre les destinations provenances peuvent être différentes
 					j = i + 1;
 					String itemHistoJour = itemHisto.get("date").substring(0, 10);
 					while (j < lhisto) {
 						itemHistoN = histo.get(j);
-						if (itemHistoJour
-								.equals(itemHistoN.get("date").substring(0, 10)) &&
-								itemHisto.get("type").equals(itemHistoN.get("type"))) {
+						if (itemHistoJour.equals(itemHistoN.get("date").substring(0, 10))
+								&& itemHisto.get("type").equals(itemHistoN.get("type"))) {
 							// si regroupables
 							// regrouper en concaténant les ruches et en stocant les dest/prov
 							ruchesGroup.append(" ");
@@ -249,15 +240,15 @@ public class RucherController {
 						}
 					}
 					// le nombre de ruches ajoutées ou retirées est j - i
-					//  on pourrait l'afficher en l'ajoutant dans itemHistoG
+					// on pourrait l'afficher en l'ajoutant dans itemHistoG
 					if (i == j - 1) {
 						histoGroup.add(itemHisto);
 					} else {
 						// enregistrer groupe dans histoGroup
 						itemHistoG = new HashMap<>();
 						// la date est la date du premier événement
-						//   les autres peuvent avoir des heures et minutes
-						//   différentes
+						// les autres peuvent avoir des heures et minutes
+						// différentes
 						itemHistoG.put("date", itemHisto.get("date"));
 						itemHistoG.put("type", itemHisto.get("type"));
 						itemHistoG.put(destProv, String.join(" ", destP));
@@ -265,7 +256,7 @@ public class RucherController {
 						itemHistoG.put(Const.NBRUCHES, itemHisto.get(Const.NBRUCHES));
 						itemHistoG.put("etat", itemHisto.get("etat"));
 						// l'id eve est l'id du premier événements, on perd les
-						//  des autres événements
+						// des autres événements
 						itemHistoG.put("eveid", itemHisto.get("eveid"));
 						histoGroup.add(itemHistoG);
 					}
@@ -276,15 +267,9 @@ public class RucherController {
 				model.addAttribute("histo", histo);
 			}
 			if (!ruches.isEmpty()) {
-				logger.error("Historique : après traitement des événements en reculant dans le temps, le rucher n'est pas vide");
+				logger.error(
+						"Historique : après traitement des événements en reculant dans le temps, le rucher n'est pas vide");
 			}
-			
-			// Pour ajouter les récoltes dans l'historique type = "Récolte"
-			// Iterable<Recolte> evenRecolte = recolteRepository.findByRucher(rucher);
-			
-			
-			
-			
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
@@ -292,18 +277,20 @@ public class RucherController {
 			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
+		model.addAttribute("group", group);
 		return "rucher/rucherHisto";
 	}
 
 	/**
 	 * Statistiques tableau poids de miel par rucher
-	*/
+	 */
 	@RequestMapping("/statistiques")
 	public String statistiques(Model model) {
 		Iterable<Recolte> recoltes = recolteRepository.findAllByOrderByDateAsc();
 		Iterable<Rucher> ruchers = rucherRepository.findAll();
 		List<Map<String, String>> ruchersPoids = new ArrayList<>();
-		DecimalFormat decimalFormat = new DecimalFormat("0.00", new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
+		DecimalFormat decimalFormat = new DecimalFormat("0.00",
+				new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
 		Integer pTotal; // poids de miel total produit par le rucher
 		Integer pMax; // poids de miel max lors d'une récolte
 		Integer pMin; // poids de miel min lors d'une récolte
@@ -322,18 +309,20 @@ public class RucherController {
 					pMin = Math.min(pMin, poids);
 				}
 			}
-			if (pMin == 1000000) { pMin = 0; }
+			if (pMin == 1000000) {
+				pMin = 0;
+			}
 			Map<String, String> rucherPoids = new HashMap<>();
 			rucherPoids.put("nom", rucher.getNom());
 			rucherPoids.put("id", rucher.getId().toString());
-			rucherPoids.put("pTotal", decimalFormat.format(pTotal/1000.0));
-			rucherPoids.put("pMax", decimalFormat.format(pMax/1000.0));
-			rucherPoids.put("pMin", decimalFormat.format(pMin/1000.0));
+			rucherPoids.put("pTotal", decimalFormat.format(pTotal / 1000.0));
+			rucherPoids.put("pMax", decimalFormat.format(pMax / 1000.0));
+			rucherPoids.put("pMin", decimalFormat.format(pMin / 1000.0));
 			if (nbRecoltes <= 0) {
 				rucherPoids.put("pMoyen", "");
 			} else {
-				float pMoyen = pTotal/(float)nbRecoltes;
-				rucherPoids.put("pMoyen", decimalFormat.format(pMoyen/1000));
+				float pMoyen = pTotal / (float) nbRecoltes;
+				rucherPoids.put("pMoyen", decimalFormat.format(pMoyen / 1000));
 			}
 			rucherPoids.put("nbRecoltes", Integer.toString(nbRecoltes));
 			ruchersPoids.add(rucherPoids);
@@ -456,8 +445,8 @@ public class RucherController {
 			for (Ruche ruche : ruches) {
 				// Compte du nombre de hausses de chaque ruche
 				listNbHausses.add(hausseRepository.countByRucheId(ruche.getId()));
-				Evenement evenCadres = evenementRepository
-						.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.RUCHECADRE);
+				Evenement evenCadres = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
+						TypeEvenement.RUCHECADRE);
 				if (evenCadres == null) {
 					nbCadres.add("");
 				} else {
@@ -469,7 +458,8 @@ public class RucherController {
 			// Si des hausses de récolte référencent ce rucher, on ne pourra la supprimer
 			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByRucherId(rucherId);
 			model.addAttribute("recolteHausses", recolteHausses.iterator().hasNext());
-			// Si des événements référencent cet rucher, il faudra les supprimer si on la supprime
+			// Si des événements référencent cet rucher, il faudra les supprimer si on la
+			// supprime
 			Iterable<Evenement> evenements = evenementRepository.findByRucherId(rucherId);
 			model.addAttribute(Const.EVENEMENTS, evenements.iterator().hasNext());
 			// Calcul du poids de miel par récoltes pour ce rucher
@@ -485,7 +475,8 @@ public class RucherController {
 					recoltesListe.add(recolte);
 					poidsTotal += poids;
 					// nombre de ruche du rucher rucherId dans cette récolte
-					recoltesNbRuches.add(recolteHausseRepository.countRucheByRecolteByRucher(recolte.getId(), rucherId));
+					recoltesNbRuches
+							.add(recolteHausseRepository.countRucheByRecolteByRucher(recolte.getId(), rucherId));
 				}
 			}
 			model.addAttribute("recoltesListe", recoltesListe);
@@ -505,7 +496,7 @@ public class RucherController {
 	/**
 	 * Rapprocher les ruches trop éloignées de leur rucher
 	 */
-	@GetMapping({"/rapproche/Ign/{rucherId}", "/rapproche/Osm/{rucherId}"})
+	@GetMapping({ "/rapproche/Ign/{rucherId}", "/rapproche/Osm/{rucherId}" })
 	public String rapproche(Model model, @PathVariable long rucherId, HttpServletRequest request) {
 		String servletPath = request.getServletPath().split("/")[3];
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
@@ -560,8 +551,7 @@ public class RucherController {
 	}
 
 	/**
-	 * Suppression d'un rucher
-	 * On ne peut pas supprimer le dépôt
+	 * Suppression d'un rucher On ne peut pas supprimer le dépôt
 	 */
 	@GetMapping("/supprime/{rucherId}")
 	public String supprime(Model model, @PathVariable long rucherId) {
@@ -572,7 +562,7 @@ public class RucherController {
 			if (rucher.getDepot()) {
 				model.addAttribute(Const.MESSAGE, "On ne peut pas supprimer le rucher dépôt");
 				model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
-			return Const.INDEX;
+				return Const.INDEX;
 			}
 			Iterable<Evenement> evenements = evenementRepository.findByRucherId(rucherId);
 			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByRucherId(rucherId);
@@ -592,7 +582,7 @@ public class RucherController {
 			} else {
 				model.addAttribute(Const.MESSAGE, "Ce rucher ne peut être supprimé");
 				model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
-			return Const.INDEX;
+				return Const.INDEX;
 			}
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
@@ -605,10 +595,10 @@ public class RucherController {
 	}
 
 	/**
-	 * Affiche la carte avec les ruches du rucher
-	 * Gg google maps, Ign ou OpenStreetMap
+	 * Affiche la carte avec les ruches du rucher Gg google maps, Ign ou
+	 * OpenStreetMap
 	 */
-	@GetMapping({"/Gg/{rucherId}", "/Ign/{rucherId}", "/Osm/{rucherId}"})
+	@GetMapping({ "/Gg/{rucherId}", "/Ign/{rucherId}", "/Osm/{rucherId}" })
 	public String rucheMap(Model model, @PathVariable long rucherId, HttpServletRequest request) {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
@@ -660,10 +650,9 @@ public class RucherController {
 	}
 
 	/**
-	 * Affiche la carte de tous les ruchers
-	 * Gg google maps, Ign ou OpenStreetMap
+	 * Affiche la carte de tous les ruchers Gg google maps, Ign ou OpenStreetMap
 	 */
-	@GetMapping({"/Gg","/Ign","/Osm"})
+	@GetMapping({ "/Gg", "/Ign", "/Osm" })
 	public String rucherMap(HttpSession session, Model model, HttpServletRequest request) {
 		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
 		Iterable<Rucher> ruchers;
@@ -697,16 +686,16 @@ public class RucherController {
 			model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
 			model.addAttribute(Const.RUCHER, rucherOpt.get());
 			model.addAttribute("ruchesNoms", ruchesNoms);
-			
+
 			// On cherche la date du dernier événement RUCHEAJOUTRUCHER
-			//   pour imposer cette date comme min dans le formulaire
+			// pour imposer cette date comme min dans le formulaire
 			LocalDateTime dateTimeMin = LocalDateTime.MIN;
 			String[] ruchesNomsSplit = ruchesNoms.split(",");
 			for (String rucheNom : ruchesNomsSplit) {
 				Ruche ruche = rucheRepository.findByNom(rucheNom);
 				if (ruche != null) {
-					Evenement evenFirst = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, 
-						ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER);
+					Evenement evenFirst = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
+							ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER);
 					if (dateTimeMin.isBefore(evenFirst.getDate())) {
 						dateTimeMin = evenFirst.getDate();
 					}
@@ -716,9 +705,9 @@ public class RucherController {
 			DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
 			model.addAttribute("dateTime", dateTimeMin);
 			LocalDateTime dateTimeFirst = dateTimeMin.plusMinutes(1);
-			model.addAttribute("dateFirst",dateTimeFirst.format(dateFormat));
+			model.addAttribute("dateFirst", dateTimeFirst.format(dateFormat));
 			model.addAttribute("timeFirst", dateTimeFirst.format(timeFormat));
-			
+
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
@@ -730,8 +719,8 @@ public class RucherController {
 	}
 
 	/**
-	 * Ajoute une liste de ruches dans un rucher
-	 * Création de l'événement RUCHEAJOUTRUCHER par ruche
+	 * Ajoute une liste de ruches dans un rucher Création de l'événement
+	 * RUCHEAJOUTRUCHER par ruche
 	 */
 	@PostMapping("/ruches/ajouter/sauve/{rucherId}/{ruchesNoms}")
 	public String sauveAjouterRuches(Model model, @PathVariable long rucherId, @PathVariable String[] ruchesNoms,
@@ -755,8 +744,7 @@ public class RucherController {
 	 */
 	@PostMapping("/deplace/{rucherId}/{lat}/{lng}")
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody String deplace(@PathVariable Long rucherId, @PathVariable Float lat,
-			@PathVariable Float lng) {
+	public @ResponseBody String deplace(@PathVariable Long rucherId, @PathVariable Float lat, @PathVariable Float lng) {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
@@ -775,8 +763,7 @@ public class RucherController {
 	 * Météo d'un rucher
 	 *
 	 * https://github.com/Prominence/openweathermap-java-api/blob/master/docs/SNAPSHOT.md
-	 * https://openweathermap.org/api/one-call-api
-	 * https://openweathermap.org/api
+	 * https://openweathermap.org/api/one-call-api https://openweathermap.org/api
 	 * http://api.openweathermap.org/data/2.5/onecall?lat=43.4900093&lon=5.49108076&APPID=xxxx
 	 *
 	 */
@@ -813,7 +800,7 @@ public class RucherController {
 			Float longitude;
 			Float latitude = 0f;
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucher.getId());
-			Float longitudeAvant =rucher.getLongitude();
+			Float longitudeAvant = rucher.getLongitude();
 			Float latitudeAvant = rucher.getLatitude();
 			int nbRuches = 0;
 			double xlon = 0d;
@@ -825,7 +812,8 @@ public class RucherController {
 				ylon += Math.sin(longrad);
 				latitude += ruche.getLatitude();
 			}
-			if (nbRuches == 0) continue;
+			if (nbRuches == 0)
+				continue;
 			longitude = (float) (Math.atan2(ylon, xlon) * 180d / Math.PI);
 			latitude /= nbRuches;
 			NumberFormat nf = NumberFormat.getNumberInstance();
@@ -833,16 +821,18 @@ public class RucherController {
 			rucher.setLongitude(longitude);
 			rucher.setLatitude(latitude);
 			rucherRepository.save(rucher);
-			logger.info("Repositionnement du rucher {} au centre de ses ruches. Avant long {} lat {}. Après long {} lat {}.",
-					rucher.getNom(), nf.format(longitudeAvant), nf.format(latitudeAvant), nf.format(longitude), nf.format(latitude));
+			logger.info(
+					"Repositionnement du rucher {} au centre de ses ruches. Avant long {} lat {}. Après long {} lat {}.",
+					rucher.getNom(), nf.format(longitudeAvant), nf.format(latitudeAvant), nf.format(longitude),
+					nf.format(latitude));
 		}
 		return "redirect:/rucher/Ign";
 	}
 
 	/**
-	 * Calcul du parcours d'un rucher (appel XMLHttpRequest)
-	 *   redraw = 0  recalcul si l'utilisateur déplace une ruche sur la carte
-	 *   redraw = 1  recalcul si l'utilisateur le demande pour améliore de parcours
+	 * Calcul du parcours d'un rucher (appel XMLHttpRequest) redraw = 0 recalcul si
+	 * l'utilisateur déplace une ruche sur la carte redraw = 1 recalcul si
+	 * l'utilisateur le demande pour améliore de parcours
 	 */
 	@GetMapping("/parcours/{rucherId}/{redraw}")
 	@ResponseStatus(value = HttpStatus.OK)
@@ -879,6 +869,5 @@ public class RucherController {
 		logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 		return "error";
 	}
-
 
 }

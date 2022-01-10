@@ -24,6 +24,8 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	Iterable<Ruche> findByRucherIdNotOrderByNom(Long id);
 
 	Ruche findByEssaimId(Long id);
+	
+	Collection<Ruche> findCollByRucherId(Long RucherId);
 
 	Collection<Nom> findAllProjectedBy();
 

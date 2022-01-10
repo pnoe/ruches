@@ -142,6 +142,18 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	Iterable<Evenement> findByRucherId(Long rucherId);
 
 	List<Evenement> findByTypeOrderByDateDesc(TypeEvenement typeEvenement);
+	
+	List<Evenement> findByTypeAndRucheNotNullAndRucherNotNullOrderByDateDesc(TypeEvenement typeEvenement);
+	
+	@Query(value = """
+			select e from Evenement e 
+			where e.type = ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER
+			  and e.ruche is not null
+			  and e.rucher is not null
+			order by date desc
+			""")
+	List<Evenement> findAjoutRucheOK();
+	
 
 	Iterable<Evenement> findByTypeOrderByDateAsc(TypeEvenement typeEvenement);
 
