@@ -41,20 +41,22 @@
 					<th th:text="#{date}"></th>
 					<th th:text="#{type}"></th>
 					<th th:text="#{destProv}"></th>
-					<th th:text="#{ruche}"></th>
+					<th th:if="${group}" style="background-color: LemonChiffon" th:text="#{nb}"></th>
+					<th style="background-color: LemonChiffon" th:text="#{ruche}"></th>
 					<th style="background-color:PaleGoldenRod" th:text="#{nb}"></th>
 					<th style="background-color:PaleGoldenRod" th:text="#{etat}"></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="eve : ${histo}">
-					<td><a th:text="${eve.get('date')}"
-						th:href="@{'/evenement/'+${eve.get('eveid')}}"></a></td>
-					<td th:text="${eve.get('type')}"></td>
-					<td th:text="${eve.get('destProv')}"></td>
-					<td th:text="${eve.get('ruche')}"></td>
-					<td th:text="${eve.get('nbruches')}"></td>
-					<td th:text="${eve.get('etat')}"></td>
+				<tr th:each="hist : ${histo}">
+					<td><a th:text="${hist.get('date')}"
+						th:href="@{'/evenement/'+${hist.get('eveid')}}"></a></td>
+					<td th:text="${hist.get('type')}"></td>
+					<td th:text="${hist.get('destProv')}"></td>
+					<td th:if="${group}" th:text="${hist.get('nbMouv')}"></td>
+					<td th:text="${hist.get('ruche')}"></td>
+					<td th:text="${hist.get('nbruches')}"></td>
+					<td th:text="${hist.get('etat')}"></td>
 				</tr>
 		</table>
 	</div>

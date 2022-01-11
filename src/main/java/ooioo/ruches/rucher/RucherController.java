@@ -116,7 +116,7 @@ public class RucherController {
 			Rucher rucher = rucherOpt.get();
 			model.addAttribute(Const.RUCHER, rucher);
 			// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date
-			// descendante
+			// descendante avec les champs ruche et rucher non null
 			List<Evenement> evensRucheAjout = evenementRepository.findAjoutRucheOK();
 			// Les nom des ruches présentes dans le rucher
 			Collection<Nom> nomRuchesX = rucheRepository.findNomsByRucherId(rucherId);
@@ -156,8 +156,6 @@ public class RucherController {
 						// ruche dans un rucher
 						itemHisto.put(destProv, "Inconnue");
 					} else {
-						// TODO si evePrec.getRucher().getNom() == eve.getRucher().getNom()
-						// erreur deux ajouts successifs dans le même rucher !
 						itemHisto.put(destProv, evePrec.getRucher().getNom());
 					}
 					itemHisto.put(Const.RUCHE, eve.getRuche().getNom());
@@ -245,12 +243,13 @@ public class RucherController {
 						}
 					}
 					// le nombre de ruches ajoutées ou retirées est j - i
-					// on pourrait l'afficher en l'ajoutant dans itemHistoG
 					if (i == j - 1) {
+						itemHisto.put("nbMouv", "1");
 						histoGroup.add(itemHisto);
 					} else {
 						// enregistrer groupe dans histoGroup
 						itemHistoG = new HashMap<>();
+						itemHistoG.put("nbMouv", String.valueOf(j - i));
 						// la date est la date du premier événement
 						// les autres peuvent avoir des heures et minutes
 						// différentes
