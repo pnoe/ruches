@@ -32,19 +32,19 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="evenement : ${evenements}">
+				<tr th:each="eve : ${evenements}">
 					<td>
-						<a th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
-							th:with="url='/evenement/'+${evenement.id}+
+						<a th:text="${#temporals.format(eve.date, 'yyyy/MM/dd HH:mm')}"
+							th:with="url='/evenement/'+${eve.id}+
 								(${type}?('?type='+${type}+'&itemId='+${itemId}):'')"
 							th:href="@{${url}}"></a>		
 					</td>
-					<td th:text="#{${evenement.type}}"></td>
-					<td th:text="${evenement.essaim?.nom}"></td>
-					<td th:text="${evenement.rucher?.nom}"></td>
-					<td th:text="${evenement.hausse?.nom}"></td>
-					<td th:text="${evenement.commentaire}"></td>
-					<td th:text="${evenement.valeur}"></td>						
+					<td th:text="#{${eve.type}}"></td>
+					<td th:text="${eve.essaim?.nom}"></td>
+					<td th:text="${eve.rucher?.nom}"></td>
+					<td th:text="${eve.hausse?.nom}"></td>
+					<td th:text="${eve.commentaire}"></td>
+					<td th:text="${haussesList[eveStat.index]}"></td>						
 				</tr>
 			</tbody>
 		</table>

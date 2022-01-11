@@ -92,14 +92,17 @@ public class RucheController {
 			Ruche ruche = rucheOpt.get();
 			// Les événements ajout/retrait des hausses de la ruche
 			List<Evenement> eveRucheHausse = evenementRepository.findEveRucheHausseDesc(rucheId);
+			// les noms des hausses présentes sur la ruche en synchro avec eveRucheHausse
+			List<String> haussesList = new ArrayList<>();
 			// Les hausses actuellement sur la ruche
 			List<Hausse> hausses = hausseRepository.findByRucheIdOrderByOrdreSurRuche(rucheId);
+			// Liste des noms des hausses (pour affichage et comparaisons)
 			List<String> haussesNom = new ArrayList<>();
 			for (Hausse hausse : hausses) {
 				haussesNom.add(hausse.getNom());
 			}
 			for (Evenement eve : eveRucheHausse) {
-				eve.setValeur(String.join(" ", haussesNom));
+				haussesList.add(String.join(" ", haussesNom));
 				if (eve.getHausse() != null) {
 					if (eve.getType() == TypeEvenement.HAUSSERETRAITRUCHE) {
 						if (haussesNom.contains(eve.getHausse().getNom())) {
@@ -121,6 +124,7 @@ public class RucheController {
 				// erreur
 			// }
 			model.addAttribute("ruche", ruche);
+			model.addAttribute("haussesList", haussesList);
 			model.addAttribute("evenements", eveRucheHausse);
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);

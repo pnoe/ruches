@@ -91,7 +91,12 @@ public class AdminController {
 		// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date descendante
 		List<Evenement> evensListe = evenementRepository.findAjoutRucheOK();
 		int levens = evensListe.size();
+		// liste des événements générant des erreurs dans l'historique
 		List<Evenement> eveRucherRuche = new ArrayList<>();
+		// les noms des ruchers analysés en synchro avec la liste eveRucherRuche 
+		List<String> ruchersErr = new ArrayList<>();
+		// les codes d'erreur en synchro avec la liste eveRucherRuche
+		List<String> errsRucher = new ArrayList<>();
 		List<Rucher> rucherNonVide = new ArrayList<>();
 		for (Rucher rucher : ruchers) {
 			Long rucherId = rucher.getId();
@@ -103,14 +108,28 @@ public class AdminController {
  			}
 			for (int i = 0; i < levens; i++) {
 				Evenement eve = evensListe.get(i);
+				// System.out.println(i + " " + eve.getDate());
  				if (eve.getRucher().getId().equals(rucherId)) {
 					// si l'événement est un ajout dans le rucher
 					// on retire la ruche de l'événement 
 					//  de la liste des ruches du rucher
 					if (!ruches.remove(eve.getRuche().getNom())) {
 						// erreur le rucher ne contient pas la ruche désignée par l'événement
-						eve.setValeur(rucher.getNom());
+						ruchersErr.add(rucher.getNom());
+						errsRucher.add("1");
 						eveRucherRuche.add(eve);
+					}
+					for (int j = i + 1; j < levens; j++) {
+						Evenement eveJ = evensListe.get(j);
+						if ((eveJ.getRuche().getId().equals(eve.getRuche().getId()))
+								&& (eveJ.getRuche().getId().equals(rucherId))
+								) {
+							// si (eveJ.getRuche().getId().equals(rucherId))
+							//  c'est une erreur, deux ajouts successifs dans le même rucher
+							ruchersErr.add(rucher.getNom());
+							errsRucher.add("2");
+							eveRucherRuche.add(eveJ);
+						}
 					}
 				} else {
 					// L'événenemt eve ajoute une ruche dans un autre rucher
@@ -125,7 +144,8 @@ public class AdminController {
 								if (ruches.contains(eve.getRuche().getNom())) {
 									// la ruche est déjà dans le rucher !
 									//   valeur va indiquer dans quel rucher l'erreur a eu lieu
-									eve.setValeur(rucher.getNom());
+									ruchersErr.add(rucher.getNom());
+									errsRucher.add("3");
 									eveRucherRuche.add(eve);
 								} else {
 									ruches.add(eve.getRuche().getNom());
@@ -148,6 +168,8 @@ public class AdminController {
 				rucherNonVide.add(rucher);
 			} 			
 		}
+		model.addAttribute("ruchersErr", ruchersErr);
+		model.addAttribute("errsRucher", errsRucher);
 		model.addAttribute("eveRucherRuche", eveRucherRuche);
 		model.addAttribute("rucherNonVide", rucherNonVide);
 		List<Evenement> eveInc = new ArrayList<>();
@@ -261,6 +283,8 @@ public class AdminController {
 		// Analyse des ajouts/retraits de hausses sur les ruches
 		Iterable<Ruche> ruches = rucheRepository.findAll();
 		List<Evenement> eveRucheHausseErr = new ArrayList<>();
+		// les codes d'erreur en synchro avec la liste eveRucheHausseErr
+		// List<String> errsRuche = new ArrayList<>();
 		List<Ruche> rucheNonVide = new ArrayList<>();
 		for (Ruche ruche : ruches) {
 			// Les événements ajout/retrait des hausses de la ruche
@@ -272,6 +296,7 @@ public class AdminController {
 					if (eve.getType() == TypeEvenement.HAUSSERETRAITRUCHE) {
 						if (hausses.contains(eve.getHausse())) {
 							// La hausse est déjà dans la liste
+							// errsRuche.add("1");
 							eveRucheHausseErr.add(eve);
 						} else {
 							hausses.add(eve.getHausse());
@@ -280,6 +305,7 @@ public class AdminController {
 						if (!hausses.remove(eve.getHausse())) {
 							// La hausse ne peut être enlevée de la liste
 							//   il y a une erreur dans la pose des hausses
+							// errsRuche.add("2");
 							eveRucheHausseErr.add(eve);
 						}
 					}
@@ -289,6 +315,7 @@ public class AdminController {
 				rucheNonVide.add(ruche);
 			}
 		}
+		// model.addAttribute("errsRuche", errsRuche);
 		model.addAttribute("eveRucheHausseErr", eveRucheHausseErr);
 		model.addAttribute("rucheNonVide", rucheNonVide);
 		return "tests";

@@ -139,9 +139,14 @@ public class RucherController {
 					itemHisto.put("date", eve.getDate().format(formatter));
 					itemHisto.put("type", "Ajout");
 					// On cherche l'événement précédent ajout de cette ruche
+					//  pour indication de sa provenance
 					Evenement evePrec = null;
 					for (int j = i + 1; j < levens; j++) {
-						if ((evensRucheAjout.get(j).getRuche().getId().equals(eve.getRuche().getId()))) {
+						if ((evensRucheAjout.get(j).getRuche().getId().equals(eve.getRuche().getId()))
+								&& !(evensRucheAjout.get(j).getRuche().getId().equals(rucherId))
+								) {
+							// si (evensRucheAjout.get(j).getRuche().getId().equals(rucherId))
+							//  c'est une erreur, deux ajouts successifs dans le même rucher
 							evePrec = evensRucheAjout.get(j);
 							break;
 						}
