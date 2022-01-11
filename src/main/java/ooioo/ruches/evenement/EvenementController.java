@@ -98,6 +98,11 @@ public class EvenementController {
 
 	/*
 	 * Détail d'un événement
+	 *   type est le type d'événement pour permettre le retour vers une
+	 *     liste d'événements typée : "pesée", "ajout ruche"...
+	 *   itemId est l'id ruche, essaim... 
+	 *        pour permettre le retour vers l'affichage des événements de l'objet
+	 *        par exemple type=ruche et itemId id de la ruche
 	 */
 	@GetMapping("/{evenementId}")
 	public String evenement(Model model, @PathVariable long evenementId,

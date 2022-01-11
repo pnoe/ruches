@@ -50,7 +50,7 @@
 			<tbody>
 				<tr th:each="hist : ${histo}">
 					<td><a th:text="${hist.get('date')}"
-						th:href="@{'/evenement/'+${hist.get('eveid')}}"></a></td>
+						th:href="@{'/evenement/'+${hist.get('eveid')}+'?type=ajoutruche'}"></a></td>
 					<td th:text="${hist.get('type')}"></td>
 					<td th:text="${hist.get('destProv')}"></td>
 					<td th:if="${group}" th:text="${hist.get('nbMouv')}"></td>

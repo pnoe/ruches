@@ -35,9 +35,7 @@
 				<tr th:each="eve : ${evenements}">
 					<td>
 						<a th:text="${#temporals.format(eve.date, 'yyyy/MM/dd HH:mm')}"
-							th:with="url='/evenement/'+${eve.id}+
-								(${type}?('?type='+${type}+'&itemId='+${itemId}):'')"
-							th:href="@{${url}}"></a>		
+							th:href="@{'/evenement/'+${eve.id}+'?type=ruche&itemId='+${ruche.id}}"></a>		
 					</td>
 					<td th:text="#{${eve.type}}"></td>
 					<td th:text="${eve.essaim?.nom}"></td>
