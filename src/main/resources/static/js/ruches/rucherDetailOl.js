@@ -9,6 +9,14 @@
 function rucherDetail(ign) {
 	const lang = navigator.language;
 	const digits2 = { maximumFractionDigits: 2 };
+	const agriAnnee = '2020';
+	const agriLegend = 'https://www.geoportail.gouv.fr/depot/layers/LANDUSE.AGRICULTURE'+
+		agriAnnee + '/legendes/LANDUSE.AGRICULTURE' + agriAnnee + '-legend.png';
+	const agriLayer = 'LANDUSE.AGRICULTURE'+agriAnnee;
+	const agriDescription = 
+		'Registre parcellaire graphique : zones de culture déclarées par les exploitants en '
+		+ agriAnnee;
+	const agriTitle = 'Registre parcellaire graphique';
 	$('.rapproche').on('click', function() {
 		return confirm(rapprochertxt);
 	});
@@ -243,6 +251,14 @@ function rucherDetail(ign) {
 	});
 	let layersMap = map.getLayers();
 	if (ign) {
+		olAgriLayer = new ol.layer.GeoportalWMTS({
+			layer: agriLayer,
+			olParams: {
+				visible: false
+				},
+			
+		});
+		layersMap.insertAt(0, olAgriLayer);
 		layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
 			layer: "CADASTRALPARCELS.PARCELS",
 			olParams: {
@@ -257,6 +273,12 @@ function rucherDetail(ign) {
 		}));
 		map.addControl(new ol.control.ElevationPath());
 		map.addControl(layerSwitcher);
+		layerSwitcher.removeLayer(olAgriLayer);
+		layerSwitcher.addLayer(olAgriLayer, {
+			title: agriTitle,
+			description: agriDescription,
+			legends: [{url: agriLegend}]
+		});
 		map.addControl(new ol.control.GeoportalMousePosition({
 			collapsed: true,
 			displayCoordinates: false
