@@ -24,6 +24,8 @@
 			<thead>
 				<tr>
 					<th th:text="#{date}"></th>
+					<th th:text="#{type}"></th>
+					<th th:text="#{ruche}"></th>
 					<th th:text="#{rucher}"></th>
 					<th th:text="#{Duree}"></th>
 				</tr>
@@ -32,6 +34,9 @@
 				<tr th:each="eve : ${evensEssaimAjout}">
 					<td><a th:text="${#temporals.format(eve.date, 'yyyy/MM/dd HH:mm')}"
 						th:href="@{'/evenement/'+${eve.id}}"></a></td>
+					<td th:text="#{${eve.type}}"></td>
+					<td><a th:text="${eve.ruche?.nom}"
+						th:href="@{'/ruche/'+${eve.ruche?.id}}"></a></td>		
 					<td><a th:text="${eve.rucher?.nom}"
 						th:href="@{'/rucher/'+${eve.rucher?.id}}"></a></td>
 					<td th:text="${durees[eveStat.index]}"></td>	

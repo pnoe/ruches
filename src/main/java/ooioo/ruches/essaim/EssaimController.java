@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,10 +105,23 @@ public class EssaimController {
 		if (essaimOpt.isPresent()) {
 			Essaim essaim = essaimOpt.get();
 			model.addAttribute(Const.ESSAIM, essaim);
-			// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date descendante
+			// la liste de tous les événements RUCHEAJOUTRUCHER concernant cet essaim
+			//   triés par ordre de date ascendante
 			List<Evenement> evensEssaimAjout = 
 					evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
 							TypeEvenement.RUCHEAJOUTRUCHER);
+			// Si l'essaim est dispersé cela termine le séjour dans le dernier rucher
+			Evenement dispersion = evenementRepository.findFirstByEssaimAndType(essaim, 
+					TypeEvenement.ESSAIMDISPERSION);
+			if (dispersion != null) {
+				evensEssaimAjout.add(dispersion);
+			}
+			// Ajouter les mises en ruche
+			List<Evenement> miseEnRuche = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(), 
+					TypeEvenement.AJOUTESSAIMRUCHE);
+			evensEssaimAjout.addAll(miseEnRuche);
+			// Trier par date
+			evensEssaimAjout.sort((e1,e2) -> e1.getDate().compareTo(e2.getDate()));
 			model.addAttribute("evensEssaimAjout", evensEssaimAjout);
 			List<Long> durees = new ArrayList<>();
 			if ((evensEssaimAjout != null) && (!evensEssaimAjout.isEmpty())) {
