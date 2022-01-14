@@ -94,6 +94,9 @@ public class EssaimController {
 	
 	/*
 	 * Historique de la mise en ruchers d'un essaim
+	 *   Il manque 
+	 *     - la dispersion de l'essaim qui termine l'historique
+	 *     - la ou les mises en ruches qui impliquent des déplacements
 	 */
 	@GetMapping("/historique/{essaimId}")
 	public String historique(Model model, @PathVariable long essaimId) {
@@ -662,17 +665,25 @@ public class EssaimController {
 			Iterable<Recolte> recoltes = recolteRepository.findAllByOrderByDateAsc();
 			List<Integer> poidsListe = new ArrayList<>();
 			List<Recolte> recoltesListe = new ArrayList<>();
+			List<String> rucherRecolteListe = new ArrayList<>();
 			Integer poidsTotal = 0;
 			for (Recolte recolte : recoltes) {
-				Integer poids = recolteHausseRepository.findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId());
+				Integer poids = recolteHausseRepository.
+						findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId());
 				if (poids != null) {
+					RecolteHausse rHFirst = recolteHausseRepository.
+							findFirstByRecolteAndEssaim(recolte, essaim);
+					String nomRucher = ((rHFirst == null) || (rHFirst.getRucher() == null)) ?
+							"" : rHFirst.getRucher().getNom();
 					poidsListe.add(poids);
+					rucherRecolteListe.add(nomRucher);
 					recoltesListe.add(recolte);
 					poidsTotal += poids;
 				}
 			}
 			model.addAttribute("recoltesListe", recoltesListe);
 			model.addAttribute("poidsListe", poidsListe);
+			model.addAttribute("rucherRecolteListe", rucherRecolteListe);
 			model.addAttribute("poidsTotal", poidsTotal);
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);

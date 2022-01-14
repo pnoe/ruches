@@ -195,6 +195,13 @@
 				</tr>
 			</thead>
 			<tbody>
+			
+				<tr>
+					<th style="background-color:LightCyan" th:text="#{rucher}"></th>
+					<td th:each="rucher : ${rucherRecolteListe}" th:text="${rucher}"></td>
+					<td></td>		
+				</tr>
+				
 				<tr>
 					<th style="background-color:LightCyan" th:text="#{poidskg}"></th>
 					<td th:each="poids : ${poidsListe}" th:text="${#numbers.formatDecimal(poids/1000.0,1,2,'DEFAULT')}"></td>
