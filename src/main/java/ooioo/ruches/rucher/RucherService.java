@@ -147,10 +147,9 @@ public class RucherService {
 	 */
 	public void sauveAjouterRuches(Rucher rucher, String[] ruchesNoms, String date, String commentaire) {
 		LocalDateTime dateEveAjout = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
-		String provenance = "";
 		for (String rucheNom : ruchesNoms) {
 			Ruche ruche = rucheRepository.findByNom(rucheNom);
-			provenance = (ruche.getRucher() == null) ? "" : ruche.getRucher().getNom();
+			String provenance = (ruche.getRucher() == null) ? "" : ruche.getRucher().getNom();
 			ruche.setRucher(rucher);
 			// Mettre les coord. de la ruche à celles du rucher
 			// dans un rayon égal à dispersion

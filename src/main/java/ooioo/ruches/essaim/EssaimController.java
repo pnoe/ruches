@@ -9,7 +9,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,9 +94,10 @@ public class EssaimController {
 	
 	/*
 	 * Historique de la mise en ruchers d'un essaim
-	 *   Il manque 
+	 *    Les événements affichés dans l'historique :
+	 *     - les mise en rucher de ruches ou l'essaim apparait
 	 *     - la dispersion de l'essaim qui termine l'historique
-	 *     - la ou les mises en ruches qui impliquent des déplacements
+	 *     - la ou les mises en ruches de l'essaim qui peuvent impliquer des déplacements
 	 */
 	@GetMapping("/historique/{essaimId}")
 	public String historique(Model model, @PathVariable long essaimId) {
@@ -679,7 +679,7 @@ public class EssaimController {
 			Iterable<Recolte> recoltes = recolteRepository.findAllByOrderByDateAsc();
 			List<Integer> poidsListe = new ArrayList<>();
 			List<Recolte> recoltesListe = new ArrayList<>();
-			List<String> rucherRecolteListe = new ArrayList<>();
+			List<Rucher> rucherRecolteListe = new ArrayList<>();
 			Integer poidsTotal = 0;
 			for (Recolte recolte : recoltes) {
 				Integer poids = recolteHausseRepository.
@@ -687,10 +687,10 @@ public class EssaimController {
 				if (poids != null) {
 					RecolteHausse rHFirst = recolteHausseRepository.
 							findFirstByRecolteAndEssaim(recolte, essaim);
-					String nomRucher = ((rHFirst == null) || (rHFirst.getRucher() == null)) ?
-							"" : rHFirst.getRucher().getNom();
+					Rucher rucher = ((rHFirst == null)) ?
+							null : rHFirst.getRucher();
 					poidsListe.add(poids);
-					rucherRecolteListe.add(nomRucher);
+					rucherRecolteListe.add(rucher);
 					recoltesListe.add(recolte);
 					poidsTotal += poids;
 				}
