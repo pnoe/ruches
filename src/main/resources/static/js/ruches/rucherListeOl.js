@@ -8,6 +8,15 @@
 function rucherListeIgn(ign) {
 	const urlbrgm = 'https://geoservices.brgm.fr/geologie';
 	const urlbrgmlegend = 'http://mapsref.brgm.fr/legendes/geoservices/Geologie1000_legende.jpg';
+	const agriAnnee = '2020';
+	const agriLegend = 'https://www.geoportail.gouv.fr/depot/layers/LANDUSE.AGRICULTURE'+
+		agriAnnee + '/legendes/LANDUSE.AGRICULTURE' + agriAnnee + '-legend.png';
+	const agriLayer = 'LANDUSE.AGRICULTURE'+agriAnnee;
+	const agriDescription = 
+		'Registre parcellaire graphique : zones de culture déclarées par les exploitants en '
+		+ agriAnnee;
+	const agriTitle = 'Registre parcellaire graphique';
+
 	$('.recentre').on('click', function () {
         return confirm(recentertxt);
     });
@@ -124,6 +133,13 @@ function rucherListeIgn(ign) {
 	});
 	let layersMap = map.getLayers();
     if (ign) {
+			olAgriLayer = new ol.layer.GeoportalWMTS({
+			layer: agriLayer,
+			olParams: {
+				visible: false
+				}	
+		});
+		layersMap.insertAt(0, olAgriLayer);
     	layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
     		layer: "CADASTRALPARCELS.PARCELS",
     		olParams: {
@@ -134,7 +150,10 @@ function rucherListeIgn(ign) {
     		layer: "GEOGRAPHICALGRIDSYSTEMS.MAPS"
     	}));
     	layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
-    		layer: "ORTHOIMAGERY.ORTHOPHOTOS"
+    		layer: "ORTHOIMAGERY.ORTHOPHOTOS",
+    		olParams: {
+                visible: false
+            }
     	}));
         map.addControl(new ol.control.ElevationPath());
 		map.addControl(new ol.control.Route());
@@ -143,6 +162,12 @@ function rucherListeIgn(ign) {
 	        displayCoordinates : false
 	    }));
         map.addControl(layerSwitcher);
+        layerSwitcher.removeLayer(olAgriLayer);
+		layerSwitcher.addLayer(olAgriLayer, {
+			title: agriTitle,
+			description: agriDescription,
+			legends: [{url: agriLegend}]
+		});
     } else {
     	const osmLayer =  new ol.layer.Tile({
             source: new ol.source.OSM()

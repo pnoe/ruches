@@ -171,9 +171,7 @@ function rucherDetail(ign) {
 			vectorLayer,
 			vectorLineLayer,
 			cerclesLayer,
-
 			drawLayer
-
 		],
 		overlays: [overlay],
 		view: new ol.View({
@@ -255,8 +253,7 @@ function rucherDetail(ign) {
 			layer: agriLayer,
 			olParams: {
 				visible: false
-				},
-			
+				}	
 		});
 		layersMap.insertAt(0, olAgriLayer);
 		layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
