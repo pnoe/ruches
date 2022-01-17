@@ -10,10 +10,13 @@ $(document).ready(function() {
         trigger: 'focus'
     });
     $('#statistiques').DataTable({
-    	dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
+    	dom: 'Blftip',
 	    buttons: [
 	    	'csv',
-            {extend: 'print', text: [[#{buttontextprint}]]}
+	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
+	    		title: [[#{listeRuchers}]] + " " + (new Date()).toLocaleDateString()},
+	        {extend: 'print', text: [[#{buttontextprint}]]},
+	        {extend: 'colvis', text: [[#{buttontextcol}]]}
         ]
     });
 });
