@@ -124,7 +124,7 @@ public class EssaimController {
 			evensEssaimAjout.sort((e1,e2) -> e1.getDate().compareTo(e2.getDate()));
 			model.addAttribute("evensEssaimAjout", evensEssaimAjout);
 			List<Long> durees = new ArrayList<>();
-			if ((evensEssaimAjout != null) && (!evensEssaimAjout.isEmpty())) {
+			if (!evensEssaimAjout.isEmpty()) {
 				int i = 0;
 				while (i < evensEssaimAjout.size() - 1) {
 				// calcul de la durée de séjour dans le rucher
@@ -687,8 +687,7 @@ public class EssaimController {
 				if (poids != null) {
 					RecolteHausse rHFirst = recolteHausseRepository.
 							findFirstByRecolteAndEssaim(recolte, essaim);
-					Rucher rucher = ((rHFirst == null)) ?
-							null : rHFirst.getRucher();
+					Rucher rucher = (rHFirst == null) ?	null : rHFirst.getRucher();
 					poidsListe.add(poids);
 					rucherRecolteListe.add(rucher);
 					recoltesListe.add(recolte);
