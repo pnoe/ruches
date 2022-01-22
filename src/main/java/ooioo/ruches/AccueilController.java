@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
@@ -130,7 +131,11 @@ public class AccueilController {
 		for(int i = dateDebut; i <= dateFin; i++) {
 			Double date = Double.valueOf(i);
 			annees.add(date);
-			Double poids = recolteRepository.findPoidsMielByYear(date);
+			// Double poids = recolteRepository.findPoidsMielByYear(date);
+		
+			Optional<Double> poidsOpt = recolteRepository.findPoidsMielByYear(date);
+			Double poids = poidsOpt.isPresent() ? poidsOpt.get() : 0.0;
+			
 			pdsMiel.add(poids == null?0:poids);
 			pdsMielTotal += (poids == null?0:poids);
 			Integer nbCree = essaimRepository.countEssaimsCreesDate(date);

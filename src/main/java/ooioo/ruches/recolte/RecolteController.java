@@ -71,9 +71,17 @@ public class RecolteController {
 			Optional<Integer> pMHOpt = recolteRepository.
 					findPoidsHaussesByYear(Double.valueOf((double)debutAnnee + i));
 			poidsMielHausses[i] = pMHOpt.isPresent() ? pMHOpt.get()/1000 : 0;
-			Optional<Integer> pMPOpt = recolteRepository.
+			Optional<Double> pMPOpt = recolteRepository.
 					findPoidsMielByYear(Double.valueOf((double)debutAnnee + i));
-			if (pMPOpt.isPresent()) { poidsMielHausses[i] = pMPOpt.get()/1000;}
+			poidsMielPots[i] = pMPOpt.isPresent() ? pMPOpt.get().intValue()/1000 : 0;
+			
+			/*
+			poidsMielHausses[i] = recolteRepository.
+			  findPoidsHaussesByYear(Double.valueOf((double)debutAnnee + i))/1000;
+			poidsMielPots[i] = recolteRepository.
+			  findPoidsMielByYear(Double.valueOf((double)debutAnnee + i)).intValue()/1000;
+			*/
+			
 		}
 		float[] nbEssaims = new float[dureeAns]; // nombre d'essaims actifs par année de production
 		Iterable<Essaim> essaims = essaimRepository.findAll();
