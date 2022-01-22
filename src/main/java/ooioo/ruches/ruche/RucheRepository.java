@@ -37,11 +37,7 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 
 	Collection<Ruche> findCompletByRucherId(Long id);
 	
-	
-	
 	Collection<Nom> findNomsByRucherId(Long id);
-	
-	
 
 	Collection<IdNom> findAllProjectedIdNomByOrderByNom();
 
@@ -58,19 +54,32 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	Iterable<Ruche> findByEssaimNotNullAndRucherDepotTrue();
 
 	// Les ruches au dépôt qui ont au moins une hausse
-	@Query(value = "select r from Ruche r, Hausse h where r.rucher.depot = 'true' and h.ruche = r")
+	@Query(value = """
+			select r 
+			from Ruche r, Hausse h 
+			where r.rucher.depot = 'true' and h.ruche = r
+			""")
 	Iterable<Ruche> findByHaussesAndDepot();
 
 	// Les ruches qui ne sont pas au dépôt et qui n'ont pas d'essaim
 	Iterable<Ruche> findByEssaimNullAndRucherDepotFalse();
 
 	// Les ruches actives et pas au dépôt qui n'ont pas eu d'événement depuis "date"
-	@Query(value = "select r from Ruche r where r.active = 'true' and r.rucher.depot = 'false' "
-			+ "and r not in (select distinct r from Ruche r, Evenement e where e.ruche = r and e.date > ?1)")
+	@Query(value = """
+			select r 
+			from Ruche r 
+			where r.active = 'true' and r.rucher.depot = 'false'
+			  and r not in 
+			    (select distinct r from Ruche r, Evenement e where e.ruche = r and e.date > ?1)
+			""")
 	Iterable<Ruche> findPasDEvenementAvant(LocalDateTime date);
 
 	// Les ruches actives dont l'id est différent de id triées par nom
-	@Query(value = "select r from Ruche r where r.active = 'true' and r.id != ?1 order by r.nom")
+	@Query(value = """
+			select r 
+			from Ruche r 
+			where r.active = 'true' and r.id != ?1 order by r.nom
+			""")
 	Iterable<Ruche> findActiveIdDiffOrderByNom(Long id);
 
 

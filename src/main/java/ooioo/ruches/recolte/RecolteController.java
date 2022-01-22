@@ -60,21 +60,28 @@ public class RecolteController {
 	@GetMapping("/statprod")
 	public String statprod(Model model) {
 		int debutAnnee = recolteRepository.findFirstByOrderByDateAsc().getDate().getYear();
-		int finAnnee = recolteRepository.findFirstByOrderByDateDesc().getDate().getYear();
+		// int finAnnee = recolteRepository.findFirstByOrderByDateDesc().getDate().getYear();
+		//   sinon erreur débordement de tableau nbEssaims
+		LocalDate maintenant = LocalDate.now();
+		int finAnnee = maintenant.getYear();
 		int dureeAns = finAnnee - debutAnnee + 1;
 		int[] poidsMielHausses = new int[dureeAns];
 		int[] poidsMielPots = new int[dureeAns];
 		for (int i = 0; i < dureeAns; i++) {
-			poidsMielHausses[i] = recolteRepository.findPoidsHaussesByYear(Double.valueOf((double)debutAnnee + i))/1000;
-			poidsMielPots[i] = recolteRepository.findPoidsMielByYear(Double.valueOf((double)debutAnnee + i)).intValue()/1000;
+			Optional<Integer> pMHOpt = recolteRepository.
+					findPoidsHaussesByYear(Double.valueOf((double)debutAnnee + i));
+			poidsMielHausses[i] = pMHOpt.isPresent() ? pMHOpt.get()/1000 : 0;
+			Optional<Integer> pMPOpt = recolteRepository.
+					findPoidsMielByYear(Double.valueOf((double)debutAnnee + i));
+			if (pMPOpt.isPresent()) { poidsMielHausses[i] = pMPOpt.get()/1000;}
 		}
 		float[] nbEssaims = new float[dureeAns]; // nombre d'essaims actifs par année de production
 		Iterable<Essaim> essaims = essaimRepository.findAll();
 		LocalDate dateFirstEssaim = essaimRepository.findFirstByOrderByDateAcquisition().getDateAcquisition();
-		LocalDate maintenant = LocalDate.now();
 		for (Essaim essaim : essaims) {
 			LocalDate dateProduction = essaim.getDateAcquisition();
-			Evenement dispersion = evenementRepository.findFirstByEssaimAndType(essaim, TypeEvenement.ESSAIMDISPERSION);
+			Evenement dispersion = evenementRepository.
+					findFirstByEssaimAndType(essaim, TypeEvenement.ESSAIMDISPERSION);
 			LocalDate dateFin = (dispersion == null)?maintenant:dispersion.getDate().toLocalDate();
 			// l'essaim est actif de dateProduction à dateFin
 			boolean premier = true;
