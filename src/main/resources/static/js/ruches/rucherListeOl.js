@@ -133,7 +133,7 @@ function rucherListeIgn(ign) {
 	});
 	let layersMap = map.getLayers();
     if (ign) {
-			olAgriLayer = new ol.layer.GeoportalWMTS({
+			const olAgriLayer = new ol.layer.GeoportalWMTS({
 			layer: agriLayer,
 			olParams: {
 				visible: false
