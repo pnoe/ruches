@@ -26,9 +26,9 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 	// en paramètre essaim actif uniquement
 	@Query(value = """
 			select ruche.id, ruche.nom, rucher.id, rucher.nom 
-			from Essaim essaim 
-			  left join Ruche ruche on ruche.essaim.id = essaim.id 
-			  left join Rucher rucher on ruche.rucher.id = rucher.id
+			  from Essaim essaim 
+			    left join Ruche ruche on ruche.essaim.id = essaim.id 
+			    left join Rucher rucher on ruche.rucher.id = rucher.id
 			  where essaim.actif = ?1 order by essaim.nom
 			""")
 	Iterable<Object[]> findRucheIdNomByActifOrderByNom(boolean actif);
@@ -37,8 +37,8 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 	@Query(value = """
 			select ruche.id, ruche.nom, rucher.id, rucher.nom 
 			  from Essaim essaim 
-			  left join Ruche ruche on ruche.essaim.id = essaim.id 
-			  left join Rucher rucher on ruche.rucher.id = rucher.id
+			    left join Ruche ruche on ruche.essaim.id = essaim.id 
+			    left join Rucher rucher on ruche.rucher.id = rucher.id
 			  order by essaim.nom
 			""")
 	Iterable<Object[]> findRucheIdNomOrderByNom();
@@ -50,7 +50,7 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 	@Query(value = """
 			select essaim.id, essaim.nom 
 			  from Essaim essaim 
-			  left join Ruche ruche on ruche.essaim.id = essaim.id
+			    left join Ruche ruche on ruche.essaim.id = essaim.id
 			  where ruche.essaim.id is null and essaim.actif is true
 			  order by essaim.dateAcquisition desc
 			""")
@@ -61,8 +61,8 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 			  from Essaim essaim 
 			  where essaim.actif = 'true' and essaim not in 
 			    (select essaim 
-			      from Essaim essaim, Ruche ruche
-			      where ruche.essaim = essaim)
+			       from Essaim essaim, Ruche ruche
+			       where ruche.essaim = essaim)
 			""")
 	Iterable<Essaim> findEssaimByActifSansRuche();
 

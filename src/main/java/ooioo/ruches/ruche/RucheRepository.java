@@ -56,8 +56,8 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	// Les ruches au dépôt qui ont au moins une hausse
 	@Query(value = """
 			select r 
-			from Ruche r, Hausse h 
-			where r.rucher.depot = 'true' and h.ruche = r
+			  from Ruche r, Hausse h 
+			  where r.rucher.depot = 'true' and h.ruche = r
 			""")
 	Iterable<Ruche> findByHaussesAndDepot();
 
@@ -67,21 +67,22 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	// Les ruches actives et pas au dépôt qui n'ont pas eu d'événement depuis "date"
 	@Query(value = """
 			select r 
-			from Ruche r 
-			where r.active = 'true' and r.rucher.depot = 'false'
-			  and r not in 
-			    (select distinct r from Ruche r, Evenement e where e.ruche = r and e.date > ?1)
+			  from Ruche r 
+			  where r.active = 'true' and r.rucher.depot = 'false'
+			    and r not in 
+			      (select distinct r 
+			        from Ruche r, Evenement e 
+			        where e.ruche = r and e.date > ?1)
 			""")
 	Iterable<Ruche> findPasDEvenementAvant(LocalDateTime date);
 
 	// Les ruches actives dont l'id est différent de id triées par nom
 	@Query(value = """
 			select r 
-			from Ruche r 
-			where r.active = 'true' and r.id != ?1 order by r.nom
+			  from Ruche r 
+			  where r.active = 'true' and r.id != ?1 
+			  order by r.nom
 			""")
 	Iterable<Ruche> findActiveIdDiffOrderByNom(Long id);
-
-
 
 }
