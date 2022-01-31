@@ -721,7 +721,7 @@ public class EssaimController {
 			
 			
 			model.addAttribute("rucheEssaim", ruche);
-			model.addAttribute("ruches", (ruche == null) ? 
+			model.addAttribute("ruches", ruche == null ? 
 					rucheRepository.findByActiveOrderByNom(true) :
 					rucheRepository.findActiveIdDiffOrderByNom(ruche.getId()));
 			

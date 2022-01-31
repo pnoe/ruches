@@ -36,7 +36,8 @@ public class EssaimService {
 	 * événement de type typeEvenement
 	 */
 	public void modelAddEvenement(Model model, Essaim essaim, TypeEvenement typeEvenement) {
-		Evenement evenement = evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim, typeEvenement);
+		Evenement evenement = evenementRepository.
+				findFirstByEssaimAndTypeOrderByDateDesc(essaim, typeEvenement);
 		String type = typeEvenement.toString();
 		if (evenement == null) {
 			model.addAttribute(Const.DATE + type, null);
@@ -97,15 +98,15 @@ public class EssaimService {
 		poidsMielDescendance += poidsMielEssaim;
 		Ruche ruche = rucheRepository.findByEssaimId(essaim.getId());
 		resultat.add(new EssaimTree(essaim.getNom(),
-				(essaim.getSouche() == null) ? "null" : essaim.getSouche().getNom(),
+				essaim.getSouche() == null ? "null" : essaim.getSouche().getNom(),
 				essaim.getId(),
 				essaim.getActif(),
 				// le parser json de essaim.EssaimController.graphedescendance
 				//  plante sur la date
 				essaim.getDateAcquisition(),
 				essaim.getReineCouleurMarquage().toString(),
-				(ruche == null) ? "null" : ruche.getNom(),
-				(ruche == null) ? "null" : ruche.getRucher().getNom(),
+				ruche == null ? "null" : ruche.getNom(),
+				ruche == null ? "null" : ruche.getRucher().getNom(),
 				poidsMielEssaim,
 				poidsMielDescendance
 				));
