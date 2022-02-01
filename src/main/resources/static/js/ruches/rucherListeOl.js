@@ -146,6 +146,12 @@ function rucherListeIgn(ign) {
                 visible: false
             }
     	}));
+    	layersMap.insertAt(0, new ol.layer.GeoportalWMS({
+    		layer: "LIMITES_ADMINISTRATIVES_EXPRESS.LATEST",
+    		olParams: {
+                visible: false
+            }
+    	}));	
     	layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
     		layer: "GEOGRAPHICALGRIDSYSTEMS.MAPS"
     	}));
