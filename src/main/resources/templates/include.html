@@ -61,7 +61,8 @@ $.extend( true, $.fn.dataTable.defaults, {
 <link th:fragment="cssol" rel="stylesheet" type="text/css" media="all"
 	th:href="@{/js/ol-6.12.0/ol.css}" /> 
  
-<script th:fragment="jsGpPluginOpenLayers" th:attr="data-key=${ignDataKey}"  
+<script th:fragment="jsGpPluginOpenLayers"
+   th:attr="data-url=@{/js/autoconf.js}" 
    th:src="@{/js/GpPluginOpenLayers-3.2.7/GpPluginOpenLayers.js}"></script>
 <script th:fragment="jsGpOsmPluginOpenLayers"  
    th:src="@{/js/GpPluginOpenLayers-3.2.7/GpPluginOpenLayers.js}"></script>

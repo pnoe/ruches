@@ -10,10 +10,10 @@ function rucherDetail(ign) {
 	const lang = navigator.language;
 	const digits2 = { maximumFractionDigits: 2 };
 	const agriAnnee = '2020';
-	const agriLegend = 'https://www.geoportail.gouv.fr/depot/layers/LANDUSE.AGRICULTURE'+
+	const agriLegend = 'https://www.geoportail.gouv.fr/depot/layers/LANDUSE.AGRICULTURE' +
 		agriAnnee + '/legendes/LANDUSE.AGRICULTURE' + agriAnnee + '-legend.png';
-	const agriLayer = 'LANDUSE.AGRICULTURE'+agriAnnee;
-	const agriDescription = 
+	const agriLayer = 'LANDUSE.AGRICULTURE' + agriAnnee;
+	const agriDescription =
 		'Registre parcellaire graphique : zones de culture déclarées par les exploitants en '
 		+ agriAnnee;
 	const agriTitle = 'Registre parcellaire graphique';
@@ -154,7 +154,7 @@ function rucherDetail(ign) {
 	/// const formatKML = new ol.format.KMLExtended({});
 	// Ne fonctionne pas
 	const formatKML = new ol.format.KML({});
-	
+
 	const dessinsFeatures = (rucher.dessin === null) ? new ol.Collection() : new ol.Collection(formatKML.readFeatures(rucher.dessin));
 	const drawLayer = new ol.layer.Vector({
 		source: new ol.source.Vector({
@@ -253,7 +253,7 @@ function rucherDetail(ign) {
 			layer: agriLayer,
 			olParams: {
 				visible: false
-				}	
+			}
 		});
 		layersMap.insertAt(0, olAgriLayer);
 		layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
@@ -266,6 +266,12 @@ function rucherDetail(ign) {
 			layer: "GEOGRAPHICALGRIDSYSTEMS.MAPS"
 		}));
 		layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
+			layer: "GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2",
+			olParams: {
+				visible: false
+			}
+		}));
+		layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
 			layer: "ORTHOIMAGERY.ORTHOPHOTOS"
 		}));
 		map.addControl(new ol.control.ElevationPath());
@@ -274,7 +280,7 @@ function rucherDetail(ign) {
 		layerSwitcher.addLayer(olAgriLayer, {
 			title: agriTitle,
 			description: agriDescription,
-			legends: [{url: agriLegend}]
+			legends: [{ url: agriLegend }]
 		});
 		map.addControl(new ol.control.GeoportalMousePosition({
 			collapsed: true,
