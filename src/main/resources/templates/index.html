@@ -22,7 +22,8 @@
 	<div class="row">
 		<header class="col jumbotron jumbotron-fluid">
 			<div class="container-fluid">
-				<h1 id="titre" class="display-4 text-primary" th:utext="${accueilTitre}">
+				<h1 id="titre" class="display-4 text-primary" 
+					th:utext="${@environment.getProperty('accueil.titre')}">
 				</h1>
 			</div>
 		</header>

@@ -60,9 +60,6 @@ public class HausseController {
 	@Autowired
 	private HausseService hausseService;
 
-	@Value("${accueil.titre}")
-	private String accueilTitre;
-
 	/**
 	 * Clonage multiple d'une hausse
 	 */
@@ -146,7 +143,6 @@ public class HausseController {
 			logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return HAUSSE_HAUSSEFORM;
@@ -176,14 +172,12 @@ public class HausseController {
 				logger.info("Hausse {} supprimée, id {}", hausse.getNom(), hausse.getId());
 			} else {
 				model.addAttribute(Const.MESSAGE, "Cette hausse ne peut être supprimée");
-				model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 			}
 		} else {
 			logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "redirect:/hausse/liste";
@@ -235,7 +229,6 @@ public class HausseController {
 			logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "hausse/hausseDetail";

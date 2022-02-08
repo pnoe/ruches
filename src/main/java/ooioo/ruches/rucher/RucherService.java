@@ -41,8 +41,7 @@ public class RucherService {
 	private EvenementRepository evenementRepository;
 
 	@Value("${rucher.ruche.dispersion}")
-	private String dispersion;
-
+	private double dispersionRuche;
 	/*
 	 * Inner class static pour les distances entre ruches
 	 */
@@ -170,7 +169,7 @@ public class RucherService {
 	 * (voir application.properties)
 	 */
 	public LatLon dispersion(Float lat, Float lon) {
-		double w = Double.parseDouble(dispersion) * Math.sqrt(Math.random()) / 111300f;
+		double w = dispersionRuche * Math.sqrt(Math.random()) / 111300f;
 		double t = 2.0 * Math.PI * Math.random();
 		return new LatLon(lat + (float) (w * Math.sin(t)),
 				lon + (float) (w * Math.cos(t) / Math.cos(Math.toRadians(lat))));

@@ -77,11 +77,6 @@ public class RucheController {
 	@Autowired
 	MessageSource messageSource;
 
-	@Value("${rucher.ruche.dispersion}")
-	private String dispersion;
-	@Value("${accueil.titre}")
-	private String accueilTitre;
-
 	/**
 	 * Historique de l'ajout des hausses sur une ruche
 	 */
@@ -130,7 +125,6 @@ public class RucheController {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "ruche/rucheHisto";
@@ -211,7 +205,6 @@ public class RucheController {
 		} catch (IOException e) {
 			logger.error("Paramètre parcours incorrect");
 			model.addAttribute(Const.MESSAGE, "Paramètre incorect");
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
@@ -222,7 +215,6 @@ public class RucheController {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		if (plus) {
@@ -279,7 +271,6 @@ public class RucheController {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "/ruche/rucheRucherForm";
@@ -304,7 +295,6 @@ public class RucheController {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "redirect:/ruche/" + rucheId;
@@ -328,7 +318,6 @@ public class RucheController {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return RUCHE_RUCHEFORM;
@@ -359,14 +348,12 @@ public class RucheController {
 				logger.info("Ruche {} supprimée, id {}", ruche.getNom(), ruche.getId());
 			} else {
 				model.addAttribute(Const.MESSAGE, "Cette ruche ne peut être supprimée");
-				model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 				return Const.INDEX;
 			}
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "redirect:/ruche/liste";
@@ -442,7 +429,6 @@ public class RucheController {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "ruche/rucheDetail";
@@ -467,7 +453,6 @@ public class RucheController {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "ruche/rucheAjoutRetrait";
@@ -536,14 +521,12 @@ public class RucheController {
 				logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
 				model.addAttribute(Const.MESSAGE,
 						messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
-				model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 				return Const.INDEX;
 			}
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "redirect:/ruche/hausses/{rucheId}";
@@ -583,14 +566,12 @@ public class RucheController {
 				logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
 				model.addAttribute(Const.MESSAGE,
 						messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
-				model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 				return Const.INDEX;
 			}
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "redirect:/ruche/hausses/{rucheId}";

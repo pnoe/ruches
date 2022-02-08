@@ -162,14 +162,6 @@ $.extend( true, $.fn.dataTable.defaults, {
 							th:href="@{/parametres}"></a></li>
 						<li sec:authorize="hasRole('ROLE_admin')"><a class="dropdown-item"
 							th:text="#{apiRest}" th:target="_blank" th:href="@{/rest}"></a></li>
-						<!--/*  	
-						<li sec:authorize="hasRole('ROLE_admin')"><a class="confirmdeploie dropdown-item"
-							th:text="#{deploie}" th:href="@{/deploie}"></a></li>
-						<li sec:authorize="hasRole('ROLE_admin')"><a class="dropdown-item"
-							th:text="#{downloaddump}" th:href="@{/dump/ruches.sql.xz}"></a></li>
-						<li sec:authorize="hasRole('ROLE_admin')"><a class="dropdown-item"
-							th:text="#{downloadschema}" th:href="@{/dump/ruches_schema.sql}"></a></li>
-						*/-->
 						<li sec:authorize="hasRole('ROLE_admin')"><a class="dropdown-item"
 							th:text="#{logs}" th:href="@{/admin/logs/logfile}" target="_blank"></a></li>
 						<li><a class="dropdown-item"
@@ -178,7 +170,7 @@ $.extend( true, $.fn.dataTable.defaults, {
 							th:text="#{tests}" th:href="@{/tests}"></a></li>
 						<li><a class="dropdown-item"
 							th:text="#{Doc}" th:target="_blank"
-							th:href="@{${#servletContext.getAttribute('docpath')}}"></a></li>
+							th:href="@{/doc/ruches.html}"></a></li>
 					</ul>
 				</li>
 			</ul>

@@ -9,7 +9,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -25,9 +24,6 @@ public class Application extends SpringBootServletInitializer {
 
 	@Autowired
 	BuildProperties buildProperties;
-
-	@Value("${doc.path}")
-	private String docpath;
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
@@ -58,8 +54,6 @@ public class Application extends SpringBootServletInitializer {
 				DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
 						.withLocale(Locale.FRENCH).withZone(ZoneId.systemDefault());
 				servletContext.setAttribute("buildtime", formatter.format(buildProperties.getTime()));
-				// Chemin vers la documentation ruches.html pour include.html
-				servletContext.setAttribute("docpath", docpath);
 			}
 		};
 	}

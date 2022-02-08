@@ -85,19 +85,8 @@ public class RucherController {
 	@Autowired
 	MessageSource messageSource;
 
-	@Value("${rucher.ruche.dispersion}")
-	private String dispersion;
-	@Value("${proxyHost}")
-	private String proxyHost;
-	@Value("${proxyPort}")
-	private String proxyPort;
-
-	@Value("${ign.data.key}")
-	private String ignDataKey;
 	@Value("${gg.map.url}")
 	private String ggMapsUrl;
-	@Value("${accueil.titre}")
-	private String accueilTitre;
 	@Value("${openweathermap.key}")
 	private String openweathermapKey;
 	@Value("${rucher.butinage.rayons}")
@@ -278,7 +267,6 @@ public class RucherController {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		model.addAttribute("group", group);
@@ -403,7 +391,6 @@ public class RucherController {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return RUCHER_RUCHERFORM;
@@ -491,7 +478,6 @@ public class RucherController {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "rucher/rucherDetail";
@@ -523,7 +509,6 @@ public class RucherController {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "redirect:/rucher/" + servletPath + "/{rucherId}";
@@ -548,7 +533,6 @@ public class RucherController {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "rucher/rucherAjout";
@@ -565,7 +549,6 @@ public class RucherController {
 			Rucher rucher = rucherOpt.get();
 			if (rucher.getDepot()) {
 				model.addAttribute(Const.MESSAGE, "On ne peut pas supprimer le rucher dépôt");
-				model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 				return Const.INDEX;
 			}
 			Iterable<Evenement> evenements = evenementRepository.findByRucherId(rucherId);
@@ -585,14 +568,12 @@ public class RucherController {
 				logger.info("Rucher {} supprimé, id {}", rucher.getNom(), rucher.getId());
 			} else {
 				model.addAttribute(Const.MESSAGE, "Ce rucher ne peut être supprimé");
-				model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 				return Const.INDEX;
 			}
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "redirect:/rucher/liste";
@@ -645,11 +626,9 @@ public class RucherController {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		model.addAttribute("ggMapsUrl", ggMapsUrl);
-		model.addAttribute("ignDataKey", ignDataKey);
 		return "rucher/rucherDetail" + request.getServletPath().split("/")[2];
 	}
 
@@ -673,7 +652,6 @@ public class RucherController {
 		model.addAttribute(Const.RUCHENOMS, nomRuches);
 		model.addAttribute(Const.RUCHERS, ruchers);
 		model.addAttribute("ggMapsUrl", ggMapsUrl);
-		model.addAttribute("ignDataKey", ignDataKey);
 		return RUCHER_RUCHERLISTE + request.getServletPath().split("/")[2];
 	}
 
@@ -716,7 +694,6 @@ public class RucherController {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "rucher/rucherRuchesAjoutForm";
@@ -737,7 +714,6 @@ public class RucherController {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "redirect:/rucher/ruches/" + rucherId;
@@ -782,7 +758,6 @@ public class RucherController {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "rucher/rucherMeteo";

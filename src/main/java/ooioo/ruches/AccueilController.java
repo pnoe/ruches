@@ -65,8 +65,6 @@ public class AccueilController {
 	@Autowired
 	private PersonneRepository personneRepository;
 
-	@Value("${accueil.titre}")
-	private String accueilTitre;
 	@Value("${dist.ruches.loins}")
 	private double distRuchesTropLoins;
 	@Value("${dist.ruchers.loins}")
@@ -81,7 +79,6 @@ public class AccueilController {
 	 */
 	@GetMapping(path = "/")
 	public String index(Model model) {
-		model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 		return Const.INDEX;
 	}
 
@@ -170,7 +167,6 @@ public class AccueilController {
 		model.addAttribute("nbCreationEssaims", nbCreationEssaims);
 		model.addAttribute("pdsMiel", pdsMiel);
 		model.addAttribute("annees", annees);
-		model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 		model.addAttribute("nbRuchesAuDepot", nbRuchesAuDepot);
 		model.addAttribute("nbRuches", nbRuches);
 		model.addAttribute("nbRuchers", nbRuchers);
@@ -291,7 +287,6 @@ public class AccueilController {
 			//  evite erreur si "" findByEmail retourne plusieurs personnes
 			logger.error("Réinitialisation du mot de passe, email incorrect {}", email);
 			model.addAttribute(Const.MESSAGE, "Email incorrect");
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		// si plusieurs personnes avec le même email erreur findByEmail
@@ -300,7 +295,6 @@ public class AccueilController {
 			// Pas d'email trouvé ou persone sans login
 			logger.error("Réinitialisation du mot de passe, email {} incorrect", email);
 			model.addAttribute(Const.MESSAGE, "Email incorrect");
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		} else {
 			String token = UUID.randomUUID().toString();
@@ -313,7 +307,6 @@ public class AccueilController {
 			         appUrl + "?token=" + token);
 		}
 		model.addAttribute(Const.MESSAGE, "Un email a été envoyé à cette adresse");
-		model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 		return Const.INDEX;
 	}
 
@@ -324,7 +317,6 @@ public class AccueilController {
 				personne.getTokenexpiration().isBefore(LocalDateTime.now())) {
 			logger.error("Réinitialisation du mot de passe, token {} invalide", token);
 			model.addAttribute(Const.MESSAGE, "Token invalide");
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		model.addAttribute("token", token);
@@ -338,7 +330,6 @@ public class AccueilController {
 				personne.getTokenexpiration().isBefore(LocalDateTime.now())) {
 			logger.error("Réinitialisation du mot de passe, token {} invalide", token);
 			model.addAttribute(Const.MESSAGE, "Token invalide");
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		personne.setPassword(new BCryptPasswordEncoder().encode(password));

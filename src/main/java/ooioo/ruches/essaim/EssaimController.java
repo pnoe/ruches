@@ -86,12 +86,6 @@ public class EssaimController {
 	@Autowired
 	private RucheService rucheService;
 
-	@Value("${accueil.titre}")
-	private String accueilTitre;
-	@Value("${essaime.suffix}")
-	private String essaimeSuffix;
-	
-	
 	/*
 	 * Historique de la mise en ruchers d'un essaim
 	 *    Les événements affichés dans l'historique :
@@ -145,7 +139,6 @@ public class EssaimController {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "essaim/essaimHisto";
@@ -322,7 +315,6 @@ public class EssaimController {
 			for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
 				noms.add(essaimNom.getNom());
 			}
-			model.addAttribute("essaimeSuffix", essaimeSuffix);
 			model.addAttribute(Const.ESSAIMNOMS, noms);
 			model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
 			model.addAttribute(Const.ESSAIM, essaimOpt.get());
@@ -331,7 +323,6 @@ public class EssaimController {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "essaim/essaimEssaimerForm";
@@ -348,7 +339,6 @@ public class EssaimController {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		// L'essaim à disperser
@@ -365,7 +355,6 @@ public class EssaimController {
 		if (noms.contains(nom)) {
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage("LeNomXXExiste", new Object[] {nom}, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		// On crée l'essaim : nom saisi dans le formulaire, date acquisition et naissance reine
@@ -478,7 +467,6 @@ public class EssaimController {
 			} catch (JsonProcessingException e) {
 				logger.error("Erreur parser json : {}", e.getMessage());
 				model.addAttribute(Const.MESSAGE, "Erreur parser json");
-				model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 			}
 		}
@@ -569,7 +557,6 @@ public class EssaimController {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return ESSAIM_ESSAIMFORM;
@@ -599,14 +586,12 @@ public class EssaimController {
 				logger.info("Essaim {} supprimé, id {}", essaim.getNom(), essaim.getId());
 			} else {
 				model.addAttribute(Const.MESSAGE, "Cette essaim ne peut être supprimé");
-				model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 			}
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "redirect:/essaim/liste";
@@ -702,7 +687,6 @@ public class EssaimController {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "essaim/essaimDetail";
@@ -730,7 +714,6 @@ public class EssaimController {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "essaim/essaimAssociation";
@@ -773,14 +756,12 @@ public class EssaimController {
 				logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 				model.addAttribute(Const.MESSAGE,
 						messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
-				model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 			}
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		return "essaim/essaimAssociationForm";
@@ -800,7 +781,6 @@ public class EssaimController {
 			logger.error(Const.IDRUCHEINCONNU, rucheId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
@@ -808,7 +788,6 @@ public class EssaimController {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
-			model.addAttribute(Const.ACCUEILTITRE, accueilTitre);
 			return Const.INDEX;
 		}
 		Essaim essaim = essaimOpt.get();
