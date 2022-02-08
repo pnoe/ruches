@@ -85,10 +85,6 @@ public class RucherController {
 	@Autowired
 	MessageSource messageSource;
 
-	@Value("${gg.map.url}")
-	private String ggMapsUrl;
-	@Value("${openweathermap.key}")
-	private String openweathermapKey;
 	@Value("${rucher.butinage.rayons}")
 	private int[] rayonsButinage;
 
@@ -628,7 +624,6 @@ public class RucherController {
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
 			return Const.INDEX;
 		}
-		model.addAttribute("ggMapsUrl", ggMapsUrl);
 		return "rucher/rucherDetail" + request.getServletPath().split("/")[2];
 	}
 
@@ -651,7 +646,6 @@ public class RucherController {
 		}
 		model.addAttribute(Const.RUCHENOMS, nomRuches);
 		model.addAttribute(Const.RUCHERS, ruchers);
-		model.addAttribute("ggMapsUrl", ggMapsUrl);
 		return RUCHER_RUCHERLISTE + request.getServletPath().split("/")[2];
 	}
 
@@ -753,7 +747,6 @@ public class RucherController {
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
 			model.addAttribute(Const.RUCHER, rucher);
-			model.addAttribute("openweathermapKey", openweathermapKey);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,

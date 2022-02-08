@@ -25,7 +25,7 @@
 	const entreetxt = [[#{Entree}]];	
     const _csrf_token = [[${_csrf.token}]];
 </script>
-<script async defer	th:src="${ggMapsUrl}"></script>
+<script async defer	th:src="${@environment.getProperty('gg.map.url')}"></script>
 </head>
 <body>
 	<nav th:replace="include :: navbar"></nav>

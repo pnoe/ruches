@@ -6,7 +6,7 @@
 <script th:inline="javascript">
 	const longitude = [[${rucher.longitude}]];
 	const latitude = [[${rucher.latitude}]];
-	const openweathermapKey = [[${openweathermapKey}]];
+	const openweathermapKey = [[${@environment.getProperty('openweathermap.key')}]];
 	const urlPrefix='https://api.openweathermap.org/data/2.5/onecall';
 	$().ready(function() {
 		rucherMeteo();
