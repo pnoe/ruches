@@ -127,7 +127,6 @@
 			<table class="table table-sm table-bordered table-striped" th:unless="${#lists.isEmpty(eveRucheHausseErr)}">
 				<thead>
 					<tr>
-						<!-- <th th:text="#{Erreur}"></th> -->
 						<th th:text="#{date}"></th>
 						<th th:text="#{evenement}"></th>
 						<th style="background-color: PaleGoldenRod" th:text="#{ruche}"></th>
@@ -136,7 +135,6 @@
 				</thead>
 				<tbody>
 					<tr th:each="eve : ${eveRucheHausseErr}">
-						<!-- <td th:text="${errsRuche[eveStat.index]}"></td> -->
 						<td><a
 							th:text="${#temporals.format(eve.date, 'yyyy/MM/dd HH:mm')}"
 							th:with="url='/evenement/'+${eve.id}+

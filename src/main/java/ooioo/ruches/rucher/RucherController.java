@@ -112,8 +112,7 @@ public class RucherController {
 			List<Map<String, String>> histo = new ArrayList<>();
 			Map<String, String> itemHisto;
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
-			int levens = evensRucheAjout.size();
-			for (int i = 0; i < levens; i++) {
+			for (int i = 0, levens = evensRucheAjout.size(); i < levens; i++) {
 				Evenement eve = evensRucheAjout.get(i);
 				if (eve.getRucher().getId().equals(rucherId)) {
 					// si l'événement est un ajout dans le rucher
@@ -289,7 +288,8 @@ public class RucherController {
 			pMin = 1000000;
 			nbRecoltes = 0;
 			for (Recolte recolte : recoltes) {
-				Integer poids = recolteHausseRepository.findPoidsMielByRucherByRecolte(rucher.getId(), recolte.getId());
+				Integer poids = recolteHausseRepository.findPoidsMielByRucherByRecolte(rucher.getId(),
+						recolte.getId());
 				if (poids != null) {
 					nbRecoltes++;
 					pTotal += poids;
