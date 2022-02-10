@@ -175,6 +175,7 @@ function rucherListeIgn(ign) {
 				visible: false
 			}
 		}));
+		map.addControl(new ol.control.SearchEngine());
 		map.addControl(new ol.control.ElevationPath());
 		map.addControl(new ol.control.Route());
 		map.addControl(new ol.control.GeoportalMousePosition({
