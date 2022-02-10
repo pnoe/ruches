@@ -1,5 +1,5 @@
 /* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
-/* globals google,
+/* globals google, pasderuchetxt,
 	ruchers, nomRuches,	urlruches, ruchertxt, lesRuchestxt,	ruchersmapzoom, _csrf_token
  */
 
