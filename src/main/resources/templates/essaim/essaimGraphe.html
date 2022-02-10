@@ -5,15 +5,15 @@
 <script th:src="@{/js/ruches/essaimGraphe.js}"></script>
 <script th:inline="javascript">
 	const data = [(${essaimTree})];
-	const essaimnom = [[${essaim.nom}]];
-	const essaimtxt = [[#{essaim}]];
-	const ruchetxt = [[#{ruche}]];
-	const ruchertxt = [[#{rucher}]];
-	const MielKgtxt = [[#{MielKg}]];
-	const MielDescKgtxt = [[#{MielDescKg}]];
-	const Actif = [[#{actif}]];
-	const Inactif = [[#{Inactif}]];
-	const urlessaim = [[@{/essaim/}]];
+	const essaimnom = /*[[${essaim.nom}]]*/ null;
+	const essaimtxt = /*[[#{essaim}]]*/ null;
+	const ruchetxt = /*[[#{ruche}]]*/ null;
+	const ruchertxt = /*[[#{rucher}]]*/ null;
+	const MielKgtxt = /*[[#{MielKg}]]*/ null;
+	const MielDescKgtxt = /*[[#{MielDescKg}]]*/ null;
+	const Actif = /*[[#{actif}]]*/ null;
+	const Inactif = /*[[#{Inactif}]]*/ null;
+	const urlessaim = /*[[@{/essaim/}]]*/ null;
 	$(document).ready(essaimGraphe);
 </script>
 <style>

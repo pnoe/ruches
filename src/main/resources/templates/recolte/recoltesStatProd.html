@@ -7,13 +7,13 @@
 <script th:replace="include :: d3-scale-chromatic"></script>
 <script th:src="@{/js/ruches/recoltesStatProd.js}"></script>
 <script th:inline="javascript">
-	const poidsMielHausses = [[${poidsMielHausses}]];
-	const poidsMielPots = [[${poidsMielPots}]];
-	const debutAnnee = [[${debutAnnee}]];
-	const nbIEssaims = [[${nbIEssaims}]];	
-	const Hausses = [[#{Hausses}]];
-	const Pots = [[#{Pots}]];
-	const HaussesEssaim = [[#{HaussesEssaim}]];
+	const poidsMielHausses = /*[[${poidsMielHausses}]]*/ null;
+	const poidsMielPots = /*[[${poidsMielPots}]]*/ null;
+	const debutAnnee = /*[[${debutAnnee}]]*/ null;
+	const nbIEssaims = /*[[${nbIEssaims}]]*/ null;	
+	const Hausses = /*[[#{Hausses}]]*/ null;
+	const Pots = /*[[#{Pots}]]*/ null;
+	const HaussesEssaim = /*[[#{HaussesEssaim}]]*/ null;
 	$(document).ready(function() { grapheRecolte(); });
 </script>
 </head>

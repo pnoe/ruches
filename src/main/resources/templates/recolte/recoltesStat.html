@@ -7,9 +7,9 @@
 <script th:replace="include :: d3-scale-chromatic"></script>
 <script th:src="@{/js/ruches/recoltesStat.js}"></script>
 <script th:inline="javascript">
-	const poidsmiel = [[${poids}]];
-	const nomsessaims = [[${noms}]];
-	const poidsTotal = [[${poidsTotal}]];
+	const poidsmiel = /*[[${poids}]]*/ null;
+	const nomsessaims = /*[[${noms}]]*/ null;
+	const poidsTotal = /*[[${poidsTotal}]]*/ null;
 	$(document).ready(function() { graphe(); });
 </script>
 </head>

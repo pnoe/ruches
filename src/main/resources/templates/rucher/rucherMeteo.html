@@ -4,9 +4,9 @@
 <script th:replace="include :: jsChart"></script>
 <script th:src="@{/js/ruches/rucherMeteo.js}"></script>
 <script th:inline="javascript">
-	const longitude = [[${rucher.longitude}]];
-	const latitude = [[${rucher.latitude}]];
-	const openweathermapKey = [[${@environment.getProperty('openweathermap.key')}]];
+	const longitude = /*[[${rucher.longitude}]]*/ null;
+	const latitude = /*[[${rucher.latitude}]]*/ null;
+	const openweathermapKey = /*[[${@environment.getProperty('openweathermap.key')}]]*/ null;
 	const urlPrefix='https://api.openweathermap.org/data/2.5/onecall';
 	$().ready(function() {
 		rucherMeteo();

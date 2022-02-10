@@ -7,16 +7,16 @@
 <script th:replace="include :: d3-scale-chromatic"></script>
 <script th:src="@{/js/ruches/essaimsStatAge.js}"></script>
 <script th:inline="javascript">
-	const pas = [[${pas}]];
-	const agesHisto = [[${agesHisto}]];
-	const ageMoyenJours = [[${ageMoyenJours}]];
-	const ageVarianceJours = [[${ageVarianceJours}]];
-	const ageMaxJours = [[${ageMaxJours}]];
-	const ageMinJours = [[${ageMinJours}]];
-	const Moyenne = [[#{Moyenne}]];
-	const EcartType = [[#{EcartType}]];
-	const Min = [[#{Min}]];
-	const Max = [[#{Max}]];
+	const pas = /*[[${pas}]]*/ null;
+	const agesHisto = /*[[${agesHisto}]]*/ null;
+	const ageMoyenJours = /*[[${ageMoyenJours}]]*/ null;
+	const ageVarianceJours = /*[[${ageVarianceJours}]]*/ null;
+	const ageMaxJours = /*[[${ageMaxJours}]]*/ null;
+	const ageMinJours = /*[[${ageMinJours}]]*/ null;
+	const Moyenne = /*[[#{Moyenne}]]*/ null;
+	const EcartType = /*[[#{EcartType}]]*/ null;
+	const Min = /*[[#{Min}]]*/ null;
+	const Max = /*[[#{Max}]]*/ null;
 	$(document).ready(function() { graphe(); });
 </script>
 </head>

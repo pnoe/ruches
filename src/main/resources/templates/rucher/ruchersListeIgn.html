@@ -5,17 +5,17 @@
 <script th:replace="include :: jsGpPluginOpenLayers"></script>
 <script th:src="@{/js/ruches/rucherListeOl.js}"></script>
 <script th:inline="javascript">
-	const ruchers = [[${ruchers}]];	
-	const nomRuches = [[${rucheNoms}]];
-	const recentertxt = [[#{recentrer?}]];
-	const lesRucherstxt = [[#{Ruchers}]];
-	const lesRuchestxt = [[#{Ruches}]];
-	const pasderuchetxt = [[#{PasDeRuche}]];
-	const ruchertxt = [[#{rucher}]];
-	const couchemarqueursrucherstxt = [[#{couchemarqueursruchers}]];
-	const pleinecrantxt = [[#{pleinecran}]];
-	const urlruches = [[@{/}]];
-	const _csrf_token = [[${_csrf.token}]];
+	const ruchers = /*[[${ruchers}]]*/ null;	
+	const nomRuches = /*[[${rucheNoms}]]*/ null;
+	const recentertxt = /*[[#{recentrer?}]]*/ null;
+	const lesRucherstxt = /*[[#{Ruchers}]]*/ null;
+	const lesRuchestxt = /*[[#{Ruches}]]*/ null;
+	const pasderuchetxt = /*[[#{PasDeRuche}]]*/ null;
+	const ruchertxt = /*[[#{rucher}]]*/ null;
+	const couchemarqueursrucherstxt = /*[[#{couchemarqueursruchers}]]*/ null;
+	const pleinecrantxt = /*[[#{pleinecran}]]*/ null;
+	const urlruches = /*[[@{/}]]*/ null;
+	const _csrf_token = /*[[${_csrf.token}]]*/ null;
 	window.onload = function () {
 		rucherListeIgn(true); 			
 	}
@@ -27,7 +27,7 @@
 	    top: 4em;
 	}
 	[id^=GPsearchEngine-] {
-			top: 35px;
+			top: 37px;
 			left: 42px
 	}	
 </style>
