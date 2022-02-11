@@ -13,7 +13,7 @@ $(document).ready(function() {
 			return confirm([[#{supprimeressaim}]]);
 		}
     });
-	const table = $('#associerRucheEssaim').DataTable({
+	const table = new DataTable('#associerRucheEssaim', {
         "dom": '<"toolbar">lftip',
         fnInitComplete: function(){
             $('div.toolbar').html(

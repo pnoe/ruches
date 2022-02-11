@@ -4,7 +4,7 @@
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
 	$(document).ready(function() {
-		const tableRetrait = $('#retraitHausses').DataTable({
+		const tableRetrait = new DataTable('#retraitHausses', {
 			paging: false,
 			searching: false,
 			info: false,
@@ -37,7 +37,7 @@
 						}
 			});
 		});
-		$('#ajoutHausses').DataTable();
+		new DataTable('#ajoutHausses');
 	});
 </script>
 </head>

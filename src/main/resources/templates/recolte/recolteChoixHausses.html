@@ -33,7 +33,7 @@ $(document).ready(function() {
             }      
         }
 	}
-	const tableRetrait = $('#retraitHausseRecolte').DataTable({
+	const tableRetrait = new DataTable('#retraitHausseRecolte', {
 		select: {style: 'multi+shift'}
     });
 	tableRetrait.on( 'select deselect', updateLinks);
@@ -42,7 +42,7 @@ $(document).ready(function() {
     		alert([[#{selecthaussesretirer}]]);	
     	}  
 	});
-	const tableAjout = $('#ajoutHausseRecolte').DataTable({
+	const tableAjout = new DataTable('#ajoutHausseRecolte', {
 		select: {style: 'multi+shift'}
     });
 	tableAjout.on( 'select deselect', updateLinks);

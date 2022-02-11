@@ -9,7 +9,7 @@ $(document).ready(function() {
     $('.popover-dismiss').popover({
         trigger: 'focus'
     });
-    $('#statistiques').DataTable({
+    new DataTable('#statistiques', {
     	dom: 'Blftip',
 	    buttons: [
 	    	'csv',

@@ -4,10 +4,10 @@
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
 $().ready(function() {
-	let tableajout = $('#ajoutRuches').DataTable({
+	let tableajout = new DataTable('#ajoutRuches', {
 		select: {style: 'multi+shift'}
     });
-	$('#retraitRuches').DataTable({
+	new DataTable('#retraitRuches', {
     });
 	function updateLinkAjout( e, dt, type, indexes ) {
     	if ( type === 'row' ) {
