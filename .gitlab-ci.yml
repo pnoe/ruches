@@ -4,4 +4,4 @@ build-job:
   stage: build
   when: manual
   script:
-    - mvn package -U -DskipTests
+    - mvn package
