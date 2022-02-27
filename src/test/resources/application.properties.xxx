@@ -66,13 +66,13 @@ server.error.whitelabel.enabled=false
 spring.jpa.show-sql=true
 spring.jpa.hibernate.ddl-auto=none
 # spring.datasource.initialization-mode=always
-jdbc.driverClassName=org.h2.Driver
-jdbc.url=jdbc:h2:mem:db;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.url=jdbc:h2:mem:db;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
   #\
   # INIT=RUNSCRIPT FROM 'classpath:structure.sql';\
   # INIT=RUNSCRIPT FROM 'classpath:ruches_donnees_min.sql';
-jdbc.username=sa
-jdbc.password=sa
+spring.datasource.username=sa
+spring.datasource.password=sa
 
 
 # Pour eviter plantage si 2 instances d'applications spring sur le meme tomcat
