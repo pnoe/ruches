@@ -2,15 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
-$(document).ready(function() {
+  const recolteHausses = /*[[${recolteHausses}]]*/ null;
+  const evenements = /*[[${evenements}]]*/ null;
+  const essaimsupprimerecoltetxt = /*[[#{essaimsupprimerecolte}]]*/ null;
+  const supprimeressaimevenementstxt = /*[[#{supprimeressaimevenements}]]*/ null;
+  const supprimeressaimtxt = /*[[#{supprimeressaim}]]*/ null;
+  $(document).ready(function() {
 	$('.confirmation').on('click', function () {
-		if([[${recolteHausses}]]) {
-			alert([[#{essaimsupprimerecolte}]]);
+		if(recolteHausses) {
+			alert(essaimsupprimerecoltetxt);
 			return false;
-		} else if ([[${evenements}]]) {
-	        return confirm([[#{supprimeressaimevenements}]]);			
+		} else if (evenements) {
+	        return confirm(supprimeressaimevenementstxt);			
 		} else {
-			return confirm([[#{supprimeressaim}]]);
+			return confirm(supprimeressaimtxt);
 		}
     });
 	const table = new DataTable('#associerRucheEssaim', {
