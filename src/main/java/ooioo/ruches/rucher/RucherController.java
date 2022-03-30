@@ -61,8 +61,9 @@ public class RucherController {
 
 	private static final String RUCHER_RUCHERFORM = "rucher/rucherForm";
 	private static final String RUCHER_RUCHERLISTE = "rucher/ruchersListe";
-	private static final String destProv = "destProv";
-
+	private static final String DESTPROV = "destProv";
+	private static final String EVEID = "eveid";
+	
 	private final Logger logger = LoggerFactory.getLogger(RucherController.class);
 
 	@Autowired
@@ -138,14 +139,14 @@ public class RucherController {
 					if (evePrec == null) {
 						// il n'y a pas d'événement précédent d'ajout de cette
 						// ruche dans un rucher
-						itemHisto.put(destProv, "Inconnue");
+						itemHisto.put(DESTPROV, "Inconnue");
 					} else {
-						itemHisto.put(destProv, evePrec.getRucher().getNom());
+						itemHisto.put(DESTPROV, evePrec.getRucher().getNom());
 					}
 					itemHisto.put(Const.RUCHE, eve.getRuche().getNom());
 					itemHisto.put(Const.NBRUCHES, Integer.toString(ruches.size()));
 					itemHisto.put("etat", String.join(" ", ruches));
-					itemHisto.put("eveid", eve.getId().toString());
+					itemHisto.put(EVEID, eve.getId().toString());
 					histo.add(itemHisto);
 					if (!ruches.remove(eve.getRuche().getNom())) {
 						logger.error("Événement {} le rucher {} ne contient pas la ruche {}", eve.getDate(),
@@ -167,11 +168,11 @@ public class RucherController {
 									itemHisto = new HashMap<>();
 									itemHisto.put("date", eve.getDate().format(formatter));
 									itemHisto.put("type", "Retrait");
-									itemHisto.put(destProv, eve.getRucher().getNom());
+									itemHisto.put(DESTPROV, eve.getRucher().getNom());
 									itemHisto.put(Const.RUCHE, eve.getRuche().getNom());
 									itemHisto.put(Const.NBRUCHES, Integer.toString(ruches.size()));
 									itemHisto.put("etat", String.join(" ", ruches));
-									itemHisto.put("eveid", eve.getId().toString());
+									itemHisto.put(EVEID, eve.getId().toString());
 									histo.add(itemHisto);
 									ruches.add(eve.getRuche().getNom());
 								}
@@ -204,7 +205,7 @@ public class RucherController {
 					itemHisto = histo.get(i);
 					ruchesGroup = new StringBuilder(itemHisto.get(Const.RUCHE));
 					destP = new HashSet<>();
-					destP.add(itemHisto.get(destProv));
+					destP.add(itemHisto.get(DESTPROV));
 					// on recherche si les événements suivants peuvent être groupés
 					// même date et même type (Ajout/Retrait)
 					// par contre les destinations provenances peuvent être différentes
@@ -218,8 +219,8 @@ public class RucherController {
 							// regrouper en concaténant les ruches et en stocant les dest/prov
 							ruchesGroup.append(" ");
 							ruchesGroup.append(itemHistoN.get(Const.RUCHE));
-							if (!destP.contains(itemHistoN.get(destProv))) {
-								destP.add(itemHistoN.get(destProv));
+							if (!destP.contains(itemHistoN.get(DESTPROV))) {
+								destP.add(itemHistoN.get(DESTPROV));
 							}
 							j += 1;
 						} else {
@@ -239,13 +240,13 @@ public class RucherController {
 						// différentes
 						itemHistoG.put("date", itemHisto.get("date"));
 						itemHistoG.put("type", itemHisto.get("type"));
-						itemHistoG.put(destProv, String.join(" ", destP));
+						itemHistoG.put(DESTPROV, String.join(" ", destP));
 						itemHistoG.put(Const.RUCHE, ruchesGroup.toString());
 						itemHistoG.put(Const.NBRUCHES, itemHisto.get(Const.NBRUCHES));
 						itemHistoG.put("etat", itemHisto.get("etat"));
 						// l'id eve est l'id du premier événements, on perd les
 						// des autres événements
-						itemHistoG.put("eveid", itemHisto.get("eveid"));
+						itemHistoG.put(EVEID, itemHisto.get(EVEID));
 						histoGroup.add(itemHistoG);
 					}
 					i = j;

@@ -60,8 +60,6 @@ public class RecolteController {
 	@GetMapping("/statprod")
 	public String statprod(Model model) {
 		int debutAnnee = recolteRepository.findFirstByOrderByDateAsc().getDate().getYear();
-		// int finAnnee = recolteRepository.findFirstByOrderByDateDesc().getDate().getYear();
-		//   sinon erreur débordement de tableau nbEssaims
 		LocalDate maintenant = LocalDate.now();
 		int finAnnee = maintenant.getYear();
 		int dureeAns = finAnnee - debutAnnee + 1;
@@ -74,14 +72,6 @@ public class RecolteController {
 			Optional<Double> pMPOpt = recolteRepository.
 					findPoidsMielByYear(Double.valueOf((double)debutAnnee + i));
 			poidsMielPots[i] = pMPOpt.isPresent() ? pMPOpt.get().intValue()/1000 : 0;
-			
-			/*
-			poidsMielHausses[i] = recolteRepository.
-			  findPoidsHaussesByYear(Double.valueOf((double)debutAnnee + i))/1000;
-			poidsMielPots[i] = recolteRepository.
-			  findPoidsMielByYear(Double.valueOf((double)debutAnnee + i)).intValue()/1000;
-			*/
-			
 		}
 		float[] nbEssaims = new float[dureeAns]; // nombre d'essaims actifs par année de production
 		Iterable<Essaim> essaims = essaimRepository.findAll();

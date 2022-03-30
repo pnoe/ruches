@@ -40,35 +40,6 @@ public class EvenementRucherController {
 	MessageSource messageSource;
 	
 	/*
-	 * Liste événements ajout ruche dans rucher en paramètre
-	 */
-	/*
-	@GetMapping("/listeRucherRucheAjout/{rucherId}")
-	public String listeRucherRucheAjout(Model model, @PathVariable Long rucherId) {
-		Iterable<Object[]> transhumances = evenementRepository.findAjoutRucher(rucherId);
-		return "index";
-	}
-	*/
-	
-	/*
-	 * Liste événements ajout/retrait ruche dans rucher en paramètre
-	 */
-	/*
-	@GetMapping("/listeRucherRucheAjoutRetrait/{rucherId}")
-	public String listeRucherRucheAjoutRetrait(Model model, @PathVariable Long rucherId) {
-		Iterable<Object[]> ajoutRetraits = evenementRepository.findAjRucheEtPrec(rucherId);
-		for (Object[] ajoutRetrait : ajoutRetraits) {
-			for (int i = 0; i < 8; i++) {
-				System.out.print(ajoutRetrait[i].toString() + ' ');
-			}
-			System.out.println("");
-		}
-		return "redirect:/rucher/" + rucherId;
-	}
-	*/
-	
-
-	/*
 	 * Liste événements ajout ruche rucher
 	 */
 	@GetMapping("/listeRucheAjout")

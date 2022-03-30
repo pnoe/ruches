@@ -22,9 +22,9 @@ public interface RecolteRepository extends CrudRepository<Recolte, Long> {
 	 *   retour null
 	 */
 	@Query(value = """
-	  select sum(poids_miel) as poids 
-	  from recolte 
-	  where date_part('year', date) = ?1
+			select sum(poids_miel) as poids 
+				from recolte 
+				where date_part('year', date) = ?1
 			""", nativeQuery = true)
 	Optional<Double> findPoidsMielByYear(Double year);
 
@@ -34,9 +34,9 @@ public interface RecolteRepository extends CrudRepository<Recolte, Long> {
 	 *   retour null
 	 */
 	@Query(value = """
-	  select sum(rh.poids_avant) - sum(rh.poids_apres) as p 
-	  from recolte r , recolte_hausse rh
-	  where date_part('year', r.date) = ?1 and rh.recolte_id = r.id
+			select sum(rh.poids_avant) - sum(rh.poids_apres) as p 
+				from recolte r , recolte_hausse rh
+				where date_part('year', r.date) = ?1 and rh.recolte_id = r.id
 			""", nativeQuery = true)
 	Optional<Integer> findPoidsHaussesByYear(Double year);
 }

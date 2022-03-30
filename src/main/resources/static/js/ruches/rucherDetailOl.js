@@ -396,14 +396,6 @@ function rucherDetail(ign) {
 		parcoursRedraw(true);
 	});
 	$('#dragMarker').change(function() {
-		/*
-		select.getFeatures().clear();
-		select.dispatchEvent({
-		  type: 'select',
-		  selected: [],
-		  deselected: select.getFeatures(),
-		});
-		*/
 		select.setActive(!this.checked);
 		translate.setActive(!this.checked);
 	});

@@ -36,6 +36,9 @@ import ooioo.ruches.rucher.RucherService;
 @RequestMapping("/evenement/essaim")
 public class EvenementEssaimController {
 
+	private static final String ESSAIMPASDANSRUCHE = "Essaimage : l'essaim n'est pas dans une ruche !";
+	private static final String ESSAIMSNOMS = "essaimsNoms";
+	
 	final Logger logger = LoggerFactory.getLogger(EvenementEssaimController.class);
 
 	@Autowired
@@ -163,7 +166,7 @@ public class EvenementEssaimController {
 	@GetMapping("/sucreLot/{essaimsNoms}")
 	public String sucreLot(HttpSession session, Model model, @PathVariable String essaimsNoms) {
 		model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
-		model.addAttribute("essaimsNoms", essaimsNoms);
+		model.addAttribute(ESSAIMSNOMS, essaimsNoms);
 		return "essaim/essaimSucreLotForm";
 	}
 
@@ -173,7 +176,7 @@ public class EvenementEssaimController {
 	@GetMapping("/traitementLot/{essaimsNoms}")
 	public String traitementLot(HttpSession session, Model model, @PathVariable String essaimsNoms) {
 		model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
-		model.addAttribute("essaimsNoms", essaimsNoms);
+		model.addAttribute(ESSAIMSNOMS, essaimsNoms);
 		return "essaim/essaimTraitementLotForm";
 	}
 
@@ -183,7 +186,7 @@ public class EvenementEssaimController {
 	@GetMapping("/commentaireLot/{essaimsNoms}")
 	public String commentaireLot(HttpSession session, Model model, @PathVariable String essaimsNoms) {
 		model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
-		model.addAttribute("essaimsNoms", essaimsNoms);
+		model.addAttribute(ESSAIMSNOMS, essaimsNoms);
 		return "essaim/essaimCommentaireLotForm";
 	}
 
@@ -318,8 +321,8 @@ public class EvenementEssaimController {
 			return prepareAppelFormulaire(session, model, essaimId, "essaim/essaimDispersionForm");
 			
 		} else {
-			logger.error("Essaimage : l'essaim n'est pas dans une ruche !");
-			model.addAttribute(Const.MESSAGE, "Essaimage : l'essaim n'est pas dans une ruche !");
+			logger.error(ESSAIMPASDANSRUCHE);
+			model.addAttribute(Const.MESSAGE, ESSAIMPASDANSRUCHE);
 			return Const.INDEX;
 		}
 		
@@ -395,8 +398,8 @@ public class EvenementEssaimController {
 			} else {
 				// TODO il faudrait rester sur le détail essaim et afficher
 				//   le message d'erreur dans cette page
-				logger.error("Essaimage : l'essaim n'est pas dans une ruche !");
-				model.addAttribute(Const.MESSAGE, "Essaimage : l'essaim n'est pas dans une ruche !");
+				logger.error(ESSAIMPASDANSRUCHE);
+				model.addAttribute(Const.MESSAGE, ESSAIMPASDANSRUCHE);
 				return Const.INDEX;
 			}
 		}
