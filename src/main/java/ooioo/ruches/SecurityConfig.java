@@ -22,9 +22,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/forgotPassword", "/resetPassword", "/resetPasswordFin", "/", "/css/**", "/js/**",
-						"/images/**", "/open-iconic/**", "/webjars/**")
-				.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll().and()
+				.antMatchers("/forgotPassword", "/resetPassword",
+						"/resetPasswordFin", "/", "/css/**", "/js/**",
+						"/images/**", "/bootstrap-icons-*/**", "/font/**")
+				.permitAll().anyRequest().authenticated().and()
+				.formLogin().loginPage("/login").permitAll().and()
 				.logout().permitAll()
 				// désactivation du csrf pour l'api rest
 				.and().csrf().ignoringAntMatchers("/rest/**");
@@ -35,8 +37,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(userDetailsService);
 	}
 
+	/*
+	 * Password encoder nécessaire sinon erreur :
+	 *  There is no PasswordEncoder mapped for the id "null"
+	 */
 	@Bean
 	public static BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
 }

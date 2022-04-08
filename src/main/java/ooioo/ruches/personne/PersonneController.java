@@ -66,7 +66,6 @@ public class PersonneController {
 			}
 		}
 		model.addAttribute("personneLogins", logins);
-
 		List<String> emails = new ArrayList<>();
 		for (PersonneEmail personneEmail : personneRepository.findAllProjectedEmailBy()) {
 			if (!"".equals(personneEmail.getEmail())) {
@@ -74,7 +73,6 @@ public class PersonneController {
 			}
 		}
 		model.addAttribute("personneEmails", emails);
-
 		model.addAttribute(Const.PERSONNE, new Personne());
 		return PERSONNE_PERSONNEFORM;
 	}
@@ -175,7 +173,7 @@ public class PersonneController {
 	 * Détail d'une personne
 	 */
 	@GetMapping("/{personneId}")
-	public String ruche(Model model, @PathVariable long personneId) {
+	public String personne(Model model, @PathVariable long personneId) {
 		Optional<Personne> personneOpt = personneRepository.findById(personneId);
 		if (personneOpt.isPresent()) {
 			// Si des ruchers référencent cette personne, on ne pourra pas la supprimer
