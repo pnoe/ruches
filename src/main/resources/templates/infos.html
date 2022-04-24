@@ -280,14 +280,18 @@
 					<th scope="col" th:text="#{nom}"></th>
 					<th style="background-color:LemonChiffon" th:text="#{reineDateNaissance}"></th>
 					<th th:text="#{dateAcquisition}"></th>
+					<th th:text="#{diff}"></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="essaim : ${essaimDateNaissSupAcquis}">
+				<tr th:each="essaim : ${essaimDateNaissSupAcquis}"
+					th:with="N=${essaim.reineDateNaissance},A=${essaim.dateAcquisition},D=${T(java.time.Duration)}">
 					<td><a th:href="@{'/essaim/'+${essaim.id}}"
 						th:text="${essaim.nom}"></a></td>
-					<td th:text="${essaim.reineDateNaissance}"></td>
-					<td th:text="${essaim.dateAcquisition}"></td>	
+					<td th:text="${N}"></td>
+					<td th:text="${A}"></td>
+					<td th:text="${D.between(A.atStartOfDay(),N.atStartOfDay()).toDays()}"></td>
+						
 				</tr>
 			</tbody>
 		</table>
