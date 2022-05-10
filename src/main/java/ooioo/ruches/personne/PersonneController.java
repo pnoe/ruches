@@ -38,19 +38,11 @@ public class PersonneController {
 	@Autowired
 	private RucherRepository rucherRepository;
 	@Autowired
-	private PersonneService personneService;
+	private PersonneService pService;
 
-	/**
-	 * Liste des Personnes
-	 */
 	@GetMapping("/liste")
 	public String liste(HttpSession session, Model model) {
-		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
-		if (voirInactif != null && (boolean) voirInactif) {
-			model.addAttribute(Const.PERSONNES, personneRepository.findAllByOrderByNom());
-		} else {
-			model.addAttribute(Const.PERSONNES, personneRepository.findByActiveOrderByNom(true));
-		}
+		pService.modelPersonnes(model, session);
 		return "personne/personnesListe";
 	}
 
@@ -86,7 +78,7 @@ public class PersonneController {
 		if (personneOpt.isPresent()) {
 			Personne personne = personneOpt.get();
 			// Il faut être admin pour modifier une autre Personne
-			if (personneService.personneDroitsInsuffisants(personne, authentication, model)) {
+			if (pService.personneDroitsInsuffisants(personne, authentication, model)) {
 				return Const.INDEX;
 			}
 			model.addAttribute(Const.PERSONNE, personne);
@@ -107,7 +99,7 @@ public class PersonneController {
 		if (personneOpt.isPresent()) {
 			Personne personne = personneOpt.get();
 			// Il faut être admin pour supprimer une autre Personne
-			if (personneService.personneDroitsInsuffisants(personne, authentication, model)) {
+			if (pService.personneDroitsInsuffisants(personne, authentication, model)) {
 				return Const.INDEX;
 			}
 			Collection<Rucher> ruchers = rucherRepository.findByContactId(personneId);
@@ -133,7 +125,7 @@ public class PersonneController {
 	public String sauve(@ModelAttribute Personne personne, BindingResult bindingResult, Model model,
 			Authentication authentication) {
 		// Il faut être admin pour créer une Personne ou pour modifier une autre Personne que soi-même
-		if (personneService.personneDroitsInsuffisants(personne, authentication, model)) {
+		if (pService.personneDroitsInsuffisants(personne, authentication, model)) {
 			return Const.INDEX;
 		}
 		if (bindingResult.hasErrors()) {

@@ -21,6 +21,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		// https://www.baeldung.com/spring-security-cache-control-headers
+		// https://docs.spring.io/spring-security/reference/servlet/exploits/headers.html#servlet-headers-cache-control
+		http.headers().disable();
 		http.authorizeRequests()
 				.antMatchers("/forgotPassword", "/resetPassword",
 						"/resetPasswordFin", "/", "/css/**", "/js/**",
