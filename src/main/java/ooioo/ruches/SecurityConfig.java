@@ -27,7 +27,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 				.antMatchers("/forgotPassword", "/resetPassword",
 						"/resetPasswordFin", "/", "/css/**", "/js/**",
-						"/images/**", "/bootstrap-icons-*/**", "/font/**")
+						"/images/**", 
+						// "/bootstrap-icons-*/**", 
+						"/font/**")
 				.permitAll().anyRequest().authenticated().and()
 				.formLogin().loginPage("/login").permitAll().and()
 				.logout().permitAll()
