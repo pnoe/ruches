@@ -1,15 +1,7 @@
 {
     "emptyTable": "Aucune donnée disponible dans le tableau",
-    "lengthMenu": "Afficher _MENU_ éléments",
     "loadingRecords": "Chargement...",
     "processing": "Traitement...",
-    "zeroRecords": "Aucun élément correspondant trouvé",
-    "paginate": {
-        "first": "Premier",
-        "last": "Dernier",
-        "previous": "<",
-        "next": ">"
-    },
     "aria": {
         "sortAscending": ": activer pour trier la colonne par ordre croissant",
         "sortDescending": ": activer pour trier la colonne par ordre décroissant"
@@ -21,7 +13,6 @@
         }
     },
     "buttons": {
-        "copyKeys": "Appuyer sur ctrl ou u2318 + C pour copier les données du tableau dans votre presse-papier.",
         "collection": "Collection",
         "colvis": "Visibilité colonnes",
         "colvisRestore": "Rétablir visibilité",
@@ -38,13 +29,22 @@
             "_": "Afficher %d lignes"
         },
         "pdf": "PDF",
-        "print": "Imprimer"
-    },
+        "print": "Imprimer",
+    	"copyKeys": "Appuyer sur ctrl ou u2318 + C pour copier les données du tableau dans votre presse-papier."
+        },
     "decimal": ",",
+    "search": "Rechercher",
     "info": "Affichage de _START_ à _END_ sur _TOTAL_",
     "infoEmpty": "Affichage de 0 à 0 sur 0",
+    "infoFiltered": "(filtrés depuis un total de _MAX_ éléments)",    
+    "lengthMenu": "Afficher _MENU_ éléments",
+    "paginate": {
+        "first": "Premier",
+        "last": "Dernier",
+        "previous": "<",
+        "next": ">"
+    },
+    "zeroRecords": "Aucun élément correspondant trouvé",
     "infoThousands": "\u2009",
-    "search": "Rechercher",
-    "thousands": "\u2009",
-    "infoFiltered": "(filtrés depuis un total de _MAX_ éléments)"
+    "thousands": "\u2009"
 }  
