@@ -23,13 +23,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		// https://www.baeldung.com/spring-security-cache-control-headers
 		// https://docs.spring.io/spring-security/reference/servlet/exploits/headers.html#servlet-headers-cache-control
+		// https://docs.spring.io/spring-framework/docs/5.0.0.RELEASE/spring-framework-reference/web.html#mvc-config-static-resources
 		http.headers().disable();
 		http.authorizeRequests()
 				.antMatchers("/forgotPassword", "/resetPassword",
 						"/resetPasswordFin", "/", "/css/**", "/js/**",
-						"/images/**", 
-						// "/bootstrap-icons-*/**", 
-						"/font/**")
+						"/images/**", "/doc/**", "/font/**")
 				.permitAll().anyRequest().authenticated().and()
 				.formLogin().loginPage("/login").permitAll().and()
 				.logout().permitAll()
