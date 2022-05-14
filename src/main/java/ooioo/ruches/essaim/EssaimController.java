@@ -388,8 +388,16 @@ public class EssaimController {
 	}
 
 	/**
-	 * Clonage multiple d'un essaim (appel XMLHttpRequest)
-	 *   avec mise en ruche
+	 * Clonage multiple d'un essaim (appel XMLHttpRequest de la page détail d'un essaim)
+	 *   avec mises en ruches éventuelles
+	 *   
+	 * @param session pour gestion du décalage éventuel des dates
+	 * @param model 
+	 * @param essaimId l'id de l'essaim à cloner
+	 * @param nomclones les noms des clones séparés par des virgules
+	 * @param nomruches les noms des ruches pour mettre les clones
+	 *    séparés par des virgules 	
+	 * @return String liste des essaims créés ou erreur
 	 */
 	@PostMapping("/clone/{essaimId}")
 	@ResponseStatus(value = HttpStatus.OK)
