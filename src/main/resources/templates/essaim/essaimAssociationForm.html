@@ -5,12 +5,17 @@
 <link th:replace="include :: cssdatetimepicker"/>
 <script th:replace="include :: localejsdatetimepicker"></script>
 <script th:inline="javascript">
+	const doitEtreSupA = /*[[#{doitEtreSupA}]]*/ null;
+	const dateFirst = /*[[${dateFirst}]]*/ null;
+	const timeFirst = /*[[#{timeFirst}]]*/ null;
+	const rucherucherid = /*[[${ruche.rucher?.id}]]*/ null;
+	const ruchesourcerucherid = /*[[${rucheSource?.rucher?.id}]]*/ null;
 	$().ready(function() {
 		$.validator.addMethod( "greaterThanEqual", function( value, element, param ) {
 			return ($('#swapPositions').is(":checked") &&
-				([[${ruche.rucher?.id}]] != [[${rucheSource?.rucher?.id}]]))
+				(rucherucherid != ruchesourcerucherid))
 			? (Date.parse(value) > Date.parse(param)) : true;
-		}, [[#{doitEtreSupA}]] + ' {0}');
+		}, doitEtreSupA + ' {0}');
 		$("#evenementForm").validate({
 			errorClass: 'erreur-form',
 			errorPlacement: function(error, element) {
@@ -19,7 +24,7 @@
 			rules : {
 				date : {
 					required : true,
-					greaterThanEqual : [[${dateFirst}]] + ' ' + [[${timeFirst}]]
+					greaterThanEqual : dateFirst + ' ' + timeFirst
 				},
 				commentaire : {
 					maxlength : 255
@@ -32,10 +37,10 @@
 		});
 		function swapChange() {
 			const isChk =  $('#swapPositions').is(":checked") &&
-				([[${ruche.rucher?.id}]] != [[${rucheSource?.rucher?.id}]]);
+				(rucherucherid != ruchesourcerucherid);
 			$('#date').datetimepicker({
-				minDate: isChk ? [[${dateFirst}]] : false,
-				minTime: isChk ? [[${timeFirst}]] : false
+				minDate: isChk ? dateFirst : false,
+				minTime: isChk ? timeFirst : false
 			});
 		}
 		$('#swapPositions').on('change', swapChange);
