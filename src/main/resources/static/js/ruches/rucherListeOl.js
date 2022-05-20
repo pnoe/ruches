@@ -4,7 +4,7 @@
 	ruchertxt, couchemarqueursrucherstxt,
 	pleinecrantxt, urlruches, _csrf_token
 */
-
+"use strict";
 function rucherListeIgn(ign) {
 	const urlbrgm = 'https://geoservices.brgm.fr/geologie';
 	const urlbrgmlegend = 'http://mapsref.brgm.fr/legendes/geoservices/Geologie1000_legende.jpg';

@@ -2,7 +2,7 @@
 /* globals Chart, Hausses, Pots, HaussesEssaim,
       poidsMielHausses, poidsMielPots, debutAnnee, nbIEssaims
 */
-
+"use strict";
 function grapheRecolte() {
 	let labels = [];
 	for (let i = 0; i < poidsMielHausses.length; i++) {

@@ -4,7 +4,7 @@
 	 rayonsButinage, distButinage, urlruches, nomHausses, essaimtxt, pasdessaimtxt,
 	 ruchetxt, haussestxt, pasdehaussetxt, ruches, ruchestxt, distancedeparcourstxt,
 	 entreetxt, _csrf_token */
-
+"use strict";
 let parcours;
 let map;
 const markersRuche = [];

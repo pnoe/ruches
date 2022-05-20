@@ -1,6 +1,6 @@
 /* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals listeEvenements, buttontextprint, buttontextcol */
-
+"use strict";
 function evenementListe(initDatatable) {
 	const cookieOpt = ";SameSite=Strict;path=" + window.location.pathname;
 	if (initDatatable) {

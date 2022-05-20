@@ -2,7 +2,7 @@
 /* globals
    rucheParcours, distParcours, ruches, rucher, nomHausses,
    ruchestxt, distancedeparcourstxt  */
-
+"use strict";
 function exportGpx() {
 	const lang = navigator.language;
 	const digits2 = {maximumFractionDigits:2};

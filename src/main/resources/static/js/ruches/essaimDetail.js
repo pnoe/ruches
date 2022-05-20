@@ -4,6 +4,7 @@
     nexistPasOuPasVidtxt, nomexistdejatxt, Ruchestxt, Essaimstxt, creertxt, urlessaimclone,
     essaimid, pasderuchetxt
 */
+"use strict";
 function essaimDetail() {
 	$('#dispersion').on('click', function () {
 		if(!rucheEssaim) {

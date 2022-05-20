@@ -2,7 +2,7 @@
 /* globals d3,
 	data, essaimnom, essaimtxt,	ruchetxt, ruchertxt,
 	MielKgtxt, MielDescKgtxt, Actif, Inactif, urlessaim	*/
-
+"use strict";
 function essaimGraphe() {
 	const lang = navigator.language;
 	const digits2 = {maximumFractionDigits:2};

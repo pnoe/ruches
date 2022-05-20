@@ -2,7 +2,7 @@
 /* globals google, pasderuchetxt,
 	ruchers, nomRuches,	urlruches, ruchertxt, lesRuchestxt,	ruchersmapzoom, _csrf_token
  */
-
+"use strict";
 const markersRucher = [];
 
 function initMap() {

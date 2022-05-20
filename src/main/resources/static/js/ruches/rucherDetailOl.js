@@ -4,8 +4,7 @@
    rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
    ruchetxt, lesHausses, pasdehaussetxt, parcourstxt,
    parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token, dessinEnregistretxt */
-// "use strict"
-
+"use strict";
 function rucherDetail(ign) {
 	const lang = navigator.language;
 	const digits2 = { maximumFractionDigits: 2 };
