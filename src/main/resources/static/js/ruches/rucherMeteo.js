@@ -1,6 +1,6 @@
 /* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals longitude,latitude,openweathermapKey,urlPrefix,Chart */
-"use strict"
+"use strict";
 function rucherMeteo() {
 	//	https://erikflowers.github.io/weather-icons/
 	//	https://openweathermap.org/api/one-call-api
