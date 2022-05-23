@@ -4,7 +4,7 @@
 */
 "use strict";
 function grapheRecolte() {
-	let labels = [];
+	const labels = [];
 	for (let i = 0; i < poidsMielHausses.length; i++) {
 		labels[i] = i + debutAnnee;
 	}

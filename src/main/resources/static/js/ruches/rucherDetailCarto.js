@@ -6,14 +6,14 @@
 function exportGpx() {
 	const lang = navigator.language;
 	const digits2 = {maximumFractionDigits:2};
-	let gpxcontent = '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>' +
-		'<gpx xmlns="http://www.topografix.com/GPX/1/1" ' +
-		'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-		'xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" ' +
-		'version="1.1" creator="ooioo/ruches">' +
-		'<metadata><link href="https://gitlab.com/ooioo/ruches"><text>gitlab ruches</text></link>' +
-		'<time>' + new Date().toISOString() + '</time>' +
-		'</metadata>';
+	let gpxcontent = `<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+		<gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
+		  version="1.1" creator="ooioo/ruches">
+		<metadata>
+		  <link href="https://gitlab.com/ooioo/ruches"><text>gitlab ruches</text></link>
+		  <time>${new Date().toISOString()}</time>
+		</metadata>`;
 	for (const rucheP of rucheParcours) {
 		gpxcontent += '<wpt lat="' + rucheP.latitude +
 			'" lon="' + rucheP.longitude + '"><desc><![CDATA[';
