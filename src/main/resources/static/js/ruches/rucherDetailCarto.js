@@ -5,7 +5,7 @@
 "use strict";
 function exportGpx() {
 	const lang = navigator.language;
-	const digits2 = {maximumFractionDigits:2};
+	const digits2 = { maximumFractionDigits: 2 };
 	let gpxcontent = `<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 		<gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
@@ -47,13 +47,12 @@ function exportGpx() {
 
 function exportKml() {
 	const lang = navigator.language;
-	const digits2 = {maximumFractionDigits:2};
-	let styleStrBegin = '<IconStyle><Icon>' +
-		'<href>http://maps.google.com/mapfiles/kml/pushpin/wht-pushpin.png</href>' +
-		'</Icon><scale>1</scale><color>';
-	let styleStrEnd = '</color></IconStyle>' +
-		'<BalloonStyle><text><![CDATA[$[description]]]></text></BalloonStyle>' +
-		'</Style>';
+	const digits2 = { maximumFractionDigits: 2 };
+	const styleStrBegin = `<IconStyle><Icon>
+		<href>http://maps.google.com/mapfiles/kml/pushpin/wht-pushpin.png</href>
+		</Icon><scale>1</scale><color>`;
+	const styleStrEnd = `</color></IconStyle>
+		<BalloonStyle><text><![CDATA[$[description]]]></text></BalloonStyle></Style>`;
 	let kmlcontent = '<?xml version="1.0" encoding="UTF-8"?>' +
 		'<kml xmlns="http://www.opengis.net/kml/2.2"><Document>' +
 		'<Style id="iconblue">' + styleStrBegin + 'ffff0000' + styleStrEnd +
@@ -67,6 +66,14 @@ function exportKml() {
 	let nom;
 	let description;
 	let couleur;
+	const coulicon = {
+		BLUE: '#iconblue',
+		WHITE: '#iconwhite',
+		YELLOW: '#iconyellow',
+		RED: '#iconred',
+		GREEN: '#icongreen',
+		ORANGE: '#iconorange'
+	};
 	for (let i = 1; i < rucheParcours.length; i++) { // i = 1 pour éviter deux icones Entrée
 		kmlcontent += '<Placemark><open>0</open><styleUrl>#iconorange</styleUrl><name>';
 		if (rucheParcours[i].id === 0) {
@@ -86,26 +93,7 @@ function exportKml() {
 			} else {
 				description += '<br/>Essaim ' + ruche.essaim.nom +
 					((nomHausses[rucheidx] == '') ? '<br/>Pas de hausse' : ('<br/>Hausse(s) ' + nomHausses[rucheidx]));
-				switch (ruche.essaim.reineCouleurMarquage) {
-					case 'BLUE':
-						couleur = '#iconblue';
-						break;
-					case 'WHITE':
-						couleur = '#iconwhite';
-						break;
-					case 'YELLOW':
-						couleur = '#iconyellow';
-						break;
-					case 'RED':
-						couleur = '#iconred';
-						break;
-					case 'GREEN':
-						couleur = '#icongreen';
-						break;
-					case 'ORANGE':
-						couleur = '#iconorange';
-						break;
-				}
+				couleur = coulicon[ruche.essaim.reineCouleurMarquage];
 			}
 		}
 		kmlcontent += nom + ']]></name><description>' + description +
