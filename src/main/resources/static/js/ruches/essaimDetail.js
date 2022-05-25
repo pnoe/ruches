@@ -13,7 +13,8 @@ function essaimDetail() {
 		}
 		return true;
     });
-	$('.confirmation').on('click', function () {
+    
+ 	$('#supprime').on('click', function () {
 		if(recolteHausses) {
 			alert(essaimsupprecolttxt);
 			return false;
@@ -23,7 +24,8 @@ function essaimDetail() {
 			return confirm(suppessaimtxt);
 		}
     });
-	$( "#clone" ).click(function() {
+    
+	$("#clone").on('click', function() {
 		/*[- Saisie des couples nomEssaim;nomRuche séparés par une "," -]*/
 		const noms = prompt(nomessaimsvirgule);
 		if (noms == null || noms == "") {
