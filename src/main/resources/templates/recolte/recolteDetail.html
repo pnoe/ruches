@@ -89,7 +89,7 @@ $(document).ready(function() {
 				&nbsp;
 				<a th:href="@{'/recolte/choixHausses/'+${recolte.id}}"
 				  class="bi bi-justify" th:title="#{choixHausesRecolte}" aria-hidden="true"></a>
-				<span id="enlevehausses" class="bi bi-reply-all" th:title="#{recolteHausseDepot}" aria-hidden="true"></span>
+				<span id="enlevehausses" class="bi bi-reply-all cursorpointer" th:title="#{recolteHausseDepot}" aria-hidden="true"></span>
        			<a th:href="@{'/recolte/statistiques/essaim/'+${recolte.id}}"
        			  class="bi bi-pie-chart" th:title="#{statistiquesessaims}" aria-hidden="true"></a>
        			<a id="supprime" th:href="@{'/recolte/supprime/'+${recolte.id}}"
