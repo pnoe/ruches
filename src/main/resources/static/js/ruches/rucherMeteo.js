@@ -80,7 +80,7 @@ function rucherMeteo() {
 		let jour = 'xx';
 		let labels = dh.map(x => {
 				const txt = new Date(x.dt * 1000).toLocaleString(undefined,	{ day: "numeric", hour: "numeric" });
-				const ret = (jour === txt.substring(0, 2)) ? txt.substring(4) : txt;
+				const ret = (jour === txt.substring(0, 2)) ? txt.substring(txt.lastIndexOf(',') + 1) : txt;
 				jour = txt.substring(0, 2);
 				return ret;
 		});
