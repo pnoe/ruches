@@ -16,7 +16,7 @@ function rucherMeteo() {
 	const digits1 = {maximumFractionDigits:1};
 	const digits2 = {maximumFractionDigits:2};
 	
-	let urlOneCall = urlPrefix + '?lat=' +
+	const urlOneCall = urlPrefix + '?lat=' +
 		latitude + '&lon=' + longitude +
 		'&units=metric&lang=fr&APPID=' + openweathermapKey;
 	$.ajax({
@@ -62,7 +62,7 @@ function rucherMeteo() {
 		});
 		$('#previsions').append(htmlPrev);
 		tempChart(data.hourly);
-		let urlHistoPref = urlPrefix + '/timemachine?lat=' +
+		const urlHistoPref = urlPrefix + '/timemachine?lat=' +
 			latitude + '&lon=' + longitude +
 			'&units=metric' +
 			'&lang=fr' +
@@ -78,10 +78,10 @@ function rucherMeteo() {
 
 	function tempChart(dh) {
 		let jour = 'xx';
-		let labels = dh.map(x => {
-				const txt = new Date(x.dt * 1000).toLocaleString(undefined,	{ day: "numeric", hour: "numeric" });
-				const ret = (jour === txt.substring(0, 2)) ? txt.substring(txt.lastIndexOf(',') + 1) : txt;
-				jour = txt.substring(0, 2);
+		const labels = dh.map(x => {
+				const ddhh = new Date(x.dt * 1000).toLocaleString(undefined,	{ day: "numeric", hour: "numeric" });
+				const ret = (jour === ddhh.substring(0, 2)) ? ddhh.substring(ddhh.lastIndexOf(',') + 1) : ddhh;
+				jour = ddhh.substring(0, 2);
 				return ret;
 		});
 		new Chart('tempGraphe', {
@@ -137,7 +137,7 @@ function rucherMeteo() {
 			$('#historique').append(htmlHisto);
 			return;
 		}
-		let urlHisto = pref + time;
+		const urlHisto = pref + time;
 		$.ajax({
 			url: urlHisto
 		}).done(function(data) {

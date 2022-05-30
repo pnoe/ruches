@@ -69,7 +69,12 @@ $.extend( true, $.fn.dataTable.defaults, {
 <script th:fragment="jspdf" th:src="@{/js/jspdf-2.5.0.umd.min.js}"></script>
 <script th:fragment="jsdatepicker-fr" th:src="@{/js/datepicker-fr.js}"></script>
 
-<script th:fragment="jsChart" th:src="@{/js/chart.min-3.7.1.js}"></script>
+<script th:fragment="jsChart" th:src="@{/js/chart.min-3.8.0.js}"></script>
+
+<link th:fragment="weather-icons" rel="stylesheet" type="text/css" media="all"
+	th:href="@{/css/weather-icons-2.0.12/css/weather-icons.min.css}" />
+<link th:fragment="weather-icons-wind" rel="stylesheet" type="text/css" media="all"
+	th:href="@{/css/weather-icons-2.0.12/css/weather-icons-wind.min.css}" />
 
 <script th:fragment="jsdatetimepicker" th:src="@{/js/jquery.datetimepicker.full.min-2.5.20.js}"></script>
 <link th:fragment="cssdatetimepicker" rel="stylesheet" type="text/css" media="all"

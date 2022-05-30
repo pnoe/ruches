@@ -16,10 +16,8 @@
 	th {background-color:aliceblue;}
 	.wi {font-size: 20px;}
 </style>
-<link rel="stylesheet" type="text/css" media="all"
-	th:href="@{/css/weather-icons.css}" />
-<link rel="stylesheet" type="text/css" media="all"
-	th:href="@{/css/weather-icons-wind.css}" />	
+<link th:replace="include :: weather-icons"></link>
+<link th:replace="include :: weather-icons-wind"></link>
 </head>
 <body>
 	<nav th:replace="include :: navbar"></nav>
