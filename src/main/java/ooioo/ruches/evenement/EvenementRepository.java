@@ -15,6 +15,24 @@ import ooioo.ruches.rucher.Rucher;
 @RepositoryRestResource(collectionResourceRel = "evenementRepository")
 public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	
+	// pas réussi à mettre de regexp sur valeur même en nativeQuery
+	// https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories
+	//   e.valeur ~ '^[0-9]+$' 
+	//   e.valeur <> ''
+	@Query(value = """	
+			select e 
+			  from Evenement e
+			  where (e.type = ooioo.ruches.evenement.TypeEvenement.COMMENTAIREESSAIM
+			    or e.type = ooioo.ruches.evenement.TypeEvenement.COMMENTAIREHAUSSE
+			    or e.type = ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHE
+			    or e.type = ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHER
+			    ) and e.valeur <> '' 
+			    and date >= ?1
+			  order by e.date desc
+			""")
+	List<Evenement> findNotification(LocalDateTime dateNow);
+	
+	
 	@Query(value = "select evenement from Evenement evenement where evenement.date > ?1")
 	Iterable<Evenement> findPeriode(LocalDateTime date);
 
@@ -46,7 +64,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	@Query(value = """	
 		select e 
 		  from Evenement e
-		  where e.ruche.id = ?1 and
+			  where e.ruche.id = ?1 and
 		    (e.type = ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE
 		    or e.type = ooioo.ruches.evenement.TypeEvenement.HAUSSERETRAITRUCHE)
 		  order by e.date desc

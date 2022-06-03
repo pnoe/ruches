@@ -44,9 +44,9 @@
 	<form action="#" th:action="@{'/evenement/rucher/sauve/'+${rucher.id}}"
 		method="post" id="evenementForm">
 		<input type="hidden" id="typeEvenement" name="typeEvenement" value="COMMENTAIRERUCHER"/>
-		<input type="hidden" id="valeur" name="valeur"/>
 		<div th:replace="includeForm :: date"></div>
 		<div th:replace="includeForm :: commentaire"></div>
+		<div th:replace="includeForm :: notifDelai"></div>
 		<div th:replace="includeForm :: BtnForm"></div>
 	</form>
 	<footer th:include="include::footer"></footer>

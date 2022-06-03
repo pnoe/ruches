@@ -1,16 +1,17 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:replace="include :: jsdatetimepicker"></script>
-<link th:replace="include :: cssdatetimepicker"/>
+<link th:replace="include :: cssdatetimepicker" />
 <script th:replace="include :: localejsdatetimepicker"></script>
 <script>
 	$().ready(function() {
 		$("#commentaire").focus();
 		$("#evenementForm").validate({
-			errorClass: 'erreur-form',
-			errorPlacement: function(error, element) {
-			    error.insertBefore(element.closest('div'));
+			errorClass : 'erreur-form',
+			errorPlacement : function(error, element) {
+				error.insertBefore(element.closest('div'));
 			},
 			rules : {
 				date : {
@@ -35,18 +36,19 @@
 			<div class="col">
 				<h1 class="item">
 					<th:block th:text="#{commentaire} + ' '"></th:block>
-				  	<a th:href="@{'/ruche/'+${rucheId}}"
+					<a th:href="@{'/ruche/'+${rucheId}}"
 						th:text="#{ruche} + ' ' + ${ruche.nom}"></a>
 				</h1>
-        	</div>
-        </div>
-    </div>
+			</div>
+		</div>
+	</div>
 	<form action="#" th:action="@{'/evenement/ruche/sauve/'+${ruche.id}}"
-		method="post" id="evenementForm">		
-		<input type="hidden" id="valeur" name="valeur"/>
-		<input type="hidden" id="typeEvenement" name="typeEvenement" value="COMMENTAIRERUCHE"/>
+		method="post" id="evenementForm">
+		<input type="hidden" id="typeEvenement" name="typeEvenement"
+			value="COMMENTAIRERUCHE" />
 		<div th:replace="includeForm :: date"></div>
 		<div th:replace="includeForm :: commentaire"></div>
+		<div th:replace="includeForm :: notifDelai"></div>
 		<div th:replace="includeForm :: BtnForm"></div>
 	</form>
 	<footer th:include="include::footer"></footer>

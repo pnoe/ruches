@@ -2,38 +2,47 @@
 <html xmlns:th="https://www.thymeleaf.org">
 <body>
 
-	<form th:fragment="evenementListeDates (retController)" action="#" th:action="@{${retController}}"
-		method="get" id="evenementForm">
-		<input type="hidden" id="date1" name="date1" />
-		<input type="hidden" id="date2" name="date2" />
-		<input type="hidden" id="datestext" name="datestext" />
-		<select class="form-control" id="periode" name="periode">
-			<option value="1" th:selected="${periode}=='1'" th:text="#{touteperiode}"></option>
-			<option value="2" th:selected="${periode}=='2'" th:text="#{moinsdunan}"></option>
-			<option value="3" th:selected="${periode}=='3'" th:text="#{moinsdunmois}"></option>
-			<option value="4" th:selected="${periode}=='4'" th:text="#{moinsdunesemaine}"></option>
-			<option value="5" th:selected="${periode}=='5'" th:text="#{moinsdunjour}"></option>
-			<option id="cal" value="6" th:selected="${periode}=='6'" th:text="${datestext}?${datestext}:#{datesprecises}"></option>
+	<form th:fragment="evenementListeDates (retController)" action="#"
+		th:action="@{${retController}}" method="get" id="evenementForm">
+		<input type="hidden" id="date1" name="date1" /> <input type="hidden"
+			id="date2" name="date2" /> <input type="hidden" id="datestext"
+			name="datestext" /> <select class="form-control" id="periode"
+			name="periode">
+			<option value="1" th:selected="${periode}=='1'"
+				th:text="#{touteperiode}"></option>
+			<option value="2" th:selected="${periode}=='2'"
+				th:text="#{moinsdunan}"></option>
+			<option value="3" th:selected="${periode}=='3'"
+				th:text="#{moinsdunmois}"></option>
+			<option value="4" th:selected="${periode}=='4'"
+				th:text="#{moinsdunesemaine}"></option>
+			<option value="5" th:selected="${periode}=='5'"
+				th:text="#{moinsdunjour}"></option>
+			<option id="cal" value="6" th:selected="${periode}=='6'"
+				th:text="${datestext}?${datestext}:#{datesprecises}"></option>
 		</select>
 	</form>
 
 	<form action="#">
+		<div th:fragment="notifDelai" class="form-floating mb-3">
+			<input placeholder="" class="form-control" type="number" min="1"
+				step="1" id="valeur" name="valeur" /> <label class="form-label"
+				th:text="#{NotificationJoursAvant}" for="valeur"></label>
+		</div>
 		<div th:fragment="finTraitement" class="form-check">
 			<input class="form-check-input" type="checkbox" id="finTraitement"
 				name="finTraitement" /> <label class="form-check-label"
 				for="finTraitement" th:text="#{finTraitement}"></label>
 		</div>
 		<div th:fragment="poidskg" class="form-floating mb-3">
-			<input placeholder=""
-				class="form-control" type="number" step="0.001" id="valeur"
-				name="valeur" />
-			<label class="form-label" th:text="#{poidskg}" for="valeur"></label>
+			<input placeholder="" class="form-control" type="number" step="0.001"
+				id="valeur" name="valeur" /> <label class="form-label"
+				th:text="#{poidskg}" for="valeur"></label>
 		</div>
 		<div th:fragment="nomField" class="form-floating mb-3">
-			<input placeholder=""
-				class="form-control" type="text" th:field="*{nom}"
-				maxlength="92" th:errorclass="fieldError" />
-			<label class="form-label" for="nom" th:text="#{nom}"></label> 
+			<input placeholder="" class="form-control" type="text"
+				th:field="*{nom}" maxlength="92" th:errorclass="fieldError" /> <label
+				class="form-label" for="nom" th:text="#{nom}"></label>
 		</div>
 		<div th:fragment="activeField" class="form-check">
 			<input class="form-check-input" type="checkbox" th:field="*{active}" />
@@ -44,28 +53,25 @@
 			<label class="form-check-label" for="actif" th:text="#{actif}"></label>
 		</div>
 		<div th:fragment="date" class="form-floating mb-3">
-			<input placeholder=""
-				class="form-control datepicker" type="text" id="date"
-				name="date"
-				th:value="${#temporals.format(date, 'yyyy/MM/dd HH:mm')}" />
-			<label class="form-label" for="date" th:text="#{date}"></label> 
+			<input placeholder="" class="form-control datepicker" type="text"
+				id="date" name="date"
+				th:value="${#temporals.format(date, 'yyyy/MM/dd HH:mm')}" /> <label
+				class="form-label" for="date" th:text="#{date}"></label>
 		</div>
 		<div th:fragment="dateField" class="form-floating mb-3">
-			<input placeholder=""
-				class="form-control datepicker" type="text"
-				th:field="*{date}" th:errorclass="fieldError" />
-			<label class="form-label" for="date" th:text="#{date}"></label>
+			<input placeholder="" class="form-control datepicker" type="text"
+				th:field="*{date}" th:errorclass="fieldError" /> <label
+				class="form-label" for="date" th:text="#{date}"></label>
 		</div>
 		<div th:fragment="dateAcquisitionField" class="form-floating mb-3">
-			<input placeholder="2021-03-26"
-				class="form-control" type="text" th:field="*{dateAcquisition}"
-				th:errorclass="fieldError" />
-			<label class="form-label" th:text="#{dateAcquisition}" for="dateAcquisition"></label> 
+			<input placeholder="2021-03-26" class="form-control" type="text"
+				th:field="*{dateAcquisition}" th:errorclass="fieldError" /> <label
+				class="form-label" th:text="#{dateAcquisition}"
+				for="dateAcquisition"></label>
 		</div>
-		<div th:fragment="commentaireField" class="form-floating mb-3">	
+		<div th:fragment="commentaireField" class="form-floating mb-3">
 			<textarea class="form-control" th:field="*{commentaire}"
-				 placeholder="Commentaire"
-				th:errorclass="fieldError" maxlength="255"></textarea>
+				placeholder="Commentaire" th:errorclass="fieldError" maxlength="255"></textarea>
 			<label class="form-label" th:text="#{commentaire}" for="commentaire"></label>
 		</div>
 		<div th:fragment="commentaire" class="form-floating mb-3">
@@ -74,16 +80,16 @@
 			<label class="form-label" for="commentaire" th:text="#{commentaire}"></label>
 		</div>
 		<div th:fragment="latitudeField" class="form-floating mb-3">
-			<input class="form-control" placeholder="43,490837"
-				type="number" step="any" min="-90" max="90"
-				th:field="*{latitude}" th:errorclass="fieldError" />
-			<label class="form-label" for="latitude" th:text="#{latitude}"></label>
+			<input class="form-control" placeholder="43,490837" type="number"
+				step="any" min="-90" max="90" th:field="*{latitude}"
+				th:errorclass="fieldError" /> <label class="form-label"
+				for="latitude" th:text="#{latitude}"></label>
 		</div>
 		<div th:fragment="longitudeField" class="form-floating mb-3">
-			<input class="form-control" placeholder="5,491045"
-				type="number" step="any" min="-180" max="180"
-				th:field="*{longitude}" th:errorclass="fieldError" />
-			<label class="form-label" for="longitude" th:text="#{longitude}"></label>
+			<input class="form-control" placeholder="5,491045" type="number"
+				step="any" min="-180" max="180" th:field="*{longitude}"
+				th:errorclass="fieldError" /> <label class="form-label"
+				for="longitude" th:text="#{longitude}"></label>
 		</div>
 		<div th:fragment="BtnForm" class="mb-3">
 			<input class="btn btn-primary" type="submit"
