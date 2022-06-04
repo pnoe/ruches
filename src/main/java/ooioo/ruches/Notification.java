@@ -51,13 +51,13 @@ public class Notification {
 	@Scheduled(cron = "${notification.cron}")
 	public void scheduleTaskCron() {
 		// Trouve tous les événements commentaires (essaims, ruches, ruchers, hausses)
-		// de dateEve >= now + 1 jour
-		// et valeur != ''
+		// de dateEve >= now (donc ok pour les événements de la journée courante)
+		// et valeur != '' (un délai en jours a été renseigné)
 		LocalDateTime dateNow = LocalDateTime.now();
-		List<Evenement> evenements = evenementRepository.findNotification(dateNow.plusDays(1));
+		List<Evenement> evenements = evenementRepository.findNotification(dateNow);
 		StringBuilder message = new StringBuilder(1000);
 		message.append(entete);
-		int lenVide = message.length();
+		int i = 0;
 		for (Evenement evenement : evenements) {
 			try {
 				int jours = Integer.parseInt(evenement.getValeur());
@@ -96,10 +96,12 @@ public class Notification {
 								.append(evenement.getRucher() == null ? "?" : evenement.getRucher().getNom());
 						break;
 					default:
+						// le select ne prend que des événements commentaire
 						ok = false;
 						logger.error("Erreur type événement");
 					}
 					if (ok) {
+						i++;
 						message.append(messageEve).append(", Commentaire : ").append(evenement.getCommentaire())
 								.append("\n");
 					}
@@ -108,7 +110,7 @@ public class Notification {
 				// valeur n'est pas un entier
 			}
 		}
-		if (message.length() > lenVide) {
+		if (i > 0) {
 			// Envoyer le mail
 			message.append(pied);
 			for (String mail : destinataires) {
@@ -117,7 +119,7 @@ public class Notification {
 				System.out.println(mail);
 				System.out.println(message);
 			}
-			logger.info("Notifications envoyées");
+			logger.info("Message envoyé, {} événements", i);
 		} else {
 			logger.info("Pas de message envoyé");
 		}
