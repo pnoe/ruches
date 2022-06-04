@@ -128,11 +128,8 @@ public class AccueilController {
 		for(int i = dateDebut; i <= dateFin; i++) {
 			Double date = Double.valueOf(i);
 			annees.add(date);
-			// Double poids = recolteRepository.findPoidsMielByYear(date);
-		
 			Optional<Double> poidsOpt = recolteRepository.findPoidsMielByYear(date);
 			Double poids = poidsOpt.isPresent() ? poidsOpt.get() : 0.0;
-			
 			pdsMiel.add(poids == null?0:poids);
 			pdsMielTotal += (poids == null?0:poids);
 			Integer nbCree = essaimRepository.countEssaimsCreesDate(date);

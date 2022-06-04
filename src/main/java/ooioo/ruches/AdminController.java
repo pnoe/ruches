@@ -284,7 +284,6 @@ public class AdminController {
 		Iterable<Ruche> ruches = rucheRepository.findAll();
 		List<Evenement> eveRucheHausseErr = new ArrayList<>();
 		// les codes d'erreur en synchro avec la liste eveRucheHausseErr
-		// List<String> errsRuche = new ArrayList<>();
 		List<Ruche> rucheNonVide = new ArrayList<>();
 		for (Ruche ruche : ruches) {
 			// Les événements ajout/retrait des hausses de la ruche
@@ -296,7 +295,6 @@ public class AdminController {
 					if (eve.getType() == TypeEvenement.HAUSSERETRAITRUCHE) {
 						if (hausses.contains(eve.getHausse())) {
 							// La hausse est déjà dans la liste
-							// errsRuche.add("1");
 							eveRucheHausseErr.add(eve);
 						} else {
 							hausses.add(eve.getHausse());
@@ -305,7 +303,6 @@ public class AdminController {
 						if (!hausses.remove(eve.getHausse())) {
 							// La hausse ne peut être enlevée de la liste
 							//   il y a une erreur dans la pose des hausses
-							// errsRuche.add("2");
 							eveRucheHausseErr.add(eve);
 						}
 					}
@@ -315,7 +312,6 @@ public class AdminController {
 				rucheNonVide.add(ruche);
 			}
 		}
-		// model.addAttribute("errsRuche", errsRuche);
 		model.addAttribute("eveRucheHausseErr", eveRucheHausseErr);
 		model.addAttribute("rucheNonVide", rucheNonVide);
 		return "tests";

@@ -26,6 +26,10 @@ public class Notification {
 	private final Logger logger = LoggerFactory.getLogger(Notification.class);
 
 	private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+	private static final String RUCHEPREF = ", Ruche : ";
+	private static final String RUCHERPREF = ", Rucher : ";
+	private static final String HAUSSEPREF = ", Hausse : ";
+	private static final String ESSAIMPREF = ", Essaim : ";
 
 	@Autowired
 	private EvenementRepository evenementRepository;
@@ -43,8 +47,7 @@ public class Notification {
 
 	@Bean
 	public TaskScheduler taskScheduler() {
-		ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-		return threadPoolTaskScheduler;
+		return new ThreadPoolTaskScheduler();
 	}
 
 	@Scheduled(cron = "${notification.cron}")
@@ -67,31 +70,31 @@ public class Notification {
 					boolean ok = true;
 					switch (evenement.getType()) {
 					case COMMENTAIRERUCHE:
-						messageEve.append(", Ruche : ")
+						messageEve.append(RUCHEPREF)
 								.append(evenement.getRuche() == null ? "?" : evenement.getRuche().getNom())
-								.append(", Essaim : ")
+								.append(ESSAIMPREF)
 								.append(evenement.getEssaim() == null ? "?" : evenement.getEssaim().getNom())
-								.append(", Rucher : ")
+								.append(RUCHERPREF)
 								.append(evenement.getRucher() == null ? "?" : evenement.getRucher().getNom());
 						break;
 					case COMMENTAIRERUCHER:
-						messageEve.append(" Rucher : ")
+						messageEve.append(RUCHERPREF)
 								.append(evenement.getRucher() == null ? "?" : evenement.getRucher().getNom());
 						break;
 					case COMMENTAIREESSAIM:
-						messageEve.append(", Essaim : ")
+						messageEve.append(ESSAIMPREF)
 								.append(evenement.getEssaim() == null ? "?" : evenement.getEssaim().getNom())
-								.append(", Ruche : ")
+								.append(RUCHEPREF)
 								.append(evenement.getRuche() == null ? "?" : evenement.getRuche().getNom())
-								.append(", Rucher : ")
+								.append(RUCHERPREF)
 								.append(evenement.getRucher() == null ? "?" : evenement.getRucher().getNom());
 						break;
 					case COMMENTAIREHAUSSE:
-						messageEve.append(", Hausse : ")
+						messageEve.append(HAUSSEPREF)
 								.append(evenement.getHausse() == null ? "?" : evenement.getHausse().getNom())
-								.append(", Ruche : ")
+								.append(RUCHEPREF)
 								.append(evenement.getRuche() == null ? "?" : evenement.getRuche().getNom())
-								.append(", Rucher : ")
+								.append(RUCHERPREF)
 								.append(evenement.getRucher() == null ? "?" : evenement.getRucher().getNom());
 						break;
 					default:
