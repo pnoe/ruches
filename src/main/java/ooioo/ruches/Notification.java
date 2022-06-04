@@ -36,7 +36,6 @@ public class Notification {
 	private String[] destinataires;
 	@Value("${notification.objet}")
 	private String objet;
-	
 	@Value("${notification.entete}")
 	private String entete;
 	@Value("${notification.pied}")
@@ -116,8 +115,6 @@ public class Notification {
 			for (String mail : destinataires) {
 				emailService.sendSimpleMessage(mail, objet,
 						message.toString());
-				System.out.println(mail);
-				System.out.println(message);
 			}
 			logger.info("Message envoyé, {} événements", i);
 		} else {
