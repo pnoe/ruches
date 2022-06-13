@@ -3,6 +3,10 @@
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
 $(document).ready(function() {
+	const url = [[@{'/evenement/listeNotif/'}]] ;
+	$('#groupe').on('change', function () {
+		location = url + ($(this).is(':checked'));
+	});
     new DataTable('#evenementsnotif', {
         order: [ [ 0, 'desc' ] ],
         dom: 'Blftip',
@@ -25,6 +29,12 @@ $(document).ready(function() {
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col" th:text="#{Notifications}">
+			</div>
+			<div class="col">
+				<span class="padicons">
+       				<input type="checkbox" id="groupe" th:title="#{tous}" th:checked="${tous}" />
+       				<label for="tous" th:text="#{tous}"></label>
+				</span>
 			</div>
 		</div>
 	</div>

@@ -28,6 +28,19 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			  order by e.date desc
 			""")
 	List<Evenement> findNotification(LocalDateTime dateNow);
+	
+	@Query(value = """
+			select e
+			  from Evenement e
+			  where
+			    e.valeur <> ''
+			    and (e.type = ooioo.ruches.evenement.TypeEvenement.COMMENTAIREESSAIM
+			    or e.type = ooioo.ruches.evenement.TypeEvenement.COMMENTAIREHAUSSE
+			    or e.type = ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHE
+			    or e.type = ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHER)
+			  order by e.date desc
+			""")
+	List<Evenement> findNotification();
 
 	@Query(value = "select evenement from Evenement evenement where evenement.date > ?1")
 	Iterable<Evenement> findPeriode(LocalDateTime date);

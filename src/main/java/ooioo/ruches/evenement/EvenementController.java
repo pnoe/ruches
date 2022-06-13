@@ -113,22 +113,27 @@ public class EvenementController {
 	/**
 	 * Liste événements notifications
 	 */
-	@GetMapping("/listeNotif")
-	public String listenotif(Model model) {
+	@GetMapping("/listeNotif/{tous}")
+	public String listenotif(Model model, @PathVariable boolean tous) {
 		LocalDateTime dateNow = LocalDateTime.now();
-		List<Evenement> evenements = evenementRepository.findNotification(dateNow);
+		List<Evenement> evenements = tous ?
+				evenementRepository.findNotification()
+				: evenementRepository.findNotification(dateNow);
 		model.addAttribute(Const.EVENEMENTS, evenements);
 		List<Boolean> actifs = new ArrayList<>();
 		for (Evenement evenement : evenements) {
 			try {
 				int jours = Integer.parseInt(evenement.getValeur());
-				if (dateNow.isAfter(evenement.getDate().minusDays(jours))) {
+				if (dateNow.isAfter(evenement.getDate().minusDays(jours)) &&
+						dateNow.isBefore(evenement.getDate())) {
 					actifs.add(true);
+				} else {
+					actifs.add(false);
 				}
 			} catch (NumberFormatException nfe) {
 				// valeur n'est pas un entier
+				actifs.add(false);
 			}
-			actifs.add(false);
 		}
 		model.addAttribute("actifs", actifs);
 		return "evenement/evenementNotifListe";
