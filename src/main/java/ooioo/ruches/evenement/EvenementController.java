@@ -58,9 +58,9 @@ public class EvenementController {
 	 * les autres controller événements
 	 * 
 	 * @param periode   1 tous, moins d'un : 2 an, 3 mois, 4 semaine, 5 jour,
-	 *                  default période entre date1 et date2
-	 * @param date1     début de période (si periode != 1, 2, 3, 4 ou 5)
-	 * @param date2     fin de période
+	 *                  default période entre debut et fin
+	 * @param debut     début de période (si periode != 1, 2, 3, 4 ou 5)
+	 * @param fin		fin de période
 	 * @param datestext le texte des dates de début et fin de période à afficher
 	 * @param pCookie   période
 	 * @param dxCookie  le texte des dates
@@ -70,8 +70,8 @@ public class EvenementController {
 	 */
 	@GetMapping("/liste")
 	public String liste(Model model, @RequestParam(required = false) Integer periode,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime debut,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fin,
 			@RequestParam(required = false) String datestext,
 			@CookieValue(value = "p", defaultValue = "3") Integer pCookie,
 			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
@@ -80,8 +80,8 @@ public class EvenementController {
 		if (periode == null) {
 			periode = pCookie;
 			if (pCookie == 6) {
-				date1 = d1Cookie;
-				date2 = d2Cookie;
+				debut = d1Cookie;
+				fin = d2Cookie;
 				datestext = dxCookie;
 			}
 		}
@@ -102,8 +102,8 @@ public class EvenementController {
 			model.addAttribute(Const.EVENEMENTS, evenementRepository.findPeriode(LocalDateTime.now().minusDays(1)));
 			break;
 		default:
-			// ajouter tests date1 et date2 non null
-			model.addAttribute(Const.EVENEMENTS, evenementRepository.findPeriode(date1, date2));
+			// ajouter tests debut et fin non null
+			model.addAttribute(Const.EVENEMENTS, evenementRepository.findPeriode(debut, fin));
 			model.addAttribute("datestext", datestext);
 		}
 		model.addAttribute("periode", periode);
