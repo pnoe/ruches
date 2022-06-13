@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:inline="javascript">
+$(document).ready(function() {
+    new DataTable('#evenementsnotif', {
+        order: [ [ 0, 'desc' ] ],
+        dom: 'Blftip',
+        buttons: [
+	    	'csv',
+	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
+	    		title: [[#{listeEvenements}]] + " " + (new Date()).toLocaleDateString()},
+	            {extend: 'print', text: [[#{buttontextprint}]]},
+	            {extend: 'colvis', text: [[#{buttontextcol}]]}
+        ]  
+    });
+});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar">Menu</nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col" th:text="#{Notifications}">
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<table class="table table-bordered table-striped dt-responsive" id="evenementsnotif">
+			<thead>
+				<tr>
+					<th th:text="#{date}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{ruche}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{essaim}"></th>
+					<th style="background-color:PaleGoldenRod" th:text="#{rucher}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{NotificationJoursAvant}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="evenement : ${evenements}">
+					<td>
+						<a th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
+							th:href="@{'/evenement/'+${evenement.id}}+'?type=sucre'"></a>
+					</td>
+					<td th:text="${evenement.ruche?.nom}"></td>
+					<td th:text="${evenement.essaim?.nom}"></td>
+					<td th:text="${evenement.rucher?.nom}"></td>
+					<td th:text="${evenement.valeur}"></td>
+					<td th:text="${evenement.commentaire}"></td>
+				</tr>				
+			</tbody>
+		</table>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

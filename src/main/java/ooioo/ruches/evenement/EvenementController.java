@@ -50,8 +50,20 @@ public class EvenementController {
 	@Autowired
 	private RucherRepository rucherRepository;
 
-	/*
-	 * Liste événements
+	/**
+	 * Liste événements par période de temps (par défaut 1 mois)
+	 *   la période est mémorisée dans des cookies
+	 *   les listes spécifiques : sucre, varoa... sont dans les autres controller événements
+	 * 
+	 * @param periode 1 tous, moins d'un : 2 an, 3 mois, 4 semaine, 5 jour, default période entre date1 et date2 
+	 * @param date1 début de période (si periode != 1, 2, 3, 4 ou 5)
+	 * @param date2 fin de période
+	 * @param datestext le texte des dates de début et fin de période à afficher
+	 * @param pCookie période
+	 * @param dxCookie le texte des dates
+	 * @param d1Cookie date début
+	 * @param d2Cookie date fin
+	 * @return
 	 */
 	@GetMapping("/liste")
 	public String liste(Model model, @RequestParam(required = false) Integer periode,
@@ -94,6 +106,15 @@ public class EvenementController {
 		}
 		model.addAttribute("periode", periode);
 		return Const.EVEN_EVENLISTE;
+	}
+	
+	/**
+	 * Liste événements notifications
+	 */
+	@GetMapping("/listeNotif")
+	public String listenotif(Model model) {
+			model.addAttribute(Const.EVENEMENTS, evenementRepository.findNotification(LocalDateTime.now()));
+		return "evenement/evenementNotifListe";
 	}
 
 	/*
