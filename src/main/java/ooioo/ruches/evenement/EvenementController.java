@@ -1,6 +1,8 @@
 package ooioo.ruches.evenement;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,30 +53,30 @@ public class EvenementController {
 	private RucherRepository rucherRepository;
 
 	/**
-	 * Liste événements par période de temps (par défaut 1 mois)
-	 *   la période est mémorisée dans des cookies
-	 *   les listes spécifiques : sucre, varoa... sont dans les autres controller événements
+	 * Liste événements par période de temps (par défaut 1 mois) la période est
+	 * mémorisée dans des cookies les listes spécifiques : sucre, varoa... sont dans
+	 * les autres controller événements
 	 * 
-	 * @param periode 1 tous, moins d'un : 2 an, 3 mois, 4 semaine, 5 jour, default période entre date1 et date2 
-	 * @param date1 début de période (si periode != 1, 2, 3, 4 ou 5)
-	 * @param date2 fin de période
+	 * @param periode   1 tous, moins d'un : 2 an, 3 mois, 4 semaine, 5 jour,
+	 *                  default période entre date1 et date2
+	 * @param date1     début de période (si periode != 1, 2, 3, 4 ou 5)
+	 * @param date2     fin de période
 	 * @param datestext le texte des dates de début et fin de période à afficher
-	 * @param pCookie période
-	 * @param dxCookie le texte des dates
-	 * @param d1Cookie date début
-	 * @param d2Cookie date fin
+	 * @param pCookie   période
+	 * @param dxCookie  le texte des dates
+	 * @param d1Cookie  date début
+	 * @param d2Cookie  date fin
 	 * @return
 	 */
 	@GetMapping("/liste")
 	public String liste(Model model, @RequestParam(required = false) Integer periode,
-			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
-			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext,
 			@CookieValue(value = "p", defaultValue = "3") Integer pCookie,
 			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
-			@CookieValue(value = "d1", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
-			@CookieValue(value = "d2", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie
-			) {
+			@CookieValue(value = "d1", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
+			@CookieValue(value = "d2", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie) {
 		if (periode == null) {
 			periode = pCookie;
 			if (pCookie == 6) {
@@ -107,23 +109,36 @@ public class EvenementController {
 		model.addAttribute("periode", periode);
 		return Const.EVEN_EVENLISTE;
 	}
-	
+
 	/**
 	 * Liste événements notifications
 	 */
 	@GetMapping("/listeNotif")
 	public String listenotif(Model model) {
-			model.addAttribute(Const.EVENEMENTS, evenementRepository.findNotification(LocalDateTime.now()));
+		LocalDateTime dateNow = LocalDateTime.now();
+		List<Evenement> evenements = evenementRepository.findNotification(dateNow);
+		model.addAttribute(Const.EVENEMENTS, evenements);
+		List<Boolean> actifs = new ArrayList<>();
+		for (Evenement evenement : evenements) {
+			try {
+				int jours = Integer.parseInt(evenement.getValeur());
+				if (dateNow.isAfter(evenement.getDate().minusDays(jours))) {
+					actifs.add(true);
+				}
+			} catch (NumberFormatException nfe) {
+				// valeur n'est pas un entier
+			}
+			actifs.add(false);
+		}
+		model.addAttribute("actifs", actifs);
 		return "evenement/evenementNotifListe";
 	}
 
 	/*
-	 * Détail d'un événement
-	 *   type est le type d'événement pour permettre le retour vers une
-	 *     liste d'événements typée : "pesée", "ajout ruche"...
-	 *   itemId est l'id ruche, essaim... 
-	 *        pour permettre le retour vers l'affichage des événements de l'objet
-	 *        par exemple type=ruche et itemId id de la ruche
+	 * Détail d'un événement type est le type d'événement pour permettre le retour
+	 * vers une liste d'événements typée : "pesée", "ajout ruche"... itemId est l'id
+	 * ruche, essaim... pour permettre le retour vers l'affichage des événements de
+	 * l'objet par exemple type=ruche et itemId id de la ruche
 	 */
 	@GetMapping("/{evenementId}")
 	public String evenement(Model model, @PathVariable long evenementId,
@@ -162,8 +177,8 @@ public class EvenementController {
 
 	/*
 	 * Appel du formulaire de création d'un événement appel du formulaire complet
-	 * avec tous les champs. Une case à cocher permet de choisir ruche, rucher, hausse
-	 * et essaim librement.
+	 * avec tous les champs. Une case à cocher permet de choisir ruche, rucher,
+	 * hausse et essaim librement.
 	 */
 	@GetMapping("/cree")
 	public String cree(HttpSession session, Model model) {
