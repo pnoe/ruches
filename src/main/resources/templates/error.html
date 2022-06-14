@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="include">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 </head>
 <body>
 	<nav th:replace="include :: navbar"></nav>

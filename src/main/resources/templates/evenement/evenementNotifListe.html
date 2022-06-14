@@ -49,7 +49,7 @@ $(document).ready(function() {
 					<th style="background-color:PaleGoldenRod" th:text="#{rucher}"></th>
 					<th style="background-color:PaleGoldenRod" th:text="#{hausse}"></th>
 					<th style="background-color:LemonChiffon" th:text="#{JoursAvant}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{actif}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{diff}"></th>
 					<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
 				</tr>
 			</thead>
@@ -65,7 +65,7 @@ $(document).ready(function() {
 					<td th:text="${evenement.rucher?.nom}"></td>
 					<td th:text="${evenement.hausse?.nom}"></td>
 					<td th:text="${evenement.valeur}"></td>
-					<td th:text="${actifs[evenementStat.index]} ? #{oui} : #{non}"></td>
+					<td th:text="${diff[evenementStat.index]}"></td>
 					<td th:text="${evenement.commentaire}"></td>
 				</tr>				
 			</tbody>

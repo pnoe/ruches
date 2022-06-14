@@ -1,5 +1,6 @@
 package ooioo.ruches.evenement;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +61,7 @@ public class EvenementController {
 	 * @param periode   1 tous, moins d'un : 2 an, 3 mois, 4 semaine, 5 jour,
 	 *                  default période entre debut et fin
 	 * @param debut     début de période (si periode != 1, 2, 3, 4 ou 5)
-	 * @param fin		fin de période
+	 * @param fin       fin de période
 	 * @param datestext le texte des dates de début et fin de période à afficher
 	 * @param pCookie   période
 	 * @param dxCookie  le texte des dates
@@ -116,26 +117,14 @@ public class EvenementController {
 	@GetMapping("/listeNotif/{tous}")
 	public String listenotif(Model model, @PathVariable boolean tous) {
 		LocalDateTime dateNow = LocalDateTime.now();
-		List<Evenement> evenements = tous ?
-				evenementRepository.findNotification()
+		List<Evenement> evenements = tous ? evenementRepository.findNotification()
 				: evenementRepository.findNotification(dateNow);
 		model.addAttribute(Const.EVENEMENTS, evenements);
-		List<Boolean> actifs = new ArrayList<>();
+		List<Long> diff = new ArrayList<>();
 		for (Evenement evenement : evenements) {
-			try {
-				int jours = Integer.parseInt(evenement.getValeur());
-				if (dateNow.isAfter(evenement.getDate().minusDays(jours)) &&
-						dateNow.isBefore(evenement.getDate())) {
-					actifs.add(true);
-				} else {
-					actifs.add(false);
-				}
-			} catch (NumberFormatException nfe) {
-				// valeur n'est pas un entier
-				actifs.add(false);
-			}
+			diff.add(Duration.between(dateNow, evenement.getDate()).toDays());
 		}
-		model.addAttribute("actifs", actifs);
+		model.addAttribute("diff", diff);
 		return "evenement/evenementNotifListe";
 	}
 
