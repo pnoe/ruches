@@ -1,10 +1,10 @@
 package ooioo.ruches.evenement;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import ooioo.ruches.Const;
+import ooioo.ruches.Notification;
 import ooioo.ruches.Utils;
 import ooioo.ruches.essaim.EssaimRepository;
 import ooioo.ruches.hausse.HausseRepository;
@@ -117,14 +118,34 @@ public class EvenementController {
 	@GetMapping("/listeNotif/{tous}")
 	public String listenotif(Model model, @PathVariable boolean tous) {
 		LocalDateTime dateNow = LocalDateTime.now();
-		List<Evenement> evenements = tous ? evenementRepository.findNotification()
-				: evenementRepository.findNotification(dateNow);
-		model.addAttribute(Const.EVENEMENTS, evenements);
-		List<Long> diff = new ArrayList<>();
+		List<Evenement> evenements = evenementRepository.findNotification();
+		List<LocalDateTime> fin = new ArrayList<>();
+		List<Integer> jAvants = new ArrayList<>();
+		List<Evenement> evens = new ArrayList<>();
 		for (Evenement evenement : evenements) {
-			diff.add(Duration.between(dateNow, evenement.getDate()).toDays());
+			try {
+				Matcher m = Notification.MOINSNB1NB2.matcher(evenement.getValeur());
+				if (!m.matches()) {
+					continue;
+				}
+				int joursAvant = Integer.parseInt(m.group(2));
+				int joursDuree = "".equals(m.group(3)) ? 0 : Integer.parseInt(m.group(3));
+				// Si la date de notification est atteinte
+				if (tous ||
+						(dateNow.isAfter(evenement.getDate().minusDays(joursAvant))
+						  && (("-".equals(m.group(1))) || (dateNow.isBefore(evenement.getDate().plusDays(joursDuree)))))) {
+					evens.add(evenement);
+					fin.add(joursDuree == 0 ? null : evenement.getDate().plusDays(joursDuree));
+					jAvants.add(joursAvant);
+				}
+			} catch (NumberFormatException nfe) {
+				// valeur n'est pas un entier
+				logger.error("Erreur Integer.parseInt");
+			}
 		}
-		model.addAttribute("diff", diff);
+		model.addAttribute(Const.EVENEMENTS, evens);
+		model.addAttribute("fin", fin);
+		model.addAttribute("jAvants", jAvants);
 		return "evenement/evenementNotifListe";
 	}
 

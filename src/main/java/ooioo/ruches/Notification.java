@@ -3,6 +3,8 @@ package ooioo.ruches;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,14 @@ public class Notification {
 	private static final String HAUSSEPREF = ", Hausse : ";
 	private static final String ESSAIMPREF = ", Essaim : ";
 
+	// https://docs.oracle.com/en/java/javase/18/docs/api/java.base/java/util/regex/Pattern.html
+	// un éventuel signe moins (groupe 1)
+	// suivi d'un nombre d'un ou plusieurs chiffres (groupe 2)
+	// suivi d'un éventuel .
+	// suivi d'un éventuel groupe de chiffres (groupe 3)
+	// suivi de n'importe quoi
+	public static final Pattern MOINSNB1NB2 = Pattern.compile("(-?)(\\d+)\\.?(\\d?).*");
+
 	@Autowired
 	private EvenementRepository evenementRepository;
 	@Autowired
@@ -52,19 +62,24 @@ public class Notification {
 
 	@Scheduled(cron = "${notification.cron}")
 	public void scheduleTaskCron() {
-		// Trouve tous les événements commentaires (essaims, ruches, ruchers, hausses)
-		// de dateEve >= now (donc ok pour les événements de la journée courante)
-		// et valeur != '' (un délai en jours a été renseigné)
 		LocalDateTime dateNow = LocalDateTime.now();
-		List<Evenement> evenements = evenementRepository.findNotification(dateNow);
+		// Trouve tous les événements commentaires (essaims, ruches, ruchers, hausses)
+		// de valeur != '' (un délai en jours a été renseigné)
+		List<Evenement> evenements = evenementRepository.findNotification();
 		StringBuilder message = new StringBuilder(1000);
 		message.append(entete);
 		int i = 0;
 		for (Evenement evenement : evenements) {
 			try {
-				int jours = Integer.parseInt(evenement.getValeur());
-				// si la date de notification est atteinte
-				if (dateNow.isAfter(evenement.getDate().minusDays(jours))) {
+				Matcher m = MOINSNB1NB2.matcher(evenement.getValeur());
+				if (!m.matches()) {
+					continue;
+				}
+				int joursAvant = Integer.parseInt(m.group(2));
+				int joursDuree = "".equals(m.group(3)) ? 0 : Integer.parseInt(m.group(3));
+				// Si la date de notification est atteinte
+				if (dateNow.isAfter(evenement.getDate().minusDays(joursAvant))
+						&& (("-".equals(m.group(1))) || (dateNow.isBefore(evenement.getDate().plusDays(joursDuree))))) {
 					StringBuilder messageEve = new StringBuilder(200);
 					messageEve.append(evenement.getDate().format(formatter));
 					boolean ok = true;
@@ -104,20 +119,24 @@ public class Notification {
 					}
 					if (ok) {
 						i++;
-						message.append(messageEve).append(", Commentaire : ").append(evenement.getCommentaire())
-								.append("\n");
+						message.append(messageEve);
+						if (joursDuree != 0) {
+							message.append(", Fin : ")
+									.append(evenement.getDate().plusDays(joursDuree).format(formatter));
+						}
+						message.append(", Commentaire : ").append(evenement.getCommentaire()).append("\n");
 					}
 				}
 			} catch (NumberFormatException nfe) {
 				// valeur n'est pas un entier
+				logger.error("Erreur Integer.parseInt");
 			}
 		}
 		if (i > 0) {
 			// Envoyer le mail
 			message.append(pied);
 			for (String mail : destinataires) {
-				emailService.sendSimpleMessage(mail, objet,
-						message.toString());
+				emailService.sendSimpleMessage(mail, objet, message.toString());
 			}
 			logger.info("Message envoyé, {} événements", i);
 		} else {

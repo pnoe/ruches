@@ -48,9 +48,10 @@ $(document).ready(function() {
 					<th style="background-color:PaleGoldenRod" th:text="#{essaim}"></th>
 					<th style="background-color:PaleGoldenRod" th:text="#{rucher}"></th>
 					<th style="background-color:PaleGoldenRod" th:text="#{hausse}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{Persistant}"></th>
 					<th style="background-color:LemonChiffon" th:text="#{JoursAvant}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{diff}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
+					<th style="background-color:LemonChiffon" th:text="#{Fin}"></th>
+					<th style="background-color:lightskyblue" th:text="#{commentaire}"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -64,8 +65,9 @@ $(document).ready(function() {
 					<td th:text="${evenement.essaim?.nom}"></td>
 					<td th:text="${evenement.rucher?.nom}"></td>
 					<td th:text="${evenement.hausse?.nom}"></td>
-					<td th:text="${evenement.valeur}"></td>
-					<td th:text="${diff[evenementStat.index]}"></td>
+					<td th:text="${#strings.substring(evenement.valeur,0,1)} == '-' ? #{oui} : #{non}"></td>
+					<td th:text="${jAvants[evenementStat.index]}"></td>
+					<td th:text="${#temporals.format(fin[evenementStat.index], 'yyyy/MM/dd HH:mm')}"></td>
 					<td th:text="${evenement.commentaire}"></td>
 				</tr>				
 			</tbody>
