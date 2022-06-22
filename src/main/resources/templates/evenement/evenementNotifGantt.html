@@ -2,14 +2,43 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:replace="include :: jsgantt"></script>
 <!--/* <script th:replace="include :: snapsvg"></script> */-->
 <link th:replace="include :: cssgantt" />
+<script th:replace="include :: moment"></script>
+<script th:replace="include :: snapsvg"></script>
+<script th:replace="include :: jsgantt"></script>
 <script th:inline="javascript">
 	// https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#text-inlining
 	const tasks = /*[(${tasks})]*/null;
-	$().ready(function() {
-		new Gantt("#gantt", tasks, {});
+	/* src/index.js
+	const default_options = {
+	        header_height: 50,
+	        column_width: 30,
+	        step: 24,
+	        view_modes: [...Object.values(VIEW_MODE)],
+	        bar_height: 20,
+	        bar_corner_radius: 3,
+	        arrow_curve: 5,
+	        padding: 18,
+	        view_mode: 'Day',
+	        date_format: 'YYYY-MM-DD',
+	        popup_trigger: 'click',
+	        custom_popup_html: null,
+	        language: 'en',
+	    };
+	 */
+	$(document).ready(function() {
+		let gantt = new Gantt("#gantt", tasks, {
+			view_mode : 'Day',
+			language : 'fr'
+		});
+		$(".btn-group").on("click", "button", function() {
+			$btn = $(this);
+			const mode = $btn.attr('data-sel');
+			gantt.change_view_mode(mode);
+			$btn.parent().find('button').removeClass('active');
+			$btn.addClass('active');
+		});
 	});
 </script>
 </head>
@@ -22,12 +51,27 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<a th:href="@{'/evenement/listeNotif/true'}" th:text="#{Notifications}"></a>
+					<a th:href="@{'/evenement/listeNotif/true'}"
+						th:text="#{Notifications}"></a>
 					<th:block th:text="' '+#{Gantt}"></th:block>
 				</h1>
 			</div>
 		</div>
 	</div>
-	<svg id="gantt"></svg>
+	<div class="card" style="overflow: scroll">
+		<svg id="gantt"></svg>
+	</div>
+	<div class="mx-auto mt-3 btn-group" role="group">
+		<button data-sel="Quarter Day" th:text="#{QuartJour}" type="button"
+			class="btn btn-outline-info btn-sm"></button>
+		<button data-sel="Half Day" th:text="#{DemiJour}" type="button"
+			class="btn btn-outline-info btn-sm"></button>
+		<button data-sel="Day" th:text="#{Jour}" type="button"
+			class="btn btn-outline-info btn-sm active" aria-pressed="true"></button>
+		<button data-sel="Week" th:text="#{Semaine}" type="button"
+			class="btn btn-outline-info btn-sm"></button>
+		<button data-sel="Month" th:text="#{Mois}" type="button"
+			class="btn btn-outline-info btn-sm"></button>
+	</div>
 </body>
 </html>
