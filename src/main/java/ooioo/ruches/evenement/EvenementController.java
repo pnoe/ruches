@@ -1,6 +1,7 @@
 package ooioo.ruches.evenement;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import ooioo.ruches.Const;
 import ooioo.ruches.Notification;
@@ -131,9 +137,8 @@ public class EvenementController {
 				int joursAvant = Integer.parseInt(m.group(2));
 				int joursDuree = "".equals(m.group(3)) ? 0 : Integer.parseInt(m.group(3));
 				// Si la date de notification est atteinte
-				if (tous ||
-						(dateNow.isAfter(evenement.getDate().minusDays(joursAvant))
-						  && (("-".equals(m.group(1))) || (dateNow.isBefore(evenement.getDate().plusDays(joursDuree)))))) {
+				if (tous || (dateNow.isAfter(evenement.getDate().minusDays(joursAvant)) && (("-".equals(m.group(1)))
+						|| (dateNow.isBefore(evenement.getDate().plusDays(joursDuree)))))) {
 					evens.add(evenement);
 					fin.add(joursDuree == 0 ? null : evenement.getDate().plusDays(joursDuree));
 					jAvants.add(joursAvant);
@@ -147,6 +152,63 @@ public class EvenementController {
 		model.addAttribute("fin", fin);
 		model.addAttribute("jAvants", jAvants);
 		return "evenement/evenementNotifListe";
+	}
+
+	/**
+	 * Liste événements notifications
+	 */
+	@GetMapping("/ganttNotif")
+	public String ganttNotif(Model model) {
+		List<Evenement> evenements = evenementRepository.findNotification();
+		List<LocalDateTime> fin = new ArrayList<>();
+		List<Integer> jAvants = new ArrayList<>();
+		List<Evenement> evens = new ArrayList<>();
+
+		DateTimeFormatter fmtYYYYMMDDHHMM = DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM);
+		DateTimeFormatter fmtYYYYMMDD = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+		ObjectMapper mapper = new ObjectMapper();
+		ArrayNode arrayNode = mapper.createArrayNode();
+
+		for (Evenement evenement : evenements) {
+			try {
+				Matcher m = Notification.MOINSNB1NB2.matcher(evenement.getValeur());
+				if (!m.matches()) {
+					continue;
+				}
+				int joursAvant = Integer.parseInt(m.group(2));
+				int joursDuree = "".equals(m.group(3)) ? 0 : Integer.parseInt(m.group(3));
+
+				evens.add(evenement);
+				fin.add(joursDuree == 0 ? null : evenement.getDate().plusDays(joursDuree));
+				jAvants.add(joursAvant);
+
+				// https://frappe.io/gantt
+				ObjectNode task = mapper.createObjectNode();
+				task.put("id", evenement.getId());
+				task.put("name", evenement.getDate().format(fmtYYYYMMDDHHMM));
+				task.put("start", evenement.getDate().format(fmtYYYYMMDD));
+				task.put("end", evenement.getDate().plusDays(joursDuree).format(fmtYYYYMMDD));
+				// task.put("progress", 0);
+				// task.put("dependencies", "");
+				arrayNode.add(task);
+
+			} catch (NumberFormatException nfe) {
+				// valeur n'est pas un entier
+				logger.error("Erreur Integer.parseInt");
+			}
+		}
+		String tasks;
+		try {
+			tasks = mapper.writeValueAsString(arrayNode);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			tasks = "";
+		}
+		model.addAttribute("tasks", tasks);
+
+		return "evenement/evenementNotifGantt";
 	}
 
 	/*

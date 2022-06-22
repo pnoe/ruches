@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:replace="include :: jsgantt"></script>
+<!--/* <script th:replace="include :: snapsvg"></script> */-->
+<link th:replace="include :: cssgantt" />
+<script th:inline="javascript">
+	// https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#text-inlining
+	const tasks = /*[(${tasks})]*/null;
+	$().ready(function() {
+		new Gantt("#gantt", tasks, {});
+	});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar">Menu</nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					<a th:href="@{'/evenement/listeNotif/true'}" th:text="#{Notifications}"></a>
+					<th:block th:text="' '+#{Gantt}"></th:block>
+				</h1>
+			</div>
+		</div>
+	</div>
+	<svg id="gantt"></svg>
+</body>
+</html>
