@@ -1,0 +1,15 @@
+.details-container {
+	background: #fff;
+	display: inline-block;
+	padding: 12px;
+}
+
+.popup-wrapper {
+	display: inline-block;
+}
+
+.details-container p {
+  font-size: 12px;
+  margin-bottom: 6px;
+  color: #666;
+}

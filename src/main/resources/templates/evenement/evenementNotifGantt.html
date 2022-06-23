@@ -4,6 +4,8 @@
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <!--/* <script th:replace="include :: snapsvg"></script> */-->
 <link th:replace="include :: cssgantt" />
+<link rel="stylesheet" type="text/css" media="all"
+	th:href="@{/css/gantt.css}" />
 <script th:replace="include :: moment"></script>
 <script th:replace="include :: snapsvg"></script>
 <script th:replace="include :: jsgantt"></script>
@@ -30,14 +32,40 @@
 	$(document).ready(function() {
 		let gantt = new Gantt("#gantt", tasks, {
 			view_mode : 'Day',
-			language : 'fr'
+			language : 'fr',
+			
+			
+			custom_popup_html: function(task) {
+				  // the task object will contain the updated
+				  // dates and progress value
+				  const end_date = task.end;
+				  // https://frappe.io/gantt/js/index.js
+				  // task._end serait la fin de la tâche mise à jour
+				  //   .format est inconnu, pourquoi ?
+				  // Utiliser Inspecteur firefox sur https://frappe.io/gantt
+				  //  pour trouver les paramètres de la classe details-container
+				  //  ainsi que sur la page ruches/evenement/ganttNotif
+				  //  voir css/gantt.css
+				  //  white-space: nowrap rend la ligne de commentaire trop longue
+				  //    utilisé espace insécable
+				  return `
+					<div class="details-container">
+					  <p>${task.name}<p>
+					  <p>Fin&nbsp;:&nbsp;${end_date}</p>
+					  <p>${task.obj}</p>
+					  <p>${task.com}</p>
+					</div>
+				  `;
+				}
+		
+		
 		});
 		$(".btn-group").on("click", "button", function() {
-			$btn = $(this);
-			const mode = $btn.attr('data-sel');
+			const btn = $(this);
+			const mode = btn.attr('data-sel');
 			gantt.change_view_mode(mode);
-			$btn.parent().find('button').removeClass('active');
-			$btn.addClass('active');
+			btn.parent().find('button').removeClass('active');
+			btn.addClass('active');
 		});
 	});
 </script>

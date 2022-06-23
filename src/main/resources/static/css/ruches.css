@@ -1,4 +1,4 @@
-.form-control {
+	.form-control {
 	background-color: LemonChiffon;
 }
 
@@ -86,19 +86,21 @@ td.num {
 }
 
 div.dataTables_length {
-            padding: 0.1em 1.0em !important;
-        }
+	padding: 0.1em 1.0em !important;
+}
+
 div.dataTables_filter {
-            padding: 0.1em 1.0em !important;
-        }
+	padding: 0.1em 1.0em !important;
+}
+
 div.dataTables_info {
-            padding: 0.1em 1.0em !important;
-        }
+	padding: 0.1em 1.0em !important;
+}
+
 div.dataTables_paginate {
-            padding: 0.1em 1.0em !important;
-        }
+	padding: 0.1em 1.0em !important;
+}
 
 .cursorpointer {
 	cursor: pointer;
 }
-        

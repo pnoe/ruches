@@ -189,6 +189,16 @@ public class EvenementController {
 				task.put("name", evenement.getDate().format(fmtYYYYMMDDHHMM));
 				task.put("start", evenement.getDate().format(fmtYYYYMMDD));
 				task.put("end", evenement.getDate().plusDays(joursDuree).format(fmtYYYYMMDD));
+
+				task.put("obj", switch (evenement.getType()) {
+				case COMMENTAIRERUCHE -> evenement.getRuche() == null ? "?" : "Ruche : " + evenement.getRuche().getNom();
+				case COMMENTAIRERUCHER -> evenement.getRucher() == null ? "?" : "Rucher : " + evenement.getRucher().getNom();
+				case COMMENTAIREESSAIM -> evenement.getEssaim() == null ? "?" : "Essaim : " + evenement.getEssaim().getNom();
+				case COMMENTAIREHAUSSE -> evenement.getHausse() == null ? "?" : "Hausse : " + evenement.getHausse().getNom();
+				default -> "";
+				});
+				task.put("com", evenement.getCommentaire());
+
 				// task.put("progress", 0);
 				// task.put("dependencies", "");
 				arrayNode.add(task);
