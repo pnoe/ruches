@@ -8,66 +8,13 @@
 <!--/* <script th:replace="include :: moment"></script> */-->
 <!--/* <script th:replace="include :: snapsvg"></script> */-->
 <script th:replace="include :: jsgantt"></script>
+<script th:src="@{/js/ruches/eveGantt.js}"></script>
 <script th:inline="javascript">
-	// https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#text-inlining
 	const tasks = /*[(${tasks})]*/null;
-	const ruchesurl = /*[[@{/}]]*/ null;
-	/* src/index.js
-	const default_options = {
-	        header_height: 50,
-	        column_width: 30,
-	        step: 24,
-	        view_modes: [...Object.values(VIEW_MODE)],
-	        bar_height: 20,
-	        bar_corner_radius: 3,
-	        arrow_curve: 5,
-	        padding: 18,
-	        view_mode: 'Day',
-	        date_format: 'YYYY-MM-DD',
-	        popup_trigger: 'click',
-	        custom_popup_html: null,
-	        language: 'en',
-	    };
-	 */
-	$(document).ready(function() {
-		let gantt = new Gantt("#gantt", tasks, {
-			view_mode : 'Day',
-			language : 'fr',
-			custom_popup_html: function(task) {
-				  // the task object will contain the updated
-				  // dates and progress value
-				  const end_date = task.end;
-				  // https://frappe.io/gantt/js/index.js
-				  // task._end serait la fin de la tâche mise à jour
-				  //   .format est inconnu, pourquoi ?
-				  // Utiliser Inspecteur firefox sur https://frappe.io/gantt
-				  //  pour trouver les paramètres de la classe details-container
-				  //  ainsi que sur la page ruches/evenement/ganttNotif
-				  //  voir css/gantt.css
-				  //  white-space: nowrap rend la ligne de commentaire trop longue
-				  //    utilisé espace insécable
-				  //  Mis espace insécable dans task.name en java
-				  //  les back ticks en js permettent la syntaxe ${var}
-				  // const url = '<a href="' + ruchesurl + 'evenement/' + task.id + '">' + task.name + '<a>';
-				  return `<div class="details-container">
-				    <a href="${ruchesurl}evenement/${task.id}">${task.name}<a>
-					  <p>Fin&nbsp;:&nbsp;${end_date}</p>
-					  <p>${task.obj}</p>
-					  <p>${task.com}</p>
-					</div>
-				  `;
-				}
-		
-		
-		});
-		$(".btn-group").on("click", "button", function() {
-			const btn = $(this);
-			const mode = btn.attr('data-sel');
-			gantt.change_view_mode(mode);
-			btn.parent().find('button').removeClass('active');
-			btn.addClass('active');
-		});
-	});
+	const ruchesurl = /*[[@{/}]]*/null;
+	window.onload = function() {
+		eveGantt(true);
+	}
 </script>
 </head>
 <body>

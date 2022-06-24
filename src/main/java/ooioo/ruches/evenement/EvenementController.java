@@ -163,13 +163,10 @@ public class EvenementController {
 		List<LocalDateTime> fin = new ArrayList<>();
 		List<Integer> jAvants = new ArrayList<>();
 		List<Evenement> evens = new ArrayList<>();
-
 		DateTimeFormatter fmtYYYYMMDDHHMM = DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM);
 		DateTimeFormatter fmtYYYYMMDD = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
 		ObjectMapper mapper = new ObjectMapper();
 		ArrayNode arrayNode = mapper.createArrayNode();
-
 		for (Evenement evenement : evenements) {
 			try {
 				Matcher m = Notification.MOINSNB1NB2.matcher(evenement.getValeur());
@@ -178,46 +175,41 @@ public class EvenementController {
 				}
 				int joursAvant = Integer.parseInt(m.group(2));
 				int joursDuree = "".equals(m.group(3)) ? 0 : Integer.parseInt(m.group(3));
-
 				evens.add(evenement);
 				fin.add(joursDuree == 0 ? null : evenement.getDate().plusDays(joursDuree));
 				jAvants.add(joursAvant);
-
 				// https://frappe.io/gantt
 				ObjectNode task = mapper.createObjectNode();
-				task.put("id", evenement.getId());
+				// https://github.com/frappe/gantt/issues/191
+				task.put("id", evenement.getId().toString());
 				task.put("name", evenement.getDate().format(fmtYYYYMMDDHHMM).replaceAll("\\s+", "&nbsp;"));
 				task.put("start", evenement.getDate().format(fmtYYYYMMDD));
 				task.put("end", evenement.getDate().plusDays(joursDuree).format(fmtYYYYMMDD));
-
 				task.put("obj", switch (evenement.getType()) {
-				case COMMENTAIRERUCHE -> evenement.getRuche() == null ? "?" : "Ruche : " + evenement.getRuche().getNom();
-				case COMMENTAIRERUCHER -> evenement.getRucher() == null ? "?" : "Rucher : " + evenement.getRucher().getNom();
-				case COMMENTAIREESSAIM -> evenement.getEssaim() == null ? "?" : "Essaim : " + evenement.getEssaim().getNom();
-				case COMMENTAIREHAUSSE -> evenement.getHausse() == null ? "?" : "Hausse : " + evenement.getHausse().getNom();
+				case COMMENTAIRERUCHE ->
+					evenement.getRuche() == null ? "?" : "Ruche : " + evenement.getRuche().getNom();
+				case COMMENTAIRERUCHER ->
+					evenement.getRucher() == null ? "?" : "Rucher : " + evenement.getRucher().getNom();
+				case COMMENTAIREESSAIM ->
+					evenement.getEssaim() == null ? "?" : "Essaim : " + evenement.getEssaim().getNom();
+				case COMMENTAIREHAUSSE ->
+					evenement.getHausse() == null ? "?" : "Hausse : " + evenement.getHausse().getNom();
 				default -> "";
 				});
 				task.put("com", evenement.getCommentaire());
-
-				// task.put("progress", 0);
-				// task.put("dependencies", "");
 				arrayNode.add(task);
-
 			} catch (NumberFormatException nfe) {
 				// valeur n'est pas un entier
 				logger.error("Erreur Integer.parseInt");
 			}
 		}
-		String tasks;
 		try {
-			tasks = mapper.writeValueAsString(arrayNode);
+			model.addAttribute("tasks", mapper.writeValueAsString(arrayNode));
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			tasks = "";
+			logger.error("Gantt erreur json mapper");
+			model.addAttribute(Const.MESSAGE, "Erreur affichage diagramme de Gantt");
+			return Const.INDEX;
 		}
-		model.addAttribute("tasks", tasks);
-
 		return "evenement/evenementNotifGantt";
 	}
 
