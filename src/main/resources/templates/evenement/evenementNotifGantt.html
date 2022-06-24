@@ -2,16 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<!--/* <script th:replace="include :: snapsvg"></script> */-->
 <link th:replace="include :: cssgantt" />
 <link rel="stylesheet" type="text/css" media="all"
 	th:href="@{/css/gantt.css}" />
-<script th:replace="include :: moment"></script>
-<script th:replace="include :: snapsvg"></script>
+<!--/* <script th:replace="include :: moment"></script> */-->
+<!--/* <script th:replace="include :: snapsvg"></script> */-->
 <script th:replace="include :: jsgantt"></script>
 <script th:inline="javascript">
 	// https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#text-inlining
 	const tasks = /*[(${tasks})]*/null;
+	const ruchesurl = /*[[@{/}]]*/ null;
 	/* src/index.js
 	const default_options = {
 	        header_height: 50,
@@ -33,8 +33,6 @@
 		let gantt = new Gantt("#gantt", tasks, {
 			view_mode : 'Day',
 			language : 'fr',
-			
-			
 			custom_popup_html: function(task) {
 				  // the task object will contain the updated
 				  // dates and progress value
@@ -48,9 +46,11 @@
 				  //  voir css/gantt.css
 				  //  white-space: nowrap rend la ligne de commentaire trop longue
 				  //    utilisé espace insécable
-				  return `
-					<div class="details-container">
-					  <p>${task.name}<p>
+				  //  Mis espace insécable dans task.name en java
+				  //  les back ticks en js permettent la syntaxe ${var}
+				  // const url = '<a href="' + ruchesurl + 'evenement/' + task.id + '">' + task.name + '<a>';
+				  return `<div class="details-container">
+				    <a href="${ruchesurl}evenement/${task.id}">${task.name}<a>
 					  <p>Fin&nbsp;:&nbsp;${end_date}</p>
 					  <p>${task.obj}</p>
 					  <p>${task.com}</p>

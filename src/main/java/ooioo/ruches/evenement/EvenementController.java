@@ -186,7 +186,7 @@ public class EvenementController {
 				// https://frappe.io/gantt
 				ObjectNode task = mapper.createObjectNode();
 				task.put("id", evenement.getId());
-				task.put("name", evenement.getDate().format(fmtYYYYMMDDHHMM));
+				task.put("name", evenement.getDate().format(fmtYYYYMMDDHHMM).replaceAll("\\s+", "&nbsp;"));
 				task.put("start", evenement.getDate().format(fmtYYYYMMDD));
 				task.put("end", evenement.getDate().plusDays(joursDuree).format(fmtYYYYMMDD));
 
