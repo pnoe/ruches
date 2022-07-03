@@ -1,15 +1,14 @@
 {
+  "short_name": "Ruches",
   "name": "Ruches",
-  "start_url": ".",
+  "display": "standalone",
+  "start_url": "../login",
   "description": "Une application pour gérer vos ruches",
   "icons": [{
-    "src": "static/images/ruchesicon.png"",
-    "sizes": "48x48",
-    "type": "image/png"
-  },
-  {
     "src": "static/images/ruche.png",
     "sizes": "100x100",
     "type": "image/png"
-  }]
+  }],
+  "theme_color": "#404549",
+  "background_color": "#34373b"
 }
