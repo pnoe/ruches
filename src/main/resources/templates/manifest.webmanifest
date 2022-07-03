@@ -1,0 +1,15 @@
+{
+  "name": "Ruches",
+  "start_url": ".",
+  "description": "Une application pour gérer vos ruches",
+  "icons": [{
+    "src": "static/images/ruchesicon.png"",
+    "sizes": "48x48",
+    "type": "image/png"
+  },
+  {
+    "src": "static/images/ruche.png",
+    "sizes": "100x100",
+    "type": "image/png"
+  }]
+}
