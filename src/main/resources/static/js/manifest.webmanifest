@@ -3,12 +3,15 @@
   "name": "Ruches",
   "display": "standalone",
   "start_url": "../login",
-  "description": "Une application pour gérer vos ruches",
+  "description": "Une application web pour vos ruches",
   "icons": [{
-    "src": "static/images/ruche.png",
+    "src": "../images/ruche.png",
     "sizes": "100x100",
     "type": "image/png"
   }],
   "theme_color": "#404549",
-  "background_color": "#34373b"
+  "background_color": "#34373b",
+  "lang": "fr",
+  "dir": "ltr",
+  "orientation": "any"
 }
