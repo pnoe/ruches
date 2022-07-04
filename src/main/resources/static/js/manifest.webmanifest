@@ -6,13 +6,8 @@
 	"description": "Une application web pour vos ruches",
 	"icons": [
 		{
-			"src": "./bee-hive.png",
-			"sizes": "256x256",
-			"type": "image/png"
-		},
-		{
 			"src": "../images/ruche.png",
-			"sizes": "100x100",
+			"sizes": "any",
 			"type": "image/png"
 		}
 	],
