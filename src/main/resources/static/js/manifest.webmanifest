@@ -1,17 +1,24 @@
 {
-  "short_name": "Ruches",
-  "name": "Ruches",
-  "display": "standalone",
-  "start_url": "../login",
-  "description": "Une application web pour vos ruches",
-  "icons": [{
-    "src": "../images/ruche.png",
-    "sizes": "100x100",
-    "type": "image/png"
-  }],
-  "theme_color": "#404549",
-  "background_color": "#34373b",
-  "lang": "fr",
-  "dir": "ltr",
-  "orientation": "any"
+	"short_name": "Ruches",
+	"name": "Ruches",
+	"display": "standalone",
+	"start_url": "../login",
+	"description": "Une application web pour vos ruches",
+	"icons": [
+		{
+			"src": "./bee-hive.png",
+			"sizes": "256x256",
+			"type": "image/png"
+		},
+		{
+			"src": "../images/ruche.png",
+			"sizes": "100x100",
+			"type": "image/png"
+		}
+	],
+	"theme_color": "#404549",
+	"background_color": "#34373b",
+	"lang": "fr",
+	"dir": "ltr",
+	"orientation": "any"
 }
