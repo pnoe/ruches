@@ -7,7 +7,7 @@
 <link rel="manifest" th:href="@{/js/manifest.webmanifest}" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+<link rel="icon" type="image/png" th:href="@{/images/ruchesicon.png}" />
 <script th:inline="javascript">
 	function showhidepass() {
 		let x = document.getElementById("password");
@@ -21,7 +21,6 @@
 		document.getElementById("username").focus();
 	}
 </script>
-
 </head>
 <body>
 	<div th:if="${param.error}" th:text="#{nomOuPassIncorrect}"></div>
