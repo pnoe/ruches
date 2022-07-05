@@ -6,13 +6,11 @@
 	"description": "Une application web pour vos ruches",
 	"icons": [
 		{
-			"src": "../images/ruche.png",
+			"src": "../images/ruchesicon.png",
 			"sizes": "any",
 			"type": "image/png"
 		}
 	],
-	"theme_color": "#404549",
-	"background_color": "#34373b",
 	"lang": "fr",
 	"dir": "ltr",
 	"orientation": "any"
