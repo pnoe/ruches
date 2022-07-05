@@ -7,6 +7,11 @@
 	"icons": [
 		{
 			"src": "../images/beeicon.svg",
+			"sizes": "36x36",
+			"type": "image/svg+xml"
+		},
+		{
+			"src": "../images/beeicon.svg",
 			"sizes": "any",
 			"type": "image/svg+xml"
 		}
