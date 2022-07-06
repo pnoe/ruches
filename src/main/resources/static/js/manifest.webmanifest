@@ -6,12 +6,12 @@
 	"description": "Une application web pour vos ruches",
 	"icons": [
 		{
-			"src": "/beeicon192.png",
+			"src": "../images/beeicon192.png",
 			"type": "image/png",
 			"sizes": "192x192"
 		},
 		{
-			"src": "/beeicon512.png",
+			"src": "../images/beeicon512.png",
 			"type": "image/png",
 			"sizes": "512x512"
 		}
