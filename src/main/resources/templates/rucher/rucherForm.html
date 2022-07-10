@@ -3,11 +3,13 @@
 <head
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
+	const nomexiste = /*[[#{nomexiste}]]*/ null;
+	const rucherNoms = /*[[${rucherNoms}]]*/ null;
 	$().ready(function() {
 		$("#nom").focus();
 		jQuery.validator.addMethod("nomExiste", function(value) {   
-    		return $.inArray(value, [[${rucherNoms}]]) == -1;
-			}, [[#{nomexiste}]]);
+    		return $.inArray(value, rucherNoms) == -1;
+			}, nomexiste);
 		$("#rucherForm").validate({
 			errorClass: 'erreur-form',
 			errorPlacement: function(error, element) {

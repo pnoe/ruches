@@ -2,19 +2,31 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
+	const depotNPES = /*[[#{depotNePeutEtreSupprime}]]*/ null;
+	const rucherNSRR = /*[[#{ruchernonsupprimerefrecolte}]]*/ null;
+	const suppRucherEtEve = /*[[#{supprimerruchereteven}]]*/ null;
+	const suppCeRucher = /*[[#{supprimercerucher?}]]*/ null;
+	const rucherDepot = /*[[${rucher.depot}]]*/ null;
+	const recolteHausses = /*[[${recolteHausses}]]*/ null;
+	const evenements = /*[[${evenements}]]*/ null;
+	const rucherNom = /*[[${rucher.nom}]]*/ null;
+	const ruchertxt = /*[[#{rucher}]]*/ null;
+	const listeRuches = /*[[#{listeRuches}]]*/ null;
+	const buttontextprint = /*[[#{buttontextprint}]]*/ null;
+	const buttontextcol = /*[[#{buttontextcol}]]*/ null;
 	$().ready(function() {
 		$('.confirmationsupp').on('click', function () {
-			if ([[${rucher.depot}]]) {
-				alert([[#{depotNePeutEtreSupprime}]]);
+			if (rucherDepot) {
+				alert(depotNPES);
 				return false;
 			} else {
-				if([[${recolteHausses}]]) {
-					alert([[#{ruchernonsupprimerefrecolte}]]);
+				if(recolteHausses) {
+					alert(rucherNSRR);
 					return false;
-				} else if ([[${evenements}]]) {
-			        return confirm([[#{supprimerruchereteven}]]);			
+				} else if (evenements) {
+			        return confirm(suppRucherEtEve);			
 				} else {
-					return confirm([[#{supprimercerucher?}]]);
+					return confirm(suppCeRucher);
 				}
 			}
 	    });		
@@ -23,9 +35,9 @@
 		    buttons: [
 	             'csv',
 	             {extend: 'pdf',  exportOptions: {columns: ':visible'}, 
-	            	 title: [[#{rucher}]] + ' : ' +[[${rucher.nom}]] + ' - ' + [[#{listeRuches}]] + " " + (new Date()).toLocaleDateString()},
-	                 {extend: 'print', text: [[#{buttontextprint}]]},
-	                 {extend: 'colvis', text: [[#{buttontextcol}]]}
+	            	 title: ruchertxt + ' : ' +rucherNom + ' - ' + listeRuches + " " + (new Date()).toLocaleDateString()},
+	                 {extend: 'print', text: buttontextprint},
+	                 {extend: 'colvis', text: buttontextcol}
 	         ]
 	       });  
 	});
