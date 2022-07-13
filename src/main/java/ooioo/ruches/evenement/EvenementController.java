@@ -62,8 +62,8 @@ public class EvenementController {
 
 	/**
 	 * Liste événements par période de temps (par défaut 1 mois) la période est
-	 * mémorisée dans des cookies les listes spécifiques : sucre, varoa... sont dans
-	 * les autres controller événements
+	 * mémorisée dans des cookies. Les listes spécifiques : sucre, varoa... sont dans
+	 * les autres controller événements et utilisent des templates de listes spécifiques
 	 * 
 	 * @param periode   1 tous, moins d'un : 2 an, 3 mois, 4 semaine, 5 jour,
 	 *                  default période entre debut et fin
@@ -214,10 +214,10 @@ public class EvenementController {
 	}
 
 	/*
-	 * Détail d'un événement type est le type d'événement pour permettre le retour
-	 * vers une liste d'événements typée : "pesée", "ajout ruche"... itemId est l'id
-	 * ruche, essaim... pour permettre le retour vers l'affichage des événements de
-	 * l'objet par exemple type=ruche et itemId id de la ruche
+	 * Détail d'un événement 
+	 * Type est le type d'événement pour permettre le retour
+	 * vers la liste d'événements non spécifique si type = "", et sinon
+	 * vers les listes spécfiques aux objets (ex: type=ruche et item=id de la ruche)
 	 */
 	@GetMapping("/{evenementId}")
 	public String evenement(Model model, @PathVariable long evenementId,
@@ -228,6 +228,15 @@ public class EvenementController {
 			model.addAttribute(Const.EVENEMENT, evenementOpt.get());
 			model.addAttribute("type", type);
 			model.addAttribute("itemId", itemId);
+			// récupérer le type de l'événement dans 
+			//    Evenement evenement = evenementOpt.get();
+			//    pour return vers template spécifique sucre, commentaire...
+			//    les modelAttribute servent au retour vers les listes par type 
+			//    du menu Evenement
+
+			
+			
+			
 		} else {
 			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
 			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);

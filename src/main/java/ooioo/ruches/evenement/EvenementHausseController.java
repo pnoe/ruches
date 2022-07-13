@@ -209,8 +209,6 @@ public class EvenementHausseController {
 	@GetMapping("/{hausseId}")
 	public String liste(Model model, @PathVariable long hausseId) {
 		model.addAttribute(Const.EVENEMENTS, evenementRepository.findByHausseId(hausseId));
-		model.addAttribute("itemId", hausseId);
-		model.addAttribute("type", "hausse");
 		Optional<Hausse> hausseOpt = hausseRepository.findById(hausseId);
 		if (hausseOpt.isPresent()) {
 			model.addAttribute("hausseNom", hausseOpt.get().getNom());

@@ -415,8 +415,6 @@ public class EvenementEssaimController {
 	@GetMapping("/{essaimId}")
 	public String liste(Model model, @PathVariable long essaimId) {
 		model.addAttribute(Const.EVENEMENTS, evenementRepository.findByEssaimId(essaimId));
-		model.addAttribute("itemId", essaimId);
-		model.addAttribute("type", Const.ESSAIM);
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isPresent()) {
 			model.addAttribute("essaimNom", essaimOpt.get().getNom());

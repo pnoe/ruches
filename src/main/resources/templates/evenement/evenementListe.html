@@ -24,17 +24,17 @@
 			<div class="col">
 				<h1 class="item">
 					<th:block th:text="#{evenements}+ ' '"></th:block>
-	     			<a th:if="${type}=='ruche'"
-						th:href="@{'/ruche/'+${itemId}}"
+					<a th:if="${rucheId}"
+						th:href="@{'/ruche/'+${rucheId}}"
 						th:text="#{ruche} + ' ' + ${rucheNom}"></a>
-					<a th:if="${type}=='rucher'"
-						th:href="@{'/rucher/'+${itemId}}"
+					<a th:if="${rucherId}"
+						th:href="@{'/rucher/'+${rucherId}}"
 						th:text="#{rucher} + ' ' + ${rucherNom}"></a>
-					<a th:if="${type}=='essaim'"
-						th:href="@{'/essaim/'+${itemId}}"
+					<a th:if="${essaimId}"
+						th:href="@{'/essaim/'+${essaimId}}"
 						th:text="#{essaim} + ' ' + ${essaimNom}"></a>
-					<a th:if="${type}=='hausse'"
-						th:href="@{'/hausse/'+${itemId}}"
+					<a th:if="${hausseId}"
+						th:href="@{'/hausse/'+${hausseId}}"
 						th:text="#{hausse} + ' ' + ${hausseNom}"></a>
 				</h1>			
 			</div>
