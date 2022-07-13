@@ -140,6 +140,9 @@ public class EvenementRucherController {
 	@GetMapping("/{rucherId}")
 	public String listeEvenementRucher(Model model, @PathVariable long rucherId) {
 		model.addAttribute(Const.EVENEMENTS, evenementRepository.findByRucherId(rucherId));
+		model.addAttribute("itemId", rucherId);
+		model.addAttribute("type", "rucher");
+		// pour lien retour dans la liste vers détail rucher
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();

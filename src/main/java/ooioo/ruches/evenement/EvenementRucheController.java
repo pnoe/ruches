@@ -310,6 +310,9 @@ public class EvenementRucheController {
 	@GetMapping("/{rucheId}")
 	public String liste(Model model, @PathVariable long rucheId) {
 		model.addAttribute(Const.EVENEMENTS, evenementRepository.findByRucheId(rucheId));
+		model.addAttribute("itemId", rucheId);
+		model.addAttribute("type", Const.RUCHE);
+		// pour lien retour dans la liste vers détail ruche
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 		if (rucheOpt.isPresent()) {
 			Ruche ruche = rucheOpt.get();
