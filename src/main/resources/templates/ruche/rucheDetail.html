@@ -2,22 +2,33 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
+const _csrf_token = /*[[${_csrf.token}]]*/ null;
+const _csrf_param_name = /*[[${_csrf.parameterName}]]*/ null;
+const ruchenoms = /*[[${ruchenoms}]]*/ null;
+const rnpsupprec = /*[[#{ruchenepeutetresupprimeerecolte}]]*/ null;
+const recolteHausses = /*[[${recolteHausses}]]*/ null;
+const evenements = /*[[${evenements}]]*/ null;
+const suppreven = /*[[#{supprimerrucheeteven?}]]*/ null;
+const suppruche = /*[[#{supprimercetteruche?}]]*/ null;
+const nruchvirg = /*[[#{nomruchesvirgule}]]*/ null;
+const nexisted = /*[[#{nomexistentdeja}]]*/ null;
+const Ruches = /*[[#{Ruches}]]*/ null;
+const creer = /*[[#{creer}]]*/ null;
+const urlclone = /*[[@{/ruche/clone/}]]*/ null;
+const rucheid = /*[[${ruche.id}]]*/ null;
 $().ready(function() {
-	const _csrf_token = [[${_csrf.token}]];
-    const _csrf_param_name = [[${_csrf.parameterName}]];
-	let ruchenoms = [[${ruchenoms}]];
 	$('.confirmation').on('click', function () {
-		if([[${recolteHausses}]]) {
-			alert([[#{ruchenepeutetresupprimeerecolte}]]);
+		if(recolteHausses) {
+			alert(rnpsupprec);
 			return false;
-		} else if ([[${evenements}]]) {
-	        return confirm([[#{supprimerrucheeteven?}]]);			
+		} else if (evenements) {
+	        return confirm(suppreven);			
 		} else {
-			return confirm([[#{supprimercetteruche?}]]);
+			return confirm(suppruche);
 		}
     });
 	$( "#clone" ).click(function() {
-		const noms = prompt([[#{nomruchesvirgule}]]);
+		const noms = prompt(nruchvirg);
 		if (noms == null || noms == "") {
 		    return;
 		}
@@ -34,18 +45,18 @@ $().ready(function() {
 			}
 		});
 		if (tabNomExiste.length > 0) {
-			let promptexistedeja = [[#{Ruches}]] + ' : ' + tabNomExiste.join(',') + ' ' + [[#{nomexistentdeja}]];
+			let promptexistedeja = Ruches + ' : ' + tabNomExiste.join(',') + ' ' + nexisted;
 			if (tabNomOk.length == 0) {
 				alert(promptexistedeja);
 				return false;					
 			}
-			if (!confirm(promptexistedeja + '. ' + [[#{creer}]] + ' ' + tabNomOk.join(',') + ' ?')) {
+			if (!confirm(promptexistedeja + '. ' + creer + ' ' + tabNomOk.join(',') + ' ?')) {
 				return false;
 			}
 		}
 	    let requestData = {nomclones : tabNomOk.join(',')};
 	    requestData[_csrf_param_name] = _csrf_token;
-		$.post( [[@{/ruche/clone/}]] + [[${ruche.id}]],
+		$.post( urlclone + rucheid,
 				requestData).done(function (data) { 
 					alert( data );
 					document.location.reload(true);

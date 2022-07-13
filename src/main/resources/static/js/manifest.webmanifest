@@ -5,6 +5,11 @@
 	"start_url": "../login",
 	"description": "Une application web pour vos ruches",
 	"icons": [
+		{
+			"src": "../images/beeicon-72.png",
+			"type": "image/png",
+			"sizes": "72x72"
+		},
 	        {
 			"src": "../images/beeicon-96.png",
 			"type": "image/png",

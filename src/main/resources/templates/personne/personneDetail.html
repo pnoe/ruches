@@ -3,13 +3,16 @@
 <head
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
+const notListEmpty = /*[[${not #lists.isEmpty(ruchers)}]]*/ null;
+const pnnonsupp = /*[[#{personnenonsupprimeerefrrucher}]]*/ null;
+const supppers = /*[[#{supprimercettepersonne}]]*/ null;
 $().ready(function() {
 	$('.confirmation').on('click', function () {
-		if([[${not #lists.isEmpty(ruchers)}]]) {
-			alert([[#{personnenonsupprimeerefrrucher}]]);
+		if(notListEmpty) {
+			alert(pnnonsupp);
 			return false;
 		} else {
-			return confirm([[#{supprimercettepersonne}]]);
+			return confirm(supppers);
 		}
     });
 });
