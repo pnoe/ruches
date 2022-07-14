@@ -310,6 +310,8 @@ public class EvenementRucheController {
 	@GetMapping("/{rucheId}")
 	public String liste(Model model, @PathVariable long rucheId) {
 		model.addAttribute(Const.EVENEMENTS, evenementRepository.findByRucheId(rucheId));
+		// rucheId @PathVariable est connu du template : ${rucheId}
+		//  mais type et itemId simplifient le template pour le retour du lien détail d'un événement
 		model.addAttribute("itemId", rucheId);
 		model.addAttribute("type", Const.RUCHE);
 		// pour lien retour dans la liste vers détail ruche

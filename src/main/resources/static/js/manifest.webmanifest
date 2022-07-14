@@ -8,27 +8,32 @@
 		{
 			"src": "../images/beeicon-72.png",
 			"type": "image/png",
-			"sizes": "72x72"
+			"sizes": "72x72",
+			"purpose": "maskable"
 		},
-	        {
+		{
 			"src": "../images/beeicon-96.png",
 			"type": "image/png",
-			"sizes": "96x96"
+			"sizes": "96x96",
+			"purpose": "maskable"
 		},
 		{
 			"src": "../images/beeicon-128.png",
 			"type": "image/png",
-			"sizes": "128x128"
+			"sizes": "128x128",
+			"purpose": "maskable"
 		},
 		{
 			"src": "../images/beeicon-192.png",
 			"type": "image/png",
-			"sizes": "192x192"
+			"sizes": "192x192",
+			"purpose": "maskable"
 		},
 		{
 			"src": "../images/beeicon-512.png",
 			"type": "image/png",
-			"sizes": "512x512"
+			"sizes": "512x512",
+			"purpose": "maskable"
 		}
 	],
 	"lang": "fr",
