@@ -26,16 +26,16 @@
 					<th:block th:text="#{evenements}+ ' '"></th:block>
 					<a th:if="${rucheId}"
 						th:href="@{'/ruche/'+${rucheId}}"
-						th:text="#{ruche} + ' ' + ${rucheNom}"></a>
+						th:text="#{ruche} + ' ' + ${evenements[0]?.ruche?.nom}"></a>
 					<a th:if="${rucherId}"
 						th:href="@{'/rucher/'+${rucherId}}"
-						th:text="#{rucher} + ' ' + ${rucherNom}"></a>
+						th:text="#{rucher} + ' ' + ${evenements[0]?.rucher?.nom}"></a>
 					<a th:if="${essaimId}"
 						th:href="@{'/essaim/'+${essaimId}}"
-						th:text="#{essaim} + ' ' + ${essaimNom}"></a>
+						th:text="#{essaim} + ' ' + ${evenements[0]?.essaim?.nom}"></a>
 					<a th:if="${hausseId}"
 						th:href="@{'/hausse/'+${hausseId}}"
-						th:text="#{hausse} + ' ' + ${hausseNom}"></a>
+						th:text="#{hausse} + ' ' + ${evenements[0]?.hausse?.nom}"></a>
 				</h1>			
 			</div>
 			<th:block th:unless="${rucheId} or ${rucherId} or ${essaimId} or ${hausseId}">
@@ -68,7 +68,7 @@
 					<td>
 						<a th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
 							th:with="url='/evenement/'+${evenement.id}+
-								(${type}?('?type='+${type}+'&itemId='+${itemId}):'')"
+								(${type}?('?type='+${type}):'')"
 							th:href="@{${url}}"></a>		
 					</td>
 					<td th:text="#{${evenement.type}}"></td>

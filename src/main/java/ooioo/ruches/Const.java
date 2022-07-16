@@ -12,7 +12,6 @@ public final class Const {
 	public static final String RUCHENOMS = "rucheNoms";
 	public static final String IDRUCHEINCONNU = "Idrucheinconnu";
 	public static final String IDRUCHEXXINCONNU = "Id ruche {} inconnu";
-	public static final String RETOURRUCHE = "retourRuche";
 	public static final String NBRUCHES = "nbruches";
 
 	public static final String ESSAIM = "essaim";

@@ -20,16 +20,8 @@ $(document).ready(function() {
 			<div class="col">			
 				<h1 class="item">
 					<a th:if="${type}==''" th:href="@{'/evenement/liste'}" th:text="#{evenement}"></a>
-					<a th:if="${type}=='ruche'" th:href="@{'/evenement/ruche/'+${evenement.ruche.id}}" th:text="#{evenement}"></a>					
-					<a th:if="${type}=='rucher'" th:href="@{'/evenement/rucher/'+${evenement.rucher.id}}" th:text="#{evenement}"></a>					
 					<a th:if="${type}=='essaim'" th:href="@{'/evenement/essaim/'+${evenement.essaim.id}}" th:text="#{evenement}"></a>					
-					<a th:if="${type}=='hausse'" th:href="@{'/evenement/hausse/'+${evenement.hausse.id}}" th:text="#{evenement}"></a>							
 					<a th:if="${type=='sucre'}" th:href="@{'/evenement/essaim/listeSucre'}" th:text="#{evenementssucre}"></a>
-					<a th:if="${type=='traitement'}" th:href="@{'/evenement/essaim/listeTraitement'}" th:text="#{evenementstraitement}"></a>
-					<a th:if="${type=='poids'}" th:href="@{'/evenement/ruche/listePoidsRuche'}" th:text="#{evenementspoidsruche}"></a>
-					<a th:if="${type=='cadre'}" th:href="@{'/evenement/ruche/listeCadreRuche'}" th:text="#{evenementcadreruche}"></a>
-					<a th:if="${type=='remplissage'}" th:href="@{'/evenement/hausse/listeRemplissageHausse'}" th:text="#{evenementremplissagehausse}"></a>
-					<a th:if="${type=='ajoutruche'}" th:href="@{'/evenement/rucher/listeRucheAjout'}" th:text="#{evenementsrucheajout}"></a>
 					<th:block th:text="' '+${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"></th:block>
 				</h1>
 			</div>
@@ -52,8 +44,7 @@ $(document).ready(function() {
 					<th style="background-color: PaleGoldenRod" th:text="#{ruche}"></th>
 					<th style="background-color: PaleGoldenRod" th:text="#{essaim}"></th>
 					<th style="background-color: PaleGoldenRod" th:text="#{rucher}"></th>
-					<th style="background-color: PaleGoldenRod" th:text="#{hausse}"></th>
-					<th style="background-color: LemonChiffon" th:text="#{valeur}"></th>
+					<th style="background-color: LemonChiffon" th:text="#{poidskg}"></th>
 					<th style="background-color: LemonChiffon" th:text="#{commentaire}"></th>
 				</tr>
 			</thead>
@@ -66,8 +57,6 @@ $(document).ready(function() {
 						th:text="${evenement.essaim?.nom}"></a></td>
 					<td><a th:href="@{'/rucher/'+${evenement.rucher?.id}}"
 						th:text="${evenement.rucher?.nom}"></a></td>
-					<td><a th:href="@{'/hausse/'+${evenement.hausse?.id}}"
-						th:text="${evenement.hausse?.nom}"></a></td>
 					<td class="num" th:text="${evenement.valeur}"></td>
 					<td th:text="${evenement.commentaire}"></td>
 				</tr>

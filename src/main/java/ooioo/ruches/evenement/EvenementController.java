@@ -62,8 +62,9 @@ public class EvenementController {
 
 	/**
 	 * Liste événements par période de temps (par défaut 1 mois) la période est
-	 * mémorisée dans des cookies. Les listes spécifiques : sucre, varoa... sont dans
-	 * les autres controller événements et utilisent des templates de listes spécifiques
+	 * mémorisée dans des cookies. Les listes spécifiques : sucre, varoa... sont
+	 * dans les autres controller événements et utilisent des templates de listes
+	 * spécifiques
 	 * 
 	 * @param periode   1 tous, moins d'un : 2 an, 3 mois, 4 semaine, 5 jour,
 	 *                  default période entre debut et fin
@@ -155,7 +156,7 @@ public class EvenementController {
 	}
 
 	/**
-	 * Liste événements notifications
+	 * Liste événements notifications diagramme de Gantt
 	 */
 	@GetMapping("/ganttNotif")
 	public String ganttNotif(Model model) {
@@ -214,10 +215,10 @@ public class EvenementController {
 	}
 
 	/*
-	 * Détail d'un événement 
-	 * Type est le type d'événement pour permettre le retour
-	 * vers la liste d'événements non spécifique si type = "", et sinon
-	 * vers les listes spécfiques aux objets (ex: type=ruche et item=id de la ruche)
+	 * Détail d'un événement d'id evenementId
+	 * @param type : "" pour retour liste tous even, essaim/ruche/rucher/hausse pour retour liste
+	 *    spécifique à l'objet dont l'id est dans itemId, sucre/traitement/... pour retour liste even/sucre...
+	 * @param itemId l'id de l'objet de retour
 	 */
 	@GetMapping("/{evenementId}")
 	public String evenement(Model model, @PathVariable long evenementId,
@@ -225,24 +226,33 @@ public class EvenementController {
 			@RequestParam(defaultValue = "0") @Nullable Long itemId) {
 		Optional<Evenement> evenementOpt = evenementRepository.findById(evenementId);
 		if (evenementOpt.isPresent()) {
-			model.addAttribute(Const.EVENEMENT, evenementOpt.get());
+			Evenement evenement = evenementOpt.get();
+			model.addAttribute(Const.EVENEMENT, evenement);
 			model.addAttribute("type", type);
-			model.addAttribute("itemId", itemId);
-			// récupérer le type de l'événement dans 
-			//    Evenement evenement = evenementOpt.get();
-			//    pour return vers template spécifique sucre, commentaire...
-			//    les modelAttribute servent au retour vers les listes par type 
-			//    du menu Evenement
+			// model.addAttribute("itemId", itemId);
+			// récupérer le type de l'événement
+			// pour return vers template spécifique sucre, commentaire...
+			// les modelAttribute servent au retour vers les listes par type
+			// du menu Evenement
+			switch (evenement.getType()) {
+			case ESSAIMSUCRE:
+				// TODO créer le template d'affichage de l'eve sucre
+				//   type permet de revenir vers la liste de tous les eve 
+				//           ou la liste des eve de l'essaim
+				//   itemId est l'id de l'esssaim ( redondant ? evenement.getEssaim().getId )
+				return "evenement/evenementSucreDetail";
+			default:
+				// A supprimer quand tous les types seront traités ?
+				//  ou laisser pour faciliter l'ajout d'un type non traité spécifiquement
+				return "evenement/evenementDetail";
+			}
 
-			
-			
-			
 		} else {
 			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
 			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
 			return Const.INDEX;
 		}
-		return "evenement/evenementDetail";
+
 	}
 
 	/*

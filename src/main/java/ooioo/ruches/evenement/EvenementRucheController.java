@@ -205,9 +205,7 @@ public class EvenementRucheController {
 	 * Appel du formulaire pour un événement Cadres
 	 */
 	@GetMapping("/cadre/{rucheId}")
-	public String creeCadres(HttpSession session, Model model, @PathVariable long rucheId,
-			@RequestParam(defaultValue = "false") boolean retourEssaim) {
-		model.addAttribute(Const.RETOURESSAIM, retourEssaim);
+	public String creeCadres(HttpSession session, Model model, @PathVariable long rucheId) {
 		String template = prepareAppelFormulaire(session, model, rucheId, "ruche/rucheCadreForm");
 		Ruche ruche = (Ruche)model.asMap().get(Const.RUCHE);
 		essaimService.modelAddEvenement(model, ruche.getEssaim(), TypeEvenement.RUCHECADRE);
@@ -218,9 +216,7 @@ public class EvenementRucheController {
 	 * Appel du formulaire pour un événement Pesée
 	 */
 	@GetMapping("/pesee/{rucheId}")
-	public String creePesee(HttpSession session, Model model, @PathVariable long rucheId,
-			@RequestParam(defaultValue = "false") boolean retourEssaim) {
-		model.addAttribute(Const.RETOURESSAIM, retourEssaim);
+	public String creePesee(HttpSession session, Model model, @PathVariable long rucheId) {
 		String template = prepareAppelFormulaire(session, model, rucheId, "ruche/ruchePeseeForm");
 		rucheService.modelAddEvenement(model, (Ruche)model.asMap().get(Const.RUCHE), TypeEvenement.RUCHEPESEE);
 		return template;
@@ -312,20 +308,16 @@ public class EvenementRucheController {
 		model.addAttribute(Const.EVENEMENTS, evenementRepository.findByRucheId(rucheId));
 		// rucheId @PathVariable est connu du template : ${rucheId}
 		//  mais type et itemId simplifient le template pour le retour du lien détail d'un événement
-		model.addAttribute("itemId", rucheId);
 		model.addAttribute("type", Const.RUCHE);
 		// pour lien retour dans la liste vers détail ruche
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 		if (rucheOpt.isPresent()) {
-			Ruche ruche = rucheOpt.get();
-			model.addAttribute("rucheNom", ruche.getNom());
-		} else {
-			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
-			model.addAttribute(Const.MESSAGE,
-					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
-			return Const.INDEX;
+			return Const.EVEN_EVENLISTE;
 		}
-		return Const.EVEN_EVENLISTE;
+		logger.error(Const.IDRUCHEXXINCONNU, rucheId);
+		model.addAttribute(Const.MESSAGE,
+				messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
+		return Const.INDEX;
 	}
 
 }
