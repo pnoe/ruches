@@ -56,12 +56,7 @@
 		<input type="hidden" th:field="*{essaim}" />
 		<input type="hidden" th:field="*{hausse}" />
 		<div th:replace="includeForm :: dateField"></div>
-		<div class="form-floating mb-3">
-			<input placeholder=""
-				class="form-control" type="number" step="0.001"
-				th:field="*{valeur}" th:errorclass="fieldError" maxlength="64" />
-			<label class="form-label" for="valeur" th:text="#{poidskg}"></label>
-		</div>
+		<div th:replace="includeForm :: poidskgField"></div>
 		<div th:replace="includeForm :: commentaireField"></div>
 		<div th:replace="includeForm :: BtnForm"></div>
 	</form>

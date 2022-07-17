@@ -25,11 +25,11 @@
 
 	<form action="#">
 		<div th:fragment="notifDelai" class="form-floating mb-3">
-			<input placeholder="" class="form-control" type="number"
-				id="valeur" name="valeur" /> <label class="form-label"
+			<input placeholder="" class="form-control" type="number" id="valeur"
+				name="valeur" /> <label class="form-label"
 				th:text="#{NotificationJoursAvant}" for="valeur"></label>
 		</div>
-		
+
 		<!--/*  
 		<div th:fragment="notifieDelai" class="form-floating mb-3">
 			<input placeholder="" class="form-control" type="number"
@@ -46,7 +46,7 @@
 			<label class="form-check-label" for="notifPersite" th:text="#{notifPersite}"></label>
 		</div>
 		*/-->
-		
+
 		<div th:fragment="finTraitement" class="form-check">
 			<input class="form-check-input" type="checkbox" id="finTraitement"
 				name="finTraitement" /> <label class="form-check-label"
@@ -56,6 +56,11 @@
 			<input placeholder="" class="form-control" type="number" step="0.001"
 				id="valeur" name="valeur" /> <label class="form-label"
 				th:text="#{poidskg}" for="valeur"></label>
+		</div>
+		<div th:fragment="poidskgField" class="form-floating mb-3">
+			<input placeholder="" class="form-control" type="number" step="0.001"
+				th:field="*{valeur}" th:errorclass="fieldError" /> <label
+				class="form-label" th:text="#{poidskg}" for="valeur"></label>
 		</div>
 		<div th:fragment="nomField" class="form-floating mb-3">
 			<input placeholder="" class="form-control" type="text"
