@@ -221,14 +221,10 @@ public class EvenementEssaimController {
 		return prepareAppelFormulaire(session, model, essaimId, "essaim/essaimCommentaireForm");
 	}
 
-	
-	
 	/**
-	 * Appel du formulaire de création d'un événement essaim sucre
-	 *  On passe un nouvel événement avec : 
-	 *    - la date courante (ou décalée)
-	 *    - le type essaimsucre
-	 *    - les objets ruche, essaim, rucher
+	 * Appel du formulaire de création d'un événement essaim sucre On passe un
+	 * nouvel événement avec : - la date courante (ou décalée) - le type essaimsucre
+	 * - les objets ruche, essaim, rucher
 	 */
 	@GetMapping("/sucre/{essaimId}")
 	public String sucre(HttpSession session, Model model, @PathVariable long essaimId) {
@@ -245,8 +241,6 @@ public class EvenementEssaimController {
 			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.ESSAIMSUCRE, ruche, essaim,
 					rucher, null, null, null);
 			model.addAttribute(Const.EVENEMENT, evenement);
-			// TODO essaim redondant ? evenement.essaim 
-			model.addAttribute(Const.ESSAIM, essaim);
 			return "essaim/essaimSucreForm";
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
@@ -256,8 +250,25 @@ public class EvenementEssaimController {
 		}
 	}
 
-	
-	
+	/**
+	 * Appel du formulaire de modification d'un événement essaim sucre
+	 */
+	@GetMapping("/sucre/modifie/{evenementId}")
+	public String sucreModifie(HttpSession session, Model model, @PathVariable long evenementId) {
+		// pour rappel du dernier événement sucre dans le fomulaire de saisie :
+		essaimService.modelAddEvenement(model, (Essaim) model.asMap().get(Const.ESSAIM), TypeEvenement.ESSAIMSUCRE);
+		Optional<Evenement> evenementOpt = evenementRepository.findById(evenementId);
+		if (evenementOpt.isPresent()) {
+			Evenement evenement = evenementOpt.get();
+			model.addAttribute(Const.EVENEMENT, evenement);
+			return "essaim/essaimSucreForm";
+		} else {
+			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
+			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
+			return Const.INDEX;
+		}
+	}
+
 	/**
 	 * Appel du formulaire de création d'un événement essaim traitement
 	 */
@@ -285,22 +296,20 @@ public class EvenementEssaimController {
 				messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
 		return Const.INDEX;
 	}
-	
+
 	/**
-	 * Sauvegarde d'un événement essaim
-	 *   Récupère tous les champs de l'événement du formulaire
-	 *   Attention ne fontionne que pour événement sucre actuellement
-	 *     les autres eve (traitement, commentaire... ) utilisent "/sauve/{essaimId}" ci-après
+	 * Sauvegarde d'un événement essaim Récupère tous les champs de l'événement du
+	 * formulaire Attention ne fontionne que pour événement sucre actuellement les
+	 * autres eve (traitement, commentaire... ) utilisent "/sauve/{essaimId}"
+	 * ci-après
 	 */
 	@PostMapping("/sauve2")
 	public String sauve2(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
-		// le template pour return doit être passé en paramètre si on veut 
-		//   utiliser sauve pour tous les even essaim (sucre, varoa...)
+		// le template pour return doit être passé en paramètre si on veut
+		// utiliser sauve pour tous les even essaim (sucre, varoa...)
 		/*
-		if (bindingResult.hasErrors()) {
-			return "essaim/essaimSucreForm";
-		}
-		*/
+		 * if (bindingResult.hasErrors()) { return "essaim/essaimSucreForm"; }
+		 */
 		evenementRepository.save(evenement);
 		logger.info("Evénement {} enregistré, id {}", evenement.getDate(), evenement.getId());
 		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
@@ -334,7 +343,7 @@ public class EvenementEssaimController {
 				messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
 		return Const.INDEX;
 	}
-	
+
 	/**
 	 * Appel du formulaire de dispersion d'un essaim
 	 */

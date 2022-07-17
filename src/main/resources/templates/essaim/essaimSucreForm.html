@@ -39,7 +39,7 @@
 				<h1 class="item">
 				<th:block th:text="#{ajoutSucre} + ' '"></th:block>
 				  <a th:href="@{'/essaim/'+${essaimId}}"
-					th:text="#{essaim} + ' ' + ${essaim.nom}"></a>
+					th:text="#{essaim} + ' ' + ${evenement.essaim?.nom}"></a>
 				</h1>			
 				<th:block th:text="${valeurESSAIMSUCRE}?
 					${#numbers.formatDecimal(valeurESSAIMSUCRE,1,2)}+'kg le '+${#temporals.format(dateESSAIMSUCRE, 'dd/MM/yyyy')}:''">
