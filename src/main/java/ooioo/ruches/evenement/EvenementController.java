@@ -236,11 +236,9 @@ public class EvenementController {
 			// du menu Evenement
 			switch (evenement.getType()) {
 			case ESSAIMSUCRE:
-				// TODO créer le template d'affichage de l'eve sucre
-				//   type permet de revenir vers la liste de tous les eve 
-				//           ou la liste des eve de l'essaim
-				//   itemId est l'id de l'esssaim ( redondant ? evenement.getEssaim().getId )
 				return "evenement/evenementSucreDetail";
+			case COMMENTAIREESSAIM:
+				return "evenement/evenementCommEssaimDetail";
 			default:
 				// A supprimer quand tous les types seront traités ?
 				//  ou laisser pour faciliter l'ajout d'un type non traité spécifiquement

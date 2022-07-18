@@ -216,13 +216,64 @@ public class EvenementEssaimController {
 	/**
 	 * Appel du formulaire pour la création d'un événement COMMENTAIREESSAIM
 	 */
+	/*
 	@GetMapping("/commentaire/{essaimId}")
 	public String commentaire(HttpSession session, Model model, @PathVariable long essaimId) {
 		return prepareAppelFormulaire(session, model, essaimId, "essaim/essaimCommentaireForm");
 	}
+	*/
+	
+	/**
+	 * Appel du formulaire de création d'un événement essaim COMMENTAIREESSAIM. On passe un
+	 * nouvel événement avec : - la date courante (ou décalée) - le type essaimsucre
+	 * - les objets ruche, essaim, rucher
+	 */
+	@GetMapping("/commentaire/{essaimId}")
+	public String commentaire(HttpSession session, Model model, @PathVariable long essaimId) {
+
+		// pour rappel du dernier événement sucre dans le fomulaire de saisie :
+		// essaimService.modelAddEvenement(model, (Essaim) model.asMap().get(Const.ESSAIM), TypeEvenement.ESSAIMSUCRE);
+
+		// TODO factoriser avec even sucre si seul le formulaire de retour change
+		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
+		if (essaimOpt.isPresent()) {
+			Essaim essaim = essaimOpt.get();
+			Ruche ruche = rucheRepository.findByEssaimId(essaimId);
+			Rucher rucher = null;
+			if (ruche != null) {
+				rucher = ruche.getRucher();
+			}
+			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.COMMENTAIREESSAIM, ruche, essaim,
+					rucher, null, null, null);
+			model.addAttribute(Const.EVENEMENT, evenement);
+			return "essaim/essaimCommentaireForm";
+		} else {
+			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
+			model.addAttribute(Const.MESSAGE,
+					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
+			return Const.INDEX;
+		}
+	}
 
 	/**
-	 * Appel du formulaire de création d'un événement essaim sucre On passe un
+	 * Appel du formulaire de modification d'un événement essaim commentaire
+	 */
+	@GetMapping("/commentaire/modifie/{evenementId}")
+	public String commentaireModifie(HttpSession session, Model model, @PathVariable long evenementId) {
+		Optional<Evenement> evenementOpt = evenementRepository.findById(evenementId);
+		if (evenementOpt.isPresent()) {
+			Evenement evenement = evenementOpt.get();
+			model.addAttribute(Const.EVENEMENT, evenement);
+			return "essaim/essaimCommentaireForm";
+		} else {
+			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
+			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
+			return Const.INDEX;
+		}
+	}
+
+	/**
+	 * Appel du formulaire de création d'un événement essaim sucre. On passe un
 	 * nouvel événement avec : - la date courante (ou décalée) - le type essaimsucre
 	 * - les objets ruche, essaim, rucher
 	 */

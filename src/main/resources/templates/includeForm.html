@@ -24,26 +24,35 @@
 	</form>
 
 	<form action="#">
+		
+		<div th:fragment="notifDelaiField" class="form-floating mb-3">
+			<input placeholder="" class="form-control" type="number"
+				th:field="*{valeur}" th:errorclass="fieldError" step="1" /> 
+				<label class="form-label"
+				th:text="#{NotificationJoursAvant}" for="valeur"></label>
+		</div>
+		
+		<!--/*
 		<div th:fragment="notifDelai" class="form-floating mb-3">
 			<input placeholder="" class="form-control" type="number" id="valeur"
 				name="valeur" /> <label class="form-label"
 				th:text="#{NotificationJoursAvant}" for="valeur"></label>
 		</div>
-
-		<!--/*  
-		<div th:fragment="notifieDelai" class="form-floating mb-3">
+		<div th:fragment="notifDelai" class="form-floating mb-3">
 			<input placeholder="" class="form-control" type="number"
-				id="notifDelai" step="1" min="0" /> <label class="form-label"
+				id="notifDelai" name="notifDelai" step="1" min="0" /> 
+				<label class="form-label"
 				th:text="#{NotificationJoursAvant}" for="notifDelai"></label>
 		</div>
-		<div th:fragment="tacheDuree" class="form-floating mb-3">
+		<div th:fragment="notifDuree" class="form-floating mb-3">
 			<input placeholder="" class="form-control" type="number"
-				id="tacheDuree" step="1" min="0" /> <label class="form-label"
-				th:text="#{TacheDuree}" for="tacheDuree"></label>
+				id="notifDuree" name="notifDuree" step="1" min="0" />
+				<label class="form-label"
+				th:text="#{TacheDuree}" for="notifDuree"></label>
 		</div>
-		<div th:fragment="notifPersite" class="form-check">
-			<input id="notifPersite" class="form-check-input" type="checkbox" />
-			<label class="form-check-label" for="notifPersite" th:text="#{notifPersite}"></label>
+		<div th:fragment="notifPersiste" class="form-check">
+			<input id="notifPersiste" name="notifPersiste" class="form-check-input" type="checkbox" />
+			<label class="form-check-label" for="notifPersiste" th:text="#{notifPersite}"></label>
 		</div>
 		*/-->
 
