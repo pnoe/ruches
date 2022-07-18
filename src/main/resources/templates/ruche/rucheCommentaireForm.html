@@ -37,18 +37,20 @@
 				<h1 class="item">
 					<th:block th:text="#{commentaire} + ' '"></th:block>
 					<a th:href="@{'/ruche/'+${rucheId}}"
-						th:text="#{ruche} + ' ' + ${ruche.nom}"></a>
+						th:text="#{ruche} + ' ' + ${evenement.ruche?.nom}"></a>
 				</h1>
 			</div>
 		</div>
 	</div>
-	<form action="#" th:action="@{'/evenement/ruche/sauve/'+${ruche.id}}"
-		method="post" id="evenementForm">
-		<input type="hidden" id="typeEvenement" name="typeEvenement"
-			value="COMMENTAIRERUCHE" />
-		<div th:replace="includeForm :: date"></div>
-		<div th:replace="includeForm :: commentaire"></div>
-		<div th:replace="includeForm :: notifDelai"></div>
+	<form action="#" th:action="@{'/evenement/ruche/sauve2'}"
+		th:object="${evenement}" method="post" id="evenementForm">
+		<input type="hidden" th:field="*{id}" /> <input type="hidden"
+			th:field="*{type}" /> <input type="hidden" th:field="*{ruche}" /> <input
+			type="hidden" th:field="*{rucher}" /> <input type="hidden"
+			th:field="*{essaim}" /> <input type="hidden" th:field="*{hausse}" />
+		<div th:replace="includeForm :: dateField"></div>
+		<div th:replace="includeForm :: commentaireField"></div>
+		<div th:replace="includeForm :: notifDelaiField"></div>
 		<div th:replace="includeForm :: BtnForm"></div>
 	</form>
 	<footer th:include="include::footer"></footer>

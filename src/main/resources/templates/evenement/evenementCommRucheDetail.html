@@ -21,7 +21,7 @@ $(document).ready(function() {
 			<div class="col">			
 				<h1 class="item">
 					<a th:if="${type}==''" th:href="@{'/evenement/liste'}" th:text="#{evenement}"></a>
-					<a th:if="${type}=='essaim'" th:href="@{'/evenement/essaim/'+${evenement.essaim.id}}" th:text="#{evenement}"></a>					
+					<a th:if="${type}=='ruche'" th:href="@{'/evenement/ruche/'+${evenement.ruche.id}}" th:text="#{evenement}"></a>					
 					<a th:if="${type=='comment'}" th:href="@{'/evenement/listecomment'}" th:text="#{evenementscomm}"></a>
 					<th:block th:text="' '+${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"></th:block>
 				</h1>

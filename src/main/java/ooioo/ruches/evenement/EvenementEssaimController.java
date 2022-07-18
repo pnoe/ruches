@@ -228,22 +228,17 @@ public class EvenementEssaimController {
 	 * nouvel événement avec : - la date courante (ou décalée) - le type essaimsucre
 	 * - les objets ruche, essaim, rucher
 	 */
-	@GetMapping("/commentaire/{essaimId}")
+	@GetMapping("/commentaire/cree/{essaimId}")
 	public String commentaire(HttpSession session, Model model, @PathVariable long essaimId) {
-
-		// pour rappel du dernier événement sucre dans le fomulaire de saisie :
-		// essaimService.modelAddEvenement(model, (Essaim) model.asMap().get(Const.ESSAIM), TypeEvenement.ESSAIMSUCRE);
-
 		// TODO factoriser avec even sucre si seul le formulaire de retour change
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isPresent()) {
-			Essaim essaim = essaimOpt.get();
 			Ruche ruche = rucheRepository.findByEssaimId(essaimId);
 			Rucher rucher = null;
 			if (ruche != null) {
 				rucher = ruche.getRucher();
 			}
-			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.COMMENTAIREESSAIM, ruche, essaim,
+			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.COMMENTAIREESSAIM, ruche, essaimOpt.get(),
 					rucher, null, null, null);
 			model.addAttribute(Const.EVENEMENT, evenement);
 			return "essaim/essaimCommentaireForm";
@@ -277,7 +272,7 @@ public class EvenementEssaimController {
 	 * nouvel événement avec : - la date courante (ou décalée) - le type essaimsucre
 	 * - les objets ruche, essaim, rucher
 	 */
-	@GetMapping("/sucre/{essaimId}")
+	@GetMapping("/sucre/cree/{essaimId}")
 	public String sucre(HttpSession session, Model model, @PathVariable long essaimId) {
 		// pour rappel du dernier événement sucre dans le fomulaire de saisie :
 		essaimService.modelAddEvenement(model, (Essaim) model.asMap().get(Const.ESSAIM), TypeEvenement.ESSAIMSUCRE);
@@ -349,10 +344,8 @@ public class EvenementEssaimController {
 	}
 
 	/**
-	 * Sauvegarde d'un événement essaim Récupère tous les champs de l'événement du
-	 * formulaire Attention ne fontionne que pour événement sucre actuellement les
-	 * autres eve (traitement, commentaire... ) utilisent "/sauve/{essaimId}"
-	 * ci-après
+	 * Sauvegarde d'un événement essaim.
+	 * Récupère tous les champs de l'événement du formulaire
 	 */
 	@PostMapping("/sauve2")
 	public String sauve2(@ModelAttribute Evenement evenement, BindingResult bindingResult) {

@@ -58,16 +58,16 @@
 				&nbsp;
        			<a th:href="@{'/evenement/essaim/'+${essaim.id}}"
        			  class="padicons bi bi-list-ul" th:title="#{evenements}" aria-hidden="true"></a>
-				<a th:href="@{'/evenement/essaim/commentaire/'+${essaim.id}}"
+				<a th:href="@{'/evenement/essaim/commentaire/cree/'+${essaim.id}}"
 				  class="bi bi-chat-text" th:title="#{evenementCommentaireEssaim}" aria-hidden="true"></a>
-				<a th:href="@{'/evenement/essaim/sucre/'+${essaim.id}}"
+				<a th:href="@{'/evenement/essaim/sucre/cree/'+${essaim.id}}"
 				  class="bi bi-bucket" th:title="#{evenementSucre}" aria-hidden="true"></a>
-				<a th:href="@{'/evenement/essaim/traitement/'+${essaim.id}}"
+				<a th:href="@{'/evenement/essaim/traitement/cree/'+${essaim.id}}"
 				  class="bi bi-bug" th:title="#{evenementTraitement}" aria-hidden="true"></a>
 				<th:block th:if="${rucheEssaim}">
-					<a th:href="@{'/evenement/ruche/pesee/'+${rucheEssaim?.id}+'?retourEssaim=true'}"
+					<a th:href="@{'/evenement/ruche/pesee/cree/'+${rucheEssaim?.id}+'?retourEssaim=true'}"
 					  class="bi bi-chevron-bar-down" th:title="#{evenementPesee}" aria-hidden="true"></a>
-       				<a th:href="@{'/evenement/ruche/cadre/'+${rucheEssaim?.id}+'?retourEssaim=true'}"
+       				<a th:href="@{'/evenement/ruche/cadre/cree/'+${rucheEssaim?.id}+'?retourEssaim=true'}"
        				  class="bi bi-layout-three-columns" th:title="#{evenementCadres}" aria-hidden="true"></a>
 				</th:block>
 				&nbsp;
