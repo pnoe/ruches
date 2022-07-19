@@ -100,16 +100,6 @@ public class EvenementHausseController {
 		model.addAttribute("periode", periode);
 		return "evenement/evenementRemplissageHausseListe";
 	}
-
-	/**
-	 * Appel formulaire événement COMMENTAIREHAUSSE
-	 */
-	/*
-	@GetMapping("/commentaire/{hausseId}")
-	public String creeCommentaire(HttpSession session, Model model, @PathVariable long hausseId) {
-		return prepareAppelFormulaire(session, model, hausseId, "hausse/hausseCommentaireForm");
-	}
-	*/
 	
 	/**
 	 * Appel du formulaire pour la création d'un événement COMMENTAIREHAUSSE
@@ -140,7 +130,6 @@ public class EvenementHausseController {
 		}
 	}
 	
-	
 	/**
 	 * Appel du formulaire de modification d'un événement COMMENTAIREHAUSSE
 	 */
@@ -157,8 +146,6 @@ public class EvenementHausseController {
 			return Const.INDEX;
 		}
 	}
-
-	
 
 	/**
 	 * Appel du formulaire pour créer des commentaires pour un lot de hausses
