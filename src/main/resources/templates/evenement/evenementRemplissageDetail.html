@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:inline="javascript">
+const suppeve = /*[[#{supprimerevenement}]]*/ null;
+$(document).ready(function() {
+	$('.confirmation').on('click', function () {
+			return confirm(suppeve);
+		});
+});
+</script>
+</head>
+<body>
+	<nav th:replace="include :: navbar">Menu</nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">			
+				<h1 class="item">
+					<a th:if="${type}==''" th:href="@{'/evenement/liste'}" th:text="#{evenement}"></a>
+					<a th:if="${type}=='hausse'" th:href="@{'/evenement/hausse/'+${evenement.hausse.id}}" th:text="#{evenement}"></a>					
+					<a th:if="${type=='comment'}" th:href="@{'/evenement/listecomment'}" th:text="#{evenementscomm}"></a>
+					<th:block th:text="' '+${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"></th:block>
+				</h1>
+			</div>
+			<div class="col">
+				<a th:href="@{'/evenement/hausse/remplissage/modifie/'+${evenement.id}}"> <span
+					class="bi bi-pencil" th:title="#{modifier}" aria-hidden="true"></span>
+				</a> 
+				<a id="supprime" th:href="@{'/evenement/supprime/'+${evenement.id}}"> <span
+					class="confirmation bi bi-trash" style="color:red" th:title="#{supprimer}"
+					aria-hidden="true"></span>
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid table-responsive">
+		<table class="table table-sm table-bordered table-striped" id="evenements">
+			<thead>
+				<tr>
+					<th th:text="#{evenement}"></th>
+					<th style="background-color: PaleGoldenRod" th:text="#{hausse}"></th>
+					<th style="background-color: PaleGoldenRod" th:text="#{ruche}"></th>
+					<th style="background-color: PaleGoldenRod" th:text="#{essaim}"></th>
+					<th style="background-color: PaleGoldenRod" th:text="#{rucher}"></th>
+					<th style="background-color: LemonChiffon" th:text="#{remplissage}"></th>
+					<th style="background-color: LemonChiffon" th:text="#{commentaire}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td th:text="#{${evenement.type}}"></td>
+					<td><a th:href="@{'/ruche/'+${evenement.hausse?.id}}"
+						th:text="${evenement.hausse?.nom}"></a></td>
+					<td><a th:href="@{'/ruche/'+${evenement.ruche?.id}}"
+						th:text="${evenement.ruche?.nom}"></a></td>
+					<td><a th:href="@{'/essaim/'+${evenement.essaim?.id}}"
+						th:text="${evenement.essaim?.nom}"></a></td>
+					<td><a th:href="@{'/rucher/'+${evenement.rucher?.id}}"
+						th:text="${evenement.rucher?.nom}"></a></td>
+					<td class="num" th:text="${evenement.valeur}"></td>
+					<td th:text="${evenement.commentaire}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

@@ -39,8 +39,8 @@
 			<div class="col">
 				<h1 class="item">
 					<th:block th:text="#{remplissage} + ' '"></th:block>
-					<a th:href="@{'/hausse/'+${hausseId}}"
-						th:text="#{hausse} + ' ' + ${hausse.nom}"></a>
+					<a th:href="@{'/hausse/' + ${evenement.hausse?.id}}"
+						th:text="#{hausse} + ' ' + ${evenement.hausse?.nom}"></a>
 				</h1>
 				<th:block th:text="${valeurHAUSSEREMPLISSAGE}?
 					${valeurHAUSSEREMPLISSAGE}+'% le '+${#temporals.format(dateHAUSSEREMPLISSAGE, 'dd/MM/yyyy')}:''">
@@ -48,17 +48,19 @@
 			</div>
 		</div>
 	</div>
-	<form action="#" th:action="@{'/evenement/hausse/sauve/'+${hausse.id}}"
-		method="post" id="evenementForm">
-		<input type="hidden" id="typeEvenement" name="typeEvenement"
-			value="HAUSSEREMPLISSAGE" />
-		<div th:replace="includeForm :: date"></div>
+	<form action="#" th:action="@{'/evenement/hausse/sauve'}"
+		th:object="${evenement}" method="post" id="evenementForm">
+		<input type="hidden" th:field="*{id}" /> <input type="hidden"
+			th:field="*{type}" /> <input type="hidden" th:field="*{ruche}" /> <input
+			type="hidden" th:field="*{rucher}" /> <input type="hidden"
+			th:field="*{essaim}" /> <input type="hidden" th:field="*{hausse}" />
+		<div th:replace="includeForm :: dateField"></div>
 		<div class="form-floating mb-3">
 			<input placeholder=""
-				class="form-control" type="number" id="valeur" name="valeur" />
+				class="form-control" type="number" th:field="*{valeur}" />
 			<label class="form-label" th:text="#{remplissage}" for="valeur"></label> 
 		</div>
-		<div th:replace="includeForm :: commentaire"></div>
+		<div th:replace="includeForm :: commentaireField"></div>
 		<div th:replace="includeForm :: BtnForm"></div>
 	</form>
 	<footer th:include="include::footer"></footer>

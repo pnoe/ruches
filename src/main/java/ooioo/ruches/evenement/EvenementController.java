@@ -245,6 +245,9 @@ public class EvenementController {
 				return "evenement/evenementCommRucherDetail";
 			case COMMENTAIREHAUSSE:
 				return "evenement/evenementCommHausseDetail";
+			
+			case HAUSSEREMPLISSAGE:
+				return "evenement/evenementRemplissageDetail";
 				
 			case ESSAIMTRAITEMENT:
 				return "evenement/evenementTraitementDetail";

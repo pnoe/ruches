@@ -214,16 +214,6 @@ public class EvenementEssaimController {
 	}
 
 	/**
-	 * Appel du formulaire pour la création d'un événement COMMENTAIREESSAIM
-	 */
-	/*
-	@GetMapping("/commentaire/{essaimId}")
-	public String commentaire(HttpSession session, Model model, @PathVariable long essaimId) {
-		return prepareAppelFormulaire(session, model, essaimId, "essaim/essaimCommentaireForm");
-	}
-	*/
-	
-	/**
 	 * Appel du formulaire de création d'un événement essaim COMMENTAIREESSAIM. On passe un
 	 * nouvel événement avec : - la date courante (ou décalée) - le type essaimsucre
 	 * - les objets ruche, essaim, rucher
@@ -287,6 +277,7 @@ public class EvenementEssaimController {
 			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.ESSAIMSUCRE, ruche, essaim,
 					rucher, null, null, null);
 			model.addAttribute(Const.EVENEMENT, evenement);
+			essaimService.modelAddEvenement(model, essaim, TypeEvenement.ESSAIMSUCRE);
 			return "essaim/essaimSucreForm";
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
@@ -347,8 +338,8 @@ public class EvenementEssaimController {
 	 * Sauvegarde d'un événement essaim.
 	 * Récupère tous les champs de l'événement du formulaire
 	 */
-	@PostMapping("/sauve2")
-	public String sauve2(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
+	@PostMapping("/sauve")
+	public String sauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
 		// le template pour return doit être passé en paramètre si on veut
 		// utiliser sauve pour tous les even essaim (sucre, varoa...)
 		/*
@@ -361,34 +352,6 @@ public class EvenementEssaimController {
 		return "redirect:/essaim/" + evenement.getEssaim().getId();
 	}
 
-	/**
-	 * Sauvegarde d'un événement essaim
-	 */
-	/*
-	@PostMapping("/sauve/{essaimId}")
-	public String sauve(Model model, @PathVariable long essaimId, @RequestParam TypeEvenement typeEvenement,
-			@RequestParam String valeur, @RequestParam String date, @RequestParam String commentaire) {
-		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
-		if (essaimOpt.isPresent()) {
-			Essaim essaim = essaimOpt.get();
-			Ruche ruche = rucheRepository.findByEssaimId(essaimId);
-			Rucher rucher = null;
-			if (ruche != null) {
-				rucher = ruche.getRucher();
-			}
-			LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
-			Evenement evenement = new Evenement(dateEve, typeEvenement, ruche, essaim, rucher, null, valeur,
-					commentaire);
-			evenementRepository.save(evenement);
-			logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
-			return Const.REDIRECT_ESSAIM_ESSAIMID;
-		}
-		logger.error(Const.IDESSAIMXXINCONNU, essaimId);
-		model.addAttribute(Const.MESSAGE,
-				messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
-		return Const.INDEX;
-	}
-	*/
 	
 	/**
 	 * Appel du formulaire de dispersion d'un essaim

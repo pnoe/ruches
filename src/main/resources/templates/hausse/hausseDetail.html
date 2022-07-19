@@ -71,7 +71,7 @@ $().ready(function() {
 				</h1>
 			</div>
 			<div class="col">
-				<a th:href="@{'/hausse/modifie/'+${hausse.id}}"
+				<a th:href="@{'/hausse/remplissage/modifie/'+${hausse.id}}"
 				  class="bi bi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
 				&nbsp;
 				<span id="clone" class="bi bi-collection cursorpointer" th:title="#{cloner}" aria-hidden="true"></span>
@@ -82,7 +82,7 @@ $().ready(function() {
 				  class="padicons bi bi-list-ul" th:title="#{evenements}" aria-hidden="true"></a>
 				<a th:href="@{'/evenement/hausse/commentaire/cree/'+${hausse.id}}"
 				  class="bi bi-chat-text" th:title="#{evenementCommentaire}" aria-hidden="true"></a>
-				<a th:href="@{'/evenement/hausse/remplissage/'+${hausse.id}}"
+				<a th:href="@{'/evenement/hausse/remplissage/cree/'+${hausse.id}}"
 				  class="bi bi-square-half" th:title="#{evenementRemplissage}" aria-hidden="true"></a>
 			</div>
 		</div>

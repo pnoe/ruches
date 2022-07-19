@@ -323,45 +323,19 @@ public class EvenementRucheController {
 		}
 		return template;
 	}
-
 	
 	/**
 	 * Sauvegarde d'un événement ruche.
 	 * Récupère tous les champs de l'événement du formulaire
 	 */
-	@PostMapping("/sauve2")
-	public String sauve2(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
+	@PostMapping("/sauve")
+	public String sauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
 		evenementRepository.save(evenement);
 		logger.info("Evénement {} enregistré, id {}", evenement.getDate(), evenement.getId());
 		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
 		// return Const.REDIRECT_ESSAIM_ESSAIMID;
 		return "redirect:/ruche/" + evenement.getRuche().getId();
 	}
-	
-	
-	/**
-	 * Enregistre un événement ruche
-	 */
-	/*
-	@PostMapping("/sauve/{rucheId}")
-	public String sauve(Model model, @PathVariable long rucheId, @RequestParam TypeEvenement typeEvenement,
-			@RequestParam String valeur, @RequestParam String date, @RequestParam String commentaire) {
-		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
-		if (rucheOpt.isPresent()) {
-			Ruche ruche = rucheOpt.get();
-			LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
-			Evenement evenement = new Evenement(dateEve, typeEvenement, ruche, ruche.getEssaim(), ruche.getRucher(),
-					null, valeur, commentaire);
-			evenementRepository.save(evenement);
-			logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
-			return "redirect:/ruche/" + rucheId;
-		}
-		logger.error(Const.IDRUCHEXXINCONNU, rucheId);
-		model.addAttribute(Const.MESSAGE,
-				messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
-		return Const.INDEX;
-	}
-	*/
 
 	/**
 	 * Liste des événements d'une ruche
