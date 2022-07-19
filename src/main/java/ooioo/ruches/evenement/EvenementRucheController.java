@@ -342,6 +342,7 @@ public class EvenementRucheController {
 	/**
 	 * Enregistre un événement ruche
 	 */
+	/*
 	@PostMapping("/sauve/{rucheId}")
 	public String sauve(Model model, @PathVariable long rucheId, @RequestParam TypeEvenement typeEvenement,
 			@RequestParam String valeur, @RequestParam String date, @RequestParam String commentaire) {
@@ -360,6 +361,7 @@ public class EvenementRucheController {
 				messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
 		return Const.INDEX;
 	}
+	*/
 
 	/**
 	 * Liste des événements d'une ruche

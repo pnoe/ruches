@@ -364,6 +364,7 @@ public class EvenementEssaimController {
 	/**
 	 * Sauvegarde d'un événement essaim
 	 */
+	/*
 	@PostMapping("/sauve/{essaimId}")
 	public String sauve(Model model, @PathVariable long essaimId, @RequestParam TypeEvenement typeEvenement,
 			@RequestParam String valeur, @RequestParam String date, @RequestParam String commentaire) {
@@ -387,7 +388,8 @@ public class EvenementEssaimController {
 				messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
 		return Const.INDEX;
 	}
-
+	*/
+	
 	/**
 	 * Appel du formulaire de dispersion d'un essaim
 	 */

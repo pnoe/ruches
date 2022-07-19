@@ -14,8 +14,10 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -102,10 +104,61 @@ public class EvenementHausseController {
 	/**
 	 * Appel formulaire événement COMMENTAIREHAUSSE
 	 */
+	/*
 	@GetMapping("/commentaire/{hausseId}")
 	public String creeCommentaire(HttpSession session, Model model, @PathVariable long hausseId) {
 		return prepareAppelFormulaire(session, model, hausseId, "hausse/hausseCommentaireForm");
 	}
+	*/
+	
+	/**
+	 * Appel du formulaire pour la création d'un événement COMMENTAIREHAUSSE
+	 */
+	@GetMapping("/commentaire/cree/{hausseId}")
+	public String creeCommentaire(HttpSession session, Model model, @PathVariable long hausseId) {
+		Optional<Hausse> hausseOpt = hausseRepository.findById(hausseId);
+		if (hausseOpt.isPresent()) {
+			Hausse hausse = hausseOpt.get();
+			Ruche ruche = hausse.getRuche();
+			Rucher rucher = null;
+			if (ruche != null) {
+				rucher = ruche.getRucher();
+			}
+			Essaim essaim = null;
+			if (ruche != null) {
+				essaim = ruche.getEssaim();
+			}
+			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.COMMENTAIREHAUSSE, ruche, essaim,
+					rucher, hausse, null, null);
+			model.addAttribute(Const.EVENEMENT, evenement);
+			return "hausse/hausseCommentaireForm";
+		} else {
+			logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
+			model.addAttribute(Const.MESSAGE,
+					messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
+			return Const.INDEX;
+		}
+	}
+	
+	
+	/**
+	 * Appel du formulaire de modification d'un événement hausse commentaire
+	 */
+	@GetMapping("/commentaire/modifie/{evenementId}")
+	public String commentaireModifie(HttpSession session, Model model, @PathVariable long evenementId) {
+		Optional<Evenement> evenementOpt = evenementRepository.findById(evenementId);
+		if (evenementOpt.isPresent()) {
+			Evenement evenement = evenementOpt.get();
+			model.addAttribute(Const.EVENEMENT, evenement);
+			return "hausse/hausseCommentaireForm";
+		} else {
+			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
+			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
+			return Const.INDEX;
+		}
+	}
+
+	
 
 	/**
 	 * Appel du formulaire pour créer des commentaires pour un lot de hausses
@@ -174,8 +227,27 @@ public class EvenementHausseController {
 	}
 
 	/**
+	 * Sauvegarde d'un événement hausse.
+	 * Récupère tous les champs de l'événement du formulaire
+	 */
+	@PostMapping("/sauve2")
+	public String sauve2(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
+		// le template pour return doit être passé en paramètre si on veut
+		// utiliser sauve pour tous les even essaim (sucre, varoa...)
+		/*
+		 * if (bindingResult.hasErrors()) { return "essaim/essaimSucreForm"; }
+		 */
+		evenementRepository.save(evenement);
+		logger.info("Evénement {} enregistré, id {}", evenement.getDate(), evenement.getId());
+		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
+		// return Const.REDIRECT_ESSAIM_ESSAIMID;
+		return "redirect:/hausse/" + evenement.getHausse().getId();
+	}
+	
+	/**
 	 * Sauvegarde événement hausse
 	 */
+	/*
 	@PostMapping("/sauve/{hausseId}")
 	public String sauve(Model model, @PathVariable long hausseId, @RequestParam TypeEvenement typeEvenement,
 			@RequestParam String valeur, @RequestParam String date, @RequestParam String commentaire) {
@@ -202,6 +274,7 @@ public class EvenementHausseController {
 		}
 		return "redirect:/hausse/" + hausseId;
 	}
+	*/
 
 	/**
 	 * Liste des événements d'une hausse

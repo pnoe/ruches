@@ -97,6 +97,7 @@ public class EvenementRucherController {
 	/**
 	 * Appel du formulaire pour un événement commentaire rucher
 	 */
+	/*
 	@GetMapping("/commentaire/{rucherId}")
 	public String creeEvenementCommentaireRucher(HttpSession session, Model model, @PathVariable long rucherId) {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
@@ -112,6 +113,7 @@ public class EvenementRucherController {
 		}
 		return "rucher/rucherCommentaireForm";
 	}
+	*/
 	
 	/**
 	 * Appel du formulaire pour la création d'un événement COMMENTAIRERUCHER
