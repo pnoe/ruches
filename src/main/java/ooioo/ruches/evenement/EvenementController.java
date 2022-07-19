@@ -241,6 +241,18 @@ public class EvenementController {
 				return "evenement/evenementCommEssaimDetail";
 			case COMMENTAIRERUCHE:
 				return "evenement/evenementCommRucheDetail";
+			case COMMENTAIRERUCHER:
+				return "evenement/evenementCommRucherDetail";
+			case COMMENTAIREHAUSSE:
+				return "evenement/evenementCommHausseDetail";
+				
+			case ESSAIMTRAITEMENT:
+				return "evenement/evenementTraitementDetail";
+			case RUCHEPESEE:
+				return "evenement/evenementPeseeDetail";
+			case RUCHECADRE:
+				return "evenement/evenementCadreDetail";
+				
 			default:
 				// A supprimer quand tous les types seront traités ?
 				//  ou laisser pour faciliter l'ajout d'un type non traité spécifiquement

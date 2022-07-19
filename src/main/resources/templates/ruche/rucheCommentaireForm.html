@@ -36,7 +36,7 @@
 			<div class="col">
 				<h1 class="item">
 					<th:block th:text="#{commentaire} + ' '"></th:block>
-					<a th:href="@{'/ruche/'+${rucheId}}"
+					<a th:href="@{'/ruche/' + ${evenement.ruche?.id}}"
 						th:text="#{ruche} + ' ' + ${evenement.ruche?.nom}"></a>
 				</h1>
 			</div>

@@ -14,8 +14,10 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -110,7 +112,58 @@ public class EvenementRucherController {
 		}
 		return "rucher/rucherCommentaireForm";
 	}
+	
+	/**
+	 * Appel du formulaire pour la création d'un événement COMMENTAIRERUCHER
+	 */
+	@GetMapping("/commentaire/cree/{rucherId}")
+	public String creeCommentaire(HttpSession session, Model model, @PathVariable long rucherId) {
+		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
+		if (rucherOpt.isPresent()) {
+			Rucher rucher = rucherOpt.get();
+			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.COMMENTAIRERUCHER, null, null,
+					rucher, null, null, null);
+			model.addAttribute(Const.EVENEMENT, evenement);
+			return "rucher/rucherCommentaireForm";
+		} else {
+			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
+			model.addAttribute(Const.MESSAGE,
+					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
+			return Const.INDEX;
+		}
+	}
+	
+	/**
+	 * Appel du formulaire de modification d'un événement rucher commentaire
+	 */
+	@GetMapping("/commentaire/modifie/{evenementId}")
+	public String commentaireModifie(HttpSession session, Model model, @PathVariable long evenementId) {
+		Optional<Evenement> evenementOpt = evenementRepository.findById(evenementId);
+		if (evenementOpt.isPresent()) {
+			Evenement evenement = evenementOpt.get();
+			model.addAttribute(Const.EVENEMENT, evenement);
+			return "rucher/rucherCommentaireForm";
+		} else {
+			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
+			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
+			return Const.INDEX;
+		}
+	}
 
+	/**
+	 * Sauvegarde d'un événement ruche.
+	 * Récupère tous les champs de l'événement du formulaire
+	 */
+	@PostMapping("/sauve2")
+	public String sauve2(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
+		evenementRepository.save(evenement);
+		logger.info("Evénement {} enregistré, id {}", evenement.getDate(), evenement.getId());
+		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
+		// return Const.REDIRECT_ESSAIM_ESSAIMID;
+		return "redirect:/rucher/" + evenement.getRucher().getId();
+	}
+	
+	
 	/**
 	 * Enregistre un événement rucher
 	 */
