@@ -38,23 +38,26 @@
 			<div class="col">
 				<h1 class="item">
 				<th:block th:text="#{nbCadres} + ' '"></th:block>
-				<a th:href="@{'/essaim/'+${ruche.essaim.id}}"
-					th:text="#{essaim} + ' ' + ${ruche.essaim.nom}"></a>
+				<a th:href="@{'/essaim/'+${evenement.essaim?.id}}"
+					th:text="#{essaim} + ' ' + ${evenement.essaim?.nom}"></a>
 				</h1>
 				<th:block th:text="${valeurRUCHECADRE}?${valeurRUCHECADRE}+ ' ' + #{cadresLe} + ' ' + ${#temporals.format(dateRUCHECADRE, 'dd/MM/yyyy')}:''">
 				</th:block>
         	</div>
         </div>
-    </div>
-	<form action="#" th:action="@{'/evenement/essaim/sauve/'+${ruche.essaim.id}}"
-		method="post" id="evenementForm">
-		<input type="hidden" id="typeEvenement" name="typeEvenement" value="RUCHECADRE"/>
-		<div th:replace="includeForm :: date"></div>
+    </div>    
+    <form action="#" th:action="@{'/evenement/essaim/sauve'}"
+		th:object="${evenement}" method="post" id="evenementForm">
+		<input type="hidden" th:field="*{id}" /> <input type="hidden"
+			th:field="*{type}" /> <input type="hidden" th:field="*{ruche}" /> <input
+			type="hidden" th:field="*{rucher}" /> <input type="hidden"
+			th:field="*{essaim}" /> <input type="hidden" th:field="*{hausse}" />
+		<div th:replace="includeForm :: dateField"></div>
 		<div class="form-floating mb-3">
-			<input placeholder="" class="form-control" type="text" id="valeur" name="valeur"/>
-			<label class="form-label" th:text="#{nbCadres}+' ('+${ruche.type.nbCadresMax}+'max)'" for="valeur"></label>
+			<input placeholder="" class="form-control" type="text" th:field="*{valeur}"/>
+			<label class="form-label" th:text="#{nbCadres}+' ('+${evenement.ruche?.type.nbCadresMax}+'max)'" for="valeur"></label>
   		</div>
-		<div th:replace="includeForm :: commentaire"></div>
+		<div th:replace="includeForm :: commentaireField"></div>
 		<small id="textHelp" class="form-text text-muted" th:text="#{evenruchercadreaide}"></small><br/>
 		<div th:replace="includeForm :: BtnForm"></div>
 	</form>

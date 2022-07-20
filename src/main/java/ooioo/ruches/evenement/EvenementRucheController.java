@@ -250,6 +250,7 @@ public class EvenementRucheController {
 	/**
 	 * Appel du formulaire pour un événement Cadres
 	 */
+	/*
 	@GetMapping("/cadre/{rucheId}")
 	public String creeCadres(HttpSession session, Model model, @PathVariable long rucheId) {
 		String template = prepareAppelFormulaire(session, model, rucheId, "ruche/rucheCadreForm");
@@ -257,17 +258,101 @@ public class EvenementRucheController {
 		essaimService.modelAddEvenement(model, ruche.getEssaim(), TypeEvenement.RUCHECADRE);
 		return template;
 	}
+	*/
+	
+	/**
+	 * Appel du formulaire pour la création d'un événement RUCHECADRE
+	 */
+	@GetMapping("/cadre/cree/{rucheId}")
+	public String cadreCree(HttpSession session, Model model, @PathVariable long rucheId) {
+		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
+		if (rucheOpt.isPresent()) {
+			Ruche ruche = rucheOpt.get();
+			Essaim essaim = ruche.getEssaim();
+			Rucher rucher = ruche.getRucher();
+			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.RUCHECADRE, ruche, essaim,
+					rucher, null, null, null);
+			model.addAttribute(Const.EVENEMENT, evenement);
+			essaimService.modelAddEvenement(model, essaim, TypeEvenement.RUCHECADRE);
+			return "ruche/rucheCadreForm";
+		} else {
+			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
+			model.addAttribute(Const.MESSAGE,
+					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
+			return Const.INDEX;
+		}
+	}
 
+	/**
+	 * Appel du formulaire de modification d'un événement RUCHECADRE
+	 */
+	@GetMapping("/cadre/modifie/{evenementId}")
+	public String cadreModifie(HttpSession session, Model model, @PathVariable long evenementId) {
+		Optional<Evenement> evenementOpt = evenementRepository.findById(evenementId);
+		if (evenementOpt.isPresent()) {
+			Evenement evenement = evenementOpt.get();
+			model.addAttribute(Const.EVENEMENT, evenement);
+			return "ruche/rucheCadreForm";
+		} else {
+			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
+			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
+			return Const.INDEX;
+		}
+	}
+	
 	/**
 	 * Appel du formulaire pour un événement Pesée
 	 */
+	/*
 	@GetMapping("/pesee/{rucheId}")
 	public String creePesee(HttpSession session, Model model, @PathVariable long rucheId) {
 		String template = prepareAppelFormulaire(session, model, rucheId, "ruche/ruchePeseeForm");
 		rucheService.modelAddEvenement(model, (Ruche)model.asMap().get(Const.RUCHE), TypeEvenement.RUCHEPESEE);
 		return template;
 	}
+	*/
 
+	/**
+	 * Appel du formulaire pour la création d'un événement RUCHEPESEE
+	 */
+	@GetMapping("/pesee/cree/{rucheId}")
+	public String peseeCree(HttpSession session, Model model, @PathVariable long rucheId) {
+		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
+		if (rucheOpt.isPresent()) {
+			Ruche ruche = rucheOpt.get();
+			Essaim essaim = ruche.getEssaim();
+			Rucher rucher = ruche.getRucher();
+			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.RUCHEPESEE, ruche, essaim,
+					rucher, null, null, null);
+			model.addAttribute(Const.EVENEMENT, evenement);
+			rucheService.modelAddEvenement(model, ruche, TypeEvenement.RUCHEPESEE);
+			return "ruche/ruchePeseeForm";
+		} else {
+			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
+			model.addAttribute(Const.MESSAGE,
+					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
+			return Const.INDEX;
+		}
+	}
+	
+	/**
+	 * Appel du formulaire de modification d'un événement RUCHEPESEE
+	 */
+	@GetMapping("/pesee/modifie/{evenementId}")
+	public String peseeModifie(HttpSession session, Model model, @PathVariable long evenementId) {
+		Optional<Evenement> evenementOpt = evenementRepository.findById(evenementId);
+		if (evenementOpt.isPresent()) {
+			Evenement evenement = evenementOpt.get();
+			model.addAttribute(Const.EVENEMENT, evenement);
+			return "ruche/ruchePeseeForm";
+		} else {
+			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
+			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
+			return Const.INDEX;
+		}
+	}
+	
+	
 	/*
 	 * Appel du formulaire événement pour ajouter une hausse
 	 */
