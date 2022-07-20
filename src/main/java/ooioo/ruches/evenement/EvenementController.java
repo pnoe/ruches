@@ -235,33 +235,28 @@ public class EvenementController {
 			// les modelAttribute servent au retour vers les listes par type
 			// du menu Evenement
 			switch (evenement.getType()) {
-			case ESSAIMSUCRE:
-				return "evenement/evenementSucreDetail";
-			case COMMENTAIREESSAIM:
-				return "evenement/evenementCommEssaimDetail";
-			case COMMENTAIRERUCHE:
-				return "evenement/evenementCommRucheDetail";
-			case COMMENTAIRERUCHER:
-				return "evenement/evenementCommRucherDetail";
-			case COMMENTAIREHAUSSE:
-				return "evenement/evenementCommHausseDetail";
-			
 			case HAUSSEREMPLISSAGE:
 				return "evenement/evenementRemplissageDetail";
-				
-			case ESSAIMTRAITEMENT:
+			case ESSAIMTRAITEMENT, ESSAIMTRAITEMENTFIN:
 				return "evenement/evenementTraitementDetail";
+			case ESSAIMSUCRE:
+				return "evenement/evenementSucreDetail";
+			case COMMENTAIRERUCHE:
+				return "evenement/evenementCommRucheDetail";
+			case COMMENTAIREHAUSSE:
+				return "evenement/evenementCommHausseDetail";
+			case COMMENTAIREESSAIM:
+				return "evenement/evenementCommEssaimDetail";
+			case COMMENTAIRERUCHER:
+				return "evenement/evenementCommRucherDetail";
 			case RUCHEPESEE:
 				return "evenement/evenementPeseeDetail";
 			case RUCHECADRE:
 				return "evenement/evenementCadreDetail";
-				
 			default:
-				// A supprimer quand tous les types seront traités ?
-				//  ou laisser pour faciliter l'ajout d'un type non traité spécifiquement
+				//  pour faciliter l'ajout d'un type non traité spécifiquement
 				return "evenement/evenementDetail";
 			}
-
 		} else {
 			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
 			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);

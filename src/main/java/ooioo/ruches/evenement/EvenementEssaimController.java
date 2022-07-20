@@ -214,9 +214,9 @@ public class EvenementEssaimController {
 	}
 
 	/**
-	 * Appel du formulaire de création d'un événement essaim COMMENTAIREESSAIM. On passe un
-	 * nouvel événement avec : - la date courante (ou décalée) - le type essaimsucre
-	 * - les objets ruche, essaim, rucher
+	 * Appel du formulaire de création d'un événement essaim COMMENTAIREESSAIM. On
+	 * passe un nouvel événement avec : - la date courante (ou décalée) - le type
+	 * essaimsucre - les objets ruche, essaim, rucher
 	 */
 	@GetMapping("/commentaire/cree/{essaimId}")
 	public String commentaire(HttpSession session, Model model, @PathVariable long essaimId) {
@@ -228,8 +228,8 @@ public class EvenementEssaimController {
 			if (ruche != null) {
 				rucher = ruche.getRucher();
 			}
-			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.COMMENTAIREESSAIM, ruche, essaimOpt.get(),
-					rucher, null, null, null);
+			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.COMMENTAIREESSAIM, ruche,
+					essaimOpt.get(), rucher, null, null, null);
 			model.addAttribute(Const.EVENEMENT, evenement);
 			return "essaim/essaimCommentaireForm";
 		} else {
@@ -264,8 +264,6 @@ public class EvenementEssaimController {
 	 */
 	@GetMapping("/sucre/cree/{essaimId}")
 	public String sucre(HttpSession session, Model model, @PathVariable long essaimId) {
-		// pour rappel du dernier événement sucre dans le fomulaire de saisie :
-		essaimService.modelAddEvenement(model, (Essaim) model.asMap().get(Const.ESSAIM), TypeEvenement.ESSAIMSUCRE);
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isPresent()) {
 			Essaim essaim = essaimOpt.get();
@@ -277,6 +275,7 @@ public class EvenementEssaimController {
 			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.ESSAIMSUCRE, ruche, essaim,
 					rucher, null, null, null);
 			model.addAttribute(Const.EVENEMENT, evenement);
+			// pour rappel du dernier événement sucre dans le fomulaire de saisie :
 			essaimService.modelAddEvenement(model, essaim, TypeEvenement.ESSAIMSUCRE);
 			return "essaim/essaimSucreForm";
 		} else {
@@ -307,14 +306,51 @@ public class EvenementEssaimController {
 	}
 
 	/**
-	 * Appel du formulaire de création d'un événement essaim traitement
+	 * Appel du formulaire de création d'un événement ESSAIMTRAITEMENT. On passe un
+	 * nouvel événement avec : - la date courante (ou décalée) - le type essaimsucre
+	 * - les objets ruche, essaim, rucher
 	 */
-	@GetMapping("/traitement/{essaimId}")
+	@GetMapping("/traitement/cree/{essaimId}")
 	public String traitement(HttpSession session, Model model, @PathVariable long essaimId) {
-		String template = prepareAppelFormulaire(session, model, essaimId, "essaim/essaimTraitementForm");
-		essaimService.modelAddEvenement(model, (Essaim) model.asMap().get(Const.ESSAIM),
-				TypeEvenement.ESSAIMTRAITEMENT);
-		return template;
+		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
+		if (essaimOpt.isPresent()) {
+			Essaim essaim = essaimOpt.get();
+			Ruche ruche = rucheRepository.findByEssaimId(essaimId);
+			Rucher rucher = null;
+			if (ruche != null) {
+				rucher = ruche.getRucher();
+			}
+			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.ESSAIMTRAITEMENT, ruche, essaim,
+					rucher, null, null, null);
+			model.addAttribute(Const.EVENEMENT, evenement);
+			// pour rappel du dernier événement sucre dans le fomulaire de saisie :
+			essaimService.modelAddEvenement(model, essaim, TypeEvenement.ESSAIMTRAITEMENT);
+			return "essaim/essaimTraitementForm";
+		} else {
+			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
+			model.addAttribute(Const.MESSAGE,
+					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
+			return Const.INDEX;
+		}
+	}
+
+	/**
+	 * Appel du formulaire de modification d'un événement ESSAIMTRAITEMENT
+	 */
+	@GetMapping("/traitement/modifie/{evenementId}")
+	public String traitementModifie(HttpSession session, Model model, @PathVariable long evenementId) {
+		Optional<Evenement> evenementOpt = evenementRepository.findById(evenementId);
+		if (evenementOpt.isPresent()) {
+			Evenement evenement = evenementOpt.get();
+			model.addAttribute(Const.EVENEMENT, evenement);
+			// pour rappel du dernier événement sucre dans le fomulaire de saisie :
+			essaimService.modelAddEvenement(model, evenement.getEssaim(), TypeEvenement.ESSAIMTRAITEMENT);
+			return "essaim/essaimTraitementForm";
+		} else {
+			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
+			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
+			return Const.INDEX;
+		}
 	}
 
 	/**
@@ -335,8 +371,8 @@ public class EvenementEssaimController {
 	}
 
 	/**
-	 * Sauvegarde d'un événement essaim.
-	 * Récupère tous les champs de l'événement du formulaire
+	 * Sauvegarde d'un événement essaim. Récupère tous les champs de l'événement du
+	 * formulaire
 	 */
 	@PostMapping("/sauve")
 	public String sauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
@@ -352,7 +388,6 @@ public class EvenementEssaimController {
 		return "redirect:/essaim/" + evenement.getEssaim().getId();
 	}
 
-	
 	/**
 	 * Appel du formulaire de dispersion d'un essaim
 	 */
