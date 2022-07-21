@@ -3,8 +3,6 @@ package ooioo.ruches;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,14 +30,6 @@ public class Notification {
 	private static final String RUCHERPREF = ", Rucher : ";
 	private static final String HAUSSEPREF = ", Hausse : ";
 	private static final String ESSAIMPREF = ", Essaim : ";
-
-	// https://docs.oracle.com/en/java/javase/18/docs/api/java.base/java/util/regex/Pattern.html
-	// un éventuel signe moins (groupe 1)
-	// suivi d'un nombre d'un ou plusieurs chiffres (groupe 2)
-	// suivi d'un éventuel .
-	// suivi d'un éventuel groupe de chiffres (groupe 3)
-	// suivi de n'importe quoi
-	public static final Pattern MOINSNB1NB2 = Pattern.compile("(-?)(\\d+)\\.?(\\d?).*");
 
 	@Autowired
 	private EvenementRepository evenementRepository;
@@ -70,16 +60,21 @@ public class Notification {
 		message.append(entete);
 		int i = 0;
 		for (Evenement evenement : evenements) {
-			try {
-				Matcher m = MOINSNB1NB2.matcher(evenement.getValeur());
-				if (!m.matches()) {
-					continue;
+				int joursAvant = Integer.parseInt(evenement.getValeur());
+				LocalDateTime min;
+				LocalDateTime max;
+				if (joursAvant >= 0) {
+					min = evenement.getDate().minusDays(joursAvant);
+					max = evenement.getDate();
+				} else {
+					// si joursAvant est négatif la plage de notification
+					//  est la date de l'évenement - (la date eve plus le nb de jours)
+					// fonctionnalité  : notif apès date de l'événement
+					max = evenement.getDate().minusDays(joursAvant);
+					min = evenement.getDate();		
 				}
-				int joursAvant = Integer.parseInt(m.group(2));
-				int joursDuree = "".equals(m.group(3)) ? 0 : Integer.parseInt(m.group(3));
-				// Si la date de notification est atteinte
-				if (dateNow.isAfter(evenement.getDate().minusDays(joursAvant))
-						&& (("-".equals(m.group(1))) || (dateNow.isBefore(evenement.getDate().plusDays(joursDuree))))) {
+				// Si on est dans la plage de notification
+				if (dateNow.isAfter(min) && (dateNow.isBefore(max))) {
 					StringBuilder messageEve = new StringBuilder(200);
 					messageEve.append(evenement.getDate().format(formatter));
 					boolean ok = true;
@@ -120,17 +115,9 @@ public class Notification {
 					if (ok) {
 						i++;
 						message.append(messageEve);
-						if (joursDuree != 0) {
-							message.append(", Fin : ")
-									.append(evenement.getDate().plusDays(joursDuree).format(formatter));
-						}
 						message.append(", Commentaire : ").append(evenement.getCommentaire()).append("\n");
 					}
 				}
-			} catch (NumberFormatException nfe) {
-				// valeur n'est pas un entier
-				logger.error("Erreur Integer.parseInt");
-			}
 		}
 		if (i > 0) {
 			// Envoyer le mail
