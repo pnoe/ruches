@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:replace="include :: jsdatetimepicker"></script>
 <link th:replace="include :: cssdatetimepicker" />
 <script th:replace="include :: localejsdatetimepicker"></script>
@@ -8,9 +9,9 @@
 	$().ready(function() {
 		$("#valeur").focus();
 		$("#evenementForm").validate({
-			errorClass: 'erreur-form',
-			errorPlacement: function(error, element) {
-			    error.insertBefore(element.closest('div'));
+			errorClass : 'erreur-form',
+			errorPlacement : function(error, element) {
+				error.insertBefore(element.closest('div'));
 			},
 			rules : {
 				date : {
@@ -42,9 +43,10 @@
 					<a th:href="@{'/hausse/' + ${evenement.hausse?.id}}"
 						th:text="#{hausse} + ' ' + ${evenement.hausse?.nom}"></a>
 				</h1>
-				<th:block th:text="${valeurHAUSSEREMPLISSAGE}?
+				<th:block
+					th:text="${valeurHAUSSEREMPLISSAGE}?
 					${valeurHAUSSEREMPLISSAGE}+'% le '+${#temporals.format(dateHAUSSEREMPLISSAGE, 'dd/MM/yyyy')}:''">
-		        </th:block>
+				</th:block>
 			</div>
 		</div>
 	</div>
@@ -56,9 +58,10 @@
 			th:field="*{essaim}" /> <input type="hidden" th:field="*{hausse}" />
 		<div th:replace="includeForm :: dateField"></div>
 		<div class="form-floating mb-3">
-			<input placeholder=""
-				class="form-control" type="number" th:field="*{valeur}" />
-			<label class="form-label" th:text="#{remplissage}" for="valeur"></label> 
+			<input placeholder="" class="form-control" type="number" step="1"
+				min="0" max="100" th:errorclass="fieldError"
+				th:field="*{valeur}" /> <label class="form-label"
+				th:text="#{remplissage}" for="valeur"></label>
 		</div>
 		<div th:replace="includeForm :: commentaireField"></div>
 		<div th:replace="includeForm :: BtnForm"></div>

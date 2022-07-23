@@ -170,16 +170,6 @@ public class EvenementRucheController {
 		model.addAttribute("periode", periode);
 		return "evenement/evenementCadreRucheListe";
 	}
-
-	/**
-	 * Appel du formulaire pour la création d'un événement COMMENTAIRERUCHE
-	 */
-    /*
-	@GetMapping("/commentaire/{rucheId}")
-	public String creeCommentaire(HttpSession session, Model model, @PathVariable long rucheId) {
-		return prepareAppelFormulaire(session, model, rucheId, "ruche/rucheCommentaireForm");
-	}
-	*/
 	
 	/**
 	 * Appel du formulaire pour la création d'un événement COMMENTAIRERUCHE
@@ -248,19 +238,6 @@ public class EvenementRucheController {
 	}
 
 	/**
-	 * Appel du formulaire pour un événement Cadres
-	 */
-	/*
-	@GetMapping("/cadre/{rucheId}")
-	public String creeCadres(HttpSession session, Model model, @PathVariable long rucheId) {
-		String template = prepareAppelFormulaire(session, model, rucheId, "ruche/rucheCadreForm");
-		Ruche ruche = (Ruche)model.asMap().get(Const.RUCHE);
-		essaimService.modelAddEvenement(model, ruche.getEssaim(), TypeEvenement.RUCHECADRE);
-		return template;
-	}
-	*/
-	
-	/**
 	 * Appel du formulaire pour la création d'un événement RUCHECADRE
 	 */
 	@GetMapping("/cadre/cree/{rucheId}")
@@ -300,18 +277,6 @@ public class EvenementRucheController {
 		}
 	}
 	
-	/**
-	 * Appel du formulaire pour un événement Pesée
-	 */
-	/*
-	@GetMapping("/pesee/{rucheId}")
-	public String creePesee(HttpSession session, Model model, @PathVariable long rucheId) {
-		String template = prepareAppelFormulaire(session, model, rucheId, "ruche/ruchePeseeForm");
-		rucheService.modelAddEvenement(model, (Ruche)model.asMap().get(Const.RUCHE), TypeEvenement.RUCHEPESEE);
-		return template;
-	}
-	*/
-
 	/**
 	 * Appel du formulaire pour la création d'un événement RUCHEPESEE
 	 */
@@ -407,6 +372,22 @@ public class EvenementRucheController {
 			return Const.INDEX;
 		}
 		return template;
+	}
+	
+	/**
+	 * Sauvegarde d'un événement commentaire ruche. Récupère tous les champs de
+	 * l'événement du formulaire
+	 */
+	@PostMapping("/commentaire/sauve")
+	public String commentaireSauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return "ruche/rucheCommentaireForm";
+		}
+		evenement.setValeur(Utils.notifIntFmt(evenement.getValeur()));
+		evenementRepository.save(evenement);
+		logger.info("Evénement {} enregistré, id {}", evenement.getDate(), evenement.getId());
+		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
+		return "redirect:/ruche/" + evenement.getRuche().getId();
 	}
 	
 	/**

@@ -60,64 +60,69 @@ public class Notification {
 		message.append(entete);
 		int i = 0;
 		for (Evenement evenement : evenements) {
-				int joursAvant = Integer.parseInt(evenement.getValeur());
-				LocalDateTime min;
-				LocalDateTime max;
-				if (joursAvant >= 0) {
-					min = evenement.getDate().minusDays(joursAvant);
-					max = evenement.getDate();
-				} else {
-					// si joursAvant est négatif la plage de notification
-					//  est la date de l'évenement - (la date eve plus le nb de jours)
-					// fonctionnalité  : notif apès date de l'événement
-					max = evenement.getDate().minusDays(joursAvant);
-					min = evenement.getDate();		
+			int joursAvant = 0;
+			try {
+				joursAvant = Integer.parseInt(evenement.getValeur());
+			} catch (NumberFormatException e) {
+				continue;
+			}
+			LocalDateTime min;
+			LocalDateTime max;
+			if (joursAvant >= 0) {
+				min = evenement.getDate().minusDays(joursAvant);
+				max = evenement.getDate();
+			} else {
+				// si joursAvant est négatif la plage de notification
+				// est la date de l'évenement - (la date eve plus le nb de jours)
+				// fonctionnalité : notif apès date de l'événement
+				max = evenement.getDate().minusDays(joursAvant);
+				min = evenement.getDate();
+			}
+			// Si on est dans la plage de notification
+			if (dateNow.isAfter(min) && (dateNow.isBefore(max))) {
+				StringBuilder messageEve = new StringBuilder(200);
+				messageEve.append(evenement.getDate().format(formatter));
+				boolean ok = true;
+				switch (evenement.getType()) {
+				case COMMENTAIRERUCHE:
+					messageEve.append(RUCHEPREF)
+							.append(evenement.getRuche() == null ? "?" : evenement.getRuche().getNom())
+							.append(ESSAIMPREF)
+							.append(evenement.getEssaim() == null ? "?" : evenement.getEssaim().getNom())
+							.append(RUCHERPREF)
+							.append(evenement.getRucher() == null ? "?" : evenement.getRucher().getNom());
+					break;
+				case COMMENTAIRERUCHER:
+					messageEve.append(RUCHERPREF)
+							.append(evenement.getRucher() == null ? "?" : evenement.getRucher().getNom());
+					break;
+				case COMMENTAIREESSAIM:
+					messageEve.append(ESSAIMPREF)
+							.append(evenement.getEssaim() == null ? "?" : evenement.getEssaim().getNom())
+							.append(RUCHEPREF)
+							.append(evenement.getRuche() == null ? "?" : evenement.getRuche().getNom())
+							.append(RUCHERPREF)
+							.append(evenement.getRucher() == null ? "?" : evenement.getRucher().getNom());
+					break;
+				case COMMENTAIREHAUSSE:
+					messageEve.append(HAUSSEPREF)
+							.append(evenement.getHausse() == null ? "?" : evenement.getHausse().getNom())
+							.append(RUCHEPREF)
+							.append(evenement.getRuche() == null ? "?" : evenement.getRuche().getNom())
+							.append(RUCHERPREF)
+							.append(evenement.getRucher() == null ? "?" : evenement.getRucher().getNom());
+					break;
+				default:
+					// le select ne prend que des événements commentaire
+					ok = false;
+					logger.error("Erreur type événement");
 				}
-				// Si on est dans la plage de notification
-				if (dateNow.isAfter(min) && (dateNow.isBefore(max))) {
-					StringBuilder messageEve = new StringBuilder(200);
-					messageEve.append(evenement.getDate().format(formatter));
-					boolean ok = true;
-					switch (evenement.getType()) {
-					case COMMENTAIRERUCHE:
-						messageEve.append(RUCHEPREF)
-								.append(evenement.getRuche() == null ? "?" : evenement.getRuche().getNom())
-								.append(ESSAIMPREF)
-								.append(evenement.getEssaim() == null ? "?" : evenement.getEssaim().getNom())
-								.append(RUCHERPREF)
-								.append(evenement.getRucher() == null ? "?" : evenement.getRucher().getNom());
-						break;
-					case COMMENTAIRERUCHER:
-						messageEve.append(RUCHERPREF)
-								.append(evenement.getRucher() == null ? "?" : evenement.getRucher().getNom());
-						break;
-					case COMMENTAIREESSAIM:
-						messageEve.append(ESSAIMPREF)
-								.append(evenement.getEssaim() == null ? "?" : evenement.getEssaim().getNom())
-								.append(RUCHEPREF)
-								.append(evenement.getRuche() == null ? "?" : evenement.getRuche().getNom())
-								.append(RUCHERPREF)
-								.append(evenement.getRucher() == null ? "?" : evenement.getRucher().getNom());
-						break;
-					case COMMENTAIREHAUSSE:
-						messageEve.append(HAUSSEPREF)
-								.append(evenement.getHausse() == null ? "?" : evenement.getHausse().getNom())
-								.append(RUCHEPREF)
-								.append(evenement.getRuche() == null ? "?" : evenement.getRuche().getNom())
-								.append(RUCHERPREF)
-								.append(evenement.getRucher() == null ? "?" : evenement.getRucher().getNom());
-						break;
-					default:
-						// le select ne prend que des événements commentaire
-						ok = false;
-						logger.error("Erreur type événement");
-					}
-					if (ok) {
-						i++;
-						message.append(messageEve);
-						message.append(", Commentaire : ").append(evenement.getCommentaire()).append("\n");
-					}
+				if (ok) {
+					i++;
+					message.append(messageEve);
+					message.append(", Commentaire : ").append(evenement.getCommentaire()).append("\n");
 				}
+			}
 		}
 		if (i > 0) {
 			// Envoyer le mail

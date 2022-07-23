@@ -252,6 +252,22 @@ public class EvenementHausseController {
 	}
 
 	/**
+	 * Sauvegarde d'un événement commentaire hausse. Récupère tous les champs de
+	 * l'événement du formulaire
+	 */
+	@PostMapping("/commentaire/sauve")
+	public String commentaireSauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return "hausse/hausseCommentaireForm";
+		}
+		evenement.setValeur(Utils.notifIntFmt(evenement.getValeur()));
+		evenementRepository.save(evenement);
+		logger.info("Evénement {} enregistré, id {}", evenement.getDate(), evenement.getId());
+		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
+		return "redirect:/hausse/" + evenement.getHausse().getId();
+	}
+	
+	/**
 	 * Sauvegarde d'un événement hausse.
 	 * Récupère tous les champs de l'événement du formulaire
 	 */

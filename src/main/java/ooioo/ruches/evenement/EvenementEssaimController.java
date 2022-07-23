@@ -371,6 +371,22 @@ public class EvenementEssaimController {
 	}
 
 	/**
+	 * Sauvegarde d'un événement commentaire essaim. Récupère tous les champs de
+	 * l'événement du formulaire
+	 */
+	@PostMapping("/commentaire/sauve")
+	public String commentaireSauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return "essaim/essaimCommentaireForm";
+		}
+		evenement.setValeur(Utils.notifIntFmt(evenement.getValeur()));
+		evenementRepository.save(evenement);
+		logger.info("Evénement {} enregistré, id {}", evenement.getDate(), evenement.getId());
+		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
+		return "redirect:/essaim/" + evenement.getEssaim().getId();
+	}
+
+	/**
 	 * Sauvegarde d'un événement essaim. Récupère tous les champs de l'événement du
 	 * formulaire
 	 */

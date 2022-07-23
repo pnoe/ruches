@@ -92,27 +92,6 @@ public class EvenementRucherController {
 		model.addAttribute("periode", periode);
 		return "evenement/evenementRucheAjoutListe";
 	}
-
-	/**
-	 * Appel du formulaire pour un événement commentaire rucher
-	 */
-	/*
-	@GetMapping("/commentaire/{rucherId}")
-	public String creeEvenementCommentaireRucher(HttpSession session, Model model, @PathVariable long rucherId) {
-		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
-		if (rucherOpt.isPresent()) {
-			Rucher rucher = rucherOpt.get();
-			model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
-			model.addAttribute(Const.RUCHER, rucher);
-		} else {
-			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
-			model.addAttribute(Const.MESSAGE,
-					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
-			return Const.INDEX;
-		}
-		return "rucher/rucherCommentaireForm";
-	}
-	*/
 	
 	/**
 	 * Appel du formulaire pour la création d'un événement COMMENTAIRERUCHER
@@ -151,6 +130,22 @@ public class EvenementRucherController {
 		}
 	}
 
+	/**
+	 * Sauvegarde d'un événement commentaire rucher. Récupère tous les champs de
+	 * l'événement du formulaire
+	 */
+	@PostMapping("/commentaire/sauve")
+	public String commentaireSauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return "rucher/rucherCommentaireForm";
+		}
+		evenement.setValeur(Utils.notifIntFmt(evenement.getValeur()));
+		evenementRepository.save(evenement);
+		logger.info("Evénement {} enregistré, id {}", evenement.getDate(), evenement.getId());
+		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
+		return "redirect:/rucher/" + evenement.getRucher().getId();
+	}
+	
 	/**
 	 * Sauvegarde d'un événement ruche.
 	 * Récupère tous les champs de l'événement du formulaire

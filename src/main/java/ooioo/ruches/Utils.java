@@ -9,6 +9,21 @@ import javax.servlet.http.HttpSession;
 public final class Utils {
 
 	/*
+	 * Formatte le nbre de jours d'une notification
+	 *   si int enlève les 0 en tête (0023 -> 23)
+	 *   si 0 renvoie ""
+	 *   si pas un integer renvoie ""
+	 */
+	public static final String notifIntFmt(String txtInt) {
+		try {
+			Integer i = Integer.parseInt(txtInt);
+			return i.equals(0)?"":i.toString();
+		} catch (NumberFormatException e) {
+			return "";
+		}
+	}
+	
+	/*
 	 * Renvoie la date et heure LocalDateTime.now() décalée éventuellement du décalage
 	 *  demandé par le menu préférences mémorisé en session
 	 */
