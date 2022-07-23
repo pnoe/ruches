@@ -290,7 +290,8 @@ public class EvenementRucheController {
 			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.RUCHEPESEE, ruche, essaim,
 					rucher, null, null, null);
 			model.addAttribute(Const.EVENEMENT, evenement);
-			rucheService.modelAddEvenement(model, ruche, TypeEvenement.RUCHEPESEE);
+			// rucheService.modelAddEvenement(model, ruche, TypeEvenement.RUCHEPESEE);
+			essaimService.modelAddEvenement(model, essaim, TypeEvenement.RUCHEPESEE);
 			return "ruche/ruchePeseeForm";
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
