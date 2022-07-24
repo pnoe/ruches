@@ -175,8 +175,9 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td
+					<td><span th:if="${eveTraite != null}"
 						th:text="${T(ooioo.ruches.evenement.TypeEvenement).ESSAIMTRAITEMENT.equals(eveTraite?.type)}?#{Debut}:#{Fin}">
+						</span>
 					</td>
 					<td><a th:if="${eveTraite != null}"
 						th:href="@{'/evenement/'+${eveTraite?.id}+'?type=essaim'}"
