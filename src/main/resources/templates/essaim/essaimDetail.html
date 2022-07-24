@@ -1,28 +1,29 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:src="@{/js/ruches/essaimDetail.js}"></script>
 <script th:inline="javascript">
-	const _csrf_token = /*[[${_csrf.token}]]*/ null;
-	const _csrf_param_name = /*[[${_csrf.parameterName}]]*/ null;
-	const essaimnoms = /*[[${essaimnoms}]]*/ null;
-	const ruchesvidesnoms = /*[[${ruchesvidesnoms}]]*/ null;
-	const recolteHausses = /*[[${recolteHausses}]]*/ null;
-	const rucheEssaim = /*[[${rucheEssaim}]]*/ null;
-	const PasDeRuche = /*[[${PasDeRuche}]]*/ null;
-	const pasderuchetxt = /*[[#{PasDeRuche}]]*/ null;
-	const essaimsupprecolttxt =/*[[#{essaimsupprimerecolte}]]*/ null;
-	const suppessaimevetxt = /*[[#{supprimeressaimevenements}]]*/ null;
-	const suppessaimtxt = /*[[#{supprimeressaim}]]*/ null;
-	const evenements = /*[[${evenements}]]*/ null;
-	const nomessaimsvirgule = /*[[#{nomessaimsvirgule}]]*/ null;
-	const nexistPasOuPasVidtxt = /*[[#{nexistentPasOuPasVides}]]*/ null;
-	const nomexistdejatxt = /*[[#{nomexistentdeja}]]*/ null;
-	const Ruchestxt = /*[[#{Ruches}]]*/ null;
-	const Essaimstxt = /*[[#{Essaims}]]*/ null;
-	const creertxt = /*[[#{creer}]]*/ null;
-	const urlessaimclone = /*[[@{/essaim/clone/}]]*/ null;
-	const essaimid = /*[[${essaim.id}]]*/ null;
+	const _csrf_token = /*[[${_csrf.token}]]*/null;
+	const _csrf_param_name = /*[[${_csrf.parameterName}]]*/null;
+	const essaimnoms = /*[[${essaimnoms}]]*/null;
+	const ruchesvidesnoms = /*[[${ruchesvidesnoms}]]*/null;
+	const recolteHausses = /*[[${recolteHausses}]]*/null;
+	const rucheEssaim = /*[[${rucheEssaim}]]*/null;
+	const PasDeRuche = /*[[${PasDeRuche}]]*/null;
+	const pasderuchetxt = /*[[#{PasDeRuche}]]*/null;
+	const essaimsupprecolttxt = /*[[#{essaimsupprimerecolte}]]*/null;
+	const suppessaimevetxt = /*[[#{supprimeressaimevenements}]]*/null;
+	const suppessaimtxt = /*[[#{supprimeressaim}]]*/null;
+	const evenements = /*[[${evenements}]]*/null;
+	const nomessaimsvirgule = /*[[#{nomessaimsvirgule}]]*/null;
+	const nexistPasOuPasVidtxt = /*[[#{nexistentPasOuPasVides}]]*/null;
+	const nomexistdejatxt = /*[[#{nomexistentdeja}]]*/null;
+	const Ruchestxt = /*[[#{Ruches}]]*/null;
+	const Essaimstxt = /*[[#{Essaims}]]*/null;
+	const creertxt = /*[[#{creer}]]*/null;
+	const urlessaimclone = /*[[@{/essaim/clone/}]]*/null;
+	const essaimid = /*[[${essaim.id}]]*/null;
 	$(document).ready(essaimDetail);
 </script>
 </head>
@@ -40,39 +41,50 @@
 				</h1>
 			</div>
 			<div class="col">
-				<a th:href="@{'/essaim/modifie/'+${essaim.id}}"
-				  class="bi bi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
-				&nbsp;
-				<span id="clone" class="bi bi-collection cursorpointer" th:title="#{cloner}" aria-hidden="true"></span>
-				<a th:href="@{'/essaim/essaime/'+${essaim.id}}"
-				  class="bi bi-box-arrow-left" th:title="#{essaimer}" aria-hidden="true"></a>
-       			<a th:href="@{'/essaim/associe/'+${essaim.id}}"
-       			  class="bi bi-box-arrow-in-down-right" th:title="#{associationruche}" aria-hidden="true"></a>
-       			<a id="supprime" th:href="@{'/essaim/supprime/'+${essaim.id}}"
-       			  class="bi bi-trash" style="color:red" 
-       			  th:title="#{supprimer}" aria-hidden="true"></a>
-       			<a th:href="@{'/essaim/descendance/'+${essaim.id}}"
-       			  class="bi bi-diagram-3" th:title="#{graphedescendance}" aria-hidden="true"></a>
-       			  <a th:href="@{'/evenement/essaim/dispersion/'+${essaim.id}}" id="dispersion"
-				  class="bi bi-box-arrow-up-left" th:title="#{evenementDispersion}" aria-hidden="true"></a>
-				&nbsp;
-       			<a th:href="@{'/evenement/essaim/'+${essaim.id}}"
-       			  class="padicons bi bi-list-ul" th:title="#{evenements}" aria-hidden="true"></a>
-				<a th:href="@{'/evenement/essaim/commentaire/cree/'+${essaim.id}}"
-				  class="bi bi-chat-text" th:title="#{evenementCommentaireEssaim}" aria-hidden="true"></a>
-				<a th:href="@{'/evenement/essaim/sucre/cree/'+${essaim.id}}"
-				  class="bi bi-bucket" th:title="#{evenementSucre}" aria-hidden="true"></a>
-				<a th:href="@{'/evenement/essaim/traitement/cree/'+${essaim.id}}"
-				  class="bi bi-bug" th:title="#{evenementTraitement}" aria-hidden="true"></a>
+				<a th:href="@{'/essaim/modifie/'+${essaim.id}}" class="bi bi-pencil"
+					th:title="#{modifier}" aria-hidden="true"></a> &nbsp; <span
+					id="clone" class="bi bi-collection cursorpointer"
+					th:title="#{cloner}" aria-hidden="true"></span> <a
+					th:href="@{'/essaim/essaime/'+${essaim.id}}"
+					class="bi bi-box-arrow-left" th:title="#{essaimer}"
+					aria-hidden="true"></a> <a
+					th:href="@{'/essaim/associe/'+${essaim.id}}"
+					class="bi bi-box-arrow-in-down-right"
+					th:title="#{associationruche}" aria-hidden="true"></a> <a
+					id="supprime" th:href="@{'/essaim/supprime/'+${essaim.id}}"
+					class="bi bi-trash" style="color: red" th:title="#{supprimer}"
+					aria-hidden="true"></a> <a
+					th:href="@{'/essaim/descendance/'+${essaim.id}}"
+					class="bi bi-diagram-3" th:title="#{graphedescendance}"
+					aria-hidden="true"></a> <a
+					th:href="@{'/evenement/essaim/dispersion/'+${essaim.id}}"
+					id="dispersion" class="bi bi-box-arrow-up-left"
+					th:title="#{evenementDispersion}" aria-hidden="true"></a> &nbsp; <a
+					th:href="@{'/evenement/essaim/'+${essaim.id}}"
+					class="padicons bi bi-list-ul" th:title="#{evenements}"
+					aria-hidden="true"></a> <a
+					th:href="@{'/evenement/essaim/commentaire/cree/'+${essaim.id}}"
+					class="bi bi-chat-text" th:title="#{evenementCommentaireEssaim}"
+					aria-hidden="true"></a> <a
+					th:href="@{'/evenement/essaim/sucre/cree/'+${essaim.id}}"
+					class="bi bi-bucket" th:title="#{evenementSucre}"
+					aria-hidden="true"></a> <a
+					th:href="@{'/evenement/essaim/traitement/cree/'+${essaim.id}}"
+					class="bi bi-bug" th:title="#{evenementTraitement}"
+					aria-hidden="true"></a>
 				<th:block th:if="${rucheEssaim}">
-					<a th:href="@{'/evenement/ruche/pesee/cree/'+${rucheEssaim?.id}+'?retourEssaim=true'}"
-					  class="bi bi-chevron-bar-down" th:title="#{evenementPesee}" aria-hidden="true"></a>
-       				<a th:href="@{'/evenement/ruche/cadre/cree/'+${rucheEssaim?.id}+'?retourEssaim=true'}"
-       				  class="bi bi-layout-three-columns" th:title="#{evenementCadres}" aria-hidden="true"></a>
+					<a
+						th:href="@{'/evenement/ruche/pesee/cree/'+${rucheEssaim?.id}+'?retourEssaim=true'}"
+						class="bi bi-chevron-bar-down" th:title="#{evenementPesee}"
+						aria-hidden="true"></a>
+					<a
+						th:href="@{'/evenement/ruche/cadre/cree/'+${rucheEssaim?.id}+'?retourEssaim=true'}"
+						class="bi bi-layout-three-columns" th:title="#{evenementCadres}"
+						aria-hidden="true"></a>
 				</th:block>
-				&nbsp;
-				<a th:href="@{'/essaim/historique/'+${essaim.id}}"
-				  class="bi bi-calendar-check" th:title="#{historique}" aria-hidden="true"></a>
+				&nbsp; <a th:href="@{'/essaim/historique/'+${essaim.id}}"
+					class="bi bi-calendar-check" th:title="#{historique}"
+					aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
@@ -82,9 +94,12 @@
 				<tr>
 					<th th:if="${session.voirInactif}" th:text="#{actif}"></th>
 					<th th:text="#{dateAcquisition}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{reineMarquee}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{reineCouleurMarquage}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{reineDateNaissance}"></th>
+					<th style="background-color: LemonChiffon"
+						th:text="#{reineMarquee}"></th>
+					<th style="background-color: LemonChiffon"
+						th:text="#{reineCouleurMarquage}"></th>
+					<th style="background-color: LemonChiffon"
+						th:text="#{reineDateNaissance}"></th>
 					<th th:text="#{souche}"></th>
 					<th th:text="#{agressivite}"></th>
 					<th th:text="#{proprete}"></th>
@@ -93,125 +108,156 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td th:if="${session.voirInactif}" th:text="${essaim.actif}? #{oui} : #{non}"></td>	
+					<td th:if="${session.voirInactif}"
+						th:text="${essaim.actif}? #{oui} : #{non}"></td>
 					<td th:text="${essaim.dateAcquisition}"></td>
 					<td th:text="${essaim.reineMarquee}? #{oui} : #{non}"></td>
 					<td th:text="#{${essaim.reineCouleurMarquage}}"></td>
-					<td th:text="${essaim.reineDateNaissance}"></td>				
+					<td th:text="${essaim.reineDateNaissance}"></td>
 					<td><a th:href="@{'/essaim/'+${essaim.souche?.id}}"
-						th:text="${essaim.souche?.nom}"></a>
-					</td>
+						th:text="${essaim.souche?.nom}"></a></td>
 					<td th:text="${essaim.agressivite}"></td>
 					<td th:text="${essaim.proprete}"></td>
 					<td th:text="${essaim.commentaire}"></td>
 				</tr>
 			</tbody>
 		</table>
-		<table class="table table-sm table-bordered">			
+		<table class="table table-sm table-bordered">
 			<thead>
-				<tr>		
-					<th style="background-color:PaleGoldenRod" th:text="#{ruche}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{commentaire}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{rucher}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{date}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
+				<tr>
+					<th style="background-color: PaleGoldenRod" th:text="#{ruche}"></th>
+					<th style="background-color: PaleGoldenRod" th:text="#{date}"></th>
+					<th style="background-color: PaleGoldenRod"
+						th:text="#{commentaire}"></th>
+					<th style="background-color: LemonChiffon" th:text="#{rucher}"></th>
+					<th style="background-color: LemonChiffon" th:text="#{date}"></th>
+					<th style="background-color: LemonChiffon" th:text="#{commentaire}"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
 					<td><a th:href="@{'/ruche/'+${rucheEssaim?.id}}"
-							th:text="${rucheEssaim?.nom}"></a></td>						
-					<td th:text="${#temporals.format(dateAJOUTESSAIMRUCHE, 'yyyy/MM/dd')}"></td>
-					<td th:text="${commentaireAJOUTESSAIMRUCHE}"></td>
+						th:text="${rucheEssaim?.nom}"></a></td>
+					<td><a th:if="${eveRuche != null}"
+						th:href="@{'/evenement/'+${eveRuche?.id}+'?type=essaim'}"
+						th:text="${#temporals.format(eveRuche?.date, 'yyyy/MM/dd')}"></a>
+					</td>
+					<td th:text="${eveRuche?.commentaire}"></td>
 					<td><a th:href="@{'/rucher/'+${rucheEssaim?.rucher?.id}}"
-							th:text="${rucheEssaim?.rucher?.nom}"></a></td>
-					<td th:text="${#temporals.format(dateRUCHEAJOUTRUCHER, 'yyyy/MM/dd')}"></td>
-					<td th:text="${commentaireRUCHEAJOUTRUCHER}"></td>
+						th:text="${rucheEssaim?.rucher?.nom}"></a></td>
+					<td><a th:if="${eveRucher != null}"
+						th:href="@{'/evenement/'+${eveRucher?.id}+'?type=essaim'}"
+						th:text="${#temporals.format(eveRucher?.date, 'yyyy/MM/dd')}"></a>
+					</td>
+					<td th:text="${eveRucher?.commentaire}"></td>
 				</tr>
 			</tbody>
 		</table>
-		<h6 th:text="#{evenements}" 
-			th:if="${(dateTraitement != null) or (dateESSAIMSUCRE != null) or 
-			(dateCOMMENTAIREESSAIM != null) or (dateRUCHEPESEE != null) or (dateRUCHECADRE != null)}">
+		<h6 th:text="#{evenements}"
+			th:if="${(eveTraite != null) or (eveSucre != null) or 
+			(eveComm != null) or (evePesee != null) or (eveCadre != null)}">
 		</h6>
-		<table class="table table-sm table-bordered" 
-			th:if="${(dateTraitement != null) or (dateESSAIMSUCRE != null) or (dateCOMMENTAIREESSAIM != null)}">			
+		<table class="table table-sm table-bordered"
+			th:if="${(eveTraite != null) or (eveSucre != null) or (eveComm != null)}">
 			<thead>
-				<tr>		
-					<th style="background-color:PaleGoldenRod" th:text="#{traitement}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{commentaire}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{actionSucre}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{date}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{commentaire}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>
+				<tr>
+					<th style="background-color: PaleGoldenRod" th:text="#{traitement}"></th>
+					<th style="background-color: PaleGoldenRod" th:text="#{date}"></th>
+					<th style="background-color: PaleGoldenRod"
+						th:text="#{commentaire}"></th>
+					<th style="background-color: LemonChiffon" th:text="#{actionSucre}"></th>
+					<th style="background-color: LemonChiffon" th:text="#{date}"></th>
+					<th style="background-color: LemonChiffon" th:text="#{commentaire}"></th>
+					<th style="background-color: PaleGoldenRod"
+						th:text="#{commentaire}"></th>
+					<th style="background-color: PaleGoldenRod" th:text="#{date}"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td th:text="${typeTraitement}"></td>
-					<td th:text="${#temporals.format(dateTraitement, 'yyyy/MM/dd')}"></td>
-					<td th:text="${commentaireTraitement}"></td>
-					<td class="num" th:text="${#numbers.formatDecimal(valeurESSAIMSUCRE,1,2,'COMMA')}"></td>
-					<td th:text="${#temporals.format(dateESSAIMSUCRE, 'yyyy/MM/dd')}"></td>
-					<td th:text="${commentaireESSAIMSUCRE}"></td>
-					<td th:text="${commentaireCOMMENTAIREESSAIM}"></td>
-					<td th:text="${#temporals.format(dateCOMMENTAIREESSAIM, 'yyyy/MM/dd')}"></td>
+					<td
+						th:text="${T(ooioo.ruches.evenement.TypeEvenement).ESSAIMTRAITEMENT.equals(eveTraite?.type)}?#{Debut}:#{Fin}">
+					</td>
+					<td><a th:if="${eveTraite != null}"
+						th:href="@{'/evenement/'+${eveTraite?.id}+'?type=essaim'}"
+						th:text="${#temporals.format(eveTraite?.date, 'yyyy/MM/dd')}"></a>
+					</td>
+					<td th:text="${eveTraite?.commentaire}"></td>
+					<td class="num"
+						th:text="${#numbers.formatDecimal(eveSucre?.valeur,1,2,'COMMA')}"></td>
+					<td><a th:if="${eveSucre != null}"
+						th:href="@{'/evenement/'+${eveSucre?.id}+'?type=essaim'}"
+						th:text="${#temporals.format(eveSucre?.date, 'yyyy/MM/dd')}"></a>
+					</td>
+					<td th:text="${eveSucre?.commentaire}"></td>
+					<td th:text="${eveComm?.commentaire}"></td>
+					<td><a th:if="${eveComm != null}"
+						th:href="@{'/evenement/'+${eveComm?.id}+'?type=essaim'}"
+						th:text="${#temporals.format(eveComm?.date, 'yyyy/MM/dd')}"></a></td>
 				</tr>
 			</tbody>
 		</table>
-		<table class="table table-sm table-bordered" th:if="${(dateRUCHEPESEE != null) or (dateRUCHECADRE != null)}">			
+		<table class="table table-sm table-bordered"
+			th:if="${(evePesee != null) or (eveCadre != null)}">
 			<thead>
 				<tr>
-					<th style="background-color:PaleGoldenRod" th:text="#{poidsVide}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{commentaire}"></th>				
-					<th style="background-color:LemonChiffon" th:text="#{nbCadres}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{date}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
+					<th style="background-color: PaleGoldenRod" th:text="#{poidsVide}"></th>
+					<th style="background-color: PaleGoldenRod" th:text="#{date}"></th>
+					<th style="background-color: PaleGoldenRod"
+						th:text="#{commentaire}"></th>
+					<th style="background-color: LemonChiffon" th:text="#{nbCadres}"></th>
+					<th style="background-color: LemonChiffon" th:text="#{date}"></th>
+					<th style="background-color: LemonChiffon" th:text="#{commentaire}"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td th:text="${#numbers.formatDecimal(valeurRUCHEPESEE,1,2)}"></td>
-					<td th:text="${#temporals.format(dateRUCHEPESEE, 'yyyy/MM/dd')}"></td>
-					<td th:text="${commentaireRUCHEPESEE}"></td>
-					<td class="num" th:text="${valeurRUCHECADRE}"></td>
-					<td th:text="${#temporals.format(dateRUCHECADRE, 'yyyy/MM/dd')}"></td>
-					<td th:text="${commentaireRUCHECADRE}"></td>
+					<td th:text="${#numbers.formatDecimal(evePesee?.valeur,1,2)}"></td>
+					<td><a th:if="${evePesee != null}"
+						th:href="@{'/evenement/'+${evePesee?.id}+'?type=essaim'}"
+						th:text="${#temporals.format(evePesee?.date, 'yyyy/MM/dd')}"></a>
+					</td>
+					<td th:text="${evePesee?.commentaire}"></td>
+					<td class="num" th:text="${eveCadre?.valeur}"></td>
+					<td><a th:if="${eveCadre != null}"
+						th:href="@{'/evenement/'+${eveCadre?.id}+'?type=essaim'}"
+						th:text="${#temporals.format(eveCadre?.date, 'yyyy/MM/dd')}"></a>
+					</td>
+					<td th:text="${eveCadre?.commentaire}"></td>
 				</tr>
 			</tbody>
 		</table>
-		<h6 th:text="#{PasDeRecolte}" th:if="${#lists.isEmpty(poidsListe)}"></h6>	
-		<table th:unless="${#lists.isEmpty(poidsListe)}" class="table table-sm table-bordered">			
+		<h6 th:text="#{PasDeRecolte}" th:if="${#lists.isEmpty(poidsListe)}"></h6>
+		<table th:unless="${#lists.isEmpty(poidsListe)}"
+			class="table table-sm table-bordered">
 			<thead>
 				<tr>
-					<th style="background-color:LightCyan" th:text="#{recolte}"></th>
-					<td th:each="recolte : ${recoltesListe}">
-						<a th:href="@{'/recolte/'+${recolte.id}}" th:text="${#temporals.format(recolte.date, 'yyyy/MM/dd')}"></a>
-					</td>
-					<th style="background-color:LightCyan" th:text="#{Total}"></th>
+					<th style="background-color: LightCyan" th:text="#{recolte}"></th>
+					<td th:each="recolte : ${recoltesListe}"><a
+						th:href="@{'/recolte/'+${recolte.id}}"
+						th:text="${#temporals.format(recolte.date, 'yyyy/MM/dd')}"></a></td>
+					<th style="background-color: LightCyan" th:text="#{Total}"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<th style="background-color:LightCyan" th:text="#{rucher}"></th>
-					<td th:each="rucher : ${rucherRecolteListe}">
-						<a th:href="@{'/rucher/'+${rucher?.id}}" th:text="${rucher?.nom}"></a>
+					<th style="background-color: LightCyan" th:text="#{rucher}"></th>
+					<td th:each="rucher : ${rucherRecolteListe}"><a
+						th:href="@{'/rucher/'+${rucher?.id}}" th:text="${rucher?.nom}"></a>
 					</td>
-					<td></td>		
+					<td></td>
 				</tr>
 				<tr>
-					<th style="background-color:LightCyan" th:text="#{poidskg}"></th>
-					<td th:each="poids : ${poidsListe}" th:text="${#numbers.formatDecimal(poids/1000.0,1,2,'DEFAULT')}"></td>
-					<td th:text="${#numbers.formatDecimal(poidsTotal/1000.0,1,2,'DEFAULT')}"></td>		
+					<th style="background-color: LightCyan" th:text="#{poidskg}"></th>
+					<td th:each="poids : ${poidsListe}"
+						th:text="${#numbers.formatDecimal(poids/1000.0,1,2,'DEFAULT')}"></td>
+					<td
+						th:text="${#numbers.formatDecimal(poidsTotal/1000.0,1,2,'DEFAULT')}"></td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
-	<br/>
+	<br />
 	<footer th:replace="include::footer"></footer>
 </body>
 </html>

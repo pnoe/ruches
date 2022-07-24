@@ -86,11 +86,10 @@ public class EssaimController {
 	private RucheService rucheService;
 
 	/*
-	 * Historique de la mise en ruchers d'un essaim
-	 *    Les événements affichés dans l'historique :
-	 *     - les mise en rucher de ruches ou l'essaim apparait
-	 *     - la dispersion de l'essaim qui termine l'historique
-	 *     - la ou les mises en ruches de l'essaim qui peuvent impliquer des déplacements
+	 * Historique de la mise en ruchers d'un essaim Les événements affichés dans
+	 * l'historique : - les mise en rucher de ruches ou l'essaim apparait - la
+	 * dispersion de l'essaim qui termine l'historique - la ou les mises en ruches
+	 * de l'essaim qui peuvent impliquer des déplacements
 	 */
 	@GetMapping("/historique/{essaimId}")
 	public String historique(Model model, @PathVariable long essaimId) {
@@ -99,39 +98,32 @@ public class EssaimController {
 			Essaim essaim = essaimOpt.get();
 			model.addAttribute(Const.ESSAIM, essaim);
 			// la liste de tous les événements RUCHEAJOUTRUCHER concernant cet essaim
-			//   triés par ordre de date ascendante
-			List<Evenement> evensEssaimAjout = 
-					evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
-							TypeEvenement.RUCHEAJOUTRUCHER);
+			// triés par ordre de date ascendante
+			List<Evenement> evensEssaimAjout = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
+					TypeEvenement.RUCHEAJOUTRUCHER);
 			// Si l'essaim est dispersé cela termine le séjour dans le dernier rucher
-			Evenement dispersion = evenementRepository.findFirstByEssaimAndType(essaim, 
-					TypeEvenement.ESSAIMDISPERSION);
+			Evenement dispersion = evenementRepository.findFirstByEssaimAndType(essaim, TypeEvenement.ESSAIMDISPERSION);
 			if (dispersion != null) {
 				evensEssaimAjout.add(dispersion);
 			}
 			// Ajouter les mises en ruche
-			List<Evenement> miseEnRuche = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(), 
+			List<Evenement> miseEnRuche = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
 					TypeEvenement.AJOUTESSAIMRUCHE);
 			evensEssaimAjout.addAll(miseEnRuche);
 			// Trier par date
-			evensEssaimAjout.sort((e1,e2) -> e1.getDate().compareTo(e2.getDate()));
+			evensEssaimAjout.sort((e1, e2) -> e1.getDate().compareTo(e2.getDate()));
 			model.addAttribute("evensEssaimAjout", evensEssaimAjout);
 			List<Long> durees = new ArrayList<>();
 			if (!evensEssaimAjout.isEmpty()) {
 				int i = 0;
 				while (i < evensEssaimAjout.size() - 1) {
-				// calcul de la durée de séjour dans le rucher
-					durees.add(Duration.between(
-							evensEssaimAjout.get(i).getDate(),
-							evensEssaimAjout.get(i + 1).getDate()
-							).toDays()
-							);
+					// calcul de la durée de séjour dans le rucher
+					durees.add(
+							Duration.between(evensEssaimAjout.get(i).getDate(), evensEssaimAjout.get(i + 1).getDate())
+									.toDays());
 					i++;
 				}
-				durees.add(Duration.between(
-						evensEssaimAjout.get(i).getDate(),
-						LocalDateTime.now()
-						).toDays());
+				durees.add(Duration.between(evensEssaimAjout.get(i).getDate(), LocalDateTime.now()).toDays());
 				model.addAttribute("durees", durees);
 			}
 		} else {
@@ -142,7 +134,7 @@ public class EssaimController {
 		}
 		return "essaim/essaimHisto";
 	}
-	
+
 	/*
 	 * Statistiques âges des reines
 	 */
@@ -152,8 +144,9 @@ public class EssaimController {
 		int pas = 6;
 		int maxAgeMois = 95; // reine ignorée si plus ancienne (96 mois, 8 ans)
 		// ages : classes d'âge de largeur "pas" en mois
-		// voir https://stackoverflow.com/questions/7139382/java-rounding-up-to-an-int-using-math-ceil/21830188
-		int[] ages = new int[(maxAgeMois + pas - 1)/pas];
+		// voir
+		// https://stackoverflow.com/questions/7139382/java-rounding-up-to-an-int-using-math-ceil/21830188
+		int[] ages = new int[(maxAgeMois + pas - 1) / pas];
 		int indexMaxAges = 0;
 		long ageMaxJours = 0;
 		long ageMinJours = 0;
@@ -181,7 +174,7 @@ public class EssaimController {
 					// Si la reine n'est pas dans une ruche on ne la prends pas en compte
 					continue;
 				}
-				int indexAge = (int)ageMois/pas;
+				int indexAge = (int) ageMois / pas;
 				ages[indexAge]++;
 				indexMaxAges = Math.max(indexMaxAges, indexAge);
 				long ageJours = ChronoUnit.DAYS.between(essaim.getReineDateNaissance(), dateNow);
@@ -196,17 +189,18 @@ public class EssaimController {
 				// Variance Welford's algorithm
 				double tmpM = m;
 				double ageJ = ageJours;
-		        m += (ageJ - tmpM) / nb;
-		        s += (ageJ - tmpM) * (ageJ - m);
-		        nb++;
+				m += (ageJ - tmpM) / nb;
+				s += (ageJ - tmpM) * (ageJ - m);
+				nb++;
 			}
 		}
 		List<Integer> agesHisto = new ArrayList<>();
 		for (int i = 0; i <= indexMaxAges; i++) {
 			agesHisto.add(ages[i]);
 		}
-		ageMoyenJours = (int)Math.round((double)ageTotalJours/(nb - 1));
-		// Variance sur population entière (nb est incrémenté avant la sortie de la boucle)
+		ageMoyenJours = (int) Math.round((double) ageTotalJours / (nb - 1));
+		// Variance sur population entière (nb est incrémenté avant la sortie de la
+		// boucle)
 		long ageVarianceJours = Math.round(Math.sqrt(s / (nb - 1)));
 		model.addAttribute("ageMoyenJours", ageMoyenJours);
 		model.addAttribute("agesHisto", agesHisto);
@@ -220,20 +214,22 @@ public class EssaimController {
 	/**
 	 * Statistiques tableau poids de miel par essaim
 	 *
-	 * @param rucherId optionnel pour ne prendre en compte que les hausses de récolte dans ce rucher
+	 * @param rucherId       optionnel pour ne prendre en compte que les hausses de
+	 *                       récolte dans ce rucher
 	 * @param masquerInactif pour masquer les essaims inactifs
-	*/
+	 */
 	@RequestMapping("/statistiques")
-	public String statistiques(Model model,
-			@RequestParam(required = false) Long rucherId,
+	public String statistiques(Model model, @RequestParam(required = false) Long rucherId,
 			@RequestParam(defaultValue = "false") boolean masquerInactif) {
 		// pour équivalence appel Get ou Post avec rucherId = 0
-		if ((rucherId != null) && rucherId.equals(0L)) { rucherId = null; }
+		if ((rucherId != null) && rucherId.equals(0L)) {
+			rucherId = null;
+		}
 		Iterable<Recolte> recoltes = recolteRepository.findAllByOrderByDateAsc();
-		Iterable<Essaim> essaims = masquerInactif ? essaimRepository.findByActif(true)
-				: essaimRepository.findAll();
+		Iterable<Essaim> essaims = masquerInactif ? essaimRepository.findByActif(true) : essaimRepository.findAll();
 		List<Map<String, String>> essaimsPoids = new ArrayList<>();
-		DecimalFormat decimalFormat = new DecimalFormat("0.00", new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
+		DecimalFormat decimalFormat = new DecimalFormat("0.00",
+				new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
 		Integer pTotal; // poids de miel total produit par l'essaim
 		Integer pMax; // poids de miel max lors d'une récolte
 		Integer pMin; // poids de miel min lors d'une récolte
@@ -245,8 +241,8 @@ public class EssaimController {
 			rucherOK = false;
 			for (Recolte recolte : recoltes) {
 				// si rucherId non null, tester ou était l'essaim pour cette récolte
-				//  en regardant le rucher dans une des hausseRécolte de cette récolte
-				//  si différent de rucherId "continue"
+				// en regardant le rucher dans une des hausseRécolte de cette récolte
+				// si différent de rucherId "continue"
 				if (rucherId != null) {
 					RecolteHausse recoltehausse = recolteHausseRepository.findFirstByRecolteAndEssaim(recolte, essaim);
 					if ((recoltehausse == null) || !recoltehausse.getRucher().getId().equals(rucherId)) {
@@ -261,32 +257,36 @@ public class EssaimController {
 					pMin = Math.min(pMin, poids);
 				}
 			}
-			if (pMin == 1000000) { pMin = 0; }
+			if (pMin == 1000000) {
+				pMin = 0;
+			}
 			// si rucherId non null
-			//  et rucherOK false ignorer cet essaim, il n'a pas produit dans le rucher rucherId
+			// et rucherOK false ignorer cet essaim, il n'a pas produit dans le rucher
+			// rucherId
 			if ((rucherId == null) || rucherOK) {
 				Map<String, String> essaimPoids = new HashMap<>();
 				essaimPoids.put("nom", essaim.getNom());
 				essaimPoids.put("id", essaim.getId().toString());
 				essaimPoids.put("dateAcquisition", essaim.getDateAcquisition().toString());
-				Evenement dispersion = evenementRepository.findFirstByEssaimAndType(essaim, TypeEvenement.ESSAIMDISPERSION);
+				Evenement dispersion = evenementRepository.findFirstByEssaimAndType(essaim,
+						TypeEvenement.ESSAIMDISPERSION);
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-				essaimPoids.put("dateDispersion", (dispersion == null)?"":dispersion.getDate().format(formatter));
+				essaimPoids.put("dateDispersion", (dispersion == null) ? "" : dispersion.getDate().format(formatter));
 				// calcul moyenne production miel par jour d'existence de l'essaim
 				if (rucherId == null) {
-					LocalDateTime dateFin = (dispersion == null)?LocalDateTime.now():dispersion.getDate();
+					LocalDateTime dateFin = (dispersion == null) ? LocalDateTime.now() : dispersion.getDate();
 					long duree = ChronoUnit.DAYS.between(essaim.getDateAcquisition().atStartOfDay(), dateFin);
 					if (duree <= 0) {
 						essaimPoids.put("pMoyen", "Erreur durée");
 					} else {
-						float pMoyen = pTotal*0.365242f/duree;
+						float pMoyen = pTotal * 0.365242f / duree;
 						essaimPoids.put("pMoyen", decimalFormat.format(pMoyen));
 					}
 					essaimPoids.put("duree", Long.toString(duree));
 				}
-				essaimPoids.put("pTotal", decimalFormat.format(pTotal/1000.0));
-				essaimPoids.put("pMax", decimalFormat.format(pMax/1000.0));
-				essaimPoids.put("pMin", decimalFormat.format(pMin/1000.0));
+				essaimPoids.put("pTotal", decimalFormat.format(pTotal / 1000.0));
+				essaimPoids.put("pMax", decimalFormat.format(pMax / 1000.0));
+				essaimPoids.put("pMin", decimalFormat.format(pMin / 1000.0));
 				essaimsPoids.add(essaimPoids);
 			}
 		}
@@ -331,8 +331,8 @@ public class EssaimController {
 	 * Enregistrement de l'essaimage
 	 */
 	@PostMapping("/essaime/sauve/{essaimId}")
-	public String essaimeSauve(Model model, @PathVariable long essaimId,
-			@RequestParam String date, @RequestParam String nom, @RequestParam String commentaire) {
+	public String essaimeSauve(Model model, @PathVariable long essaimId, @RequestParam String date,
+			@RequestParam String nom, @RequestParam String commentaire) {
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isEmpty()) {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
@@ -344,8 +344,7 @@ public class EssaimController {
 		Essaim essaim = essaimOpt.get();
 		// La ruche dans laquelle on va mettre le nouvel essaim à créer
 		Ruche ruche = rucheRepository.findByEssaimId(essaimId);
-		LocalDateTime dateEveAjout = LocalDateTime.parse(date,
-				DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
+		LocalDateTime dateEveAjout = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 		// On vérifie aussi côté serveur que le nom est libre
 		List<String> noms = new ArrayList<>();
 		for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
@@ -353,13 +352,13 @@ public class EssaimController {
 		}
 		if (noms.contains(nom)) {
 			model.addAttribute(Const.MESSAGE,
-					messageSource.getMessage("LeNomXXExiste", new Object[] {nom}, LocaleContextHolder.getLocale()));
+					messageSource.getMessage("LeNomXXExiste", new Object[] { nom }, LocaleContextHolder.getLocale()));
 			return Const.INDEX;
 		}
-		// On crée l'essaim : nom saisi dans le formulaire, date acquisition et naissance reine
-		//   = date formulaire, souche = essaim dispersé
-		Essaim nouvelEssaim = new Essaim(nom,
-				true, // actif
+		// On crée l'essaim : nom saisi dans le formulaire, date acquisition et
+		// naissance reine
+		// = date formulaire, souche = essaim dispersé
+		Essaim nouvelEssaim = new Essaim(nom, true, // actif
 				dateEveAjout.toLocalDate(), // acquisition
 				commentaire, // Le champ commentaire du formulaire ? essaim ou événement dispersion ?
 				dateEveAjout.toLocalDate(), // reineDateNaissance
@@ -380,23 +379,23 @@ public class EssaimController {
 		essaimRepository.save(essaim);
 		// On crée l'événement dispersion
 		LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
-		Evenement evenement = new Evenement(dateEve, TypeEvenement.ESSAIMDISPERSION, ruche, essaim,
-				ruche.getRucher(), null, null, commentaire);
+		Evenement evenement = new Evenement(dateEve, TypeEvenement.ESSAIMDISPERSION, ruche, essaim, ruche.getRucher(),
+				null, null, commentaire);
 		evenementRepository.save(evenement);
 		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
 		return "redirect:/essaim/" + nouvelEssaim.getId();
 	}
 
 	/**
-	 * Clonage multiple d'un essaim (appel XMLHttpRequest de la page détail d'un essaim)
-	 *   avec mises en ruches éventuelles
-	 *   
-	 * @param session pour gestion du décalage éventuel des dates
-	 * @param model 
-	 * @param essaimId l'id de l'essaim à cloner
+	 * Clonage multiple d'un essaim (appel XMLHttpRequest de la page détail d'un
+	 * essaim) avec mises en ruches éventuelles
+	 * 
+	 * @param session   pour gestion du décalage éventuel des dates
+	 * @param model
+	 * @param essaimId  l'id de l'essaim à cloner
 	 * @param nomclones les noms des clones séparés par des virgules
-	 * @param nomruches les noms des ruches pour mettre les clones
-	 *    séparés par des virgules 	
+	 * @param nomruches les noms des ruches pour mettre les clones séparés par des
+	 *                  virgules
 	 * @return String liste des essaims créés ou erreur
 	 */
 	@PostMapping("/clone/{essaimId}")
@@ -428,19 +427,21 @@ public class EssaimController {
 						if (ruche.getEssaim() == null) {
 							ruche.setEssaim(clone);
 							rucheRepository.save(ruche);
-							Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, ruche, clone,
-									ruche.getRucher(), null, null, "Clone essaim " + essaim.getNom());
+							Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, ruche,
+									clone, ruche.getRucher(), null, null, "Clone essaim " + essaim.getNom());
 							evenementRepository.save(evenementAjout);
 							logger.info(Const.EVENEMENTXXENREGISTRE, evenementAjout.getId());
 						} else {
-							logger.error("Clone d'un essaim : {} la ruche {} n'est pas vide", nomarray[i], nomruchesarray[i]);
+							logger.error("Clone d'un essaim : {} la ruche {} n'est pas vide", nomarray[i],
+									nomruchesarray[i]);
 						}
 					}
 				}
 			}
 			String nomsJoin = String.join(",", nomsCrees);
 			logger.info("Essaims {} créé(s)", nomsJoin);
-			return messageSource.getMessage("cloneessaimcrees", new Object[] {nomsJoin}, LocaleContextHolder.getLocale());
+			return messageSource.getMessage("cloneessaimcrees", new Object[] { nomsJoin },
+					LocaleContextHolder.getLocale());
 		}
 		logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 		return "Erreur : id essaim inconnu";
@@ -459,7 +460,7 @@ public class EssaimController {
 			model.addAttribute(Const.ESSAIM, essaim);
 			try {
 				// Recherche de l'essaim racine du graphe de descendance
-				//  dans lequel est l'essaim passé en paramètre
+				// dans lequel est l'essaim passé en paramètre
 				Essaim essaimRoot = essaim;
 				while (essaimRoot.getSouche() != null) {
 					essaimRoot = essaimRoot.getSouche();
@@ -474,7 +475,7 @@ public class EssaimController {
 			} catch (JsonProcessingException e) {
 				logger.error("Erreur parser json : {}", e.getMessage());
 				model.addAttribute(Const.MESSAGE, "Erreur parser json");
-			return Const.INDEX;
+				return Const.INDEX;
 			}
 		}
 		return "essaim/essaimGraphe";
@@ -503,13 +504,13 @@ public class EssaimController {
 	@GetMapping("/cree")
 	public String cree(HttpSession session, Model model) {
 		// Pour le choix de la souche de l'essaim à créer
-		Iterable <IdNom> idNoms = essaimRepository.findAllProjectedIdNomByOrderByNom();
+		Iterable<IdNom> idNoms = essaimRepository.findAllProjectedIdNomByOrderByNom();
 		model.addAttribute(Const.ESSAIMS, idNoms);
 		// Liste des noms des essaims pour nom essaim unique
-		//   en modification il faudra retirer le nom de l'essaim à modifier
-		//   de cette liste
+		// en modification il faudra retirer le nom de l'essaim à modifier
+		// de cette liste
 		List<String> noms = new ArrayList<>();
-		for ( IdNom idNom : idNoms) {
+		for (IdNom idNom : idNoms) {
 			noms.add(idNom.getNom());
 		}
 		model.addAttribute(Const.ESSAIMNOMS, noms);
@@ -530,16 +531,16 @@ public class EssaimController {
 			// Pour le choix de la souche de l'essaim à modifier
 			Iterable<IdNom> essaimIdNom = essaimRepository.findAllProjectedIdNomByOrderByNom();
 			// Liste des noms des essaims pour nom essaim unique
-			//   on retire le nom de l'essaim à modifier de cette liste
+			// on retire le nom de l'essaim à modifier de cette liste
 			List<String> noms = new ArrayList<>();
-			for ( IdNom idNom : essaimIdNom) {
+			for (IdNom idNom : essaimIdNom) {
 				noms.add(idNom.getNom());
 			}
 			noms.remove(essaim.getNom());
 			model.addAttribute(Const.ESSAIMNOMS, noms);
 			// Il faut enlever les essaims qui génèrent une boucle de descendance
-			//  ainsi que l'essaim à modifier pour qu'ils ne soient pas dans la
-			//  liste des essaims pour le choix de la souche
+			// ainsi que l'essaim à modifier pour qu'ils ne soient pas dans la
+			// liste des essaims pour le choix de la souche
 			List<IdNom> essaimIdNomClean = new ArrayList<>();
 			for (IdNom essaimIdNomItem : essaimIdNom) {
 				boolean soucheok = true;
@@ -554,7 +555,9 @@ public class EssaimController {
 							}
 							essaimSouche = essaimSouche.getSouche();
 						}
-						if (soucheok) { essaimIdNomClean.add(essaimIdNomItem); }
+						if (soucheok) {
+							essaimIdNomClean.add(essaimIdNomItem);
+						}
 					}
 				}
 			}
@@ -593,7 +596,7 @@ public class EssaimController {
 				logger.info("Essaim {} supprimé, id {}", essaim.getNom(), essaim.getId());
 			} else {
 				model.addAttribute(Const.MESSAGE, "Cette essaim ne peut être supprimé");
-			return Const.INDEX;
+				return Const.INDEX;
 			}
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
@@ -651,10 +654,10 @@ public class EssaimController {
 				ruchesvidesnoms.add(rucheNom.getNom());
 			}
 			model.addAttribute("ruchesvidesnoms", ruchesvidesnoms);
-			if (ruche != null) {
-				rucheService.modelAddEvenement(model, ruche, TypeEvenement.AJOUTESSAIMRUCHE);
-				rucheService.modelAddEvenement(model, ruche, TypeEvenement.RUCHEAJOUTRUCHER);
-			}
+			model.addAttribute("eveRuche", evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim,
+					TypeEvenement.AJOUTESSAIMRUCHE));
+			model.addAttribute("eveRucher", evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim,
+					TypeEvenement.RUCHEAJOUTRUCHER));
 			// Si des hausses de récolte référencent cet essaim, on ne pourra la supprimer
 			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByEssaimId(essaimId);
 			model.addAttribute("recolteHausses", recolteHausses.iterator().hasNext());
@@ -662,11 +665,16 @@ public class EssaimController {
 			// supprime l'essaim
 			Iterable<Evenement> evenements = evenementRepository.findByEssaimId(essaimId);
 			model.addAttribute(Const.EVENEMENTS, evenements.iterator().hasNext());
-			essaimService.modelAddEvenTraitement(model, essaim);
-			essaimService.modelAddEvenement(model, essaim, TypeEvenement.ESSAIMSUCRE);
-			essaimService.modelAddEvenement(model, essaim, TypeEvenement.COMMENTAIREESSAIM);
-			essaimService.modelAddEvenement(model, essaim, TypeEvenement.RUCHEPESEE);
-			essaimService.modelAddEvenement(model, essaim, TypeEvenement.RUCHECADRE);
+			model.addAttribute("eveTraite", evenementRepository.findFirstTraitemenetByEssaim(essaim.getId(),
+					TypeEvenement.ESSAIMTRAITEMENT.ordinal(), TypeEvenement.ESSAIMTRAITEMENTFIN.ordinal()));
+			model.addAttribute("eveSucre",
+					evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim, TypeEvenement.ESSAIMSUCRE));
+			model.addAttribute("eveComm", evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim,
+					TypeEvenement.COMMENTAIREESSAIM));
+			model.addAttribute("evePesee",
+					evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim, TypeEvenement.RUCHEPESEE));
+			model.addAttribute("eveCadre",
+					evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim, TypeEvenement.RUCHECADRE));
 			// Calcul du poids de miel par récoltes pour cet essaim
 			Iterable<Recolte> recoltes = recolteRepository.findAllByOrderByDateAsc();
 			List<Integer> poidsListe = new ArrayList<>();
@@ -674,12 +682,10 @@ public class EssaimController {
 			List<Rucher> rucherRecolteListe = new ArrayList<>();
 			Integer poidsTotal = 0;
 			for (Recolte recolte : recoltes) {
-				Integer poids = recolteHausseRepository.
-						findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId());
+				Integer poids = recolteHausseRepository.findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId());
 				if (poids != null) {
-					RecolteHausse rHFirst = recolteHausseRepository.
-							findFirstByRecolteAndEssaim(recolte, essaim);
-					Rucher rucher = (rHFirst == null) ?	null : rHFirst.getRucher();
+					RecolteHausse rHFirst = recolteHausseRepository.findFirstByRecolteAndEssaim(recolte, essaim);
+					Rucher rucher = (rHFirst == null) ? null : rHFirst.getRucher();
 					poidsListe.add(poids);
 					rucherRecolteListe.add(rucher);
 					recoltesListe.add(recolte);
@@ -709,14 +715,11 @@ public class EssaimController {
 			Essaim essaim = essaimOpt.get();
 			model.addAttribute(Const.ESSAIM, essaim);
 			Ruche ruche = rucheRepository.findByEssaimId(essaimId);
-			
-			
+
 			model.addAttribute("rucheEssaim", ruche);
-			model.addAttribute("ruches", ruche == null ? 
-					rucheRepository.findByActiveOrderByNom(true) :
-					rucheRepository.findActiveIdDiffOrderByNom(ruche.getId()));
-			
-			
+			model.addAttribute("ruches", ruche == null ? rucheRepository.findByActiveOrderByNom(true)
+					: rucheRepository.findActiveIdDiffOrderByNom(ruche.getId()));
+
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 			model.addAttribute(Const.MESSAGE,
@@ -741,29 +744,30 @@ public class EssaimController {
 				model.addAttribute(Const.ESSAIM, essaimOpt.get());
 				model.addAttribute(Const.RUCHE, ruche);
 				// Si l'essaim est dans une ruche envoyer le nom de la ruche
-				//  pour proposer l'échange du postionnment des deux ruches
+				// pour proposer l'échange du postionnment des deux ruches
 				Ruche rucheSource = rucheRepository.findByEssaimId(essaimOpt.get().getId());
 				model.addAttribute("rucheSource", rucheSource);
 				if (rucheSource != null) {
 					// envoyer la date max événements ajout ruchers
-					Evenement evenRuche = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, 
+					Evenement evenRuche = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
 							ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER);
-					Evenement evenRucheSource = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(rucheSource, 
+					Evenement evenRucheSource = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(rucheSource,
 							ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER);
-					LocalDateTime dateTime = evenRuche.getDate().isBefore(evenRucheSource.getDate()) ?
-							evenRucheSource.getDate() : evenRuche.getDate();		
+					LocalDateTime dateTime = evenRuche.getDate().isBefore(evenRucheSource.getDate())
+							? evenRucheSource.getDate()
+							: evenRuche.getDate();
 					DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 					DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
 					model.addAttribute("dateTime", dateTime);
 					LocalDateTime dateTimeFirst = dateTime.plusMinutes(1);
-					model.addAttribute("dateFirst",dateTimeFirst.format(dateFormat));
+					model.addAttribute("dateFirst", dateTimeFirst.format(dateFormat));
 					model.addAttribute("timeFirst", dateTimeFirst.format(timeFormat));
 				}
 			} else {
 				logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 				model.addAttribute(Const.MESSAGE,
 						messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
-			return Const.INDEX;
+				return Const.INDEX;
 			}
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
@@ -775,9 +779,8 @@ public class EssaimController {
 	}
 
 	/**
-	 * Change un essaim de ruche
-	 * Il faut mettre l'essaim essaimId dans le ruche rucheId
-	 *    si la ruche contient un essaim, le disperser
+	 * Change un essaim de ruche Il faut mettre l'essaim essaimId dans le ruche
+	 * rucheId si la ruche contient un essaim, le disperser
 	 */
 	@PostMapping("/ruche/associe/sauve/{rucheId}/{essaimId}")
 	public String associeRucheSauve(Model model, @PathVariable long rucheId, @PathVariable long essaimId,
@@ -829,15 +832,17 @@ public class EssaimController {
 				rucheActuelle.setLatitude(lat);
 				rucheActuelle.setLongitude(lon);
 				// création de deux événements rucherajouterucher si les ruchers sont différents
-				//  on peut avoir demandé d'échanger les positions des ruches alors qu'elles sont dans
-				//  les mêmes ruchers !
+				// on peut avoir demandé d'échanger les positions des ruches alors qu'elles sont
+				// dans
+				// les mêmes ruchers !
 				if (!rucheActuelle.getRucher().getId().equals(ruche.getRucher().getId())) {
-					Evenement eveRuche = new Evenement(dateEve.minusSeconds(1), TypeEvenement.RUCHEAJOUTRUCHER,
-							ruche, ruche.getEssaim(), ruche.getRucher(), null, null, commentaire);
+					Evenement eveRuche = new Evenement(dateEve.minusSeconds(1), TypeEvenement.RUCHEAJOUTRUCHER, ruche,
+							ruche.getEssaim(), ruche.getRucher(), null, null, commentaire);
 					evenementRepository.save(eveRuche);
 					logger.info(Const.EVENEMENTXXENREGISTRE, eveRuche.getId());
 					Evenement eveRucheActuelle = new Evenement(dateEve.minusSeconds(1), TypeEvenement.RUCHEAJOUTRUCHER,
-							rucheActuelle, rucheActuelle.getEssaim(), rucheActuelle.getRucher(), null, null, commentaire);
+							rucheActuelle, rucheActuelle.getEssaim(), rucheActuelle.getRucher(), null, null,
+							commentaire);
 					evenementRepository.save(eveRucheActuelle);
 					logger.info(Const.EVENEMENTXXENREGISTRE, eveRucheActuelle.getId());
 				}
@@ -847,7 +852,8 @@ public class EssaimController {
 		}
 		ruche.setEssaim(essaimOpt.get());
 		rucheRepository.save(ruche);
-		// on met dans l'événement le rucher ruche.getRucher car la position des ruches a pu être échangée
+		// on met dans l'événement le rucher ruche.getRucher car la position des ruches
+		// a pu être échangée
 		Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, ruche, essaim,
 				ruche.getRucher(), null, null, commentaire); // valeur commentaire
 		evenementRepository.save(evenementAjout);

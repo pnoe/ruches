@@ -22,7 +22,7 @@
 				<h1 class="item">
 					<a th:if="${type}==''" th:href="@{'/evenement/liste'}"
 						th:text="#{evenement}"></a> <a th:if="${type}=='essaim'"
-						th:href="@{'/evenement/essaim/cree/'+${evenement.essaim.id}}"
+						th:href="@{'/evenement/essaim/'+${evenement.essaim.id}}"
 						th:text="#{evenement}"></a> <a th:if="${type=='traitement'}"
 						th:href="@{'/evenement/essaim/listeTraitement'}"
 						th:text="#{evenementstraitement}"></a>
