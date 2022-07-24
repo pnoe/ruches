@@ -237,14 +237,15 @@ public class EvenementController {
 	 * Appel du formulaire de modification d'un événement
 	 */
 	@GetMapping("/modifie/{evenementId}")
-	public String modifie(Model model, HttpServletRequest request, @PathVariable long evenementId) {
+	public String modifie(Model model, HttpServletRequest request, @PathVariable long evenementId,
+			@RequestParam(defaultValue = "false") @Nullable String complet) {
 		Optional<Evenement> evenementOpt = evenementRepository.findById(evenementId);
 		if (evenementOpt.isPresent()) {
 			model.addAttribute(Const.RUCHES, rucheRepository.findAllProjectedIdNomByOrderByNom());
 			model.addAttribute(Const.RUCHERS, rucherRepository.findAllProjectedIdNomByOrderByNom());
 			model.addAttribute(Const.HAUSSES, hausseRepository.findAllProjectedIdNomByOrderByNom());
 			model.addAttribute(Const.ESSAIMS, essaimRepository.findAllProjectedIdNomByOrderByNom());
-			model.addAttribute("complet", "false");
+			model.addAttribute("complet", complet);
 			model.addAttribute(Const.EVENEMENT, evenementOpt.get());
 		} else {
 			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);

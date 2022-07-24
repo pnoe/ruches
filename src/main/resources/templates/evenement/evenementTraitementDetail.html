@@ -3,12 +3,12 @@
 <head
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
-const suppeve = /*[[#{supprimerevenement}]]*/ null;
-$(document).ready(function() {
-	$('.confirmation').on('click', function () {
+	const suppeve = /*[[#{supprimerevenement}]]*/null;
+	$(document).ready(function() {
+		$('.confirmation').on('click', function() {
 			return confirm(suppeve);
 		});
-});
+	});
 </script>
 </head>
 <body>
@@ -18,27 +18,37 @@ $(document).ready(function() {
 	<br />
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col">			
+			<div class="col">
 				<h1 class="item">
-					<a th:if="${type}==''" th:href="@{'/evenement/liste'}" th:text="#{evenement}"></a>
-					<a th:if="${type}=='essaim'" th:href="@{'/evenement/essaim/cree/'+${evenement.essaim.id}}" th:text="#{evenement}"></a>					
-					<a th:if="${type=='traitement'}" th:href="@{'/evenement/essaim/listeTraitement'}" th:text="#{evenementstraitement}"></a>
-					<th:block th:text="' '+${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"></th:block>
+					<a th:if="${type}==''" th:href="@{'/evenement/liste'}"
+						th:text="#{evenement}"></a> <a th:if="${type}=='essaim'"
+						th:href="@{'/evenement/essaim/cree/'+${evenement.essaim.id}}"
+						th:text="#{evenement}"></a> <a th:if="${type=='traitement'}"
+						th:href="@{'/evenement/essaim/listeTraitement'}"
+						th:text="#{evenementstraitement}"></a>
+					<th:block
+						th:text="' '+${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"></th:block>
 				</h1>
 			</div>
 			<div class="col">
-				<a th:href="@{'/evenement/essaim/traitement/modifie/'+${evenement.id}}"> <span
-					class="bi bi-pencil" th:title="#{modifier}" aria-hidden="true"></span>
-				</a> 
-				<a id="supprime" th:href="@{'/evenement/supprime/'+${evenement.id}}"> <span
-					class="confirmation bi bi-trash" style="color:red" th:title="#{supprimer}"
+				<a
+					th:href="@{'/evenement/essaim/traitement/modifie/'+${evenement.id}}">
+					<span class="bi bi-pencil" th:title="#{modifier}"
 					aria-hidden="true"></span>
+				</a>&nbsp; <a th:href="@{'/evenement/modifie/'+${evenement.id}+'?complet=true'}"> <span
+					class="bi bi-pencil" style="color: red" th:title="#{modifierTout}"
+					aria-hidden="true"></span>
+				</a> <a id="supprime"
+					th:href="@{'/evenement/supprime/'+${evenement.id}}"> <span
+					class="confirmation bi bi-trash" style="color: red"
+					th:title="#{supprimer}" aria-hidden="true"></span>
 				</a>
 			</div>
 		</div>
 	</div>
 	<div class="container-fluid table-responsive">
-		<table class="table table-sm table-bordered table-striped" id="evenements">
+		<table class="table table-sm table-bordered table-striped"
+			id="evenements">
 			<thead>
 				<tr>
 					<th th:text="#{evenement}"></th>
