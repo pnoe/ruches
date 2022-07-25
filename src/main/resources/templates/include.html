@@ -31,7 +31,7 @@
 <script th:src="@{/js/datatables-1.12.1/datatables.min.js}"></script>
 <script th:inline="javascript">
 const urlValMessFr = /*[[@{/js/jquery.validate-1.19.5-messages_fr.min.js}]]*/ null;
-const urlDatatMessFr = /*[[@{/js/datatables_fr.json}]*/ null;
+const urlDatatMessFr = /*[[@{/js/datatables_fr.json}]]*/ null;
 const datatPageLength = /*[[${@environment.getProperty('datatables.pageLength')}]]*/ null;
 const tout = /*[[#{Tout}]]*/ null;
 if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('fr') != -1)) {
@@ -80,7 +80,7 @@ $.extend( true, $.fn.dataTable.defaults, {
 <script th:fragment="jspdf" th:src="@{/js/jspdf-2.5.0.umd.min.js}"></script>
 <script th:fragment="jsdatepicker-fr" th:src="@{/js/datepicker-fr.js}"></script>
 
-<script th:fragment="jsChart" th:src="@{/js/chart.min-3.8.0.js}"></script>
+<script th:fragment="jsChart" th:src="@{/js/chart.min-3.8.2.js}"></script>
 
 <link th:fragment="weather-icons" rel="stylesheet" type="text/css" media="all"
 	th:href="@{/css/weather-icons-2.0.12/css/weather-icons.min.css}" />
