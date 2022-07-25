@@ -113,9 +113,11 @@ public class EvenementEssaimController {
 
 	/*
 	 * Liste événements essaim traitement
+	 * @param tous : événements traitement début et fin si true, début seulement sinon
 	 */
-	@GetMapping("/listeTraitement")
-	public String listeTraitement(Model model, @RequestParam(required = false) Integer periode,
+	@GetMapping("/listeTraitement/{tous}")
+	public String listeTraitement(Model model, @PathVariable boolean tous,
+			@RequestParam(required = false) Integer periode,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext,
@@ -131,31 +133,37 @@ public class EvenementEssaimController {
 				datestext = dxCookie;
 			}
 		}
+		TypeEvenement typD = TypeEvenement.ESSAIMTRAITEMENT;
+		TypeEvenement typF = TypeEvenement.ESSAIMTRAITEMENTFIN;
 		switch (periode) {
 		case 1: // toute période
-			model.addAttribute(Const.EVENEMENTS,
-					evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.ESSAIMTRAITEMENT));
+			model.addAttribute(Const.EVENEMENTS, tous ? evenementRepository.findByTypeOrTypeOrderByDateDesc(typD, typF)
+					: evenementRepository.findByTypeOrderByDateDesc(typD));
 			break;
 		case 2: // moins d'un an
-			model.addAttribute(Const.EVENEMENTS, evenementRepository.findTypePeriode(TypeEvenement.ESSAIMTRAITEMENT,
-					LocalDateTime.now().minusYears(1)));
+			model.addAttribute(Const.EVENEMENTS,
+					tous ? evenementRepository.findTypePeriode(typD, typF, LocalDateTime.now().minusYears(1))
+							: evenementRepository.findTypePeriode(typD, LocalDateTime.now().minusYears(1)));
 			break;
 		case 3: // moins d'un mois
-			model.addAttribute(Const.EVENEMENTS, evenementRepository.findTypePeriode(TypeEvenement.ESSAIMTRAITEMENT,
-					LocalDateTime.now().minusMonths(1)));
+			model.addAttribute(Const.EVENEMENTS,
+					tous ? evenementRepository.findTypePeriode(typD, typF, LocalDateTime.now().minusMonths(1))
+							: evenementRepository.findTypePeriode(typD, LocalDateTime.now().minusMonths(1)));
 			break;
 		case 4: // moins d'une semaine
-			model.addAttribute(Const.EVENEMENTS, evenementRepository.findTypePeriode(TypeEvenement.ESSAIMTRAITEMENT,
-					LocalDateTime.now().minusWeeks(1)));
+			model.addAttribute(Const.EVENEMENTS,
+					tous ? evenementRepository.findTypePeriode(typD, typF, LocalDateTime.now().minusWeeks(1))
+							: evenementRepository.findTypePeriode(typD, LocalDateTime.now().minusWeeks(1)));
 			break;
 		case 5: // moins d'un jour
-			model.addAttribute(Const.EVENEMENTS, evenementRepository.findTypePeriode(TypeEvenement.ESSAIMTRAITEMENT,
-					LocalDateTime.now().minusDays(1)));
+			model.addAttribute(Const.EVENEMENTS,
+					tous ? evenementRepository.findTypePeriode(typD, typF, LocalDateTime.now().minusDays(1))
+							: evenementRepository.findTypePeriode(typD, LocalDateTime.now().minusDays(1)));
 			break;
 		default:
 			// ajouter tests date1 et date2 non null
-			model.addAttribute(Const.EVENEMENTS,
-					evenementRepository.findTypePeriode(TypeEvenement.ESSAIMTRAITEMENT, date1, date2));
+			model.addAttribute(Const.EVENEMENTS, tous ? evenementRepository.findTypePeriode(typD, typF, date1, date2)
+					: evenementRepository.findTypePeriode(typD, date1, date2));
 			model.addAttribute("datestext", datestext);
 		}
 		model.addAttribute("periode", periode);

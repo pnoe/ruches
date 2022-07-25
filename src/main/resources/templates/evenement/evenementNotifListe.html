@@ -3,8 +3,11 @@
 <head
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
+const url = /*[[@{'/evenement/listeNotif/'}]]*/ null;
+const listeve = /*[[#{listeEvenements}]]*/ null;
+const btp = /*[[#{buttontextprint}]]*/ null;
+const btc = /*[[#{buttontextcol}]]*/ null;
 $(document).ready(function() {
-	const url = [[@{'/evenement/listeNotif/'}]] ;
 	$('#groupe').on('change', function () {
 		location = url + ($(this).is(':checked'));
 	});
@@ -14,9 +17,9 @@ $(document).ready(function() {
         buttons: [
 	    	'csv',
 	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-	    		title: [[#{listeEvenements}]] + " " + (new Date()).toLocaleDateString()},
-	            {extend: 'print', text: [[#{buttontextprint}]]},
-	            {extend: 'colvis', text: [[#{buttontextcol}]]}
+	    		title: listeve + " " + (new Date()).toLocaleDateString()},
+	            {extend: 'print', text: btp},
+	            {extend: 'colvis', text: btc}
         ]  
     });
 });

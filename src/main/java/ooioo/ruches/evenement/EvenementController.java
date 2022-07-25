@@ -121,7 +121,6 @@ public class EvenementController {
 		List<Integer> jAvants = new ArrayList<>();
 		List<Evenement> evens = new ArrayList<>();
 		for (Evenement evenement : evenements) {
-			
 			int joursAvant = Integer.parseInt(evenement.getValeur());
 			LocalDateTime min;
 			LocalDateTime max;
