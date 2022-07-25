@@ -1,26 +1,36 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
+const _csrf_token = [[${_csrf.token}]];
+const _csrf_param_name = [[${_csrf.parameterName}]];
+const haussesnoms = /*[[${haussenoms}]]*/ null;
+const recolteHausses = /*[[${recolteHausses}]]*/ null;
+const haussesupp = /*[[#{haussenonsupprimeerefrecolte}]]*/ null;
+const supphausseeve = /*[[#{supprimerhausseevenement}]]*/ null;
+const supphausse = /*[[#{supprimerhausse}]]*/ null;
+const nomhaussesv = /*[[#{nomhaussesvirgule}]]*/ null;
+const evenements = /*[[${evenements}]]*/ null;
+const urlclone = /*[@{/hausse/clone/}]]*/ null;
+const hausseid = /*[[${hausse.id}]]*/ null;
 $().ready(function() {
-	const _csrf_token = [[${_csrf.token}]];
-    const _csrf_param_name = [[${_csrf.parameterName}]];
-	let haussenoms = [[${haussenoms}]];
+	let haussenoms = haussesnoms;
 	$('.confirmation').on('click', function () {
-		if([[${recolteHausses}]]) {
-			alert([[#{haussenonsupprimeerefrecolte}]]);
+		if(recolteHausses) {
+			alert(haussesupp);
 			return false;
-		} else if ([[${evenements}]]) {
-	        return confirm([[#{supprimerhausseevenement}]]);			
+		} else if (evenements) {
+	        return confirm(supphausseeve);			
 		} else {
-			return confirm([[#{supprimerhausse?}]]);
+			return confirm(supphausse);
 		}
     });
 	function nomexiste (value) {   
 		return $.inArray(value, haussenoms) != -1;
 		};
 	$( "#clone" ).click(function() {
-		const noms = prompt([[#{nomhaussesvirgule}]]);
+		const noms = prompt(nomhaussesv);
 		if (noms == null || noms == "") {
 		    return;
 		} else {
@@ -47,7 +57,7 @@ $().ready(function() {
 			}
 			let requestData = {nomclones : tabNomOk.join(',')};
 		    requestData[_csrf_param_name] = _csrf_token;
-		    $.post( [[@{/hausse/clone/}]] + [[${hausse.id}]],
+		    $.post( urlclone + hausseid,
 					requestData).done(function (data) { 
 						alert( data );
 						document.location.reload(true);
@@ -71,19 +81,23 @@ $().ready(function() {
 				</h1>
 			</div>
 			<div class="col">
-				<a th:href="@{'/hausse/evenement/remplissage/modifie/'+${hausse.id}}"
-				  class="bi bi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
-				&nbsp;
-				<span id="clone" class="bi bi-collection cursorpointer" th:title="#{cloner}" aria-hidden="true"></span>
-      				<a id="supprime" th:href="@{'/hausse/supprime/'+${hausse.id}}"
-      				  class="confirmation bi bi-trash" style="color:red" 
-      				  th:title="#{supprimer}" aria-hidden="true"></a>&nbsp;
-				<a th:href="@{'/evenement/hausse/'+${hausse.id}}"
-				  class="padicons bi bi-list-ul" th:title="#{evenements}" aria-hidden="true"></a>
-				<a th:href="@{'/evenement/hausse/commentaire/cree/'+${hausse.id}}"
-				  class="bi bi-chat-text" th:title="#{evenementCommentaire}" aria-hidden="true"></a>
-				<a th:href="@{'/evenement/hausse/remplissage/cree/'+${hausse.id}}"
-				  class="bi bi-square-half" th:title="#{evenementRemplissage}" aria-hidden="true"></a>
+				<a
+					th:href="@{'/hausse/evenement/remplissage/modifie/'+${hausse.id}}"
+					class="bi bi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
+				&nbsp; <span id="clone" class="bi bi-collection cursorpointer"
+					th:title="#{cloner}" aria-hidden="true"></span> <a id="supprime"
+					th:href="@{'/hausse/supprime/'+${hausse.id}}"
+					class="confirmation bi bi-trash" style="color: red"
+					th:title="#{supprimer}" aria-hidden="true"></a>&nbsp; <a
+					th:href="@{'/evenement/hausse/'+${hausse.id}}"
+					class="padicons bi bi-list-ul" th:title="#{evenements}"
+					aria-hidden="true"></a> <a
+					th:href="@{'/evenement/hausse/commentaire/cree/'+${hausse.id}}"
+					class="bi bi-chat-text" th:title="#{evenementCommentaire}"
+					aria-hidden="true"></a> <a
+					th:href="@{'/evenement/hausse/remplissage/cree/'+${hausse.id}}"
+					class="bi bi-square-half" th:title="#{evenementRemplissage}"
+					aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
@@ -101,25 +115,28 @@ $().ready(function() {
 			</thead>
 			<tbody>
 				<tr>
-					<td th:if="${session.voirInactif}" th:text="${hausse.active}? #{oui} : #{non}"></td>
+					<td th:if="${session.voirInactif}"
+						th:text="${hausse.active}? #{oui} : #{non}"></td>
 					<td th:text="${hausse.dateAcquisition}"></td>
-					<td class="num" th:text="${#numbers.formatDecimal(hausse.poidsVide,1,2,'DEFAULT')}"></td>
+					<td class="num"
+						th:text="${#numbers.formatDecimal(hausse.poidsVide,1,2,'DEFAULT')}"></td>
 					<td class="num" th:text="${hausse.nbCadres}"></td>
 					<td class="num" th:text="${hausse.nbCadresMax}"></td>
 					<td th:text="${hausse.commentaire}"></td>
 				</tr>
 			</tbody>
 		</table>
-		<table class="table table-sm table-bordered">
+		<table class="table table-sm table-bordered"
+			th:if="${(eveHausse != null) or (eveRucher != null) or (eveRuche != null)}">
 			<thead>
 				<tr>
-					<th style="background-color:PaleGoldenRod" th:text="#{ruche}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{Ordre}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{rucher}"></th>	
-					<th style="background-color:LemonChiffon" th:text="#{date}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{essaim}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>	
+					<th style="background-color: PaleGoldenRod" th:text="#{ruche}"></th>
+					<th style="background-color: PaleGoldenRod" th:text="#{Ordre}"></th>
+					<th style="background-color: PaleGoldenRod" th:text="#{date}"></th>
+					<th style="background-color: LemonChiffon" th:text="#{rucher}"></th>
+					<th style="background-color: LemonChiffon" th:text="#{date}"></th>
+					<th style="background-color: PaleGoldenRod" th:text="#{essaim}"></th>
+					<th style="background-color: PaleGoldenRod" th:text="#{date}"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -127,42 +144,62 @@ $().ready(function() {
 					<td><a th:href="@{'/ruche/'+${hausse.ruche?.id}}"
 						th:text="${hausse.ruche?.nom}"></a></td>
 					<td th:text="${hausse.ordreSurRuche}"></td>
-					<td th:text="${#temporals.format(dateHAUSSEPOSERUCHE, 'yyyy/MM/dd')}"></td>
+					<td><a th:if="${eveHausse != null}"
+						th:href="@{'/evenement/'+${eveHausse?.id}+'?type=hausse'}"
+						th:text="${#temporals.format(eveHausse?.date, 'yyyy/MM/dd')}"></a>
+					</td>
 					<td><a th:href="@{'/rucher/'+${hausse.ruche?.rucher?.id}}"
 						th:text="${hausse.ruche?.rucher?.nom}"></a></td>
-					<td th:text="${#temporals.format(dateRUCHEAJOUTRUCHER, 'yyyy/MM/dd')}"></td>
-					
+					<td><a th:if="${eveRucher != null}"
+						th:href="@{'/evenement/'+${eveRucher?.id}+'?type=hausse'}"
+						th:text="${#temporals.format(eveRucher?.date, 'yyyy/MM/dd')}"></a>
+					</td>
 					<td><a th:href="@{'/essaim/'+${hausse.ruche?.essaim?.id}}"
 						th:text="${hausse.ruche?.essaim?.nom}"></a></td>
-					<td th:text="${#temporals.format(dateAJOUTESSAIMRUCHE, 'yyyy/MM/dd')}"></td>
-					
+					<td><a th:if="${eveRuche != null}"
+						th:href="@{'/evenement/'+${eveRuche?.id}+'?type=hausse'}"
+						th:text="${#temporals.format(eveRuche?.date, 'yyyy/MM/dd')}"></a>
+					</td>
 				</tr>
 			</tbody>
 		</table>
-		<h6 th:text="#{evenements}" 
-			th:if="${(dateHAUSSEREMPLISSAGE != null) or (dateCOMMENTAIREHAUSSE != null)}">
-		</h6>
-		<table class="table table-sm table-bordered" 
-			th:if="${(dateHAUSSEREMPLISSAGE != null) or (dateCOMMENTAIREHAUSSE != null)}">			
-			<thead>
-				<tr>
-					<th style="background-color:PaleGoldenRod" th:text="#{remplissage}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{commentaire}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{date}"></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td class="num" th:text="${valeurHAUSSEREMPLISSAGE}"></td>
-					<td th:text="${#temporals.format(dateHAUSSEREMPLISSAGE, 'yyyy/MM/dd')}"></td>
-					<td th:text="${commentaireHAUSSEREMPLISSAGE}"></td>
-					<td th:text="${commentaireCOMMENTAIREHAUSSE}"></td>
-					<td th:text="${#temporals.format(dateCOMMENTAIREHAUSSE, 'yyyy/MM/dd')}"></td>
-				</tr>
-			</tbody>
-		</table>
+		<th:block th:if="${(eveRempl != null) or (eveComm != null)}">
+			<h6 th:text="#{evenements}"></h6>
+			<table class="table table-sm table-bordered">
+				<thead>
+					<tr>
+						<th style="background-color: PaleGoldenRod"
+							th:text="#{remplissage}"></th>
+						<th style="background-color: PaleGoldenRod" th:text="#{date}"></th>
+						<th style="background-color: PaleGoldenRod"
+							th:text="#{commentaire}"></th>
+						<th style="background-color: LemonChiffon"
+							th:text="#{commentaire}"></th>
+						<th style="background-color: LemonChiffon" th:text="#{date}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="num" th:text="${eveRempl.valeur}"></td>
+						<td><a th:if="${eveRempl != null}"
+							th:href="@{'/evenement/'+${eveRempl?.id}+'?type=hausse'}"
+							th:text="${#temporals.format(eveRempl?.date, 'yyyy/MM/dd')}"></a>
+						</td>
+						<td th:text="${eveRempl.commentaire}"></td>
+
+
+						<td th:text="${eveComm.commentaire}"></td>
+						<td><a th:if="${eveComm != null}"
+							th:href="@{'/evenement/'+${eveComm?.id}+'?type=hausse'}"
+							th:text="${#temporals.format(eveComm?.date, 'yyyy/MM/dd')}"></a>
+						</td>
+
+
+
+					</tr>
+				</tbody>
+			</table>
+		</th:block>
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>

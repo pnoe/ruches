@@ -52,7 +52,6 @@ import ooioo.ruches.recolte.RecolteHausseRepository;
 import ooioo.ruches.recolte.RecolteRepository;
 import ooioo.ruches.ruche.Ruche;
 import ooioo.ruches.ruche.RucheRepository;
-import ooioo.ruches.ruche.RucheService;
 import ooioo.ruches.rucher.Rucher;
 import ooioo.ruches.rucher.RucherRepository;
 
@@ -82,8 +81,6 @@ public class EssaimController {
 
 	@Autowired
 	private EssaimService essaimService;
-	@Autowired
-	private RucheService rucheService;
 
 	/*
 	 * Historique de la mise en ruchers d'un essaim Les événements affichés dans
@@ -166,7 +163,7 @@ public class EssaimController {
 				long ageMois = ChronoUnit.MONTHS.between(essaim.getReineDateNaissance(), dateNow);
 				if (ageMois > maxAgeMois) {
 					// Si la reine à plus de maxAgeMois on ne la prends pas en compte
-					// TODO afficher un message en haut de la page de stat
+					//  afficher un message en haut de la page de stat
 					logger.info("Essaim {}, âge supérieur à {} mois", essaim.getNom(), maxAgeMois);
 					continue;
 				}
@@ -656,6 +653,8 @@ public class EssaimController {
 			model.addAttribute("ruchesvidesnoms", ruchesvidesnoms);
 			model.addAttribute("eveRuche", evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim,
 					TypeEvenement.AJOUTESSAIMRUCHE));
+			// On recherche le premier éven RUCHEAJOUTRUCHER référençant l'essaim
+			//   si on fait la recherche pour la ruche cela peut donner un résultat différent dans certains cas
 			model.addAttribute("eveRucher", evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim,
 					TypeEvenement.RUCHEAJOUTRUCHER));
 			// Si des hausses de récolte référencent cet essaim, on ne pourra la supprimer
@@ -811,7 +810,7 @@ public class EssaimController {
 			essaimDisperse.setActif(false);
 			essaimRepository.save(essaimDisperse);
 			// On crée l'événement dispersion
-			// TODO quel commentaire ?
+			//  quel commentaire ?
 			Evenement eveDisperse = new Evenement(dateEve, TypeEvenement.ESSAIMDISPERSION, ruche, essaimDisperse,
 					ruche.getRucher(), null, null, commentaire);
 			evenementRepository.save(eveDisperse);

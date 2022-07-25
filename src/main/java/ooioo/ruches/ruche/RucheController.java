@@ -419,10 +419,20 @@ public class RucheController {
 			model.addAttribute(Const.EVENEMENTS, evenements.iterator().hasNext());
 			// Trouver l'événement association essaim ruche
 			if (ruche.getEssaim() != null) {
-				rucheService.modelAddEvenement(model, ruche, TypeEvenement.AJOUTESSAIMRUCHE);
+				
+				// rucheService.modelAddEvenement(model, ruche, TypeEvenement.AJOUTESSAIMRUCHE);
+				model.addAttribute("eveEssaim", evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
+						TypeEvenement.AJOUTESSAIMRUCHE));
 			}
-			rucheService.modelAddEvenement(model, ruche, TypeEvenement.RUCHEAJOUTRUCHER);
-			rucheService.modelAddEvenement(model, ruche, TypeEvenement.COMMENTAIRERUCHE);
+			
+			// rucheService.modelAddEvenement(model, ruche, TypeEvenement.RUCHEAJOUTRUCHER);
+			model.addAttribute("eveRucher", evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
+					TypeEvenement.RUCHEAJOUTRUCHER));
+			
+			// rucheService.modelAddEvenement(model, ruche, TypeEvenement.COMMENTAIRERUCHE);
+			model.addAttribute("eveComm", evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
+					TypeEvenement.COMMENTAIRERUCHE));
+			
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 			model.addAttribute(Const.MESSAGE,

@@ -142,16 +142,22 @@ $().ready(function() {
 			<tr>
 				<td><a th:href="@{'/rucher/'+${ruche.rucher?.id}}"
 					th:text="${ruche.rucher?.nom}"></a></td>
-				<td th:text="${#temporals.format(dateRUCHEAJOUTRUCHER, 'yyyy/MM/dd')}"></td>
-				<td th:text="${commentaireRUCHEAJOUTRUCHER}"></td>
+				<td><a 
+						th:href="@{'/evenement/'+${eveRucher?.id}+'?type=ruche'}"
+						th:text="${#temporals.format(eveRucher?.date, 'yyyy/MM/dd')}"></a>
+					</td>
+				<td th:text="${eveRucher?.commentaire}"></td>
 				<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}"
 					th:text="${ruche.essaim?.nom}"></a></td>
-				<td th:text="${#temporals.format(dateAJOUTESSAIMRUCHE, 'yyyy/MM/dd')}"></td>
-				<td th:text="${commentaireAJOUTESSAIMRUCHE}"></td>
+				<td><a th:if="${eveEssaim != null}"
+						th:href="@{'/evenement/'+${eveEssaim?.id}+'?type=ruche'}"
+						th:text="${#temporals.format(eveEssaim?.date, 'yyyy/MM/dd')}"></a>
+					</td>
+				<td th:text="${eveEssaim?.commentaire}"></td>
 			</tr>
 		</tbody>
 	</table>
-	<th:block th:if="${commentaireCOMMENTAIRERUCHE}">
+	<th:block th:if="${eveComm != null}">
 		<h6 th:text="#{evenements}" ></h6>
 	<table class="table table-sm table-bordered">			
 		<thead>
@@ -162,8 +168,11 @@ $().ready(function() {
 		</thead>
 		<tbody>
 			<tr>
-				<td th:text="${commentaireCOMMENTAIRERUCHE}"></td>
-				<td th:text="${#temporals.format(dateCOMMENTAIRERUCHE, 'yyyy/MM/dd')}"></td>
+				<td th:text="${eveComm?.commentaire}"></td>
+				<td><a th:if="${eveComm != null}"
+						th:href="@{'/evenement/'+${eveComm?.id}+'?type=ruche'}"
+						th:text="${#temporals.format(eveComm?.date, 'yyyy/MM/dd')}"></a>
+					</td>
 			</tr>
 		</tbody>
 	</table>

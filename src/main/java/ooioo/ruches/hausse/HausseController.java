@@ -50,14 +50,10 @@ public class HausseController {
 	private EvenementRepository evenementRepository;
 	@Autowired
 	private RecolteHausseRepository recolteHausseRepository;
-
 	@Autowired
 	MessageSource messageSource;
-
 	@Autowired
 	private RucheService rucheService;
-	@Autowired
-	private HausseService hausseService;
 
 	/**
 	 * Clonage multiple d'une hausse
@@ -87,7 +83,8 @@ public class HausseController {
 			}
 			String nomsJoin = String.join(",", nomsCrees);
 			logger.info("Hausses {} créée(s)", nomsJoin);
-			return messageSource.getMessage("clonehaussecreees", new Object[] {nomsJoin}, LocaleContextHolder.getLocale());
+			return messageSource.getMessage("clonehaussecreees", new Object[] { nomsJoin },
+					LocaleContextHolder.getLocale());
 		}
 		logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
 		model.addAttribute(Const.MESSAGE,
@@ -171,7 +168,7 @@ public class HausseController {
 				logger.info("Hausse {} supprimée, id {}", hausse.getNom(), hausse.getId());
 			} else {
 				model.addAttribute(Const.MESSAGE, "Cette hausse ne peut être supprimée");
-			return Const.INDEX;
+				return Const.INDEX;
 			}
 		} else {
 			logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
@@ -218,12 +215,17 @@ public class HausseController {
 			model.addAttribute(Const.EVENEMENTS, evenements.iterator().hasNext());
 			Ruche ruche = hausse.getRuche();
 			if (ruche != null) {
-				hausseService.modelAddEvenPoseHausse(model, ruche, hausse);
-				rucheService.modelAddEvenement(model, ruche, TypeEvenement.RUCHEAJOUTRUCHER);
-				rucheService.modelAddEvenement(model, ruche, TypeEvenement.AJOUTESSAIMRUCHE);
+				model.addAttribute("eveHausse", evenementRepository
+						.findFirstByRucheAndHausseAndTypeOrderByDateDesc(ruche, hausse, TypeEvenement.HAUSSEPOSERUCHE));
+				model.addAttribute("eveRucher", evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
+						TypeEvenement.RUCHEAJOUTRUCHER));
+				model.addAttribute("eveRuche", evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
+						TypeEvenement.AJOUTESSAIMRUCHE));
 			}
-			hausseService.modelAddEvenement(model, hausse, TypeEvenement.HAUSSEREMPLISSAGE);
-			hausseService.modelAddEvenement(model, hausse, TypeEvenement.COMMENTAIREHAUSSE);
+			model.addAttribute("eveRempl", evenementRepository.findFirstByHausseAndTypeOrderByDateDesc(hausse,
+					TypeEvenement.HAUSSEREMPLISSAGE));
+			model.addAttribute("eveComm", evenementRepository.findFirstByHausseAndTypeOrderByDateDesc(hausse,
+					TypeEvenement.COMMENTAIREHAUSSE));
 		} else {
 			logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
 			model.addAttribute(Const.MESSAGE,
