@@ -654,7 +654,9 @@ public class EssaimController {
 			model.addAttribute("eveRuche", evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim,
 					TypeEvenement.AJOUTESSAIMRUCHE));
 			// On recherche le premier éven RUCHEAJOUTRUCHER référençant l'essaim
-			//   si on fait la recherche pour la ruche cela peut donner un résultat différent dans certains cas
+			//   si on fait la recherche pour la ruche et que la ruche a été mise dans le rucher
+			//   sans l'essaim initialement, le retour du détail vers l'essaim ne sera pas possible
+			//   laisser tel quel, c'est mieux pour les cas normaux (ruche + essaim mis en rucher)
 			model.addAttribute("eveRucher", evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim,
 					TypeEvenement.RUCHEAJOUTRUCHER));
 			// Si des hausses de récolte référencent cet essaim, on ne pourra la supprimer

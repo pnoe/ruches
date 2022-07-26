@@ -10,19 +10,27 @@
 
 
 <script th:inline="javascript">
+const _csrf_token = /*[[${_csrf.token}]]*/ null;
+const _csrf_param_name = /*[[${_csrf.parameterName}]]*/ null;
+const suppRecHauss = /*[[#{supprimerrecolteethausses}]]*/ null;
+const dateRecEpoch = /*[[${dateRecolteEpoch}]]*/ null;
+const enlevTtHauRec = /*[[#{enlevertoutesleshaussesrecolte}]]*/ null;
+const enlevHRecDe30 = /*[[#{enlverhaussesrecoltedelai(30)}]]*/ null;
+const urlRecHDepot = /*[[@{/recolte/haussesDepot/}]]*/ null;
+const recId = /*[[${recolte.id}]]*/ null;
 $(document).ready(function() {	
 	$('#date').hide();
 	$('#dateOK').hide();
 	$("#enlevehausses").click(function() {
 		/*[- */ 
-			La fonction est désactivée après 30 jours 
-			30 * 24 * 3600 * 1000 =  2592000000 
+			// La fonction est désactivée après 30 jours 
+			// 30 * 24 * 3600 * 1000 =  2592000000 
 		/* -]*/
-		if (Date.now() > [[${dateRecolteEpoch}]] * 1000 + 2592000000) {
-			alert([[#{enlverhaussesrecoltedelai(30)}]]);
+		if (Date.now() > dateRecEpoch * 1000 + 2592000000) {
+			alert(enlevHRecDe30);
 			return;
 		}
-		if (!confirm([[#{enlevertoutesleshaussesrecolte}]])) {
+		if (!confirm(enlevTtHauRec)) {
 			return;
 		}
 		$('#date').show();
@@ -35,17 +43,15 @@ $(document).ready(function() {
 		$('#date').hide();
 		$('#dateOK').hide();
 		let requestData = {};
-		const _csrf_token = [[${_csrf.token}]];
-	    const _csrf_param_name = [[${_csrf.parameterName}]];
-	    requestData[_csrf_param_name] = _csrf_token;
+		requestData[_csrf_param_name] = _csrf_token;
 	    requestData['date'] = date;
-	    $.post( [[@{/recolte/haussesDepot/}]] + [[${recolte.id}]],
+	    $.post( urlRecHDepot + recId,
 				requestData).done(function (data) { 
 					alert( data );
 		});		
 	});
 	$('.confirmationsupprime').on('click', function () {
-        return confirm([[#{supprimerrecolteethausses}]]);
+        return confirm(suppRecHauss);
     });
     new DataTable('#hausses', {
         order: [ [ 1, 'asc' ], [ 0, 'asc' ] ] ,

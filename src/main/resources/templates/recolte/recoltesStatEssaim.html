@@ -2,12 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
+const btnTxtPrint = /*[[#{buttontextprint}]]*/ null;
+const recoltes = /*[[${recoltes}]]*/ null;
 $(document).ready(function() {
     new DataTable('#recoltes', {
     	dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
 	    buttons: [
 	    	'csv',
-            {extend: 'print', text: [[#{buttontextprint}]]},
+            {extend: 'print', text: btnTxtPrint},
         ],
     	"footerCallback": function ( row, data, start, end, display ) {
              let api = this.api();
@@ -18,7 +20,7 @@ $(document).ready(function() {
                      typeof p === 'number' ?
                          p : 0;
              };
-             const recoltes = [[${recoltes}]];
+             const recoltes = recoltes;
 	         for (let i = 1; i < recoltes.length + 2 ; i++) {
 	             total = api
 	                 .column(i, {search:'applied'})
