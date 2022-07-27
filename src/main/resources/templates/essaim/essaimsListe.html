@@ -2,18 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
-// https://developer.mozilla.org/en-US/docs/Web/API/Document/DOMContentLoaded_event
-/*
-function doSomething() {
-  console.info('DOM loaded');
-}
-
-if (document.readyState === 'loading') {  // Loading hasn't finished yet
-  document.addEventListener('DOMContentLoaded', doSomething);
-} else {  // `DOMContentLoaded` has already fired
-  doSomething();
-}
-*/
+const listeEssaims = /*[[#{listeEssaims}]]*/ null;
+const buttontextprint = /*[[#{buttontextprint}]]*/ null;
+const buttontextcol = /*[[#{buttontextcol}]]*/ null;
+const urlTraitLot = /*[[@{/evenement/essaim/traitementLot/}]]*/ null;
+const urlSucreLot = /*[[@{/evenement/essaim/sucreLot/}]]*/ null;
+const urlCommLot = /*[[@{/evenement/essaim/commentaireLot/}]]*/ null;
+const selectEssTrt = /*[[#{selectessaimstraiter}]]*/ null;
 $(document).ready(function() {
 	const table = new DataTable('#essaims', {
     	select: {style: 'multi+shift'},
@@ -21,9 +16,9 @@ $(document).ready(function() {
         buttons: [
 	    	'csv',
 	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-	    		title: [[#{listeEssaims}]] + " " + (new Date()).toLocaleDateString()},
-	        {extend: 'print', text: [[#{buttontextprint}]]},
-	        {extend: 'colvis', text: [[#{buttontextcol}]]}
+	    		title: listeEssaims + " " + (new Date()).toLocaleDateString()},
+	        {extend: 'print', text: buttontextprint},
+	        {extend: 'colvis', text: buttontextcol}
         ]
     });
 	function updateLinks( e, dt, type, indexes ) {
@@ -38,9 +33,9 @@ $(document).ready(function() {
             if (noms) { 
             	/*[- on enlève la dernière virgule et met à jour l'url de traitement -]*/
             	noms = noms.substring(0, noms.length-1);
-            	$('#traitement').attr('href', [[@{/evenement/essaim/traitementLot/}]] + noms);
-            	$('#sucre').attr('href', [[@{/evenement/essaim/sucreLot/}]] + noms);
-            	$('#commentaire').attr('href', [[@{/evenement/essaim/commentaireLot/}]] + noms);
+            	$('#traitement').attr('href', urlTraitLot + noms);
+            	$('#sucre').attr('href', urlSucreLot + noms);
+            	$('#commentaire').attr('href', urlCommLot + noms);
             } else {
             	$('#traitement').attr('href', "#");
             	$('#sucre').attr('href', "#");
@@ -49,22 +44,9 @@ $(document).ready(function() {
         }
 	}
     table.on( 'select deselect', updateLinks);
-    // https://stackoverflow.com/questions/14377590/queryselector-and-queryselectorall-vs-getelementsbyclassname-and-getelementbyid
-    // https://stackoverflow.com/questions/10693845/what-do-queryselectorall-and-getelementsby-methods-return
-    // $('.selection').on('click', function () {
-    /*
-    	const elements = document.getElementsByClassName('selection');
-    for (let i = 0; i < elements.length; i++) {
-    	  elements[i].on('click', function () {   //   .on  erreur !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    	    	if ($(this).attr("href") == "#") {
-    	    		alert([[#{selectessaimstraiter}]]);	
-    	    	}      
-    	    });
-   	}
-    */
     $('.selection').on('click', function () {
     	if ($(this).attr("href") == "#") {
-    		alert([[#{selectessaimstraiter}]]);	
+    		alert(selectEssTrt);	
     	}      
     });
 });
