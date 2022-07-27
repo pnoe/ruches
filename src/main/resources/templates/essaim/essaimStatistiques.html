@@ -2,6 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
+const buttontextprint = /*[[#{buttontextprint}]]*/ null;
+const buttontextcol = /*[[#{buttontextcol}]]*/ null;
+const listeEssaims = /*[[#{listeEssaims}]]*/ null;
+const Production = /*[[#{Production}]]*/ null;
 $(document).ready(function() {
     $('.bi-question-lg').popover({
         html: true
@@ -14,9 +18,9 @@ $(document).ready(function() {
 	    buttons: [
 	    	'csv',
 	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-	    		title: [[#{listeRuchers}]] + " " + (new Date()).toLocaleDateString()},
-	        {extend: 'print', text: [[#{buttontextprint}]]},
-	        {extend: 'colvis', text: [[#{buttontextcol}]]}
+	    		title: Production + " " + listeEssaims + " " + (new Date()).toLocaleDateString()},
+	        {extend: 'print', text: buttontextprint},
+	        {extend: 'colvis', text: buttontextcol}
         ]
     });
 });
