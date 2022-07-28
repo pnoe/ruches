@@ -5,7 +5,7 @@
 
 <script th:inline="javascript">
 	$().ready(function() {
-		const url = /*[[@{'/rucher/historique/'}+${rucher.id}+'/']]*/ null;
+		const url = /*[[@{'/rucher/historiques/'}]]*/ null;
 		$('#groupe').on('change', function () {
 			location = url + ($(this).is(':checked'));
 		});
@@ -22,8 +22,6 @@
 			<div class="col">
 				<h1 class="item">
 					<th:block th:text="#{historique} + ' '"></th:block>
-					<a th:href="@{'/rucher/'+${rucher.id}}"
-						th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
 				</h1>
 			</div>
 			<div class="col">
@@ -39,6 +37,7 @@
 			<thead>
 				<tr>
 					<th th:text="#{date}"></th>
+					<th th:text="#{rucher}"></th>
 					<th th:text="#{type}"></th>
 					<th th:text="#{destProv}"></th>
 					<th th:if="${group}" style="background-color: LemonChiffon" th:text="#{nb}"></th>
@@ -51,6 +50,8 @@
 				<tr th:each="hist : ${histo}">
 					<td><a th:text="${hist.get('date')}"
 						th:href="@{'/evenement/'+${hist.get('eveid')}+'?type=ajoutruche'}"></a></td>
+					<td><a th:text="${hist.get('rucherNom')}"
+						th:href="@{'/rucher/'+${hist.get('rucherId')}}"></a></td>
 					<td th:text="${hist.get('type')}"></td>
 					<td th:text="${hist.get('destProv')}"></td>
 					<td th:if="${group}" th:text="${hist.get('nbMouv')}"></td>

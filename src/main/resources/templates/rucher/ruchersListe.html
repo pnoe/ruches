@@ -1,7 +1,10 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
+const buttontextprint = /*[[#{buttontextprint}]]*/ null;
+const buttontextcol = /*[[#{buttontextcol}]]*/ null;
 $(document).ready(function() {
     new DataTable('#ruchers', {
         dom: 'Blftip',
@@ -9,8 +12,8 @@ $(document).ready(function() {
 	    	'csv',
 	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
 	    		title: [[#{listeRuchers}]] + " " + (new Date()).toLocaleDateString()},
-	        {extend: 'print', text: [[#{buttontextprint}]]},
-	        {extend: 'colvis', text: [[#{buttontextcol}]]}
+	        {extend: 'print', text: buttontextprint},
+	        {extend: 'colvis', text: buttontextcol}
         ]
     });
 });
@@ -24,34 +27,38 @@ $(document).ready(function() {
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-			<h1 class="item" th:text="#{Ruchers}"></h1>
+				<h1 class="item" th:text="#{Ruchers}"></h1>
 			</div>
 			<div class="col">
-       		 <a id="cree" th:href="@{/rucher/cree}" class="bi bi-plus-lg"
-       		 	th:title="#{ajouterRucher}" aria-hidden="true"></a>
-			 &nbsp;
-			 <a th:href="@{/rucher/Gg/}" class="bi bi-google" th:title="#{carteGg}" aria-hidden="true"></a>
-       		 <a th:href="@{/rucher/Ign/}" class="bi bi-map" th:title="#{carteIgn}" aria-hidden="true"></a>
-			 <a th:href="@{/rucher/Osm/}" class="bi bi-globe" th:title="#{carteOsm}" aria-hidden="true"></a>
-			 &nbsp;
-			 <a th:href="@{/rucher/statistiques}"
-				  class="bi bi-table" th:title="#{statistiquesruchers}" aria-hidden="true"></a>
-        	</div>
-        </div>
-    </div>
+				<a id="cree" th:href="@{/rucher/cree}" class="bi bi-plus-lg"
+					th:title="#{ajouterRucher}" aria-hidden="true"></a> &nbsp; <a
+					th:href="@{/rucher/Gg/}" class="bi bi-google" th:title="#{carteGg}"
+					aria-hidden="true"></a> <a th:href="@{/rucher/Ign/}"
+					class="bi bi-map" th:title="#{carteIgn}" aria-hidden="true"></a> <a
+					th:href="@{/rucher/Osm/}" class="bi bi-globe"
+					th:title="#{carteOsm}" aria-hidden="true"></a> &nbsp; <a
+					th:href="@{/rucher/statistiques}" class="bi bi-table"
+					th:title="#{statistiquesruchers}" aria-hidden="true"></a> &nbsp; <a
+					th:href="@{'/rucher/historiques/true'}"
+					class="bi bi-calendar-check" th:title="#{historique}"
+					aria-hidden="true"></a>
+			</div>
+		</div>
+	</div>
 	<div class="container-fluid" id="ruchersDiv">
-	<table class="table table-bordered table-striped dt-responsive" id="ruchers">			
+		<table class="table table-bordered table-striped dt-responsive"
+			id="ruchers">
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>
 					<th th:if="${session.voirInactif}" th:text="#{actif}"></th>
 					<th th:text="#{contact}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{adresse}"></th>
+					<th style="background-color: LemonChiffon" th:text="#{adresse}"></th>
 					<th:block th:if="${session.voirLatLon}">
-						<th style="background-color:LemonChiffon" th:text="#{latitude}"></th>
-						<th style="background-color:LemonChiffon" th:text="#{longitude}"></th>
+						<th style="background-color: LemonChiffon" th:text="#{latitude}"></th>
+						<th style="background-color: LemonChiffon" th:text="#{longitude}"></th>
 					</th:block>
-					<th style="background-color:LemonChiffon" th:text="#{altitude}"></th>
+					<th style="background-color: LemonChiffon" th:text="#{altitude}"></th>
 					<th th:text="#{ressource}"></th>
 					<th th:text="#{Ruches}"></th>
 					<th th:text="#{Hausses}"></th>
@@ -62,12 +69,15 @@ $(document).ready(function() {
 				<tr th:each="rucher : ${ruchers}">
 					<td><a th:href="@{'/rucher/'+${rucher.id}}"
 						th:text="${rucher.nom}"></a></td>
-					<td th:if="${session.voirInactif}" th:text="${rucher.actif}? #{oui} : #{non}"></td>
+					<td th:if="${session.voirInactif}"
+						th:text="${rucher.actif}? #{oui} : #{non}"></td>
 					<td th:text="${rucher.contact?.nom}"></td>
 					<td th:text="${rucher.adresse}"></td>
 					<th:block th:if="${session.voirLatLon}">
-						<td class="num" th:text="${#numbers.formatDecimal(rucher.latitude,1,4)}"></td>
-						<td class="num" th:text="${#numbers.formatDecimal(rucher.longitude,1,4)}"></td>
+						<td class="num"
+							th:text="${#numbers.formatDecimal(rucher.latitude,1,4)}"></td>
+						<td class="num"
+							th:text="${#numbers.formatDecimal(rucher.longitude,1,4)}"></td>
 					</th:block>
 					<td class="num" th:text="${rucher.altitude}"></td>
 					<td th:text="${rucher.ressource}"></td>
