@@ -8,7 +8,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -64,6 +63,8 @@ public class RucherController {
 	private static final String RUCHER_RUCHERLISTE = "rucher/ruchersListe";
 	private static final String DESTPROV = "destProv";
 	private static final String EVEID = "eveid";
+	private static final String HISTO = "histo";
+	private static final String NBMOUV = "nbMouv";	
 
 	private final Logger logger = LoggerFactory.getLogger(RucherController.class);
 
@@ -235,12 +236,12 @@ public class RucherController {
 					}
 					// le nombre de ruches ajoutées ou retirées est j - i
 					if (i == j - 1) {
-						itemHisto.put("nbMouv", "1");
+						itemHisto.put(NBMOUV, "1");
 						histoGroup.add(itemHisto);
 					} else {
 						// enregistrer groupe dans histoGroup
 						itemHistoG = new HashMap<>();
-						itemHistoG.put("nbMouv", String.valueOf(j - i));
+						itemHistoG.put(NBMOUV, String.valueOf(j - i));
 						// la date est la date du premier événement
 						// les autres peuvent avoir des heures et minutes
 						// différentes
@@ -257,9 +258,9 @@ public class RucherController {
 					}
 					i = j;
 				}
-				model.addAttribute("histo", histoGroup);
+				model.addAttribute(HISTO, histoGroup);
 			} else {
-				model.addAttribute("histo", histo);
+				model.addAttribute(HISTO, histo);
 			}
 			if (!ruches.isEmpty()) {
 				logger.error(
@@ -281,25 +282,17 @@ public class RucherController {
 	@GetMapping("/historiques/{group}")
 	public String historiques(Model model, @PathVariable boolean group) {
 		List<Rucher> ruchers = rucherRepository.findByActif(true);
-
 		List<Map<String, String>> histoAll = new ArrayList<>();
 		List<Map<String, String>> histoGroup = new ArrayList<>();
-
 		for (Rucher rucher : ruchers) {
-
 			if (rucher.getDepot()) {
 				continue;
 			}
-
-			String rucherNom = rucher.getNom();
-			Long rucherId = rucher.getId();
-
-// 			model.addAttribute(Const.RUCHER, rucher);
 			// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date
 			// descendante avec les champs ruche et rucher non null
 			List<Evenement> evensRucheAjout = evenementRepository.findAjoutRucheOK();
 			// Les nom des ruches présentes dans le rucher
-			Collection<Nom> nomRuchesX = rucheRepository.findNomsByRucherId(rucherId);
+			Collection<Nom> nomRuchesX = rucheRepository.findNomsByRucherId(rucher.getId());
 			List<String> ruches = new ArrayList<>();
 			for (Nom nomR : nomRuchesX) {
 				ruches.add(nomR.getNom());
@@ -309,24 +302,22 @@ public class RucherController {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
 			for (int i = 0, levens = evensRucheAjout.size(); i < levens; i++) {
 				Evenement eve = evensRucheAjout.get(i);
-				if (eve.getRucher().getId().equals(rucherId)) {
+				if (eve.getRucher().getId().equals(rucher.getId())) {
 					// si l'événement est un ajout dans le rucher
 					// on retire après l'affichage la ruche de l'événement
 					// de la liste des ruches du rucher
 					Collections.sort(ruches);
 					itemHisto = new HashMap<>();
 					itemHisto.put("date", eve.getDate().format(formatter));
-
-					itemHisto.put("rucherNom", rucherNom);
-					itemHisto.put("rucherId", rucherId.toString());
-
+					itemHisto.put("rucherNom", rucher.getNom());
+					itemHisto.put("rucherId", rucher.getId().toString());
 					itemHisto.put("type", "Ajout");
 					// On cherche l'événement précédent ajout de cette ruche
 					// pour indication de sa provenance
 					Evenement evePrec = null;
 					for (int j = i + 1; j < levens; j++) {
 						if ((evensRucheAjout.get(j).getRuche().getId().equals(eve.getRuche().getId()))
-								&& !(evensRucheAjout.get(j).getRuche().getId().equals(rucherId))) {
+								&& !(evensRucheAjout.get(j).getRuche().getId().equals(rucher.getId()))) {
 							// si (evensRucheAjout.get(j).getRuche().getId().equals(rucherId))
 							// c'est une erreur, deux ajouts successifs dans le même rucher
 							evePrec = evensRucheAjout.get(j);
@@ -355,7 +346,7 @@ public class RucherController {
 					for (int j = i + 1; j < levens; j++) {
 						Evenement eveJ = evensRucheAjout.get(j);
 						if (eveJ.getRuche().getId().equals(eve.getRuche().getId())) {
-							if (eveJ.getRucher().getId().equals(rucherId)) {
+							if (eveJ.getRucher().getId().equals(rucher.getId())) {
 								// si l'événement précédent evePrec était un ajout dans le
 								// rucher, alors eve retire la ruche du rucher
 								if (!ruches.contains(eve.getRuche().getNom())) {
@@ -364,10 +355,8 @@ public class RucherController {
 									Collections.sort(ruches);
 									itemHisto = new HashMap<>();
 									itemHisto.put("date", eve.getDate().format(formatter));
-
-									itemHisto.put("rucherNom", rucherNom);
-									itemHisto.put("rucherId", rucherId.toString());
-
+									itemHisto.put("rucherNom", rucher.getNom());
+									itemHisto.put("rucherId", rucher.getId().toString());
 									itemHisto.put("type", "Retrait");
 									itemHisto.put(DESTPROV, eve.getRucher().getNom());
 									itemHisto.put(Const.RUCHE, eve.getRuche().getNom());
@@ -393,7 +382,6 @@ public class RucherController {
 			if (group) {
 				// Si le groupement est demandé, on boucle sur histo
 				// pour créer histoGroup
-//				List<Map<String, String>> histoGroup = new ArrayList<>();
 				int lhisto = histo.size();
 				StringBuilder ruchesGroup;
 				Map<String, String> itemHistoN;
@@ -430,20 +418,18 @@ public class RucherController {
 					}
 					// le nombre de ruches ajoutées ou retirées est j - i
 					if (i == j - 1) {
-						itemHisto.put("nbMouv", "1");
+						itemHisto.put(NBMOUV, "1");
 						histoGroup.add(itemHisto);
 					} else {
 						// enregistrer groupe dans histoGroup
 						itemHistoG = new HashMap<>();
-						itemHistoG.put("nbMouv", String.valueOf(j - i));
+						itemHistoG.put(NBMOUV, String.valueOf(j - i));
 						// la date est la date du premier événement
 						// les autres peuvent avoir des heures et minutes
 						// différentes
-						itemHistoG.put("date", itemHisto.get("date"));
-
-						itemHistoG.put("rucherNom", rucherNom);
-						itemHistoG.put("rucherId", rucherId.toString());
-
+						itemHistoG.put("date", itemHisto.get("date"));		
+						itemHistoG.put("rucherNom", rucher.getNom());
+						itemHistoG.put("rucherId", rucher.getId().toString());
 						itemHistoG.put("type", itemHisto.get("type"));
 						itemHistoG.put(DESTPROV, String.join(" ", destP));
 						itemHistoG.put(Const.RUCHE, ruchesGroup.toString());
@@ -456,9 +442,7 @@ public class RucherController {
 					}
 					i = j;
 				}
-				// model.addAttribute("histo", histoGroup);
 			} else {
-				// model.addAttribute("histo", histo);
 				// ajouter dans histoxx les items d'histo
 				histoAll.addAll(histo);
 			}
@@ -467,28 +451,14 @@ public class RucherController {
 						"Historique : après traitement des événements en reculant dans le temps, le rucher n'est pas vide");
 			}
 		}
-
 		// On trie la liste à afficher par date et on l'ajoute au model
 		if (group) {
-			Collections.sort(histoGroup, new Comparator<Map<String, String>>() {
-				@Override
-				public int compare(Map<String, String> b, Map<String, String> a) {
-					return a.get("date").compareTo(b.get("date"));
-				}
-			});
-			model.addAttribute("histo", histoGroup);
+			Collections.sort(histoGroup, (b, a) -> a.get("date").compareTo(b.get("date")));
+			model.addAttribute(HISTO, histoGroup);
 		} else {
-
-			Collections.sort(histoAll, new Comparator<Map<String, String>>() {
-				@Override
-				public int compare(Map<String, String> b, Map<String, String> a) {
-					return a.get("date").compareTo(b.get("date"));
-				}
-			});
-
-			model.addAttribute("histo", histoAll);
+			Collections.sort(histoAll, (b, a) -> a.get("date").compareTo(b.get("date")));
+			model.addAttribute(HISTO, histoAll);
 		}
-
 		model.addAttribute("group", group);
 		return "rucher/ruchersHisto";
 	}
