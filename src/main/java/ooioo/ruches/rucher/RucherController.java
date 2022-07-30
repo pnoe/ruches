@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -117,13 +118,13 @@ public class RucherController {
 				ruches.add(nomR.getNom());
 			}
 			List<Transhumance> histo = new ArrayList<>();
-			Transhumance itemHisto;
 			for (int i = 0, levens = evensRucheAjout.size(); i < levens; i++) {
 				Evenement eve = evensRucheAjout.get(i);
 				if (eve.getRucher().getId().equals(rucherId)) {
 					// si l'événement est un ajout dans le rucher
 					// on retire après l'affichage la ruche de l'événement
 					// de la liste des ruches du rucher
+					// TODO les sort sont inutiles, les mettre dans thymeleaf ?
 					Collections.sort(ruches);
 					// On cherche l'événement précédent ajout de cette ruche
 					// pour indication de sa provenance
@@ -131,16 +132,16 @@ public class RucherController {
 					for (int j = i + 1; j < levens; j++) {
 						if ((evensRucheAjout.get(j).getRuche().getId().equals(eve.getRuche().getId()))
 								&& !(evensRucheAjout.get(j).getRuche().getId().equals(rucherId))) {
-							// si (evensRucheAjout.get(j).getRuche().getId().equals(rucherId))
+							// si evensRucheAjout.get(j).getRuche().getId().equals(rucherId)
 							// c'est une erreur, deux ajouts successifs dans le même rucher
 							evePrec = evensRucheAjout.get(j);
 							break;
 						}
 					}
-					itemHisto = new Transhumance(null, true, // type = true Ajout
-							eve.getDate(), evePrec == null ? "Inconnue" : evePrec.getRucher().getNom(), 1,
-							eve.getRuche().getNom(), ruches.size(), String.join(" ", ruches), eve.getId());
-					histo.add(itemHisto);
+					histo.add(new Transhumance(null, true, // type = true Ajout
+							eve.getDate(),
+							Collections.singleton(evePrec == null ? "Inconnue" : evePrec.getRucher().getNom()),
+							Arrays.asList(eve.getRuche().getNom()), new ArrayList<String>(ruches), eve.getId()));
 					if (!ruches.remove(eve.getRuche().getNom())) {
 						logger.error("Événement {} le rucher {} ne contient pas la ruche {}", eve.getDate(),
 								eve.getRucher().getNom(), eve.getRuche().getNom());
@@ -157,11 +158,12 @@ public class RucherController {
 								if (!ruches.contains(eve.getRuche().getNom())) {
 									// si l'événement précédent evePrec était un ajout dans le
 									// rucher, alors eve retire la ruche du rucher
+									// TODO les sort sont inutiles, les mettre dans thymeleaf ?
 									Collections.sort(ruches);
-									itemHisto = new Transhumance(null, false, // type = false Retrait
-											eve.getDate(), eve.getRucher().getNom(), 1, eve.getRuche().getNom(),
-											ruches.size(), String.join(" ", ruches), eve.getId());
-									histo.add(itemHisto);
+									histo.add(new Transhumance(null, false, // type = false Retrait
+											eve.getDate(), Collections.singleton(eve.getRucher().getNom()),
+											Arrays.asList(eve.getRuche().getNom()), new ArrayList<String>(ruches),
+											eve.getId()));
 									ruches.add(eve.getRuche().getNom());
 								}
 								break;
@@ -182,33 +184,29 @@ public class RucherController {
 				// pour créer histoGroup
 				List<Transhumance> histoGroup = new ArrayList<>();
 				int lhisto = histo.size();
-				StringBuilder ruchesGroup;
-				Transhumance itemHistoN;
-				Transhumance itemHistoG;
 				// pour stockage des provenances/destinations et suppression de doublons
 				Set<String> destP;
 				int i = 0;
 				int j;
 				while (i < lhisto) {
-					itemHisto = histo.get(i);
-					ruchesGroup = new StringBuilder(itemHisto.ruche());
+					Transhumance itemHisto = histo.get(i);
+					List<String> ruchesGroup = new ArrayList<String>(itemHisto.ruche());
 					destP = new HashSet<>();
-					destP.add(itemHisto.destProv());
+					destP.addAll(itemHisto.destProv());
 					// on recherche si les événements suivants peuvent être groupés
 					// même date et même type (Ajout/Retrait)
 					// par contre les destinations provenances peuvent être différentes
 					j = i + 1;
 					LocalDate itemHistoJour = itemHisto.date().toLocalDate();
 					while (j < lhisto) {
-						itemHistoN = histo.get(j);
+						Transhumance itemHistoN = histo.get(j);
 						if (itemHistoJour.equals(itemHistoN.date().toLocalDate())
 								&& (itemHisto.type() == itemHistoN.type())) {
 							// si regroupables
-							// regrouper en concaténant les ruches et en stocant les dest/prov
-							ruchesGroup.append(" ");
-							ruchesGroup.append(itemHistoN.ruche());
-							if (!destP.contains(itemHistoN.destProv())) {
-								destP.add(itemHistoN.destProv());
+							// regrouper en concaténant les ruches et en stockant les dest/prov
+							ruchesGroup.addAll(itemHistoN.ruche());
+							if (!destP.contains(itemHistoN.destProv().iterator().next())) {
+								destP.addAll(itemHistoN.destProv());
 							}
 							j += 1;
 						} else {
@@ -219,11 +217,8 @@ public class RucherController {
 					if (i == j - 1) {
 						histoGroup.add(itemHisto);
 					} else {
-						// enregistrer groupe dans histoGroup
-						itemHistoG = new Transhumance(null, itemHisto.type(), itemHisto.date(), String.join(" ", destP),
-								j - i, ruchesGroup.toString(), itemHisto.nbruches(), itemHisto.etat(),
-								itemHisto.eveid());
-						histoGroup.add(itemHistoG);
+						histoGroup.add(new Transhumance(null, itemHisto.type(), itemHisto.date(), destP,
+								new ArrayList<String>(ruchesGroup), itemHisto.etat(), itemHisto.eveid()));
 					}
 					i = j;
 				}
@@ -269,13 +264,13 @@ public class RucherController {
 				ruches.add(nomR.getNom());
 			}
 			List<Transhumance> histo = new ArrayList<>();
-			Transhumance itemHisto;
 			for (int i = 0, levens = evensRucheAjout.size(); i < levens; i++) {
 				Evenement eve = evensRucheAjout.get(i);
 				if (eve.getRucher().getId().equals(rucher.getId())) {
 					// si l'événement est un ajout dans le rucher
 					// on retire après l'affichage la ruche de l'événement
 					// de la liste des ruches du rucher
+					// TODO les sort sont inutiles, les mettre dans thymeleaf ?
 					Collections.sort(ruches);
 					// On cherche l'événement précédent ajout de cette ruche
 					// pour indication de sa provenance
@@ -289,10 +284,10 @@ public class RucherController {
 							break;
 						}
 					}
-					itemHisto = new Transhumance(rucher, true, // type = true Ajout
-							eve.getDate(), evePrec == null ? "Inconnue" : evePrec.getRucher().getNom(), 1,
-							eve.getRuche().getNom(), ruches.size(), String.join(" ", ruches), eve.getId());
-					histo.add(itemHisto);
+					histo.add(new Transhumance(rucher, true, // type = true Ajout
+							eve.getDate(),
+							Collections.singleton(evePrec == null ? "Inconnue" : evePrec.getRucher().getNom()),
+							Arrays.asList(eve.getRuche().getNom()), new ArrayList<String>(ruches), eve.getId()));
 					if (!ruches.remove(eve.getRuche().getNom())) {
 						logger.error("Événement {} le rucher {} ne contient pas la ruche {}", eve.getDate(),
 								eve.getRucher().getNom(), eve.getRuche().getNom());
@@ -309,11 +304,12 @@ public class RucherController {
 								if (!ruches.contains(eve.getRuche().getNom())) {
 									// si l'événement précédent evePrec était un ajout dans le
 									// rucher, alors eve retire la ruche du rucher
+									// TODO les sort sont inutiles, les mettre dans thymeleaf ?
 									Collections.sort(ruches);
-									itemHisto = new Transhumance(rucher, false, // type = false Retrait
-											eve.getDate(), eve.getRucher().getNom(), 1, eve.getRuche().getNom(),
-											ruches.size(), String.join(" ", ruches), eve.getId());
-									histo.add(itemHisto);
+									histo.add(new Transhumance(rucher, false, // type = false Retrait
+											eve.getDate(), Collections.singleton(eve.getRucher().getNom()),
+											Arrays.asList(eve.getRuche().getNom()), new ArrayList<String>(ruches),
+											eve.getId()));
 									ruches.add(eve.getRuche().getNom());
 								}
 								break;
@@ -333,33 +329,30 @@ public class RucherController {
 				// Si le groupement est demandé, on boucle sur histo
 				// pour créer histoGroup
 				int lhisto = histo.size();
-				StringBuilder ruchesGroup;
-				Transhumance itemHistoN;
-				Transhumance itemHistoG;
 				// pour stockage des provenances/destinations et suppression de doublons
 				Set<String> destP;
 				int i = 0;
 				int j;
 				while (i < lhisto) {
-					itemHisto = histo.get(i);
-					ruchesGroup = new StringBuilder(itemHisto.ruche());
+
+					Transhumance itemHisto = histo.get(i);
+					List<String> ruchesGroup = new ArrayList<String>(itemHisto.ruche());
 					destP = new HashSet<>();
-					destP.add(itemHisto.destProv());
+					destP.addAll(itemHisto.destProv());
 					// on recherche si les événements suivants peuvent être groupés
 					// même date et même type (Ajout/Retrait)
 					// par contre les destinations provenances peuvent être différentes
 					j = i + 1;
 					LocalDate itemHistoJour = itemHisto.date().toLocalDate();
 					while (j < lhisto) {
-						itemHistoN = histo.get(j);
+						Transhumance itemHistoN = histo.get(j);
 						if (itemHistoJour.equals(itemHistoN.date().toLocalDate())
-								&& itemHisto.type() == itemHistoN.type()) {
+								&& (itemHisto.type() == itemHistoN.type())) {
 							// si regroupables
-							// regrouper en concaténant les ruches et en stocant les dest/prov
-							ruchesGroup.append(" ");
-							ruchesGroup.append(itemHistoN.ruche());
-							if (!destP.contains(itemHistoN.destProv())) {
-								destP.add(itemHistoN.destProv());
+							// regrouper en concaténant les ruches et en stockant les dest/prov
+							ruchesGroup.addAll(itemHistoN.ruche());
+							if (!destP.contains(itemHistoN.destProv().iterator().next())) {
+								destP.addAll(itemHistoN.destProv());
 							}
 							j += 1;
 						} else {
@@ -376,10 +369,8 @@ public class RucherController {
 						// différentes
 						// l'id eve est l'id du premier événements, on perd les
 						// des autres événements
-						itemHistoG = new Transhumance(rucher, itemHisto.type(), itemHisto.date(),
-								String.join(" ", destP), j - i, ruchesGroup.toString(), itemHisto.nbruches(),
-								itemHisto.etat(), itemHisto.eveid());
-						histoGroup.add(itemHistoG);
+						histoGroup.add(new Transhumance(rucher, itemHisto.type(), itemHisto.date(), destP,
+								new ArrayList<String>(ruchesGroup), itemHisto.etat(), itemHisto.eveid()));
 					}
 					i = j;
 				}
