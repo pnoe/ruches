@@ -124,8 +124,6 @@ public class RucherController {
 					// si l'événement est un ajout dans le rucher
 					// on retire après l'affichage la ruche de l'événement
 					// de la liste des ruches du rucher
-					// TODO les sort sont inutiles, les mettre dans thymeleaf ?
-					Collections.sort(ruches);
 					// On cherche l'événement précédent ajout de cette ruche
 					// pour indication de sa provenance
 					Evenement evePrec = null;
@@ -158,8 +156,6 @@ public class RucherController {
 								if (!ruches.contains(eve.getRuche().getNom())) {
 									// si l'événement précédent evePrec était un ajout dans le
 									// rucher, alors eve retire la ruche du rucher
-									// TODO les sort sont inutiles, les mettre dans thymeleaf ?
-									Collections.sort(ruches);
 									histo.add(new Transhumance(null, false, // type = false Retrait
 											eve.getDate(), Collections.singleton(eve.getRucher().getNom()),
 											Arrays.asList(eve.getRuche().getNom()), new ArrayList<String>(ruches),
@@ -270,8 +266,6 @@ public class RucherController {
 					// si l'événement est un ajout dans le rucher
 					// on retire après l'affichage la ruche de l'événement
 					// de la liste des ruches du rucher
-					// TODO les sort sont inutiles, les mettre dans thymeleaf ?
-					Collections.sort(ruches);
 					// On cherche l'événement précédent ajout de cette ruche
 					// pour indication de sa provenance
 					Evenement evePrec = null;
@@ -304,8 +298,6 @@ public class RucherController {
 								if (!ruches.contains(eve.getRuche().getNom())) {
 									// si l'événement précédent evePrec était un ajout dans le
 									// rucher, alors eve retire la ruche du rucher
-									// TODO les sort sont inutiles, les mettre dans thymeleaf ?
-									Collections.sort(ruches);
 									histo.add(new Transhumance(rucher, false, // type = false Retrait
 											eve.getDate(), Collections.singleton(eve.getRucher().getNom()),
 											Arrays.asList(eve.getRuche().getNom()), new ArrayList<String>(ruches),

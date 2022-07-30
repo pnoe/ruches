@@ -54,9 +54,9 @@
 					<td th:text="${hist.type} ? #{Ajout} : #{Retrait}"></td>
 					<td th:text="${#strings.listJoin(hist.destProv,' ')}"></td>
 					<td th:if="${group}" th:text="${#lists.size(hist.ruche)}"></td>
-					<td th:text="${#strings.listJoin(hist.ruche,' ')}"></td>
+					<td th:text="${#strings.listJoin(#lists.sort(hist.ruche),' ')}"></td>
 					<td th:text="${#lists.size(hist.etat)}"></td>
-					<td th:text="${#strings.listJoin(hist.etat,' ')}"></td>
+					<td th:text="${#strings.listJoin(#lists.sort(hist.etat),' ')}"></td>
 				</tr>
 		</table>
 	</div>
