@@ -153,8 +153,8 @@ public class RucherService {
 			// Mettre les coord. de la ruche à celles du rucher
 			// dans un rayon égal à dispersion
 			LatLon latLon = dispersion(rucher.getLatitude(), rucher.getLongitude());
-			ruche.setLatitude(latLon.getLat());
-			ruche.setLongitude(latLon.getLon());
+			ruche.setLatitude(latLon.lat());
+			ruche.setLongitude(latLon.lon());
 			rucheRepository.save(ruche);
 			// Créer un événement ajout dans le rucher rucherId
 			Evenement eveAjout = new Evenement(dateEveAjout, TypeEvenement.RUCHEAJOUTRUCHER, ruche, ruche.getEssaim(),

@@ -481,8 +481,8 @@ public class RucherController {
 		// Récupération des coordonnées du dépôt
 		Rucher rucherDepot = rucherRepository.findByDepotIsTrue();
 		LatLon latLon = rucherService.dispersion(rucherDepot.getLatitude(), rucherDepot.getLongitude());
-		rucher.setLatitude(latLon.getLat());
-		rucher.setLongitude(latLon.getLon());
+		rucher.setLatitude(latLon.lat());
+		rucher.setLongitude(latLon.lon());
 		model.addAttribute(Const.RUCHER, rucher);
 		model.addAttribute(Const.PERSONNES, personneRepository.findAll());
 		return RUCHER_RUCHERFORM;
@@ -612,8 +612,8 @@ public class RucherController {
 			for (Ruche ruche : ruches) {
 				if (rucherService.distance(latRucher, ruche.getLatitude(), longRucher, ruche.getLongitude()) > 200.0d) {
 					LatLon latLon = rucherService.dispersion(ruche.getLatitude(), ruche.getLongitude());
-					ruche.setLatitude(latLon.getLat());
-					ruche.setLongitude(latLon.getLon());
+					ruche.setLatitude(latLon.lat());
+					ruche.setLongitude(latLon.lon());
 					rucheRepository.save(ruche);
 					logger.info("Ruche {} repositionnée", ruche.getNom());
 				}

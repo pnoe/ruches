@@ -32,8 +32,8 @@ public class TestRucheRepository {
 		ruche.setNom("007");
 		Rucher rucher = rucherRepository.findByDepotIsTrue();
 		LatLon latLon = rucherService.dispersion(rucher.getLatitude(), rucher.getLongitude());
-		ruche.setLatitude(latLon.getLat());
-		ruche.setLongitude(latLon.getLon());
+		ruche.setLatitude(latLon.lat());
+		ruche.setLongitude(latLon.lon());
 		ruche.setRucher(rucher);
 		rucheRepository.save(ruche);
 		

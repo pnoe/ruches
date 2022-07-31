@@ -238,8 +238,8 @@ public class RucheController {
 		ruche.setDateAcquisition(Utils.dateDecal(session));
 		Rucher rucher = rucherRepository.findByDepotIsTrue();
 		LatLon latLon = rucherService.dispersion(rucher.getLatitude(), rucher.getLongitude());
-		ruche.setLatitude(latLon.getLat());
-		ruche.setLongitude(latLon.getLon());
+		ruche.setLatitude(latLon.lat());
+		ruche.setLongitude(latLon.lon());
 		model.addAttribute(Const.RUCHE, ruche);
 		model.addAttribute(Const.RUCHETYPES, rucheTypeRepository.findAll());
 		return RUCHE_RUCHEFORM;
