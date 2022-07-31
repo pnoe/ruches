@@ -34,7 +34,6 @@ import ooioo.ruches.hausse.Hausse;
 import ooioo.ruches.hausse.HausseRepository;
 import ooioo.ruches.ruche.Ruche;
 import ooioo.ruches.ruche.RucheRepository;
-import ooioo.ruches.ruche.RucheService;
 import ooioo.ruches.rucher.Rucher;
 
 @Controller
@@ -51,8 +50,6 @@ public class EvenementRucheController {
 	private HausseRepository hausseRepository;
 	@Autowired
 	MessageSource messageSource;
-	@Autowired
-	private RucheService rucheService;
 	@Autowired
 	private EssaimService essaimService;
 	/*

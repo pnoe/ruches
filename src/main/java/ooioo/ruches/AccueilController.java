@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,6 +24,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestTemplate;
 
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.essaim.EssaimRepository;
@@ -82,12 +86,68 @@ public class AccueilController {
 		return Const.INDEX;
 	}
 
+	/**
+	 * Calcul des distances entre les ruchers
+	 * Pour éventuel intégration dans un calcul de distances parcourues
+	 * pour les transhumances ou affichage brut du tableau 
+	 */
+	@GetMapping(path = "/dist")
+	public String dist(Model model) {
+		// https://geoservices.ign.fr/documentation/services/api-et-services-ogc/itineraires/documentation-du-service-du-calcul
+		// https://wxs.ign.fr/geoportail/itineraire/rest/1.0.0/getCapabilities
+		// avec resource = OSRM erreur
+		String urlIgn = "https://wxs.ign.fr/calcul/geoportail/itineraire/rest/1.0.0/route?resource=bdtopo-pgr&getSteps=false&start=";
+		List<Rucher> ruchers = rucherRepository.findByActif(true);
+		int size = ((Collection<?>) ruchers).size(); 
+		System.out.print("size " + size);
+		Float[][] dists = new Float[size][size];
+		RestTemplate restTemplate = new RestTemplate();
+		int i1 = 0;
+		int i2 = 0;
+		for (Rucher r1 : ruchers) {
+			i2 = 0;
+			for (Rucher r2 : ruchers) {
+				if (i1 == i2) {
+					dists[i1][i2] = 0f;
+				} else if (i1 < i2) {
+					StringBuilder uri = new StringBuilder(urlIgn);
+					uri.append(r1.getLongitude()).append(",").append(r1.getLatitude()).append("&end=")
+							.append(r2.getLongitude()).append(",").append(r2.getLatitude());
+					try {
+						Itineraire result = restTemplate.getForObject(uri.toString(), Itineraire.class);
+						dists[i1][i2] = result.getDistance();
+					} catch (HttpClientErrorException e) {
+						// erreur 4xx
+						dists[i1][i2] = 0f;
+						logger.error(e.getMessage());
+					} catch (HttpServerErrorException e) {
+						// erreur 5xx
+						dists[i1][i2] = 0f;
+						logger.error(e.getMessage());
+					}
+					dists[i2][i1] = dists[i1][i2];
+					System.out.println(r1.getNom() + " " + r2.getNom() + " " + dists[i1][i2]);
+				}
+				i2++;
+			}
+			i1++;
+		}
+		for (i1 = 0; i1 < size; i1++) {
+			for (i2 = 0; i2 < size; i2++) {
+				System.out.printf("%15.6f", dists[i1][i2]);
+			}
+			System.out.print("\n");
+		}
+		return Const.INDEX;
+	}
+
 	@GetMapping(path = "/infos")
 	public String infos(Model model) {
 		model.addAttribute("rayonsButinage", rayonsButinage);
 		long nbRuches = rucheRepository.countByActiveTrue();
 		long nbRuchesAvecEssaim = rucheRepository.countByEssaimNotNullAndActiveTrue();
-		long nbHaussesSurRuchesAvecEssaim = hausseRepository.countByActiveTrueAndRucheNotNullAndRucheActiveTrueAndRucheEssaimNotNull();
+		long nbHaussesSurRuchesAvecEssaim = hausseRepository
+				.countByActiveTrueAndRucheNotNullAndRucheActiveTrueAndRucheEssaimNotNull();
 		long nbHausses = hausseRepository.countByActiveTrue();
 		long nbHaussesHorsRuche = hausseRepository.countByActiveTrueAndRucheNull();
 		long nbRuchesAuDepot = rucheRepository.countByActiveTrueAndRucherDepotTrue();
@@ -110,7 +170,7 @@ public class AccueilController {
 			dateFin = 0;
 		} else {
 			dateFin = java.lang.Math.max(dernierEssaim.getDateAcquisition().getYear(),
-				derniereRecolte.getDate().getYear());
+					derniereRecolte.getDate().getYear());
 		}
 		List<Integer> nbEssaims = new ArrayList<>();
 		List<Integer> nbCreationEssaims = new ArrayList<>();
@@ -125,13 +185,13 @@ public class AccueilController {
 		List<Integer> nbTraitementsEssaims = new ArrayList<>();
 
 		Double pdsMielTotal = 0d;
-		for(int i = dateDebut; i <= dateFin; i++) {
+		for (int i = dateDebut; i <= dateFin; i++) {
 			Double date = Double.valueOf(i);
 			annees.add(date);
 			Optional<Double> poidsOpt = recolteRepository.findPoidsMielByYear(date);
 			Double poids = poidsOpt.isPresent() ? poidsOpt.get() : 0.0;
-			pdsMiel.add(poids == null?0:poids);
-			pdsMielTotal += (poids == null?0:poids);
+			pdsMiel.add(poids == null ? 0 : poids);
+			pdsMielTotal += (poids == null ? 0 : poids);
 			Integer nbCree = essaimRepository.countEssaimsCreesDate(date);
 			nbCreationEssaimsTotal += nbCree;
 			nbCreationEssaims.add(nbCree);
@@ -140,7 +200,9 @@ public class AccueilController {
 			nbDispersionEssaims.add(nbDisperse);
 			nbEssaims.add(nbCree - nbDisperse);
 			Double sucreAnneeEssaims = evenementRepository.sucreEssaimParAnnee(date);
-			if (sucreAnneeEssaims == null) { sucreAnneeEssaims = 0.0; }
+			if (sucreAnneeEssaims == null) {
+				sucreAnneeEssaims = 0.0;
+			}
 			sucreEssaimsTotal += sucreAnneeEssaims;
 			sucreEssaims.add(sucreAnneeEssaims);
 
@@ -154,7 +216,7 @@ public class AccueilController {
 		nbTraitementsEssaims.add(nbTraitementsEssaimsTotal);
 		sucreEssaims.add(sucreEssaimsTotal);
 		nbDispersionEssaims.add(nbDispersionEssaimsTotal);
-		for(int j = 1; j < nbEssaims.size(); j++) {
+		for (int j = 1; j < nbEssaims.size(); j++) {
 			nbEssaims.set(j, nbEssaims.get(j) + nbEssaims.get(j - 1));
 		}
 		model.addAttribute("nbTraitementsEssaims", nbTraitementsEssaims);
@@ -183,7 +245,8 @@ public class AccueilController {
 			Float latRucher = rucher.getLatitude();
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucher.getId());
 			for (Ruche ruche : ruches) {
-				if (rucherService.distance(latRucher, ruche.getLatitude(), longRucher, ruche.getLongitude()) > distRuchesTropLoins) {
+				if (rucherService.distance(latRucher, ruche.getLatitude(), longRucher,
+						ruche.getLongitude()) > distRuchesTropLoins) {
 					ruchesTropLoins.add(ruche);
 				}
 			}
@@ -192,7 +255,7 @@ public class AccueilController {
 		model.addAttribute("distRuchesTropLoins", distRuchesTropLoins);
 		// rucher trop éloignés du barycentre de ses ruches
 		List<Rucher> ruchersMalCales = new ArrayList<>();
-		List<Double> distances =  new ArrayList<>();
+		List<Double> distances = new ArrayList<>();
 		for (Rucher rucher : ruchers) {
 			Float longitude;
 			Float latitude = 0f;
@@ -207,7 +270,8 @@ public class AccueilController {
 				ylon += Math.sin(longrad);
 				latitude += ruche.getLatitude();
 			}
-			if (nbRuches2 == 0) continue;
+			if (nbRuches2 == 0)
+				continue;
 			longitude = (float) (Math.atan2(ylon, xlon) * 180d / Math.PI);
 			latitude /= nbRuches2;
 			double dist = rucherService.distance(latitude, rucher.getLatitude(), longitude, rucher.getLongitude());
@@ -224,7 +288,6 @@ public class AccueilController {
 		Iterable<Ruche> ruchesPasDEvenement = rucheRepository.findPasDEvenementAvant(date);
 		model.addAttribute("ruchesPasDEvenement", ruchesPasDEvenement);
 		model.addAttribute("retardRucheEvenement", retardRucheEvenement);
-
 
 		Iterable<Essaim> essaimDateNaissSupAcquis = essaimRepository.findEssaimDateNaissSupAcquis();
 		model.addAttribute("essaimDateNaissSupAcquis", essaimDateNaissSupAcquis);
@@ -244,8 +307,8 @@ public class AccueilController {
 	}
 
 	/**
-	 * Appel du formulaire de saisie des préférences
-	 *  Affichages inactifs et décalage de date
+	 * Appel du formulaire de saisie des préférences Affichages inactifs et décalage
+	 * de date
 	 */
 	@GetMapping("/parametres")
 	public String parametres() {
@@ -257,17 +320,17 @@ public class AccueilController {
 	 */
 	@PostMapping("/sauveParametres")
 	public String sauveParametres(HttpSession session, @RequestParam(defaultValue = "false") boolean voirInactif,
-			@RequestParam(defaultValue = "false") boolean voirLatLon,
-			@RequestParam String date) {
-		session.setAttribute(Const.VOIRINACTIF,voirInactif);
-		session.setAttribute(Const.VOIRLATLON,voirLatLon);
+			@RequestParam(defaultValue = "false") boolean voirLatLon, @RequestParam String date) {
+		session.setAttribute(Const.VOIRINACTIF, voirInactif);
+		session.setAttribute(Const.VOIRLATLON, voirLatLon);
 		if (date.equals("")) {
 			session.removeAttribute(Const.DECALAGETEMPS);
 		} else {
-			LocalDateTime dateSaisieDecalage = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
+			LocalDateTime dateSaisieDecalage = LocalDateTime.parse(date,
+					DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 			Duration decalage = Duration.between(LocalDateTime.now(), dateSaisieDecalage);
 			session.setAttribute(Const.DECALAGETEMPS, decalage);
-			}
+		}
 		return "redirect:/";
 	}
 
@@ -280,8 +343,8 @@ public class AccueilController {
 	public String resetPassword(@RequestParam String email, HttpServletRequest request, Model model) {
 		final long tokenValidite = 60;
 		if ("".contentEquals(email)) {
-			//  email à valider coté client
-			//  evite erreur si "" findByEmail retourne plusieurs personnes
+			// email à valider coté client
+			// evite erreur si "" findByEmail retourne plusieurs personnes
 			logger.error("Réinitialisation du mot de passe, email incorrect {}", email);
 			model.addAttribute(Const.MESSAGE, "Email incorrect");
 			return Const.INDEX;
@@ -296,12 +359,12 @@ public class AccueilController {
 		} else {
 			String token = UUID.randomUUID().toString();
 			personne.setToken(token);
-	        personne.setTokenExpiration(LocalDateTime.now().plusMinutes(tokenValidite));
+			personne.setTokenExpiration(LocalDateTime.now().plusMinutes(tokenValidite));
 			personneRepository.save(personne);
 			StringBuffer appUrl = request.getRequestURL();
 			emailService.sendSimpleMessage(email, "Réinitialisation du mot de passe",
-					"Pour réinitialiser votre mot de passe, cliquez sur le lien ci-dessous:\n" +
-			         appUrl + "?token=" + token);
+					"Pour réinitialiser votre mot de passe, cliquez sur le lien ci-dessous:\n" + appUrl + "?token="
+							+ token);
 		}
 		model.addAttribute(Const.MESSAGE, "Un email a été envoyé à cette adresse");
 		return Const.INDEX;
@@ -310,8 +373,8 @@ public class AccueilController {
 	@GetMapping("/resetPassword")
 	public String resetPasswordGet(@RequestParam String token, HttpServletRequest request, Model model) {
 		Personne personne = personneRepository.findByToken(token);
-		if ((personne == null) || ("".contentEquals(personne.getLogin())) ||
-				personne.getTokenexpiration().isBefore(LocalDateTime.now())) {
+		if ((personne == null) || ("".contentEquals(personne.getLogin()))
+				|| personne.getTokenexpiration().isBefore(LocalDateTime.now())) {
 			logger.error("Réinitialisation du mot de passe, token {} invalide", token);
 			model.addAttribute(Const.MESSAGE, "Token invalide");
 			return Const.INDEX;
@@ -321,10 +384,11 @@ public class AccueilController {
 	}
 
 	@PostMapping("/resetPasswordFin")
-	public String resetPasswordFin(@RequestParam String token, @RequestParam String password, HttpServletRequest request, Model model) {
+	public String resetPasswordFin(@RequestParam String token, @RequestParam String password,
+			HttpServletRequest request, Model model) {
 		Personne personne = personneRepository.findByToken(token);
-		if ((personne == null) || ("".contentEquals(personne.getLogin())) ||
-				personne.getTokenexpiration().isBefore(LocalDateTime.now())) {
+		if ((personne == null) || ("".contentEquals(personne.getLogin()))
+				|| personne.getTokenexpiration().isBefore(LocalDateTime.now())) {
 			logger.error("Réinitialisation du mot de passe, token {} invalide", token);
 			model.addAttribute(Const.MESSAGE, "Token invalide");
 			return Const.INDEX;

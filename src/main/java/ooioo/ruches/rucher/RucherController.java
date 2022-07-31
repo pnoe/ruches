@@ -198,7 +198,7 @@ public class RucherController {
 						Transhumance itemHistoN = histo.get(j);
 						if (itemHistoJour.equals(itemHistoN.date().toLocalDate())
 								&& (itemHisto.type() == itemHistoN.type())) {
-							// si regroupables
+							// si regroupables : même type et même Date (année, mois et jour)
 							// regrouper en concaténant les ruches et en stockant les dest/prov
 							ruchesGroup.addAll(itemHistoN.ruche());
 							if (!destP.contains(itemHistoN.destProv().iterator().next())) {
@@ -326,7 +326,6 @@ public class RucherController {
 				int i = 0;
 				int j;
 				while (i < lhisto) {
-
 					Transhumance itemHisto = histo.get(i);
 					List<String> ruchesGroup = new ArrayList<String>(itemHisto.ruche());
 					destP = new HashSet<>();
