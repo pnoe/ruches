@@ -80,7 +80,7 @@ public class RucherService {
 			for (int j = 0; j < i; j++) {
 				RucheParcours ii = chemin.get(i);
 				RucheParcours jj = chemin.get(j);
-				dist = distance(ii.getLatitude(), jj.getLatitude(), ii.getLongitude(), jj.getLongitude());
+				dist = distance(ii.latitude(), jj.latitude(), ii.longitude(), jj.longitude());
 				DataModel.distanceMatrix[i][j] = (int) (dist * 1000.0);
 				DataModel.distanceMatrix[j][i] = DataModel.distanceMatrix[i][j];
 			}

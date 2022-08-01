@@ -146,7 +146,7 @@ public class RucheService {
 			// ajoute l'index de la ruche dans chemin dans ordreRuche
 			int ordre = 0;
 			for (RucheParcours rucheParcours : chemin) {
-				if (rucheParcours.getId().equals(ruche.getId())) {
+				if (rucheParcours.id().equals(ruche.getId())) {
 					break;
 				}
 				ordre += 1;
