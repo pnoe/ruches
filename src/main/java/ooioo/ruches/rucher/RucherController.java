@@ -115,7 +115,7 @@ public class RucherController {
 			Collection<Nom> nomRuchesX = rucheRepository.findNomsByRucherId(rucherId);
 			List<String> ruches = new ArrayList<>();
 			for (Nom nomR : nomRuchesX) {
-				ruches.add(nomR.getNom());
+				ruches.add(nomR.nom());
 			}
 			List<Transhumance> histo = new ArrayList<>();
 			for (int i = 0, levens = evensRucheAjout.size(); i < levens; i++) {
@@ -257,7 +257,7 @@ public class RucherController {
 			Collection<Nom> nomRuchesX = rucheRepository.findNomsByRucherId(rucher.getId());
 			List<String> ruches = new ArrayList<>();
 			for (Nom nomR : nomRuchesX) {
-				ruches.add(nomR.getNom());
+				ruches.add(nomR.nom());
 			}
 			List<Transhumance> histo = new ArrayList<>();
 			for (int i = 0, levens = evensRucheAjout.size(); i < levens; i++) {
@@ -474,7 +474,7 @@ public class RucherController {
 	public String cree(Model model) {
 		List<String> noms = new ArrayList<>();
 		for (Nom rucherNom : rucherRepository.findAllProjectedBy()) {
-			noms.add(rucherNom.getNom());
+			noms.add(rucherNom.nom());
 		}
 		model.addAttribute(Const.RUCHERNOMS, noms);
 		Rucher rucher = new Rucher();
@@ -496,7 +496,7 @@ public class RucherController {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
-			model.addAttribute(Const.RUCHERNOMS, rucherRepository.findAllProjectedBy().stream().map(Nom::getNom)
+			model.addAttribute(Const.RUCHERNOMS, rucherRepository.findAllProjectedBy().stream().map(Nom::nom)
 					.filter(nom -> !nom.equals(rucher.getNom())).toList());
 			model.addAttribute(Const.RUCHER, rucher);
 			model.addAttribute(Const.PERSONNES, personneRepository.findAll());
@@ -714,7 +714,7 @@ public class RucherController {
 			double xlon = 0d;
 			double ylon = 0d;
 			for (Ruche ruche : ruches) {
-				nomHausses.add(hausseRepository.findByRucheId(ruche.getId()).stream().map(Nom::getNom)
+				nomHausses.add(hausseRepository.findByRucheId(ruche.getId()).stream().map(Nom::nom)
 						.reduce("", (a, b) -> a + " " + b).trim());
 				nbRuches++;
 				Float longrad = (float) (ruche.getLongitude() * Math.PI / 180.0d);
@@ -758,7 +758,7 @@ public class RucherController {
 		}
 		List<String> nomRuches = new ArrayList<>();
 		for (Rucher rucher : ruchers) {
-			nomRuches.add(rucheRepository.findByRucherId(rucher.getId()).stream().map(Nom::getNom)
+			nomRuches.add(rucheRepository.findByRucherId(rucher.getId()).stream().map(Nom::nom)
 					.reduce("", (a, b) -> a + " " + b).trim());
 		}
 		model.addAttribute(Const.RUCHENOMS, nomRuches);

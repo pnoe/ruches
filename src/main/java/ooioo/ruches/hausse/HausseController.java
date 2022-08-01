@@ -66,7 +66,7 @@ public class HausseController {
 			Hausse hausse = hausseOpt.get();
 			List<String> noms = new ArrayList<>();
 			for (Nom hausseNom : hausseRepository.findAllProjectedBy()) {
-				noms.add(hausseNom.getNom());
+				noms.add(hausseNom.nom());
 			}
 			String[] nomhaussesarray = nomclones.split(",");
 			List<String> nomsCrees = new ArrayList<>();
@@ -115,7 +115,7 @@ public class HausseController {
 	public String cree(HttpSession session, Model model) {
 		List<String> noms = new ArrayList<>();
 		for (Nom hausseNom : hausseRepository.findAllProjectedBy()) {
-			noms.add(hausseNom.getNom());
+			noms.add(hausseNom.nom());
 		}
 		model.addAttribute(Const.HAUSSENOMS, noms);
 		Hausse hausse = new Hausse();
@@ -132,7 +132,7 @@ public class HausseController {
 		Optional<Hausse> hausseOpt = hausseRepository.findById(hausseId);
 		if (hausseOpt.isPresent()) {
 			Hausse hausse = hausseOpt.get();
-			model.addAttribute(Const.HAUSSENOMS, hausseRepository.findAllProjectedBy().stream().map(Nom::getNom)
+			model.addAttribute(Const.HAUSSENOMS, hausseRepository.findAllProjectedBy().stream().map(Nom::nom)
 					.filter(nom -> !nom.equals(hausse.getNom())).toList());
 			model.addAttribute(Const.HAUSSE, hausseOpt.get());
 		} else {
@@ -203,7 +203,7 @@ public class HausseController {
 			model.addAttribute(Const.HAUSSE, hausse);
 			List<String> noms = new ArrayList<>();
 			for (Nom hausseNom : hausseRepository.findAllProjectedBy()) {
-				noms.add(hausseNom.getNom());
+				noms.add(hausseNom.nom());
 			}
 			model.addAttribute("haussenoms", noms);
 			// Si des hausses de récolte référencent cette hause, on ne pourra la supprimer

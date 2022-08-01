@@ -309,7 +309,7 @@ public class EssaimController {
 			// if (ruche = null) ?
 			List<String> noms = new ArrayList<>();
 			for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
-				noms.add(essaimNom.getNom());
+				noms.add(essaimNom.nom());
 			}
 			model.addAttribute(Const.ESSAIMNOMS, noms);
 			model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
@@ -345,7 +345,7 @@ public class EssaimController {
 		// On vérifie aussi côté serveur que le nom est libre
 		List<String> noms = new ArrayList<>();
 		for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
-			noms.add(essaimNom.getNom());
+			noms.add(essaimNom.nom());
 		}
 		if (noms.contains(nom)) {
 			model.addAttribute(Const.MESSAGE,
@@ -404,7 +404,7 @@ public class EssaimController {
 			Essaim essaim = essaimOpt.get();
 			List<String> noms = new ArrayList<>();
 			for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
-				noms.add(essaimNom.getNom());
+				noms.add(essaimNom.nom());
 			}
 			String[] nomarray = nomclones.split(",");
 			String[] nomruchesarray = nomruches.split(",");
@@ -508,7 +508,7 @@ public class EssaimController {
 		// de cette liste
 		List<String> noms = new ArrayList<>();
 		for (IdNom idNom : idNoms) {
-			noms.add(idNom.getNom());
+			noms.add(idNom.nom());
 		}
 		model.addAttribute(Const.ESSAIMNOMS, noms);
 		Essaim essaim = new Essaim();
@@ -531,7 +531,7 @@ public class EssaimController {
 			// on retire le nom de l'essaim à modifier de cette liste
 			List<String> noms = new ArrayList<>();
 			for (IdNom idNom : essaimIdNom) {
-				noms.add(idNom.getNom());
+				noms.add(idNom.nom());
 			}
 			noms.remove(essaim.getNom());
 			model.addAttribute(Const.ESSAIMNOMS, noms);
@@ -541,8 +541,8 @@ public class EssaimController {
 			List<IdNom> essaimIdNomClean = new ArrayList<>();
 			for (IdNom essaimIdNomItem : essaimIdNom) {
 				boolean soucheok = true;
-				if (essaimIdNomItem.getId() != essaimId) {
-					Optional<Essaim> soucheOpt = essaimRepository.findById(essaimIdNomItem.getId());
+				if (essaimIdNomItem.id() != essaimId) {
+					Optional<Essaim> soucheOpt = essaimRepository.findById(essaimIdNomItem.id());
 					if (soucheOpt.isPresent()) {
 						Essaim essaimSouche = soucheOpt.get();
 						while (essaimSouche.getSouche() != null) {
@@ -643,12 +643,12 @@ public class EssaimController {
 			model.addAttribute("rucheEssaim", ruche);
 			List<String> noms = new ArrayList<>();
 			for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
-				noms.add(essaimNom.getNom());
+				noms.add(essaimNom.nom());
 			}
 			model.addAttribute("essaimnoms", noms);
 			List<String> ruchesvidesnoms = new ArrayList<>();
 			for (Nom rucheNom : rucheRepository.findAllByEssaimNull()) {
-				ruchesvidesnoms.add(rucheNom.getNom());
+				ruchesvidesnoms.add(rucheNom.nom());
 			}
 			model.addAttribute("ruchesvidesnoms", ruchesvidesnoms);
 			model.addAttribute("eveRuche", evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim,

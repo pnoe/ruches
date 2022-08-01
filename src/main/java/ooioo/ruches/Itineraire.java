@@ -2,6 +2,10 @@ package ooioo.ruches;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+
+/*
+ * Pour calculs de distances entre les ruchers
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Itineraire {
 	private Float distance;

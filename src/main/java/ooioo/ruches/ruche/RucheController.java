@@ -141,7 +141,7 @@ public class RucheController {
 			Ruche ruche = rucheOpt.get();
 			List<String> noms = new ArrayList<>();
 			for (Nom rucheNom : rucheRepository.findAllProjectedBy()) {
-				noms.add(rucheNom.getNom());
+				noms.add(rucheNom.nom());
 			}
 			Float longitude = ruche.getLongitude();
 			String[] nomarray = nomclones.split(",");
@@ -230,7 +230,7 @@ public class RucheController {
 	public String cree(HttpSession session, Model model) {
 		List<String> noms = new ArrayList<>();
 		for (Nom rucheNom : rucheRepository.findAllProjectedBy()) {
-			noms.add(rucheNom.getNom());
+			noms.add(rucheNom.nom());
 		}
 		model.addAttribute(Const.RUCHENOMS, noms);
 		// récupération des coordonnées du dépôt
@@ -307,7 +307,7 @@ public class RucheController {
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 		if (rucheOpt.isPresent()) {
 			Ruche ruche = rucheOpt.get();
-			model.addAttribute(Const.RUCHENOMS, rucheRepository.findAllProjectedBy().stream().map(Nom::getNom)
+			model.addAttribute(Const.RUCHENOMS, rucheRepository.findAllProjectedBy().stream().map(Nom::nom)
 					.filter(nom -> !nom.equals(ruche.getNom())).toList());
 			model.addAttribute(Const.RUCHE, ruche);
 			Iterable<RucheType> rucheTypes = rucheTypeRepository.findAll();
@@ -396,7 +396,7 @@ public class RucheController {
 			model.addAttribute(Const.RUCHE, ruche);
 			List<String> noms = new ArrayList<>();
 			for (Nom rucheNom : rucheRepository.findAllProjectedBy()) {
-				noms.add(rucheNom.getNom());
+				noms.add(rucheNom.nom());
 			}
 			model.addAttribute("ruchenoms", noms);
 			Iterable<Hausse> haussesRuche = hausseRepository.findByRucheIdOrderByOrdreSurRuche(rucheId);

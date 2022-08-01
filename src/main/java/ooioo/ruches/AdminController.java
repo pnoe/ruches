@@ -104,7 +104,7 @@ public class AdminController {
 			Collection<Nom> nomRuchesX = rucheRepository.findNomsByRucherId(rucherId);
  			List<String> ruches = new ArrayList<>();
  			for (Nom nomR : nomRuchesX) {
- 				ruches.add(nomR.getNom());
+ 				ruches.add(nomR.nom());
  			}
 			for (int i = 0; i < levens; i++) {
 				Evenement eve = evensListe.get(i);
