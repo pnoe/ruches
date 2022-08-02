@@ -210,6 +210,7 @@ public class EssaimController {
 
 	/**
 	 * Statistiques tableau poids de miel par essaim
+	 *  Appel à partir de la liste des essaims
 	 *
 	 * @param rucherId       optionnel pour ne prendre en compte que les hausses de
 	 *                       récolte dans ce rucher

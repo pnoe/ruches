@@ -2,30 +2,11 @@ package ooioo.ruches;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
 /*
  * Pour calculs de distances entre les ruchers
+ *    https://geoservices.ign.fr/documentation/services/api-et-services-ogc/itineraires/documentation-du-service-du-calcul
+ *    distance en m et durée en minutes
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Itineraire {
-	private Float distance;
-	private Float duration;
-	public Float getDistance() {
-		return distance;
-	}
-	public void setDistance(Float distance) {
-		this.distance = distance;
-	}
-	public Float getDuration() {
-		return duration;
-	}
-	public void setDuration(Float duration) {
-		this.duration = duration;
-	}
-	@Override
-	public String toString() {
-		return "Itineraire [distance=" + distance + ", duration=" + duration + "]";
-	}
-	
-	
+public record Itineraire(float distance, float duration) {
 }

@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,6 +38,8 @@ import ooioo.ruches.recolte.Recolte;
 import ooioo.ruches.recolte.RecolteRepository;
 import ooioo.ruches.ruche.Ruche;
 import ooioo.ruches.ruche.RucheRepository;
+import ooioo.ruches.rucher.DistRucher;
+import ooioo.ruches.rucher.DistRucherRepository;
 import ooioo.ruches.rucher.Rucher;
 import ooioo.ruches.rucher.RucherRepository;
 import ooioo.ruches.rucher.RucherService;
@@ -68,6 +69,8 @@ public class AccueilController {
 	private RucherService rucherService;
 	@Autowired
 	private PersonneRepository personneRepository;
+	@Autowired
+	private DistRucherRepository drRepo;
 
 	@Value("${dist.ruches.loins}")
 	private double distRuchesTropLoins;
@@ -87,56 +90,54 @@ public class AccueilController {
 	}
 
 	/**
-	 * Calcul des distances entre les ruchers
+	 * Calcul des distances entre les ruchers par appel de l'api ign de calcul d'itinéraire.
+	 * Ne calcule qu'un sens et non une valeur pour l'aller et une autre pour le retour.
+	 * Le sens calculé est départ du rucher de plus petit Id.
+	 * Ne stocke pas la distance d'un ruche à lui même.
+	 * En cas d'erreur renvoyée par l'api ign met 0 comme distance et temps de parcours.
 	 * Pour éventuel intégration dans un calcul de distances parcourues
 	 * pour les transhumances ou affichage brut du tableau 
+	 * Si appel /dist?reset=true toutes les distances sont recalculées,
+	 *   si /dist seules les distances non enregistées sont recalculées
 	 */
 	@GetMapping(path = "/dist")
-	public String dist(Model model) {
+	public String dist(Model model, @RequestParam(required = false) boolean reset) {
 		// https://geoservices.ign.fr/documentation/services/api-et-services-ogc/itineraires/documentation-du-service-du-calcul
 		// https://wxs.ign.fr/geoportail/itineraire/rest/1.0.0/getCapabilities
 		// avec resource = OSRM erreur
 		String urlIgn = "https://wxs.ign.fr/calcul/geoportail/itineraire/rest/1.0.0/route?resource=bdtopo-pgr&getSteps=false&start=";
-		List<Rucher> ruchers = rucherRepository.findByActif(true);
-		int size = ((Collection<?>) ruchers).size(); 
-		System.out.print("size " + size);
-		Float[][] dists = new Float[size][size];
+		Iterable<Rucher> ruchers = rucherRepository.findAll();
 		RestTemplate restTemplate = new RestTemplate();
-		int i1 = 0;
-		int i2 = 0;
 		for (Rucher r1 : ruchers) {
-			i2 = 0;
 			for (Rucher r2 : ruchers) {
-				if (i1 == i2) {
-					dists[i1][i2] = 0f;
-				} else if (i1 < i2) {
+				if (r1.getId().equals(r2.getId())) {
+					// même ruchers
+					continue;
+				}
+				if (!reset && (drRepo.findByRucherStartAndRucherEnd(r1, r2) != null)) {
+					// pas de reset demandé et la distance a déjà été calculée
+					continue;
+				}
+				DistRucher dr = new DistRucher(r1, r2, 0, 0);
+				if (r1.getId().intValue() < r2.getId().intValue()) {
 					StringBuilder uri = new StringBuilder(urlIgn);
 					uri.append(r1.getLongitude()).append(",").append(r1.getLatitude()).append("&end=")
 							.append(r2.getLongitude()).append(",").append(r2.getLatitude());
 					try {
 						Itineraire result = restTemplate.getForObject(uri.toString(), Itineraire.class);
-						dists[i1][i2] = result.getDistance();
+						dr.setDist(Math.round(result.distance()));
+						dr.setTemps(Math.round(result.duration()));
 					} catch (HttpClientErrorException e) {
 						// erreur 4xx
-						dists[i1][i2] = 0f;
 						logger.error(e.getMessage());
 					} catch (HttpServerErrorException e) {
 						// erreur 5xx
-						dists[i1][i2] = 0f;
 						logger.error(e.getMessage());
 					}
-					dists[i2][i1] = dists[i1][i2];
-					System.out.println(r1.getNom() + " " + r2.getNom() + " " + dists[i1][i2]);
+					drRepo.save(dr);
+					logger.info("{} => {}, distance {}m et temps {}min, enregistrés", r1.getNom(), r2.getNom(), dr.getDist(), dr.getTemps());
 				}
-				i2++;
 			}
-			i1++;
-		}
-		for (i1 = 0; i1 < size; i1++) {
-			for (i2 = 0; i2 < size; i2++) {
-				System.out.printf("%15.6f", dists[i1][i2]);
-			}
-			System.out.print("\n");
 		}
 		return Const.INDEX;
 	}
