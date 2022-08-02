@@ -95,6 +95,10 @@
 					<th style="background-color:LemonChiffon" th:text="#{latitude}"></th>
 					<th style="background-color:LemonChiffon" th:text="#{longitude}"></th>
 					<th style="background-color:LemonChiffon" th:text="#{altitude}"></th>
+					<th:block th:if="!${rucher.depot} and (${dist} != null)">
+						<th style="background-color:PaleGoldenRod">Distance</th>
+						<th style="background-color:PaleGoldenRod">Temps</th>
+					</th:block>
 					<th th:text="#{ressource}"></th>
 					<th th:text="#{commentaire}"></th>
 				</tr>
@@ -109,6 +113,10 @@
 					  th:text="${#numbers.formatDecimal(rucher.latitude,1,4)}"></a></td>
 					<td class="num" th:text="${#numbers.formatDecimal(rucher.longitude,1,4)}"></td>
 					<td class="num" th:text="${rucher.altitude}"></td>
+					<th:block th:if="!${rucher.depot} and (${dist} != null)">
+						<td th:text="${dist}"></td>
+						<td th:text="${temps}"></td>
+					</th:block>
 					<td th:text="${rucher.ressource}"></td>
 					<td th:text="${rucher.commentaire}"></td>
 				</tr>

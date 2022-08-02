@@ -83,6 +83,8 @@ public class RucherController {
 	private RucherService rucherService;
 	@Autowired
 	private RecolteRepository recolteRepository;
+	@Autowired
+	private DistRucherRepository drRepo;
 
 	@Autowired
 	MessageSource messageSource;
@@ -541,6 +543,20 @@ public class RucherController {
 				// on ajoute les hausses qui ne sont pas sur des ruches
 				// à la somme pour le dépôt
 				nbHausses += hausseRepository.countByActiveAndRucheIsNull(true);
+			} else {
+				// lecture en base de la distance et du temps pour aller du dépôt
+				// à ce rucher
+				Rucher depot = rucherRepository.findByDepotIsTrue();
+				DistRucher dr = (depot.getId().intValue() > rucher.getId().intValue()) ?
+						drRepo.findByRucherStartAndRucherEnd(rucher, depot) :
+							drRepo.findByRucherStartAndRucherEnd(depot, rucher);
+				if (dr != null) {
+					// distance en km
+					model.addAttribute("dist", Math.round(dr.getDist()/1000.0) + "km");
+					// temps en h et min
+					model.addAttribute("temps", ((dr.getTemps()/60 == 0) ? "" : dr.getTemps()/60 + "h ") + dr.getTemps()%60 + "min");
+					
+				}
 			}
 			model.addAttribute("nbHausses", nbHausses);
 			List<Integer> listNbHausses = new ArrayList<>();
