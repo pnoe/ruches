@@ -139,6 +139,7 @@ public class AccueilController {
 				}
 			}
 		}
+		model.addAttribute(Const.MESSAGE, "Calcul des distances terminé.");
 		return Const.INDEX;
 	}
 
