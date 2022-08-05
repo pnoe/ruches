@@ -5,8 +5,8 @@
 
 <script th:inline="javascript">
 	$().ready(function() {
-		const url = /*[[@{'/rucher/historique/'}+${rucher.id}+'/']]*/ null;
-		$('#groupe').on('change', function () {
+		const url = /*[[@{'/rucher/historique/'}+${rucher.id}+'/']]*/null;
+		$('#groupe').on('change', function() {
 			location = url + ($(this).is(':checked'));
 		});
 	});
@@ -27,9 +27,9 @@
 				</h1>
 			</div>
 			<div class="col">
-				<span class="padicons">
-       				<input type="checkbox" id="groupe" th:title="#{grouper}" th:checked="${group}" />
-       				<label for="groupe" th:text="#{grouper}"></label>
+				<span class="padicons"> <input type="checkbox" id="groupe"
+					th:title="#{grouper}" th:checked="${group}" /> <label for="groupe"
+					th:text="#{grouper}"></label>
 				</span>
 			</div>
 		</div>
@@ -41,15 +41,17 @@
 					<th th:text="#{date}"></th>
 					<th th:text="#{type}"></th>
 					<th th:text="#{destProv}"></th>
-					<th th:if="${group}" style="background-color: LemonChiffon" th:text="#{nb}"></th>
+					<th th:if="${group}" style="background-color: LemonChiffon"
+						th:text="#{nb}"></th>
 					<th style="background-color: LemonChiffon" th:text="#{ruche}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{nb}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{etat}"></th>
+					<th style="background-color: PaleGoldenRod" th:text="#{nb}"></th>
+					<th style="background-color: PaleGoldenRod" th:text="#{etat}"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="hist : ${histo}">
-					<td><a th:text="${#temporals.format(hist.date, 'yyyy/MM/dd HH:mm')}"
+					<td><a
+						th:text="${#temporals.format(hist.date, 'yyyy/MM/dd HH:mm')}"
 						th:href="@{'/evenement/'+${hist.eveid}+'?type=ajoutruche'}"></a></td>
 					<td th:text="${hist.type} ? #{Ajout} : #{Retrait}"></td>
 					<td th:text="${#strings.listJoin(hist.destProv,' ')}"></td>

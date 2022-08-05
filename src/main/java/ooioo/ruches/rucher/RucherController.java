@@ -93,7 +93,7 @@ public class RucherController {
 	private int[] rayonsButinage;
 
 	/**
-	 * Historique d'un rucher.
+	 * Transhumances d'un rucher.
 	 * 
 	 * Les événements sont utilisés par date décroissante : du plus récent au plus
 	 * ancien. Liste les événements correspondant à l'ajout ou le retrait de ruches
@@ -239,7 +239,7 @@ public class RucherController {
 	}
 
 	/**
-	 * Historiques de tous les ruchers.
+	 * Transhumances de tous les ruchers.
 	 */
 	@GetMapping("/historiques/{group}")
 	public String historiques(Model model, @PathVariable boolean group) {
