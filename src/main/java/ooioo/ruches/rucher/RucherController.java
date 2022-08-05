@@ -536,7 +536,6 @@ public class RucherController {
 			// liste des ruches de ce rucher
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
 			model.addAttribute(Const.RUCHES, ruches);
-
 			// si rucher.depot == true alors ajouter les hausses ou hausse.ruche == null
 			Integer nbHausses = hausseRepository.countHausseInRucher(rucherId);
 			if (rucher.getDepot()) {
@@ -552,9 +551,10 @@ public class RucherController {
 							drRepo.findByRucherStartAndRucherEnd(depot, rucher);
 				if (dr != null) {
 					// distance en km
-					model.addAttribute("dist", Math.round(dr.getDist()/1000.0) + "km");
+					model.addAttribute("dist", dr.getDist()/1000.);
 					// temps en h et min
-					model.addAttribute("temps", ((dr.getTemps()/60 == 0) ? "" : dr.getTemps()/60 + "h ") + dr.getTemps()%60 + "min");
+					int t = dr.getTemps()/60;
+					model.addAttribute("temps", ((t == 0) ? "" : t + "h ") + dr.getTemps()%60 + "min");
 					
 				}
 			}

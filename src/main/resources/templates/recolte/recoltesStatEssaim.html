@@ -20,8 +20,7 @@ $(document).ready(function() {
                      typeof p === 'number' ?
                          p : 0;
              };
-             const recoltes = recoltes;
-	         for (let i = 1; i < recoltes.length + 2 ; i++) {
+             for (let i = 1; i < recoltes.length + 2 ; i++) {
 	             total = api
 	                 .column(i, {search:'applied'})
 	                 .data()
