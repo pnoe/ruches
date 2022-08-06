@@ -180,22 +180,17 @@ $().ready(function() {
 				</thead>
 				<tbody>
 					<tr>
-						<td class="num" th:text="${eveRempl.valeur}"></td>
+						<td class="num" th:text="${eveRempl?.valeur}"></td>
 						<td><a th:if="${eveRempl != null}"
 							th:href="@{'/evenement/'+${eveRempl?.id}+'?type=hausse'}"
 							th:text="${#temporals.format(eveRempl?.date, 'yyyy/MM/dd')}"></a>
 						</td>
-						<td th:text="${eveRempl.commentaire}"></td>
-
-
-						<td th:text="${eveComm.commentaire}"></td>
+						<td th:text="${eveRempl?.commentaire}"></td>
+						<td th:text="${eveComm?.commentaire}"></td>
 						<td><a th:if="${eveComm != null}"
 							th:href="@{'/evenement/'+${eveComm?.id}+'?type=hausse'}"
 							th:text="${#temporals.format(eveComm?.date, 'yyyy/MM/dd')}"></a>
 						</td>
-
-
-
 					</tr>
 				</tbody>
 			</table>
