@@ -145,7 +145,8 @@ public class RucheController {
 			}
 			Float longitude = ruche.getLongitude();
 			String[] nomarray = nomclones.split(",");
-			String commentaire = "Clône ruche " + ruche.getNom();
+			// TODO internationalisation clone ruche
+			String commentaire = "Clone ruche " + ruche.getNom();
 			List<String> nomsCrees = new ArrayList<>();
 			for (String nom : nomarray) {
 				if (noms.contains(nom)) {
