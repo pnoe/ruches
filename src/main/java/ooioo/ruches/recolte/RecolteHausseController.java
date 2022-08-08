@@ -93,7 +93,7 @@ public class RecolteHausseController {
 			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByRecolte(recolte);
 			model.addAttribute("detailsRecolte", recolteHausses);
 			model.addAttribute(Const.NBRUCHES, recolteHausseService.nomsRuches(recolteHausses).size());
-			model.addAttribute(Const.RUCHER, recolteHausseService.nomsRuchers(recolteHausses));
+			model.addAttribute(Const.RUCHER, recolteHausseService.idNomRuchers(recolteHausses));
 		} else {
 			logger.error(Const.IDRECOLTEXXINCONNU, recolteId);
 			model.addAttribute(Const.MESSAGE, Const.IDRECOLTEINCONNU);

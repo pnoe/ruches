@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import ooioo.ruches.Const;
+import ooioo.ruches.IdNom;
 import ooioo.ruches.Utils;
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.essaim.EssaimRepository;
@@ -142,12 +143,12 @@ public class RecolteController {
 	public String liste(Model model) {
 		Iterable<Recolte> recoltes = recolteRepository.findAllByOrderByDateDesc();
 		model.addAttribute("recoltes", recoltes);
-		List<String> rucherListe = new ArrayList<>();
+		List<List<IdNom> > ruchers = new ArrayList<>();
 		for (Recolte recolte : recoltes) {
 			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByRecolte(recolte);
-			rucherListe.add(recolteHausseService.nomsRuchers(recolteHausses));
+			ruchers.add(recolteHausseService.idNomRuchers(recolteHausses));
 		}
-		model.addAttribute(Const.RUCHERS, rucherListe);
+		model.addAttribute(Const.RUCHERS, ruchers);
 		return "recolte/recoltesListe";
 	}
 

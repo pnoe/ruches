@@ -5,22 +5,28 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import ooioo.ruches.IdNom;
+
 @Service
 public class RecolteHausseService {
 
 	/**
-	 * Retourne une String des noms des ruchers séparés par une virgule
-	 * auquels appartiennent les hausses de la récolte
+	 * Liste des ids et noms des ruchers d'une récolte
+	 * 
+	 * @param recolteHausses la liste des hausses d'une récolte
+	 * @return les records IdNom des ruchers de cette récolte
 	 */
-	public String nomsRuchers(List<RecolteHausse> recolteHausses) {
-		List<String> nomRuchers = new ArrayList<>();
-		for (RecolteHausse recolteHausse : recolteHausses) {
-			if ((recolteHausse.getRucher() != null) && (!nomRuchers.contains(recolteHausse.getRucher().getNom()))) {
-				nomRuchers.add(recolteHausse.getRucher().getNom());
+	public List<IdNom> idNomRuchers(List<RecolteHausse> recolteHausses) {
+		List<IdNom> idNoms = new ArrayList<>();
+		for (RecolteHausse rH : recolteHausses) {
+			IdNom idn = new IdNom(rH.getRucher().getId(), rH.getRucher().getNom());
+			if ((rH.getRucher() != null) && (!idNoms.contains(idn))) {
+				idNoms.add(idn);
 			}
 		}
-		return String.join(", ", nomRuchers);
+		return idNoms;
 	}
+	
 
 	/**
 	 * Retourne une liste des noms des ruches de la récolte
