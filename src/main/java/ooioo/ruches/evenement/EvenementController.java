@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
@@ -52,6 +53,9 @@ public class EvenementController {
 	@Autowired
 	private RucherRepository rucherRepository;
 
+	@Value("${notification.destinataires}")
+	private String[] notifDest;
+	
 	/**
 	 * Liste événements par période de temps (par défaut 1 mois) la période est
 	 * mémorisée dans des cookies. Les listes spécifiques : sucre, varoa... sont
@@ -142,6 +146,9 @@ public class EvenementController {
 		}
 		model.addAttribute(Const.EVENEMENTS, evens);
 		model.addAttribute("jAvants", jAvants);
+		
+		model.addAttribute("dests", "Destinataires :<br/>" + String.join("<br/>", notifDest));
+		
 		return "evenement/evenementNotifListe";
 	}
 

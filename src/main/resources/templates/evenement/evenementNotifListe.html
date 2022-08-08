@@ -3,26 +3,38 @@
 <head
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
-const url = /*[[@{'/evenement/listeNotif/'}]]*/ null;
-const listeve = /*[[#{listeEvenements}]]*/ null;
-const btp = /*[[#{buttontextprint}]]*/ null;
-const btc = /*[[#{buttontextcol}]]*/ null;
-$(document).ready(function() {
-	$('#groupe').on('change', function () {
-		location = url + ($(this).is(':checked'));
+	const url = /*[[@{'/evenement/listeNotif/'}]]*/null;
+	const listeve = /*[[#{listeEvenements}]]*/null;
+	const btp = /*[[#{buttontextprint}]]*/null;
+	const btc = /*[[#{buttontextcol}]]*/null;
+	$(document).ready(function() {
+		$('.bi-question-lg').popover({
+			html : true
+		});
+		$('.popover-dismiss').popover({
+			trigger : 'focus'
+		});
+		$('#groupe').on('change', function() {
+			location = url + ($(this).is(':checked'));
+		});
+		new DataTable('#evenementsnotif', {
+			order : [ [ 0, 'desc' ] ],
+			dom : 'Blftip',
+			buttons : [ 'csv', {
+				extend : 'pdf',
+				exportOptions : {
+					columns : ':visible'
+				},
+				title : listeve + " " + (new Date()).toLocaleDateString()
+			}, {
+				extend : 'print',
+				text : btp
+			}, {
+				extend : 'colvis',
+				text : btc
+			} ]
+		});
 	});
-    new DataTable('#evenementsnotif', {
-        order: [ [ 0, 'desc' ] ],
-        dom: 'Blftip',
-        buttons: [
-	    	'csv',
-	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-	    		title: listeve + " " + (new Date()).toLocaleDateString()},
-	            {extend: 'print', text: btp},
-	            {extend: 'colvis', text: btc}
-        ]  
-    });
-});
 </script>
 </head>
 <body>
@@ -36,9 +48,12 @@ $(document).ready(function() {
 				<h1 class="item" th:text="#{Notifications}"></h1>
 			</div>
 			<div class="col">
-				<span class="padicons"> <input type="checkbox"
-					id="groupe" th:title="#{tous}" th:checked="${tous}" /> <label
-					for="tous" th:text="#{tous}"></label>
+				<a href="#" class="bi bi-question-lg" data-bs-toggle="popover"
+					data-bs-trigger="focus" tabindex="0" role="button"
+					th:attr="data-bs-content=${dests}"></a>
+				<span class="padicons">
+					<input type="checkbox" id="groupe" th:title="#{tous}"
+					th:checked="${tous}" /> <label for="tous" th:text="#{tous}"></label>
 				</span>
 			</div>
 		</div>
@@ -73,6 +88,10 @@ $(document).ready(function() {
 				</tr>
 			</tbody>
 		</table>
+	</div>
+	<div id="popup" class="ol-popup">
+		<a href="#" id="popup-closer" class="ol-popup-closer"></a>
+		<div id="popup-content"></div>
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
