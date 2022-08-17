@@ -7,13 +7,13 @@ import java.util.Set;
 public record Transhumance(
 		// Le rucher si transhumances de tous les ruchers
 		Rucher rucher,
-		// le type de mouvement, true : Ajout dans le rucher, false : Retrait du rucher
+		// Le type de mouvement, true : Ajout dans le rucher, false : Retrait du rucher
 		boolean type,
-		// la date de l'événement ou du premier événement si groupe
+		// La date de l'événement ou du premier événement si groupe
 		// Date java et formattage dans le template ?
 		LocalDateTime date,
-		// le nom du rucher de destination (Retrait) ou de provenance (Ajout) ou
-		// "Inconnue" (localisation à faire)
+		// Le ou les nom(s) de rucher(s) de destination (Retrait) ou de provenance (Ajout) ou
+		// "Inconnue" (localisation à faire, attention on peut avoir Inconnue et d'autre noms de ruchers)
 		Set<String> destProv,
 		// le nom de la ruche ajoutée ou retirée (ou des ruches, séparés par un espace)
 		List<String> ruche,

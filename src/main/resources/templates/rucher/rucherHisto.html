@@ -54,7 +54,7 @@
 						th:text="${#temporals.format(hist.date, 'yyyy/MM/dd HH:mm')}"
 						th:href="@{'/evenement/'+${hist.eveid}+'?type=ajoutruche'}"></a></td>
 					<td th:text="${hist.type} ? #{Ajout} : #{Retrait}"></td>
-					<td th:text="${#strings.listJoin(hist.destProv,' ')}"></td>
+					<td th:text="${hist.destProv[0]}"></td>
 					<td th:if="${group}" th:text="${#lists.size(hist.ruche)}"></td>
 					<td th:text="${#strings.listJoin(#lists.sort(hist.ruche),' ')}"></td>
 					<td th:text="${#lists.size(hist.etat)}"></td>

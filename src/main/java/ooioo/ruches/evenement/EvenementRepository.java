@@ -68,7 +68,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	
 	
 	
-	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	// pour TypeEvenement.ESSAIMTRAITEMENT et TypeEvenement.ESSAIMTRAITEMENTFIN
 	@Query(value = """
 			select evenement
 			  from Evenement evenement
@@ -76,7 +76,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			""")
 	Iterable<Evenement> findTypePeriode(TypeEvenement type1, TypeEvenement type2, LocalDateTime date);
 	
-	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	// pour TypeEvenement.ESSAIMTRAITEMENT et TypeEvenement.ESSAIMTRAITEMENTFIN
 	@Query(value = """
 			select evenement
 			  from Evenement evenement
@@ -84,9 +84,6 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			""")
 	Iterable<Evenement> findTypePeriode(TypeEvenement type1, TypeEvenement type2, LocalDateTime date1, LocalDateTime date2);
 	
-	
-	
-
 	Iterable<Evenement> findByRucheId(Long rucheId);
 
 	Iterable<Evenement> findByEssaimId(Long essaimId);
@@ -109,13 +106,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 	List<Evenement> findByTypeOrderByDateDesc(TypeEvenement typeEvenement);
 	
-	
-	
-	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	List<Evenement> findByTypeOrTypeOrderByDateDesc(TypeEvenement type1, TypeEvenement type2);
-	
-	
-	
 
 	List<Evenement> findByTypeAndRucheNotNullAndRucherNotNullOrderByDateDesc(TypeEvenement typeEvenement);
 

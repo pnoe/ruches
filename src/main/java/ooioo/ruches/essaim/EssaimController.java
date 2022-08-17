@@ -83,7 +83,7 @@ public class EssaimController {
 	private EssaimService essaimService;
 
 	/*
-	 * Historique de la mise en ruchers d'un essaim Les événements affichés dans
+	 * Historique de la mise en ruchers d'un essaim. Les événements affichés dans
 	 * l'historique : - les mise en rucher de ruches ou l'essaim apparait - la
 	 * dispersion de l'essaim qui termine l'historique - la ou les mises en ruches
 	 * de l'essaim qui peuvent impliquer des déplacements

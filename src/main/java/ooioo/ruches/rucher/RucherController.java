@@ -386,7 +386,7 @@ public class RucherController {
 		}
 		model.addAttribute("group", group);
 		return "rucher/ruchersHisto";
-	}
+	}	
 
 	/**
 	 * Statistiques tableau poids de miel par rucher
@@ -546,16 +546,16 @@ public class RucherController {
 				// lecture en base de la distance et du temps pour aller du dépôt
 				// à ce rucher
 				Rucher depot = rucherRepository.findByDepotIsTrue();
-				DistRucher dr = (depot.getId().intValue() > rucher.getId().intValue()) ?
-						drRepo.findByRucherStartAndRucherEnd(rucher, depot) :
-							drRepo.findByRucherStartAndRucherEnd(depot, rucher);
+				DistRucher dr = (depot.getId().intValue() > rucher.getId().intValue())
+						? drRepo.findByRucherStartAndRucherEnd(rucher, depot)
+						: drRepo.findByRucherStartAndRucherEnd(depot, rucher);
 				if (dr != null) {
 					// distance en km
-					model.addAttribute("dist", dr.getDist()/1000.);
+					model.addAttribute("dist", dr.getDist() / 1000.);
 					// temps en h et min
-					int t = dr.getTemps()/60;
-					model.addAttribute("temps", ((t == 0) ? "" : t + "h ") + dr.getTemps()%60 + "min");
-					
+					int t = dr.getTemps() / 60;
+					model.addAttribute("temps", ((t == 0) ? "" : t + "h ") + dr.getTemps() % 60 + "min");
+
 				}
 			}
 			model.addAttribute("nbHausses", nbHausses);

@@ -375,9 +375,11 @@ public class RucheController {
 			rucheRepository.save(ruche);
 			// date mis au dépôt = date acquisition de la ruche
 			// la date d'acquisition est un LocalDate d'ou le asStartOfDay
-			// pour renseigner le heure, minutes...
+			// pour renseigner le heure, minutes... 
+			// Mais cela met 00:00 au lieu de l'heure courante : tester si jour est
+			//   le jour de now() et si oui metter LocalDateTime de now ?
 			Evenement eveAjout = new Evenement(ruche.getDateAcquisition().atStartOfDay(),
-					TypeEvenement.RUCHEAJOUTRUCHER, ruche, null, rucher, null, null, "");
+					TypeEvenement.RUCHEAJOUTRUCHER, ruche, null, rucher, null, null, "Création de la ruche");
 			evenementRepository.save(eveAjout);
 		} else {
 			rucheRepository.save(ruche);
