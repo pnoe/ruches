@@ -5,8 +5,7 @@
 <title th:text="#{Ruches}"></title>
 <meta charset="UTF-8" />
 <link rel="manifest" th:href="@{/js/manifest.webmanifest}" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/png" th:href="@{/images/ruchesicon.png}" />
 <link rel="stylesheet" type="text/css" media="all"
 	th:href="@{/js/jquery-ui-1.13.2/jquery-ui.min.css}" />
@@ -18,10 +17,10 @@
 	th:href="@{/css/ruches.css}" />
 <link rel="stylesheet" type="text/css" media="all"
 	th:href="@{/js/datatables-1.12.1/datatables.min.css}" />
-	
+
 <link rel="stylesheet" type="text/css" media="all"
-	th:href="@{/images/bootstrap-icons-1.9.1/bootstrap-icons.css}" />	
-	
+	th:href="@{/images/bootstrap-icons-1.9.1/bootstrap-icons.css}" />
+
 <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
 <script th:src="@{/js/jquery-ui-1.13.2/jquery-ui.min.js}"></script>
 <script th:src="@{/js/jquery.validate.min-1.19.5.js}"></script>
@@ -30,23 +29,24 @@
 	th:href="@{/js/bootstrap-5.2.0/bootstrap.min.css}" />
 <script th:src="@{/js/datatables-1.12.1/datatables.min.js}"></script>
 <script th:inline="javascript">
-const urlValMessFr = /*[[@{/js/jquery.validate-1.19.5-messages_fr.min.js}]]*/ null;
-const urlDatatMessFr = /*[[@{/js/datatables_fr.json}]]*/ null;
-const datatPageLength = /*[[${@environment.getProperty('datatables.pageLength')}]]*/ null;
-const tout = /*[[#{Tout}]]*/ null;
-if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('fr') != -1)) {
-	jQuery.getScript(urlValMessFr);
-	$.extend( true, $.fn.dataTable.defaults, {
-		language: {
-        	url: urlDatatMessFr
-    	},
+	const urlValMessFr = /*[[@{/js/jquery.validate-1.19.5-messages_fr.min.js}]]*/null;
+	const urlDatatMessFr = /*[[@{/js/datatables_fr.json}]]*/null;
+	const datatPageLength = /*[[${@environment.getProperty('datatables.pageLength')}]]*/null;
+	const tout = /*[[#{Tout}]]*/null;
+	if ((window.navigator.language == 'fr')
+			|| (window.navigator.language.indexOf('fr') != -1)) {
+		jQuery.getScript(urlValMessFr);
+		$.extend(true, $.fn.dataTable.defaults, {
+			language : {
+				url : urlDatatMessFr
+			},
+		});
+	}
+	$.extend(true, $.fn.dataTable.defaults, {
+		stateSave : true,
+		lengthMenu : [ [ 10, 25, 50, 100, -1 ], [ 10, 25, 50, 100, tout ] ],
+		pageLength : parseInt(datatPageLength),
 	});
-}
-$.extend( true, $.fn.dataTable.defaults, {
-	stateSave: true,
-	lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, tout ] ],
-	pageLength: parseInt(datatPageLength),
-});
 </script>
 <th:block th:replace="${scripts} ?: ~{}" />
 <th:block th:replace="${styles} ?: ~{}" />
@@ -55,144 +55,156 @@ $.extend( true, $.fn.dataTable.defaults, {
 
 <script th:fragment="d3" th:src="@{/js/d3.min-7.6.1.js}"></script>
 <script th:fragment="d3-color" th:src="@{/js/d3-color.min-3.1.0.js}"></script>
-<script th:fragment="d3-interpolate" th:src="@{/js/d3-interpolate.min-3.0.1.js}"></script>
-<script th:fragment="d3-scale-chromatic" th:src="@{/js/d3-scale-chromatic.min-3.0.1.js}"></script>
+<script th:fragment="d3-interpolate"
+	th:src="@{/js/d3-interpolate.min-3.0.1.js}"></script>
+<script th:fragment="d3-scale-chromatic"
+	th:src="@{/js/d3-scale-chromatic.min-3.0.1.js}"></script>
 
-<script th:fragment="jsgantt" th:src="@{/js/gantt-0.6.1/frappe-gantt.min.js}"></script>
+<script th:fragment="jsgantt"
+	th:src="@{/js/gantt-0.6.1/frappe-gantt.min.js}"></script>
 <script th:fragment="snapsvg" th:src="@{/js/snap.svg-min-0.5.1.js}"></script>
-<link th:fragment="cssgantt" rel="stylesheet" type="text/css" media="all"
-	th:href="@{/js/gantt-0.6.1/frappe-gantt.min.css}" />
+<link th:fragment="cssgantt" rel="stylesheet" type="text/css"
+	media="all" th:href="@{/js/gantt-0.6.1/frappe-gantt.min.css}" />
 
 
 <script th:fragment="jsol" th:src="@{/js/ol-6.15.1/ol.js}"></script>
 <link th:fragment="cssol" rel="stylesheet" type="text/css" media="all"
-	th:href="@{/js/ol-6.15.1/ol.css}" /> 
- 
+	th:href="@{/js/ol-6.15.1/ol.css}" />
+
 <script th:fragment="jsGpPluginOpenLayers"
-   th:attr="data-url=@{/js/autoconf.js}" 
-   th:src="@{/js/GpPluginOpenLayers-3.2.13/GpPluginOpenLayers.js}"></script>
-<script th:fragment="jsGpOsmPluginOpenLayers"  
-   th:src="@{/js/GpPluginOpenLayers-3.2.13/GpPluginOpenLayers.js}"></script>
-<link th:fragment="cssGpPluginOpenLayers" rel="stylesheet" type="text/css" media="all"
+	th:attr="data-url=@{/js/autoconf.js}"
+	th:src="@{/js/GpPluginOpenLayers-3.2.13/GpPluginOpenLayers.js}"></script>
+<script th:fragment="jsGpOsmPluginOpenLayers"
+	th:src="@{/js/GpPluginOpenLayers-3.2.13/GpPluginOpenLayers.js}"></script>
+<link th:fragment="cssGpPluginOpenLayers" rel="stylesheet"
+	type="text/css" media="all"
 	th:href="@{/js/GpPluginOpenLayers-3.2.13/GpPluginOpenLayers.css}" />
- 	
-<script th:fragment="dom-to-image" th:src="@{/js/dom-to-image-more.min-2.10.1.js}"></script>
+
+<script th:fragment="dom-to-image"
+	th:src="@{/js/dom-to-image-more.min-2.10.1.js}"></script>
 <script th:fragment="jspdf" th:src="@{/js/jspdf-2.5.0.umd.min.js}"></script>
 <script th:fragment="jsdatepicker-fr" th:src="@{/js/datepicker-fr.js}"></script>
 
 <script th:fragment="jsChart" th:src="@{/js/chart.min-3.9.0.js}"></script>
 
-<link th:fragment="weather-icons" rel="stylesheet" type="text/css" media="all"
+<link th:fragment="weather-icons" rel="stylesheet" type="text/css"
+	media="all"
 	th:href="@{/css/weather-icons-2.0.12/css/weather-icons.min.css}" />
-<link th:fragment="weather-icons-wind" rel="stylesheet" type="text/css" media="all"
+<link th:fragment="weather-icons-wind" rel="stylesheet" type="text/css"
+	media="all"
 	th:href="@{/css/weather-icons-2.0.12/css/weather-icons-wind.min.css}" />
 
-<script th:fragment="jsdatetimepicker" th:src="@{/js/jquery.datetimepicker.full.min-2.5.20.js}"></script>
-<link th:fragment="cssdatetimepicker" rel="stylesheet" type="text/css" media="all"
-	th:href="@{/js/jquery.datetimepicker.min-2.5.20.css}" />
+<script th:fragment="jsdatetimepicker"
+	th:src="@{/js/jquery.datetimepicker.full.min-2.5.20.js}"></script>
+<link th:fragment="cssdatetimepicker" rel="stylesheet" type="text/css"
+	media="all" th:href="@{/js/jquery.datetimepicker.min-2.5.20.css}" />
 <script th:fragment="localejsdatetimepicker">
-	$().ready(function() {		
-		$("#date").datetimepicker();
-		if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('fr') != -1)) {
-			$.datetimepicker.setLocale('fr');
-		} else {
-			$.datetimepicker.setLocale('en');
-		}
-	});
+	$().ready(
+			function() {
+				$("#date").datetimepicker();
+				if ((window.navigator.language == 'fr')
+						|| (window.navigator.language.indexOf('fr') != -1)) {
+					$.datetimepicker.setLocale('fr');
+				} else {
+					$.datetimepicker.setLocale('en');
+				}
+			});
 </script>
 
-<script th:fragment="jquerydaterangepicker" th:src="@{/js/jquery-date-range-picker-0.21.1/jquery.daterangepicker.min.js}"></script>
-<link th:fragment="cssjquerydaterangepicker" rel="stylesheet" type="text/css" media="all"
+<script th:fragment="jquerydaterangepicker"
+	th:src="@{/js/jquery-date-range-picker-0.21.1/jquery.daterangepicker.min.js}"></script>
+<link th:fragment="cssjquerydaterangepicker" rel="stylesheet"
+	type="text/css" media="all"
 	th:href="@{/js/jquery-date-range-picker-0.21.1/daterangepicker.min.css}" />
-<script th:fragment="moment" th:src="@{/js/moment-with-locales.min-2.29.4.js}"></script>
-	
+<script th:fragment="moment"
+	th:src="@{/js/moment-with-locales.min-2.29.4.js}"></script>
+
 <body>
 	<!--/*    https://getbootstrap.com/docs/5.2/components/navbar/    */-->
-	<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-	  <div class="container-fluid"> 
-		<a class="navbar-brand" href="#" th:href="@{/}"> <img
-			th:src="@{/images/ruche.png}" alt="Logo" width="18">
-		</a>
-		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
-			data-bs-target="#navbarSupportedContent" 
-			aria-controls="navbarSupportedContent" aria-expanded="false" 
-			aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" 
-					  data-bs-toggle="dropdown" aria-expanded="false" th:text="#{Ruches}">
-					</a>
-					<ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
-						<li><a class="dropdown-item" th:text="#{liste}"
-							th:href="@{/ruche/liste}"></a></li>
-						<li><a class="dropdown-item" th:text="#{rucheTypes}"
-							th:href="@{/rucheType/liste}"></a></li>
-						<li><a class="dropdown-item"
-							th:text="#{listedetail}" th:href="@{/ruche/listeplus}"></a></li>
-					</ul>
-				</li>
-				<li class="nav-item"><a class="nav-link" th:text="#{Hausses}"
-					th:href="@{/hausse/liste}"></a></li>
-				<li class="nav-item"><a class="nav-link" th:text="#{Ruchers}"
-					th:href="@{/rucher/liste}">Liste des ruchers</a></li>
-				<li class="nav-item"><a class="nav-link" th:text="#{Personnes}"
-					th:href="@{/personne/liste}"></a></li>
-				<li class="nav-item"><a class="nav-link" th:text="#{Essaims}"
-					th:href="@{/essaim/liste}"></a></li>
-				<li class="nav-item"><a class="nav-link" th:text="#{Recoltes}"
-					th:href="@{/recolte/liste}"></a></li>
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" 
-					  data-bs-toggle="dropdown" aria-expanded="false" th:text="#{evenements}">
-					</a>  
-					<ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
-						<li><a class="dropdown-item" th:text="#{tous}"
-							th:href="@{/evenement/liste}"></a></li>
-						<li><a class="dropdown-item" th:text="#{actionSucre}"
-							th:href="@{/evenement/essaim/listeSucre}"></a></li>
-						<li><a class="dropdown-item" th:text="#{traitement}"
-							th:href="@{/evenement/essaim/listeTraitement/false}"></a></li>
-						<li><a class="dropdown-item" th:text="#{poidsruche}"
-							th:href="@{/evenement/ruche/listePoidsRuche}"></a></li>
-						<li><a class="dropdown-item" th:text="#{cadreruche}"
-							th:href="@{/evenement/ruche/listeCadreRuche}"></a></li>
-						<li><a class="dropdown-item" th:text="#{HAUSSEREMPLISSAGE}"
-							th:href="@{/evenement/hausse/listeRemplissageHausse}"></a></li>
-						<li><a class="dropdown-item" th:text="#{rucherucher}"
-							th:href="@{/evenement/rucher/listeRucheAjout}"></a></li>
-						<li><a class="dropdown-item" th:text="#{Notifications}"
-							th:href="@{/evenement/listeNotif/false}"></a></li>
-					</ul>
-				</li>
-				<li class="nav-item dropdown">	
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" 
-					  data-bs-toggle="dropdown" aria-expanded="false" th:text="#{Admin}">
-					</a>					
-					<ul class="dropdown-menu" aria-labelledby="navbarDropdown3">
-						<li><a class="dropdown-item" th:text="#{preferences}"
-							th:href="@{/parametres}"></a></li>
-						<li sec:authorize="hasRole('ROLE_admin')"><a class="dropdown-item"
-							th:text="#{apiRest}" th:target="_blank" th:href="@{/rest}"></a></li>
-						<li sec:authorize="hasRole('ROLE_admin')"><a class="dropdown-item"
-							th:text="#{logs}" th:href="@{/admin/logs/logfile}" target="_blank"></a></li>
-						<li><a class="dropdown-item"
-							th:text="#{infos}" th:href="@{/infos}"></a></li>
-						<li sec:authorize="hasRole('ROLE_admin')"><a class="dropdown-item"
-							th:text="#{tests}" th:href="@{/tests}"></a></li>
-						<li><a class="dropdown-item"
-							th:text="#{Doc}" th:target="_blank"
-							th:href="@{/doc/ruches.html}"></a></li>
-					</ul>
-				</li>
+	<nav th:fragment="navbar"
+		class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#" th:href="@{/}"> <img
+				th:src="@{/images/ruche.png}" alt="Logo" width="18">
+			</a>
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" href="#" id="navbarDropdown1"
+						role="button" data-bs-toggle="dropdown" aria-expanded="false"
+						th:text="#{Ruches}"> </a>
+						<ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+							<li><a class="dropdown-item" th:text="#{liste}"
+								th:href="@{/ruche/liste}"></a></li>
+							<li><a class="dropdown-item" th:text="#{rucheTypes}"
+								th:href="@{/rucheType/liste}"></a></li>
+							<li><a class="dropdown-item" th:text="#{listedetail}"
+								th:href="@{/ruche/listeplus}"></a></li>
+						</ul></li>
+					<li class="nav-item"><a class="nav-link" th:text="#{Hausses}"
+						th:href="@{/hausse/liste}"></a></li>
+					<li class="nav-item"><a class="nav-link" th:text="#{Ruchers}"
+						th:href="@{/rucher/liste}">Liste des ruchers</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:text="#{Personnes}" th:href="@{/personne/liste}"></a></li>
+					<li class="nav-item"><a class="nav-link" th:text="#{Essaims}"
+						th:href="@{/essaim/liste}"></a></li>
+					<li class="nav-item"><a class="nav-link" th:text="#{Recoltes}"
+						th:href="@{/recolte/liste}"></a></li>
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" href="#" id="navbarDropdown2"
+						role="button" data-bs-toggle="dropdown" aria-expanded="false"
+						th:text="#{evenements}"> </a>
+						<ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
+							<li><a class="dropdown-item" th:text="#{tous}"
+								th:href="@{/evenement/liste}"></a></li>
+							<li><a class="dropdown-item" th:text="#{actionSucre}"
+								th:href="@{/evenement/essaim/listeSucre}"></a></li>
+							<li><a class="dropdown-item" th:text="#{traitement}"
+								th:href="@{/evenement/essaim/listeTraitement/false}"></a></li>
+							<li><a class="dropdown-item" th:text="#{poidsruche}"
+								th:href="@{/evenement/ruche/listePoidsRuche}"></a></li>
+							<li><a class="dropdown-item" th:text="#{cadreruche}"
+								th:href="@{/evenement/ruche/listeCadreRuche}"></a></li>
+							<li><a class="dropdown-item" th:text="#{HAUSSEREMPLISSAGE}"
+								th:href="@{/evenement/hausse/listeRemplissageHausse}"></a></li>
+							<li><a class="dropdown-item" th:text="#{rucherucher}"
+								th:href="@{/evenement/rucher/listeRucheAjout}"></a></li>
+							<li><a class="dropdown-item" th:text="#{Notifications}"
+								th:href="@{/evenement/listeNotif/false}"></a></li>
+						</ul></li>
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" href="#" id="navbarDropdown3"
+						role="button" data-bs-toggle="dropdown" aria-expanded="false"
+						th:text="#{Admin}"> </a>
+						<ul class="dropdown-menu" aria-labelledby="navbarDropdown3">
+							<li><a class="dropdown-item" th:text="#{preferences}"
+								th:href="@{/parametres}"></a></li>
+							<li sec:authorize="hasRole('ROLE_admin')"><a
+								class="dropdown-item" th:text="#{apiRest}" th:target="_blank"
+								th:href="@{/rest}"></a></li>
+							<li sec:authorize="hasRole('ROLE_admin')"><a
+								class="dropdown-item" th:text="#{logs}"
+								th:href="@{/admin/logs/logfile}" target="_blank"></a></li>
+							<li><a class="dropdown-item" th:text="#{infos}"
+								th:href="@{/infos}"></a></li>
+							<li sec:authorize="hasRole('ROLE_admin')"><a
+								class="dropdown-item" th:text="#{tests}" th:href="@{/tests}"></a></li>
+							<li><a class="dropdown-item" th:text="#{Doc}"
+								th:target="_blank" th:href="@{/doc/ruches.html}"></a></li>
+						</ul></li>
+				</ul>
+			</div>
+			<ul th:if="${currentDate} != ''" class="nav navbar-nav navbar-right">
+				<li th:text="${currentDate}"></li>
 			</ul>
 		</div>
-		<ul th:if="${currentDate} != ''" class="nav navbar-nav navbar-right">
-			<li th:text="${currentDate}"></li>
-		</ul>
-	  </div>	
 	</nav>
 	<footer th:fragment="footer">
 		<small
