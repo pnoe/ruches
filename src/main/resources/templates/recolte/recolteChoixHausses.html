@@ -2,6 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
+const urlRetrait = /*[[@{/recolte/retraitHausses/}]]*/ null;
+const urlAjout = /*[[@{/recolte/ajoutHausses/}]]*/ null;
+const recolteId = /*[[${recolte.id}]]*/ null;
+const selHausRet = /*[[#{selecthaussesretirer}]]*/ null;
+const selHausAjout = /*[[#{selecthaussesajouter}]]*/ null;
 $(document).ready(function() {
 	function updateLinks( e, dt, type, indexes ) {
 		let id; 
@@ -9,11 +14,11 @@ $(document).ready(function() {
 		let table;
 		if (this.id == "ajoutHausseRecolte") {
 			id = $('#ajouterHausses');
-			href = [[@{/recolte/ajoutHausses/}]];
+			href = urlAjout;
 			table = tableAjout;
 		} else {
 			id = $('#retirerHausses');
-			href = [[@{/recolte/retraitHausses/}]];
+			href = urlRetrait;
 			table = tableRetrait;
 		}
     	if ( type === 'row' ) {
@@ -27,7 +32,7 @@ $(document).ready(function() {
             if (hausseNoms) { 
             	/*[- on enlève la dernière virgule et met à jour l'url de traitement -]*/
             	hausseNoms = hausseNoms.substring(0, hausseNoms.length-1);
-            	id.attr('href', href + [[${recolte.id}+'/']] + hausseNoms);
+            	id.attr('href', href + recolteId + '/' + hausseNoms);
             } else {
             	id.attr('href', "#");
             }      
@@ -39,7 +44,7 @@ $(document).ready(function() {
 	tableRetrait.on( 'select deselect', updateLinks);
 	$('#retirerHausses').on('click', function () {
 		if ($(this).attr("href") == "#") {
-    		alert([[#{selecthaussesretirer}]]);	
+    		alert(selHausRet);	
     	}  
 	});
 	const tableAjout = new DataTable('#ajoutHausseRecolte', {
@@ -48,7 +53,7 @@ $(document).ready(function() {
 	tableAjout.on( 'select deselect', updateLinks);
     $('#ajouterHausses').on('click', function () {
 		if ($(this).attr("href") == "#") {
-    		alert([[#{selecthaussesajouter}]]);	
+    		alert(selHausAjout);	
     	}  
 	});
 });
