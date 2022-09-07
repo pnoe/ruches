@@ -92,12 +92,12 @@ public class AccueilController {
 	/**
 	 * Calcul des distances entre les ruchers par appel de l'api ign de calcul d'itinéraire.
 	 * Ne calcule qu'un sens et non une valeur pour l'aller et une autre pour le retour.
-	 * Le sens calculé est départ du rucher de plus petit Id.
-	 * Ne stocke pas la distance d'un ruche à lui même.
+	 * Le sens calculé est : départ du rucher de plus petit Id.
+	 * Ne stocke pas la distance d'un rucher à lui même.
 	 * En cas d'erreur renvoyée par l'api ign met 0 comme distance et temps de parcours.
 	 * Pour éventuel intégration dans un calcul de distances parcourues
 	 * pour les transhumances ou affichage brut du tableau 
-	 * Si appel /dist?reset=true toutes les distances sont recalculées,
+	 * Si appel /dist?reset=true toutes les distances sont effacées puis recalculées,
 	 *   si /dist seules les distances non enregistées sont recalculées
 	 */
 	@GetMapping(path = "/dist")
@@ -108,6 +108,10 @@ public class AccueilController {
 		String urlIgn = "https://wxs.ign.fr/calcul/geoportail/itineraire/rest/1.0.0/route?resource=bdtopo-pgr&getSteps=false&start=";
 		Iterable<Rucher> ruchers = rucherRepository.findAll();
 		RestTemplate restTemplate = new RestTemplate();
+		if (reset) {
+			// Effacer la table dist_rucher sinon les distances déjà calculées apparaîtront deux fois
+			drRepo.deleteAll();
+		}
 		for (Rucher r1 : ruchers) {
 			for (Rucher r2 : ruchers) {
 				if (r1.getId().equals(r2.getId())) {
