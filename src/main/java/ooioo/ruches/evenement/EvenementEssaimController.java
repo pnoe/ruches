@@ -537,10 +537,11 @@ public class EvenementEssaimController {
 	 */
 	@GetMapping("/{essaimId}")
 	public String liste(Model model, @PathVariable long essaimId) {
-		model.addAttribute(Const.EVENEMENTS, evenementRepository.findByEssaimId(essaimId));
-		model.addAttribute("type", Const.ESSAIM);
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isPresent()) {
+			model.addAttribute(Const.EVENEMENTS, evenementRepository.findByEssaimId(essaimId));
+			model.addAttribute("type", Const.ESSAIM);
+			model.addAttribute("essaimNom", essaimOpt.get().getNom());
 			return Const.EVEN_EVENLISTE;
 		}
 		logger.error(Const.IDESSAIMXXINCONNU, essaimId);

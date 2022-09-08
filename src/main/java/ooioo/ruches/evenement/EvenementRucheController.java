@@ -406,13 +406,16 @@ public class EvenementRucheController {
 	 */
 	@GetMapping("/{rucheId}")
 	public String liste(Model model, @PathVariable long rucheId) {
-		model.addAttribute(Const.EVENEMENTS, evenementRepository.findByRucheId(rucheId));
-		// rucheId @PathVariable est connu du template : ${rucheId}
-		//  mais type et itemId simplifient le template pour le retour du lien détail d'un événement
-		model.addAttribute("type", Const.RUCHE);
-		// pour lien retour dans la liste vers détail ruche
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 		if (rucheOpt.isPresent()) {
+			model.addAttribute(Const.EVENEMENTS, evenementRepository.findByRucheId(rucheId));
+			// rucheId @PathVariable est connu du template : ${rucheId}
+			//  mais type et itemId simplifient le template pour le retour du lien détail d'un événement
+			model.addAttribute("type", Const.RUCHE);
+			// pour lien retour dans la liste vers détail ruche 
+			//  evenements[0].getRuche().getNom() ne fonctionne pas dasns le template
+			//   s'il n'y a pas d'événement ruche !
+			model.addAttribute("rucheNom", rucheOpt.get().getNom());
 			return Const.EVEN_EVENLISTE;
 		}
 		logger.error(Const.IDRUCHEXXINCONNU, rucheId);

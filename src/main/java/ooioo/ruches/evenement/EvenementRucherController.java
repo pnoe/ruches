@@ -164,11 +164,12 @@ public class EvenementRucherController {
 	 */
 	@GetMapping("/{rucherId}")
 	public String listeEvenementRucher(Model model, @PathVariable long rucherId) {
-		model.addAttribute(Const.EVENEMENTS, evenementRepository.findByRucherId(rucherId));
-		model.addAttribute("type", "rucher");
-		// pour lien retour dans la liste vers détail rucher
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
+			model.addAttribute(Const.EVENEMENTS, evenementRepository.findByRucherId(rucherId));
+			model.addAttribute("type", "rucher");
+			// pour lien retour dans la liste vers détail rucher
+			model.addAttribute("rucherNom", rucherOpt.get().getNom());
 			return Const.EVEN_EVENLISTE;
 		}
 		logger.error(Const.IDRUCHERXXINCONNU, rucherId);

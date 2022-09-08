@@ -290,17 +290,17 @@ public class EvenementHausseController {
 	 */
 	@GetMapping("/{hausseId}")
 	public String liste(Model model, @PathVariable long hausseId) {
-		model.addAttribute(Const.EVENEMENTS, evenementRepository.findByHausseId(hausseId));
-		model.addAttribute("type", "hausse");
 		Optional<Hausse> hausseOpt = hausseRepository.findById(hausseId);
 		if (hausseOpt.isPresent()) {
+			model.addAttribute(Const.EVENEMENTS, evenementRepository.findByHausseId(hausseId));
+			model.addAttribute("type", "hausse");
+			model.addAttribute("hausseNom", hausseOpt.get().getNom());
 			return Const.EVEN_EVENLISTE;
-		} else {
-			logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
-			model.addAttribute(Const.MESSAGE,
-					messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
-			return Const.INDEX;
 		}
+		logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
+		model.addAttribute(Const.MESSAGE,
+				messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
+		return Const.INDEX;
 	}
 
 }
