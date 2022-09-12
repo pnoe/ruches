@@ -80,6 +80,9 @@ public class AccueilController {
 	private int retardRucheEvenement;
 	@Value("${rucher.butinage.rayons}")
 	private int[] rayonsButinage;
+	@Value("${ign.url.itineraire}")
+	private String urlIgnItineraire;
+	
 
 	/**
 	 * Page d'accueil
@@ -105,7 +108,7 @@ public class AccueilController {
 		// https://geoservices.ign.fr/documentation/services/api-et-services-ogc/itineraires/documentation-du-service-du-calcul
 		// https://wxs.ign.fr/geoportail/itineraire/rest/1.0.0/getCapabilities
 		// avec resource = OSRM erreur
-		String urlIgn = "https://wxs.ign.fr/calcul/geoportail/itineraire/rest/1.0.0/route?resource=bdtopo-pgr&getSteps=false&start=";
+		// String urlIgn = "https://wxs.ign.fr/calcul/geoportail/itineraire/rest/1.0.0/route?resource=bdtopo-pgr&getSteps=false&start=";
 		Iterable<Rucher> ruchers = rucherRepository.findAll();
 		RestTemplate restTemplate = new RestTemplate();
 		if (reset) {
@@ -118,13 +121,13 @@ public class AccueilController {
 					// même ruchers
 					continue;
 				}
-				if (!reset && (drRepo.findByRucherStartAndRucherEnd(r1, r2) != null)) {
-					// pas de reset demandé et la distance a déjà été calculée
-					continue;
-				}
-				DistRucher dr = new DistRucher(r1, r2, 0, 0);
 				if (r1.getId().intValue() < r2.getId().intValue()) {
-					StringBuilder uri = new StringBuilder(urlIgn);
+					if (!reset && (drRepo.findByRucherStartAndRucherEnd(r1, r2) != null)) {
+						// pas de reset demandé et la distance a déjà été calculée
+						continue;
+					}
+					DistRucher dr = new DistRucher(r1, r2, 0, 0);
+					StringBuilder uri = new StringBuilder(urlIgnItineraire);
 					uri.append(r1.getLongitude()).append(",").append(r1.getLatitude()).append("&end=")
 							.append(r2.getLongitude()).append(",").append(r2.getLatitude());
 					try {

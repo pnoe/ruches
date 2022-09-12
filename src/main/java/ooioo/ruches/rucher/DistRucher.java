@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+// Distances et temps de parcours en voiture entre les ruchers
 @Entity
 public class DistRucher {
 
@@ -20,9 +21,11 @@ public class DistRucher {
 	@ManyToOne
 	private Rucher rucherEnd;
 
+	// Distance en mètres
 	@Column(nullable = false)
 	private Integer dist = 0;
 
+	// Temps en minutes
 	@Column(nullable = false)
 	private Integer temps = 0;
 
