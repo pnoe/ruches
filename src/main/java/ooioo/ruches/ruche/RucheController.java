@@ -375,7 +375,7 @@ public class RucheController {
 			rucheRepository.save(ruche);
 			// date mis au dépôt = date acquisition de la ruche
 			// la date d'acquisition est un LocalDate d'ou le asStartOfDay
-			// pour renseigner le heure, minutes... 
+			// pour renseigner le heure, minutes...
 			// Mais cela met 00:00 au lieu de l'heure courante : tester si jour est
 			//   le jour de now() et si oui metter LocalDateTime de now ?
 			Evenement eveAjout = new Evenement(ruche.getDateAcquisition().atStartOfDay(),
@@ -422,20 +422,20 @@ public class RucheController {
 			model.addAttribute(Const.EVENEMENTS, evenements.iterator().hasNext());
 			// Trouver l'événement association essaim ruche
 			if (ruche.getEssaim() != null) {
-				
+
 				// rucheService.modelAddEvenement(model, ruche, TypeEvenement.AJOUTESSAIMRUCHE);
 				model.addAttribute("eveEssaim", evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
 						TypeEvenement.AJOUTESSAIMRUCHE));
 			}
-			
+
 			// rucheService.modelAddEvenement(model, ruche, TypeEvenement.RUCHEAJOUTRUCHER);
 			model.addAttribute("eveRucher", evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
 					TypeEvenement.RUCHEAJOUTRUCHER));
-			
+
 			// rucheService.modelAddEvenement(model, ruche, TypeEvenement.COMMENTAIRERUCHE);
 			model.addAttribute("eveComm", evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
 					TypeEvenement.COMMENTAIRERUCHE));
-			
+
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 			model.addAttribute(Const.MESSAGE,

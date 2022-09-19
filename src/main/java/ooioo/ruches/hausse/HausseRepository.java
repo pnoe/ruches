@@ -35,9 +35,9 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 	//   et hausse.ruche not null pour ne pas afficher des hausses qui n'aurait
 	//   pas de ruche/essaim/rucher associé
 	@Query(value = """
-			select h 
-				from Hausse h 
-				where h.ruche is not null and h.id not in 
+			select h
+				from Hausse h
+				where h.ruche is not null and h.id not in
 					(select rh.hausse.id
 						from RecolteHausse rh
 						where rh.recolte.id = ?1)
@@ -45,18 +45,18 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 	Iterable<Hausse> findHaussesNotInRecolteId(Long recolteId);
 
 	@Query(value =	"""
-			select h 
-			  from Hausse h 
-			  where h.id in 
-			    (select rh.hausse.id 
-			      from RecolteHausse rh 
+			select h
+			  from Hausse h
+			  where h.id in
+			    (select rh.hausse.id
+			      from RecolteHausse rh
 			      where rh.recolte.id = ?1)
 			""")
 	Iterable<Hausse> findHaussesInRecolteId(Long recolteId);
 
 	@Query(value =	"""
-			select count(h) 
-			  from Hausse h, Ruche r, Rucher rr 
+			select count(h)
+			  from Hausse h, Ruche r, Rucher rr
 			  where h.ruche.id = r.id and r.rucher.id = rr.id and rr.id = ?1
 			""")
 	Integer countHausseInRucher(Long rucherId);
@@ -72,7 +72,7 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 	Collection<IdNom> findAllProjectedIdNomByOrderByNom();
 
 	// en nativeQuery à cause de string_agg
-	@Query(value = 
+	@Query(value =
 			"select string_agg(nom, ', ') from Hausse where ruche_id = ?1",
 			nativeQuery = true)
 	String hausseNomsByRucheId(Long rucheId);

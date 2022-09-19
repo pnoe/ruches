@@ -100,7 +100,7 @@ public class EvenementHausseController {
 		model.addAttribute("periode", periode);
 		return "evenement/evenementRemplissageHausseListe";
 	}
-	
+
 	/**
 	 * Appel du formulaire pour la création d'un événement COMMENTAIREHAUSSE
 	 */
@@ -129,7 +129,7 @@ public class EvenementHausseController {
 			return Const.INDEX;
 		}
 	}
-	
+
 	/**
 	 * Appel du formulaire de modification d'un événement COMMENTAIREHAUSSE
 	 */
@@ -215,7 +215,7 @@ public class EvenementHausseController {
 			return Const.INDEX;
 		}
 	}
-	
+
 	/**
 	 * Appel du formulaire de modification d'un événement HAUSSEREMPLISSAGE
 	 */
@@ -232,7 +232,7 @@ public class EvenementHausseController {
 			return Const.INDEX;
 		}
 	}
-	
+
 	/**
 	 * Préparation appel formulaire événement hausse
 	 */
@@ -266,7 +266,7 @@ public class EvenementHausseController {
 		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
 		return "redirect:/hausse/" + evenement.getHausse().getId();
 	}
-	
+
 	/**
 	 * Sauvegarde d'un événement hausse.
 	 * Récupère tous les champs de l'événement du formulaire

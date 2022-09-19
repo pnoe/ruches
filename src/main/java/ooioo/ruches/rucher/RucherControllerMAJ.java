@@ -77,7 +77,7 @@ public class RucherControllerMAJ {
 					histo.add(new Transhumance(rucher, true, // type = true Ajout
 							eve.getDate(),
 							Collections.singleton(evePrec == null ? "Inconnue" : evePrec.getRucher().getNom()),
-							Arrays.asList(eve.getRuche().getNom()), new ArrayList<String>(ruches), eve.getId()));
+							Arrays.asList(eve.getRuche().getNom()), new ArrayList<>(ruches), eve.getId()));
 					if (!ruches.remove(eve.getRuche().getNom())) {
 						logger.error("Événement {} le rucher {} ne contient pas la ruche {}", eve.getDate(),
 								eve.getRucher().getNom(), eve.getRuche().getNom());
@@ -96,7 +96,7 @@ public class RucherControllerMAJ {
 									// rucher, alors eve retire la ruche du rucher
 									histo.add(new Transhumance(rucher, false, // type = false Retrait
 											eve.getDate(), Collections.singleton(eve.getRucher().getNom()),
-											Arrays.asList(eve.getRuche().getNom()), new ArrayList<String>(ruches),
+											Arrays.asList(eve.getRuche().getNom()), new ArrayList<>(ruches),
 											eve.getId()));
 									ruches.add(eve.getRuche().getNom());
 								}
@@ -133,7 +133,7 @@ public class RucherControllerMAJ {
 	 * transhumances de tous les ruchers. En commentaire mise de l'id du rucher dans
 	 * le champ valeur mais abandonné car gestion de l'affichage lourde
 	 * (transformation ids en noms)
-	 * 
+	 *
 	 * @param histoAll les transhumances de tous les ruchers
 	 */
 	private void majEve(List<Transhumance> histoAll) {

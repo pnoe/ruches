@@ -22,7 +22,7 @@ public class PersonneService {
 
 	/**
 	 * Ajoute la liste des Personnes au Model
-	 * 
+	 *
 	 * @param model
 	 * @param session Pour masquer éventuellement les personnnes inactivées
 	 */
@@ -34,7 +34,7 @@ public class PersonneService {
 			model.addAttribute(Const.PERSONNES, persRepository.findByActiveOrderByNom(true));
 		}
 	}
-	
+
 	/**
 	 * Vérification des droits utiliteurs pour créer ou modifier une "personne"
 	 */

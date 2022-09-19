@@ -94,12 +94,12 @@ public class RucherController {
 
 	/**
 	 * Transhumances d'un rucher.
-	 * 
+	 *
 	 * Les événements sont utilisés par date décroissante : du plus récent au plus
 	 * ancien. Liste les événements correspondant à l'ajout ou le retrait de ruches
 	 * dans ce rucher. Option "Grouper" pour grouper les événements de même date
 	 * (année, mois et jour)
-	 * 
+	 *
 	 * @param model : on ajoute au model "hist" la liste des événements, "group"
 	 *              true si regroupement fait, "rucher" l'objet rucher (titre, lien)
 	 * @param group : si true les événements de même jour sont regroupés
@@ -141,7 +141,7 @@ public class RucherController {
 					histo.add(new Transhumance(null, true, // type = true Ajout
 							eve.getDate(),
 							Collections.singleton(evePrec == null ? "Inconnue" : evePrec.getRucher().getNom()),
-							Arrays.asList(eve.getRuche().getNom()), new ArrayList<String>(ruches), eve.getId()));
+							Arrays.asList(eve.getRuche().getNom()), new ArrayList<>(ruches), eve.getId()));
 					if (!ruches.remove(eve.getRuche().getNom())) {
 						logger.error("Événement {} le rucher {} ne contient pas la ruche {}", eve.getDate(),
 								eve.getRucher().getNom(), eve.getRuche().getNom());
@@ -160,7 +160,7 @@ public class RucherController {
 									// rucher, alors eve retire la ruche du rucher
 									histo.add(new Transhumance(null, false, // type = false Retrait
 											eve.getDate(), Collections.singleton(eve.getRucher().getNom()),
-											Arrays.asList(eve.getRuche().getNom()), new ArrayList<String>(ruches),
+											Arrays.asList(eve.getRuche().getNom()), new ArrayList<>(ruches),
 											eve.getId()));
 									ruches.add(eve.getRuche().getNom());
 								}
@@ -188,7 +188,7 @@ public class RucherController {
 				int j;
 				while (i < lhisto) {
 					Transhumance itemHisto = histo.get(i);
-					List<String> ruchesGroup = new ArrayList<String>(itemHisto.ruche());
+					List<String> ruchesGroup = new ArrayList<>(itemHisto.ruche());
 					destP = new HashSet<>();
 					destP.addAll(itemHisto.destProv());
 					// on recherche si les événements suivants peuvent être groupés
@@ -216,7 +216,7 @@ public class RucherController {
 						histoGroup.add(itemHisto);
 					} else {
 						histoGroup.add(new Transhumance(null, itemHisto.type(), itemHisto.date(), destP,
-								new ArrayList<String>(ruchesGroup), itemHisto.etat(), itemHisto.eveid()));
+								new ArrayList<>(ruchesGroup), itemHisto.etat(), itemHisto.eveid()));
 					}
 					i = j;
 				}
@@ -283,7 +283,7 @@ public class RucherController {
 					histo.add(new Transhumance(rucher, true, // type = true Ajout
 							eve.getDate(),
 							Collections.singleton(evePrec == null ? "Inconnue" : evePrec.getRucher().getNom()),
-							Arrays.asList(eve.getRuche().getNom()), new ArrayList<String>(ruches), eve.getId()));
+							Arrays.asList(eve.getRuche().getNom()), new ArrayList<>(ruches), eve.getId()));
 					if (!ruches.remove(eve.getRuche().getNom())) {
 						logger.error("Événement {} le rucher {} ne contient pas la ruche {}", eve.getDate(),
 								eve.getRucher().getNom(), eve.getRuche().getNom());
@@ -302,7 +302,7 @@ public class RucherController {
 									// rucher, alors eve retire la ruche du rucher
 									histo.add(new Transhumance(rucher, false, // type = false Retrait
 											eve.getDate(), Collections.singleton(eve.getRucher().getNom()),
-											Arrays.asList(eve.getRuche().getNom()), new ArrayList<String>(ruches),
+											Arrays.asList(eve.getRuche().getNom()), new ArrayList<>(ruches),
 											eve.getId()));
 									ruches.add(eve.getRuche().getNom());
 								}
@@ -329,7 +329,7 @@ public class RucherController {
 				int j;
 				while (i < lhisto) {
 					Transhumance itemHisto = histo.get(i);
-					List<String> ruchesGroup = new ArrayList<String>(itemHisto.ruche());
+					List<String> ruchesGroup = new ArrayList<>(itemHisto.ruche());
 					destP = new HashSet<>();
 					destP.addAll(itemHisto.destProv());
 					// on recherche si les événements suivants peuvent être groupés
@@ -363,7 +363,7 @@ public class RucherController {
 						// l'id eve est l'id du premier événements, on perd les
 						// des autres événements
 						histoGroup.add(new Transhumance(rucher, itemHisto.type(), itemHisto.date(), destP,
-								new ArrayList<String>(ruchesGroup), itemHisto.etat(), itemHisto.eveid()));
+								new ArrayList<>(ruchesGroup), itemHisto.etat(), itemHisto.eveid()));
 					}
 					i = j;
 				}
@@ -386,7 +386,7 @@ public class RucherController {
 		}
 		model.addAttribute("group", group);
 		return "rucher/ruchersHisto";
-	}	
+	}
 
 	/**
 	 * Statistiques tableau poids de miel par rucher

@@ -12,7 +12,7 @@ public class RecolteHausseService {
 
 	/**
 	 * Liste des ids et noms des ruchers d'une récolte
-	 * 
+	 *
 	 * @param recolteHausses la liste des hausses d'une récolte
 	 * @return les records IdNom des ruchers de cette récolte
 	 */
@@ -26,7 +26,7 @@ public class RecolteHausseService {
 		}
 		return idNoms;
 	}
-	
+
 
 	/**
 	 * Retourne une liste des noms des ruches de la récolte

@@ -387,7 +387,7 @@ public class EssaimController {
 	/**
 	 * Clonage multiple d'un essaim (appel XMLHttpRequest de la page détail d'un
 	 * essaim) avec mises en ruches éventuelles
-	 * 
+	 *
 	 * @param session   pour gestion du décalage éventuel des dates
 	 * @param model
 	 * @param essaimId  l'id de l'essaim à cloner

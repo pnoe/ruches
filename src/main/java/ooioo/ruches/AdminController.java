@@ -53,7 +53,7 @@ public class AdminController {
 					continue;
 				}
 				if (eve.getRucher().getId().equals(rucher.getId())) {
-					// si l'événement est un ajout dans le rucher on ajoute la ruche de l'événement 
+					// si l'événement est un ajout dans le rucher on ajoute la ruche de l'événement
 					//  à la liste des ruches du rucher
 					if (!ruches.add(eve.getRuche())) {
 						// erreur le rucher contient la ruche désignée par l'événement
@@ -71,15 +71,15 @@ public class AdminController {
 			Set<Ruche> ruchesRucherSet = new HashSet<>(ruchesRucher);
 			if (!ruches.equals(ruchesRucherSet)) {
 				// Après traitement des événements, le rucher ne contient pas
-				//  les ruches en accord avec les événements 
+				//  les ruches en accord avec les événements
 				rucherRuchesDiff.add(rucher);
-			} 
+			}
 		}
 		model.addAttribute("eveRucherRuche", evesErrRucherRuche);
 		model.addAttribute("rucherNonVide", rucherRuchesDiff);
 		return "tests";
 	}
-	
+
 	/**
 	 * Tests erreurs
 	 *  résultat dans la page tests.html
@@ -93,7 +93,7 @@ public class AdminController {
 		int levens = evensListe.size();
 		// liste des événements générant des erreurs dans l'historique
 		List<Evenement> eveRucherRuche = new ArrayList<>();
-		// les noms des ruchers analysés en synchro avec la liste eveRucherRuche 
+		// les noms des ruchers analysés en synchro avec la liste eveRucherRuche
 		List<String> ruchersErr = new ArrayList<>();
 		// les codes d'erreur en synchro avec la liste eveRucherRuche
 		List<String> errsRucher = new ArrayList<>();
@@ -111,7 +111,7 @@ public class AdminController {
 				// System.out.println(i + " " + eve.getDate());
  				if (eve.getRucher().getId().equals(rucherId)) {
 					// si l'événement est un ajout dans le rucher
-					// on retire la ruche de l'événement 
+					// on retire la ruche de l'événement
 					//  de la liste des ruches du rucher
 					if (!ruches.remove(eve.getRuche().getNom())) {
 						// erreur le rucher ne contient pas la ruche désignée par l'événement
@@ -153,12 +153,12 @@ public class AdminController {
 								break;
 							} else {
 								// c'est un événement ajout dans la ruche mais
-								//   dans un autre rucher. IL y a deux événements 
+								//   dans un autre rucher. IL y a deux événements
 								//   successifs ajout de la ruche dans un autre rucher
 								//   on revient à la boucle principale qui traitera
 								//   ce deuxième événement
 								break;
-							}	
+							}
 						}
 					}
 				}
@@ -166,7 +166,7 @@ public class AdminController {
 			if (!ruches.isEmpty()) {
 				// Après traitement des événements, le rucher n'est pas vide
 				rucherNonVide.add(rucher);
-			} 			
+			}
 		}
 		model.addAttribute("ruchersErr", ruchersErr);
 		model.addAttribute("errsRucher", errsRucher);
@@ -182,7 +182,7 @@ public class AdminController {
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(
 				TypeEvenement.HAUSSEPOSERUCHE);
 		for (Evenement eve : evensListe) {
-			if (eve.getHausse() == null || eve.getRuche() == null 
+			if (eve.getHausse() == null || eve.getRuche() == null
 					|| !Utils.isIntInf10(eve.getValeur())) {
 				eveInc.add(eve);
 			}
@@ -299,7 +299,7 @@ public class AdminController {
 						} else {
 							hausses.add(eve.getHausse());
 						}
-					} else { // eve.getType() est TypeEvenement.HAUSSEPOSERUCHE 
+					} else { // eve.getType() est TypeEvenement.HAUSSEPOSERUCHE
 						if (!hausses.remove(eve.getHausse())) {
 							// La hausse ne peut être enlevée de la liste
 							//   il y a une erreur dans la pose des hausses

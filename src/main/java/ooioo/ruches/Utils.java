@@ -22,7 +22,7 @@ public final class Utils {
 			return "";
 		}
 	}
-	
+
 	/*
 	 * Renvoie la date et heure LocalDateTime.now() décalée éventuellement du décalage
 	 *  demandé par le menu préférences mémorisé en session
@@ -42,7 +42,7 @@ public final class Utils {
 				? LocalDate.now().plusDays(((Duration) session.getAttribute(Const.DECALAGETEMPS)).toDays())
 				: LocalDate.now();
 	}
-	
+
 	/*
 	 * Pourcentage ?
 	 * Renvoie true si str est un int compris entre 0 et 100
@@ -61,7 +61,7 @@ public final class Utils {
 	    }
 	    return true;
 	}
-	
+
 	/*
 	 * Pour test nb hausses correct
 	 * Renvoie true si str est un int compris entre 0 et 10
@@ -80,8 +80,8 @@ public final class Utils {
 	    }
 	    return true;
 	}
-	
-	
+
+
 	/*
 	 * Renvoie true si str est numérique
 	 */

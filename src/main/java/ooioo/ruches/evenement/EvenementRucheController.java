@@ -167,7 +167,7 @@ public class EvenementRucheController {
 		model.addAttribute("periode", periode);
 		return "evenement/evenementCadreRucheListe";
 	}
-	
+
 	/**
 	 * Appel du formulaire pour la création d'un événement COMMENTAIRERUCHE
 	 */
@@ -189,7 +189,7 @@ public class EvenementRucheController {
 			return Const.INDEX;
 		}
 	}
-	
+
 	/**
 	 * Appel du formulaire de modification d'un événement ruche commentaire
 	 */
@@ -273,7 +273,7 @@ public class EvenementRucheController {
 			return Const.INDEX;
 		}
 	}
-	
+
 	/**
 	 * Appel du formulaire pour la création d'un événement RUCHEPESEE
 	 */
@@ -297,7 +297,7 @@ public class EvenementRucheController {
 			return Const.INDEX;
 		}
 	}
-	
+
 	/**
 	 * Appel du formulaire de modification d'un événement RUCHEPESEE
 	 */
@@ -314,8 +314,8 @@ public class EvenementRucheController {
 			return Const.INDEX;
 		}
 	}
-	
-	
+
+
 	/*
 	 * Appel du formulaire événement pour ajouter une hausse
 	 */
@@ -371,7 +371,7 @@ public class EvenementRucheController {
 		}
 		return template;
 	}
-	
+
 	/**
 	 * Sauvegarde d'un événement commentaire ruche. Récupère tous les champs de
 	 * l'événement du formulaire
@@ -387,7 +387,7 @@ public class EvenementRucheController {
 		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
 		return "redirect:/ruche/" + evenement.getRuche().getId();
 	}
-	
+
 	/**
 	 * Sauvegarde d'un événement ruche.
 	 * Récupère tous les champs de l'événement du formulaire
@@ -412,7 +412,7 @@ public class EvenementRucheController {
 			// rucheId @PathVariable est connu du template : ${rucheId}
 			//  mais type et itemId simplifient le template pour le retour du lien détail d'un événement
 			model.addAttribute("type", Const.RUCHE);
-			// pour lien retour dans la liste vers détail ruche 
+			// pour lien retour dans la liste vers détail ruche
 			//  evenements[0].getRuche().getNom() ne fonctionne pas dasns le template
 			//   s'il n'y a pas d'événement ruche !
 			model.addAttribute("rucheNom", rucheOpt.get().getNom());

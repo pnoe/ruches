@@ -55,13 +55,13 @@ public class EvenementController {
 
 	@Value("${notification.destinataires}")
 	private String[] notifDest;
-	
+
 	/**
 	 * Liste événements par période de temps (par défaut 1 mois) la période est
 	 * mémorisée dans des cookies. Les listes spécifiques : sucre, varoa... sont
 	 * dans les autres controller événements et utilisent des templates de listes
 	 * spécifiques
-	 * 
+	 *
 	 * @param periode   1 tous, moins d'un : 2 an, 3 mois, 4 semaine, 5 jour,
 	 *                  default période entre debut et fin
 	 * @param debut     début de période (si periode != 1, 2, 3, 4 ou 5)
@@ -136,7 +136,7 @@ public class EvenementController {
 				//  est la date de l'évenement - (la date eve plus le nb de jours)
 				// fonctionnalité  : notif apès date de l'événement
 				max = evenement.getDate().minusDays(joursAvant);
-				min = evenement.getDate();		
+				min = evenement.getDate();
 			}
 			// Si on est dans la plage de notification
 			if (tous || (dateNow.isAfter(min) && (dateNow.isBefore(max)))) {
@@ -146,9 +146,9 @@ public class EvenementController {
 		}
 		model.addAttribute(Const.EVENEMENTS, evens);
 		model.addAttribute("jAvants", jAvants);
-		
+
 		model.addAttribute("dests", "Destinataires :<br/>" + String.join("<br/>", notifDest));
-		
+
 		return "evenement/evenementNotifListe";
 	}
 

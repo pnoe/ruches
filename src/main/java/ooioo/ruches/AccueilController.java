@@ -82,7 +82,7 @@ public class AccueilController {
 	private int[] rayonsButinage;
 	@Value("${ign.url.itineraire}")
 	private String urlIgnItineraire;
-	
+
 
 	/**
 	 * Page d'accueil
@@ -99,7 +99,7 @@ public class AccueilController {
 	 * Ne stocke pas la distance d'un rucher à lui même.
 	 * En cas d'erreur renvoyée par l'api ign met 0 comme distance et temps de parcours.
 	 * Pour éventuel intégration dans un calcul de distances parcourues
-	 * pour les transhumances ou affichage brut du tableau 
+	 * pour les transhumances ou affichage brut du tableau
 	 * Si appel /dist?reset=true toutes les distances sont effacées puis recalculées,
 	 *   si /dist seules les distances non enregistées sont recalculées
 	 */

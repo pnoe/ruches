@@ -25,9 +25,9 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 	// liste ordonnée par nom d'essaims, des id et nom de la ruche associée
 	// en paramètre essaim actif uniquement
 	@Query(value = """
-			select ruche.id, ruche.nom, rucher.id, rucher.nom 
-			  from Essaim essaim 
-			    left join Ruche ruche on ruche.essaim.id = essaim.id 
+			select ruche.id, ruche.nom, rucher.id, rucher.nom
+			  from Essaim essaim
+			    left join Ruche ruche on ruche.essaim.id = essaim.id
 			    left join Rucher rucher on ruche.rucher.id = rucher.id
 			  where essaim.actif = ?1 order by essaim.nom
 			""")
@@ -35,9 +35,9 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 
 	// liste ordonnée par nom d'essaims, des id et nom de la ruche associée
 	@Query(value = """
-			select ruche.id, ruche.nom, rucher.id, rucher.nom 
-			  from Essaim essaim 
-			    left join Ruche ruche on ruche.essaim.id = essaim.id 
+			select ruche.id, ruche.nom, rucher.id, rucher.nom
+			  from Essaim essaim
+			    left join Ruche ruche on ruche.essaim.id = essaim.id
 			    left join Rucher rucher on ruche.rucher.id = rucher.id
 			  order by essaim.nom
 			""")
@@ -48,8 +48,8 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 	// Pour remérage dans formulaire dispersion
 	// liste des essaims actifs qui ne sont pas dans des ruches ordonnés par date décroissante
 	@Query(value = """
-			select essaim.id, essaim.nom 
-			  from Essaim essaim 
+			select essaim.id, essaim.nom
+			  from Essaim essaim
 			    left join Ruche ruche on ruche.essaim.id = essaim.id
 			  where ruche.essaim.id is null and essaim.actif is true
 			  order by essaim.dateAcquisition desc
@@ -57,10 +57,10 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 	Iterable<Object[]> findProjectedIdNomByRucheIsNullOrderByDateAcquisitionDesc();
 
 	@Query(value = """
-			select essaim 
-			  from Essaim essaim 
-			  where essaim.actif = 'true' and essaim not in 
-			    (select essaim 
+			select essaim
+			  from Essaim essaim
+			  where essaim.actif = 'true' and essaim not in
+			    (select essaim
 			       from Essaim essaim, Ruche ruche
 			       where ruche.essaim = essaim)
 			""")
@@ -68,7 +68,7 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 
 	@Query(value = """
 			select count(*) as nbessaims
-			  from Essaim 
+			  from Essaim
 			  where date_part('year', dateAcquisition)=?1
 			""")
 	Integer countEssaimsCreesDate(Double date);
@@ -77,8 +77,8 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 	Essaim findFirstByOrderByDateAcquisitionDesc();
 
 	@Query(value = """
-			select essaim 
-			  from Essaim essaim 
+			select essaim
+			  from Essaim essaim
 			  where essaim.reineDateNaissance > essaim.dateAcquisition
 			""")
 	Iterable<Essaim> findEssaimDateNaissSupAcquis();

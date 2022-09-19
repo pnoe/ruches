@@ -28,7 +28,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			  order by e.date desc
 			""")
 	List<Evenement> findNotification(LocalDateTime dateNow);
-	
+
 	@Query(value = """
 			select e
 			  from Evenement e
@@ -65,9 +65,9 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			  where evenement.type = ?1 and evenement.date > ?2 and evenement.date < ?3
 			""")
 	Iterable<Evenement> findTypePeriode(TypeEvenement typeEvenement, LocalDateTime date1, LocalDateTime date2);
-	
-	
-	
+
+
+
 	// pour TypeEvenement.ESSAIMTRAITEMENT et TypeEvenement.ESSAIMTRAITEMENTFIN
 	@Query(value = """
 			select evenement
@@ -75,7 +75,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			  where (evenement.type = ?1 or evenement.type = ?2) and evenement.date > ?3
 			""")
 	Iterable<Evenement> findTypePeriode(TypeEvenement type1, TypeEvenement type2, LocalDateTime date);
-	
+
 	// pour TypeEvenement.ESSAIMTRAITEMENT et TypeEvenement.ESSAIMTRAITEMENTFIN
 	@Query(value = """
 			select evenement
@@ -83,7 +83,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			  where (evenement.type = ?1 or evenement.type = ?2) and evenement.date > ?3 and evenement.date < ?4
 			""")
 	Iterable<Evenement> findTypePeriode(TypeEvenement type1, TypeEvenement type2, LocalDateTime date1, LocalDateTime date2);
-	
+
 	Iterable<Evenement> findByRucheId(Long rucheId);
 
 	Iterable<Evenement> findByEssaimId(Long essaimId);
@@ -105,7 +105,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	Iterable<Evenement> findByRucherId(Long rucherId);
 
 	List<Evenement> findByTypeOrderByDateDesc(TypeEvenement typeEvenement);
-	
+
 	List<Evenement> findByTypeOrTypeOrderByDateDesc(TypeEvenement type1, TypeEvenement type2);
 
 	List<Evenement> findByTypeAndRucheNotNullAndRucherNotNullOrderByDateDesc(TypeEvenement typeEvenement);

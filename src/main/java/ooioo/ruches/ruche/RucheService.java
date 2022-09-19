@@ -90,7 +90,7 @@ public class RucheService {
 			ruches = rucheRepository.findByActiveOrderByNom(true);
 		}
 		for (Ruche ruche : ruches) {
-			nbHausses.add(hausseRepository.countByRucheId(ruche.getId()));	
+			nbHausses.add(hausseRepository.countByRucheId(ruche.getId()));
 			if (plus) {
 				nomHausses.add(hausseRepository.hausseNomsByRucheId(ruche.getId()));
 				listeEvensCommentaireEssaim.add(evenementRepository
@@ -175,7 +175,7 @@ public class RucheService {
 		model.addAttribute("dateAjoutRucher", dateAjoutRucher);
 		model.addAttribute("listeEvenCadre", listeEvenCadre);
 		model.addAttribute(Const.RUCHES, ruches);
-		model.addAttribute(Const.NBHAUSSES, nbHausses);			
+		model.addAttribute(Const.NBHAUSSES, nbHausses);
 		model.addAttribute(Const.RUCHER, rucher);
 		if (plus) {
 			model.addAttribute(Const.HAUSSENOMS, nomHausses);

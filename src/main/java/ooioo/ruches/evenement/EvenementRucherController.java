@@ -39,7 +39,7 @@ public class EvenementRucherController {
 	private RucherRepository rucherRepository;
 	@Autowired
 	MessageSource messageSource;
-	
+
 	/*
 	 * Liste événements ajout ruche rucher
 	 */
@@ -92,7 +92,7 @@ public class EvenementRucherController {
 		model.addAttribute("periode", periode);
 		return "evenement/evenementRucheAjoutListe";
 	}
-	
+
 	/**
 	 * Appel du formulaire pour la création d'un événement COMMENTAIRERUCHER
 	 */
@@ -112,7 +112,7 @@ public class EvenementRucherController {
 			return Const.INDEX;
 		}
 	}
-	
+
 	/**
 	 * Appel du formulaire de modification d'un événement rucher commentaire
 	 */
@@ -145,7 +145,7 @@ public class EvenementRucherController {
 		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
 		return "redirect:/rucher/" + evenement.getRucher().getId();
 	}
-	
+
 	/**
 	 * Sauvegarde d'un événement ruche.
 	 * Récupère tous les champs de l'événement du formulaire
