@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.servlet.http.HttpSession;
 import ooioo.ruches.Const;
 import ooioo.ruches.LatLon;
 import ooioo.ruches.Nom;
@@ -75,7 +74,7 @@ public class RucheController {
 
 	@Autowired
 	MessageSource messageSource;
-
+	
 	/**
 	 * Historique de l'ajout des hausses sur une ruche
 	 */

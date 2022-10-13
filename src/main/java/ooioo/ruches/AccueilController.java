@@ -1,5 +1,6 @@
 package ooioo.ruches;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -8,10 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +24,9 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.essaim.EssaimRepository;
 import ooioo.ruches.evenement.EvenementRepository;
@@ -145,6 +145,11 @@ public class AccueilController {
 					logger.info("{} => {}, distance {}m et temps {}min, enregistrés", r1.getNom(), r2.getNom(), dr.getDist(), dr.getTemps());
 				}
 			}
+		}
+		try {
+			restTemplate.close();
+		} catch (IOException e) {
+			logger.error(e.getMessage());
 		}
 		model.addAttribute(Const.MESSAGE, "Calcul des distances terminé.");
 		return Const.INDEX;

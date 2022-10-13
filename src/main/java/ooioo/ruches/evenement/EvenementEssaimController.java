@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpSession;
 import ooioo.ruches.Const;
 import ooioo.ruches.Utils;
 import ooioo.ruches.essaim.Essaim;
@@ -422,13 +421,18 @@ public class EvenementEssaimController {
 		// pour remérage
 		Ruche ruche = rucheRepository.findByEssaimId(essaimId);
 		if (ruche != null) {
+			
+			
+			/* TODO A rétablir !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			Iterable<Object[]> essaimsRemerage = essaimRepository
 					.findProjectedIdNomByRucheIsNullOrderByDateAcquisitionDesc();
 			if (essaimsRemerage.iterator().hasNext()) {
 				model.addAttribute("nomRuche", ruche.getNom());
 				model.addAttribute("essaimsRemerage", essaimsRemerage);
 			}
-
+			*/
+			
+			
 			model.addAttribute(Const.RUCHE, ruche);
 
 			// Si le retour au dépôt est demandé dans le formulaire, il faudra

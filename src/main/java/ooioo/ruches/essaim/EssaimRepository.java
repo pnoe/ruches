@@ -45,8 +45,15 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 
 	Iterable<IdNom> findAllProjectedIdNomByOrderByNom();
 
+	
+	// TODO erreur spring boot 3.0.0-M5
+	// Validation failed for query for method public abstract java.lang.Iterable 
+	//   ooioo.ruches.essaim.EssaimRepository.findProjectedIdNomByRucheIsNullOrderByDateAcquisitionDesc()
 	// Pour remérage dans formulaire dispersion
-	// liste des essaims actifs qui ne sont pas dans des ruches ordonnés par date décroissante
+	// liste des essaims actifs qui ne sont pas dans des ruches, ordonnés par date décroissante
+
+	/*
+	 TODO A rétablir !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	@Query(value = """
 			select essaim.id, essaim.nom
 			  from Essaim essaim
@@ -55,7 +62,8 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 			  order by essaim.dateAcquisition desc
 			""")
 	Iterable<Object[]> findProjectedIdNomByRucheIsNullOrderByDateAcquisitionDesc();
-
+	*/
+	
 	@Query(value = """
 			select essaim
 			  from Essaim essaim
