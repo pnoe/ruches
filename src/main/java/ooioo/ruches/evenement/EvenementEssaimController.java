@@ -421,20 +421,13 @@ public class EvenementEssaimController {
 		// pour remérage
 		Ruche ruche = rucheRepository.findByEssaimId(essaimId);
 		if (ruche != null) {
-			
-			
-			/* TODO A rétablir !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			Iterable<Object[]> essaimsRemerage = essaimRepository
 					.findProjectedIdNomByRucheIsNullOrderByDateAcquisitionDesc();
 			if (essaimsRemerage.iterator().hasNext()) {
 				model.addAttribute("nomRuche", ruche.getNom());
 				model.addAttribute("essaimsRemerage", essaimsRemerage);
 			}
-			*/
-			
-			
 			model.addAttribute(Const.RUCHE, ruche);
-
 			// Si le retour au dépôt est demandé dans le formulaire, il faudra
 			// que la date choisie soit postérieure à celle du dernier ajout
 			// de la ruche dans son rucher
