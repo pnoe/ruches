@@ -55,7 +55,9 @@
 		<div th:replace="includeForm :: dateField"></div>
 		<div class="form-floating mb-3">
 			<input placeholder="" class="form-control" type="text" th:field="*{valeur}"/>
-			<label class="form-label" th:text="#{nbCadres}+' ('+${evenement.ruche?.type.nbCadresMax}+'max)'" for="valeur"></label>
+			<label class="form-label" th:text="#{nbCadres}+
+				(${evenement.ruche?.type?.nbCadresMax}?' ('+${evenement.ruche?.type?.nbCadresMax}+'max)':'')
+				" for="valeur"></label>
   		</div>
 		<div th:replace="includeForm :: commentaireField"></div>
 		<small id="textHelp" class="form-text text-muted" th:text="#{evenruchercadreaide}"></small><br/>

@@ -5,7 +5,7 @@
 <script th:replace="include :: jsdatetimepicker"></script>
 <link th:replace="include :: cssdatetimepicker" />
 <script th:replace="include :: localejsdatetimepicker"></script>
-<script>
+<script th:inline="javascript">
 	$().ready(function() {
 		$("#typeMiel").focus();
 		$("#recolteForm").validate({
@@ -22,12 +22,11 @@
 				}
 			}
 		});
-
+		/*[- */	 Pour trier les noms de types de miel /* -]*/
 		const selOpt = $("#typeMiel").val();
 		$("#typeMiel").html($("#typeMiel option").sort(function(a, b) {
 			return a.text == b.text ? 0 : a.text < b.text ? -1 : 1;
 		})).val(selOpt);
-
 	});
 </script>
 </head>
