@@ -135,15 +135,18 @@ public class AdminController {
 					//  donc même ruche que eve et même rucher : rucherId
 					for (int j = i + 1; j < levens; j++) {
 						Evenement eveJ = evensListe.get(j);
-						if ((eveJ.getRuche().getId().equals(eve.getRuche().getId()))
-								// 20/10/2022 corrigé erreur ?!!!!!!!!!!!!!!!!!!!!!!! eveJ.getRucher !
-								// && (eveJ.getRuche().getId().equals(rucherId))
-								&& (eveJ.getRucher().getId().equals(rucher.getId()))
-								) {
-							//  c'est une erreur, deux ajouts successifs dans le même rucher
-							ruchersErr.add(rucher.getNom());
-							errsRucher.add("2");
-							eveRucherRuche.add(eveJ);
+						if (eveJ.getRuche().getId().equals(eve.getRuche().getId())) {
+							// si ajout de la même ruche dans un rucher
+							if (eveJ.getRuche().getId().equals(rucher.getId())) {
+								// si même rucher
+								//  c'est une erreur, deux ajouts successifs dans le même rucher
+								ruchersErr.add(rucher.getNom());
+								errsRucher.add("2");
+								eveRucherRuche.add(eveJ);
+							} // sinon pas d'erreur, la ruche a été ajouté dans un autre rucher
+							// Une fois un ajout de cette ruche dans un rucher trouvé on arrête
+							//  la recherche de deux ajouts consécutifs
+							break;
 						}
 					}
 				} else {
