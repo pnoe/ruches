@@ -167,7 +167,6 @@ public class EvenementController {
 			Evenement evenement = evenementOpt.get();
 			model.addAttribute(Const.EVENEMENT, evenement);
 			model.addAttribute("type", type);
-			// model.addAttribute("itemId", itemId);
 			// récupérer le type de l'événement
 			// pour return vers template spécifique sucre, commentaire...
 			// les modelAttribute servent au retour vers les listes par type

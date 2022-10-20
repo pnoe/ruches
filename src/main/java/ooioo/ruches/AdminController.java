@@ -34,14 +34,17 @@ public class AdminController {
 	private HausseRepository hausseRepository;
 
 	/**
-	 * Tests erreurs
+	 * Tests2 recherche les erreurs de l'ajout et du retrait des ruches dans les ruchers
+	 *  En partant du rucher vide et en ajoutant et retirant les ruches en parcourant les événements RUCHEAJOUTRUCHER
+	 *    dans l'orde ascendant des dates (plus ancien au plus récent)
 	 *  résultat dans la page tests.html
+	 *  Test2 (contrairement à Tests ci-dessous) n'est pas appelé par un menu et doit être appelé en tapant son url
 	 */
 	@GetMapping("/tests2")
 	public String tests2(Model model) {
 		// Recherche des erreurs dans l'historique des ajouts de ruches dans les ruchers
 		Iterable<Rucher> ruchers = rucherRepository.findAll();
-		// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date descendante
+		// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date ascendante
 		Iterable<Evenement> evesRucheAjoutRucher = evenementRepository.findByTypeOrderByDateAsc(TypeEvenement.RUCHEAJOUTRUCHER);
 		List<Evenement> evesErrRucherRuche = new ArrayList<>();
 		List<Rucher> rucherRuchesDiff = new ArrayList<>();
@@ -81,14 +84,21 @@ public class AdminController {
 	}
 
 	/**
-	 * Tests erreurs
+	 * Tests recherche les erreurs de l'ajout et du retrait des ruches dans les ruchers
+	 * En partant du rucher dans son état actuel et en ajoutant et retirant les ruches en parcourant les événements RUCHEAJOUTRUCHER
+	 *    dans l'orde descendant des dates (plus récent au plus ancien)
 	 *  résultat dans la page tests.html
+	 *  Tests de la validité des événements
+	 *  Tests erreurs ajout/retrait des hausses sur les ruches
 	 */
 	@GetMapping("/tests")
 	public String tests(Model model) {
 		// Recherche des erreurs dans l'historique des ajouts de ruches dans les ruchers
+		// La liste de tous les ruches même inactifs
 		Iterable<Rucher> ruchers = rucherRepository.findAll();
-		// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date descendante
+		// la liste de tous les événements RUCHEAJOUTRUCHER 
+		//   ayant une ruche et un rucher non nuls
+		//   triés par ordre de date descendante
 		List<Evenement> evensListe = evenementRepository.findAjoutRucheOK();
 		int levens = evensListe.size();
 		// liste des événements générant des erreurs dans l'historique
@@ -99,32 +109,37 @@ public class AdminController {
 		List<String> errsRucher = new ArrayList<>();
 		List<Rucher> rucherNonVide = new ArrayList<>();
 		for (Rucher rucher : ruchers) {
-			Long rucherId = rucher.getId();
-			// Les nom des ruches présentes dans le rucher
-			Collection<Nom> nomRuchesX = rucheRepository.findNomsByRucherId(rucherId);
+			// Les noms des ruches présentes dans le rucher
+			// TODO Nom inutile ? List<String> 
+			Collection<Nom> nomRuchesX = rucheRepository.findNomsByRucherId(rucher.getId());
+			// TODO Lourd ! pour passer de collection à list ?
  			List<String> ruches = new ArrayList<>();
  			for (Nom nomR : nomRuchesX) {
  				ruches.add(nomR.nom());
  			}
 			for (int i = 0; i < levens; i++) {
 				Evenement eve = evensListe.get(i);
-				// System.out.println(i + " " + eve.getDate());
- 				if (eve.getRucher().getId().equals(rucherId)) {
+ 				if (eve.getRucher().getId().equals(rucher.getId())) {
 					// si l'événement est un ajout dans le rucher
 					// on retire la ruche de l'événement
 					//  de la liste des ruches du rucher
 					if (!ruches.remove(eve.getRuche().getNom())) {
 						// erreur le rucher ne contient pas la ruche désignée par l'événement
+						// TODO rucher.getNom n'est pas dans eve ?
 						ruchersErr.add(rucher.getNom());
 						errsRucher.add("1");
 						eveRucherRuche.add(eve);
-					}
+					} // sinon, la ruche a été enlevée de la liste des noms
+					// On parcours les événements suivants à la recherche 
+					//  de deux ajouts successifs (erreur)
+					//  donc même ruche que eve et même rucher : rucherId
 					for (int j = i + 1; j < levens; j++) {
 						Evenement eveJ = evensListe.get(j);
 						if ((eveJ.getRuche().getId().equals(eve.getRuche().getId()))
-								&& (eveJ.getRuche().getId().equals(rucherId))
+								// 20/10/2022 corrigé erreur ?!!!!!!!!!!!!!!!!!!!!!!! eveJ.getRucher !
+								// && (eveJ.getRuche().getId().equals(rucherId))
+								&& (eveJ.getRucher().getId().equals(rucher.getId()))
 								) {
-							// si (eveJ.getRuche().getId().equals(rucherId))
 							//  c'est une erreur, deux ajouts successifs dans le même rucher
 							ruchersErr.add(rucher.getNom());
 							errsRucher.add("2");
@@ -138,7 +153,7 @@ public class AdminController {
 					for (int j = i + 1; j < levens; j++) {
 						Evenement eveJ = evensListe.get(j);
 						if (eveJ.getRuche().getId().equals(eve.getRuche().getId())) {
-							if (eveJ.getRucher().getId().equals(rucherId)) {
+							if (eveJ.getRucher().getId().equals(rucher.getId())) {
 								// si l'événement précédent evePrec était un ajout dans le
 								//   rucher, alors eve retire la ruche du rucher
 								if (ruches.contains(eve.getRuche().getNom())) {
@@ -152,7 +167,7 @@ public class AdminController {
 								}
 								break;
 							} else {
-								// c'est un événement ajout dans la ruche mais
+								// c'est un événement ajout de la ruche mais
 								//   dans un autre rucher. IL y a deux événements
 								//   successifs ajout de la ruche dans un autre rucher
 								//   on revient à la boucle principale qui traitera
