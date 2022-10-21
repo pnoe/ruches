@@ -499,6 +499,14 @@ public class RucheController {
 			if (hausseOpt.isPresent()) {
 				Ruche ruche = rucheOpt.get();
 				Hausse hausse = hausseOpt.get();
+				// Si la hausse est déjà sur la ruche, abandon et message d'erreur
+				if (hausse.getRuche() != null ) {
+					logger.error("La hausse {} est déjà sur une ruche", hausse.getNom());
+					model.addAttribute(Const.MESSAGE, "Cette hausse est déjà sur une ruche"
+							);
+							// messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
+					return Const.INDEX;
+				}
 				Evenement evenementRetrait = null;
 				Ruche rucheHausse = hausse.getRuche();
 				LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
@@ -537,7 +545,8 @@ public class RucheController {
 	}
 
 	/**
-	 * Retirer une hausse de sa ruche recalcule l'ordre des hausses de cette ruche
+	 * Retirer une hausse de sa ruche.
+	 * Recalcule l'ordre des hausses de cette ruche.
 	 */
 	@PostMapping("/hausse/retrait/{rucheId}/{hausseId}")
 	public String retraitHausse(Model model, @PathVariable long rucheId, @PathVariable long hausseId,
@@ -548,7 +557,16 @@ public class RucheController {
 			if (hausseOpt.isPresent()) {
 				Hausse hausse = hausseOpt.get();
 				// création événement avant mise à null de la ruche
-				Ruche ruche = hausse.getRuche();
+				// Ruche ruche = hausse.getRuche();
+				Ruche ruche = rucheOpt.get();
+				// Si la hausse n'est pas sur la ruche, abandon et message d'erreur
+				if (hausse.getRuche() == null || (hausse.getRuche().getId() != ruche.getId())) {
+					logger.error("La hausse {} n'est pas sur la ruche {}", hausse.getNom(), ruche.getNom());
+					model.addAttribute(Const.MESSAGE, "Cette hausse n'est pas sur la ruche"
+							);
+							// messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
+					return Const.INDEX;
+				}
 				LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 				Essaim essaim = null;
 				Rucher rucher = null;
