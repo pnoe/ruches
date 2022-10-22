@@ -98,7 +98,7 @@ public class RucherController {
 	 * Les événements sont utilisés par date décroissante : du plus récent au plus
 	 * ancien. Liste les événements correspondant à l'ajout ou le retrait de ruches
 	 * dans ce rucher. Option "Grouper" pour grouper les événements de même date
-	 * (année, mois et jour)
+	 * (année, mois et jour).
 	 *
 	 * @param model : on ajoute au model "hist" la liste des événements, "group"
 	 *              true si regroupement fait, "rucher" l'objet rucher (titre, lien)
@@ -795,7 +795,6 @@ public class RucherController {
 			model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
 			model.addAttribute(Const.RUCHER, rucherOpt.get());
 			model.addAttribute("ruchesNoms", ruchesNoms);
-
 			// On cherche la date du dernier événement RUCHEAJOUTRUCHER
 			// pour imposer cette date comme min dans le formulaire
 			LocalDateTime dateTimeMin = LocalDateTime.MIN;
@@ -827,7 +826,7 @@ public class RucherController {
 	}
 
 	/**
-	 * Ajoute une liste de ruches dans un rucher Création de l'événement
+	 * Ajoute une liste de ruches dans un rucher. Création de l'événement
 	 * RUCHEAJOUTRUCHER par ruche
 	 */
 	@PostMapping("/ruches/ajouter/sauve/{rucherId}/{ruchesNoms}")

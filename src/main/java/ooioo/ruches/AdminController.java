@@ -96,7 +96,7 @@ public class AdminController {
 		// Recherche des erreurs dans l'historique des ajouts de ruches dans les ruchers
 		// La liste de tous les ruches même inactifs
 		Iterable<Rucher> ruchers = rucherRepository.findAll();
-		// la liste de tous les événements RUCHEAJOUTRUCHER 
+		// la liste de tous les événements RUCHEAJOUTRUCHER
 		//   ayant une ruche et un rucher non nuls
 		//   triés par ordre de date descendante
 		List<Evenement> evensListe = evenementRepository.findAjoutRucheOK();
@@ -110,7 +110,7 @@ public class AdminController {
 		List<Rucher> rucherNonVide = new ArrayList<>();
 		for (Rucher rucher : ruchers) {
 			// Les noms des ruches présentes dans le rucher
-			// TODO Nom inutile ? List<String> 
+			// TODO Nom inutile ? List<String>
 			Collection<Nom> nomRuchesX = rucheRepository.findNomsByRucherId(rucher.getId());
 			// TODO Lourd ! pour passer de collection à list ?
  			List<String> ruches = new ArrayList<>();
@@ -130,7 +130,7 @@ public class AdminController {
 						errsRucher.add("1");
 						eveRucherRuche.add(eve);
 					} // sinon, la ruche a été enlevée de la liste des noms
-					// On parcours les événements suivants à la recherche 
+					// On parcours les événements suivants à la recherche
 					//  de deux ajouts successifs (erreur)
 					//  donc même ruche que eve et même rucher : rucherId
 					for (int j = i + 1; j < levens; j++) {

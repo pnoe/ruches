@@ -148,6 +148,18 @@ public class RucherService {
 		LocalDateTime dateEveAjout = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 		for (String rucheNom : ruchesNoms) {
 			Ruche ruche = rucheRepository.findByNom(rucheNom);
+			// Si le nom de la ruche est inconnu, log de l'erreur puis on continue.
+			// L'utilisateur ne voit donc pas l'erreur (sauf s'il consulte les logs).
+			if(ruche == null) {
+				logger.info("Ruche {} inconnue.", rucheNom);
+				continue;
+			}
+			// Si la ruche est déjà dans le rucher, log de l'erreur puis on continue.
+			// L'utilisateur ne voit donc pas l'erreur (sauf s'il consulte les logs).
+			if((ruche.getRucher() != null) && (ruche.getRucher().getId().equals(rucher.getId()))) {
+				logger.info("Ruche {} déjà présente dans le rucher {}", rucheNom, rucher.getNom());
+				continue;
+			}
 			String provenance = (ruche.getRucher() == null) ? "" : ruche.getRucher().getNom();
 			ruche.setRucher(rucher);
 			// Mettre les coord. de la ruche à celles du rucher
