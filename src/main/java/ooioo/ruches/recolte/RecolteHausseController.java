@@ -172,12 +172,17 @@ public class RecolteHausseController {
 				if (hausseOpt.isPresent()) {
 					Recolte recolte = recolteOpt.get();
 					Hausse hausse = hausseOpt.get();
+					// Si la hausse est déjà dans la récolte, log erreur et on passe cette hausse.
+					if (recolteHausseRepository.findByRecolteAndHausse(recolte, hausse) != null) {
+						logger.error("La hausse {} est déjà dans la récolte {}", hausseNom, recolte.getDate());
+						continue;
+					}
 					BigDecimal poids = hausse.getPoidsVide().add(hausseResteMiel);
 					RecolteHausse recolteHausse = new RecolteHausse(recolte, hausse, poids,	poids);
 					Ruche ruche = hausse.getRuche();
 					if (ruche == null) {
 						// la hausse n'est pas sur une ruche. On ne saura ni la ruche, ni le rucher,
-						// ni l'essaim correspondants
+						// ni l'essaim correspondants.
 						logger.error("Récolte {} hausse {} Id ruche inconnu", recolteId, hausse.getId());
 					} else {
 						recolteHausse.setRuche(ruche);
@@ -192,6 +197,7 @@ public class RecolteHausseController {
 					recolteHausseRepository.save(recolteHausse);
 				} else {
 					logger.error("Nom hausse {} inconnu", hausseNom);
+					// On continue le traitement des autres hausses
 				}
 			} else {
 				logger.error(Const.IDRECOLTEXXINCONNU, recolteId);
@@ -203,7 +209,7 @@ public class RecolteHausseController {
 	}
 
 	/**
-	 * Retrait d'une série de hausses dans la récolte
+	 * Retrait d'une série de hausses de la récolte.
 	 */
 	@GetMapping("/retraitHausses/{recolteId}/{haussesNoms}")
 	public String retraitHausses(Model model, @PathVariable long recolteId, @PathVariable String[] haussesNoms) {
@@ -211,10 +217,14 @@ public class RecolteHausseController {
 			Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
 			Optional<Hausse> hausseOpt = hausseRepository.findByNom(hausseNom);
 			if (recolteOpt.isPresent()) {
+				Recolte recolte = recolteOpt.get();
 				if (hausseOpt.isPresent()) {
-					Recolte recolte = recolteOpt.get();
 					Hausse hausse = hausseOpt.get();
 					RecolteHausse recolteHausse = recolteHausseRepository.findByRecolteAndHausse(recolte, hausse);
+					if(recolteHausse == null) {
+						logger.error("La hausse {} n'est pas dans le récolte {}", hausseNom, recolte.getDate());
+						continue;
+					}
 					recolteHausseRepository.delete(recolteHausse);
 				} else {
 					logger.error("Nom hausse {} inconnu", hausseNom);
@@ -229,9 +239,9 @@ public class RecolteHausseController {
 	}
 
 	/**
-	 * Enlève les hausses de la récolte des ruches
-	 *  crée les événements retraits des hausses
-	 *   et remplissage à 0
+	 * Enlève toutes les hausses de la récolte des ruches.
+	 * Crée les événements retraits des hausses
+	 *   et remplissage à 0.
 	 *   (appel XMLHttpRequest)
 	 */
 	@PostMapping("/haussesDepot/{recolteId}")
