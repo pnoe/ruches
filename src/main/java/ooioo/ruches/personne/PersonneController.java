@@ -131,6 +131,18 @@ public class PersonneController {
 		if (bindingResult.hasErrors()) {
 			return PERSONNE_PERSONNEFORM;
 		}
+		// Vérification de l'unicité du login si différent de ""
+		if (!"".equals(personne.getLogin()) && personneRepository.findByLogin(personne.getLogin()) != null) {
+			logger.error("Login {} existant.", personne.getLogin());
+			model.addAttribute(Const.MESSAGE, "Login existant.");
+			return Const.INDEX;
+		}
+		// Vérification de l'unicité de l'email
+		if (personneRepository.findByEmail(personne.getEmail()) != null) {
+			logger.error("Email {} existant.", personne.getEmail());
+			model.addAttribute(Const.MESSAGE, "Email existant.");
+			return Const.INDEX;
+		}
 		String password = personne.getPassword();
 		// si pas de password saisi on récupère le password existant si la personne
 		// existe en base
