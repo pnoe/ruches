@@ -119,12 +119,13 @@ public class PersonneController {
 	}
 
 	/**
-	 * Enregistrement de la personne
+	 * Enregistrement de la personne crée ou modifiée
 	 */
 	@PostMapping("/sauve")
 	public String sauve(@ModelAttribute Personne personne, BindingResult bindingResult, Model model,
 			Authentication authentication) {
-		// Il faut être admin pour créer une Personne ou pour modifier une autre Personne que soi-même
+		// Il faut être admin pour créer une Personne ou pour modifier une autre
+		// Personne que soi-même
 		if (pService.personneDroitsInsuffisants(personne, authentication, model)) {
 			return Const.INDEX;
 		}
@@ -132,14 +133,19 @@ public class PersonneController {
 			return PERSONNE_PERSONNEFORM;
 		}
 		// Vérification de l'unicité du login si différent de ""
-		if (!"".equals(personne.getLogin()) && personneRepository.findByLogin(personne.getLogin()) != null) {
-			logger.error("Login {} existant.", personne.getLogin());
-			model.addAttribute(Const.MESSAGE, "Login existant.");
-			return Const.INDEX;
+		// et si la personne retrouvée en base n'est pas la personne elle même
+		if (!"".equals(personne.getLogin())) { 
+			Personne pL = personneRepository.findByLogin(personne.getLogin());
+			if (pL != null && !pL.getId().equals(personne.getId())) {
+				logger.error("Login {} existant.", pL.getLogin());
+				model.addAttribute(Const.MESSAGE, "Login existant.");
+				return Const.INDEX;
+			}
 		}
+		Personne pE = personneRepository.findByEmail(personne.getEmail());
 		// Vérification de l'unicité de l'email
-		if (personneRepository.findByEmail(personne.getEmail()) != null) {
-			logger.error("Email {} existant.", personne.getEmail());
+		if (pE != null &&  !pE.getId().equals(personne.getId())) {
+			logger.error("Email {} existant.", pE.getEmail());
 			model.addAttribute(Const.MESSAGE, "Email existant.");
 			return Const.INDEX;
 		}
@@ -147,15 +153,14 @@ public class PersonneController {
 		// si pas de password saisi on récupère le password existant si la personne
 		// existe en base
 		if ("".equals(password)) {
-			Long personneId = personne.getId();
-			if (personneId != null) {
+			if (personne.getId() != null) {
 				Optional<Personne> personneOptTemp = personneRepository.findById(personne.getId());
 				if (personneOptTemp.isPresent()) {
 					String passwordTemp = personneOptTemp.get().getPassword();
 					personne.setPassword(passwordTemp);
 				} else {
 					// erreur personne.id existe mais rien en base
-					logger.error("Récupération en base de {}", personneId);
+					logger.error("Récupération en base de {}", personne.getId());
 					model.addAttribute(Const.MESSAGE, "Erreur base de données.");
 					return Const.INDEX;
 				}
