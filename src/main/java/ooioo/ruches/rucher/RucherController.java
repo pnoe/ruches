@@ -512,12 +512,19 @@ public class RucherController {
 	}
 
 	/**
-	 * Enregistrement du rucher
+	 * Enregistrement du rucher créé ou modifié
 	 */
 	@PostMapping("/sauve")
-	public String sauve(@ModelAttribute Rucher rucher, BindingResult bindingResult) {
+	public String sauve(Model model, @ModelAttribute Rucher rucher, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return RUCHER_RUCHERFORM;
+		}
+		// Vérification de l'unicité du nom
+		Rucher rNom = rucherRepository.findByNom(rucher.getNom());
+		if (rNom != null && !rNom.getId().equals(rucher.getId())) {
+			logger.error("Nom de rucher {} existant.", rNom.getNom());
+			model.addAttribute(Const.MESSAGE, "Nom de rucher existant.");
+			return Const.INDEX;
 		}
 		rucherRepository.save(rucher);
 		logger.info("Rucher {} enregistré, id {}", rucher.getNom(), rucher.getId());

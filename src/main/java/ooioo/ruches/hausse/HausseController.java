@@ -180,12 +180,22 @@ public class HausseController {
 	}
 
 	/**
-	 * Enregistrement de la hausse
+	 * Enregistrement de la hausse crée ou modifiée
 	 */
 	@PostMapping("/sauve")
-	public String sauveHausse(@ModelAttribute Hausse hausse, BindingResult bindingResult) {
+	public String sauveHausse(Model model, @ModelAttribute Hausse hausse, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return HAUSSE_HAUSSEFORM;
+		}
+		// Vérification de l'unicité du nom
+		Optional <Hausse> optH = hausseRepository.findByNom(hausse.getNom());
+		if (optH.isPresent()) {
+			Hausse hNom = optH.get();
+			if (!hNom.getId().equals(hausse.getId())) {
+				logger.error("Nom de hausse {} existant.", hNom.getNom());
+				model.addAttribute(Const.MESSAGE, "Nom de hausse existant.");
+				return Const.INDEX;
+			}
 		}
 		hausseRepository.save(hausse);
 		logger.info("Hausse {} enregistrée, id {}", hausse.getNom(), hausse.getId());

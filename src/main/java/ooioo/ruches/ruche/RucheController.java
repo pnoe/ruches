@@ -359,16 +359,23 @@ public class RucheController {
 	}
 
 	/**
-	 * Enregistrement de la ruche
+	 * Enregistrement de la ruche crée ou modifiée
 	 */
 	@PostMapping("/sauve")
-	public String sauve(@ModelAttribute Ruche ruche, BindingResult bindingResult) {
+	public String sauve(Model model, @ModelAttribute Ruche ruche, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return RUCHE_RUCHEFORM;
 		}
-		// à sa création on met la ruche est au dépôt
-		// par contre on garde les coordonnées qui ont pu être
-		// être modifiées dans le formulaire
+		// Vérification de l'unicité du nom
+		Ruche rNom = rucheRepository.findByNom(ruche.getNom());
+		if (rNom != null &&  !rNom.getId().equals(ruche.getId())) {
+			logger.error("Nom de ruche {} existant.", rNom.getNom());
+			model.addAttribute(Const.MESSAGE, "Nom de ruche existant.");
+			return Const.INDEX;
+		}
+		// à sa création on met la ruche est au dépôt.
+		// Par contre on garde les coordonnées qui ont pu être
+		// être modifiées dans le formulaire.
 		if (ruche.getRucher() == null) {
 			Rucher rucher = rucherRepository.findByDepotIsTrue();
 			ruche.setRucher(rucher);

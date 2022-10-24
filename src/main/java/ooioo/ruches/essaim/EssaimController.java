@@ -163,7 +163,7 @@ public class EssaimController {
 				long ageMois = ChronoUnit.MONTHS.between(essaim.getReineDateNaissance(), dateNow);
 				if (ageMois > maxAgeMois) {
 					// Si la reine à plus de maxAgeMois on ne la prends pas en compte
-					//  afficher un message en haut de la page de stat
+					// afficher un message en haut de la page de stat
 					logger.info("Essaim {}, âge supérieur à {} mois", essaim.getNom(), maxAgeMois);
 					continue;
 				}
@@ -209,8 +209,8 @@ public class EssaimController {
 	}
 
 	/**
-	 * Statistiques tableau poids de miel par essaim
-	 *  Appel à partir de la liste des essaims
+	 * Statistiques tableau poids de miel par essaim Appel à partir de la liste des
+	 * essaims
 	 *
 	 * @param rucherId       optionnel pour ne prendre en compte que les hausses de
 	 *                       récolte dans ce rucher
@@ -606,12 +606,19 @@ public class EssaimController {
 	}
 
 	/**
-	 * Enregistrement de l'essaim
+	 * Enregistrement de l'essaim créé ou modifié
 	 */
 	@PostMapping("/sauve")
-	public String sauve(@ModelAttribute Essaim essaim, BindingResult bindingResult) {
+	public String sauve(Model model, @ModelAttribute Essaim essaim, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return ESSAIM_ESSAIMFORM;
+		}
+		// Vérification de l'unicité du nom
+		Essaim eNom = essaimRepository.findByNom(essaim.getNom());
+		if (eNom != null && !eNom.getId().equals(essaim.getId())) {
+			logger.error("Nom d'essaim {} existant.", eNom.getNom());
+			model.addAttribute(Const.MESSAGE, "Nom d'essaim existant.");
+			return Const.INDEX;
 		}
 		Essaim essaimParent = essaim;
 		while (essaimParent.getSouche() != null) {
@@ -655,9 +662,12 @@ public class EssaimController {
 			model.addAttribute("eveRuche", evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim,
 					TypeEvenement.AJOUTESSAIMRUCHE));
 			// On recherche le premier éven RUCHEAJOUTRUCHER référençant l'essaim
-			//   si on fait la recherche pour la ruche et que la ruche a été mise dans le rucher
-			//   sans l'essaim initialement, le retour du détail vers l'essaim ne sera pas possible
-			//   laisser tel quel, c'est mieux pour les cas normaux (ruche + essaim mis en rucher)
+			// si on fait la recherche pour la ruche et que la ruche a été mise dans le
+			// rucher
+			// sans l'essaim initialement, le retour du détail vers l'essaim ne sera pas
+			// possible
+			// laisser tel quel, c'est mieux pour les cas normaux (ruche + essaim mis en
+			// rucher)
 			model.addAttribute("eveRucher", evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim,
 					TypeEvenement.RUCHEAJOUTRUCHER));
 			// Si des hausses de récolte référencent cet essaim, on ne pourra la supprimer
@@ -813,7 +823,7 @@ public class EssaimController {
 			essaimDisperse.setActif(false);
 			essaimRepository.save(essaimDisperse);
 			// On crée l'événement dispersion
-			//  quel commentaire ?
+			// quel commentaire ?
 			Evenement eveDisperse = new Evenement(dateEve, TypeEvenement.ESSAIMDISPERSION, ruche, essaimDisperse,
 					ruche.getRucher(), null, null, commentaire);
 			evenementRepository.save(eveDisperse);
