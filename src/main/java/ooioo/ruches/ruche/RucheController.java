@@ -471,23 +471,26 @@ public class RucheController {
 
 	/**
 	 * Enregistrer en base l'ordre des hausses modifié par drag and drop (appel
-	 * XMLHttpRequest)
+	 * XMLHttpRequest).
+	 * @param hausses : tableau de ids des hausses dans l'ordre affiché dans la page html
 	 */
 	@PostMapping("/ordreHausses/{rucheId}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody String ordreHausses(@PathVariable long rucheId,
-			@RequestParam(value = "hausses[]") Long[] hausses, @RequestParam(value = "ordre[]") Integer[] ordre) {
+			@RequestParam(value = "hausses[]") Long[] hausses) {
 		for (int i = 0; i < hausses.length; i++) {
 			Optional<Hausse> hausseOpt = hausseRepository.findById(hausses[i]);
 			if (hausseOpt.isPresent()) {
 				Hausse hausse = hausseOpt.get();
 				if ((hausse.getRuche() != null) && (hausse.getRuche().getId() == rucheId)) {
-					hausse.setOrdreSurRuche(ordre[i]);
+					hausse.setOrdreSurRuche(i + 1);
 					hausseRepository.save(hausse);
 				} else {
+					logger.error("Hausse {} id ruche incorrect", hausse.getNom());
 					return "Id ruche incorrect";
 				}
 			} else {
+				logger.error("Hausse {} id incorrect", hausses[i]);
 				return "Hausse non trouvée";
 			}
 		}

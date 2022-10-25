@@ -3,6 +3,10 @@
 <head
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
+	const _csrf_token = /*[[${_csrf.token}]]*/null;
+	const _csrf_param_name = /*[[${_csrf.parameterName}]]*/null;
+	const urlRucheOdreHause = /*[[@{/ruche/ordreHausses/}]]*/null;
+	const rucheId = /*[[${ruche.id}]]*/null;
 	$(document).ready(function() {
 		const tableRetrait = new DataTable('#retraitHausses', {
 			paging: false,
@@ -20,19 +24,15 @@
 		tableRetrait.on( 'row-reordered', function (e, diff) {
 			if(diff.length === 0) return;
 			let hausses = [];
-			let ordre = [];
-		    for ( let i=0, ien=diff.length ; i<ien ; i++ ) {
-		    	const href = $(diff[i].node).find('a').attr('href');
-		    	hausses.push(href.substring(href.lastIndexOf('/') + 1));
-		    	ordre.push($(diff[i].node).children(":first").text()[0]);
-		    }
-		    let requestData = {hausses : hausses, ordre : ordre};
-			const _csrf_token = [[${_csrf.token}]];
-		    const _csrf_param_name = [[${_csrf.parameterName}]];
-		    requestData[_csrf_param_name] = _csrf_token;
-			$.post( [[@{/ruche/ordreHausses/}]] + [[${ruche.id}]],
+			$("#retraitHausses tbody tr a").each(function () {
+				const href = $(this).attr('href');
+				hausses.push(href.substring(href.lastIndexOf('/') + 1));
+			});
+		    let requestData = {hausses : hausses};
+			requestData[_csrf_param_name] = _csrf_token;
+			$.post(urlRucheOdreHause + rucheId,
 					requestData).done(function (data) {
-						if(!data.equals("OK")) {
+						if(data !== "OK") {
 							alert( data );
 						}
 			});
@@ -56,8 +56,10 @@
 				</h1>
 			</div>
 			<div class="col">
-				<a th:href="@{/doc/ruches.html#%5F%5FRefHeading%5F%5F%5FToc3802_3476563104}"
-				  class="bi bi-book" th:title="#{Doc}" target="_blank" aria-hidden="true"></a>
+				<a
+					th:href="@{/doc/ruches.html#%5F%5FRefHeading%5F%5F%5FToc3802_3476563104}"
+					class="bi bi-book" th:title="#{Doc}" target="_blank"
+					aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
@@ -68,7 +70,7 @@
 			<thead>
 				<tr>
 					<th th:text="#{Ordre}"></th>
-					<th th:text="#{nom}"></th>	
+					<th th:text="#{nom}"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -80,7 +82,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<br/>
+		<br />
 		<h6 th:text="#{ajouterHausses}"></h6>
 		<table class="table table-bordered table-striped" id="ajoutHausses">
 			<thead>
