@@ -162,6 +162,9 @@ public class HausseController {
 				Ruche ruche = hausse.getRuche();
 				if (ruche != null) {
 					hausse.setRuche(null);
+					// On sauve la hausse après avoir mis hausse.ruche à null
+					//  pour que ordonneHaussesRuche ne trouve plus cette hausse
+					hausseRepository.save(hausse);
 					rucheService.ordonneHaussesRuche(ruche.getId());
 				}
 				hausseRepository.delete(hausse);

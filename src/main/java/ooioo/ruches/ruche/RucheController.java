@@ -593,7 +593,7 @@ public class RucheController {
 				hausse.setOrdreSurRuche(null);
 				hausseRepository.save(hausse);
 				rucheService.ordonneHaussesRuche(rucheId);
-				logger.info("Hause {} retirée de le ruche {}", hausse.getNom(), rucheNom);
+				logger.info("Hausse {} retirée de le ruche {}", hausse.getNom(), rucheNom);
 			} else {
 				logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
 				model.addAttribute(Const.MESSAGE,

@@ -37,7 +37,6 @@ public class RucheService {
 	 * hausse
 	 */
 	public void ordonneHaussesRuche(long rucheId) {
-
 		Iterable<Hausse> haussesRuche = hausseRepository.findByRucheIdOrderByOrdreSurRuche(rucheId);
 		int i = 1;
 		for (Hausse hausseRuche : haussesRuche) {
