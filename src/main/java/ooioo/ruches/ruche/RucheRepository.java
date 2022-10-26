@@ -37,7 +37,7 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 
 	Collection<Ruche> findCompletByRucherId(Long id);
 
-	Collection<Nom> findNomsByRucherId(Long id);
+	Collection<Nom> findNomsByRucherId(Long id);	
 
 	Collection<IdNom> findAllProjectedIdNomByOrderByNom();
 

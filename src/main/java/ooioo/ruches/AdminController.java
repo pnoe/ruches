@@ -110,9 +110,7 @@ public class AdminController {
 		List<Rucher> rucherNonVide = new ArrayList<>();
 		for (Rucher rucher : ruchers) {
 			// Les noms des ruches présentes dans le rucher
-			// TODO Nom inutile ? List<String>
 			Collection<Nom> nomRuchesX = rucheRepository.findNomsByRucherId(rucher.getId());
-			// TODO Lourd ! pour passer de collection à list ?
  			List<String> ruches = new ArrayList<>();
  			for (Nom nomR : nomRuchesX) {
  				ruches.add(nomR.nom());
