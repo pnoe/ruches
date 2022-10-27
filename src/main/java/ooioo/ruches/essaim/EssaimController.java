@@ -1,6 +1,5 @@
 package ooioo.ruches.essaim;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -82,37 +81,7 @@ public class EssaimController {
 	public String historique(Model model, @PathVariable long essaimId) {
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isPresent()) {
-			Essaim essaim = essaimOpt.get();
-			model.addAttribute(Const.ESSAIM, essaim);
-			// la liste de tous les événements RUCHEAJOUTRUCHER concernant cet essaim
-			// triés par ordre de date ascendante
-			List<Evenement> evensEssaimAjout = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
-					TypeEvenement.RUCHEAJOUTRUCHER);
-			// Si l'essaim est dispersé cela termine le séjour dans le dernier rucher
-			Evenement dispersion = evenementRepository.findFirstByEssaimAndType(essaim, TypeEvenement.ESSAIMDISPERSION);
-			if (dispersion != null) {
-				evensEssaimAjout.add(dispersion);
-			}
-			// Ajouter les mises en ruche
-			List<Evenement> miseEnRuche = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
-					TypeEvenement.AJOUTESSAIMRUCHE);
-			evensEssaimAjout.addAll(miseEnRuche);
-			// Trier par date
-			evensEssaimAjout.sort((e1, e2) -> e1.getDate().compareTo(e2.getDate()));
-			model.addAttribute("evensEssaimAjout", evensEssaimAjout);
-			List<Long> durees = new ArrayList<>();
-			if (!evensEssaimAjout.isEmpty()) {
-				int i = 0;
-				while (i < evensEssaimAjout.size() - 1) {
-					// calcul de la durée de séjour dans le rucher
-					durees.add(
-							Duration.between(evensEssaimAjout.get(i).getDate(), evensEssaimAjout.get(i + 1).getDate())
-									.toDays());
-					i++;
-				}
-				durees.add(Duration.between(evensEssaimAjout.get(i).getDate(), LocalDateTime.now()).toDays());
-				model.addAttribute("durees", durees);
-			}
+			essaimService.historique(model, essaimOpt, essaimId);
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 			model.addAttribute(Const.MESSAGE,
@@ -123,7 +92,8 @@ public class EssaimController {
 	}
 
 	/*
-	 * Statistiques âges des reines
+	 * Statistiques (chartjs barchart) âges des reines. Appel icône dans page liste
+	 * essaim.
 	 */
 	@RequestMapping("/statistiquesage")
 	public String statistiquesage(Model model) {
@@ -131,12 +101,13 @@ public class EssaimController {
 		return "essaim/essaimsStatAges";
 	}
 
-	/**
-	 * Statistiques tableau poids de miel par essaim Appel à partir de la liste des
-	 * essaims
+	/*
+	 * Statistiques tableau poids de miel par essaim. Appel icône dans page liste
+	 * essaim.
 	 *
-	 * @param rucherId       optionnel pour ne prendre en compte que les hausses de
-	 *                       récolte dans ce rucher.
+	 * @param rucherId optionnel pour ne prendre en compte que les hausses de
+	 * récolte dans ce rucher.
+	 * 
 	 * @param masquerInactif pour masquer les essaims inactifs.
 	 */
 	@RequestMapping("/statistiques")
@@ -176,10 +147,13 @@ public class EssaimController {
 	 * Enregistrement de l'essaimage.
 	 *
 	 * @param essaimId l'id de l'essaim qui essaime.
+	 * 
 	 * @param date la date saisie dans le formulaire d'essaimage.
-	 * @param nom le nom du nouvel essaim restant dans la ruche
-	 *  saisi dans le formulaire d'essaimage.
-	 * @param commentaire le commentaire  saisi dans le formulaire d'essaimage.
+	 * 
+	 * @param nom le nom du nouvel essaim restant dans la ruche saisi dans le
+	 * formulaire d'essaimage.
+	 * 
+	 * @param commentaire le commentaire saisi dans le formulaire d'essaimage.
 	 */
 	@PostMapping("/essaime/sauve/{essaimId}")
 	public String essaimeSauve(Model model, @PathVariable long essaimId, @RequestParam String date,
@@ -207,7 +181,7 @@ public class EssaimController {
 
 	/**
 	 * Clonage multiple d'un essaim (appel XMLHttpRequest de la page détail d'un
-	 * essaim) avec mises en ruches éventuelles
+	 * essaim) avec mises en ruches éventuelles.
 	 *
 	 * @param session   pour gestion du décalage éventuel des dates
 	 * @param model
@@ -223,44 +197,7 @@ public class EssaimController {
 			@RequestParam String nomclones, @RequestParam String nomruches) {
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isPresent()) {
-			Essaim essaim = essaimOpt.get();
-			List<String> noms = new ArrayList<>();
-			for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
-				noms.add(essaimNom.nom());
-			}
-			String[] nomarray = nomclones.split(",");
-			String[] nomruchesarray = nomruches.split(",");
-			List<String> nomsCrees = new ArrayList<>();
-			LocalDateTime dateEve = Utils.dateTimeDecal(session);
-			for (int i = 0; i < nomarray.length; i++) {
-				if (noms.contains(nomarray[i])) {
-					logger.error("Clone d'un essaim : {} nom existant", nomarray[i]);
-				} else {
-					Essaim clone = new Essaim(essaim, nomarray[i]);
-					essaimRepository.save(clone);
-					nomsCrees.add(nomarray[i]);
-					// pour éviter clone "a,a" : 2 fois le même nom dans la liste
-					noms.add(nomarray[i]);
-					if (i < nomruchesarray.length && !"".contentEquals(nomruchesarray[i])) {
-						Ruche ruche = rucheRepository.findByNom(nomruchesarray[i]);
-						if (ruche.getEssaim() == null) {
-							ruche.setEssaim(clone);
-							rucheRepository.save(ruche);
-							Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, ruche,
-									clone, ruche.getRucher(), null, null, "Clone essaim " + essaim.getNom());
-							evenementRepository.save(evenementAjout);
-							logger.info(Const.EVENEMENTXXENREGISTRE, evenementAjout.getId());
-						} else {
-							logger.error("Clone d'un essaim : {} la ruche {} n'est pas vide", nomarray[i],
-									nomruchesarray[i]);
-						}
-					}
-				}
-			}
-			String nomsJoin = String.join(",", nomsCrees);
-			logger.info("Essaims {} créé(s)", nomsJoin);
-			return messageSource.getMessage("cloneessaimcrees", new Object[] { nomsJoin },
-					LocaleContextHolder.getLocale());
+			return essaimService.clone(session, model, essaimOpt, nomclones, nomruches);
 		}
 		logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 		return "Erreur : id essaim inconnu";

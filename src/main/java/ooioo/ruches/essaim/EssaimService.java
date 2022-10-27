@@ -2,6 +2,7 @@ package ooioo.ruches.essaim;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -13,15 +14,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import ooioo.ruches.Const;
 import ooioo.ruches.IdNom;
+import ooioo.ruches.Nom;
+import ooioo.ruches.Utils;
 import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
@@ -50,9 +56,93 @@ public class EssaimService {
 	private RecolteHausseRepository recolteHausseRepository;
 	@Autowired
 	private RucherRepository rucherRepository;
+	
+	@Autowired
+	MessageSource messageSource;
 
-	/**
-	 * Calcul des statistiques sur l'âge des reines
+	public String clone(HttpSession session, Model model,
+			Optional<Essaim> essaimOpt, String nomclones, String nomruches) {
+		Essaim essaim = essaimOpt.get();
+		List<String> noms = new ArrayList<>();
+		for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
+			noms.add(essaimNom.nom());
+		}
+		String[] nomarray = nomclones.split(",");
+		String[] nomruchesarray = nomruches.split(",");
+		List<String> nomsCrees = new ArrayList<>();
+		LocalDateTime dateEve = Utils.dateTimeDecal(session);
+		for (int i = 0; i < nomarray.length; i++) {
+			if (noms.contains(nomarray[i])) {
+				logger.error("Clone d'un essaim : {} nom existant", nomarray[i]);
+			} else {
+				Essaim clone = new Essaim(essaim, nomarray[i]);
+				essaimRepository.save(clone);
+				nomsCrees.add(nomarray[i]);
+				// pour éviter clone "a,a" : 2 fois le même nom dans la liste
+				noms.add(nomarray[i]);
+				if (i < nomruchesarray.length && !"".contentEquals(nomruchesarray[i])) {
+					Ruche ruche = rucheRepository.findByNom(nomruchesarray[i]);
+					if (ruche.getEssaim() == null) {
+						ruche.setEssaim(clone);
+						rucheRepository.save(ruche);
+						Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, ruche,
+								clone, ruche.getRucher(), null, null, "Clone essaim " + essaim.getNom());
+						evenementRepository.save(evenementAjout);
+						logger.info(Const.EVENEMENTXXENREGISTRE, evenementAjout.getId());
+					} else {
+						logger.error("Clone d'un essaim : {} la ruche {} n'est pas vide", nomarray[i],
+								nomruchesarray[i]);
+					}
+				}
+			}
+		}
+		String nomsJoin = String.join(",", nomsCrees);
+		logger.info("Essaims {} créé(s)", nomsJoin);
+		return messageSource.getMessage("cloneessaimcrees", new Object[] { nomsJoin },
+				LocaleContextHolder.getLocale());
+	}
+	
+	/*
+	 * Historique de la mise en ruchers d'un essaim. Les événements affichés dans
+	 * l'historique : - les mise en rucher de ruches ou l'essaim apparait - la
+	 * dispersion de l'essaim qui termine l'historique - la ou les mises en ruches
+	 * de l'essaim qui peuvent impliquer des déplacements
+	 */
+	public void historique(Model model, Optional<Essaim> essaimOpt, Long essaimId) {
+		Essaim essaim = essaimOpt.get();
+		model.addAttribute(Const.ESSAIM, essaim);
+		// la liste de tous les événements RUCHEAJOUTRUCHER concernant cet essaim
+		// triés par ordre de date ascendante
+		List<Evenement> evensEssaimAjout = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
+				TypeEvenement.RUCHEAJOUTRUCHER);
+		// Si l'essaim est dispersé cela termine le séjour dans le dernier rucher
+		Evenement dispersion = evenementRepository.findFirstByEssaimAndType(essaim, TypeEvenement.ESSAIMDISPERSION);
+		if (dispersion != null) {
+			evensEssaimAjout.add(dispersion);
+		}
+		// Ajouter les mises en ruche
+		List<Evenement> miseEnRuche = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
+				TypeEvenement.AJOUTESSAIMRUCHE);
+		evensEssaimAjout.addAll(miseEnRuche);
+		// Trier par date
+		evensEssaimAjout.sort((e1, e2) -> e1.getDate().compareTo(e2.getDate()));
+		model.addAttribute("evensEssaimAjout", evensEssaimAjout);
+		List<Long> durees = new ArrayList<>();
+		if (!evensEssaimAjout.isEmpty()) {
+			int i = 0;
+			while (i < evensEssaimAjout.size() - 1) {
+				// calcul de la durée de séjour dans le rucher
+				durees.add(Duration.between(evensEssaimAjout.get(i).getDate(), evensEssaimAjout.get(i + 1).getDate())
+						.toDays());
+				i++;
+			}
+			durees.add(Duration.between(evensEssaimAjout.get(i).getDate(), LocalDateTime.now()).toDays());
+			model.addAttribute("durees", durees);
+		}
+	}
+
+	/*
+	 * Calcul des statistiques sur l'âge des reines.
 	 */
 	public void statistiquesage(Model model) {
 		Iterable<Essaim> essaims = essaimRepository.findByActif(true);
@@ -212,20 +302,25 @@ public class EssaimService {
 		model.addAttribute("rucherId", rucherId);
 		model.addAttribute("masquerInactif", masquerInactif);
 	}
-	
+
 	/*
 	 * Enregistrement de l'essaimage.
 	 *
 	 * @param essaimId l'id de l'essaim qui essaime.
+	 * 
 	 * @param date la date saisie dans le formulaire d'essaimage.
-	 * @param nom le nom du nouvel essaim restant dans la ruche
-	 *  saisi dans le formulaire d'essaimage.
-	 * @param commentaire le commentaire  saisi dans le formulaire d'essaimage.
+	 * 
+	 * @param nom le nom du nouvel essaim restant dans la ruche saisi dans le
+	 * formulaire d'essaimage.
+	 * 
+	 * @param commentaire le commentaire saisi dans le formulaire d'essaimage.
+	 * 
 	 * @param essaimOpt l'essaim essaimId.
-	 * @param nouvelEssaim le nouvel essaim à créer 	restant dans le ruche 
+	 * 
+	 * @param nouvelEssaim le nouvel essaim à créer restant dans le ruche
 	 */
-	public Essaim essaimSauve(Model model, long essaimId, String date,
-			String nom, String commentaire, Optional<Essaim> essaimOpt) {
+	public Essaim essaimSauve(Model model, long essaimId, String date, String nom, String commentaire,
+			Optional<Essaim> essaimOpt) {
 		// L'essaim à disperser
 		Essaim essaim = essaimOpt.get();
 		// La ruche dans laquelle on va mettre le nouvel essaim à créer

@@ -29,6 +29,7 @@ public class Essaim {
 		this.commentaire = essaim.getCommentaire();
 		this.reineDateNaissance = essaim.getReineDateNaissance();
 		this.reineMarquee = essaim.getReineMarquee();
+		// L'essaim à la même souche que l'essaim cloné
 		this.souche = essaim.getSouche();
 		this.agressivite = essaim.getAgressivite();
 		this.proprete = essaim.getProprete();
