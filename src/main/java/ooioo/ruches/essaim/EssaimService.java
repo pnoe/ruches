@@ -108,37 +108,42 @@ public class EssaimService {
 	 * dispersion de l'essaim qui termine l'historique - la ou les mises en ruches
 	 * de l'essaim qui peuvent impliquer des déplacements
 	 */
-	public void historique(Model model, Optional<Essaim> essaimOpt, Long essaimId) {
-		Essaim essaim = essaimOpt.get();
-		model.addAttribute(Const.ESSAIM, essaim);
-		// la liste de tous les événements RUCHEAJOUTRUCHER concernant cet essaim
-		// triés par ordre de date ascendante
-		List<Evenement> evensEssaimAjout = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
-				TypeEvenement.RUCHEAJOUTRUCHER);
-		// Si l'essaim est dispersé cela termine le séjour dans le dernier rucher
-		Evenement dispersion = evenementRepository.findFirstByEssaimAndType(essaim, TypeEvenement.ESSAIMDISPERSION);
-		if (dispersion != null) {
-			evensEssaimAjout.add(dispersion);
-		}
-		// Ajouter les mises en ruche
-		List<Evenement> miseEnRuche = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
-				TypeEvenement.AJOUTESSAIMRUCHE);
-		evensEssaimAjout.addAll(miseEnRuche);
-		// Trier par date
-		evensEssaimAjout.sort((e1, e2) -> e1.getDate().compareTo(e2.getDate()));
-		model.addAttribute("evensEssaimAjout", evensEssaimAjout);
-		List<Long> durees = new ArrayList<>();
-		if (!evensEssaimAjout.isEmpty()) {
-			int i = 0;
-			while (i < evensEssaimAjout.size() - 1) {
-				// calcul de la durée de séjour dans le rucher
-				durees.add(Duration.between(evensEssaimAjout.get(i).getDate(), evensEssaimAjout.get(i + 1).getDate())
-						.toDays());
-				i++;
+	public boolean historique(Model model, Long essaimId) {
+		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
+		if (essaimOpt.isPresent()) {
+			Essaim essaim = essaimOpt.get();
+			model.addAttribute(Const.ESSAIM, essaim);
+			// la liste de tous les événements RUCHEAJOUTRUCHER concernant cet essaim
+			// triés par ordre de date ascendante
+			List<Evenement> evensEssaimAjout = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
+					TypeEvenement.RUCHEAJOUTRUCHER);
+			// Si l'essaim est dispersé cela termine le séjour dans le dernier rucher
+			Evenement dispersion = evenementRepository.findFirstByEssaimAndType(essaim, TypeEvenement.ESSAIMDISPERSION);
+			if (dispersion != null) {
+				evensEssaimAjout.add(dispersion);
 			}
-			durees.add(Duration.between(evensEssaimAjout.get(i).getDate(), LocalDateTime.now()).toDays());
-			model.addAttribute("durees", durees);
+			// Ajouter les mises en ruche
+			List<Evenement> miseEnRuche = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
+					TypeEvenement.AJOUTESSAIMRUCHE);
+			evensEssaimAjout.addAll(miseEnRuche);
+			// Trier par date
+			evensEssaimAjout.sort((e1, e2) -> e1.getDate().compareTo(e2.getDate()));
+			model.addAttribute("evensEssaimAjout", evensEssaimAjout);
+			List<Long> durees = new ArrayList<>();
+			if (!evensEssaimAjout.isEmpty()) {
+				int i = 0;
+				while (i < evensEssaimAjout.size() - 1) {
+					// calcul de la durée de séjour dans le rucher
+					durees.add(Duration.between(evensEssaimAjout.get(i).getDate(), evensEssaimAjout.get(i + 1).getDate())
+							.toDays());
+					i++;
+				}
+				durees.add(Duration.between(evensEssaimAjout.get(i).getDate(), LocalDateTime.now()).toDays());
+				model.addAttribute("durees", durees);
+			}
+			return true;
 		}
+		return false;
 	}
 
 	/*

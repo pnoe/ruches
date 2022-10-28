@@ -526,8 +526,9 @@ public class RucherController {
 			model.addAttribute(Const.MESSAGE, "Nom de rucher existant.");
 			return Const.INDEX;
 		}
+		String action = ((rucher.getId() == null)?"créé":"modifié");
 		rucherRepository.save(rucher);
-		logger.info("Rucher {} enregistré, id {}", rucher.getNom(), rucher.getId());
+		logger.info("{} " + action, rucher);
 		return "redirect:/rucher/" + rucher.getId();
 	}
 

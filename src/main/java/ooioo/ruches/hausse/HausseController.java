@@ -200,8 +200,9 @@ public class HausseController {
 				return Const.INDEX;
 			}
 		}
+		String action = ((hausse.getId() == null)?"créée":"modifiée");
 		hausseRepository.save(hausse);
-		logger.info("Hausse {} enregistrée, id {}", hausse.getNom(), hausse.getId());
+		logger.info("{} " + action, hausse);
 		return "redirect:/hausse/" + hausse.getId();
 	}
 
@@ -219,7 +220,7 @@ public class HausseController {
 				noms.add(hausseNom.nom());
 			}
 			model.addAttribute("haussenoms", noms);
-			// Si des hausses de récolte référencent cette hause, on ne pourra la supprimer
+			// Si des hausses de récolte référencent cette hausse, on ne pourra la supprimer
 			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByHausseId(hausseId);
 			model.addAttribute("recolteHausses", recolteHausses.iterator().hasNext());
 			// Si des événements référencent cette hausse, il faudra les supprimer si on

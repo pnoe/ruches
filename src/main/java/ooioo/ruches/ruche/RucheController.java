@@ -373,6 +373,7 @@ public class RucheController {
 			model.addAttribute(Const.MESSAGE, "Nom de ruche existant.");
 			return Const.INDEX;
 		}
+		String action = ((ruche.getId() == null)?"créée":"modifiée");
 		// à sa création on met la ruche est au dépôt.
 		// Par contre on garde les coordonnées qui ont pu être
 		// être modifiées dans le formulaire.
@@ -391,7 +392,7 @@ public class RucheController {
 		} else {
 			rucheRepository.save(ruche);
 		}
-		logger.info("Ruche {} enregistrée, id {}", ruche.getNom(), ruche.getId());
+		logger.info("{} " + action, ruche.toString());
 		return "redirect:/ruche/" + ruche.getId();
 	}
 
@@ -538,7 +539,7 @@ public class RucheController {
 					evenementPose.setDate(evenementRetrait.getDate().withSecond(0).withNano(0).plusMinutes(1L));
 				}
 				evenementRepository.save(evenementPose);
-				logger.info("Hause {} posée sur le ruche {}", hausse.getNom(), ruche.getNom());
+				logger.info("Hausse {} posée sur le ruche {}", hausse.getNom(), ruche.getNom());
 			} else {
 				logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
 				model.addAttribute(Const.MESSAGE,

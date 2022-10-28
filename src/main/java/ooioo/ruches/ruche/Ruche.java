@@ -20,6 +20,14 @@ import ooioo.ruches.rucher.Rucher;
 @Entity
 public class Ruche {
 
+	@Override
+	public String toString() {
+		return "Ruche [id=" + id + ", nom=" + nom + ", active=" + active + ", Acquisition=" + dateAcquisition
+				+ ", poidsVide=" + poidsVide + ", type=" + type.getNom() + ", essaim=" + 
+				((essaim == null)?"null":essaim.getNom()) + ", rucher=" + rucher.getNom()
+				+ ", longitude=" + longitude + ", latitude=" + latitude + ", commentaire=" + commentaire + "]";
+	}
+
 	public Ruche() {
 	}
 

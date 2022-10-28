@@ -17,6 +17,14 @@ import ooioo.ruches.ruche.Ruche;
 @Entity
 public class Hausse {
 
+	@Override
+	public String toString() {
+		return "Hausse [id=" + id + ", ruche=" + ((ruche == null)?"null":ruche.getNom()) + 
+				", ordreSurRuche=" + ordreSurRuche + ", active=" + active
+				+ ", nom=" + nom + ", Acquisition=" + dateAcquisition + ", nbCadres=" + nbCadres + ", nbCadresMax="
+				+ nbCadresMax + ", poidsVide=" + poidsVide + ", commentaire=" + commentaire + "]";
+	}
+
 	public Hausse() {
 	}
 

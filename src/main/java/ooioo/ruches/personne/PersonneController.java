@@ -142,12 +142,14 @@ public class PersonneController {
 				return Const.INDEX;
 			}
 		}
-		Personne pE = personneRepository.findByEmail(personne.getEmail());
-		// Vérification de l'unicité de l'email
-		if (pE != null &&  !pE.getId().equals(personne.getId())) {
-			logger.error("Email {} existant.", pE.getEmail());
-			model.addAttribute(Const.MESSAGE, "Email existant.");
-			return Const.INDEX;
+		if (!"".equals(personne.getEmail())) {
+			// Vérification de l'unicité de l'email si différent de ""
+			Personne pE = personneRepository.findByEmail(personne.getEmail());
+			if (pE != null &&  !pE.getId().equals(personne.getId())) {
+				logger.error("Email {} existant.", pE.getEmail());
+				model.addAttribute(Const.MESSAGE, "Email existant.");
+				return Const.INDEX;
+			}
 		}
 		String password = personne.getPassword();
 		// si pas de password saisi on récupère le password existant si la personne
@@ -173,8 +175,9 @@ public class PersonneController {
 		} else {
 			personne.setPassword(new BCryptPasswordEncoder().encode(password));
 		}
+		String action = ((personne.getId() == null)?"créée":"modifiée");
 		personneRepository.save(personne);
-		logger.info("Personne {} enregistrée, id {}", personne.getNom(), personne.getId());
+		logger.info("{} " + action, personne);
 		return "redirect:/personne/" + personne.getId();
 	}
 

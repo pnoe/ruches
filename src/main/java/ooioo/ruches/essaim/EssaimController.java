@@ -79,16 +79,13 @@ public class EssaimController {
 	 */
 	@GetMapping("/historique/{essaimId}")
 	public String historique(Model model, @PathVariable long essaimId) {
-		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
-		if (essaimOpt.isPresent()) {
-			essaimService.historique(model, essaimOpt, essaimId);
-		} else {
-			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
-			model.addAttribute(Const.MESSAGE,
-					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
-			return Const.INDEX;
+		if (essaimService.historique(model, essaimId)) {
+			return "essaim/essaimHisto";
 		}
-		return "essaim/essaimHisto";
+		logger.error(Const.IDESSAIMXXINCONNU, essaimId);
+		model.addAttribute(Const.MESSAGE,
+				messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
+		return Const.INDEX;
 	}
 
 	/*
@@ -391,8 +388,9 @@ public class EssaimController {
 			}
 			essaimParent = essaimParent.getSouche();
 		}
+		String action = ((essaim.getId() == null)?"créé":"modifié");
 		essaimRepository.save(essaim);
-		logger.info("Essaim {} enregistré, id {}", essaim.getNom(), essaim.getId());
+		logger.info("{} " + action, essaim.toString());
 		return "redirect:/essaim/" + essaim.getId();
 	}
 
