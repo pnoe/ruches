@@ -230,6 +230,7 @@ public class EvenementRucheController {
 			Evenement evenement = new Evenement(dateEve, typeEvenement, ruche, ruche.getEssaim(), ruche.getRucher(),
 					null, valeur, commentaire);
 			evenementRepository.save(evenement);
+			logger.info("{} créé", evenement);
 		}
 		return "redirect:/ruche/liste";
 	}
@@ -382,9 +383,9 @@ public class EvenementRucheController {
 			return "ruche/rucheCommentaireForm";
 		}
 		evenement.setValeur(Utils.notifIntFmt(evenement.getValeur()));
+		String action = (evenement.getId() == null)?"créé":"modifié"; 
 		evenementRepository.save(evenement);
-		logger.info("Evénement {} enregistré, id {}", evenement.getDate(), evenement.getId());
-		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
+		logger.info("{} " + action, evenement);
 		return "redirect:/ruche/" + evenement.getRuche().getId();
 	}
 
@@ -394,10 +395,9 @@ public class EvenementRucheController {
 	 */
 	@PostMapping("/sauve")
 	public String sauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
+		String action = (evenement.getId() == null)?"créé":"modifié"; 
 		evenementRepository.save(evenement);
-		logger.info("Evénement {} enregistré, id {}", evenement.getDate(), evenement.getId());
-		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
-		// return Const.REDIRECT_ESSAIM_ESSAIMID;
+		logger.info("{} " + action, evenement);
 		return "redirect:/ruche/" + evenement.getRuche().getId();
 	}
 

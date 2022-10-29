@@ -172,7 +172,7 @@ public class RucherService {
 			Evenement eveAjout = new Evenement(dateEveAjout, TypeEvenement.RUCHEAJOUTRUCHER, ruche, ruche.getEssaim(),
 					rucher, null, provenance, commentaire); // valeur commentaire
 			evenementRepository.save(eveAjout);
-			logger.info("Ruche {} déplacée dans le rucher {}", rucheNom, rucher.getNom());
+			logger.info("{} créé", eveAjout);
 		}
 	}
 

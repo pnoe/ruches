@@ -291,10 +291,12 @@ public class RecolteHausseController {
 							TypeEvenement.HAUSSERETRAITRUCHE, ruche, essaim, rucher, hausse,
 							hausse.getOrdreSurRuche().toString(), commentaireEve);
 					evenementRepository.save(evenementRetrait);
+					logger.info("{} créé", evenementRetrait);
 					Evenement evenementRemplissage = new Evenement(Utils.dateTimeDecal(session),
 							TypeEvenement.HAUSSEREMPLISSAGE, ruche, essaim, rucher, hausse,
 							"0", commentaireEve);
 					evenementRepository.save(evenementRemplissage);
+					logger.info("{} créé", evenementRemplissage);
 					hausse.setRuche(null);
 					hausse.setOrdreSurRuche(null);
 					hausseRepository.save(hausse);

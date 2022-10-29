@@ -88,7 +88,7 @@ public class EssaimService {
 						Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, ruche,
 								clone, ruche.getRucher(), null, null, "Clone essaim " + essaim.getNom());
 						evenementRepository.save(evenementAjout);
-						logger.info(Const.EVENEMENTXXENREGISTRE, evenementAjout.getId());
+						logger.info("{} créé", evenementAjout);
 					} else {
 						logger.error("Clone d'un essaim : {} la ruche {} n'est pas vide", nomarray[i],
 								nomruchesarray[i]);
@@ -348,7 +348,7 @@ public class EssaimService {
 		Evenement evenementAjout = new Evenement(dateEveAjout, TypeEvenement.AJOUTESSAIMRUCHE, ruche, nouvelEssaim,
 				ruche.getRucher(), null, null, commentaire);
 		evenementRepository.save(evenementAjout);
-		logger.info(Const.EVENEMENTXXENREGISTRE, evenementAjout.getId());
+		logger.info("{} créé", evenementAjout);
 		rucheRepository.save(ruche);
 		// On inactive l'essaim dispersé
 		essaim.setActif(false);
@@ -358,7 +358,7 @@ public class EssaimService {
 		Evenement evenement = new Evenement(dateEve, TypeEvenement.ESSAIMDISPERSION, ruche, essaim, ruche.getRucher(),
 				null, null, commentaire);
 		evenementRepository.save(evenement);
-		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
+		logger.info("{} créé", evenement);
 		return nouvelEssaim;
 	}
 

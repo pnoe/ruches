@@ -217,6 +217,7 @@ public class EvenementEssaimController {
 			Evenement evenement = new Evenement(dateEve, typeEvenement, ruche, essaim, rucher, null, valeur,
 					commentaire); // valeur commentaire
 			evenementRepository.save(evenement);
+			logger.info("{} créé", evenement);
 		}
 		return "redirect:/essaim/liste";
 	}
@@ -388,9 +389,9 @@ public class EvenementEssaimController {
 			return "essaim/essaimCommentaireForm";
 		}
 		evenement.setValeur(Utils.notifIntFmt(evenement.getValeur()));
+		String action = (evenement.getId() == null)?"créé":"modifié"; 
 		evenementRepository.save(evenement);
-		logger.info("Evénement {} enregistré, id {}", evenement.getDate(), evenement.getId());
-		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
+		logger.info("{} " + action, evenement);
 		return "redirect:/essaim/" + evenement.getEssaim().getId();
 	}
 
@@ -405,10 +406,9 @@ public class EvenementEssaimController {
 		/*
 		 * if (bindingResult.hasErrors()) { return "essaim/essaimSucreForm"; }
 		 */
+		String action = (evenement.getId() == null)?"créé":"modifié"; 
 		evenementRepository.save(evenement);
-		logger.info("Evénement {} enregistré, id {}", evenement.getDate(), evenement.getId());
-		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
-		// return Const.REDIRECT_ESSAIM_ESSAIMID;
+		logger.info("{} " + action, evenement);
 		return "redirect:/essaim/" + evenement.getEssaim().getId();
 	}
 
@@ -485,6 +485,7 @@ public class EvenementEssaimController {
 						Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, ruche,
 								essaimRemerage, ruche.getRucher(), null, null, commentaire);
 						evenementRepository.save(evenementAjout);
+						logger.info("{} créé", evenementAjout);
 						ruche.setEssaim(essaimRemerage);
 					} else {
 						logger.error(Const.IDESSAIMXXINCONNU, remerageId);
@@ -511,11 +512,13 @@ public class EvenementEssaimController {
 					Evenement eveCadre = new Evenement(dateEve, TypeEvenement.RUCHECADRE, ruche, null,
 							(depot) ? rucherDepot : rucher, null, "0", "Dispersion essaim " + essaim.getNom());
 					evenementRepository.save(eveCadre);
+					logger.info("{} créé", eveCadre);
 				}
 				// On inactive l'essaim
 				essaim.setActif(false);
 				essaimRepository.save(essaim);
-				logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
+				// log de la création de l'événement de dispersion de l'essaim
+				logger.info("{} créé", evenement);
 				// essaim inactivé on affiche la liste des essaims
 				return "redirect:/essaim/liste";
 			} else {

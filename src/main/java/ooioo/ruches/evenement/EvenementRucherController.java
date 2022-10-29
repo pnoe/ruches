@@ -140,9 +140,9 @@ public class EvenementRucherController {
 			return "rucher/rucherCommentaireForm";
 		}
 		evenement.setValeur(Utils.notifIntFmt(evenement.getValeur()));
+		String action = (evenement.getId() == null)?"créé":"modifié"; 
 		evenementRepository.save(evenement);
-		logger.info("Evénement {} enregistré, id {}", evenement.getDate(), evenement.getId());
-		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
+		logger.info("{} " + action, evenement);
 		return "redirect:/rucher/" + evenement.getRucher().getId();
 	}
 
@@ -152,10 +152,9 @@ public class EvenementRucherController {
 	 */
 	@PostMapping("/sauve")
 	public String sauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
+		String action = (evenement.getId() == null)?"créé":"modifié"; 
 		evenementRepository.save(evenement);
-		logger.info("Evénement {} enregistré, id {}", evenement.getDate(), evenement.getId());
-		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
-		// return Const.REDIRECT_ESSAIM_ESSAIMID;
+		logger.info("{} " + action, evenement);
 		return "redirect:/rucher/" + evenement.getRucher().getId();
 	}
 

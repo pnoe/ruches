@@ -178,6 +178,7 @@ public class EvenementHausseController {
 				Evenement evenement = new Evenement(dateEve, typeEvenement, ruche, essaim, rucher,
 						hausse, valeur, commentaire);
 				evenementRepository.save(evenement);
+				logger.info("{} créé", evenement);
 			} else {
 				logger.error("Nom hausse {} inconnu", hausseNoms);
 			}
@@ -261,9 +262,9 @@ public class EvenementHausseController {
 			return "hausse/hausseCommentaireForm";
 		}
 		evenement.setValeur(Utils.notifIntFmt(evenement.getValeur()));
+		String action = (evenement.getId() == null)?"créé":"modifié"; 
 		evenementRepository.save(evenement);
-		logger.info("Evénement {} enregistré, id {}", evenement.getDate(), evenement.getId());
-		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
+		logger.info("{} " + action, evenement);
 		return "redirect:/hausse/" + evenement.getHausse().getId();
 	}
 
@@ -278,10 +279,9 @@ public class EvenementHausseController {
 		/*
 		 * if (bindingResult.hasErrors()) { return "essaim/essaimSucreForm"; }
 		 */
+		String action = (evenement.getId() == null)?"créé":"modifié"; 
 		evenementRepository.save(evenement);
-		logger.info("Evénement {} enregistré, id {}", evenement.getDate(), evenement.getId());
-		logger.info(Const.EVENEMENTXXENREGISTRE, evenement.getId());
-		// return Const.REDIRECT_ESSAIM_ESSAIMID;
+		logger.info("{} " + action, evenement);
 		return "redirect:/hausse/" + evenement.getHausse().getId();
 	}
 

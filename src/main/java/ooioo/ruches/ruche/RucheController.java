@@ -119,6 +119,7 @@ public class RucheController {
 					Evenement eveAjout = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.RUCHEAJOUTRUCHER,
 							clone, null, ruche.getRucher(), null, null, commentaire);
 					evenementRepository.save(eveAjout);
+					logger.info("{} créé", eveAjout);
 					nomsCrees.add(nom);
 					// pour éviter clone "a,a" : 2 fois le même nom dans la liste
 					noms.add(nom);
@@ -350,10 +351,11 @@ public class RucheController {
 			Evenement eveAjout = new Evenement(ruche.getDateAcquisition().atStartOfDay(),
 					TypeEvenement.RUCHEAJOUTRUCHER, ruche, null, rucher, null, null, "Création de la ruche");
 			evenementRepository.save(eveAjout);
+			logger.info("{} créé", eveAjout);
 		} else {
 			rucheRepository.save(ruche);
 		}
-		logger.info("{} " + action, ruche.toString());
+		logger.info("{} " + action, ruche);
 		return "redirect:/ruche/" + ruche.getId();
 	}
 
@@ -487,6 +489,7 @@ public class RucheController {
 							rucheHausse.getEssaim(), rucheHausse.getRucher(), hausse,
 							hausse.getOrdreSurRuche().toString(), commentaire);
 					evenementRepository.save(evenementRetrait);
+					
 				}
 				hausse.setRuche(ruche);
 				// mettre ordreSurRuche au max des ordreSurRuche
@@ -500,7 +503,7 @@ public class RucheController {
 					evenementPose.setDate(evenementRetrait.getDate().withSecond(0).withNano(0).plusMinutes(1L));
 				}
 				evenementRepository.save(evenementPose);
-				logger.info("Hausse {} posée sur le ruche {}", hausse.getNom(), ruche.getNom());
+				logger.info("{} créé", evenementPose);
 			} else {
 				logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
 				model.addAttribute(Const.MESSAGE,
@@ -551,6 +554,7 @@ public class RucheController {
 				Evenement evenementRetrait = new Evenement(dateEve, TypeEvenement.HAUSSERETRAITRUCHE, ruche, essaim,
 						rucher, hausse, hausse.getOrdreSurRuche().toString(), commentaire);
 				evenementRepository.save(evenementRetrait);
+				logger.info("{} créé", evenementRetrait);
 				hausse.setRuche(null);
 				hausse.setOrdreSurRuche(null);
 				hausseRepository.save(hausse);

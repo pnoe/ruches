@@ -390,7 +390,7 @@ public class EssaimController {
 		}
 		String action = ((essaim.getId() == null)?"créé":"modifié");
 		essaimRepository.save(essaim);
-		logger.info("{} " + action, essaim.toString());
+		logger.info("{} " + action, essaim);
 		return "redirect:/essaim/" + essaim.getId();
 	}
 
@@ -583,7 +583,7 @@ public class EssaimController {
 			Evenement eveDisperse = new Evenement(dateEve, TypeEvenement.ESSAIMDISPERSION, ruche, essaimDisperse,
 					ruche.getRucher(), null, null, commentaire);
 			evenementRepository.save(eveDisperse);
-			logger.info(Const.EVENEMENTXXENREGISTRE, eveDisperse.getId());
+			logger.info("{} créé", eveDisperse);
 		}
 		Rucher rucher = ruche.getRucher();
 		// La ruche dans laquelle est l'essaim
@@ -607,12 +607,12 @@ public class EssaimController {
 					Evenement eveRuche = new Evenement(dateEve.minusSeconds(1), TypeEvenement.RUCHEAJOUTRUCHER, ruche,
 							ruche.getEssaim(), ruche.getRucher(), null, null, commentaire);
 					evenementRepository.save(eveRuche);
-					logger.info(Const.EVENEMENTXXENREGISTRE, eveRuche.getId());
+					logger.info("{} créé", eveRuche);
 					Evenement eveRucheActuelle = new Evenement(dateEve.minusSeconds(1), TypeEvenement.RUCHEAJOUTRUCHER,
 							rucheActuelle, rucheActuelle.getEssaim(), rucheActuelle.getRucher(), null, null,
 							commentaire);
 					evenementRepository.save(eveRucheActuelle);
-					logger.info(Const.EVENEMENTXXENREGISTRE, eveRucheActuelle.getId());
+					logger.info("{} créé", eveRucheActuelle);
 				}
 			}
 			rucheActuelle.setEssaim(null);
@@ -625,6 +625,7 @@ public class EssaimController {
 		Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, ruche, essaim,
 				ruche.getRucher(), null, null, commentaire); // valeur commentaire
 		evenementRepository.save(evenementAjout);
+		logger.info("{} créé", evenementAjout);
 		return Const.REDIRECT_ESSAIM_ESSAIMID;
 	}
 }

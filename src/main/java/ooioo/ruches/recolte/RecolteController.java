@@ -189,7 +189,7 @@ public class RecolteController {
 		}
 		String action = ((recolte.getId() == null)?"créée":"modifiée");
 		recolteRepository.save(recolte);
-		logger.info("{} " + action, recolte.toString());
+		logger.info("{} " + action, recolte);
 		return "redirect:/recolte/" + recolte.getId();
 	}
 

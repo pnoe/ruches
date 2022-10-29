@@ -421,7 +421,7 @@ public class RucherController {
 			}
 			Map<String, String> rucherPoids = new HashMap<>();
 			rucherPoids.put("nom", rucher.getNom());
-			rucherPoids.put("id", rucher.getId().toString());
+			rucherPoids.put("id", rucher.getId());
 			rucherPoids.put("pTotal", decimalFormat.format(pTotal / 1000.0));
 			rucherPoids.put("pMax", decimalFormat.format(pMax / 1000.0));
 			rucherPoids.put("pMin", decimalFormat.format(pMin / 1000.0));

@@ -146,9 +146,7 @@ public class EvenementController {
 		}
 		model.addAttribute(Const.EVENEMENTS, evens);
 		model.addAttribute("jAvants", jAvants);
-
 		model.addAttribute("dests", "Destinataires :<br/>" + String.join("<br/>", notifDest));
-
 		return "evenement/evenementNotifListe";
 	}
 
@@ -194,12 +192,10 @@ public class EvenementController {
 				//  pour faciliter l'ajout d'un type non traité spécifiquement
 				return "evenement/evenementDetail";
 			}
-		} else {
-			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
-			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
-			return Const.INDEX;
 		}
-
+		logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
+		model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
+		return Const.INDEX;
 	}
 
 	/*
@@ -212,12 +208,11 @@ public class EvenementController {
 			Evenement evenement = evenementOpt.get();
 			evenementRepository.delete(evenement);
 			logger.info("{} supprimé", evenement);
-		} else {
-			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
-			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
-			return Const.INDEX;
+			return REDIRECT_EVEN_LISTE;
 		}
-		return REDIRECT_EVEN_LISTE;
+		logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
+		model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
+		return Const.INDEX;
 	}
 
 	/*
@@ -252,12 +247,11 @@ public class EvenementController {
 			model.addAttribute(Const.ESSAIMS, essaimRepository.findAllProjectedIdNomByOrderByNom());
 			model.addAttribute("complet", complet);
 			model.addAttribute(Const.EVENEMENT, evenementOpt.get());
-		} else {
-			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
-			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
-			return Const.INDEX;
+			return EVEN_EVENFORM;
 		}
-		return EVEN_EVENFORM;
+		logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
+		model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
+		return Const.INDEX;
 	}
 
 	/*
