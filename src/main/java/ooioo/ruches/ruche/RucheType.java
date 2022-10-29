@@ -9,6 +9,11 @@ import javax.persistence.Id;
 @Entity
 public class RucheType {
 
+	@Override
+	public String toString() {
+		return "RucheType [id=" + id + ", nom=" + nom + ", nbCadresMax=" + nbCadresMax + "]";
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
