@@ -3,6 +3,7 @@ package ooioo.ruches.ruche;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
@@ -32,6 +33,54 @@ public class RucheService {
 	@Autowired
 	private RucheRepository rucheRepository;
 
+	/**
+	 * Historique de l'ajout des hausses sur une ruche
+	 */
+	public boolean historique(Model model, Long rucheId) {
+		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
+		if (rucheOpt.isPresent()) {
+			Ruche ruche = rucheOpt.get();
+			// Les événements ajout/retrait des hausses de la ruche
+			List<Evenement> eveRucheHausse = evenementRepository.findEveRucheHausseDesc(rucheId);
+			// les noms des hausses présentes sur la ruche en synchro avec eveRucheHausse
+			List<String> haussesList = new ArrayList<>();
+			// Les hausses actuellement sur la ruche
+			List<Hausse> hausses = hausseRepository.findByRucheIdOrderByOrdreSurRuche(rucheId);
+			// Liste des noms des hausses (pour affichage et comparaisons)
+			List<String> haussesNom = new ArrayList<>();
+			for (Hausse hausse : hausses) {
+				haussesNom.add(hausse.getNom());
+			}
+			for (Evenement eve : eveRucheHausse) {
+				haussesList.add(String.join(" ", haussesNom));
+				if (eve.getHausse() != null) {
+					if (eve.getType() == TypeEvenement.HAUSSERETRAITRUCHE) {
+						if (haussesNom.contains(eve.getHausse().getNom())) {
+							// La hausse est déjà dans la liste
+							// erreur
+						} else {
+							haussesNom.add(eve.getHausse().getNom());
+						}
+					} else { // eve.getType() est TypeEvenement.HAUSSEPOSERUCHE
+						if (!haussesNom.remove(eve.getHausse().getNom())) {
+							// La hausse ne peut être enlevée de la liste
+							// il y a une erreur dans la pose des hausses
+							// erreur
+						}
+					}
+				}
+			}
+			// if (!hausses.isEmpty()) {
+				// erreur
+			// }
+			model.addAttribute("ruche", ruche);
+			model.addAttribute("haussesList", haussesList);
+			model.addAttribute("evenements", eveRucheHausse);
+			return true;
+		}
+		return false;
+	}
+	
 	/*
 	 * Ré-ordonne les hausses d'une ruche utilisé après retrait ou suppression d'une
 	 * hausse

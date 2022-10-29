@@ -187,8 +187,9 @@ public class RecolteController {
 		if (bindingResult.hasErrors()) {
 			return RECOLTERECOLTEFORM;
 		}
+		String action = ((recolte.getId() == null)?"créée":"modifiée");
 		recolteRepository.save(recolte);
-		logger.info("Récolte {} enregistrée", recolte.getId());
+		logger.info("{} " + action, recolte.toString());
 		return "redirect:/recolte/" + recolte.getId();
 	}
 
@@ -205,7 +206,7 @@ public class RecolteController {
 				recolteHausseRepository.delete(recolteHausse);
 			}
 			recolteRepository.delete(recolte);
-			logger.info("Récolte {} supprimée, id {}", recolte.getDate(), recolte.getId());
+			logger.info("{} supprimée", recolte);
 		} else {
 			logger.error(Const.IDRECOLTEXXINCONNU, recolteId);
 			model.addAttribute(Const.MESSAGE, Const.IDRECOLTEINCONNU);

@@ -211,7 +211,7 @@ public class EvenementController {
 		if (evenementOpt.isPresent()) {
 			Evenement evenement = evenementOpt.get();
 			evenementRepository.delete(evenement);
-			logger.info("Evénement {} supprimé, id {}", evenement.getDate(), evenement.getId());
+			logger.info("{} supprimé", evenement);
 		} else {
 			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
 			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
@@ -268,8 +268,9 @@ public class EvenementController {
 		if (bindingResult.hasErrors()) {
 			return EVEN_EVENFORM;
 		}
+		String action = (evenement.getId() == null)?"créé":"modifié"; 
 		evenementRepository.save(evenement);
-		logger.info("Evénement {} enregistré, id {}", evenement.getDate(), evenement.getId());
+		logger.info("{} " + action, evenement);
 		return REDIRECT_EVEN + evenement.getId();
 	}
 

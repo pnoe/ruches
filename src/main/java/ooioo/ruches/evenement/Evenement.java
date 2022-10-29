@@ -19,6 +19,18 @@ import ooioo.ruches.rucher.Rucher;
 
 @Entity
 public class Evenement {
+	
+
+	@Override
+	public String toString() {
+		return "Evenement [id=" + id + ", date=" + date + ", type=" + type +
+				", ruche=" + ((ruche == null)?"null":ruche.getNom()) +
+				", essaim=" + ((essaim == null)?"null":essaim.getNom()) +
+				", rucher=" + ((rucher == null)?"null":rucher.getNom()) +
+				", hausse=" + ((hausse == null)?"null":hausse.getNom()) +
+				", valeur=" + valeur + ", commentaire=" + commentaire
+				+ "]";
+	}
 
 	public Evenement() {
 	}

@@ -105,7 +105,7 @@ public class PersonneController {
 			Collection<Rucher> ruchers = rucherRepository.findByContactId(personneId);
 			if (ruchers.isEmpty()) {
 				personneRepository.delete(personne);
-				logger.info("Personne {} supprimée, id {}", personne.getNom(), personne.getId());
+				logger.info("{} supprimée", personne);
 			} else {
 				model.addAttribute(Const.MESSAGE, "Cette personne ne peut être supprimée");
 				return Const.INDEX;

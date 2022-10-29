@@ -702,7 +702,7 @@ public class RucherController {
 					evenementRepository.delete(evenement);
 				}
 				rucherRepository.delete(rucher);
-				logger.info("Rucher {} supprimé, id {}", rucher.getNom(), rucher.getId());
+				logger.info("{} supprimé", rucher);
 			} else {
 				model.addAttribute(Const.MESSAGE, "Ce rucher ne peut être supprimé");
 				return Const.INDEX;

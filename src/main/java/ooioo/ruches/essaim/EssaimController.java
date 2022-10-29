@@ -346,7 +346,7 @@ public class EssaimController {
 				}
 				Essaim essaim = essaimOpt.get();
 				essaimRepository.delete(essaim);
-				logger.info("Essaim {} supprimé, id {}", essaim.getNom(), essaim.getId());
+				logger.info("{} supprimé", essaim);
 			} else {
 				model.addAttribute(Const.MESSAGE, "Cette essaim ne peut être supprimé");
 				return Const.INDEX;

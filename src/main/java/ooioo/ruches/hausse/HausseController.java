@@ -168,7 +168,7 @@ public class HausseController {
 					rucheService.ordonneHaussesRuche(ruche.getId());
 				}
 				hausseRepository.delete(hausse);
-				logger.info("Hausse {} supprimée, id {}", hausse.getNom(), hausse.getId());
+				logger.info("{} supprimée", hausse);
 			} else {
 				model.addAttribute(Const.MESSAGE, "Cette hausse ne peut être supprimée");
 				return Const.INDEX;
