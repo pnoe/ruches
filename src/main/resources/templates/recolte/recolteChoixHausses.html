@@ -1,62 +1,73 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
-const urlRetrait = /*[[@{/recolte/retraitHausses/}]]*/ null;
-const urlAjout = /*[[@{/recolte/ajoutHausses/}]]*/ null;
-const recolteId = /*[[${recolte.id}]]*/ null;
-const selHausRet = /*[[#{selecthaussesretirer}]]*/ null;
-const selHausAjout = /*[[#{selecthaussesajouter}]]*/ null;
-$(document).ready(function() {
-	function updateLinks( e, dt, type, indexes ) {
-		let id; 
-		let href;
-		let table;
-		if (this.id == "ajoutHausseRecolte") {
-			id = $('#ajouterHausses');
-			href = urlAjout;
-			table = tableAjout;
-		} else {
-			id = $('#retirerHausses');
-			href = urlRetrait;
-			table = tableRetrait;
-		}
-    	if ( type === 'row' ) {
-    		let hausseNoms = "";
-    		table.rows( { selected: true } ).data().pluck( 0 ).each(function (value, index) {
-    			/*[- le code suivant permet de gérer les caractères tels que < > ... -]*/
-            	const a = document.createElement('a');
-            	a.innerHTML = value;
-            	hausseNoms += a.textContent + ",";
-            });
-            if (hausseNoms) { 
-            	/*[- on enlève la dernière virgule et met à jour l'url de traitement -]*/
-            	hausseNoms = hausseNoms.substring(0, hausseNoms.length-1);
-            	id.attr('href', href + recolteId + '/' + hausseNoms);
-            } else {
-            	id.attr('href', "#");
-            }      
-        }
-	}
-	const tableRetrait = new DataTable('#retraitHausseRecolte', {
-		select: {style: 'multi+shift'}
-    });
-	tableRetrait.on( 'select deselect', updateLinks);
-	$('#retirerHausses').on('click', function () {
-		if ($(this).attr("href") == "#") {
-    		alert(selHausRet);	
-    	}  
-	});
-	const tableAjout = new DataTable('#ajoutHausseRecolte', {
-		select: {style: 'multi+shift'}
-    });
-	tableAjout.on( 'select deselect', updateLinks);
-    $('#ajouterHausses').on('click', function () {
-		if ($(this).attr("href") == "#") {
-    		alert(selHausAjout);	
-    	}  
-	});
-});
+	const urlRetrait = /*[[@{/recolte/retraitHausses/}]]*/null;
+	const urlAjout = /*[[@{/recolte/ajoutHausses/}]]*/null;
+	const recolteId = /*[[${recolte.id}]]*/null;
+	const selHausRet = /*[[#{selecthaussesretirer}]]*/null;
+	const selHausAjout = /*[[#{selecthaussesajouter}]]*/null;
+	$(document).ready(
+			function() {
+				function updateLinks(e, dt, type, indexes) {
+					let id;
+					let href;
+					let table;
+					if (this.id == "ajoutHausseRecolte") {
+						id = $('#ajouterHausses');
+						href = urlAjout;
+						table = tableAjout;
+					} else {
+						id = $('#retirerHausses');
+						href = urlRetrait;
+						table = tableRetrait;
+					}
+					if (type === 'row') {
+						let hausseNoms = "";
+						table.rows({
+							selected : true
+						}).data().pluck(0).each(function(value, index) {
+							/*[- le code suivant permet de gérer les caractères tels que < > ... -]*/
+							const a = document.createElement('a');
+							a.innerHTML = value;
+							hausseNoms += a.textContent + ",";
+						});
+						if (hausseNoms) {
+							/*[- on enlève la dernière virgule et met à jour l'url de traitement -]*/
+							hausseNoms = hausseNoms.substring(0,
+									hausseNoms.length - 1);
+							id
+									.attr('href', href + recolteId + '/'
+											+ hausseNoms);
+						} else {
+							id.attr('href', "#");
+						}
+					}
+				}
+				const tableRetrait = new DataTable('#retraitHausseRecolte', {
+					select : {
+						style : 'multi+shift'
+					}
+				});
+				tableRetrait.on('select deselect', updateLinks);
+				$('#retirerHausses').on('click', function() {
+					if ($(this).attr("href") == "#") {
+						alert(selHausRet);
+					}
+				});
+				const tableAjout = new DataTable('#ajoutHausseRecolte', {
+					select : {
+						style : 'multi+shift'
+					}
+				});
+				tableAjout.on('select deselect', updateLinks);
+				$('#ajouterHausses').on('click', function() {
+					if ($(this).attr("href") == "#") {
+						alert(selHausAjout);
+					}
+				});
+			});
 </script>
 </head>
 <body>
@@ -68,18 +79,25 @@ $(document).ready(function() {
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-				  <th:block th:text="#{ajoutretraithaussesrecolte}"></th:block>
-				  <a th:href="@{'/recolte/'+${recolte.id}}"
-					th:text="#{recolte} + ' ' + ${#temporals.format(recolte.date, 'yyyy/MM/dd HH:mm')}"></a>
+					<th:block th:text="#{ajoutretraithaussesrecolte}"></th:block>
+					<a th:href="@{'/recolte/'+${recolte.id}}"
+						th:text="#{recolte} + ' ' + ${#temporals.format(recolte.date, 'yyyy/MM/dd HH:mm')}"></a>
 				</h1>
 			</div>
-        </div>
-    </div>
+			<div class="col">
+				<a
+					th:href="@{/doc/ruches.html#%5F%5FRefHeading%5F%5F%5FToc3782_3476563104}"
+					class="bi bi-book" th:title="#{Doc}" target="_blank"
+					aria-hidden="true"></a>
+			</div>
+		</div>
+	</div>
 	<div class="container-fluid">
 		<h6>
 			<a id="retirerHausses" href="#" th:text="#{retirerHausses}"></a>
 		</h6>
-		<table class="table table-bordered table-striped dt-responsive" id="retraitHausseRecolte">			
+		<table class="table table-bordered table-striped dt-responsive"
+			id="retraitHausseRecolte">
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>
@@ -97,11 +115,12 @@ $(document).ready(function() {
 				</tr>
 			</tbody>
 		</table>
-		<br/>
+		<br />
 		<h6>
 			<a id="ajouterHausses" href="#" th:text="#{ajouterHausses}"></a>
 		</h6>
-		<table class="table table-bordered table-striped dt-responsive" id="ajoutHausseRecolte">			
+		<table class="table table-bordered table-striped dt-responsive"
+			id="ajoutHausseRecolte">
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>

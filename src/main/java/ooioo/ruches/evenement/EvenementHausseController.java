@@ -262,7 +262,7 @@ public class EvenementHausseController {
 			return "hausse/hausseCommentaireForm";
 		}
 		evenement.setValeur(Utils.notifIntFmt(evenement.getValeur()));
-		String action = (evenement.getId() == null)?"créé":"modifié"; 
+		String action = (evenement.getId() == null)?"créé":"modifié";
 		evenementRepository.save(evenement);
 		logger.info("{} " + action, evenement);
 		return "redirect:/hausse/" + evenement.getHausse().getId();
@@ -279,7 +279,7 @@ public class EvenementHausseController {
 		/*
 		 * if (bindingResult.hasErrors()) { return "essaim/essaimSucreForm"; }
 		 */
-		String action = (evenement.getId() == null)?"créé":"modifié"; 
+		String action = (evenement.getId() == null)?"créé":"modifié";
 		evenementRepository.save(evenement);
 		logger.info("{} " + action, evenement);
 		return "redirect:/hausse/" + evenement.getHausse().getId();

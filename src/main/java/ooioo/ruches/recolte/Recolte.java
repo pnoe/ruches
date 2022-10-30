@@ -15,7 +15,7 @@ import ooioo.ruches.Const;
 
 @Entity
 public class Recolte {
-	
+
 	@Override
 	public String toString() {
 		return "Recolte [id=" + id + ", date=" + date + ", typeMiel=" + typeMiel + ", poidsMiel=" + poidsMiel

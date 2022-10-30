@@ -3,22 +3,28 @@
 <head
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
-const listeRuches = /*[[#{listeRuches}]]*/ null;
-const buttontextprint = /*[[#{buttontextprint}]]*/ null;
-const buttontextcol = /*[[#{buttontextcol}]]*/ null;
-$(document).ready(function() {
-    new DataTable('#recoltes', {
-    	dom: 'Blftip',
-	    buttons: [
-	    	'csv',
-	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-	    		title: listeRuches + " " + (new Date()).toLocaleDateString()},
-            {extend: 'print', text: buttontextprint},
-            {extend: 'colvis', text: buttontextcol}
-        ],
-    	"order": [ [ 0, "desc" ] ]
-    });
-});
+	const listeRuches = /*[[#{listeRuches}]]*/null;
+	const buttontextprint = /*[[#{buttontextprint}]]*/null;
+	const buttontextcol = /*[[#{buttontextcol}]]*/null;
+	$(document).ready(function() {
+		new DataTable('#recoltes', {
+			dom : 'Blftip',
+			buttons : [ 'csv', {
+				extend : 'pdf',
+				exportOptions : {
+					columns : ':visible'
+				},
+				title : listeRuches + " " + (new Date()).toLocaleDateString()
+			}, {
+				extend : 'print',
+				text : buttontextprint
+			}, {
+				extend : 'colvis',
+				text : buttontextcol
+			} ],
+			"order" : [ [ 0, "desc" ] ]
+		});
+	});
 </script>
 </head>
 <body>
@@ -37,7 +43,10 @@ $(document).ready(function() {
 					th:href="@{/recolte/statistiques/essaim}" class="bi bi-table"
 					th:title="#{statistiquesessaims}" aria-hidden="true"></a> <a
 					th:href="@{/recolte/statprod}" class="bi bi-bar-chart"
-					th:title="#{statistiquesProd}" aria-hidden="true"></a>
+					th:title="#{statistiquesProd}" aria-hidden="true"></a> &nbsp;<a
+					th:href="@{/doc/ruches.html#%5F%5FRefHeading%5F%5F%5FToc1102_1613789997}"
+					class="bi bi-book" th:title="#{Doc}" target="_blank"
+					aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>

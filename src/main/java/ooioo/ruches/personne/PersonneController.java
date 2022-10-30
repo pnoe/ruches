@@ -134,7 +134,7 @@ public class PersonneController {
 		}
 		// Vérification de l'unicité du login si différent de ""
 		// et si la personne retrouvée en base n'est pas la personne elle même
-		if (!"".equals(personne.getLogin())) { 
+		if (!"".equals(personne.getLogin())) {
 			Personne pL = personneRepository.findByLogin(personne.getLogin());
 			if (pL != null && !pL.getId().equals(personne.getId())) {
 				logger.error("Login {} existant.", pL.getLogin());

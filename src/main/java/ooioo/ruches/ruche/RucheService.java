@@ -80,7 +80,7 @@ public class RucheService {
 		}
 		return false;
 	}
-	
+
 	/*
 	 * Ré-ordonne les hausses d'une ruche utilisé après retrait ou suppression d'une
 	 * hausse

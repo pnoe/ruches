@@ -56,7 +56,7 @@ public class EssaimService {
 	private RecolteHausseRepository recolteHausseRepository;
 	@Autowired
 	private RucherRepository rucherRepository;
-	
+
 	@Autowired
 	MessageSource messageSource;
 
@@ -101,7 +101,7 @@ public class EssaimService {
 		return messageSource.getMessage("cloneessaimcrees", new Object[] { nomsJoin },
 				LocaleContextHolder.getLocale());
 	}
-	
+
 	/*
 	 * Historique de la mise en ruchers d'un essaim. Les événements affichés dans
 	 * l'historique : - les mise en rucher de ruches ou l'essaim apparait - la
@@ -312,16 +312,16 @@ public class EssaimService {
 	 * Enregistrement de l'essaimage.
 	 *
 	 * @param essaimId l'id de l'essaim qui essaime.
-	 * 
+	 *
 	 * @param date la date saisie dans le formulaire d'essaimage.
-	 * 
+	 *
 	 * @param nom le nom du nouvel essaim restant dans la ruche saisi dans le
 	 * formulaire d'essaimage.
-	 * 
+	 *
 	 * @param commentaire le commentaire saisi dans le formulaire d'essaimage.
-	 * 
+	 *
 	 * @param essaimOpt l'essaim essaimId.
-	 * 
+	 *
 	 * @param nouvelEssaim le nouvel essaim à créer restant dans le ruche
 	 */
 	public Essaim essaimSauve(Model model, long essaimId, String date, String nom, String commentaire,

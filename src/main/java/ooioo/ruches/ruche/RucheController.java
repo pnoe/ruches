@@ -489,7 +489,7 @@ public class RucheController {
 							rucheHausse.getEssaim(), rucheHausse.getRucher(), hausse,
 							hausse.getOrdreSurRuche().toString(), commentaire);
 					evenementRepository.save(evenementRetrait);
-					
+
 				}
 				hausse.setRuche(ruche);
 				// mettre ordreSurRuche au max des ordreSurRuche

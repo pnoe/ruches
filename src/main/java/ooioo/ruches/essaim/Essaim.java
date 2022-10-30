@@ -18,7 +18,7 @@ public class Essaim {
 	public String toString() {
 		return "Essaim [id=" + id + ", nom=" + nom + ", Acquisition=" + dateAcquisition + ", actif=" + actif
 				+ ", commentaire=" + commentaire + ", Naissance=" + reineDateNaissance + ", Marquee="
-				+ reineMarquee + ", souche=" + ((souche == null)?"null":souche.getNom()) + 
+				+ reineMarquee + ", souche=" + ((souche == null)?"null":souche.getNom()) +
 				", agressivite=" + agressivite + ", proprete=" + proprete + "]";
 	}
 

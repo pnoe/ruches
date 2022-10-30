@@ -383,7 +383,7 @@ public class EvenementRucheController {
 			return "ruche/rucheCommentaireForm";
 		}
 		evenement.setValeur(Utils.notifIntFmt(evenement.getValeur()));
-		String action = (evenement.getId() == null)?"créé":"modifié"; 
+		String action = (evenement.getId() == null)?"créé":"modifié";
 		evenementRepository.save(evenement);
 		logger.info("{} " + action, evenement);
 		return "redirect:/ruche/" + evenement.getRuche().getId();
@@ -395,7 +395,7 @@ public class EvenementRucheController {
 	 */
 	@PostMapping("/sauve")
 	public String sauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
-		String action = (evenement.getId() == null)?"créé":"modifié"; 
+		String action = (evenement.getId() == null)?"créé":"modifié";
 		evenementRepository.save(evenement);
 		logger.info("{} " + action, evenement);
 		return "redirect:/ruche/" + evenement.getRuche().getId();

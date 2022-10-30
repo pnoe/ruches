@@ -389,7 +389,7 @@ public class EvenementEssaimController {
 			return "essaim/essaimCommentaireForm";
 		}
 		evenement.setValeur(Utils.notifIntFmt(evenement.getValeur()));
-		String action = (evenement.getId() == null)?"créé":"modifié"; 
+		String action = (evenement.getId() == null)?"créé":"modifié";
 		evenementRepository.save(evenement);
 		logger.info("{} " + action, evenement);
 		return "redirect:/essaim/" + evenement.getEssaim().getId();
@@ -406,7 +406,7 @@ public class EvenementEssaimController {
 		/*
 		 * if (bindingResult.hasErrors()) { return "essaim/essaimSucreForm"; }
 		 */
-		String action = (evenement.getId() == null)?"créé":"modifié"; 
+		String action = (evenement.getId() == null)?"créé":"modifié";
 		evenementRepository.save(evenement);
 		logger.info("{} " + action, evenement);
 		return "redirect:/essaim/" + evenement.getEssaim().getId();

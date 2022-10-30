@@ -262,7 +262,7 @@ public class EvenementController {
 		if (bindingResult.hasErrors()) {
 			return EVEN_EVENFORM;
 		}
-		String action = (evenement.getId() == null)?"créé":"modifié"; 
+		String action = (evenement.getId() == null)?"créé":"modifié";
 		evenementRepository.save(evenement);
 		logger.info("{} " + action, evenement);
 		return REDIRECT_EVEN + evenement.getId();

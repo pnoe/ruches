@@ -104,7 +104,7 @@ public class EssaimController {
 	 *
 	 * @param rucherId optionnel pour ne prendre en compte que les hausses de
 	 * récolte dans ce rucher.
-	 * 
+	 *
 	 * @param masquerInactif pour masquer les essaims inactifs.
 	 */
 	@RequestMapping("/statistiques")
@@ -144,12 +144,12 @@ public class EssaimController {
 	 * Enregistrement de l'essaimage.
 	 *
 	 * @param essaimId l'id de l'essaim qui essaime.
-	 * 
+	 *
 	 * @param date la date saisie dans le formulaire d'essaimage.
-	 * 
+	 *
 	 * @param nom le nom du nouvel essaim restant dans la ruche saisi dans le
 	 * formulaire d'essaimage.
-	 * 
+	 *
 	 * @param commentaire le commentaire saisi dans le formulaire d'essaimage.
 	 */
 	@PostMapping("/essaime/sauve/{essaimId}")

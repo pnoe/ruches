@@ -14,7 +14,7 @@ public class Rucher {
 
 	@Override
 	public String toString() {
-		return "Rucher [id=" + id + ", depot=" + depot + ", nom=" + nom + ", contact=" + 
+		return "Rucher [id=" + id + ", depot=" + depot + ", nom=" + nom + ", contact=" +
 				((contact == null)?"null":contact.getNom()) + ", adresse="
 				+ adresse + ", commentaire=" + commentaire + ", longitude=" + longitude + ", latitude=" + latitude
 				+ ", altitude=" + altitude + ", ressource=" + ressource + ", actif=" + actif + ", dessin=" + dessin
