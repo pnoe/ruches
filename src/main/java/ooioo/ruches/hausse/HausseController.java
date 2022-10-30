@@ -56,7 +56,7 @@ public class HausseController {
 	private RucheService rucheService;
 
 	/**
-	 * Clonage multiple d'une hausse
+	 * Clonage multiple d'une hausse (appel XMLHttpRequest)
 	 */
 	@PostMapping("/clone/{hausseId}")
 	@ResponseStatus(value = HttpStatus.OK)
@@ -87,9 +87,7 @@ public class HausseController {
 					LocaleContextHolder.getLocale());
 		}
 		logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
-		model.addAttribute(Const.MESSAGE,
-				messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
-		return Const.INDEX;
+		return messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale());
 	}
 
 	/**

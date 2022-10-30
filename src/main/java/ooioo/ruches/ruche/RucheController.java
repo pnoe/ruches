@@ -131,7 +131,7 @@ public class RucheController {
 					LocaleContextHolder.getLocale());
 		}
 		logger.error(Const.IDRUCHEXXINCONNU, rucheId);
-		return "Erreur : id ruche inconnu";
+		return messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale());
 	}
 
 	/**

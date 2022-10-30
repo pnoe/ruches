@@ -197,7 +197,7 @@ public class EssaimController {
 			return essaimService.clone(session, model, essaimOpt, nomclones, nomruches);
 		}
 		logger.error(Const.IDESSAIMXXINCONNU, essaimId);
-		return "Erreur : id essaim inconnu";
+		return messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale());
 	}
 
 	/**
