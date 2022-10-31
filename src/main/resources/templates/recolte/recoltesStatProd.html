@@ -1,20 +1,23 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:replace="include :: jsChart"></script>
 <script th:replace="include :: d3-color"></script>
 <script th:replace="include :: d3-interpolate"></script>
 <script th:replace="include :: d3-scale-chromatic"></script>
 <script th:src="@{/js/ruches/recoltesStatProd.js}"></script>
 <script th:inline="javascript">
-	const poidsMielHausses = /*[[${poidsMielHausses}]]*/ null;
-	const poidsMielPots = /*[[${poidsMielPots}]]*/ null;
-	const debutAnnee = /*[[${debutAnnee}]]*/ null;
-	const nbIEssaims = /*[[${nbIEssaims}]]*/ null;	
-	const Hausses = /*[[#{Hausses}]]*/ null;
-	const Pots = /*[[#{Pots}]]*/ null;
-	const HaussesEssaim = /*[[#{HaussesEssaim}]]*/ null;
-	$(document).ready(function() { grapheRecolte(); });
+	const poidsMielHausses = /*[[${poidsMielHausses}]]*/null;
+	const poidsMielPots = /*[[${poidsMielPots}]]*/null;
+	const debutAnnee = /*[[${debutAnnee}]]*/null;
+	const nbIEssaims = /*[[${nbIEssaims}]]*/null;
+	const Hausses = /*[[#{Hausses}]]*/null;
+	const Pots = /*[[#{Pots}]]*/null;
+	const HaussesEssaim = /*[[#{HaussesEssaim}]]*/null;
+	$(document).ready(function() {
+		grapheRecolte();
+	});
 </script>
 </head>
 <body>
@@ -29,6 +32,10 @@
 				<h1 class="item">
 					<a th:href="@{'/recolte/liste'}" th:text="#{Recoltes}"></a>
 					<th:block th:text="' '+#{PoidsMielAnneeKg}"></th:block>
+					&nbsp; <a
+						th:href="@{/doc/ruches.html#%5F%5FRefHeading%5F%5F%5FToc3836_3476563104}"
+						class="bi bi-book" th:title="#{Doc}" target="_blank"
+						aria-hidden="true"></a>
 				</h1>
 			</div>
 		</div>
