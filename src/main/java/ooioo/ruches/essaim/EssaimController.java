@@ -274,7 +274,7 @@ public class EssaimController {
 	}
 
 	/**
-	 * Appel du formulaire pour modifier un essaim
+	 * Appel du formulaire pour modifier un essaim.
 	 */
 	@GetMapping("/modifie/{essaimId}")
 	public String modifie(Model model, @PathVariable long essaimId) {
@@ -326,7 +326,7 @@ public class EssaimController {
 	}
 
 	/**
-	 * Supprimer un essaim
+	 * Supprimer un essaim.
 	 */
 	@GetMapping("/supprime/{essaimId}")
 	public String supprime(Model model, @PathVariable long essaimId) {
@@ -361,7 +361,7 @@ public class EssaimController {
 	}
 
 	/**
-	 * Enregistrement de l'essaim créé ou modifié
+	 * Enregistrement de l'essaim créé ou modifié.
 	 */
 	@PostMapping("/sauve")
 	public String sauve(Model model, @ModelAttribute Essaim essaim, BindingResult bindingResult) {
@@ -547,8 +547,8 @@ public class EssaimController {
 	}
 
 	/**
-	 * Change un essaim de ruche Il faut mettre l'essaim essaimId dans le ruche
-	 * rucheId si la ruche contient un essaim, le disperser
+	 * Change un essaim de ruche. Il faut mettre l'essaim essaimId dans le ruche
+	 * rucheId. Si la ruche contient un essaim, le disperser.
 	 */
 	@PostMapping("/ruche/associe/sauve/{rucheId}/{essaimId}")
 	public String associeRucheSauve(Model model, @PathVariable long rucheId, @PathVariable long essaimId,
