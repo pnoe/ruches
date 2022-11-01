@@ -3,15 +3,16 @@
 <head
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
-const buttontextprint = /*[[#{buttontextprint}]]*/ null;
-const buttontextcol = /*[[#{buttontextcol}]]*/ null;
+const buttontextprint = /*[[#{buttontextprint}]]*/null;
+const buttontextcol = /*[[#{buttontextcol}]]*/null;
+const listeRuchers = /*[[#{listeRuchers}]]*/null;
 $(document).ready(function() {
     new DataTable('#ruchers', {
         dom: 'Blftip',
 	    buttons: [
 	    	'csv',
 	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-	    		title: [[#{listeRuchers}]] + " " + (new Date()).toLocaleDateString()},
+	    		title: listeRuchers + " " + (new Date()).toLocaleDateString()},
 	        {extend: 'print', text: buttontextprint},
 	        {extend: 'colvis', text: buttontextcol}
         ]
