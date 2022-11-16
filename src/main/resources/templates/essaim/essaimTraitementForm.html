@@ -45,9 +45,9 @@
 					<a th:href="@{'/essaim/'+${evenement.essaim?.id}}"
 						th:text="#{essaim} + ' ' + ${evenement.essaim?.nom}"></a>
 				</h1>
-				<th:block
-					th:text="${dateESSAIMTRAITEMENT}?
-				'Traité le '+${#temporals.format(dateESSAIMTRAITEMENT, 'dd/MM/yyyy')}:''">
+				<th:block th:if="${EveESSAIMTRAITEMENT}">
+					<a th:href="@{'/evenement/'+${EveESSAIMTRAITEMENT.id}}"
+						th:text="'Traité le '+${#temporals.format(EveESSAIMTRAITEMENT.date, 'dd/MM/yyyy')}"></a>
 				</th:block>
 			</div>
 		</div>
@@ -67,13 +67,13 @@
 					th:selected="${typeEve}==*{type}"></option>
 			</select> <label class="form-label" for="type" th:text="#{typeEvenement}"></label>
 		</div>
-		
+
 		<div class="form-floating mb-3">
 			<input placeholder="" class="form-control" type="number" step="0.001"
 				th:field="*{valeur}" th:errorclass="fieldError" /> <label
 				class="form-label" th:text="#{quantite}" for="valeur"></label>
 		</div>
-		
+
 		<div th:replace="includeForm :: commentaireField"></div>
 		<div th:replace="includeForm :: BtnForm"></div>
 	</form>

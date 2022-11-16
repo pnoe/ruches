@@ -285,7 +285,7 @@ public class EvenementEssaimController {
 					rucher, null, null, null);
 			model.addAttribute(Const.EVENEMENT, evenement);
 			// pour rappel du dernier événement sucre dans le fomulaire de saisie :
-			essaimService.modelAddEvenement(model, essaim, TypeEvenement.ESSAIMSUCRE);
+			essaimService.modelAddEve(model, essaim, TypeEvenement.ESSAIMSUCRE);
 			return "essaim/essaimSucreForm";
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
@@ -296,12 +296,10 @@ public class EvenementEssaimController {
 	}
 
 	/**
-	 * Appel du formulaire de modification d'un événement essaim sucre
+	 * Appel du formulaire de modification d'un événement essaim sucre.
 	 */
 	@GetMapping("/sucre/modifie/{evenementId}")
 	public String sucreModifie(HttpSession session, Model model, @PathVariable long evenementId) {
-		// pour rappel du dernier événement sucre dans le fomulaire de saisie :
-		essaimService.modelAddEvenement(model, (Essaim) model.asMap().get(Const.ESSAIM), TypeEvenement.ESSAIMSUCRE);
 		Optional<Evenement> evenementOpt = evenementRepository.findById(evenementId);
 		if (evenementOpt.isPresent()) {
 			Evenement evenement = evenementOpt.get();
@@ -332,8 +330,8 @@ public class EvenementEssaimController {
 			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.ESSAIMTRAITEMENT, ruche, essaim,
 					rucher, null, null, null);
 			model.addAttribute(Const.EVENEMENT, evenement);
-			// pour rappel du dernier événement sucre dans le fomulaire de saisie :
-			essaimService.modelAddEvenement(model, essaim, TypeEvenement.ESSAIMTRAITEMENT);
+			// pour rappel du dernier événement traitement dans le fomulaire de saisie :
+			essaimService.modelAddEve(model, essaim, TypeEvenement.ESSAIMTRAITEMENT);
 			return "essaim/essaimTraitementForm";
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
@@ -352,8 +350,6 @@ public class EvenementEssaimController {
 		if (evenementOpt.isPresent()) {
 			Evenement evenement = evenementOpt.get();
 			model.addAttribute(Const.EVENEMENT, evenement);
-			// pour rappel du dernier événement sucre dans le fomulaire de saisie :
-			essaimService.modelAddEvenement(model, evenement.getEssaim(), TypeEvenement.ESSAIMTRAITEMENT);
 			return "essaim/essaimTraitementForm";
 		} else {
 			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);

@@ -40,10 +40,11 @@
 				<th:block th:text="#{ajoutSucre} + ' '"></th:block>
 				  <a th:href="@{'/essaim/'+${evenement.essaim?.id}}"
 					th:text="#{essaim} + ' ' + ${evenement.essaim?.nom}"></a>
-				</h1>			
-				<th:block th:text="${valeurESSAIMSUCRE}?
-					${#numbers.formatDecimal(valeurESSAIMSUCRE,1,2)}+'kg le '+${#temporals.format(dateESSAIMSUCRE, 'dd/MM/yyyy')}:''">
-		        </th:block>
+				</h1>
+				<th:block th:if="${EveESSAIMSUCRE}">
+					<a th:href="@{'/evenement/'+${EveESSAIMSUCRE.id}}"
+						th:text="${#numbers.formatDecimal(EveESSAIMSUCRE.valeur,1,2)}+'kg le '+${#temporals.format(EveESSAIMSUCRE.date, 'dd/MM/yyyy')}"></a>
+				</th:block>
         	</div>
         </div>
     </div>

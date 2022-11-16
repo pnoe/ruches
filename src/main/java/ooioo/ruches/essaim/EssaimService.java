@@ -363,27 +363,19 @@ public class EssaimService {
 	}
 
 	/*
-	 * Ajoute au model Spring les chaînes date, valeur et commentaire du dernier
-	 * événement de type typeEvenement
+	 * Ajoute au model Spring le dernier événement de type typeEvenement
+	 *  avec le nom d'attribut : Eve + typeEvenement.
 	 */
-	public void modelAddEvenement(Model model, Essaim essaim, TypeEvenement typeEvenement) {
+	public void modelAddEve(Model model, Essaim essaim, TypeEvenement typeEvenement) {
 		Evenement evenement = evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim, typeEvenement);
-		String type = typeEvenement.toString();
-		if (evenement == null) {
-			model.addAttribute(Const.DATE + type, null);
-			model.addAttribute(Const.VALEUR + type, null);
-			model.addAttribute(Const.COMMENTAIRE + type, null);
-		} else {
-			model.addAttribute(Const.DATE + type, evenement.getDate());
-			model.addAttribute(Const.VALEUR + type, evenement.getValeur());
-			model.addAttribute(Const.COMMENTAIRE + type, evenement.getCommentaire());
-		}
+		model.addAttribute("Eve" + typeEvenement, evenement);
 	}
-
+	
 	/*
 	 * Ajoute au model Spring les chaînes date, valeur et commentaire du dernier
 	 * événement de type ESSAIMTRAITEMENT ou ESSAIMTRAITEMENTFIN
 	 */
+	/*
 	public void modelAddEvenTraitement(Model model, Essaim essaim) {
 		Evenement evenement = evenementRepository.findFirstTraitemenetByEssaim(essaim.getId(),
 				TypeEvenement.ESSAIMTRAITEMENT.ordinal(), TypeEvenement.ESSAIMTRAITEMENTFIN.ordinal());
@@ -400,6 +392,7 @@ public class EssaimService {
 					(evenement.getType() == TypeEvenement.ESSAIMTRAITEMENT) ? "Début" : "Fin");
 		}
 	}
+	*/
 
 	/**
 	 * Renvoie la liste des EssaimTree fils de l'essaim passé en paramètre

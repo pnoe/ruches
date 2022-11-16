@@ -18,11 +18,11 @@ const urlclone = /*[[@{/ruche/clone/}]]*/ null;
 const rucheid = /*[[${ruche.id}]]*/ null;
 $().ready(function() {
 	$('.confirmation').on('click', function () {
-		if(recolteHausses) {
+		if (recolteHausses) {
 			alert(rnpsupprec);
 			return false;
-		} else if (evenements) {
-	        return confirm(suppreven);			
+		} else if (evenements > 0) {
+			return confirm(suppreven);
 		} else {
 			return confirm(suppruche);
 		}

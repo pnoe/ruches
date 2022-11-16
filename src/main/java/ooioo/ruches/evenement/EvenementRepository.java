@@ -83,11 +83,8 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			  where (evenement.type = ?1 or evenement.type = ?2) and evenement.date > ?3 and evenement.date < ?4
 			""")
 	Iterable<Evenement> findTypePeriode(TypeEvenement type1, TypeEvenement type2, LocalDateTime date1, LocalDateTime date2);
-
-	Iterable<Evenement> findByRucheId(Long rucheId);
-
+	List<Evenement> findByRucheId(Long rucheId);
 	Iterable<Evenement> findByEssaimId(Long essaimId);
-
 	@Query(value = """
 			select e
 			  from Evenement e

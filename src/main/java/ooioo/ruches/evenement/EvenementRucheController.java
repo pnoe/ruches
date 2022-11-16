@@ -248,7 +248,10 @@ public class EvenementRucheController {
 			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.RUCHECADRE, ruche, essaim,
 					rucher, null, null, null);
 			model.addAttribute(Const.EVENEMENT, evenement);
-			essaimService.modelAddEvenement(model, essaim, TypeEvenement.RUCHECADRE);
+
+			// essaimService.modelAddEvenement(model, essaim, TypeEvenement.RUCHECADRE);
+			essaimService.modelAddEve(model, essaim, TypeEvenement.RUCHECADRE);
+			
 			return "ruche/rucheCadreForm";
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
@@ -289,7 +292,11 @@ public class EvenementRucheController {
 					rucher, null, null, null);
 			model.addAttribute(Const.EVENEMENT, evenement);
 			// rucheService.modelAddEvenement(model, ruche, TypeEvenement.RUCHEPESEE);
-			essaimService.modelAddEvenement(model, essaim, TypeEvenement.RUCHEPESEE);
+			// essaimService.modelAddEvenement(model, essaim, TypeEvenement.RUCHEPESEE);
+			
+			essaimService.modelAddEve(model, essaim, TypeEvenement.RUCHEPESEE);
+			
+			
 			return "ruche/ruchePeseeForm";
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);

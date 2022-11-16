@@ -389,8 +389,8 @@ public class RucheController {
 			model.addAttribute("recolteHausses", recolteHausses.iterator().hasNext());
 			// Si des événements référencent cette ruche, il faudra les supprimer si on la
 			// supprime
-			Iterable<Evenement> evenements = evenementRepository.findByRucheId(rucheId);
-			model.addAttribute(Const.EVENEMENTS, evenements.iterator().hasNext());
+			List<Evenement> evenements = evenementRepository.findByRucheId(rucheId);
+			model.addAttribute(Const.EVENEMENTS, evenements.size());
 			// Trouver l'événement association essaim ruche
 			if (ruche.getEssaim() != null) {
 				model.addAttribute("eveEssaim", evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
