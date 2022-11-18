@@ -72,9 +72,12 @@
 	th:href="@{/js/ol-6.15.1/ol.css}" />
 	
 <!--/* th:data-key="${@environment.getProperty('ign.data.key')}" */-->
+<!--/* th:attr="data-url=@{/js/autoconf.js}" */-->
+
 <script th:fragment="jsGpPluginOpenLayers"
     th:attr="data-url=@{/js/autoconf.js}"
 	th:src="@{/js/GpPluginOpenLayers-3.2.17/GpPluginOpenLayers.js}"></script>
+
 <script th:fragment="jsGpOsmPluginOpenLayers"
 	th:src="@{/js/GpPluginOpenLayers-3.2.17/GpPluginOpenLayers.js}"></script>
 <link th:fragment="cssGpPluginOpenLayers" rel="stylesheet"

@@ -91,7 +91,9 @@ public class RucherController {
 
 	@Value("${rucher.butinage.rayons}")
 	private int[] rayonsButinage;
-
+	@Value("${ign.carteIGN.license}")
+	private boolean ignCarteLiscense;
+	
 	/**
 	 * Transhumances d'un rucher.
 	 *
@@ -759,6 +761,7 @@ public class RucherController {
 			model.addAttribute(Const.HAUSSENOMS, nomHausses);
 			model.addAttribute(Const.RUCHER, rucher);
 			model.addAttribute(Const.RUCHES, ruches);
+			model.addAttribute("ignCarteLiscense", ignCarteLiscense);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
@@ -787,6 +790,7 @@ public class RucherController {
 		}
 		model.addAttribute(Const.RUCHENOMS, nomRuches);
 		model.addAttribute(Const.RUCHERS, ruchers);
+		model.addAttribute("ignCarteLiscense", ignCarteLiscense);
 		return RUCHER_RUCHERLISTE + request.getServletPath().split("/")[2];
 	}
 

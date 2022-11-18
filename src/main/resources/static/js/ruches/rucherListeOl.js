@@ -160,13 +160,15 @@ function rucherListeIgn(ign) {
 				visible: false
 			}
 		}));
-		layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
-			layer: "GEOGRAPHICALGRIDSYSTEMS.MAPS"
-		}));
+		if (ignCarteLiscense) {
+			layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
+				layer: "GEOGRAPHICALGRIDSYSTEMS.MAPS"
+			}));
+		}
 		layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
 			layer: "GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2",
 			olParams: {
-				visible: false
+				visible: !ignCarteLiscense
 			}
 		}));
 		layersMap.insertAt(0, new ol.layer.GeoportalWMTS({

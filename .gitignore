@@ -4,6 +4,4 @@ target/
 .classpath
 javadoc/
 src/main/webapp/META-INF/context.xml
-src/main/resources/static/js/autoconf.js
-
 
