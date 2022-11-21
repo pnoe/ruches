@@ -1,7 +1,7 @@
 /* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals ol,
 	ruchers, nomRuches,	recentertxt, lesRucherstxt,	lesRuchestxt, pasderuchetxt, 
-	ruchertxt, couchemarqueursrucherstxt,
+	ruchertxt, couchemarqueursrucherstxt, ignCarteLiscense,
 	pleinecrantxt, urlruches, _csrf_token
 */
 "use strict";
@@ -100,7 +100,6 @@ function rucherListeIgn(ign) {
 			style.getText().setText(txt.substring(1, txt.length - 1)); feature.setStyle(style);
 		});
 	});
-
 	const translate = new ol.interaction.Translate({
 		features: select.getFeatures(),
 		layers: [vectorLayer]

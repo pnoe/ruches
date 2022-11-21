@@ -2,7 +2,7 @@
 /* globals ol, domtoimage, jsPDF, exportGpx, exportKml,
    rucheParcours, distParcours, longitudeCentre, latitudeCentre, rayonsButinage, cercles, distButinage, ruches, 
    rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
-   ruchetxt, lesHausses, pasdehaussetxt, parcourstxt,
+   ruchetxt, lesHausses, pasdehaussetxt, parcourstxt, ignCarteLiscense,
    parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token, dessinEnregistretxt */
 "use strict";
 function rucherDetail(ign) {
@@ -153,7 +153,6 @@ function rucherDetail(ign) {
 	/// const formatKML = new ol.format.KMLExtended({});
 	// Ne fonctionne pas
 	const formatKML = new ol.format.KML({});
-
 	const dessinsFeatures = (rucher.dessin === null) ? new ol.Collection() : new ol.Collection(formatKML.readFeatures(rucher.dessin));
 	const drawLayer = new ol.layer.Vector({
 		source: new ol.source.Vector({
@@ -333,7 +332,6 @@ function rucherDetail(ign) {
 		overlay.setPosition(feature.getGeometry().getCoordinates());
 		selectDoubleClick.getFeatures().clear();
 	});
-
 	translate.on('translateend', function(evt) {
 		const coord = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
 		const req = new XMLHttpRequest();
@@ -401,7 +399,6 @@ function rucherDetail(ign) {
 		translate.setActive(!this.checked);
 	});
 	if (!ign) {
-		// export png
 		$('#export-png').click(function() {
 			map.once('rendercomplete', function() {
 				domtoimage.toPng(map.getTargetElement().getElementsByClassName("ol-layers")[0])
@@ -413,7 +410,6 @@ function rucherDetail(ign) {
 			});
 			map.renderSync();
 		});
-		// export pdf
 		const { jsPDF } = window.jspdf;
 		const exportPdf = $('#export-pdf');
 		exportPdf.click(function() {
@@ -452,7 +448,6 @@ function rucherDetail(ign) {
 			map.getView().setResolution(viewResolution / scaling);
 		});
 	}
-
 	function newVectorLineLayer() {
 		const coordsLineString = [];
 		for (const rucheP of rucheParcours) {
@@ -472,7 +467,6 @@ function rucherDetail(ign) {
 			source: lineSource
 		});
 	}
-
 	function parcoursRedraw(redraw = false) {
 		const req2 = new XMLHttpRequest();
 		req2.open('GET', ruchesurl + 'rucher/parcours/' + rucher.id + '/' + redraw, true);
@@ -514,5 +508,4 @@ function rucherDetail(ign) {
 		};
 		req2.send();
 	}
-
 }

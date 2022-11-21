@@ -42,6 +42,7 @@ public class RucherService {
 
 	@Value("${rucher.ruche.dispersion}")
 	private double dispersionRuche;
+	
 	/*
 	 * Inner class static pour les distances entre ruches
 	 */

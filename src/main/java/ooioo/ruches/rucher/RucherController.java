@@ -93,6 +93,8 @@ public class RucherController {
 	private int[] rayonsButinage;
 	@Value("${ign.carteIGN.license}")
 	private boolean ignCarteLiscense;
+	@Value("${ruche.dist.max}")
+	private float distMaxRuche;
 	
 	/**
 	 * Transhumances d'un rucher.
@@ -636,12 +638,14 @@ public class RucherController {
 			// liste des ruches de ce rucher
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
 			for (Ruche ruche : ruches) {
-				if (rucherService.distance(latRucher, ruche.getLatitude(), longRucher, ruche.getLongitude()) > 200.0d) {
-					LatLon latLon = rucherService.dispersion(ruche.getLatitude(), ruche.getLongitude());
+				if (rucherService.distance(latRucher, ruche.getLatitude(), longRucher, ruche.getLongitude()) > distMaxRuche) {
+					// On calcule un point près de l'entrée du rucher
+					LatLon latLon = rucherService.dispersion(rucher.getLatitude(), rucher.getLongitude());
+					// On met la ruche à ce point
 					ruche.setLatitude(latLon.lat());
 					ruche.setLongitude(latLon.lon());
 					rucheRepository.save(ruche);
-					logger.info("Ruche {} repositionnée", ruche.getNom());
+					logger.info("{} repositionnée", ruche);
 				}
 			}
 		} else {
