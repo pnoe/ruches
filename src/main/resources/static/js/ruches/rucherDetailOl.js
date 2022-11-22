@@ -291,12 +291,50 @@ function rucherDetail(ign) {
 			source: new ol.source.OSM()
 		});
 		layersMap.insertAt(0, osmLayer);
+
+		// Belgique Wallonie cartoweb.be couche topo
+		var belgiumExtent = [ 279569.630, 6352288.757, 731563.107, 6711221.861 ];
+		const beLayerURL = 'https://cartoweb.wmts.ngi.be/1.0.0/topo/default/3857/{z}/{y}/{x}.png';
+		const beLayer = new ol.layer.Tile({
+			extent: belgiumExtent,
+			source: new ol.source.XYZ({
+				url: beLayerURL
+			})
+		});
+		layersMap.insertAt(0, beLayer);
+		// Belgique Wallonie SPW couche ortho (1)
+		const beOrthoURL = "https://geoservices.wallonie.be/INSPIRE/WMS/OI/MapServer/WmsServer?";
+		const beOrthoLayer = new ol.layer.Tile({
+			extent: belgiumExtent,
+			source: new ol.source.TileWMS({
+				url: beOrthoURL,
+				params: {
+					layers: '1'
+				}
+			})
+		});
+		layersMap.insertAt(0, beOrthoLayer);
+
 		map.addControl(layerSwitcher);
 		layerSwitcher.removeLayer(osmLayer);
 		layerSwitcher.addLayer(osmLayer, {
 			title: 'OpenStreetMap',
 			description: 'Carte OpenStreetMap'
 		});
+
+		// Belgique
+		const beLegendURL = 'https://cartoweb.wmts.ngi.be/legend/topo/default/legende_fr.png';
+		layerSwitcher.removeLayer(beLayer);
+		layerSwitcher.addLayer(beLayer, {
+			title: 'Belgique',
+			description: 'Carte Belgique',
+			legends: [{ url: beLegendURL }]
+		});
+		layerSwitcher.addLayer(beOrthoLayer, {
+			title: 'Belgique OrhtoPhotos',
+			description: 'Ortho Belgique'
+		});
+
 	}
 	map.addControl(new ol.control.MeasureLength());
 	map.addControl(new ol.control.MeasureArea());
