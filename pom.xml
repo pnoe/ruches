@@ -78,10 +78,16 @@
 			<artifactId>jaxb-api</artifactId>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.google.ortools/ortools-java -->
+		<!-- <version>9.5.2237</version> 
+		`GLIBC_2.32' not found (required by /tmp/ortools-java13745325625564540481/ortools-linux-x86-64/libjniortools.so)]
+		java.lang.UnsatisfiedLinkError: 
+			/tmp/ortools-java13745325625564540481/ortools-linux-x86-64/libjniortools.so: /lib/x86_64-linux-gnu/libc.so.6: 
+			version `GLIBC_2.32' not found 
+		-->
 		<dependency>
 			<groupId>com.google.ortools</groupId>
 			<artifactId>ortools-java</artifactId>
-			<version>9.5.2237</version>
+			<version>9.4.1874</version>
 		</dependency>
 	</dependencies>
 	<properties>
