@@ -292,8 +292,11 @@ function rucherDetail(ign) {
 		});
 		layersMap.insertAt(0, osmLayer);
 
+
+		// https://www.ngi.be/website/fr/offre/geodonnees-numeriques/cartoweb-be-2/
+		// https://cartoweb.wmts.ngi.be/1.0.0/WMTSCapabilities.xml
 		// Belgique Wallonie cartoweb.be couche topo
-		var belgiumExtent = [ 279569.630, 6352288.757, 731563.107, 6711221.861 ];
+		const belgiumExtent = [279569.630, 6352288.757, 731563.107, 6711221.861];
 		const beLayerURL = 'https://cartoweb.wmts.ngi.be/1.0.0/topo/default/3857/{z}/{y}/{x}.png';
 		const beLayer = new ol.layer.Tile({
 			extent: belgiumExtent,
@@ -302,6 +305,9 @@ function rucherDetail(ign) {
 			})
 		});
 		layersMap.insertAt(0, beLayer);
+		// https://geoservices.wallonie.be/INSPIRE/WMS/OI/MapServer/WMSServer?request=GetCapabilities&service=WMS
+		// https://geoportail.wallonie.be/catalogue/949d31b0-4994-488d-a454-3a10232e8785.html
+		// https://metawal.wallonie.be/geonetwork/srv/fre/catalog.search#/metadata/949d31b0-4994-488d-a454-3a10232e8785
 		// Belgique Wallonie SPW couche ortho (1)
 		const beOrthoURL = "https://geoservices.wallonie.be/INSPIRE/WMS/OI/MapServer/WmsServer?";
 		const beOrthoLayer = new ol.layer.Tile({
@@ -314,6 +320,28 @@ function rucherDetail(ign) {
 			})
 		});
 		layersMap.insertAt(0, beOrthoLayer);
+
+		// Québec 
+		// https://imagesgeo-atlas.mrnf.gouv.qc.ca/IDS_IMAGERIE_WMS/service.svc/get?request=GetCapabilities&service=WMS
+		// https://www.donneesquebec.ca/recherche/dataset/imagerie-aerienne-mosaiques-orthophotographiques
+		// https://openlayers.org/en/v6.15.1/apidoc/module-ol_source_TileWMS-TileWMS.html
+		/*
+				const quebecLayerURL = 'https://imagesgeo-atlas.mrnf.gouv.qc.ca/IDS_IMAGERIE_WMS/service.svc/get?';
+				const quebecLayer = new ol.layer.Tile({
+					source: new ol.source.TileWMS({
+						url: quebecLayerURL,
+						projection: 'EPSG:3857',
+						params: {
+							PROJECTION: 'EPSG:3857',
+							// LAYERS: 'Satellitaire_Sentinel-2_2019_2019_Sentinel-2_5m_b8-b11-b2',                // infrarouge !
+							// LAYERS: 'Orthomosaique_2020_2020_Partenariat_Centre-du-Quebec_20cm_RVB',            // yes ! 2020 ?
+							LAYERS: 'Orthomosaique_2022_2022_Partenariat_Laurentides_20cm_RVB',					   // une petite zone, dézoomer pour la voir
+							FORMAT: 'image/jpeg'
+						}
+					})
+				});
+				layersMap.insertAt(0, quebecLayer);
+		*/
 
 		map.addControl(layerSwitcher);
 		layerSwitcher.removeLayer(osmLayer);
@@ -330,10 +358,20 @@ function rucherDetail(ign) {
 			description: 'Carte Belgique',
 			legends: [{ url: beLegendURL }]
 		});
+		layerSwitcher.removeLayer(beOrthoLayer);
 		layerSwitcher.addLayer(beOrthoLayer, {
 			title: 'Belgique OrhtoPhotos',
 			description: 'Ortho Belgique'
 		});
+
+		// Québec
+		/*
+		layerSwitcher.removeLayer(quebecLayer);
+		layerSwitcher.addLayer(quebecLayer, {
+			title: 'Québec OrhtoPhotos',
+			description: 'OrhtoPhotos Québec'
+		});
+		*/
 
 	}
 	map.addControl(new ol.control.MeasureLength());
@@ -437,9 +475,9 @@ function rucherDetail(ign) {
 		translate.setActive(!this.checked);
 	});
 	if (!ign) {
-		$('#export-png').click(function() {
+		document.getElementById('export-png').addEventListener('click', function() {
 			map.once('rendercomplete', function() {
-				domtoimage.toPng(map.getTargetElement().getElementsByClassName("ol-layers")[0])
+				domtoimage.toPng(map.getViewport().querySelectorAll('.ol-layer canvas, canvas.ol-layer')[0])
 					.then(function(dataURL) {
 						let link = document.getElementById('image-download');
 						link.href = dataURL;
