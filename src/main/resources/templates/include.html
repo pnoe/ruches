@@ -212,7 +212,7 @@
 	</nav>
 	<footer th:fragment="footer">
 		<small
-			th:text="#{include.footer} + ' Version ' + ${#servletContext.getAttribute('buildtime')}"></small>
+			th:text="#{include.footer} + ' Version ' + ${buildTime}"></small>
 	</footer>
 </body>
 </html>
