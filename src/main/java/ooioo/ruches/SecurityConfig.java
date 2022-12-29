@@ -29,33 +29,36 @@ import jakarta.servlet.http.HttpServletResponse;
 public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
 
 	private final Logger loggerSecConfig = LoggerFactory.getLogger(SecurityConfig.class);
-	
+
 	@Autowired
 	MessageSource messageSource;
-	
+
 	@Resource(name = "userDetailService")
 	private UserDetailsService userDetailsService;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-				.antMatchers("/forgotPassword", "/resetPassword", "/resetPasswordFin", "/", "/css/**", "/js/**",
+		// http.authorizeRequests()
+		http.authorizeHttpRequests()
+				// .antMatchers("/forgotPassword", "/resetPassword", "/resetPasswordFin", "/",
+				// "/css/**", "/js/**",
+				// "/images/**", "/doc/**", "/font/**")
+				.requestMatchers("/forgotPassword", "/resetPassword", "/resetPasswordFin", "/", "/css/**", "/js/**",
 						"/images/**", "/doc/**", "/font/**")
-				.permitAll().anyRequest().authenticated()
-				.and().formLogin().loginPage("/login").permitAll()
+				.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll()
 				.successHandler(new SavedRequestAwareAuthenticationSuccessHandler() {
-				    @Override
-				    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-				            Authentication authentication) throws IOException, ServletException {
-				        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-				        loggerSecConfig.info(messageSource.getMessage("CONNECTE", null,
-				        		LocaleContextHolder.getLocale()), userDetails.getUsername());
-				        super.onAuthenticationSuccess(request, response, authentication);
-				    }                      
-				})
-				.and().logout().permitAll()
+					@Override
+					public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+							Authentication authentication) throws IOException, ServletException {
+						UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+						loggerSecConfig.info(
+								messageSource.getMessage("CONNECTE", null, LocaleContextHolder.getLocale()),
+								userDetails.getUsername());
+						super.onAuthenticationSuccess(request, response, authentication);
+					}
+				}).and().logout().permitAll()
 				// désactivation du csrf pour l'api rest
-				.and().csrf().ignoringAntMatchers("/rest/**");
+				.and().csrf().ignoringRequestMatchers("/rest/**");
 		return http.build();
 	}
 

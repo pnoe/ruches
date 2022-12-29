@@ -47,11 +47,15 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 
 	// Pour remérage dans formulaire dispersion
 	// liste des essaims actifs qui ne sont pas dans des ruches ordonnés par date décroissante
+	
+	// org.hibernate.query.SemanticException: A query exception occurred
+	// java.lang.IllegalArgumentException: org.hibernate.query.SemanticException
+	// pas d'erreur si on remplace : "is true" par "= true"
 	@Query(value = """
 			select essaim.id, essaim.nom
 			  from Essaim essaim
 			    left join Ruche ruche on ruche.essaim.id = essaim.id
-			  where ruche.essaim.id is null and essaim.actif is true
+			  where ruche.essaim.id is null and essaim.actif = true
 			  order by essaim.dateAcquisition desc
 			""")
 	Iterable<Object[]> findProjectedIdNomByRucheIsNullOrderByDateAcquisitionDesc();
