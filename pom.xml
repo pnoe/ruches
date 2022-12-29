@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.7</version>
+		<version>3.0.1</version>
 	</parent>
 	<dependencies>
 		<dependency>
@@ -45,26 +45,31 @@
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5 -->
-		<!-- spring boot 3.0.0
+		<!-- spring boot 3.0 -->
 		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
 		</dependency>
-		-->
+		<!-- spring boot 2.7
 		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
 		</dependency>
-
+        -->
+        
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.sun.mail/javax.mail -->
+		
+		<!-- https://mvnrepository.com/artifact/com.sun.mail/javax.mail 
+		  supprimé pour spring boot 3.0
 		<dependency>
 			<groupId>com.sun.mail</groupId>
 			<artifactId>jakarta.mail</artifactId>
 		</dependency>
+		-->
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-rest</artifactId>
@@ -73,10 +78,14 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
+		
+		<!--  supprimé pour spring boot 3.0
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
 		</dependency>
+		-->
+		
 		<!-- https://mvnrepository.com/artifact/com.google.ortools/ortools-java -->
 		<!-- <version>9.5.2237</version> 
 		`GLIBC_2.32' not found (required by /tmp/ortools-java13745325625564540481/ortools-linux-x86-64/libjniortools.so)]
