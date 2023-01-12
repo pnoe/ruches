@@ -100,11 +100,11 @@ public class RucherController {
 	 * Transhumances d'un rucher.
 	 *
 	 * Les événements sont utilisés par date décroissante : du plus récent au plus
-	 * ancien. Liste les événements correspondant à l'ajout ou le retrait de ruches
+	 * ancien. Liste les événements correspondant à l'ajout ou au retrait de ruches
 	 * dans ce rucher. Option "Grouper" pour grouper les événements de même date
-	 * (année, mois et jour).
+	 * (année, mois et jour) et de même type (Ajout/Retrait).
 	 *
-	 * @param model : on ajoute au model "hist" la liste des événements, "group"
+	 * @param model : on ajoute au model "histo" ou "histoGroup" la liste des événements, "group"
 	 *              true si regroupement fait, "rucher" l'objet rucher (titre, lien)
 	 * @param group : si true les événements de même jour sont regroupés
 	 */
