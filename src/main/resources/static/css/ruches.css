@@ -115,3 +115,7 @@ div.dataTables_paginate {
   letter-spacing: .15em;
   text-shadow: 1px -1px 0 #767676, -2px 4px 1px #767474, -4px 8px 1px #7b7a7a, -6px 12px 1px #828181, -8px 16px 1px #8b8a89;
 }
+
+.coloredrow {
+	background-color: #F2F2F2;
+}

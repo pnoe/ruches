@@ -52,7 +52,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="hist : ${histo}">
+				<tr th:each="hist : ${histo}" th:class="${hist.type} ? 'coloredrow'">
 					<td><a
 						th:text="${#temporals.format(hist.date, 'yyyy/MM/dd HH:mm')}"
 						th:href="@{'/evenement/'+${hist.eveid}+'?type=ajoutruche'}"></a></td>
