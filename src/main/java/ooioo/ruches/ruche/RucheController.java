@@ -473,7 +473,12 @@ public class RucheController {
 			if (hausseOpt.isPresent()) {
 				Ruche ruche = rucheOpt.get();
 				Hausse hausse = hausseOpt.get();
+				
+				
+				
 				// Si la hausse est déjà sur la ruche, abandon et message d'erreur
+				//   Bizarre, le code plus bas gère le retrait de la hausse de sa ruche !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				/*
 				if (hausse.getRuche() != null ) {
 					logger.error("La hausse {} est déjà sur une ruche", hausse.getNom());
 					model.addAttribute(Const.MESSAGE, "Cette hausse est déjà sur une ruche"
@@ -481,11 +486,15 @@ public class RucheController {
 							// messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
 					return Const.INDEX;
 				}
+				*/
+				
+				
 				Evenement evenementRetrait = null;
 				Ruche rucheHausse = hausse.getRuche();
 				LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 				if (rucheHausse != null) {
-					evenementRetrait = new Evenement(dateEve, TypeEvenement.HAUSSERETRAITRUCHE, rucheHausse,
+					evenementRetrait = new Evenement(dateEve.withSecond(0).withNano(0).minusMinutes(1L),
+							TypeEvenement.HAUSSERETRAITRUCHE, rucheHausse,
 							rucheHausse.getEssaim(), rucheHausse.getRucher(), hausse,
 							hausse.getOrdreSurRuche().toString(), commentaire);
 					evenementRepository.save(evenementRetrait);
@@ -499,9 +508,14 @@ public class RucheController {
 				Evenement evenementPose = new Evenement(dateEve, TypeEvenement.HAUSSEPOSERUCHE, ruche,
 						ruche.getEssaim(), ruche.getRucher(), hausse, hausse.getOrdreSurRuche().toString(),
 						commentaire);
+				
+				// fait directement dans l'eve retrait
+				/*
 				if (evenementRetrait != null) {
 					evenementPose.setDate(evenementRetrait.getDate().withSecond(0).withNano(0).plusMinutes(1L));
 				}
+				*/
+				
 				evenementRepository.save(evenementPose);
 				logger.info("{} créé", evenementPose);
 			} else {
