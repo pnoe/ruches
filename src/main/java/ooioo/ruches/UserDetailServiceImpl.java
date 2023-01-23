@@ -19,13 +19,14 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+		if ("".equals(login)) {
+			throw new UsernameNotFoundException("Login ou mot de passe incorrect.");
+		}
 		Personne personne = personneRepository.findByLogin(login);
-		UserBuilder builder = null;
 		if (personne == null) {
 			throw new UsernameNotFoundException("Login ou mot de passe incorrect.");
 		}
-		builder = org.springframework.security.core.userdetails.User.withUsername(login);
-//		builder.password(new BCryptPasswordEncoder().encode(personne.getPassword()));
+		UserBuilder builder = org.springframework.security.core.userdetails.User.withUsername(login);
 		builder.password(personne.getPassword());
 		builder.roles(personne.getRoles());
 		return builder.build();

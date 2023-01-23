@@ -516,6 +516,11 @@ public class RucheController {
 				}
 				*/
 				
+				// On réordonne les hausses de la ruche du retrait
+				if (evenementRetrait != null) {
+					rucheService.ordonneHaussesRuche(rucheHausse.getId());
+				}
+				
 				evenementRepository.save(evenementPose);
 				logger.info("{} créé", evenementPose);
 			} else {
