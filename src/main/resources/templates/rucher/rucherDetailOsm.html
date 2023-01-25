@@ -76,7 +76,7 @@
 					th:title="#{listePlusRuchesOrdonnees}" aria-hidden="true"></span>
 				<span id="export-png" class="bi bi-filetype-png cursorpointer" th:title="#{exportPng}"
 					aria-hidden="true"></span>
-				<a id="image-download" download="map.png"></a>
+				<a id="image-download" th:download="${rucher.nom}+'.png'"></a>
 				<span id="export-gpx" class="bi bi-arrow-up-right-circle cursorpointer" th:title="#{exportGPX}"
 					aria-hidden="true"></span>
 				<a id="gpx-download"></a>	
