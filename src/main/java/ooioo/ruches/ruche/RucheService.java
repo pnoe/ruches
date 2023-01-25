@@ -82,8 +82,8 @@ public class RucheService {
 	}
 
 	/*
-	 * Ré-ordonne les hausses d'une ruche utilisé après retrait ou suppression d'une
-	 * hausse
+	 * Ré-ordonne les hausses d'une ruche utilisé après retrait d'une
+	 * hausse.
 	 */
 	public void ordonneHaussesRuche(long rucheId) {
 		Iterable<Hausse> haussesRuche = hausseRepository.findByRucheIdOrderByOrdreSurRuche(rucheId);
@@ -93,8 +93,13 @@ public class RucheService {
 			if (ordre == null) {
 				logger.error("Ruche {} Ordre hausse {} null.", rucheId, hausseRuche.getNom());
 			}
-			hausseRuche.setOrdreSurRuche(i++);
-			hausseRepository.save(hausseRuche);
+			if ((ordre == null) || (ordre != i)) {
+				// On corrige l'ordre s'il est null ou s'il est différent de l'ordre
+				//  renvoyé par findByRucheIdOrderByOrdreSurRuche
+				hausseRuche.setOrdreSurRuche(i++);
+				hausseRepository.save(hausseRuche);
+				// System.out.println("i " + i + " ordre " + ordre);
+			}
 		}
 	}
 

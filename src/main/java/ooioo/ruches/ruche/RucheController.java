@@ -360,7 +360,7 @@ public class RucheController {
 	}
 
 	/**
-	 * Afficher une ruche et ses hausses
+	 * Afficher une ruche et ses hausses.
 	 */
 	@GetMapping("/{rucheId}")
 	public String affiche(Model model, @PathVariable long rucheId) {
@@ -418,12 +418,10 @@ public class RucheController {
 		if (rucheOpt.isPresent()) {
 			Ruche ruche = rucheOpt.get();
 			Iterable<Hausse> haussesRuche = hausseRepository.findByRucheIdOrderByOrdreSurRuche(rucheId);
-			Iterable<Hausse> haussesRucheNull = hausseRepository.findByActiveAndRucheIsNull(true);
-			Iterable<Hausse> haussesRucheNot = hausseRepository.findByActiveAndRucheIdNot(true, rucheId);
+			List<Hausse> haussesRucheAjout = hausseRepository.findHaussesPourAjout(rucheId);
 			model.addAttribute(Const.RUCHE, ruche);
 			model.addAttribute("haussesRuche", haussesRuche);
-			model.addAttribute("haussesRucheNull", haussesRucheNull);
-			model.addAttribute("haussesRucheNot", haussesRucheNot);
+			model.addAttribute("haussesRucheAjout", haussesRucheAjout);
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 			model.addAttribute(Const.MESSAGE,
@@ -462,7 +460,8 @@ public class RucheController {
 	}
 
 	/**
-	 * Ajouter une hausse sur une ruche
+	 * Ajoute une hausse sur une ruche.
+	 * Si la hausse est déjà sur une ruche, on la retire de cette ruche.
 	 */
 	@PostMapping("/hausse/ajout/{rucheId}/{hausseId}")
 	public String ajoutHausse(Model model, @PathVariable long rucheId, @PathVariable long hausseId,
@@ -473,32 +472,20 @@ public class RucheController {
 			if (hausseOpt.isPresent()) {
 				Ruche ruche = rucheOpt.get();
 				Hausse hausse = hausseOpt.get();
-				
-				
-				
-				// Si la hausse est déjà sur la ruche, abandon et message d'erreur
-				//   Bizarre, le code plus bas gère le retrait de la hausse de sa ruche !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				/*
-				if (hausse.getRuche() != null ) {
-					logger.error("La hausse {} est déjà sur une ruche", hausse.getNom());
-					model.addAttribute(Const.MESSAGE, "Cette hausse est déjà sur une ruche"
-							);
-							// messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
-					return Const.INDEX;
-				}
-				*/
-				
-				
 				Evenement evenementRetrait = null;
 				Ruche rucheHausse = hausse.getRuche();
 				LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 				if (rucheHausse != null) {
+					// ajouter dans commentaire préfixe au commentaire d'ajout : "Pour ajout dans ruche.getNom())"
+					//  localisation...
 					evenementRetrait = new Evenement(dateEve.withSecond(0).withNano(0).minusMinutes(1L),
 							TypeEvenement.HAUSSERETRAITRUCHE, rucheHausse,
 							rucheHausse.getEssaim(), rucheHausse.getRucher(), hausse,
 							hausse.getOrdreSurRuche().toString(), commentaire);
 					evenementRepository.save(evenementRetrait);
-
+					logger.info("{} créé", evenementRetrait);
+					rucheService.ordonneHaussesRuche(rucheHausse.getId());
+					logger.info("Hausse {} retirée de la ruche {}", hausse.getNom(), rucheHausse.getNom());
 				}
 				hausse.setRuche(ruche);
 				// mettre ordreSurRuche au max des ordreSurRuche
@@ -508,21 +495,9 @@ public class RucheController {
 				Evenement evenementPose = new Evenement(dateEve, TypeEvenement.HAUSSEPOSERUCHE, ruche,
 						ruche.getEssaim(), ruche.getRucher(), hausse, hausse.getOrdreSurRuche().toString(),
 						commentaire);
-				
-				// fait directement dans l'eve retrait
-				/*
-				if (evenementRetrait != null) {
-					evenementPose.setDate(evenementRetrait.getDate().withSecond(0).withNano(0).plusMinutes(1L));
-				}
-				*/
-				
-				// On réordonne les hausses de la ruche du retrait
-				if (evenementRetrait != null) {
-					rucheService.ordonneHaussesRuche(rucheHausse.getId());
-				}
-				
 				evenementRepository.save(evenementPose);
 				logger.info("{} créé", evenementPose);
+				logger.info("Hausse {} posée sur la ruche {}", hausse.getNom(), ruche.getNom());
 			} else {
 				logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
 				model.addAttribute(Const.MESSAGE,
@@ -578,7 +553,7 @@ public class RucheController {
 				hausse.setOrdreSurRuche(null);
 				hausseRepository.save(hausse);
 				rucheService.ordonneHaussesRuche(rucheId);
-				logger.info("Hausse {} retirée de le ruche {}", hausse.getNom(), rucheNom);
+				logger.info("Hausse {} retirée de la ruche {}", hausse.getNom(), rucheNom);
 			} else {
 				logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
 				model.addAttribute(Const.MESSAGE,

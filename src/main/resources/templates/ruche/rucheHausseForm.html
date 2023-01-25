@@ -1,20 +1,25 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:replace="include :: jsdatetimepicker"></script>
-<link th:replace="include :: cssdatetimepicker"/>
+<link th:replace="include :: cssdatetimepicker" />
 <script th:replace="include :: localejsdatetimepicker"></script>
 <script th:inline="javascript">
 	$().ready(function() {
 		$("#commentaire").focus();
 		$("#evenementForm").validate({
-			errorClass: 'erreur-form',
-			errorPlacement: function(error, element) {
-			    error.insertBefore(element.closest('div'));
+			errorClass : 'erreur-form',
+			errorPlacement : function(error, element) {
+				error.insertBefore(element.closest('div'));
 			},
 			rules : {
-				date : { required : true },
-				commentaire : {	maxlength : 255	}
+				date : {
+					required : true
+				},
+				commentaire : {
+					maxlength : 255
+				}
 			}
 		});
 	});
@@ -29,16 +34,21 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-				<th:block th:text="#{hausseXX(${hausse.nom})}"></th:block>
-				  <a th:href="@{'/ruche/hausses/'+${ruche.id}}"
-					th:text="#{ajoutSurLaruche(${ruche.nom})}"></a>
-				 
-				 	
+					<th:block th:text="#{hausseXX(${hausse.nom})}"></th:block>
+					<a th:href="@{'/ruche/hausses/'+${ruche.id}}"
+						th:text="#{ajoutSurLaruche(${ruche.nom})}"></a>
 				</h1>
-        	</div>
-        </div>
-    </div>
-	<form action="#" th:action="@{'/ruche/hausse/ajout/'+${ruche.id}+'/'+${hausse.id}}"
+			</div>
+		</div>
+		<div th:if="${hausse.ruche}" class="row">
+			<div class="col">
+				<a th:href="@{'/ruche/'+${hausse.ruche.id}}"
+						th:text="#{retraitDeLaruche(${hausse.ruche.nom})}"></a>
+			</div>
+		</div>
+	</div>
+	<form action="#"
+		th:action="@{'/ruche/hausse/ajout/'+${ruche.id}+'/'+${hausse.id}}"
 		method="post" id="evenementForm">
 		<div th:replace="includeForm :: date"></div>
 		<div th:replace="includeForm :: commentaire"></div>

@@ -92,17 +92,11 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="hausseRucheNull : ${haussesRucheNull}">
+				<tr th:each="hausse : ${haussesRucheAjout}">
 					<td><a data-bs-toggle="tooltip" th:title="#{ajouterhausse}"
-						th:href="@{'/evenement/ruche/hausse/ajout/'+${ruche.id}+'/'+${hausseRucheNull.id}}"
-						th:text="${hausseRucheNull.nom}"></a></td>
-					<td></td>
-				</tr>
-				<tr th:each="hausseRucheNot : ${haussesRucheNot}">
-					<td><a data-bs-toggle="tooltip" th:title="#{ajouterhausse}"
-						th:href="@{'/evenement/ruche/hausse/ajout/'+${ruche.id}+'/'+${hausseRucheNot.id}}"
-						th:text="${hausseRucheNot.nom}"></a></td>
-					<td th:text="${hausseRucheNot.ruche?.nom}"></td>
+						th:href="@{'/evenement/ruche/hausse/ajout/'+${ruche.id}+'/'+${hausse.id}}"
+						th:text="${hausse.nom}"></a></td>
+					<td th:text="${hausse.ruche?.nom}"></td>
 				</tr>
 			</tbody>
 		</table>
