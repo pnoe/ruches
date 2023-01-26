@@ -510,7 +510,7 @@ function rucherDetail(ign) {
 					.then(function(dataURL) {
 						let pdf = new jsPDF('landscape', undefined, format);
 						pdf.addImage(dataURL, 'JPEG', 0, 0, dim[0], dim[1]);
-						pdf.save('map.pdf');
+						pdf.save(rucher.nom + '.pdf');
 						// Reset original map size
 						map.setSize(size);
 						map.getView().setResolution(viewResolution);
