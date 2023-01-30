@@ -11,8 +11,8 @@
 	<br />
 	<div class="logout"
 		sec:authorize="isAuthenticated()">
-		<span th:text="#{connecte}"></span> : <span sec:authentication="name"></span>
-		| <span th:text="#{roles}"></span> : <span sec:authentication="principal.authorities"></span>
+		<span th:text="#{connecte}"></span> : <span id="login" sec:authentication="name"></span>
+		| <span th:text="#{roles}"></span> : <span id="role" sec:authentication="principal.authorities"></span>
 		<div>
 			<form action="#" th:action="@{/logout}" method="post">
 				<input type="submit" th:value="#{deconnexion}" />

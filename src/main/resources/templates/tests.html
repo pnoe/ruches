@@ -27,7 +27,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid table-responsive accordion">
+	<div class="container-fluid table-responsive accordion" id="tests">
 		<h1 class="item" th:if="${#lists.isEmpty(eveRucherRuche)}"
 			th:text="#{HistRuchersEveOK}"></h1>
 		<h1 class="item" th:unless="${#lists.isEmpty(eveRucherRuche)}"

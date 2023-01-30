@@ -7,7 +7,7 @@ const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
 const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
 const rucheTypes = /*[[#{rucheTypes}]]*/ null;
 $(document).ready(function() {
-    new DataTable('#ruches', {
+    new DataTable('#ruchetypes', {
         dom: 'Blftip',
 	    buttons: [
 	    	'csv',
@@ -38,7 +38,7 @@ $(document).ready(function() {
 		</div>
 	</div>
 	<div class="container-fluid">
-		<table class="table table-bordered table-striped" id="ruches">
+		<table class="table table-bordered table-striped" id="ruchetypes">
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>
