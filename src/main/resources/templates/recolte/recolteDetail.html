@@ -107,7 +107,7 @@ $(document).ready(function() {
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid table-responsive"
+	<div class="container-fluid table-responsive" id="detailRecolte"
 		th:with="pdsMiel=(${nbruches}==0) ? 0.00 : 
 			${#aggregates.sum(detailsRecolte.![poidsAvant])} - ${#aggregates.sum(detailsRecolte.![poidsApres])}">
 		<table class="table table-sm table-bordered">
