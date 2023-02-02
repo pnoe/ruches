@@ -12,6 +12,7 @@ import java.util.Date;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -32,6 +33,7 @@ public class TestChrome {
 
 	// Attention certains tests écrivent en base de donnée.
 	// Ne pas utiliser sur application en production !!!!!!!!!
+	// Démarrer l'application correspondant à cette url !!!!
 	static final String baseUrl = "http://localhost:8080/ruches/";
 
 	// Initialisation du navigateur Chrome et login
@@ -42,6 +44,7 @@ public class TestChrome {
 	static final String role = "[ROLE_admin]";
 
 	static final String commentaire = "commentaire";
+	static final String modif = " - modifié";
 
 	@BeforeAll
 	static void initChrome() {
@@ -49,6 +52,8 @@ public class TestChrome {
 		System.setProperty("webdriver.chrome.driver", "/snap/bin/chromium.chromedriver");
 //		https://github.com/SeleniumHQ/selenium/issues/10969
 //		https://github.com/SeleniumHQ/selenium/issues/7788
+//		driver = new ChromeDriver();
+//		erreur : unknown flag `port'
 		driver = new ChromeDriver((ChromeDriverService) (new ChromeDriverService.Builder() {
 			@Override
 			protected File findDefaultExecutable() {
@@ -96,7 +101,7 @@ public class TestChrome {
 		js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
 		js.executeScript("arguments[0].click();", driver.findElement(By.xpath("//input[@type='submit']")));
 	}
-	
+
 	void clearSend(String key, String val) {
 		WebElement we = driver.findElement(By.name(key));
 		we.clear();
@@ -104,16 +109,21 @@ public class TestChrome {
 	}
 
 	@Test
-	void ruches() {
-		// ******************** Liste des ruches **************************
+	void listeRuches() {
 		driver.get(baseUrl + "ruche/liste");
 		// La table d'id "ruches" est affichée
 		assertEquals("table", driver.findElement(By.id("ruches")).getTagName());
-		// ******************** Liste des type de ruches **************************
+	}
+
+	@Test
+	void listeRucheTypes() {
 		driver.get(baseUrl + "rucheType/liste");
 		// La table d'id "ruchetypes" est affichée
 		assertEquals("table", driver.findElement(By.id("ruchetypes")).getTagName());
-		// ******************** Liste détaillée des ruches **************************
+	}
+
+	@Test
+	void listeRuchesPlus() {
 		driver.get(baseUrl + "ruche/listeplus");
 		// La table d'id "ruchesplus" est affichée
 		assertEquals("table", driver.findElement(By.id("ruchesplus")).getTagName());
@@ -147,7 +157,7 @@ public class TestChrome {
 	}
 
 	@Test
-	void creeRuche() {
+	void creeModifRuche() {
 		// Création d'une ruche
 		// Attention écriture en base de données
 		driver.get(baseUrl + "ruche/cree");
@@ -159,10 +169,17 @@ public class TestChrome {
 		submit();
 		// Page détail de la ruche créée
 		assertEquals("div", driver.findElement(By.id("ruche")).getTagName());
+		// Modification de la ruche
+		String urlDetail = driver.getCurrentUrl();
+		driver.get(baseUrl + "ruche/modifie" + urlDetail.substring(urlDetail.lastIndexOf("/")));
+		driver.findElement(By.name(commentaire)).sendKeys(modif);
+		submit();
+		// Page détail de la ruche modifiée
+		assertEquals("div", driver.findElement(By.id("ruche")).getTagName());
 	}
 
 	@Test
-	void hausses() {
+	void listeHausses() {
 		// ******************** Liste des hausses **************************
 		driver.get(baseUrl + "hausse/liste");
 		// La table d'id "hausses" est affichée
@@ -184,20 +201,63 @@ public class TestChrome {
 		// Modification de la hausse
 		String urlDetail = driver.getCurrentUrl();
 		driver.get(baseUrl + "hausse/modifie" + urlDetail.substring(urlDetail.lastIndexOf("/")));
-		driver.findElement(By.name(commentaire)).sendKeys(" - modifié");
+		driver.findElement(By.name(commentaire)).sendKeys(modif);
 		submit();
 		// Page détail de la hausse modifiée
 		assertEquals("div", driver.findElement(By.id("hausse")).getTagName());
 	}
 
 	@Test
-	void ruchers() {
-		// ******************** Liste des ruchers **************************
+	void listeRuchers() {
 		driver.get(baseUrl + "rucher/liste");
 		// La table d'id "ruchers" est affichée
 		assertEquals("table", driver.findElement(By.id("ruchers")).getTagName());
 	}
+	
+	@Test
+	void mapGgRuchers() {
+		driver.get(baseUrl + "rucher/Gg");
+		// La div d'id "map" est affichée
+		assertEquals("div", driver.findElement(By.id("map")).getTagName());
+	}
+	
+	@Test
+	void mapIgnRuchers() {
+		driver.get(baseUrl + "rucher/Ign");
+		// La div d'id "map" est affichée
+		assertEquals("div", driver.findElement(By.id("map")).getTagName());
+	}
+	
+	@Test
+	void mapOsmRuchers() {
+		driver.get(baseUrl + "rucher/Osm");
+		// La div d'id "map" est affichée
+		assertEquals("div", driver.findElement(By.id("map")).getTagName());
+	}
+	
+	@Test
+	void statistiquesRuchers() {
+		driver.get(baseUrl + "rucher/statistiques");
+		// La table d'id "statistiques" est affichée
+		assertEquals("table", driver.findElement(By.id("statistiques")).getTagName());
+	}
 
+	@Test
+	@DisplayName("Transhumances des ruchers, groupées")
+	void transhumGroupeRuchers() {
+		driver.get(baseUrl + "rucher/historiques/true");
+		// La table d'id "transhumances" est affichée
+		assertEquals("table", driver.findElement(By.id("transhumances")).getTagName());
+	}
+
+	@Test
+	@DisplayName("Transhumances des ruchers, non groupées")
+	void transhumRuchers() {
+		driver.get(baseUrl + "rucher/historiques/false");
+		// La table d'id "transhumances" est affichée
+		assertEquals("table", driver.findElement(By.id("transhumances")).getTagName());
+	}
+	
 	@Test
 	void creeModifRucher() {
 		// Création d'un rucher
@@ -220,8 +280,7 @@ public class TestChrome {
 	}
 
 	@Test
-	void personnes() {
-		// ******************** Liste des personnes **************************
+	void listePersonnes() {
 		driver.get(baseUrl + "personne/liste");
 		// La table d'id "personnes" est affichée
 		assertEquals("table", driver.findElement(By.id("personnes")).getTagName());
@@ -250,15 +309,14 @@ public class TestChrome {
 	}
 
 	@Test
-	void essaims() {
-		// ******************** Liste des essaims **************************
+	void listeEssaims() {
 		driver.get(baseUrl + "essaim/liste");
 		// La table d'id "essaims" est affichée
 		assertEquals("table", driver.findElement(By.id("essaims")).getTagName());
 	}
 
 	@Test
-	void creeEssaim() {
+	void creeModifEssaim() {
 		// Création d'un essaim
 		// Attention écriture en base de données
 		driver.get(baseUrl + "essaim/cree");
@@ -269,10 +327,18 @@ public class TestChrome {
 		submit();
 		// Page détail du rucher créé
 		assertEquals("div", driver.findElement(By.id("detailEssaim")).getTagName());
+		// Modification de l'essaim
+		String urlDetail = driver.getCurrentUrl();
+		driver.get(baseUrl + "essaim/modifie" + urlDetail.substring(urlDetail.lastIndexOf("/")));
+		driver.findElement(By.name(commentaire)).sendKeys(modif);
+		submit();
+		// Page détail de l'essaim modifiée
+		assertEquals("div", driver.findElement(By.id("detailEssaim")).getTagName());
+
 	}
 
 	@Test
-	void recoltes() {
+	void listeRecoltes() {
 		// ******************** Liste des récoltes **************************
 		driver.get(baseUrl + "recolte/liste");
 		// La table d'id "recoltes" est affichée
@@ -290,10 +356,17 @@ public class TestChrome {
 		submit();
 		// Page détail de la récolte créée
 		assertEquals("div", driver.findElement(By.id("detailRecolte")).getTagName());
+		// Modification de la récolte
+		String urlDetail = driver.getCurrentUrl();
+		driver.get(baseUrl + "recolte/modifie" + urlDetail.substring(urlDetail.lastIndexOf("/")));
+		driver.findElement(By.name(commentaire)).sendKeys(modif);
+		submit();
+		// Page détail de la récolte modifiée
+		assertEquals("div", driver.findElement(By.id("detailRecolte")).getTagName());
 	}
 
 	@Test
-	void evenements() {
+	void listeEvenements() {
 		// ******************** Liste des événements **************************
 		driver.get(baseUrl + "evenement/liste");
 		// La table d'id "evenements" est affichée
@@ -354,11 +427,14 @@ public class TestChrome {
 	}
 
 	@Test
-	void admin() {
-		// ******************** Admin **************************
+	void adminParam() {
 		driver.get(baseUrl + "parametres");
 		// Le formulaire d'id "parametresForm" est affiché
 		assertEquals("form", driver.findElement(By.id("parametresForm")).getTagName());
+	}
+
+	@Test
+	void adminRest() {
 		driver.get(baseUrl + "rest");
 		// api rest, json test sur lien vers repository recolteHausses
 		ObjectMapper mapper = new ObjectMapper();
@@ -369,15 +445,31 @@ public class TestChrome {
 		} catch (JsonProcessingException e) {
 			fail(e.getMessage());
 		}
+	}
+
+	@Test
+	void adminLog() {
 		driver.get(baseUrl + "admin/logs/logfile");
 		// La page de log contient la classe d'authentification
 		assertEquals(true, driver.getPageSource().contains("ooioo.ruches.SecurityConfig.onAuthenticationSuccess"));
+	}
+
+	@Test
+	void adminInfos() {
 		driver.get(baseUrl + "infos");
 		// La div d'id "info" est présente
 		assertEquals("div", driver.findElement(By.id("info")).getTagName());
+	}
+
+	@Test
+	void adminTests() {
 		driver.get(baseUrl + "tests");
 		// La div d'id "tests" est présente
 		assertEquals("div", driver.findElement(By.id("tests")).getTagName());
+	}
+
+	@Test
+	void adminDoc() {
 		driver.get(baseUrl + "doc/ruches.html");
 		// La page de doc contient "LibreOffice"
 		assertEquals(true, driver.getPageSource().contains("LibreOffice"));
