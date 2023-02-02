@@ -30,8 +30,8 @@ public class TestChrome {
 	static WebDriver driver;
 	static final String comment = "Test selenium chrome";
 
-	// Attention certains tests écrivent en base de donnée
-	// ne pas utiliser sur application en production !!!!!!!!!
+	// Attention certains tests écrivent en base de donnée.
+	// Ne pas utiliser sur application en production !!!!!!!!!
 	static final String baseUrl = "http://localhost:8080/ruches/";
 
 	// Initialisation du navigateur Chrome et login
@@ -40,7 +40,9 @@ public class TestChrome {
 	static final String user = "test";
 	static final String pwd = "testpwd";
 	static final String role = "[ROLE_admin]";
-	
+
+	static final String commentaire = "commentaire";
+
 	@BeforeAll
 	static void initChrome() {
 //		System.setProperty("webdriver.chrome.driver","/home/noe/selenium/driver/chrome109/chromedriver");
@@ -94,6 +96,12 @@ public class TestChrome {
 		js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
 		js.executeScript("arguments[0].click();", driver.findElement(By.xpath("//input[@type='submit']")));
 	}
+	
+	void clearSend(String key, String val) {
+		WebElement we = driver.findElement(By.name(key));
+		we.clear();
+		we.sendKeys(val);
+	}
 
 	@Test
 	void ruches() {
@@ -122,19 +130,20 @@ public class TestChrome {
 		driver.findElement(By.xpath("//input[@type='submit']")).click();
 		assertEquals("table", driver.findElement(By.id("ruchetypes")).getTagName());
 		// Modification de la valeur de l'événement
-		//   pas de page détail après création d'un type de ruche
-		//   le code suivant ne récupère pas l'id du nouveau type créé
-		//   A corriger !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		// pas de page détail après création d'un type de ruche
+		// le code suivant ne récupère pas l'id du nouveau type créé
+		// A corriger !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		// api rest avec méthode dans repository findlastruchetype ?
 		/*
-		String urlDetail = driver.getCurrentUrl();
-		driver.get(baseUrl + "rucheType/modifie" + urlDetail.substring(urlDetail.lastIndexOf("/")));
-		WebElement nbMax = driver.findElement(By.name("nbCadresMax"));
-		nbMax.clear(); // Sinon concaténation avec valeur par défaut ("8" + "10")
-		nbMax.sendKeys("8");
-		driver.findElement(By.xpath("//input[@type='submit']")).click();
-		// Page détail de l'événement modifié
-		assertEquals("div", driver.findElement(By.id("ruchetypes")).getTagName());
-		*/
+		 * String urlDetail = driver.getCurrentUrl(); driver.get(baseUrl +
+		 * "rucheType/modifie" + urlDetail.substring(urlDetail.lastIndexOf("/")));
+		 * WebElement nbMax = driver.findElement(By.name("nbCadresMax")); nbMax.clear();
+		 * // Sinon concaténation avec valeur par défaut ("8" + "10")
+		 * nbMax.sendKeys("8");
+		 * driver.findElement(By.xpath("//input[@type='submit']")).click(); // Page
+		 * détail de l'événement modifié assertEquals("div",
+		 * driver.findElement(By.id("ruchetypes")).getTagName());
+		 */
 	}
 
 	@Test
@@ -145,7 +154,7 @@ public class TestChrome {
 		// Formulaire de création de ruche
 		assertEquals("form", driver.findElement(By.id("rucheForm")).getTagName());
 		driver.findElement(By.name("nom")).sendKeys("#" + new SimpleDateFormat("yyMMddHHmmss").format(new Date()));
-		driver.findElement(By.name("commentaire")).sendKeys(comment);
+		driver.findElement(By.name(commentaire)).sendKeys(comment);
 		// erreur: le bouton submit n'est pas cliquable, car non visible ?
 		submit();
 		// Page détail de la ruche créée
@@ -161,16 +170,23 @@ public class TestChrome {
 	}
 
 	@Test
-	void creeHausse() {
+	void creeModifHausse() {
 		// Création d'une hausse
 		// Attention écriture en base de données
 		driver.get(baseUrl + "hausse/cree");
 		// Formulaire de création de ruche
 		assertEquals("form", driver.findElement(By.id("hausseForm")).getTagName());
 		driver.findElement(By.name("nom")).sendKeys("#" + new SimpleDateFormat("yyMMddHHmmss").format(new Date()));
-		driver.findElement(By.name("commentaire")).sendKeys(comment);
+		driver.findElement(By.name(commentaire)).sendKeys(comment);
 		submit();
 		// Page détail de la hausse créée
+		assertEquals("div", driver.findElement(By.id("hausse")).getTagName());
+		// Modification de la hausse
+		String urlDetail = driver.getCurrentUrl();
+		driver.get(baseUrl + "hausse/modifie" + urlDetail.substring(urlDetail.lastIndexOf("/")));
+		driver.findElement(By.name(commentaire)).sendKeys(" - modifié");
+		submit();
+		// Page détail de la hausse modifiée
 		assertEquals("div", driver.findElement(By.id("hausse")).getTagName());
 	}
 
@@ -183,16 +199,23 @@ public class TestChrome {
 	}
 
 	@Test
-	void creeRucher() {
+	void creeModifRucher() {
 		// Création d'un rucher
 		// Attention écriture en base de données
 		driver.get(baseUrl + "rucher/cree");
 		// Formulaire de création de ruche
 		assertEquals("form", driver.findElement(By.id("rucherForm")).getTagName());
 		driver.findElement(By.name("nom")).sendKeys("#" + new SimpleDateFormat("yyMMddHHmmss").format(new Date()));
-		driver.findElement(By.name("commentaire")).sendKeys(comment);
+		driver.findElement(By.name(commentaire)).sendKeys(comment);
 		submit();
 		// Page détail du rucher créé
+		assertEquals("div", driver.findElement(By.id("detailRucher")).getTagName());
+		// Modification du rucher
+		String urlDetail = driver.getCurrentUrl();
+		driver.get(baseUrl + "rucher/modifie" + urlDetail.substring(urlDetail.lastIndexOf("/")));
+		clearSend("altitude", "1000");
+		submit();
+		// Page détail du rucher modifiée
 		assertEquals("div", driver.findElement(By.id("detailRucher")).getTagName());
 	}
 
@@ -205,7 +228,7 @@ public class TestChrome {
 	}
 
 	@Test
-	void creePersonne() {
+	void creeModifPersonne() {
 		// Création d'une personne
 		// Attention écriture en base de données
 		driver.get(baseUrl + "personne/cree");
@@ -216,6 +239,13 @@ public class TestChrome {
 		// Pas de champ commentaire sur Personne
 		submit();
 		// Page détail de la personne créée
+		assertEquals("div", driver.findElement(By.id("detailPersonne")).getTagName());
+		// Modification de la personne
+		String urlDetail = driver.getCurrentUrl();
+		driver.get(baseUrl + "personne/modifie" + urlDetail.substring(urlDetail.lastIndexOf("/")));
+		driver.findElement(By.name("adresse")).sendKeys("La croix - Sainte Victoire");
+		submit();
+		// Page détail de la personne modifiée
 		assertEquals("div", driver.findElement(By.id("detailPersonne")).getTagName());
 	}
 
@@ -235,7 +265,7 @@ public class TestChrome {
 		// Formulaire de création de ruche
 		assertEquals("form", driver.findElement(By.id("essaimForm")).getTagName());
 		driver.findElement(By.name("nom")).sendKeys("#" + new SimpleDateFormat("yyMMddHHmmss").format(new Date()));
-		driver.findElement(By.name("commentaire")).sendKeys(comment);
+		driver.findElement(By.name(commentaire)).sendKeys(comment);
 		submit();
 		// Page détail du rucher créé
 		assertEquals("div", driver.findElement(By.id("detailEssaim")).getTagName());
@@ -256,7 +286,7 @@ public class TestChrome {
 		driver.get(baseUrl + "recolte/cree");
 		// Formulaire de création de la récolte
 		assertEquals("form", driver.findElement(By.id("recolteForm")).getTagName());
-		driver.findElement(By.name("commentaire")).sendKeys(comment);
+		driver.findElement(By.name(commentaire)).sendKeys(comment);
 		submit();
 		// Page détail de la récolte créée
 		assertEquals("div", driver.findElement(By.id("detailRecolte")).getTagName());
@@ -310,7 +340,7 @@ public class TestChrome {
 		WebElement rucherSelEle = driver.findElement(By.name("rucher"));
 		Select rucherSelect = new Select(rucherSelEle);
 		rucherSelect.selectByIndex(1);
-		driver.findElement(By.name("commentaire")).sendKeys(comment);
+		driver.findElement(By.name(commentaire)).sendKeys(comment);
 		submit();
 		// Page détail de l'événement créé
 		assertEquals("div", driver.findElement(By.id("detailEvenement")).getTagName());
