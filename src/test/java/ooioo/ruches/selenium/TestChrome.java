@@ -1,5 +1,6 @@
 package ooioo.ruches.selenium;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -31,10 +32,15 @@ public class TestChrome {
 
 	// Attention certains tests écrivent en base de donnée
 	// ne pas utiliser sur application en production !!!!!!!!!
-	static String baseUrl = "http://localhost:8080/ruches/";
+	static final String baseUrl = "http://localhost:8080/ruches/";
 
 	// Initialisation du navigateur Chrome et login
 	// Créer un admin, nom : test, prénom : testp, login : test, password : testpwd
+	// Attention à ne pas mettre de mot de passe de production !
+	static final String user = "test";
+	static final String pwd = "testpwd";
+	static final String role = "[ROLE_admin]";
+	
 	@BeforeAll
 	static void initChrome() {
 //		System.setProperty("webdriver.chrome.driver","/home/noe/selenium/driver/chrome109/chromedriver");
@@ -65,23 +71,25 @@ public class TestChrome {
 		driver.get(baseUrl + "login");
 		// Le titre de la page de connexion est "Connexion"
 		assertEquals("Connexion", driver.getTitle());
-		driver.findElement(By.name("username")).sendKeys("test");
-		driver.findElement(By.name("password")).sendKeys("testpwd");
+		driver.findElement(By.name("username")).sendKeys(user);
+		driver.findElement(By.name("password")).sendKeys(pwd);
 		driver.findElement(By.xpath("//input[@type='submit']")).click();
 		// ******************** Logged **************************
 		// Le titre de la page après login est "ruches"
-		assertEquals("Ruches", driver.getTitle());
+		assertEquals("Ruches", driver.getTitle(),
+				() -> "La connexion a échoué, avez-vous créé un utilisateur 'test' ?");
 		// L'utilisateur est "test" avec un rôle admin
-		assertEquals("test", driver.findElement(By.id("login")).getText());
-		assertEquals("[ROLE_admin]", driver.findElement(By.id("role")).getText());
+		assertAll("login, rôle", () -> assertEquals(user, driver.findElement(By.id("login")).getText()),
+				() -> assertEquals(role, driver.findElement(By.id("role")).getText()));
 	}
 
 	@AfterAll
 	static void quitChrome() {
 		driver.quit();
 	}
-	
+
 	void submit() {
+		// https://www.lambdatest.com/blog/how-to-deal-with-element-is-not-clickable-at-point-exception-using-selenium/
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
 		js.executeScript("arguments[0].click();", driver.findElement(By.xpath("//input[@type='submit']")));
@@ -110,12 +118,23 @@ public class TestChrome {
 		driver.get(baseUrl + "rucheType/cree");
 		assertEquals("form", driver.findElement(By.id("rucheTypeForm")).getTagName());
 		driver.findElement(By.name("nom")).sendKeys("#" + new SimpleDateFormat("yyMMddHHmmss").format(new Date()));
-		driver.findElement(By.name("commentaire")).sendKeys(comment);
+		// Pas de champ commentaire sur TypeRuche
+		driver.findElement(By.xpath("//input[@type='submit']")).click();
+		assertEquals("table", driver.findElement(By.id("ruchetypes")).getTagName());
+		// Modification de la valeur de l'événement
+		//   pas de page détail après création d'un type de ruche
+		//   le code suivant ne récupère pas l'id du nouveau type créé
+		//   A corriger !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		/*
+		String urlDetail = driver.getCurrentUrl();
+		driver.get(baseUrl + "rucheType/modifie" + urlDetail.substring(urlDetail.lastIndexOf("/")));
 		WebElement nbMax = driver.findElement(By.name("nbCadresMax"));
 		nbMax.clear(); // Sinon concaténation avec valeur par défaut ("8" + "10")
 		nbMax.sendKeys("8");
 		driver.findElement(By.xpath("//input[@type='submit']")).click();
-		assertEquals("table", driver.findElement(By.id("ruchetypes")).getTagName());
+		// Page détail de l'événement modifié
+		assertEquals("div", driver.findElement(By.id("ruchetypes")).getTagName());
+		*/
 	}
 
 	@Test
@@ -127,13 +146,8 @@ public class TestChrome {
 		assertEquals("form", driver.findElement(By.id("rucheForm")).getTagName());
 		driver.findElement(By.name("nom")).sendKeys("#" + new SimpleDateFormat("yyMMddHHmmss").format(new Date()));
 		driver.findElement(By.name("commentaire")).sendKeys(comment);
-		// https://www.lambdatest.com/blog/how-to-deal-with-element-is-not-clickable-at-point-exception-using-selenium/
 		// erreur: le bouton submit n'est pas cliquable, car non visible ?
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-//		js.executeScript("arguments[0].scrollIntoView(true);", btnSubmit);
-		js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
-		js.executeScript("arguments[0].click();", driver.findElement(By.xpath("//input[@type='submit']")));
-//		driver.findElement(By.xpath("//input[@type='submit']")).click();
+		submit();
 		// Page détail de la ruche créée
 		assertEquals("div", driver.findElement(By.id("ruche")).getTagName());
 	}
@@ -155,9 +169,7 @@ public class TestChrome {
 		assertEquals("form", driver.findElement(By.id("hausseForm")).getTagName());
 		driver.findElement(By.name("nom")).sendKeys("#" + new SimpleDateFormat("yyMMddHHmmss").format(new Date()));
 		driver.findElement(By.name("commentaire")).sendKeys(comment);
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
-		js.executeScript("arguments[0].click();", driver.findElement(By.xpath("//input[@type='submit']")));
+		submit();
 		// Page détail de la hausse créée
 		assertEquals("div", driver.findElement(By.id("hausse")).getTagName());
 	}
@@ -179,9 +191,7 @@ public class TestChrome {
 		assertEquals("form", driver.findElement(By.id("rucherForm")).getTagName());
 		driver.findElement(By.name("nom")).sendKeys("#" + new SimpleDateFormat("yyMMddHHmmss").format(new Date()));
 		driver.findElement(By.name("commentaire")).sendKeys(comment);
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
-		js.executeScript("arguments[0].click();", driver.findElement(By.xpath("//input[@type='submit']")));
+		submit();
 		// Page détail du rucher créé
 		assertEquals("div", driver.findElement(By.id("detailRucher")).getTagName());
 	}
@@ -203,9 +213,8 @@ public class TestChrome {
 		assertEquals("form", driver.findElement(By.id("personneForm")).getTagName());
 		driver.findElement(By.name("nom")).sendKeys("#" + new SimpleDateFormat("yyMMddHHmmss").format(new Date()));
 		driver.findElement(By.name("prenom")).sendKeys("test");
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
-		js.executeScript("arguments[0].click();", driver.findElement(By.xpath("//input[@type='submit']")));
+		// Pas de champ commentaire sur Personne
+		submit();
 		// Page détail de la personne créée
 		assertEquals("div", driver.findElement(By.id("detailPersonne")).getTagName());
 	}
@@ -227,9 +236,7 @@ public class TestChrome {
 		assertEquals("form", driver.findElement(By.id("essaimForm")).getTagName());
 		driver.findElement(By.name("nom")).sendKeys("#" + new SimpleDateFormat("yyMMddHHmmss").format(new Date()));
 		driver.findElement(By.name("commentaire")).sendKeys(comment);
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
-		js.executeScript("arguments[0].click();", driver.findElement(By.xpath("//input[@type='submit']")));
+		submit();
 		// Page détail du rucher créé
 		assertEquals("div", driver.findElement(By.id("detailEssaim")).getTagName());
 	}
@@ -250,9 +257,7 @@ public class TestChrome {
 		// Formulaire de création de la récolte
 		assertEquals("form", driver.findElement(By.id("recolteForm")).getTagName());
 		driver.findElement(By.name("commentaire")).sendKeys(comment);
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
-		js.executeScript("arguments[0].click();", driver.findElement(By.xpath("//input[@type='submit']")));
+		submit();
 		// Page détail de la récolte créée
 		assertEquals("div", driver.findElement(By.id("detailRecolte")).getTagName());
 	}
@@ -294,16 +299,15 @@ public class TestChrome {
 		// Formulaire de création de l'événement
 		assertEquals("form", driver.findElement(By.id("evenementForm")).getTagName());
 		/*
-		// Pour choisir un autre type d'événement
-		WebElement typeSelEle  = driver.findElement(By.name("type"));
-		Select typeSelect = new Select(typeSelEle);
-		//List<WebElement> optionTypeList = typeSelect.getOptions();
-		typeSelect.selectByValue("RUCHEAJOUTRUCHER");
-		*/
-		WebElement rucheSelEle  = driver.findElement(By.name("ruche"));
+		 * // Pour choisir un autre type d'événement WebElement typeSelEle =
+		 * driver.findElement(By.name("type")); Select typeSelect = new
+		 * Select(typeSelEle); //List<WebElement> optionTypeList =
+		 * typeSelect.getOptions(); typeSelect.selectByValue("RUCHEAJOUTRUCHER");
+		 */
+		WebElement rucheSelEle = driver.findElement(By.name("ruche"));
 		Select rucheSelect = new Select(rucheSelEle);
 		rucheSelect.selectByIndex(1);
-		WebElement rucherSelEle  = driver.findElement(By.name("rucher"));
+		WebElement rucherSelEle = driver.findElement(By.name("rucher"));
 		Select rucherSelect = new Select(rucherSelEle);
 		rucherSelect.selectByIndex(1);
 		driver.findElement(By.name("commentaire")).sendKeys(comment);
@@ -312,8 +316,7 @@ public class TestChrome {
 		assertEquals("div", driver.findElement(By.id("detailEvenement")).getTagName());
 		// Modification de la valeur de l'événement
 		String urlDetail = driver.getCurrentUrl();
-		String idStr = urlDetail.substring(urlDetail.lastIndexOf("/"));
-		driver.get(baseUrl + "evenement/modifie" + idStr);
+		driver.get(baseUrl + "evenement/modifie" + urlDetail.substring(urlDetail.lastIndexOf("/")));
 		driver.findElement(By.name("valeur")).sendKeys("007");
 		submit();
 		// Page détail de l'événement modifié
