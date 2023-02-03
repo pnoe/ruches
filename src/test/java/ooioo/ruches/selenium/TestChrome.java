@@ -48,6 +48,8 @@ public class TestChrome {
 	static final String commentaire = "commentaire";
 	static final String modif = " - modifié";
 
+	String depotId;
+
 	@BeforeAll
 	static void initChrome() {
 //		System.setProperty("webdriver.chrome.driver","/home/noe/selenium/driver/chrome109/chromedriver");
@@ -88,16 +90,6 @@ public class TestChrome {
 				() -> "La connexion a échoué, avez-vous créé un utilisateur 'test' ?");
 	}
 
-	@Test
-	void connecte() {
-		driver.get(baseUrl);
-		// Le titre de la page après login est "ruches"
-		assertEquals("Ruches", driver.getTitle());
-		// L'utilisateur est "test" avec un rôle admin
-		assertAll("login, rôle", () -> assertEquals(user, driver.findElement(By.id("login")).getText()),
-				() -> assertEquals(role, driver.findElement(By.id("role")).getText()));
-	}
-
 	@AfterAll
 	static void quitChrome() {
 		driver.quit();
@@ -114,6 +106,17 @@ public class TestChrome {
 		WebElement we = driver.findElement(By.name(key));
 		we.clear();
 		we.sendKeys(val);
+	}
+
+	@Test
+	@DisplayName("Page d'accueil")
+	void connecte() {
+		driver.get(baseUrl);
+		// Le titre de la page d'accueil est "ruches"
+		assertEquals("Ruches", driver.getTitle());
+		// L'utilisateur est "test" avec un rôle admin
+		assertAll("login, rôle", () -> assertEquals(user, driver.findElement(By.id("login")).getText()),
+				() -> assertEquals(role, driver.findElement(By.id("role")).getText()));
 	}
 
 	@Test
@@ -153,23 +156,11 @@ public class TestChrome {
 		assertEquals("table", driver.findElement(By.id("ruchetypes")).getTagName());
 		// Modification de la valeur de l'événement
 		// pas de page détail après création d'un type de ruche
-		// le code suivant ne récupère pas l'id du nouveau type créé
-		// A corriger !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		// api rest avec méthode dans repository findlastruchetype ?
-		/*
-		 * String urlDetail = driver.getCurrentUrl(); driver.get(baseUrl +
-		 * "rucheType/modifie" + urlDetail.substring(urlDetail.lastIndexOf("/")));
-		 * WebElement nbMax = driver.findElement(By.name("nbCadresMax")); nbMax.clear();
-		 * // Sinon concaténation avec valeur par défaut ("8" + "10")
-		 * nbMax.sendKeys("8");
-		 * driver.findElement(By.xpath("//input[@type='submit']")).click(); // Page
-		 * détail de l'événement modifié assertEquals("div",
-		 * driver.findElement(By.id("ruchetypes")).getTagName());
-		 */
 	}
 
 	@Test
-	@DisplayName("Ruches création/modif")
+	@DisplayName("Ruche création/modif")
 	void creeModifRuche() {
 		// Création d'une ruche
 		// Attention écriture en base de données
@@ -194,14 +185,13 @@ public class TestChrome {
 	@Test
 	@DisplayName("Hausses liste")
 	void listeHausses() {
-		// ******************** Liste des hausses **************************
 		driver.get(baseUrl + "hausse/liste");
 		// La table d'id "hausses" est affichée
 		assertEquals("table", driver.findElement(By.id("hausses")).getTagName());
 	}
 
 	@Test
-	@DisplayName("Hausses création/modif")
+	@DisplayName("Hausse création/modif")
 	void creeModifHausse() {
 		// Création d'une hausse
 		// Attention écriture en base de données
@@ -223,6 +213,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Ruchers liste")
 	void listeRuchers() {
 		driver.get(baseUrl + "rucher/liste");
 		// La table d'id "ruchers" est affichée
@@ -230,6 +221,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Ruchers carte Gg")
 	void mapGgRuchers() {
 		driver.get(baseUrl + "rucher/Gg");
 		// La div d'id "map" est affichée
@@ -237,6 +229,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Ruchers carte IGN")
 	void mapIgnRuchers() {
 		driver.get(baseUrl + "rucher/Ign");
 		// La div d'id "map" est affichée
@@ -244,6 +237,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Ruchers carte OSM")
 	void mapOsmRuchers() {
 		driver.get(baseUrl + "rucher/Osm");
 		// La div d'id "map" est affichée
@@ -251,6 +245,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Ruchers statistiques")
 	void statistiquesRuchers() {
 		driver.get(baseUrl + "rucher/statistiques");
 		// La table d'id "statistiques" est affichée
@@ -259,6 +254,9 @@ public class TestChrome {
 
 	@Test
 	@DisplayName("Transhumances des ruchers, groupées")
+//	@ParameterizedTest
+//	@ValueSource(strings = {true, false})
+//   @ValueSource inconnu, version de junit ?
 	void transhumGroupeRuchers() {
 		driver.get(baseUrl + "rucher/historiques/true");
 		// La table d'id "transhumances" est affichée
@@ -274,7 +272,7 @@ public class TestChrome {
 	}
 
 	@Test
-	@DisplayName("Ruchers création/modif")
+	@DisplayName("Rucher création/modif")
 	void creeModifRucher() {
 		// Création d'un rucher
 		// Attention écriture en base de données
@@ -295,6 +293,110 @@ public class TestChrome {
 		assertEquals("div", driver.findElement(By.id("detailRucher")).getTagName());
 	}
 
+	String getDepotId() {
+		// recherche de l'id du dépot avec l'api rest
+		driver.get(baseUrl + "rest/ruchers/search/findByDepotIsTrue");
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			JsonNode actualObj = mapper.readTree(driver.findElement(By.tagName("pre")).getText());
+			JsonNode jsonNode = actualObj.get("_links").get("self").get("href");
+			String urlDepot = jsonNode.textValue();
+			return urlDepot.substring(urlDepot.lastIndexOf("/") + 1);
+		} catch (JsonProcessingException e) {
+			return "";
+		}
+	}
+
+	@Test
+	@DisplayName("Rucher dépot carte Gg")
+	void mapGgDepot() {
+		if (depotId == null) {
+			depotId = getDepotId();
+		}
+		if ("".equals(depotId)) {
+			fail("Api rest recherche de l'id du dépôt");
+		} else {
+			driver.get(baseUrl + "rucher/Gg/" + depotId);
+			// La div d'id "map" est affichée
+			assertEquals("div", driver.findElement(By.id("map")).getTagName());
+		}
+	}
+	
+	@Test
+	@DisplayName("Rucher dépot carte IGN")
+	void mapIgnDepot() {
+		if (depotId == null) {
+			depotId = getDepotId();
+		}
+		if ("".equals(depotId)) {
+			fail("Api rest recherche de l'id du dépôt");
+		} else {
+			driver.get(baseUrl + "rucher/Ign/" + depotId);
+			// La div d'id "map" est affichée
+			assertEquals("div", driver.findElement(By.id("map")).getTagName());
+		}
+	}
+	
+	@Test
+	@DisplayName("Rucher dépot carte OSM")
+	void mapOsmDepot() {
+		if (depotId == null) {
+			depotId = getDepotId();
+		}
+		if ("".equals(depotId)) {
+			fail("Api rest recherche de l'id du dépôt");
+		} else {
+			driver.get(baseUrl + "rucher/Osm/" + depotId);
+			// La div d'id "map" est affichée
+			assertEquals("div", driver.findElement(By.id("map")).getTagName());
+		}
+	}
+
+	@Test
+	@DisplayName("Rucher dépot Météo")
+	void meteoDepot() {
+		if (depotId == null) {
+			depotId = getDepotId();
+		}
+		if ("".equals(depotId)) {
+			fail("Api rest recherche de l'id du dépôt");
+		} else {
+			driver.get(baseUrl + "rucher/meteo/" + depotId);
+			// La div d'id "accordion" est affichée
+			assertEquals("div", driver.findElement(By.id("accordion")).getTagName());
+		}
+	}
+	
+	@Test
+	@DisplayName("Rucher dépot Transhumances, groupées")
+	void transhumGroupeDepot() {
+		if (depotId == null) {
+			depotId = getDepotId();
+		}
+		if ("".equals(depotId)) {
+			fail("Api rest recherche de l'id du dépôt");
+		} else {
+			driver.get(baseUrl + "rucher/historique/" + depotId + "/true");
+			// La table d'id "transhumances" est affichée
+			assertEquals("table", driver.findElement(By.id("transhumances")).getTagName());
+		}
+	}
+
+	@Test
+	@DisplayName("Rucher dépot Transhumances, non groupées")
+	void transhumDepot() {
+		if (depotId == null) {
+			depotId = getDepotId();
+		}
+		if ("".equals(depotId)) {
+			fail("Api rest recherche de l'id du dépôt");
+		} else {
+			driver.get(baseUrl + "rucher/historique/" + depotId + "/false");
+			// La table d'id "transhumances" est affichée
+			assertEquals("table", driver.findElement(By.id("transhumances")).getTagName());
+		}
+	}
+	
 	@Test
 	@DisplayName("Personnes liste")
 	void listePersonnes() {
@@ -304,7 +406,7 @@ public class TestChrome {
 	}
 
 	@Test
-	@DisplayName("Personnes création/modif")
+	@DisplayName("Personne création/modif")
 	void creeModifPersonne() {
 		// Création d'une personne
 		// Attention écriture en base de données
@@ -327,6 +429,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Essaims liste")
 	void listeEssaims() {
 		driver.get(baseUrl + "essaim/liste");
 		// La table d'id "essaims" est affichée
@@ -334,6 +437,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Essaim création/modif")
 	void creeModifEssaim() {
 		// Création d'un essaim
 		// Attention écriture en base de données
@@ -380,7 +484,7 @@ public class TestChrome {
 	}
 
 	@Test
-	@DisplayName("Récoltes création")
+	@DisplayName("Récolte création")
 	void creeRecolte() {
 		// Création d'une récolte
 		// Attention écriture en base de données
@@ -419,7 +523,6 @@ public class TestChrome {
 	@Test
 	@DisplayName("Événements liste")
 	void listeEvenements() {
-		// ******************** Liste des événements **************************
 		driver.get(baseUrl + "evenement/liste");
 		// La table d'id "evenements" est affichée
 		assertEquals("table", driver.findElement(By.id("evenements")).getTagName());
@@ -447,6 +550,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Événement création/modif")
 	void creeEtModifEvenement() {
 		// Création d'un événement
 		// Attention écriture en base de données
@@ -479,6 +583,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Admin paramètres")
 	void adminParam() {
 		driver.get(baseUrl + "parametres");
 		// Le formulaire d'id "parametresForm" est affiché
@@ -486,6 +591,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Admin API REST")
 	void adminRest() {
 		driver.get(baseUrl + "rest");
 		// api rest, json test sur lien vers repository recolteHausses
@@ -500,6 +606,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Admin logs")
 	void adminLog() {
 		driver.get(baseUrl + "admin/logs/logfile");
 		// La page de log contient la classe d'authentification
@@ -507,6 +614,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Admin infos")
 	void adminInfos() {
 		driver.get(baseUrl + "infos");
 		// La div d'id "info" est présente
@@ -514,6 +622,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Admin tests")
 	void adminTests() {
 		driver.get(baseUrl + "tests");
 		// La div d'id "tests" est présente
@@ -521,6 +630,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Admin documentation")
 	void adminDoc() {
 		driver.get(baseUrl + "doc/ruches.html");
 		// La page de doc contient "LibreOffice"
