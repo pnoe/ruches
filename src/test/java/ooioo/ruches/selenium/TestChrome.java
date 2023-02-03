@@ -37,7 +37,9 @@ public class TestChrome {
 	static final String baseUrl = "http://localhost:8080/ruches/";
 
 	// Initialisation du navigateur Chrome et login
-	// Créer un admin, nom : test, prénom : testp, login : test, password : testpwd
+	// Créer un admin, nom : xx, prénom : yy, login : test, password : testpwd, role
+	// : admin
+	// le nom et le prénom peuvent être quelconques
 	// Attention à ne pas mettre de mot de passe de production !
 	static final String user = "test";
 	static final String pwd = "testpwd";
@@ -81,10 +83,16 @@ public class TestChrome {
 		driver.findElement(By.name("username")).sendKeys(user);
 		driver.findElement(By.name("password")).sendKeys(pwd);
 		driver.findElement(By.xpath("//input[@type='submit']")).click();
-		// ******************** Logged **************************
 		// Le titre de la page après login est "ruches"
 		assertEquals("Ruches", driver.getTitle(),
 				() -> "La connexion a échoué, avez-vous créé un utilisateur 'test' ?");
+	}
+
+	@Test
+	void connecte() {
+		driver.get(baseUrl);
+		// Le titre de la page après login est "ruches"
+		assertEquals("Ruches", driver.getTitle());
 		// L'utilisateur est "test" avec un rôle admin
 		assertAll("login, rôle", () -> assertEquals(user, driver.findElement(By.id("login")).getText()),
 				() -> assertEquals(role, driver.findElement(By.id("role")).getText()));
@@ -109,6 +117,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Ruches liste")
 	void listeRuches() {
 		driver.get(baseUrl + "ruche/liste");
 		// La table d'id "ruches" est affichée
@@ -116,6 +125,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Ruche Types liste")
 	void listeRucheTypes() {
 		driver.get(baseUrl + "rucheType/liste");
 		// La table d'id "ruchetypes" est affichée
@@ -123,6 +133,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Ruches liste plus")
 	void listeRuchesPlus() {
 		driver.get(baseUrl + "ruche/listeplus");
 		// La table d'id "ruchesplus" est affichée
@@ -130,6 +141,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Ruche type création")
 	void creeTypeRuche() {
 		// Création du type de ruche "TestRucheType" avec 8 cadres max.
 		// Attention écriture en base de données
@@ -157,6 +169,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Ruches création/modif")
 	void creeModifRuche() {
 		// Création d'une ruche
 		// Attention écriture en base de données
@@ -179,6 +192,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Hausses liste")
 	void listeHausses() {
 		// ******************** Liste des hausses **************************
 		driver.get(baseUrl + "hausse/liste");
@@ -187,6 +201,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Hausses création/modif")
 	void creeModifHausse() {
 		// Création d'une hausse
 		// Attention écriture en base de données
@@ -213,28 +228,28 @@ public class TestChrome {
 		// La table d'id "ruchers" est affichée
 		assertEquals("table", driver.findElement(By.id("ruchers")).getTagName());
 	}
-	
+
 	@Test
 	void mapGgRuchers() {
 		driver.get(baseUrl + "rucher/Gg");
 		// La div d'id "map" est affichée
 		assertEquals("div", driver.findElement(By.id("map")).getTagName());
 	}
-	
+
 	@Test
 	void mapIgnRuchers() {
 		driver.get(baseUrl + "rucher/Ign");
 		// La div d'id "map" est affichée
 		assertEquals("div", driver.findElement(By.id("map")).getTagName());
 	}
-	
+
 	@Test
 	void mapOsmRuchers() {
 		driver.get(baseUrl + "rucher/Osm");
 		// La div d'id "map" est affichée
 		assertEquals("div", driver.findElement(By.id("map")).getTagName());
 	}
-	
+
 	@Test
 	void statistiquesRuchers() {
 		driver.get(baseUrl + "rucher/statistiques");
@@ -257,8 +272,9 @@ public class TestChrome {
 		// La table d'id "transhumances" est affichée
 		assertEquals("table", driver.findElement(By.id("transhumances")).getTagName());
 	}
-	
+
 	@Test
+	@DisplayName("Ruchers création/modif")
 	void creeModifRucher() {
 		// Création d'un rucher
 		// Attention écriture en base de données
@@ -280,6 +296,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Personnes liste")
 	void listePersonnes() {
 		driver.get(baseUrl + "personne/liste");
 		// La table d'id "personnes" est affichée
@@ -287,6 +304,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Personnes création/modif")
 	void creeModifPersonne() {
 		// Création d'une personne
 		// Attention écriture en base de données
@@ -338,14 +356,31 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Essaims statistiques")
+	void essaimStatistiques() {
+		driver.get(baseUrl + "essaim/statistiques");
+		// La table d'id "statistiques" est affichée
+		assertEquals("table", driver.findElement(By.id("statistiques")).getTagName());
+	}
+
+	@Test
+	@DisplayName("Essaims âge des reines")
+	void essaimAgeReines() {
+		driver.get(baseUrl + "essaim/statistiquesage");
+		// Le canevas d'id "ctx" est affiché
+		assertEquals("canvas", driver.findElement(By.id("ctx")).getTagName());
+	}
+
+	@Test
+	@DisplayName("Récoltes liste")
 	void listeRecoltes() {
-		// ******************** Liste des récoltes **************************
 		driver.get(baseUrl + "recolte/liste");
 		// La table d'id "recoltes" est affichée
 		assertEquals("table", driver.findElement(By.id("recoltes")).getTagName());
 	}
 
 	@Test
+	@DisplayName("Récoltes création")
 	void creeRecolte() {
 		// Création d'une récolte
 		// Attention écriture en base de données
@@ -366,6 +401,23 @@ public class TestChrome {
 	}
 
 	@Test
+	@DisplayName("Récoltes statistiques essaim")
+	void recoltesStatEssaim() {
+		driver.get(baseUrl + "recolte/statistiques/essaim");
+		// La tables d'id "recoltes" est affichée
+		assertEquals("table", driver.findElement(By.id("recoltes")).getTagName());
+	}
+
+	@Test
+	@DisplayName("Récoltes statistiques production")
+	void recoltesStatProd() {
+		driver.get(baseUrl + "recolte/statprod");
+		// Le canevas d'id "ctx" est affiché
+		assertEquals("canvas", driver.findElement(By.id("ctx")).getTagName());
+	}
+
+	@Test
+	@DisplayName("Événements liste")
 	void listeEvenements() {
 		// ******************** Liste des événements **************************
 		driver.get(baseUrl + "evenement/liste");
