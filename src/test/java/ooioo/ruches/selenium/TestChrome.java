@@ -14,6 +14,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -52,8 +54,9 @@ public class TestChrome {
 
 	@BeforeAll
 	static void initChrome() {
+		String pathChromeDriver = "/snap/bin/chromium.chromedriver";
 //		System.setProperty("webdriver.chrome.driver","/home/noe/selenium/driver/chrome109/chromedriver");
-		System.setProperty("webdriver.chrome.driver", "/snap/bin/chromium.chromedriver");
+//		System.setProperty("webdriver.chrome.driver", pathChromeDriver");
 //		https://github.com/SeleniumHQ/selenium/issues/10969
 //		https://github.com/SeleniumHQ/selenium/issues/7788
 //		driver = new ChromeDriver();
@@ -61,9 +64,9 @@ public class TestChrome {
 		driver = new ChromeDriver((ChromeDriverService) (new ChromeDriverService.Builder() {
 			@Override
 			protected File findDefaultExecutable() {
-				if (new File("/snap/bin/chromium.chromedriver").exists()) {
+				if (new File(pathChromeDriver).exists()) {
 					@SuppressWarnings("serial")
-					File f = new File("/snap/bin/chromium.chromedriver") {
+					File f = new File(pathChromeDriver) {
 						@Override
 						public String getCanonicalPath() throws IOException {
 							return this.getAbsolutePath();
@@ -252,21 +255,11 @@ public class TestChrome {
 		assertEquals("table", driver.findElement(By.id("statistiques")).getTagName());
 	}
 
-	@Test
-	@DisplayName("Transhumances des ruchers, groupées")
-//	@ParameterizedTest
-//	@ValueSource(strings = {true, false})
-//   @ValueSource inconnu, version de junit ?
-	void transhumGroupeRuchers() {
-		driver.get(baseUrl + "rucher/historiques/true");
-		// La table d'id "transhumances" est affichée
-		assertEquals("table", driver.findElement(By.id("transhumances")).getTagName());
-	}
-
-	@Test
-	@DisplayName("Transhumances des ruchers, non groupées")
-	void transhumRuchers() {
-		driver.get(baseUrl + "rucher/historiques/false");
+	@DisplayName("Ruchers Transhumances")
+	@ParameterizedTest
+	@ValueSource(strings = { "true", "false" })
+	void transhumanceRuchers(String groupe) {
+		driver.get(baseUrl + "rucher/historiques/" + groupe);
 		// La table d'id "transhumances" est affichée
 		assertEquals("table", driver.findElement(By.id("transhumances")).getTagName());
 	}
@@ -321,7 +314,7 @@ public class TestChrome {
 			assertEquals("div", driver.findElement(By.id("map")).getTagName());
 		}
 	}
-	
+
 	@Test
 	@DisplayName("Rucher dépot carte IGN")
 	void mapIgnDepot() {
@@ -336,7 +329,7 @@ public class TestChrome {
 			assertEquals("div", driver.findElement(By.id("map")).getTagName());
 		}
 	}
-	
+
 	@Test
 	@DisplayName("Rucher dépot carte OSM")
 	void mapOsmDepot() {
@@ -367,36 +360,22 @@ public class TestChrome {
 		}
 	}
 	
-	@Test
-	@DisplayName("Rucher dépot Transhumances, groupées")
-	void transhumGroupeDepot() {
+	@DisplayName("Rucher dépôt Transhumances")
+	@ParameterizedTest
+	@ValueSource(strings = { "true", "false" })
+	void transhumDepot(String groupe) {
 		if (depotId == null) {
 			depotId = getDepotId();
 		}
 		if ("".equals(depotId)) {
 			fail("Api rest recherche de l'id du dépôt");
 		} else {
-			driver.get(baseUrl + "rucher/historique/" + depotId + "/true");
+			driver.get(baseUrl + "rucher/historique/" + depotId + "/" + groupe);
 			// La table d'id "transhumances" est affichée
 			assertEquals("table", driver.findElement(By.id("transhumances")).getTagName());
 		}
 	}
 
-	@Test
-	@DisplayName("Rucher dépot Transhumances, non groupées")
-	void transhumDepot() {
-		if (depotId == null) {
-			depotId = getDepotId();
-		}
-		if ("".equals(depotId)) {
-			fail("Api rest recherche de l'id du dépôt");
-		} else {
-			driver.get(baseUrl + "rucher/historique/" + depotId + "/false");
-			// La table d'id "transhumances" est affichée
-			assertEquals("table", driver.findElement(By.id("transhumances")).getTagName());
-		}
-	}
-	
 	@Test
 	@DisplayName("Personnes liste")
 	void listePersonnes() {
@@ -522,29 +501,66 @@ public class TestChrome {
 
 	@Test
 	@DisplayName("Événements liste")
-	void listeEvenements() {
+	void listeEve() {
 		driver.get(baseUrl + "evenement/liste");
 		// La table d'id "evenements" est affichée
 		assertEquals("table", driver.findElement(By.id("evenements")).getTagName());
+	}
+
+	@Test
+	@DisplayName("Événements liste sucre")
+	void listeEveSucre() {
 		driver.get(baseUrl + "evenement/essaim/listeSucre");
 		// La table d'id "evenementssucre" est affichée
 		assertEquals("table", driver.findElement(By.id("evenementssucre")).getTagName());
-		driver.get(baseUrl + "evenement/essaim/listeTraitement/false");
+	}
+
+	@DisplayName("Événements liste traitement")
+	@ParameterizedTest
+	@ValueSource(strings = { "true", "false" })
+	void listeEveTraite(String tous) {
+		driver.get(baseUrl + "evenement/essaim/listeTraitement/" + tous);
 		// La table d'id "evenements" est affichée
 		assertEquals("table", driver.findElement(By.id("evenements")).getTagName());
+	}
+
+	@Test
+	@DisplayName("Événements liste poids ruche")
+	void listeEvePoids() {
 		driver.get(baseUrl + "evenement/ruche/listePoidsRuche");
 		// La table d'id "evenements" est affichée
 		assertEquals("table", driver.findElement(By.id("evenements")).getTagName());
+	}
+
+	@Test
+	@DisplayName("Événements liste cadre ruche")
+	void listeEveCadre() {
 		driver.get(baseUrl + "evenement/ruche/listeCadreRuche");
 		// La table d'id "evenements" est affichée
 		assertEquals("table", driver.findElement(By.id("evenements")).getTagName());
+	}
+
+	@Test
+	@DisplayName("Événements liste remplissage")
+	void listeEveRemplissage() {
 		driver.get(baseUrl + "evenement/hausse/listeRemplissageHausse");
 		// La table d'id "evenements" est affichée
 		assertEquals("table", driver.findElement(By.id("evenements")).getTagName());
+	}
+
+	@Test
+	@DisplayName("Événements liste ruche ajout")
+	void listeEveRucheAjout() {
 		driver.get(baseUrl + "evenement/rucher/listeRucheAjout");
 		// La table d'id "evenements" est affichée
 		assertEquals("table", driver.findElement(By.id("evenements")).getTagName());
-		driver.get(baseUrl + "evenement/listeNotif/false");
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = { "true", "false" })
+	@DisplayName("Événements liste notifications")
+	void listeEveNotif(String tous) {
+		driver.get(baseUrl + "evenement/listeNotif/" + tous);
 		// La table d'id "evenementsnotif" est affichée
 		assertEquals("table", driver.findElement(By.id("evenementsnotif")).getTagName());
 	}
@@ -557,12 +573,11 @@ public class TestChrome {
 		driver.get(baseUrl + "evenement/cree");
 		// Formulaire de création de l'événement
 		assertEquals("form", driver.findElement(By.id("evenementForm")).getTagName());
-		/*
-		 * // Pour choisir un autre type d'événement WebElement typeSelEle =
-		 * driver.findElement(By.name("type")); Select typeSelect = new
-		 * Select(typeSelEle); //List<WebElement> optionTypeList =
-		 * typeSelect.getOptions(); typeSelect.selectByValue("RUCHEAJOUTRUCHER");
-		 */
+		// Pour choisir un autre type d'événement :
+		// WebElement typeSelEle = driver.findElement(By.name("type"));
+		// Select typeSelect = new Select(typeSelEle);
+		// List<WebElement> optionTypeList = typeSelect.getOptions();
+		// typeSelect.selectByValue("RUCHEAJOUTRUCHER");
 		WebElement rucheSelEle = driver.findElement(By.name("ruche"));
 		Select rucheSelect = new Select(rucheSelEle);
 		rucheSelect.selectByIndex(1);
@@ -610,7 +625,7 @@ public class TestChrome {
 	void adminLog() {
 		driver.get(baseUrl + "admin/logs/logfile");
 		// La page de log contient la classe d'authentification
-		assertEquals(true, driver.getPageSource().contains("ooioo.ruches.SecurityConfig.onAuthenticationSuccess"));
+		assertTrue(driver.getPageSource().contains("ooioo.ruches.SecurityConfig.onAuthenticationSuccess"));
 	}
 
 	@Test
@@ -634,7 +649,7 @@ public class TestChrome {
 	void adminDoc() {
 		driver.get(baseUrl + "doc/ruches.html");
 		// La page de doc contient "LibreOffice"
-		assertEquals(true, driver.getPageSource().contains("LibreOffice"));
+		assertTrue(driver.getPageSource().contains("LibreOffice"));
 	}
 
 }
