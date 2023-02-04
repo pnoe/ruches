@@ -375,6 +375,21 @@ public class TestChrome {
 			assertEquals("table", driver.findElement(By.id("transhumances")).getTagName());
 		}
 	}
+	
+	@DisplayName("Rucher dépôt ajouter ruches")
+	@Test
+	void rucherRucheDepot() {
+		if (depotId == null) {
+			depotId = getDepotId();
+		}
+		if ("".equals(depotId)) {
+			fail("Api rest recherche de l'id du dépôt");
+		} else {
+			driver.get(baseUrl + "rucher/ruches/" + depotId);
+			// La table d'id "ajoutRuches" est affichée
+			assertEquals("table", driver.findElement(By.id("ajoutRuches")).getTagName());
+		}
+	}
 
 	@Test
 	@DisplayName("Personnes liste")
@@ -499,10 +514,11 @@ public class TestChrome {
 		assertEquals("canvas", driver.findElement(By.id("ctx")).getTagName());
 	}
 
-	@Test
 	@DisplayName("Événements liste")
-	void listeEve() {
-		driver.get(baseUrl + "evenement/liste");
+	@ParameterizedTest
+	@ValueSource(strings = { "", "?periode=2" })
+	void listeEve(String periode) {
+		driver.get(baseUrl + "evenement/liste" + periode);
 		// La table d'id "evenements" est affichée
 		assertEquals("table", driver.findElement(By.id("evenements")).getTagName());
 	}
@@ -565,6 +581,21 @@ public class TestChrome {
 		assertEquals("table", driver.findElement(By.id("evenementsnotif")).getTagName());
 	}
 
+	@Test
+	@DisplayName("Événements liste rucher dépot")
+	void listeEveDepot() {
+		if (depotId == null) {
+			depotId = getDepotId();
+		}
+		if ("".equals(depotId)) {
+			fail("Api rest recherche de l'id du dépôt");
+		} else {
+			driver.get(baseUrl + "evenement/rucher/7");
+			// La table d'id "evenements" est affichée
+			assertEquals("table", driver.findElement(By.id("evenements")).getTagName());
+		}
+	}
+	
 	@Test
 	@DisplayName("Événement création/modif")
 	void creeEtModifEvenement() {
