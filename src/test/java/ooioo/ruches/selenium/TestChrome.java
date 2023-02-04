@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import org.junit.jupiter.api.AfterAll;
@@ -100,6 +102,9 @@ public class TestChrome {
 
 	void submit() {
 		// https://www.lambdatest.com/blog/how-to-deal-with-element-is-not-clickable-at-point-exception-using-selenium/
+		// driver.findElement(By.xpath("//input[@type='submit']")).click();
+		//   ne fonctionne pas si le bouton submit n'est pas visible
+		//   scroll down et click avec javascript
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
 		js.executeScript("arguments[0].click();", driver.findElement(By.xpath("//input[@type='submit']")));
@@ -590,9 +595,30 @@ public class TestChrome {
 		if ("".equals(depotId)) {
 			fail("Api rest recherche de l'id du dépôt");
 		} else {
-			driver.get(baseUrl + "evenement/rucher/7");
+			driver.get(baseUrl + "evenement/rucher/" + depotId);
 			// La table d'id "evenements" est affichée
 			assertEquals("table", driver.findElement(By.id("evenements")).getTagName());
+		}
+	}
+	
+	@Test
+	@DisplayName("Événements commentaire création rucher dépot")
+	void creeEveCommDepot() {
+		if (depotId == null) {
+			depotId = getDepotId();
+		}
+		if ("".equals(depotId)) {
+			fail("Api rest recherche de l'id du dépôt");
+		} else {
+			driver.get(baseUrl + "evenement/rucher/commentaire/cree/" + depotId);
+			LocalDateTime date = LocalDateTime.now().minusDays(2);
+			clearSend("date", date.format(
+					DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
+			driver.findElement(By.name(commentaire)).sendKeys(comment);
+			driver.findElement(By.name("valeur")).sendKeys("5");
+			submit();
+			// La div d'id "detailRucher" est affichée
+			assertEquals("div", driver.findElement(By.id("detailRucher")).getTagName());
 		}
 	}
 	
