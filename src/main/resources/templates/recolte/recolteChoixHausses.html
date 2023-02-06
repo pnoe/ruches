@@ -27,11 +27,8 @@
 						let hausseNoms = "";
 						table.rows({
 							selected : true
-						}).data().pluck(0).each(function(value, index) {
-							/*[- le code suivant permet de gérer les caractères tels que < > ... -]*/
-							const a = document.createElement('a');
-							a.innerHTML = value;
-							hausseNoms += a.textContent + ",";
+						}).data().pluck(1).each(function(value, index) {
+							hausseNoms += value + ",";							
 						});
 						if (hausseNoms) {
 							/*[- on enlève la dernière virgule et met à jour l'url de traitement -]*/
@@ -101,6 +98,7 @@
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>
+					<th hidden></th>
 					<th th:text="#{rucher}"></th>
 					<th th:text="#{ruche}"></th>
 					<th th:text="#{essaim}"></th>
@@ -109,6 +107,7 @@
 			<tbody>
 				<tr th:each="hausseRecolte : ${haussesRecolte}">
 					<td th:text="${hausseRecolte.nom}"></td>
+					<td hidden th:text="${hausseRecolte.id}"></td>
 					<td th:text="${hausseRecolte.ruche?.rucher?.nom}"></td>
 					<td th:text="${hausseRecolte.ruche?.nom}"></td>
 					<td th:text="${hausseRecolte.ruche?.essaim?.nom}"></td>
@@ -124,6 +123,7 @@
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>
+					<th hidden></th>
 					<th th:text="#{rucher}"></th>
 					<th th:text="#{ruche}"></th>
 					<th th:text="#{essaim}"></th>
@@ -131,7 +131,8 @@
 			</thead>
 			<tbody>
 				<tr th:each="hausseNotInRecolte : ${haussesNotInRecolte}">
-					<td th:text="${hausseNotInRecolte.nom}"></td>
+					<td th:text="${hausseNotInRecolte.nom}"></td>				
+					<td hidden th:text="${hausseNotInRecolte.id}"></td>	
 					<td th:text="${hausseNotInRecolte.ruche?.rucher?.nom}"></td>
 					<td th:text="${hausseNotInRecolte.ruche?.nom}"></td>
 					<td th:text="${hausseNotInRecolte.ruche?.essaim?.nom}"></td>

@@ -163,10 +163,10 @@ public class RecolteHausseController {
 	/**
 	 * Ajout d'une série de hausses dans la récolte
 	 */
-	@GetMapping("/ajoutHausses/{recolteId}/{haussesNoms}")
-	public String ajoutHausses(Model model, @PathVariable long recolteId, @PathVariable String[] haussesNoms) {
-		for (String hausseNom : haussesNoms) {
-			Optional<Hausse> hausseOpt = hausseRepository.findByNom(hausseNom);
+	@GetMapping("/ajoutHausses/{recolteId}/{haussesIds}")
+	public String ajoutHausses(Model model, @PathVariable long recolteId, @PathVariable Long[] haussesIds) {
+		for (Long hausseId : haussesIds) {
+			Optional<Hausse> hausseOpt = hausseRepository.findById(hausseId);
 			Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
 			if (recolteOpt.isPresent()) {
 				if (hausseOpt.isPresent()) {
@@ -174,7 +174,7 @@ public class RecolteHausseController {
 					Hausse hausse = hausseOpt.get();
 					// Si la hausse est déjà dans la récolte, log erreur et on passe cette hausse.
 					if (recolteHausseRepository.findByRecolteAndHausse(recolte, hausse) != null) {
-						logger.error("La hausse {} est déjà dans la récolte {}", hausseNom, recolte.getDate());
+						logger.error("La hausse {} est déjà dans la récolte {}", hausse.getNom(), recolte.getDate());
 						continue;
 					}
 					BigDecimal poids = hausse.getPoidsVide().add(hausseResteMiel);
@@ -196,7 +196,7 @@ public class RecolteHausseController {
 					}
 					recolteHausseRepository.save(recolteHausse);
 				} else {
-					logger.error("Nom hausse {} inconnu", hausseNom);
+					logger.error("Hausse d'Id {} inconnue", hausseId);
 					// On continue le traitement des autres hausses
 				}
 			} else {
@@ -211,23 +211,23 @@ public class RecolteHausseController {
 	/**
 	 * Retrait d'une série de hausses de la récolte.
 	 */
-	@GetMapping("/retraitHausses/{recolteId}/{haussesNoms}")
-	public String retraitHausses(Model model, @PathVariable long recolteId, @PathVariable String[] haussesNoms) {
-		for (String hausseNom : haussesNoms) {
+	@GetMapping("/retraitHausses/{recolteId}/{haussesIds}")
+	public String retraitHausses(Model model, @PathVariable long recolteId, @PathVariable Long[] haussesIds) {
+		for (Long haussesId : haussesIds) {
 			Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
-			Optional<Hausse> hausseOpt = hausseRepository.findByNom(hausseNom);
+			Optional<Hausse> hausseOpt = hausseRepository.findById(haussesId);
 			if (recolteOpt.isPresent()) {
 				Recolte recolte = recolteOpt.get();
 				if (hausseOpt.isPresent()) {
 					Hausse hausse = hausseOpt.get();
 					RecolteHausse recolteHausse = recolteHausseRepository.findByRecolteAndHausse(recolte, hausse);
 					if(recolteHausse == null) {
-						logger.error("La hausse {} n'est pas dans le récolte {}", hausseNom, recolte.getDate());
+						logger.error("La hausse {} n'est pas dans le récolte {}", hausse.getNom(), recolte.getDate());
 						continue;
 					}
 					recolteHausseRepository.delete(recolteHausse);
 				} else {
-					logger.error("Nom hausse {} inconnu", hausseNom);
+					logger.error("Hausse d'ID {} inconnue", haussesId);
 				}
 			} else {
 				logger.error(Const.IDRECOLTEXXINCONNU, recolteId);

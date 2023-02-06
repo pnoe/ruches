@@ -52,7 +52,7 @@ public class TestChrome {
 	static final String commentaire = "commentaire";
 	static final String modif = " - modifié";
 
-	String depotId;
+	static String depotId;
 
 	@BeforeAll
 	static void initChrome() {
