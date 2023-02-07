@@ -2,6 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
+const listeHausses = /*[[#{listeHausses}]]*/ null;
+const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
+const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
+const urlCommLot = /*[[@{/evenement/hausse/commentaireLot/}]]*/ null;
+const selectHaTrait = /*[[#{selecthaussestraiter}]]*/ null;
 $(document).ready(function() {
     const table = new DataTable('#hausses', {
     	select: {style: 'multi+shift'},
@@ -9,23 +14,23 @@ $(document).ready(function() {
         buttons: [
 	    	'csv',
 	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-	    		title: [[#{listeHausses}]] + " " + (new Date()).toLocaleDateString()},
-	        {extend: 'print', text: [[#{buttontextprint}]]},
-	        {extend: 'colvis', text: [[#{buttontextcol}]]}
+	    		title: listeHausses + " " + (new Date()).toLocaleDateString()},
+	        {extend: 'print', text: buttTxtPrint},
+	        {extend: 'colvis', text: buttTxtCol}
         ]
     });
-    
     function updateLinks( e, dt, type, indexes ) {
     	if ( type === 'row' ) {
     		let noms = "";
-            table.rows( { selected: true } ).data().pluck( 0 ).each(function (value, index) {
-            	const a = document.createElement('a');
+            table.rows( { selected: true } ).data().pluck(0).each(function (value, index) {
+            	const a = document.createElement('template');
             	a.innerHTML = value;
-            	noms += a.textContent + ",";
+            	noms += a.content.children[0].getAttribute("href").
+            		substring(a.content.children[0].getAttribute("href").lastIndexOf("/") + 1) + ",";
             });
             if (noms) { 
             	noms = noms.substring(0, noms.length-1);
-            	$('#commentaire').attr('href', [[@{/evenement/hausse/commentaireLot/}]] + noms);
+            	$('#commentaire').attr('href', urlCommLot + noms);
             } else {
             	$('#commentaire').attr('href', "#");
             }      
@@ -34,7 +39,7 @@ $(document).ready(function() {
     table.on( 'select deselect', updateLinks);
     $('.selection').on('click', function () {
     	if ($(this).attr("href") == "#") {
-    		alert([[#{selecthaussestraiter}]]);	
+    		alert(selectHaTrait);	
     	}      
     });
     

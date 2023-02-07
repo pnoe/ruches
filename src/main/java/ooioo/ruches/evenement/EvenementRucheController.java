@@ -52,19 +52,19 @@ public class EvenementRucheController {
 	MessageSource messageSource;
 	@Autowired
 	private EssaimService essaimService;
+
 	/*
 	 * Liste événements poids ruche
 	 */
 	@GetMapping("/listePoidsRuche")
 	public String listePoidsRuche(Model model, @RequestParam(required = false) Integer periode,
-			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
-			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext,
 			@CookieValue(value = "p", defaultValue = "1") Integer pCookie,
 			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
-			@CookieValue(value = "d1", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
-			@CookieValue(value = "d2", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie
-			) {
+			@CookieValue(value = "d1", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
+			@CookieValue(value = "d2", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie) {
 		if (periode == null) {
 			periode = pCookie;
 			if (pCookie == 6) {
@@ -79,25 +79,24 @@ public class EvenementRucheController {
 			evenements = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEPESEE);
 			break;
 		case 2: // moins d'un an
-			evenements =
-					evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE, LocalDateTime.now().minusYears(1));
+			evenements = evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE,
+					LocalDateTime.now().minusYears(1));
 			break;
 		case 3: // moins d'un mois
-			evenements =
-					evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE, LocalDateTime.now().minusMonths(1));
+			evenements = evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE,
+					LocalDateTime.now().minusMonths(1));
 			break;
 		case 4: // moins d'une semaine
-			evenements =
-					evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE, LocalDateTime.now().minusWeeks(1));
+			evenements = evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE,
+					LocalDateTime.now().minusWeeks(1));
 			break;
 		case 5: // moins d'un jour
-			evenements =
-					evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE, LocalDateTime.now().minusDays(1));
+			evenements = evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE,
+					LocalDateTime.now().minusDays(1));
 			break;
 		default:
 			// ajouter tests date1 et date2 non null
-			evenements =
-					evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE, date1, date2);
+			evenements = evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE, date1, date2);
 			model.addAttribute("datestext", datestext);
 		}
 		List<BigDecimal> diff = new ArrayList<>();
@@ -120,14 +119,13 @@ public class EvenementRucheController {
 	 */
 	@GetMapping("/listeCadreRuche")
 	public String listeCadreRuche(Model model, @RequestParam(required = false) Integer periode,
-			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
-			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext,
 			@CookieValue(value = "p", defaultValue = "1") Integer pCookie,
 			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
-			@CookieValue(value = "d1", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
-			@CookieValue(value = "d2", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie
-			) {
+			@CookieValue(value = "d1", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
+			@CookieValue(value = "d2", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie) {
 		if (periode == null) {
 			periode = pCookie;
 			if (pCookie == 6) {
@@ -142,25 +140,24 @@ public class EvenementRucheController {
 			evenements = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHECADRE);
 			break;
 		case 2: // moins d'un an
-			evenements =
-					evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE, LocalDateTime.now().minusYears(1));
+			evenements = evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE,
+					LocalDateTime.now().minusYears(1));
 			break;
 		case 3: // moins d'un mois
-			evenements =
-					evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE, LocalDateTime.now().minusMonths(1));
+			evenements = evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE,
+					LocalDateTime.now().minusMonths(1));
 			break;
 		case 4: // moins d'une semaine
-			evenements =
-					evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE, LocalDateTime.now().minusWeeks(1));
+			evenements = evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE,
+					LocalDateTime.now().minusWeeks(1));
 			break;
 		case 5: // moins d'un jour
-			evenements =
-					evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE, LocalDateTime.now().minusDays(1));
+			evenements = evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE,
+					LocalDateTime.now().minusDays(1));
 			break;
 		default:
 			// ajouter tests date1 et date2 non null
-			evenements =
-					evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE, date1, date2);
+			evenements = evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE, date1, date2);
 			model.addAttribute("datestext", datestext);
 		}
 		model.addAttribute(Const.EVENEMENTS, evenements);
@@ -207,30 +204,52 @@ public class EvenementRucheController {
 		}
 	}
 
-
 	/**
 	 * Appel du formulaire pour créer des commentaires pour un lot de ruches
 	 */
-	@GetMapping("/commentaireLot/{ruchesNoms}")
-	public String commentaireLot(HttpSession session, Model model, @PathVariable String ruchesNoms) {
+	@GetMapping("/commentaireLot/{rucheIds}")
+	public String commentaireLot(HttpSession session, Model model, @PathVariable Long[] rucheIds) {
 		model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
+		// on reconstitue les liste de noms et d'ids de ruche séparés par des virgules
+		StringBuilder ruchesNoms = new StringBuilder();
+		StringBuilder rIds = new StringBuilder();
+		for (Long rucheId : rucheIds) {
+			Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
+			if (rucheOpt.isPresent()) {
+				Ruche ruche = rucheOpt.get();
+				ruchesNoms.append(ruche.getNom() + ",");
+				rIds.append(ruche.getId() + ",");
+			} else {
+				// on continue le traitement des autres ruches
+				logger.error(Const.IDRUCHEXXINCONNU, rucheId);
+			}
+		}
+		ruchesNoms.deleteCharAt(ruchesNoms.length() - 1);
+		rIds.deleteCharAt(rIds.length() - 1);
 		model.addAttribute("ruchesNoms", ruchesNoms);
+		model.addAttribute("rIds", rIds);
 		return "ruche/rucheCommentaireLotForm";
 	}
 
 	/**
 	 * Créations des événements pour un lot de ruches
 	 */
-	@PostMapping("/sauve/lot/{ruchesNom}")
-	public String sauveLot(@PathVariable String[] ruchesNom, @RequestParam TypeEvenement typeEvenement,
+	@PostMapping("/sauve/lot/{rucheIds}")
+	public String sauveLot(@PathVariable Long[] rucheIds, @RequestParam TypeEvenement typeEvenement,
 			@RequestParam String date, @RequestParam String valeur, @RequestParam String commentaire) {
-		for (String rucheNom : ruchesNom) {
-			Ruche ruche = rucheRepository.findByNom(rucheNom);
-			LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
-			Evenement evenement = new Evenement(dateEve, typeEvenement, ruche, ruche.getEssaim(), ruche.getRucher(),
-					null, valeur, commentaire);
-			evenementRepository.save(evenement);
-			logger.info("{} créé", evenement);
+		for (Long rucheId : rucheIds) {
+			Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
+			if (rucheOpt.isPresent()) {
+				Ruche ruche = rucheOpt.get();
+				LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
+				Evenement evenement = new Evenement(dateEve, typeEvenement, ruche, ruche.getEssaim(), ruche.getRucher(),
+						null, valeur, commentaire);
+				evenementRepository.save(evenement);
+				logger.info("{} créé", evenement);
+			} else {
+				// on continue le traitement des autres ruches
+				logger.error(Const.IDRUCHEXXINCONNU, rucheId);
+			}
 		}
 		return "redirect:/ruche/liste";
 	}
@@ -245,13 +264,13 @@ public class EvenementRucheController {
 			Ruche ruche = rucheOpt.get();
 			Essaim essaim = ruche.getEssaim();
 			Rucher rucher = ruche.getRucher();
-			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.RUCHECADRE, ruche, essaim,
-					rucher, null, null, null);
+			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.RUCHECADRE, ruche, essaim, rucher,
+					null, null, null);
 			model.addAttribute(Const.EVENEMENT, evenement);
 
 			// essaimService.modelAddEvenement(model, essaim, TypeEvenement.RUCHECADRE);
 			essaimService.modelAddEve(model, essaim, TypeEvenement.RUCHECADRE);
-			
+
 			return "ruche/rucheCadreForm";
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
@@ -288,15 +307,14 @@ public class EvenementRucheController {
 			Ruche ruche = rucheOpt.get();
 			Essaim essaim = ruche.getEssaim();
 			Rucher rucher = ruche.getRucher();
-			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.RUCHEPESEE, ruche, essaim,
-					rucher, null, null, null);
+			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.RUCHEPESEE, ruche, essaim, rucher,
+					null, null, null);
 			model.addAttribute(Const.EVENEMENT, evenement);
 			// rucheService.modelAddEvenement(model, ruche, TypeEvenement.RUCHEPESEE);
 			// essaimService.modelAddEvenement(model, essaim, TypeEvenement.RUCHEPESEE);
-			
+
 			essaimService.modelAddEve(model, essaim, TypeEvenement.RUCHEPESEE);
-			
-			
+
 			return "ruche/ruchePeseeForm";
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
@@ -322,7 +340,6 @@ public class EvenementRucheController {
 			return Const.INDEX;
 		}
 	}
-
 
 	/*
 	 * Appel du formulaire événement pour ajouter une hausse
@@ -363,7 +380,7 @@ public class EvenementRucheController {
 	}
 
 	/**
-	 * Préparation de l'appel du formulaire pour un événement ruche
+	 * Préparation de l'appel du formulaire pour un événement ruche.
 	 */
 	public String prepareAppelFormulaire(HttpSession session, Model model, long rucheId, String template) {
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
@@ -382,7 +399,7 @@ public class EvenementRucheController {
 
 	/**
 	 * Sauvegarde d'un événement commentaire ruche. Récupère tous les champs de
-	 * l'événement du formulaire
+	 * l'événement du formulaire.
 	 */
 	@PostMapping("/commentaire/sauve")
 	public String commentaireSauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
@@ -390,19 +407,19 @@ public class EvenementRucheController {
 			return "ruche/rucheCommentaireForm";
 		}
 		evenement.setValeur(Utils.notifIntFmt(evenement.getValeur()));
-		String action = (evenement.getId() == null)?"créé":"modifié";
+		String action = (evenement.getId() == null) ? "créé" : "modifié";
 		evenementRepository.save(evenement);
 		logger.info("{} " + action, evenement);
 		return "redirect:/ruche/" + evenement.getRuche().getId();
 	}
 
 	/**
-	 * Sauvegarde d'un événement ruche.
-	 * Récupère tous les champs de l'événement du formulaire
+	 * Sauvegarde d'un événement ruche. Récupère tous les champs de l'événement du
+	 * formulaire
 	 */
 	@PostMapping("/sauve")
 	public String sauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
-		String action = (evenement.getId() == null)?"créé":"modifié";
+		String action = (evenement.getId() == null) ? "créé" : "modifié";
 		evenementRepository.save(evenement);
 		logger.info("{} " + action, evenement);
 		return "redirect:/ruche/" + evenement.getRuche().getId();
@@ -417,11 +434,12 @@ public class EvenementRucheController {
 		if (rucheOpt.isPresent()) {
 			model.addAttribute(Const.EVENEMENTS, evenementRepository.findByRucheId(rucheId));
 			// rucheId @PathVariable est connu du template : ${rucheId}
-			//  mais type et itemId simplifient le template pour le retour du lien détail d'un événement
+			// mais type et itemId simplifient le template pour le retour du lien détail
+			// d'un événement
 			model.addAttribute("type", Const.RUCHE);
 			// pour lien retour dans la liste vers détail ruche
-			//  evenements[0].getRuche().getNom() ne fonctionne pas dasns le template
-			//   s'il n'y a pas d'événement ruche !
+			// evenements[0].getRuche().getNom() ne fonctionne pas dasns le template
+			// s'il n'y a pas d'événement ruche !
 			model.addAttribute("rucheNom", rucheOpt.get().getNom());
 			return Const.EVEN_EVENLISTE;
 		}

@@ -24,11 +24,11 @@ $(document).ready(function() {
 	function updateLinks( e, dt, type, indexes ) {
     	if ( type === 'row' ) {
     		let noms = "";
-            table.rows( { selected: true } ).data().pluck( 0 ).each(function (value, index) {
-            	/*[- code pour traiter les caratères < > ... dans les noms -]*/
-            	const a = document.createElement('a');
+            table.rows( { selected: true } ).data().pluck(0).each(function (value, index) {
+            	const a = document.createElement('template');
             	a.innerHTML = value;
-            	noms += a.textContent + ",";
+            	noms += a.content.children[0].getAttribute("href").
+            		substring(a.content.children[0].getAttribute("href").lastIndexOf("/") + 1) + ",";
             });
             if (noms) { 
             	/*[- on enlève la dernière virgule et met à jour l'url de traitement -]*/
@@ -101,7 +101,7 @@ $(document).ready(function() {
 			<tbody>
 				<tr th:each="essaim : ${essaims}">
 					<td><a th:href="@{'/essaim/'+${essaim.id}}"
-						th:text="${essaim.nom}"></a></td>										
+						th:text="${essaim.nom}"></a></td>
 					<td><a th:href="@{'/ruche/'+${ruches[essaimStat.index][0]}}"
 						th:text="${ruches[essaimStat.index][1]}"></a></td>
 					<td><a th:href="@{'/rucher/'+${ruches[essaimStat.index][2]}}"

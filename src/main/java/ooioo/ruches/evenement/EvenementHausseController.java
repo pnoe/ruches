@@ -150,21 +150,37 @@ public class EvenementHausseController {
 	/**
 	 * Appel du formulaire pour créer des commentaires pour un lot de hausses
 	 */
-	@GetMapping("/commentaireLot/{haussesNoms}")
-	public String commentaireLot(HttpSession session, Model model, @PathVariable String haussesNoms) {
+	@GetMapping("/commentaireLot/{hausseIds}")
+	public String commentaireLot(HttpSession session, Model model, @PathVariable Long[] hausseIds) {
 		model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
+		StringBuilder haussesNoms = new StringBuilder();
+		StringBuilder hIds = new StringBuilder();
+		for (Long hausseId : hausseIds) {
+			Optional<Hausse> hausseOpt = hausseRepository.findById(hausseId);
+			if (hausseOpt.isPresent()) {
+				Hausse hausse = hausseOpt.get();
+				haussesNoms.append(hausse.getNom() + ",");
+				hIds.append(hausse.getId() + ",");
+			} else {
+				// on continue le traitement des autres hausses
+				logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
+			}
+		}
+		haussesNoms.deleteCharAt(haussesNoms.length() - 1);
+		hIds.deleteCharAt(hIds.length() - 1);
 		model.addAttribute("haussesNoms", haussesNoms);
+		model.addAttribute("hIds", hIds);
 		return "hausse/hausseCommentaireLotForm";
 	}
 
 	/**
 	 * Créations des événements pour un lot de hausses
 	 */
-	@PostMapping("/sauve/lot/{haussesNoms}")
-	public String sauveLot(@PathVariable String[] haussesNoms, @RequestParam TypeEvenement typeEvenement,
+	@PostMapping("/sauve/lot/{hausseIds}")
+	public String sauveLot(@PathVariable Long[] hausseIds, @RequestParam TypeEvenement typeEvenement,
 			@RequestParam String date, @RequestParam String valeur, @RequestParam String commentaire) {
-		for (String hausseNoms : haussesNoms) {
-			Optional<Hausse> hausseOpt = hausseRepository.findByNom(hausseNoms);
+		for (Long hausseId : hausseIds) {
+			Optional<Hausse> hausseOpt = hausseRepository.findById(hausseId);
 			if (hausseOpt.isPresent()) {
 				Hausse hausse = hausseOpt.get();
 				Ruche ruche = hausse.getRuche();
@@ -180,7 +196,7 @@ public class EvenementHausseController {
 				evenementRepository.save(evenement);
 				logger.info("{} créé", evenement);
 			} else {
-				logger.error("Nom hausse {} inconnu", hausseNoms);
+				logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
 			}
 		}
 		return "redirect:/hausse/liste";

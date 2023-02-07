@@ -22,10 +22,11 @@
 	    function updateLinks( e, dt, type, indexes ) {
 	    	if ( type === 'row' ) {
 	    		let noms = "";
-	            table.rows( { selected: true } ).data().pluck( 0 ).each(function (value, index) {
-	            	const a = document.createElement('a');
+	            table.rows( { selected: true } ).data().pluck(0).each(function (value, index) {
+	            	const a = document.createElement('template');
 	            	a.innerHTML = value;
-	            	noms += a.textContent + ",";
+	            	noms += a.content.children[0].getAttribute("href").
+	            		substring(a.content.children[0].getAttribute("href").lastIndexOf("/") + 1) + ",";
 	            });
 	            if (noms) { 
 	            	noms = noms.substring(0, noms.length-1);

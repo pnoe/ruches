@@ -113,7 +113,9 @@ public class EvenementEssaimController {
 
 	/*
 	 * Liste événements essaim traitement
-	 * @param tous : événements traitement début et fin si true, début seulement sinon
+	 * 
+	 * @param tous : événements traitement début et fin si true, début seulement
+	 * sinon
 	 */
 	@GetMapping("/listeTraitement/{tous}")
 	public String listeTraitement(Model model, @PathVariable boolean tous,
@@ -173,51 +175,76 @@ public class EvenementEssaimController {
 	/**
 	 * Appel du formulaire pour l'ajout de sucre pour un lot d'essaims
 	 */
-	@GetMapping("/sucreLot/{essaimsNoms}")
-	public String sucreLot(HttpSession session, Model model, @PathVariable String essaimsNoms) {
-		model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
-		model.addAttribute(ESSAIMSNOMS, essaimsNoms);
+	@GetMapping("/sucreLot/{essaimIds}")
+	public String sucreLot(HttpSession session, Model model, @PathVariable Long[] essaimIds) {
+		nomsIdsListe(session, model, essaimIds);
 		return "essaim/essaimSucreLotForm";
+	}
+
+	private void nomsIdsListe(HttpSession session, Model model, Long[] essaimIds) {
+		model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
+		// on reconstitue les liste de noms et d'ids d'essaims séparés par des virgules
+		StringBuilder essaimsNoms = new StringBuilder();
+		StringBuilder eIds = new StringBuilder();
+		for (Long essaimId : essaimIds) {
+			Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
+			if (essaimOpt.isPresent()) {
+				Essaim essaim = essaimOpt.get();
+				essaimsNoms.append(essaim.getNom() + ",");
+				eIds.append(essaim.getId() + ",");
+			} else {
+				// on continue le traitement des autres essaims
+				logger.error(Const.IDESSAIMXXINCONNU, essaimId);
+			}
+		}
+		essaimsNoms.deleteCharAt(essaimsNoms.length() - 1);
+		eIds.deleteCharAt(eIds.length() - 1);
+		model.addAttribute("essaimsNoms", essaimsNoms);
+		model.addAttribute("eIds", eIds);
 	}
 
 	/**
 	 * Appel du formulaire pour le traitement contre le varoa d'un lot d'essaims
 	 */
-	@GetMapping("/traitementLot/{essaimsNoms}")
-	public String traitementLot(HttpSession session, Model model, @PathVariable String essaimsNoms) {
-		model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
-		model.addAttribute(ESSAIMSNOMS, essaimsNoms);
+	@GetMapping("/traitementLot/{essaimIds}")
+	public String traitementLot(HttpSession session, Model model, @PathVariable Long[] essaimIds) {
+		nomsIdsListe(session, model, essaimIds);
 		return "essaim/essaimTraitementLotForm";
 	}
 
 	/**
 	 * Appel du formulaire pour créer des commentaires pour un lot d'essaims
 	 */
-	@GetMapping("/commentaireLot/{essaimsNoms}")
-	public String commentaireLot(HttpSession session, Model model, @PathVariable String essaimsNoms) {
-		model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
-		model.addAttribute(ESSAIMSNOMS, essaimsNoms);
+	@GetMapping("/commentaireLot/{essaimIds}")
+	public String commentaireLot(HttpSession session, Model model, @PathVariable Long[] essaimIds) {
+		nomsIdsListe(session, model, essaimIds);
 		return "essaim/essaimCommentaireLotForm";
 	}
 
 	/**
 	 * Créations des événements pour un lot d'essaims
 	 */
-	@PostMapping("/sauve/lot/{essaimsNom}")
-	public String sauveLot(@PathVariable String[] essaimsNom, @RequestParam TypeEvenement typeEvenement,
+	@PostMapping("/sauve/lot/{essaimIds}")
+	public String sauveLot(@PathVariable Long[] essaimIds, @RequestParam TypeEvenement typeEvenement,
 			@RequestParam String date, @RequestParam String valeur, @RequestParam String commentaire) {
-		for (String essaimNom : essaimsNom) {
-			Essaim essaim = essaimRepository.findByNom(essaimNom);
-			Ruche ruche = rucheRepository.findByEssaimId(essaim.getId());
-			Rucher rucher = null;
-			if (ruche != null) {
-				rucher = ruche.getRucher();
+		for (Long essaimId : essaimIds) {
+			Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
+			if (essaimOpt.isPresent()) {
+				Essaim essaim = essaimOpt.get();
+				Ruche ruche = rucheRepository.findByEssaimId(essaimId);
+				Rucher rucher = null;
+				if (ruche != null) {
+					rucher = ruche.getRucher();
+				}
+				LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
+				Evenement evenement = new Evenement(dateEve, typeEvenement, ruche, essaim, rucher, null, valeur,
+						commentaire); // valeur commentaire
+				evenementRepository.save(evenement);
+				logger.info("{} créé", evenement);
+			} else {
+				// on continue le traitement des autres essaims
+				logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 			}
-			LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
-			Evenement evenement = new Evenement(dateEve, typeEvenement, ruche, essaim, rucher, null, valeur,
-					commentaire); // valeur commentaire
-			evenementRepository.save(evenement);
-			logger.info("{} créé", evenement);
 		}
 		return "redirect:/essaim/liste";
 	}
@@ -385,7 +412,7 @@ public class EvenementEssaimController {
 			return "essaim/essaimCommentaireForm";
 		}
 		evenement.setValeur(Utils.notifIntFmt(evenement.getValeur()));
-		String action = (evenement.getId() == null)?"créé":"modifié";
+		String action = (evenement.getId() == null) ? "créé" : "modifié";
 		evenementRepository.save(evenement);
 		logger.info("{} " + action, evenement);
 		return "redirect:/essaim/" + evenement.getEssaim().getId();
@@ -402,7 +429,7 @@ public class EvenementEssaimController {
 		/*
 		 * if (bindingResult.hasErrors()) { return "essaim/essaimSucreForm"; }
 		 */
-		String action = (evenement.getId() == null)?"créé":"modifié";
+		String action = (evenement.getId() == null) ? "créé" : "modifié";
 		evenementRepository.save(evenement);
 		logger.info("{} " + action, evenement);
 		return "redirect:/essaim/" + evenement.getEssaim().getId();

@@ -3,8 +3,6 @@ package ooioo.ruches.selenium;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -19,8 +17,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeDriverService;
 
 /*
  * Enchainement de tests :
@@ -28,7 +24,7 @@ import org.openqa.selenium.chrome.ChromeDriverService;
  *    création récolte, ajout hausse récolte
  */
 @TestMethodOrder(OrderAnnotation.class)
-public class TestChrome2 {
+public class TestRecolte {
 
 	static WebDriver driver;
 	static final String comment = "Test selenium chrome";
@@ -56,33 +52,8 @@ public class TestChrome2 {
 
 	@BeforeAll
 	static void initChrome() {
-		String pathChromeDriver = "/snap/bin/chromium.chromedriver";
-		driver = new ChromeDriver((ChromeDriverService) (new ChromeDriverService.Builder() {
-			@Override
-			protected File findDefaultExecutable() {
-				if (new File(pathChromeDriver).exists()) {
-					@SuppressWarnings("serial")
-					File f = new File(pathChromeDriver) {
-						@Override
-						public String getCanonicalPath() throws IOException {
-							return this.getAbsolutePath();
-						}
-					};
-					return f;
-				} else {
-					return super.findDefaultExecutable();
-				}
-			}
-		}).build());
-		driver.get(baseUrl + "login");
-		// Le titre de la page de connexion est "Connexion"
-		assertEquals("Connexion", driver.getTitle());
-		driver.findElement(By.name("username")).sendKeys(user);
-		driver.findElement(By.name("password")).sendKeys(pwd);
-		driver.findElement(By.xpath("//input[@type='submit']")).click();
-		// Le titre de la page après login est "ruches"
-		assertEquals("Ruches", driver.getTitle(),
-				() -> "La connexion a échoué, avez-vous créé un utilisateur 'test' ?");
+		TestChrome.initChrome();
+		driver = TestChrome.driver;
 	}
 
 	@AfterAll
@@ -120,7 +91,6 @@ public class TestChrome2 {
 				() -> assertEquals(role, driver.findElement(By.id("role")).getText()));
 	}
 	
-	
 	@Test
 	@Order(2)
 	@DisplayName("Ruche création")
@@ -157,7 +127,6 @@ public class TestChrome2 {
 		String urlDetail = driver.getCurrentUrl();
 		hausseId =  urlDetail.substring(urlDetail.lastIndexOf("/") + 1);
 	}
-	
 	
 	@Test
 	@Order(4)
