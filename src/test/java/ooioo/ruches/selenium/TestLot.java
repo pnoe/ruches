@@ -2,6 +2,7 @@ package ooioo.ruches.selenium;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,6 +19,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /*
  * Enchainement de tests des traitements par lot
@@ -128,9 +133,28 @@ public class TestLot {
 		driver.findElement(By.id("commentaire")).click();
 		assertEquals("form", driver.findElement(By.id("evenementForm")).getTagName());
 		driver.findElement(By.name(commentaire)).sendKeys(comment);
+		String ids = driver.getCurrentUrl();
+		String[] idsT = ids.substring(ids.lastIndexOf("/") + 1).split(",");
 		submit();
 		// La table liste des ruches d'id "ruches" est affichée
 		assertEquals("table", driver.findElement(By.id("ruches")).getTagName());
+		for (String str : idsT) {
+			assertTrue("COMMENTAIRERUCHE".equals(typeEveRucheId(str)));
+		}
+	}
+	
+	String typeEveRucheId(String rucheId) {
+		// recherche des événements ruche avec l'api rest
+		driver.get(baseUrl + "rest/evenements/search/findByRucheId?rucheId=" + rucheId);
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			JsonNode actualObj = mapper.readTree(driver.findElement(By.tagName("pre")).getText());
+			// On prend le type du premier événement
+			JsonNode jsonNode = actualObj.get("_embedded").get("evenementRepository").get(1).get("type");
+			return jsonNode.textValue();
+		} catch (JsonProcessingException e) {
+			return "";
+		}
 	}
 
 }

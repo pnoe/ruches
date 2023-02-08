@@ -662,6 +662,7 @@ public class TestChrome {
 		assertEquals("form", driver.findElement(By.id("parametresForm")).getTagName());
 	}
 
+	// TODO API rest appeler chacunes des urls de la page /rest
 	@Test
 	@DisplayName("Admin API REST")
 	void adminRest() {

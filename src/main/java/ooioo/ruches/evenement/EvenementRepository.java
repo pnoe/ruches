@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.hausse.Hausse;
@@ -15,6 +16,8 @@ import ooioo.ruches.rucher.Rucher;
 @RepositoryRestResource(collectionResourceRel = "evenementRepository")
 public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
+	// n'est pas utilisée et plante l'api rest, conflit avec la méthode List<Evenement> findNotification();
+	/*
 	@Query(value = """
 			select e
 			  from Evenement e
@@ -28,7 +31,8 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			  order by e.date desc
 			""")
 	List<Evenement> findNotification(LocalDateTime dateNow);
-
+	*/
+	
 	@Query(value = """
 			select e
 			  from Evenement e
@@ -45,6 +49,8 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	@Query(value = "select evenement from Evenement evenement where evenement.date > ?1")
 	Iterable<Evenement> findPeriode(LocalDateTime date);
 
+//	https://docs.spring.io/spring-data/rest/docs/current/reference/html/#customizing-sdr.configuring-the-rest-url-path
+	@RestResource(path = "findPeriodeDate1Date2")
 	@Query(value = """
 			select evenement
 			  from Evenement evenement
@@ -52,6 +58,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			""")
 	Iterable<Evenement> findPeriode(LocalDateTime date1, LocalDateTime date2);
 
+	@RestResource(path = "findPeriodeTypeDate")
 	@Query(value = """
 			select evenement
 			  from Evenement evenement
@@ -59,6 +66,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			""")
 	Iterable<Evenement> findTypePeriode(TypeEvenement typeEvenement, LocalDateTime date);
 
+	@RestResource(path = "findPeriodeTypeDate1Date2")
 	@Query(value = """
 			select evenement
 			  from Evenement evenement
@@ -69,6 +77,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 
 	// pour TypeEvenement.ESSAIMTRAITEMENT et TypeEvenement.ESSAIMTRAITEMENTFIN
+	@RestResource(path = "findPeriodeType1Type2Date1")
 	@Query(value = """
 			select evenement
 			  from Evenement evenement
@@ -77,12 +86,14 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	Iterable<Evenement> findTypePeriode(TypeEvenement type1, TypeEvenement type2, LocalDateTime date);
 
 	// pour TypeEvenement.ESSAIMTRAITEMENT et TypeEvenement.ESSAIMTRAITEMENTFIN
+	@RestResource(path = "findPeriodeType1Type2Date1Date2")
 	@Query(value = """
 			select evenement
 			  from Evenement evenement
 			  where (evenement.type = ?1 or evenement.type = ?2) and evenement.date > ?3 and evenement.date < ?4
 			""")
 	Iterable<Evenement> findTypePeriode(TypeEvenement type1, TypeEvenement type2, LocalDateTime date1, LocalDateTime date2);
+	
 	List<Evenement> findByRucheId(Long rucheId);
 	Iterable<Evenement> findByEssaimId(Long essaimId);
 	@Query(value = """

@@ -69,7 +69,6 @@ public class TestRecolte {
 	
 	void xpathClick(String xpath) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
 		js.executeScript("arguments[0].click();", driver.findElement(By.xpath(xpath)));
 	}
 
