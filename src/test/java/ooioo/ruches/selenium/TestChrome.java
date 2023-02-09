@@ -7,10 +7,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -63,6 +60,7 @@ public class TestChrome {
 //		https://github.com/SeleniumHQ/selenium/issues/7788
 //		driver = new ChromeDriver();
 //		erreur : unknown flag `port'
+		
 		driver = new ChromeDriver((ChromeDriverService) (new ChromeDriverService.Builder() {
 			@Override
 			protected File findDefaultExecutable() {
@@ -80,6 +78,8 @@ public class TestChrome {
 				}
 			}
 		}).build()); // , options);
+		
+		
 
 //		https://www.selenium.dev/documentation/webdriver/elements/finders/
 //		https://www.selenium.dev/documentation/webdriver/elements/locators/		
@@ -98,22 +98,6 @@ public class TestChrome {
 	@AfterAll
 	static void quitChrome() {
 		driver.quit();
-	}
-
-	void submit() {
-		// https://www.lambdatest.com/blog/how-to-deal-with-element-is-not-clickable-at-point-exception-using-selenium/
-		// driver.findElement(By.xpath("//input[@type='submit']")).click();
-		//   ne fonctionne pas si le bouton submit n'est pas visible
-		//   scroll down et click avec javascript
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
-		js.executeScript("arguments[0].click();", driver.findElement(By.xpath("//input[@type='submit']")));
-	}
-
-	void clearSend(String key, String val) {
-		WebElement we = driver.findElement(By.name(key));
-		we.clear();
-		we.sendKeys(val);
 	}
 
 	@Test
@@ -158,7 +142,7 @@ public class TestChrome {
 		// Attention écriture en base de données
 		driver.get(baseUrl + "rucheType/cree");
 		assertEquals("form", driver.findElement(By.id("rucheTypeForm")).getTagName());
-		driver.findElement(By.name("nom")).sendKeys("#" + new SimpleDateFormat("yyMMddHHmmss").format(new Date()));
+		driver.findElement(By.name("nom")).sendKeys(TestUtils.nomMilli());
 		// Pas de champ commentaire sur TypeRuche
 		driver.findElement(By.xpath("//input[@type='submit']")).click();
 		assertEquals("table", driver.findElement(By.id("ruchetypes")).getTagName());
@@ -175,17 +159,17 @@ public class TestChrome {
 		driver.get(baseUrl + "ruche/cree");
 		// Formulaire de création de ruche
 		assertEquals("form", driver.findElement(By.id("rucheForm")).getTagName());
-		driver.findElement(By.name("nom")).sendKeys("#" + new SimpleDateFormat("yyMMddHHmmss").format(new Date()));
+		driver.findElement(By.name("nom")).sendKeys(TestUtils.nomMilli());
 		driver.findElement(By.name(commentaire)).sendKeys(comment);
 		// erreur: le bouton submit n'est pas cliquable, car non visible ?
-		submit();
+		TestUtils.submit(driver);
 		// Page détail de la ruche créée
 		assertEquals("div", driver.findElement(By.id("ruche")).getTagName());
 		// Modification de la ruche
 		String urlDetail = driver.getCurrentUrl();
 		driver.get(baseUrl + "ruche/modifie" + urlDetail.substring(urlDetail.lastIndexOf("/")));
 		driver.findElement(By.name(commentaire)).sendKeys(modif);
-		submit();
+		TestUtils.submit(driver);
 		// Page détail de la ruche modifiée
 		assertEquals("div", driver.findElement(By.id("ruche")).getTagName());
 	}
@@ -206,16 +190,16 @@ public class TestChrome {
 		driver.get(baseUrl + "hausse/cree");
 		// Formulaire de création de ruche
 		assertEquals("form", driver.findElement(By.id("hausseForm")).getTagName());
-		driver.findElement(By.name("nom")).sendKeys("#" + new SimpleDateFormat("yyMMddHHmmss").format(new Date()));
+		driver.findElement(By.name("nom")).sendKeys(TestUtils.nomMilli());
 		driver.findElement(By.name(commentaire)).sendKeys(comment);
-		submit();
+		TestUtils.submit(driver);
 		// Page détail de la hausse créée
 		assertEquals("div", driver.findElement(By.id("hausse")).getTagName());
 		// Modification de la hausse
 		String urlDetail = driver.getCurrentUrl();
 		driver.get(baseUrl + "hausse/modifie" + urlDetail.substring(urlDetail.lastIndexOf("/")));
 		driver.findElement(By.name(commentaire)).sendKeys(modif);
-		submit();
+		TestUtils.submit(driver);
 		// Page détail de la hausse modifiée
 		assertEquals("div", driver.findElement(By.id("hausse")).getTagName());
 	}
@@ -277,39 +261,25 @@ public class TestChrome {
 		driver.get(baseUrl + "rucher/cree");
 		// Formulaire de création de ruche
 		assertEquals("form", driver.findElement(By.id("rucherForm")).getTagName());
-		driver.findElement(By.name("nom")).sendKeys("#" + new SimpleDateFormat("yyMMddHHmmss").format(new Date()));
+		driver.findElement(By.name("nom")).sendKeys(TestUtils.nomMilli());
 		driver.findElement(By.name(commentaire)).sendKeys(comment);
-		submit();
+		TestUtils.submit(driver);
 		// Page détail du rucher créé
 		assertEquals("div", driver.findElement(By.id("detailRucher")).getTagName());
 		// Modification du rucher
 		String urlDetail = driver.getCurrentUrl();
 		driver.get(baseUrl + "rucher/modifie" + urlDetail.substring(urlDetail.lastIndexOf("/")));
-		clearSend("altitude", "1000");
-		submit();
+		TestUtils.clearSend(driver, "altitude", "1000");
+		TestUtils.submit(driver);
 		// Page détail du rucher modifiée
 		assertEquals("div", driver.findElement(By.id("detailRucher")).getTagName());
-	}
-
-	String getDepotId() {
-		// recherche de l'id du dépot avec l'api rest
-		driver.get(baseUrl + "rest/ruchers/search/findByDepotIsTrue");
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			JsonNode actualObj = mapper.readTree(driver.findElement(By.tagName("pre")).getText());
-			JsonNode jsonNode = actualObj.get("_links").get("self").get("href");
-			String urlDepot = jsonNode.textValue();
-			return urlDepot.substring(urlDepot.lastIndexOf("/") + 1);
-		} catch (JsonProcessingException e) {
-			return "";
-		}
 	}
 
 	@Test
 	@DisplayName("Rucher dépot carte Gg")
 	void mapGgDepot() {
 		if (depotId == null) {
-			depotId = getDepotId();
+			depotId = TestUtils.getDepotId(driver, baseUrl);
 		}
 		if ("".equals(depotId)) {
 			fail("Api rest recherche de l'id du dépôt");
@@ -324,7 +294,7 @@ public class TestChrome {
 	@DisplayName("Rucher dépot carte IGN")
 	void mapIgnDepot() {
 		if (depotId == null) {
-			depotId = getDepotId();
+			depotId = TestUtils.getDepotId(driver, baseUrl);
 		}
 		if ("".equals(depotId)) {
 			fail("Api rest recherche de l'id du dépôt");
@@ -339,7 +309,7 @@ public class TestChrome {
 	@DisplayName("Rucher dépot carte OSM")
 	void mapOsmDepot() {
 		if (depotId == null) {
-			depotId = getDepotId();
+			depotId = TestUtils.getDepotId(driver, baseUrl);
 		}
 		if ("".equals(depotId)) {
 			fail("Api rest recherche de l'id du dépôt");
@@ -354,7 +324,7 @@ public class TestChrome {
 	@DisplayName("Rucher dépot Météo")
 	void meteoDepot() {
 		if (depotId == null) {
-			depotId = getDepotId();
+			depotId = TestUtils.getDepotId(driver, baseUrl);
 		}
 		if ("".equals(depotId)) {
 			fail("Api rest recherche de l'id du dépôt");
@@ -370,7 +340,7 @@ public class TestChrome {
 	@ValueSource(strings = { "true", "false" })
 	void transhumDepot(String groupe) {
 		if (depotId == null) {
-			depotId = getDepotId();
+			depotId = TestUtils.getDepotId(driver, baseUrl);
 		}
 		if ("".equals(depotId)) {
 			fail("Api rest recherche de l'id du dépôt");
@@ -385,7 +355,7 @@ public class TestChrome {
 	@Test
 	void rucherRucheDepot() {
 		if (depotId == null) {
-			depotId = getDepotId();
+			depotId = TestUtils.getDepotId(driver, baseUrl);
 		}
 		if ("".equals(depotId)) {
 			fail("Api rest recherche de l'id du dépôt");
@@ -412,17 +382,17 @@ public class TestChrome {
 		driver.get(baseUrl + "personne/cree");
 		// Formulaire de création de la personne
 		assertEquals("form", driver.findElement(By.id("personneForm")).getTagName());
-		driver.findElement(By.name("nom")).sendKeys("#" + new SimpleDateFormat("yyMMddHHmmss").format(new Date()));
+		driver.findElement(By.name("nom")).sendKeys(TestUtils.nomMilli());
 		driver.findElement(By.name("prenom")).sendKeys("test");
 		// Pas de champ commentaire sur Personne
-		submit();
+		TestUtils.submit(driver);
 		// Page détail de la personne créée
 		assertEquals("div", driver.findElement(By.id("detailPersonne")).getTagName());
 		// Modification de la personne
 		String urlDetail = driver.getCurrentUrl();
 		driver.get(baseUrl + "personne/modifie" + urlDetail.substring(urlDetail.lastIndexOf("/")));
 		driver.findElement(By.name("adresse")).sendKeys("La croix - Sainte Victoire");
-		submit();
+		TestUtils.submit(driver);
 		// Page détail de la personne modifiée
 		assertEquals("div", driver.findElement(By.id("detailPersonne")).getTagName());
 	}
@@ -443,16 +413,16 @@ public class TestChrome {
 		driver.get(baseUrl + "essaim/cree");
 		// Formulaire de création de ruche
 		assertEquals("form", driver.findElement(By.id("essaimForm")).getTagName());
-		driver.findElement(By.name("nom")).sendKeys("#" + new SimpleDateFormat("yyMMddHHmmss").format(new Date()));
+		driver.findElement(By.name("nom")).sendKeys(TestUtils.nomMilli());
 		driver.findElement(By.name(commentaire)).sendKeys(comment);
-		submit();
+		TestUtils.submit(driver);
 		// Page détail du rucher créé
 		assertEquals("div", driver.findElement(By.id("detailEssaim")).getTagName());
 		// Modification de l'essaim
 		String urlDetail = driver.getCurrentUrl();
 		driver.get(baseUrl + "essaim/modifie" + urlDetail.substring(urlDetail.lastIndexOf("/")));
 		driver.findElement(By.name(commentaire)).sendKeys(modif);
-		submit();
+		TestUtils.submit(driver);
 		// Page détail de l'essaim modifiée
 		assertEquals("div", driver.findElement(By.id("detailEssaim")).getTagName());
 
@@ -491,14 +461,14 @@ public class TestChrome {
 		// Formulaire de création de la récolte
 		assertEquals("form", driver.findElement(By.id("recolteForm")).getTagName());
 		driver.findElement(By.name(commentaire)).sendKeys(comment);
-		submit();
+		TestUtils.submit(driver);
 		// Page détail de la récolte créée
 		assertEquals("div", driver.findElement(By.id("detailRecolte")).getTagName());
 		// Modification de la récolte
 		String urlDetail = driver.getCurrentUrl();
 		driver.get(baseUrl + "recolte/modifie" + urlDetail.substring(urlDetail.lastIndexOf("/")));
 		driver.findElement(By.name(commentaire)).sendKeys(modif);
-		submit();
+		TestUtils.submit(driver);
 		// Page détail de la récolte modifiée
 		assertEquals("div", driver.findElement(By.id("detailRecolte")).getTagName());
 	}
@@ -590,7 +560,7 @@ public class TestChrome {
 	@DisplayName("Événements liste rucher dépot")
 	void listeEveDepot() {
 		if (depotId == null) {
-			depotId = getDepotId();
+			depotId = TestUtils.getDepotId(driver, baseUrl);
 		}
 		if ("".equals(depotId)) {
 			fail("Api rest recherche de l'id du dépôt");
@@ -605,18 +575,18 @@ public class TestChrome {
 	@DisplayName("Événements commentaire création rucher dépot")
 	void creeEveCommDepot() {
 		if (depotId == null) {
-			depotId = getDepotId();
+			depotId = TestUtils.getDepotId(driver, baseUrl);
 		}
 		if ("".equals(depotId)) {
 			fail("Api rest recherche de l'id du dépôt");
 		} else {
 			driver.get(baseUrl + "evenement/rucher/commentaire/cree/" + depotId);
 			LocalDateTime date = LocalDateTime.now().minusDays(2);
-			clearSend("date", date.format(
+			TestUtils.clearSend(driver, "date", date.format(
 					DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
 			driver.findElement(By.name(commentaire)).sendKeys(comment);
 			driver.findElement(By.name("valeur")).sendKeys("5");
-			submit();
+			TestUtils.submit(driver);
 			// La div d'id "detailRucher" est affichée
 			assertEquals("div", driver.findElement(By.id("detailRucher")).getTagName());
 		}
@@ -642,14 +612,14 @@ public class TestChrome {
 		Select rucherSelect = new Select(rucherSelEle);
 		rucherSelect.selectByIndex(1);
 		driver.findElement(By.name(commentaire)).sendKeys(comment);
-		submit();
+		TestUtils.submit(driver);
 		// Page détail de l'événement créé
 		assertEquals("div", driver.findElement(By.id("detailEvenement")).getTagName());
 		// Modification de la valeur de l'événement
 		String urlDetail = driver.getCurrentUrl();
 		driver.get(baseUrl + "evenement/modifie" + urlDetail.substring(urlDetail.lastIndexOf("/")));
 		driver.findElement(By.name("valeur")).sendKeys("007");
-		submit();
+		TestUtils.submit(driver);
 		// Page détail de l'événement modifié
 		assertEquals("div", driver.findElement(By.id("detailEvenement")).getTagName());
 	}

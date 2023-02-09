@@ -39,7 +39,6 @@ import ooioo.ruches.rucher.RucherService;
 public class EvenementEssaimController {
 
 	private static final String ESSAIMPASDANSRUCHE = "Essaimage : l'essaim n'est pas dans une ruche !";
-	private static final String ESSAIMSNOMS = "essaimsNoms";
 
 	final Logger logger = LoggerFactory.getLogger(EvenementEssaimController.class);
 

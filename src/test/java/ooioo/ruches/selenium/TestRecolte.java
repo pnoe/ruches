@@ -3,9 +3,6 @@ package ooioo.ruches.selenium;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -14,9 +11,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 /*
  * Enchainement de tests :
@@ -45,7 +40,7 @@ public class TestRecolte {
 
 	static final String commentaire = "commentaire";
 	static final String modif = " - modifié";
-	
+
 	static String rucheId;
 	static String hausseId;
 	static String recolteId;
@@ -61,23 +56,6 @@ public class TestRecolte {
 		driver.quit();
 	}
 
-	void submit() {
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
-		js.executeScript("arguments[0].click();", driver.findElement(By.xpath("//input[@type='submit']")));
-	}
-	
-	void xpathClick(String xpath) {
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("arguments[0].click();", driver.findElement(By.xpath(xpath)));
-	}
-
-	void clearSend(String key, String val) {
-		WebElement we = driver.findElement(By.name(key));
-		we.clear();
-		we.sendKeys(val);
-	}
-
 	@Test
 	@Order(1)
 	@DisplayName("Page d'accueil")
@@ -89,7 +67,7 @@ public class TestRecolte {
 		assertAll("login, rôle", () -> assertEquals(user, driver.findElement(By.id("login")).getText()),
 				() -> assertEquals(role, driver.findElement(By.id("role")).getText()));
 	}
-	
+
 	@Test
 	@Order(2)
 	@DisplayName("Ruche création")
@@ -99,16 +77,16 @@ public class TestRecolte {
 		driver.get(baseUrl + "ruche/cree");
 		// Formulaire de création de ruche
 		assertEquals("form", driver.findElement(By.id("rucheForm")).getTagName());
-		driver.findElement(By.name("nom")).sendKeys("#" + new SimpleDateFormat("yyMMddHHmmss").format(new Date()));
+		driver.findElement(By.name("nom")).sendKeys(TestUtils.nomMilli());
 		driver.findElement(By.name(commentaire)).sendKeys(comment);
 		// erreur: le bouton submit n'est pas cliquable, car non visible ?
-		submit();
+		TestUtils.submit(driver);
 		// Page détail de la ruche créée
 		assertEquals("div", driver.findElement(By.id("ruche")).getTagName());
 		String urlDetail = driver.getCurrentUrl();
 		rucheId = urlDetail.substring(urlDetail.lastIndexOf("/") + 1);
 	}
-	
+
 	@Test
 	@Order(3)
 	@DisplayName("Hausse création")
@@ -118,15 +96,15 @@ public class TestRecolte {
 		driver.get(baseUrl + "hausse/cree");
 		// Formulaire de création de ruche
 		assertEquals("form", driver.findElement(By.id("hausseForm")).getTagName());
-		driver.findElement(By.name("nom")).sendKeys("#" + new SimpleDateFormat("yyMMddHHmmss").format(new Date()));
+		driver.findElement(By.name("nom")).sendKeys(TestUtils.nomMilli());
 		driver.findElement(By.name(commentaire)).sendKeys(comment);
-		submit();
+		TestUtils.submit(driver);
 		// Page détail de la hausse créée
 		assertEquals("div", driver.findElement(By.id("hausse")).getTagName());
 		String urlDetail = driver.getCurrentUrl();
-		hausseId =  urlDetail.substring(urlDetail.lastIndexOf("/") + 1);
+		hausseId = urlDetail.substring(urlDetail.lastIndexOf("/") + 1);
 	}
-	
+
 	@Test
 	@Order(4)
 	@DisplayName("Ruche ajout hausse")
@@ -137,17 +115,19 @@ public class TestRecolte {
 		// table liste des hausses à ajouter
 		assertEquals("table", driver.findElement(By.id("ajoutHausses")).getTagName());
 		// rechercher href dont le texte est hausseId
-		//  puis click, ou appel direct
+		// puis click, ou appel direct
 		String urlForm = "/ruches/evenement/ruche/hausse/ajout/" + rucheId + "/" + hausseId;
-		// WebElement link = driver.findElement(By.xpath("//a[@href=\"" + urlForm + "\"]"));
-		xpathClick("//a[@href=\"" + urlForm + "\"]");
+		// WebElement link = driver.findElement(By.xpath("//a[@href=\"" + urlForm +
+		// "\"]"));
+		TestUtils.xpathClick(driver, "//a[@href=\"" + urlForm + "\"]");
 		driver.findElement(By.name(commentaire)).sendKeys(comment);
 		assertEquals("form", driver.findElement(By.id("evenementForm")).getTagName());
-		submit();
+		TestUtils.submit(driver);
 		assertEquals("table", driver.findElement(By.id("ajoutHausses")).getTagName());
 	}
-	
-	@Test@Order(5)
+
+	@Test
+	@Order(5)
 	@DisplayName("Récolte création")
 	void creeRecolte() {
 		// Création d'une récolte
@@ -156,13 +136,13 @@ public class TestRecolte {
 		// Formulaire de création de la récolte
 		assertEquals("form", driver.findElement(By.id("recolteForm")).getTagName());
 		driver.findElement(By.name(commentaire)).sendKeys(comment);
-		submit();
+		TestUtils.submit(driver);
 		// Page détail de la récolte créée
 		assertEquals("div", driver.findElement(By.id("detailRecolte")).getTagName());
 		String urlDetail = driver.getCurrentUrl();
-		recolteId =  urlDetail.substring(urlDetail.lastIndexOf("/") + 1);		
+		recolteId = urlDetail.substring(urlDetail.lastIndexOf("/") + 1);
 	}
-	
+
 	@Test
 	@Order(6)
 	@DisplayName("Récolte ajout hausse")
@@ -172,13 +152,12 @@ public class TestRecolte {
 		driver.get(baseUrl + "recolte/choixHausses/" + recolteId);
 		// table liste des hausses à ajouter
 		assertEquals("table", driver.findElement(By.id("ajoutHausseRecolte")).getTagName());
-		xpathClick("//td[contains(., " + hausseId + ")]");
+		TestUtils.xpathClick(driver, "//td[contains(., " + hausseId + ")]");
 		driver.findElement(By.id("ajouterHausses")).click();
 		// la table retraitHausseRecolte contient maintenant la hausse d'id hausseId
-		assertEquals("td", 
-				driver.findElement(By.xpath(
-						"//table[@id='retraitHausseRecolte']//td[contains(., " + hausseId + ")]"
-						)).getTagName());
+		assertEquals("td",
+				driver.findElement(By.xpath("//table[@id='retraitHausseRecolte']//td[contains(., " + hausseId + ")]"))
+						.getTagName());
 	}
 
 }

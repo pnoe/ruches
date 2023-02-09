@@ -4,9 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -16,9 +13,7 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -28,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Enchainement de tests des traitements par lot
  */
 @TestMethodOrder(OrderAnnotation.class)
-public class TestLot {
+public class TestLotEssaim {
 
 	static WebDriver driver;
 	static final String comment = "Test selenium chrome";
@@ -48,6 +43,7 @@ public class TestLot {
 	static final String role = "[ROLE_admin]";
 
 	static final String commentaire = "commentaire";
+	static final String valeur = "valeur";
 	static final String modif = " - modifié";
 
 	static String rucheId;
@@ -65,31 +61,6 @@ public class TestLot {
 		driver.quit();
 	}
 
-	// Click sur bouton submit
-	void submit() {
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		// scroll en bas de page pour click sur bouton submit
-		js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
-		js.executeScript("arguments[0].click();", driver.findElement(By.xpath("//input[@type='submit']")));
-	}
-
-	void scrollToTop() {
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("window.scrollTo(0,0)");
-	}
-
-	void xpathClick(String xpath) {
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		// js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
-		js.executeScript("arguments[0].click();", driver.findElement(By.xpath(xpath)));
-	}
-
-	void clearSend(String key, String val) {
-		WebElement we = driver.findElement(By.name(key));
-		we.clear();
-		we.sendKeys(val);
-	}
-
 	@Test
 	@Order(1)
 	@DisplayName("Page d'accueil")
@@ -105,47 +76,81 @@ public class TestLot {
 	@Test
 	@Order(2)
 	@RepeatedTest(1)
-	@DisplayName("Ruche création")
-	void creeRuche() {
-		// Création d'une ruche
+	@DisplayName("Essaim création")
+	void creeEssaim() {
+		// Création d'une essaim
 		// Attention écriture en base de données
-		driver.get(baseUrl + "ruche/cree");
-		// Formulaire de création de ruche
-		assertEquals("form", driver.findElement(By.id("rucheForm")).getTagName());
-		driver.findElement(By.name("nom")).sendKeys("!" + new SimpleDateFormat("yyMMddHHmmssSSS").format(new Date()));
+		driver.get(baseUrl + "essaim/cree");
+		// Formulaire de création de essaim
+		assertEquals("form", driver.findElement(By.id("essaimForm")).getTagName());
+		driver.findElement(By.name("nom")).sendKeys(TestUtils.nomMilli());
 		driver.findElement(By.name(commentaire)).sendKeys(comment);
-		// erreur: le bouton submit n'est pas cliquable, car non visible ?
-		submit();
-		// Page détail de la ruche créée
-		assertEquals("div", driver.findElement(By.id("ruche")).getTagName());
+		TestUtils.submit(driver);
+		// Page détail de l'essaim créée
+		assertEquals("div", driver.findElement(By.id("detailEssaim")).getTagName());
 	}
 
 	@Test
 	@Order(3)
-	@DisplayName("Ruche création commentaires lot")
-	void creeCommRuche() {
-		driver.get(baseUrl + "ruche/liste");
-		// La table liste des ruches d'id "ruches" est affichée
-		assertEquals("table", driver.findElement(By.id("ruches")).getTagName());
-		// Sélectionner les lignes des deux premières ruches
-		xpathClick("//table/tbody/tr[1]/td[4]");
-		xpathClick("//table/tbody/tr[2]/td[4]");
+	@DisplayName("Essaim création commentaires lot")
+	void creeCommEssaim() {
+		driver.get(baseUrl + "essaim/liste");
+		// La table liste des essaims d'id "essaims" est affichée
+		assertEquals("table", driver.findElement(By.id("essaims")).getTagName());
+		// Sélectionner les lignes des deux premiers essaims
+		TestUtils.xpathClick(driver, "//table/tbody/tr[1]/td[4]");
+		TestUtils.xpathClick(driver, "//table/tbody/tr[2]/td[4]");
 		driver.findElement(By.id("commentaire")).click();
 		assertEquals("form", driver.findElement(By.id("evenementForm")).getTagName());
 		driver.findElement(By.name(commentaire)).sendKeys(comment);
 		String ids = driver.getCurrentUrl();
 		String[] idsT = ids.substring(ids.lastIndexOf("/") + 1).split(",");
-		submit();
-		// La table liste des ruches d'id "ruches" est affichée
-		assertEquals("table", driver.findElement(By.id("ruches")).getTagName());
+		TestUtils.submit(driver);
+		// La table liste des essaims d'id "essaims" est affichée
+		assertEquals("table", driver.findElement(By.id("essaims")).getTagName());
 		for (String str : idsT) {
-			assertTrue("COMMENTAIRERUCHE".equals(typeEveRucheId(str)));
+			assertTrue("COMMENTAIREESSAIM".equals(typeEveEssaimId(str)));
 		}
 	}
-	
-	String typeEveRucheId(String rucheId) {
-		// recherche des événements ruche avec l'api rest
-		driver.get(baseUrl + "rest/evenements/search/findByRucheId?rucheId=" + rucheId);
+
+	@Test
+	@Order(4)
+	@DisplayName("Essaim création sucre lot")
+	void creeSucreEssaim() {
+		driver.get(baseUrl + "essaim/liste");
+		// La table liste des essaims d'id "essaims" est affichée
+		assertEquals("table", driver.findElement(By.id("essaims")).getTagName());
+		// Sélectionner les lignes des deux premiers essaims
+
+		// TODO en fait on ne récupère pas les derniers essaims, le tri est dans le
+		// mauvais sens
+
+		TestUtils.xpathClick(driver, "//table/tbody/tr[1]/td[4]");
+		TestUtils.xpathClick(driver, "//table/tbody/tr[2]/td[4]");
+		driver.findElement(By.id("sucre")).click();
+		assertEquals("form", driver.findElement(By.id("evenementForm")).getTagName());
+		driver.findElement(By.name(commentaire)).sendKeys(comment);
+		driver.findElement(By.name(valeur)).sendKeys("0,5");
+		String ids = driver.getCurrentUrl();
+		String[] idsT = ids.substring(ids.lastIndexOf("/") + 1).split(",");
+		TestUtils.submit(driver);
+		// La table liste des essaims d'id "essaims" est affichée
+		assertEquals("table", driver.findElement(By.id("essaims")).getTagName());
+
+		// TODO erreur la date des événements est identique (même minute)
+		// on récupère les événements commentaire, le test suivant plante
+
+		for (String str : idsT) {
+			assertTrue("ESSAIMSUCRE".equals(typeEveEssaimId(str)));
+		}
+	}
+
+	/*
+	 * Renvoie le type eve du dernier événement de l'essaim id. Appel API REST.
+	 */
+	String typeEveEssaimId(String id) {
+		// recherche des événements essaim avec l'api rest
+		driver.get(baseUrl + "rest/evenements/search/findByEssaimId?essaimId=" + id);
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode actualObj = mapper.readTree(driver.findElement(By.tagName("pre")).getText());

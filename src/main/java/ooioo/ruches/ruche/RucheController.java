@@ -1,6 +1,7 @@
 package ooioo.ruches.ruche;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -321,7 +322,8 @@ public class RucheController {
 	}
 
 	/**
-	 * Enregistrement de la ruche crée ou modifiée
+	 * Enregistrement de la ruche crée ou modifiée.
+	 * Si création de ruche, création de l'événement RUCHEAJOUTRUCHER dans le dépôt.
 	 */
 	@PostMapping("/sauve")
 	public String sauve(Model model, @ModelAttribute Ruche ruche, BindingResult bindingResult) {
@@ -343,12 +345,13 @@ public class RucheController {
 			Rucher rucher = rucherRepository.findByDepotIsTrue();
 			ruche.setRucher(rucher);
 			rucheRepository.save(ruche);
-			// date mis au dépôt = date acquisition de la ruche
-			// la date d'acquisition est un LocalDate d'ou le asStartOfDay
+			// Date eve mis au dépôt = date acquisition (LocalDate) de la ruche ou LocalDateTime.now()
+			//  (si date acquisition = LocalDate.now()). 
+			// La date d'acquisition est un LocalDate d'où le asStartOfDay
 			// pour renseigner le heure, minutes...
-			// Mais cela met 00:00 au lieu de l'heure courante : tester si jour est
-			//   le jour de now() et si oui metter LocalDateTime de now ?
-			Evenement eveAjout = new Evenement(ruche.getDateAcquisition().atStartOfDay(),
+			Evenement eveAjout = new Evenement(
+					LocalDate.now().equals(ruche.getDateAcquisition()) ? 
+							LocalDateTime.now() : ruche.getDateAcquisition().atStartOfDay(),
 					TypeEvenement.RUCHEAJOUTRUCHER, ruche, null, rucher, null, null, "Création de la ruche");
 			evenementRepository.save(eveAjout);
 			logger.info("{} créé", eveAjout);
