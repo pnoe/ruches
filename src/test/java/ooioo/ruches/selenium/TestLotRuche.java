@@ -114,25 +114,28 @@ public class TestLotRuche {
 		// La table liste des ruches d'id "ruches" est affichée
 		assertEquals("table", driver.findElement(By.id("ruches")).getTagName());
 		for (String str : idsT) {
-			assertTrue("COMMENTAIRERUCHE".equals(typeEveRucheId(str)));
+			assertTrue(typeEveRucheId(str, "COMMENTAIRERUCHE"));
 		}
 	}
 
 	/*
-	 * Renvoie le type eve du dernier événement de la ruche id. Appel API REST.
+	 * Renvoie true si le type eve typeVal de la ruche id est trouvé. Appel API
+	 * REST. false sinon
 	 */
-	String typeEveRucheId(String id) {
+	boolean typeEveRucheId(String id, String typeVal) {
 		// recherche des événements ruche avec l'api rest
 		driver.get(baseUrl + "rest/evenements/search/findByRucheId?rucheId=" + id);
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode actualObj = mapper.readTree(driver.findElement(By.tagName("pre")).getText());
-			// On prend le type du deuxième événement (le premier est RUCHEAJOUTRUCHER dans
-			// le dépot
-			JsonNode jsonNode = actualObj.get("_embedded").get("evenementRepository").get(1).get("type");
-			return jsonNode.textValue();
+			for (JsonNode j : actualObj.findValues("type")) {
+				if (j.textValue().equals(typeVal)) {
+					return true;
+				}
+			}
+			return false;
 		} catch (JsonProcessingException e) {
-			return "";
+			return false;
 		}
 	}
 

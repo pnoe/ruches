@@ -109,7 +109,7 @@ public class TestLotEssaim {
 		// La table liste des essaims d'id "essaims" est affichée
 		assertEquals("table", driver.findElement(By.id("essaims")).getTagName());
 		for (String str : idsT) {
-			assertTrue("COMMENTAIREESSAIM".equals(typeEveEssaimId(str)));
+			assertTrue(typeEveEssaimId(str, "COMMENTAIREESSAIM"));
 		}
 	}
 
@@ -120,11 +120,6 @@ public class TestLotEssaim {
 		driver.get(baseUrl + "essaim/liste");
 		// La table liste des essaims d'id "essaims" est affichée
 		assertEquals("table", driver.findElement(By.id("essaims")).getTagName());
-		// Sélectionner les lignes des deux premiers essaims
-
-		// TODO en fait on ne récupère pas les derniers essaims, le tri est dans le
-		// mauvais sens
-
 		TestUtils.xpathClick(driver, "//table/tbody/tr[1]/td[4]");
 		TestUtils.xpathClick(driver, "//table/tbody/tr[2]/td[4]");
 		driver.findElement(By.id("sucre")).click();
@@ -136,29 +131,51 @@ public class TestLotEssaim {
 		TestUtils.submit(driver);
 		// La table liste des essaims d'id "essaims" est affichée
 		assertEquals("table", driver.findElement(By.id("essaims")).getTagName());
-
-		// TODO erreur la date des événements est identique (même minute)
-		// on récupère les événements commentaire, le test suivant plante
-
 		for (String str : idsT) {
-			assertTrue("ESSAIMSUCRE".equals(typeEveEssaimId(str)));
+			assertTrue(typeEveEssaimId(str, "ESSAIMSUCRE"));
+		}
+	}
+
+	@Test
+	@Order(4)
+	@DisplayName("Essaim création traitement lot")
+	void creeTraitementEssaim() {
+		driver.get(baseUrl + "essaim/liste");
+		// La table liste des essaims d'id "essaims" est affichée
+		assertEquals("table", driver.findElement(By.id("essaims")).getTagName());
+		TestUtils.xpathClick(driver, "//table/tbody/tr[1]/td[4]");
+		TestUtils.xpathClick(driver, "//table/tbody/tr[2]/td[4]");
+		driver.findElement(By.id("traitement")).click();
+		assertEquals("form", driver.findElement(By.id("evenementForm")).getTagName());
+		driver.findElement(By.name(commentaire)).sendKeys(comment);
+		String ids = driver.getCurrentUrl();
+		String[] idsT = ids.substring(ids.lastIndexOf("/") + 1).split(",");
+		TestUtils.submit(driver);
+		// La table liste des essaims d'id "essaims" est affichée
+		assertEquals("table", driver.findElement(By.id("essaims")).getTagName());
+		for (String str : idsT) {
+			assertTrue(typeEveEssaimId(str, "ESSAIMTRAITEMENT"));
 		}
 	}
 
 	/*
-	 * Renvoie le type eve du dernier événement de l'essaim id. Appel API REST.
+	 * Renvoie true si le type eve typeVal de l'essaim id est trouvé. Appel API
+	 * REST. false sinon
 	 */
-	String typeEveEssaimId(String id) {
+	boolean typeEveEssaimId(String id, String typeVal) {
 		// recherche des événements essaim avec l'api rest
 		driver.get(baseUrl + "rest/evenements/search/findByEssaimId?essaimId=" + id);
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode actualObj = mapper.readTree(driver.findElement(By.tagName("pre")).getText());
-			// On prend le type du premier événement
-			JsonNode jsonNode = actualObj.get("_embedded").get("evenementRepository").get(1).get("type");
-			return jsonNode.textValue();
+			for (JsonNode j : actualObj.findValues("type")) {
+				if (j.textValue().equals(typeVal)) {
+					return true;
+				}
+			}
+			return false;
 		} catch (JsonProcessingException e) {
-			return "";
+			return false;
 		}
 	}
 

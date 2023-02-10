@@ -61,6 +61,9 @@ public class TestChrome {
 //		driver = new ChromeDriver();
 //		erreur : unknown flag `port'
 		
+//      logs voir commentaires dans :		
+//		https://github.com/SeleniumHQ/selenium/blob/trunk/java/src/org/openqa/selenium/logging/LoggingPreferences.java
+		
 		driver = new ChromeDriver((ChromeDriverService) (new ChromeDriverService.Builder() {
 			@Override
 			protected File findDefaultExecutable() {

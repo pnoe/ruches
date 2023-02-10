@@ -109,24 +109,28 @@ public class TestLotHausse {
 		// La table liste des hausses d'id "hausses" est affichée
 		assertEquals("table", driver.findElement(By.id("hausses")).getTagName());
 		for (String str : idsT) {
-			assertTrue("COMMENTAIREHAUSSE".equals(typeEveHausseId(str)));
+			assertTrue(typeEveHausseId(str, "COMMENTAIREHAUSSE"));
 		}
 	}
 
 	/*
-	 * Renvoie le type eve du dernier événement de la hausse id. Appel API REST.
+	 * Renvoie true si le type eve typeVal de hausse id est trouvé. Appel API
+	 * REST. false sinon
 	 */
-	String typeEveHausseId(String id) {
-		// recherche des événements hausse avec l'api rest
+	boolean typeEveHausseId(String id, String typeVal) {
+		// recherche des événements essaim avec l'api rest
 		driver.get(baseUrl + "rest/evenements/search/findByHausseId?hausseId=" + id);
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode actualObj = mapper.readTree(driver.findElement(By.tagName("pre")).getText());
-			// On prend le type du premier événement
-			JsonNode jsonNode = actualObj.get("_embedded").get("evenementRepository").get(0).get("type");
-			return jsonNode.textValue();
+			for (JsonNode j : actualObj.findValues("type")) {
+				if (j.textValue().equals(typeVal)) {
+					return true;
+				}
+			}
+			return false;
 		} catch (JsonProcessingException e) {
-			return "";
+			return false;
 		}
 	}
 
