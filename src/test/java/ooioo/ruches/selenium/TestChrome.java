@@ -21,6 +21,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.Select;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -63,6 +64,15 @@ public class TestChrome {
 		
 //      logs voir commentaires dans :		
 //		https://github.com/SeleniumHQ/selenium/blob/trunk/java/src/org/openqa/selenium/logging/LoggingPreferences.java
+//      dans application.properties, ne marche pas non plus :
+//		logging.level.org.openqa.selenium=INFO
+//		logging.level.org.junit.jupiter=INFO
+
+				
+		ChromeOptions options = new ChromeOptions();
+		//   Pas d'effet sur les logs :
+		//		options.setLogLevel(ChromeDriverLogLevel.OFF);
+		
 		
 		driver = new ChromeDriver((ChromeDriverService) (new ChromeDriverService.Builder() {
 			@Override
@@ -80,7 +90,7 @@ public class TestChrome {
 					return super.findDefaultExecutable();
 				}
 			}
-		}).build()); // , options);
+		}).build(), options);
 		
 		
 
