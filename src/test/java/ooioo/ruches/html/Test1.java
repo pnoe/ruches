@@ -11,7 +11,12 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 // Validation de pages html.
 //  https://validator.w3.org/docs/api.html
 //            Est ce qu'il peut y avoir des erreurs html après traitement par thymeleaf ??????????????????????????????????????
+@TestMethodOrder(OrderAnnotation.class)
 public class Test1 {
 
 //	https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/package-summary.html
@@ -29,9 +35,8 @@ public class Test1 {
 //	http://www.mastertheboss.com/java/top-solutions-for-java-http-clients/
 
 	private final Logger logger = LoggerFactory.getLogger(Test1.class);
-	
-	static final String w3cVal = "https://validator.nu/";
 
+	static final String w3cVal = "https://validator.nu/";
 	static final String baseUrl = "http://localhost:8080/ruches/";
 	static final String user = "test";
 	static final String pwd = "testpwd";
@@ -40,6 +45,8 @@ public class Test1 {
 			.cookieHandler(new CookieManager(null, CookiePolicy.ACCEPT_ALL)).build();
 
 	void w3c(String html, String nomPage) throws IOException, InterruptedException {
+		// Pour éviter erreur 500 de l'api w3c
+		Thread.sleep(1000);
 		// https://github.com/validator/validator/wiki/Service-%C2%BB-Common-params
 		HttpRequest reqW3c = HttpRequest.newBuilder().uri(URI.create(w3cVal + "?out=json"))
 				.headers("Content-type", "text/html; charset=utf-8").POST(HttpRequest.BodyPublishers.ofString(html))
@@ -59,6 +66,7 @@ public class Test1 {
 	}
 
 	@Test
+	@Order(1)
 	void login() {
 		try {
 			HttpRequest reqRuche = HttpRequest.newBuilder().uri(URI.create(baseUrl + "login")).GET().build();
@@ -66,8 +74,7 @@ public class Test1 {
 			String rb = respRuche.body();
 			assertEquals(200, respRuche.statusCode());
 			w3c(rb, "login.html");
-			// Connexion à l'application Ruches.
-			// Récupérer le csrf du formulaire de login
+			// Connexion à l'application Ruches. Récupérer le csrf du formulaire de login.
 			// <form action="/ruchestest/login" method="post"><input type="hidden"
 			// name="_csrf" value="2cf67483-a65e-46d3-b18c-c5a01bdbe11f"/>
 			String csrf = rb.substring(rb.indexOf("value=\"") + 7);
@@ -80,9 +87,32 @@ public class Test1 {
 			// Validation html de la page de connexion
 			assertEquals(200, respLogin.statusCode());
 			w3c(respLogin.body(), "index.html");
-			
 		} catch (IOException | InterruptedException e) {
-			System.out.println(e.getMessage());
+			logger.error("Login -- " + e.getMessage());
+		}
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = { "ruche/liste", "rucheType/liste", "ruche/listeplus",
+			"hausse/liste", "rucher/liste", "rucher/Gg", "rucher/Ign", "rucher/Osm", 
+			"rucher/statistiques", "rucher/historiques/true", "rucher/historiques/false",
+			"personne/liste", "essaim/liste", "essaim/statistiques", "essaim/statistiquesage",
+			"recolte/liste", "recolte/statistiques/essaim", "recolte/statprod",
+			"evenement/liste", "evenement/essaim/listeSucre", "evenement/essaim/listeTraitement/true",
+			"evenement/essaim/listeTraitement/false", "evenement/ruche/listePoidsRuche",
+			"evenement/ruche/listeCadreRuche", "evenement/hausse/listeRemplissageHausse",
+			"evenement/rucher/listeRucheAjout", "evenement/listeNotif/true", "evenement/listeNotif/false",
+			"parametres", "rest", "admin/logs/logfile", "infos", "tests"})
+	@Order(2)
+	void pages(String url) {
+		try {
+			HttpRequest reqRu = HttpRequest.newBuilder().uri(URI.create(baseUrl + url)).GET().build();
+			HttpResponse<String> respRu = cli.send(reqRu, HttpResponse.BodyHandlers.ofString());
+			// Validation html de la page de connexion
+			assertEquals(200, respRu.statusCode());
+			w3c(respRu.body(), url);
+		} catch (IOException | InterruptedException e) {
+			logger.error("Page " + url + " -- " + e.getMessage());
 		}
 	}
 
