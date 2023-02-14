@@ -175,8 +175,8 @@ public class RucheService {
 	}
 
 	/*
-	 * Liste détaillée des ruches d(un rucher
-	 *  avec ordre de parcours
+	 * Liste détaillée des ruches d'un rucher
+	 *  avec ordre de parcours.
 	 */
 	public void listePlusRucher(HttpSession session, Model model, Rucher rucher, List<RucheParcours> chemin, boolean plus) {
 		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);

@@ -27,14 +27,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 //  https://validator.w3.org/docs/api.html
 //            Est ce qu'il peut y avoir des erreurs html après traitement par thymeleaf ??????????????????????????????????????
 @TestMethodOrder(OrderAnnotation.class)
-public class Test1 {
+public class TestW3cValidator {
 
 //	https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/package-summary.html
 //	https://www.baeldung.com/java-9-http-client
 //	https://www.baeldung.com/java-httpclient-post
 //	http://www.mastertheboss.com/java/top-solutions-for-java-http-clients/
 
-	private final Logger logger = LoggerFactory.getLogger(Test1.class);
+	private final Logger logger = LoggerFactory.getLogger(TestW3cValidator.class);
 
 	static final String w3cVal = "https://validator.nu/";
 	static final String baseUrl = "http://localhost:8080/ruches/";

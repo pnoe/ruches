@@ -681,7 +681,7 @@ public class RucherController {
 	}
 
 	/**
-	 * Suppression d'un rucher On ne peut pas supprimer le dépôt
+	 * Suppression d'un rucher. On ne peut pas supprimer le dépôt
 	 */
 	@GetMapping("/supprime/{rucherId}")
 	public String supprime(Model model, @PathVariable long rucherId) {
