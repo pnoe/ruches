@@ -1,3 +1,8 @@
+# Cache des dépendances téléchargées entre builds successifs.
+cache:
+  paths:
+    - .m2/repository
+
 default:
   image: maven:3.8.4-openjdk-17 
 build-job:
