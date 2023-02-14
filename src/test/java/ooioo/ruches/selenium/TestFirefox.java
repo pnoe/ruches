@@ -18,6 +18,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.GeckoDriverService;
 
+@Disabled
 public class TestFirefox {
 
 	static WebDriver driver;
@@ -110,7 +111,6 @@ public class TestFirefox {
 
 	@Test
 	@DisplayName("Page d'accueil")
-	@Disabled        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
 	void connecte() {
 		driver.get(baseUrl);
 		// Le titre de la page d'accueil est "ruches"

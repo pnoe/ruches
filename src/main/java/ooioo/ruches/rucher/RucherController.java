@@ -731,10 +731,10 @@ public class RucherController {
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
-			List<RucheParcours> chemin = new ArrayList<>();
-			double retParcours = rucherService.cheminRuchesRucher(chemin, rucher, ruches, false);
+			List<RucheParcours> cheminRet = new ArrayList<>();
+			double retParcours = rucherService.cheminRuchesRucher(cheminRet, rucher, ruches, false);
 			model.addAttribute("distParcours", retParcours);
-			model.addAttribute("rucheParcours", chemin);
+			model.addAttribute("rucheParcours", cheminRet);
 			List<String> nomHausses = new ArrayList<>();
 			// Pour calcul du barycentre des ruches, centre des cercles de butinage
 			Float longitude;
@@ -962,10 +962,10 @@ public class RucherController {
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
-			List<RucheParcours> chemin = new ArrayList<>();
-			double retParcours = rucherService.cheminRuchesRucher(chemin, rucher, ruches, redraw);
+			List<RucheParcours> cheminRet = new ArrayList<>();
+			double retParcours = rucherService.cheminRuchesRucher(cheminRet, rucher, ruches, redraw);
 			map.put("distParcours", retParcours);
-			map.put("rucheParcours", chemin);
+			map.put("rucheParcours", cheminRet);
 			return map;
 		}
 		logger.error(Const.IDRUCHERXXINCONNU, rucherId);

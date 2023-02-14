@@ -58,10 +58,13 @@ public class RucherService {
 	/*
 	 * Calcul du chemin le plus court de visite des ruches du rucher.
 	 * https://developers.google.com/optimization/routing/tsp
+	 * Le chemin est calculé dans List<RucheParcours> cheminRet
+	 * et la distance en retour de la fonction.
 	 */
-	public double cheminRuchesRucher(List<RucheParcours> chemin, Rucher rucher, Iterable<Ruche> ruches,
+	public double cheminRuchesRucher(List<RucheParcours> cheminRet, Rucher rucher, Iterable<Ruche> ruches,
 			boolean redraw) {
 		RucheParcours entree = new RucheParcours(0l, 0, rucher.getLongitude(), rucher.getLatitude());
+		List<RucheParcours> chemin = new ArrayList<>();
 		chemin.add(entree);
 		int ordre = 0;
 		for (Ruche ruche : ruches) {
@@ -121,8 +124,7 @@ public class RucherService {
 				: main.defaultRoutingSearchParameters().toBuilder()
 						.setFirstSolutionStrategy(FirstSolutionStrategy.Value.PATH_CHEAPEST_ARC).build();
 		// Appelle le solver
-		Assignment solution = routing.solveWithParameters(searchParameters);
-		List<RucheParcours> cheminRet = new ArrayList<>();
+		Assignment solution = routing.solveWithParameters(searchParameters);		
 		long routeDistance = 0;
 		long index = routing.start(0);
 		while (!routing.isEnd(index)) {
@@ -132,10 +134,6 @@ public class RucherService {
 			routeDistance += routing.getArcCostForVehicle(previousIndex, index, 0l);
 		}
 		cheminRet.add(chemin.get(manager.indexToNode(routing.end(0))));
-		chemin.clear();
-		for (int i = 0; i <= cheminSize; i++) {
-			chemin.add(cheminRet.get(i));
-		}
 		return routeDistance / 1000.0;
 	}
 
