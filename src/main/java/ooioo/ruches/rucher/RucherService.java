@@ -56,7 +56,7 @@ public class RucherService {
 	}
 
 	/*
-	 * Calcul du chemin le plus court de visite des ruches du rucher
+	 * Calcul du chemin le plus court de visite des ruches du rucher.
 	 * https://developers.google.com/optimization/routing/tsp
 	 */
 	public double cheminRuchesRucher(List<RucheParcours> chemin, Rucher rucher, Iterable<Ruche> ruches,
@@ -69,7 +69,7 @@ public class RucherService {
 			chemin.add(new RucheParcours(ruche.getId(), ordre, ruche.getLongitude(), ruche.getLatitude()));
 		}
 		int cheminSize = chemin.size();
-		if (cheminSize == 0) {
+		if (cheminSize == 1) {
 			return 0d;
 		}
 		// Initialisation d'un tableau contenant les distances entre ruches
@@ -82,13 +82,13 @@ public class RucherService {
 				RucheParcours ii = chemin.get(i);
 				RucheParcours jj = chemin.get(j);
 				dist = distance(ii.latitude(), jj.latitude(), ii.longitude(), jj.longitude());
-				DataModel.distanceMatrix[i][j] = (int) (dist * 1000.0);
+				DataModel.distanceMatrix[i][j] = (long) (dist * 1000.0);
 				DataModel.distanceMatrix[j][i] = DataModel.distanceMatrix[i][j];
 			}
 		}
 		// Initialistion de la diagonale à 0
 		for (int i = 0; i < cheminSize; i++) {
-			DataModel.distanceMatrix[i][i] = 0;
+			DataModel.distanceMatrix[i][i] = 0l;
 		}
 		Loader.loadNativeLibraries();
 		// Création du modèle de routage
@@ -129,7 +129,7 @@ public class RucherService {
 			cheminRet.add(chemin.get(manager.indexToNode(index)));
 			long previousIndex = index;
 			index = solution.value(routing.nextVar(index));
-			routeDistance += routing.getArcCostForVehicle(previousIndex, index, 0);
+			routeDistance += routing.getArcCostForVehicle(previousIndex, index, 0l);
 		}
 		cheminRet.add(chemin.get(manager.indexToNode(routing.end(0))));
 		chemin.clear();
@@ -182,8 +182,8 @@ public class RucherService {
 	 * (voir application.properties)
 	 */
 	public LatLon dispersion(Float lat, Float lon) {
-		double w = dispersionRuche * Math.sqrt(Math.random()) / 111300f;
-		double t = 2.0 * Math.PI * Math.random();
+		double w = dispersionRuche * Math.sqrt(Math.random()) / 111300d;
+		double t = 2d * Math.PI * Math.random();
 		return new LatLon(lat + (float) (w * Math.sin(t)),
 				lon + (float) (w * Math.cos(t) / Math.cos(Math.toRadians(lat))));
 	}

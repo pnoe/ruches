@@ -567,7 +567,6 @@ public class RucherController {
 					// temps en h et min
 					int t = dr.getTemps() / 60;
 					model.addAttribute("temps", ((t == 0) ? "" : t + "h ") + dr.getTemps() % 60 + "min");
-
 				}
 			}
 			model.addAttribute("nbHausses", nbHausses);
@@ -723,8 +722,8 @@ public class RucherController {
 	}
 
 	/**
-	 * Affiche la carte avec les ruches du rucher Gg google maps, Ign ou
-	 * OpenStreetMap
+	 * Affiche la carte avec les ruches du rucher rucherId.
+	 *  Gg google maps, Ign ou Osm OpenStreetMap
 	 */
 	@GetMapping({ "/Gg/{rucherId}", "/Ign/{rucherId}", "/Osm/{rucherId}" })
 	public String rucheMap(Model model, @PathVariable long rucherId, HttpServletRequest request) {
@@ -776,7 +775,8 @@ public class RucherController {
 	}
 
 	/**
-	 * Affiche la carte de tous les ruchers Gg google maps, Ign ou OpenStreetMap
+	 * Affiche la carte de tous les ruchers.
+	 *  Gg google maps, Ign ou Osm OpenStreetMap
 	 */
 	@GetMapping({ "/Gg", "/Ign", "/Osm" })
 	public String rucherMap(HttpSession session, Model model, HttpServletRequest request) {
@@ -950,9 +950,9 @@ public class RucherController {
 	}
 
 	/**
-	 * Calcul du parcours d'un rucher (appel XMLHttpRequest) redraw = 0 recalcul si
-	 * l'utilisateur déplace une ruche sur la carte redraw = 1 recalcul si
-	 * l'utilisateur le demande pour améliore de parcours
+	 * Calcul du parcours des ruches d'un rucher (appel XMLHttpRequest).
+	 *  redraw = 0 recalcul si l'utilisateur déplace une ruche sur la carte 
+	 *  redraw = 1 recalcul si l'utilisateur le demande pour améliore de parcours
 	 */
 	@GetMapping("/parcours/{rucherId}/{redraw}")
 	@ResponseStatus(value = HttpStatus.OK)
