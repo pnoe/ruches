@@ -1,9 +1,15 @@
 package ooioo.ruches.rucher;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +29,7 @@ import com.google.protobuf.Duration;
 
 import ooioo.ruches.Const;
 import ooioo.ruches.LatLon;
+import ooioo.ruches.Nom;
 import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
@@ -42,7 +49,130 @@ public class RucherService {
 
 	@Value("${rucher.ruche.dispersion}")
 	private double dispersionRuche;
-	
+
+	public void transhum(Rucher rucher, List<Evenement> evensRucheAjout, boolean group, List<Transhumance> histoAll,
+			List<Transhumance> histoGroup) {
+		// Les nom des ruches présentes dans le rucher
+		Collection<Nom> nomRuchesX = rucheRepository.findNomsByRucherId(rucher.getId());
+		List<String> ruches = new ArrayList<>();
+		for (Nom nomR : nomRuchesX) {
+			ruches.add(nomR.nom());
+		}
+		List<Transhumance> histo = new ArrayList<>();
+		for (int i = 0, levens = evensRucheAjout.size(); i < levens; i++) {
+			Evenement eve = evensRucheAjout.get(i);
+			if (eve.getRucher().getId().equals(rucher.getId())) {
+				// si l'événement est un ajout dans le rucher,
+				// on retire après l'affichage la ruche de l'événement
+				// de la liste des ruches du rucher.
+				// On cherche l'événement précédent ajout de cette ruche
+				// pour indication de sa provenance.
+				Evenement evePrec = null;
+				for (int j = i + 1; j < levens; j++) {
+					if ((evensRucheAjout.get(j).getRuche().getId().equals(eve.getRuche().getId()))
+							&& !(evensRucheAjout.get(j).getRuche().getId().equals(rucher.getId()))) {
+						// si (evensRucheAjout.get(j).getRuche().getId().equals(rucherId))
+						// c'est une erreur, deux ajouts successifs dans le même rucher
+						evePrec = evensRucheAjout.get(j);
+						break;
+					}
+				}
+				histo.add(new Transhumance(rucher, true, // type = true Ajout
+						eve.getDate(),
+						Collections.singleton(evePrec == null ? "Inconnue" : evePrec.getRucher().getNom()),
+						Arrays.asList(eve.getRuche().getNom()), new ArrayList<>(ruches), eve.getId()));
+				if (!ruches.remove(eve.getRuche().getNom())) {
+					logger.error("Événement {} le rucher {} ne contient pas la ruche {}", eve.getDate(),
+							eve.getRucher().getNom(), eve.getRuche().getNom());
+				}
+			} else {
+				// l'événenemt eve ajoute une ruche dans un autre rucher
+				// On cherche l'événement précédent ajout de cette ruche
+				for (int j = i + 1; j < levens; j++) {
+					Evenement eveJ = evensRucheAjout.get(j);
+					if (eveJ.getRuche().getId().equals(eve.getRuche().getId())) {
+						if (eveJ.getRucher().getId().equals(rucher.getId())) {
+							// si l'événement précédent evePrec était un ajout dans le
+							// rucher, alors eve retire la ruche du rucher
+							if (!ruches.contains(eve.getRuche().getNom())) {
+								// si l'événement précédent evePrec était un ajout dans le
+								// rucher, alors eve retire la ruche du rucher
+								histo.add(new Transhumance(rucher, false, // type = false Retrait
+										eve.getDate(), Collections.singleton(eve.getRucher().getNom()),
+										Arrays.asList(eve.getRuche().getNom()), new ArrayList<>(ruches), eve.getId()));
+								ruches.add(eve.getRuche().getNom());
+							}
+							break;
+						} else {
+							// c'est un événement ajout dans la ruche mais
+							// dans un autre rucher. IL y a deux événements
+							// successifs ajout de la ruche dans un autre rucher
+							// on revient à la boucle principale qui traitera
+							// ce deuxième événement
+							break;
+						}
+					}
+				}
+			}
+		}
+		if (group) {
+			// Si le groupement est demandé, on boucle sur histo
+			// pour créer histoGroup
+			int lhisto = histo.size();
+			// pour stockage des provenances/destinations et suppression de doublons
+			Set<String> destP;
+			int i = 0;
+			int j;
+			while (i < lhisto) {
+				Transhumance itemHisto = histo.get(i);
+				List<String> ruchesGroup = new ArrayList<>(itemHisto.ruche());
+				destP = new HashSet<>();
+				destP.addAll(itemHisto.destProv());
+				// on recherche si les événements suivants peuvent être groupés
+				// même date et même type (Ajout/Retrait)
+				// par contre les destinations provenances peuvent être différentes
+				j = i + 1;
+				LocalDate itemHistoJour = itemHisto.date().toLocalDate();
+				while (j < lhisto) {
+					Transhumance itemHistoN = histo.get(j);
+					if (itemHistoJour.equals(itemHistoN.date().toLocalDate())
+							&& (itemHisto.type() == itemHistoN.type())) {
+						// si regroupables
+						// regrouper en concaténant les ruches et en stockant les dest/prov
+						ruchesGroup.addAll(itemHistoN.ruche());
+						if (!destP.contains(itemHistoN.destProv().iterator().next())) {
+							destP.addAll(itemHistoN.destProv());
+						}
+						j += 1;
+					} else {
+						break;
+					}
+				}
+				// le nombre de ruches ajoutées ou retirées est j - i
+				if (i == j - 1) {
+					histoGroup.add(itemHisto);
+				} else {
+					// enregistrer groupe dans histoGroup
+					// la date est la date du premier événement
+					// les autres peuvent avoir des heures et minutes
+					// différentes
+					// l'id eve est l'id du premier événements, on perd les
+					// des autres événements
+					histoGroup.add(new Transhumance(rucher, itemHisto.type(), itemHisto.date(), destP,
+							new ArrayList<>(ruchesGroup), itemHisto.etat(), itemHisto.eveid()));
+				}
+				i = j;
+			}
+		} else {
+			histoAll.addAll(histo);
+		}
+		if (!ruches.isEmpty()) {
+			logger.error(
+					"Transhumances : après traitement des événements en reculant dans le temps, le rucher {} n'est pas vide",
+					rucher.getNom());
+		}
+	}
+
 	/*
 	 * Inner class static pour les distances entre ruches
 	 */
@@ -57,9 +187,8 @@ public class RucherService {
 
 	/*
 	 * Calcul du chemin le plus court de visite des ruches du rucher.
-	 * https://developers.google.com/optimization/routing/tsp
-	 * Le chemin est calculé dans List<RucheParcours> cheminRet
-	 * et la distance en retour de la fonction.
+	 * https://developers.google.com/optimization/routing/tsp Le chemin est calculé
+	 * dans List<RucheParcours> cheminRet et la distance en retour de la fonction.
 	 */
 	public double cheminRuchesRucher(List<RucheParcours> cheminRet, Rucher rucher, Iterable<Ruche> ruches,
 			boolean redraw) {
@@ -124,7 +253,7 @@ public class RucherService {
 				: main.defaultRoutingSearchParameters().toBuilder()
 						.setFirstSolutionStrategy(FirstSolutionStrategy.Value.PATH_CHEAPEST_ARC).build();
 		// Appelle le solver
-		Assignment solution = routing.solveWithParameters(searchParameters);		
+		Assignment solution = routing.solveWithParameters(searchParameters);
 		long routeDistance = 0;
 		long index = routing.start(0);
 		while (!routing.isEnd(index)) {
@@ -139,9 +268,8 @@ public class RucherService {
 
 	/**
 	 * Ajoute une liste de ruches dans un rucher. Création de l'événement
-	 * RUCHEAJOUTRUCHER.
-	 * Le nom du rucher de provenance est mis dans le champ valeur.
-	 * Le commentaire est le commentaire saisi dans le formulaire
+	 * RUCHEAJOUTRUCHER. Le nom du rucher de provenance est mis dans le champ
+	 * valeur. Le commentaire est le commentaire saisi dans le formulaire
 	 */
 	public void sauveAjouterRuches(Rucher rucher, String[] ruchesNoms, String date, String commentaire) {
 		LocalDateTime dateEveAjout = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
@@ -149,13 +277,13 @@ public class RucherService {
 			Ruche ruche = rucheRepository.findByNom(rucheNom);
 			// Si le nom de la ruche est inconnu, log de l'erreur puis on continue.
 			// L'utilisateur ne voit donc pas l'erreur (sauf s'il consulte les logs).
-			if(ruche == null) {
+			if (ruche == null) {
 				logger.info("Ruche {} inconnue.", rucheNom);
 				continue;
 			}
 			// Si la ruche est déjà dans le rucher, log de l'erreur puis on continue.
 			// L'utilisateur ne voit donc pas l'erreur (sauf s'il consulte les logs).
-			if((ruche.getRucher() != null) && (ruche.getRucher().getId().equals(rucher.getId()))) {
+			if ((ruche.getRucher() != null) && (ruche.getRucher().getId().equals(rucher.getId()))) {
 				logger.info("Ruche {} déjà présente dans le rucher {}", rucheNom, rucher.getNom());
 				continue;
 			}
