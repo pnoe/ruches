@@ -370,7 +370,7 @@ public class EssaimService {
 		Evenement evenement = evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim, typeEvenement);
 		model.addAttribute("Eve" + typeEvenement, evenement);
 	}
-	
+
 	/*
 	 * Ajoute au model Spring les chaînes date, valeur et commentaire du dernier
 	 * événement de type ESSAIMTRAITEMENT ou ESSAIMTRAITEMENTFIN

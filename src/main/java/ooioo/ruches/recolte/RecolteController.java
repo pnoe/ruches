@@ -44,7 +44,7 @@ public class RecolteController {
 	private EssaimRepository essaimRepository;
 	@Autowired
 	private RecolteHausseService recolteHausseService;
-	
+
 	@Autowired
 	private RecolteService recolteService;
 

@@ -112,7 +112,7 @@ public class EvenementEssaimController {
 
 	/*
 	 * Liste événements essaim traitement
-	 * 
+	 *
 	 * @param tous : événements traitement début et fin si true, début seulement
 	 * sinon
 	 */

@@ -18,7 +18,7 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 
 	// correction spring boot 2.2.0 iterable -> list
 	List<Hausse> findByRucheIdOrderByOrdreSurRuche(Long rucheId);
-	
+
 	@Query(value = """
 			select h
 				from Hausse h

@@ -61,20 +61,20 @@ public class TestChrome {
 //		https://github.com/SeleniumHQ/selenium/issues/7788
 //		driver = new ChromeDriver();
 //		erreur : unknown flag `port'
-		
-//      logs voir commentaires dans :		
+
+//      logs voir commentaires dans :
 //		https://github.com/SeleniumHQ/selenium/blob/trunk/java/src/org/openqa/selenium/logging/LoggingPreferences.java
 //      dans application.properties, ne marche pas non plus :
 //		logging.level.org.openqa.selenium=INFO
 //		logging.level.org.junit.jupiter=INFO
 
-				
+
 		ChromeOptions options = new ChromeOptions();
 		//   Pas d'effet sur les logs :
 		//		options.setLogLevel(ChromeDriverLogLevel.OFF);
-		
-		
-		driver = new ChromeDriver((ChromeDriverService) (new ChromeDriverService.Builder() {
+
+
+		driver = new ChromeDriver((new ChromeDriverService.Builder() {
 			@Override
 			protected File findDefaultExecutable() {
 				if (new File(pathChromeDriver).exists()) {
@@ -91,11 +91,11 @@ public class TestChrome {
 				}
 			}
 		}).build(), options);
-		
-		
+
+
 
 //		https://www.selenium.dev/documentation/webdriver/elements/finders/
-//		https://www.selenium.dev/documentation/webdriver/elements/locators/		
+//		https://www.selenium.dev/documentation/webdriver/elements/locators/
 		// ******************** Login **************************
 		driver.get(baseUrl + "login");
 		// Le titre de la page de connexion est "Connexion"
@@ -347,7 +347,7 @@ public class TestChrome {
 			assertEquals("div", driver.findElement(By.id("accordion")).getTagName());
 		}
 	}
-	
+
 	@DisplayName("Rucher dépôt Transhumances")
 	@ParameterizedTest
 	@ValueSource(strings = { "true", "false" })
@@ -363,7 +363,7 @@ public class TestChrome {
 			assertEquals("table", driver.findElement(By.id("transhumances")).getTagName());
 		}
 	}
-	
+
 	@DisplayName("Rucher dépôt ajouter ruches")
 	@Test
 	void rucherRucheDepot() {
@@ -583,7 +583,7 @@ public class TestChrome {
 			assertEquals("table", driver.findElement(By.id("evenements")).getTagName());
 		}
 	}
-	
+
 	@Test
 	@DisplayName("Événements commentaire création rucher dépot")
 	void creeEveCommDepot() {
@@ -604,7 +604,7 @@ public class TestChrome {
 			assertEquals("div", driver.findElement(By.id("detailRucher")).getTagName());
 		}
 	}
-	
+
 	@Test
 	@DisplayName("Événement création/modif")
 	void creeEtModifEvenement() {

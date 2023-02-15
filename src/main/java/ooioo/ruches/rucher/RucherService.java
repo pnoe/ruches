@@ -52,7 +52,7 @@ public class RucherService {
 
 	/**
 	 * Calcul des transhumances d'un rucher.
-	 * 
+	 *
 	 * @param rucher Le rucher dont on liste les transhumances
 	 * @param evensRucheAjout Tous les événements Ruche Ajout dans Rucher
 	 * @param group Si true les transhumances sont regroupées par date
@@ -171,7 +171,7 @@ public class RucherService {
 				}
 				i = j;
 			}
-		} 
+		}
 		if (!ruches.isEmpty()) {
 			logger.error(
 					"Transhumances : après traitement des événements en reculant dans le temps, le rucher {} n'est pas vide",

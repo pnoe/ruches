@@ -39,7 +39,7 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		/*
-		 * Pour Spring Boot 3 
+		 * Pour Spring Boot 3
 		 * http.authorizeHttpRequests()
 		 * .requestMatchers("/forgotPassword", "/resetPassword", "/resetPasswordFin",
 		 * "/", "/css/**", "/js/**", "/images/**", "/doc/**", "/font/**")
@@ -62,7 +62,7 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
 				// désactivation du csrf pour l'api rest
 				.and().csrf().ignoringAntMatchers("/rest/**");
 		/*
-		 * Pour Spring Boot 3 
+		 * Pour Spring Boot 3
 		 * .and().csrf().ignoringRequestMatchers("/rest/**");
 		 */
 		return http.build();

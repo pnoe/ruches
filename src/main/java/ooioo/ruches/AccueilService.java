@@ -51,7 +51,7 @@ public class AccueilService {
 	private RecolteRepository recolteRepository;
 	@Autowired
 	private RucherService rucherService;
-	
+
 	@Value("${dist.ruches.loins}")
 	private double distRuchesTropLoins;
 	@Value("${dist.ruchers.loins}")
@@ -117,7 +117,7 @@ public class AccueilService {
 			}
 		}
 	}
-	
+
 	public void infos(Model model) {
 		model.addAttribute("rayonsButinage", rayonsButinage);
 		long nbRuches = rucheRepository.countByActiveTrue();
@@ -263,5 +263,5 @@ public class AccueilService {
 		Iterable<Essaim> essaimDateNaissSupAcquis = essaimRepository.findEssaimDateNaissSupAcquis();
 		model.addAttribute("essaimDateNaissSupAcquis", essaimDateNaissSupAcquis);
 	}
-	
+
 }

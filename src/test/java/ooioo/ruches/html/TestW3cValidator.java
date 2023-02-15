@@ -94,7 +94,7 @@ public class TestW3cValidator {
 
 	@ParameterizedTest
 	@ValueSource(strings = { "ruche/liste", "rucheType/liste", "ruche/listeplus",
-			"hausse/liste", "rucher/liste", "rucher/Gg", "rucher/Ign", "rucher/Osm", 
+			"hausse/liste", "rucher/liste", "rucher/Gg", "rucher/Ign", "rucher/Osm",
 			"rucher/statistiques", "rucher/historiques/true", "rucher/historiques/false",
 			"personne/liste", "essaim/liste", "essaim/statistiques", "essaim/statistiquesage",
 			"recolte/liste", "recolte/statistiques/essaim", "recolte/statprod",

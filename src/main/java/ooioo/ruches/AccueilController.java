@@ -55,7 +55,7 @@ public class AccueilController {
 		model.addAttribute(Const.MESSAGE, "Calcul des distances terminé.");
 		return Const.INDEX;
 	}
-	
+
 	/**
 	 * Affiche la page des informations détaillées sur l'état général.
 	 * Appel par menu Admin/Infos.

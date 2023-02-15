@@ -23,7 +23,7 @@ public class RecolteService {
 	private EssaimRepository essaimRepository;
 	@Autowired
 	private	EvenementRepository evenementRepository;
-	
+
 	/*
 	 * Statistiques de production de miel par année. Miel pesé dans les hausses,
 	 * miel mis en pot et miel dans les hausses rapporté au nombre d'essaims moyen

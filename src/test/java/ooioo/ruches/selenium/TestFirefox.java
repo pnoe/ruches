@@ -78,20 +78,20 @@ public class TestFirefox {
 	@BeforeAll
 	static void initFirefox() {
 
-		
+
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("-h", "-p 4444");
-        
-       
-        
+
+
+
         System.setProperty("webdriver.gecko.driver","/snap/bin/firefox.geckodriver");
-        		
+
 		// driver = getFirefoxDriver();
 		driver = new FirefoxDriver(options);
-		
+
 
 //		https://www.selenium.dev/documentation/webdriver/elements/finders/
-//		https://www.selenium.dev/documentation/webdriver/elements/locators/		
+//		https://www.selenium.dev/documentation/webdriver/elements/locators/
 		// ******************** Login **************************
 		driver.get(baseUrl + "login");
 		// Le titre de la page de connexion est "Connexion"
