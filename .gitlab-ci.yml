@@ -1,7 +1,16 @@
+# Cache des dépendances téléchargées entre builds successifs.
+cache:
+  paths:
+    - .m2/repository
+
+variables:
+  MAVEN_OPTS: "-Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DskipTests"
+
 default:
   image: maven:3.8.4-openjdk-17 
 build-job:
   stage: build
   when: manual
   script:
-    - mvn package
+    - mvn $MAVEN_CLI_OPTS clean package
