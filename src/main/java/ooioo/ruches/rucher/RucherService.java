@@ -50,7 +50,16 @@ public class RucherService {
 	@Value("${rucher.ruche.dispersion}")
 	private double dispersionRuche;
 
-	public void transhum(Rucher rucher, List<Evenement> evensRucheAjout, boolean group, List<Transhumance> histoAll,
+	/**
+	 * Calcul des transhumances d'un rucher.
+	 * 
+	 * @param rucher Le rucher dont on liste les transhumances
+	 * @param evensRucheAjout Tous les événements Ruche Ajout dans Rucher
+	 * @param group Si true les transhumances sont regroupées par date
+	 * @param histo En retour les transhumances si pas de regroupement
+	 * @param histoGroup En retour les transhumances si pas de regroupement
+	 */
+	public void transhum(Rucher rucher, List<Evenement> evensRucheAjout, boolean group, List<Transhumance> histo,
 			List<Transhumance> histoGroup) {
 		// Les nom des ruches présentes dans le rucher
 		Collection<Nom> nomRuchesX = rucheRepository.findNomsByRucherId(rucher.getId());
@@ -58,7 +67,6 @@ public class RucherService {
 		for (Nom nomR : nomRuchesX) {
 			ruches.add(nomR.nom());
 		}
-		List<Transhumance> histo = new ArrayList<>();
 		for (int i = 0, levens = evensRucheAjout.size(); i < levens; i++) {
 			Evenement eve = evensRucheAjout.get(i);
 			if (eve.getRucher().getId().equals(rucher.getId())) {
@@ -153,19 +161,17 @@ public class RucherService {
 					histoGroup.add(itemHisto);
 				} else {
 					// enregistrer groupe dans histoGroup
-					// la date est la date du premier événement
+					// la date est la date du premier événement,
 					// les autres peuvent avoir des heures et minutes
-					// différentes
+					// différentes.
 					// l'id eve est l'id du premier événements, on perd les
-					// des autres événements
+					// id des autres événements.
 					histoGroup.add(new Transhumance(rucher, itemHisto.type(), itemHisto.date(), destP,
 							new ArrayList<>(ruchesGroup), itemHisto.etat(), itemHisto.eveid()));
 				}
 				i = j;
 			}
-		} else {
-			histoAll.addAll(histo);
-		}
+		} 
 		if (!ruches.isEmpty()) {
 			logger.error(
 					"Transhumances : après traitement des événements en reculant dans le temps, le rucher {} n'est pas vide",

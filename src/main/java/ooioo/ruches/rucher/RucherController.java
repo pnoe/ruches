@@ -113,10 +113,9 @@ public class RucherController {
 			model.addAttribute(Const.RUCHER, rucher);
 			// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date
 			// descendante avec les champs ruche et rucher non null
-			List<Evenement> evensRucheAjout = evenementRepository.findAjoutRucheOK();
 			List<Transhumance> histoAll = new ArrayList<>(); // si non groupés
 			List<Transhumance> histoGroup = new ArrayList<>(); // si groupés
-			rucherService.transhum(rucher, evensRucheAjout, group, histoAll, histoGroup);
+			rucherService.transhum(rucher, evenementRepository.findAjoutRucheOK(), group, histoAll, histoGroup);
 			if (group) {
 				model.addAttribute(HISTO, histoGroup);
 			} else {
@@ -140,18 +139,22 @@ public class RucherController {
 		List<Rucher> ruchers = rucherRepository.findByActif(true);
 		List<Transhumance> histoAll = new ArrayList<>(); // si non groupés
 		List<Transhumance> histoGroup = new ArrayList<>(); // si groupés
-		// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date
-		// descendante avec les champs ruche et rucher non null
-		// On ne peut exclure le dépôt qui sert pour trouver les retraits d'un
-		// rucher vers le dépôt
-		List<Evenement> evensRucheAjout = evenementRepository.findAjoutRucheOK();
 		for (Rucher rucher : ruchers) {
 			if (rucher.getDepot()) {
 				continue;
 			}
-			rucherService.transhum(rucher, evensRucheAjout, group, histoAll, histoGroup);
+			List<Transhumance> histo = new ArrayList<>();
+			// evenementRepository.findAjoutRucheOK() la liste de tous les événements
+			// RUCHEAJOUTRUCHER triés par ordre de date
+			// descendante avec les champs ruche et rucher non null.
+			// On ne peut exclure le dépôt qui sert pour trouver les retraits d'un
+			// rucher vers le dépôt.
+			rucherService.transhum(rucher, evenementRepository.findAjoutRucheOK(), group, histo, histoGroup);
+			if (!group) {
+				histoAll.addAll(histo);
+			}
 		}
-		// On trie la liste à afficher par date et on l'ajoute au model
+		// On trie la liste à afficher par date et on l'ajoute au model.
 		if (group) {
 			Collections.sort(histoGroup, (b, a) -> a.date().compareTo(b.date()));
 			model.addAttribute(HISTO, histoGroup);
