@@ -15,6 +15,7 @@ public class PersonneLogin {
 		this.login = login;
 	}
 
+	// constructeur nécessaire, ne pas supprimer
 	public PersonneLogin(String login) {
 		this.login = login;
 	}

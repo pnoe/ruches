@@ -49,7 +49,7 @@ public class EvenementRucheController {
 	@Autowired
 	private HausseRepository hausseRepository;
 	@Autowired
-	MessageSource messageSource;
+	private MessageSource messageSource;
 	@Autowired
 	private EssaimService essaimService;
 
@@ -409,7 +409,7 @@ public class EvenementRucheController {
 		evenement.setValeur(Utils.notifIntFmt(evenement.getValeur()));
 		String action = (evenement.getId() == null) ? "créé" : "modifié";
 		evenementRepository.save(evenement);
-		logger.info("{} " + action, evenement);
+		logger.info("{} {}", evenement, action);
 		return "redirect:/ruche/" + evenement.getRuche().getId();
 	}
 
@@ -421,7 +421,7 @@ public class EvenementRucheController {
 	public String sauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
 		String action = (evenement.getId() == null) ? "créé" : "modifié";
 		evenementRepository.save(evenement);
-		logger.info("{} " + action, evenement);
+		logger.info("{} {}", evenement, action);
 		return "redirect:/ruche/" + evenement.getRuche().getId();
 	}
 

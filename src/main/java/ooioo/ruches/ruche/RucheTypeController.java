@@ -81,9 +81,9 @@ public class RucheTypeController {
 		if (bindingResult.hasErrors()) {
 			return RUCHE_RUCHETYPEFORM;
 		}
-		String action = ((rucheType.getId() == null)?"créé":"modifié");
+		String action = (rucheType.getId() == null) ? "créé" : "modifié";
 		rucheTypeRepository.save(rucheType);
-		logger.info("{} " + action, rucheType);
+		logger.info("{} {}", rucheType, action);
 		return "redirect:/rucheType/liste";
 	}
 

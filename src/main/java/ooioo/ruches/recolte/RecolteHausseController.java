@@ -71,7 +71,7 @@ public class RecolteHausseController {
 	private RucherRepository rucherRepository;
 
 	@Autowired
-	MessageSource messageSource;
+	private MessageSource messageSource;
 
 	@Value("${hausse.reste.miel}")
 	private BigDecimal hausseResteMiel;

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @ControllerAdvice
 public class RuchesControllerAdvice {
 	@Autowired
-	MessageSource messageSource;
+	private MessageSource messageSource;
 	@Autowired
 	BuildProperties buildProperties;
 

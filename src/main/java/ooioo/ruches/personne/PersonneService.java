@@ -54,19 +54,4 @@ public class PersonneService {
 		return false;
 	}
 
-	/**
-	 * Vérifie que l'utilisateur est admin
-	 */
-	public boolean personneAdmin(Authentication authentication, Model model) {
-		// si l'utilisateur connecté n'est pas administrateur
-		GrantedAuthority auth = authentication.getAuthorities().iterator().next();
-		String role = auth.getAuthority();
-		if ("ROLE_admin".equals(role)) {
-			return true;
-		}
-		logger.error("Rôle admin obligatoire.");
-		model.addAttribute(Const.MESSAGE, "rôle admin obligatoire.");
-		return false;
-	}
-
 }

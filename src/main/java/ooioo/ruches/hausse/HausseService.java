@@ -8,7 +8,6 @@ import ooioo.ruches.Const;
 import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
-import ooioo.ruches.ruche.Ruche;
 
 @Service
 public class HausseService {
@@ -32,21 +31,6 @@ public class HausseService {
 			model.addAttribute(Const.DATE + type, evenement.getDate());
 			model.addAttribute(Const.VALEUR + type, evenement.getValeur());
 			model.addAttribute(Const.COMMENTAIRE + type, evenement.getCommentaire());
-		}
-	}
-
-	/*
-	 * Ajoute au model Spring la chaînes "dateHAUSSEPOSERUCHE" du
-	 * dernier événement de type HAUSSEPOSERUCHE
-	 */
-	public void modelAddEvenPoseHausse(Model model, Ruche ruche, Hausse hausse) {
-		Evenement evenement = evenementRepository
-				.findFirstByRucheAndHausseAndTypeOrderByDateDesc(ruche, hausse,
-						TypeEvenement.HAUSSEPOSERUCHE);
-		if (evenement == null) {
-			model.addAttribute("dateHAUSSEPOSERUCHE", null);
-		} else {
-			model.addAttribute("dateHAUSSEPOSERUCHE", evenement.getDate());
 		}
 	}
 

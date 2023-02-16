@@ -83,7 +83,7 @@ public class RucherController {
 	private DistRucherRepository drRepo;
 
 	@Autowired
-	MessageSource messageSource;
+	private MessageSource messageSource;
 
 	@Value("${rucher.butinage.rayons}")
 	private int[] rayonsButinage;
@@ -248,7 +248,7 @@ public class RucherController {
 	}
 
 	/**
-	 * Création d'un rucher
+	 * Appel du formulaire de création d'un rucher
 	 */
 	@GetMapping("/cree")
 	public String cree(Model model) {
@@ -304,9 +304,9 @@ public class RucherController {
 			model.addAttribute(Const.MESSAGE, "Nom de rucher existant.");
 			return Const.INDEX;
 		}
-		String action = ((rucher.getId() == null) ? "créé" : "modifié");
+		String action = (rucher.getId() == null) ? "créé" : "modifié";
 		rucherRepository.save(rucher);
-		logger.info("{} " + action, rucher);
+		logger.info("{} {}", rucher, action);
 		return "redirect:/rucher/" + rucher.getId();
 	}
 

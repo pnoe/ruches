@@ -52,12 +52,15 @@ public class EvenementEssaimController {
 	private EssaimRepository essaimRepository;
 
 	@Autowired
-	MessageSource messageSource;
+	private MessageSource messageSource;
 
 	@Autowired
 	private RucherService rucherService;
 	@Autowired
 	private EssaimService essaimService;
+	
+	private static final String commForm = "essaim/essaimCommentaireForm";
+	private static final String cree = "{} créé";
 
 	/*
 	 * Liste événements essaim sucre
@@ -239,7 +242,7 @@ public class EvenementEssaimController {
 				Evenement evenement = new Evenement(dateEve, typeEvenement, ruche, essaim, rucher, null, valeur,
 						commentaire); // valeur commentaire
 				evenementRepository.save(evenement);
-				logger.info("{} créé", evenement);
+				logger.info(cree, evenement);
 			} else {
 				// on continue le traitement des autres essaims
 				logger.error(Const.IDESSAIMXXINCONNU, essaimId);
@@ -266,7 +269,7 @@ public class EvenementEssaimController {
 			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.COMMENTAIREESSAIM, ruche,
 					essaimOpt.get(), rucher, null, null, null);
 			model.addAttribute(Const.EVENEMENT, evenement);
-			return "essaim/essaimCommentaireForm";
+			return commForm;
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 			model.addAttribute(Const.MESSAGE,
@@ -284,7 +287,7 @@ public class EvenementEssaimController {
 		if (evenementOpt.isPresent()) {
 			Evenement evenement = evenementOpt.get();
 			model.addAttribute(Const.EVENEMENT, evenement);
-			return "essaim/essaimCommentaireForm";
+			return commForm;
 		} else {
 			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
 			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
@@ -408,12 +411,12 @@ public class EvenementEssaimController {
 	@PostMapping("/commentaire/sauve")
 	public String commentaireSauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
-			return "essaim/essaimCommentaireForm";
+			return commForm;
 		}
 		evenement.setValeur(Utils.notifIntFmt(evenement.getValeur()));
 		String action = (evenement.getId() == null) ? "créé" : "modifié";
 		evenementRepository.save(evenement);
-		logger.info("{} " + action, evenement);
+		logger.info("{} {}", evenement, action);
 		return "redirect:/essaim/" + evenement.getEssaim().getId();
 	}
 
@@ -430,7 +433,7 @@ public class EvenementEssaimController {
 		 */
 		String action = (evenement.getId() == null) ? "créé" : "modifié";
 		evenementRepository.save(evenement);
-		logger.info("{} " + action, evenement);
+		logger.info("{} {}", evenement, action);
 		return "redirect:/essaim/" + evenement.getEssaim().getId();
 	}
 
@@ -507,7 +510,7 @@ public class EvenementEssaimController {
 						Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, ruche,
 								essaimRemerage, ruche.getRucher(), null, null, commentaire);
 						evenementRepository.save(evenementAjout);
-						logger.info("{} créé", evenementAjout);
+						logger.info(cree, evenementAjout);
 						ruche.setEssaim(essaimRemerage);
 					} else {
 						logger.error(Const.IDESSAIMXXINCONNU, remerageId);
@@ -534,13 +537,13 @@ public class EvenementEssaimController {
 					Evenement eveCadre = new Evenement(dateEve, TypeEvenement.RUCHECADRE, ruche, null,
 							(depot) ? rucherDepot : rucher, null, "0", "Dispersion essaim " + essaim.getNom());
 					evenementRepository.save(eveCadre);
-					logger.info("{} créé", eveCadre);
+					logger.info(cree, eveCadre);
 				}
 				// On inactive l'essaim
 				essaim.setActif(false);
 				essaimRepository.save(essaim);
 				// log de la création de l'événement de dispersion de l'essaim
-				logger.info("{} créé", evenement);
+				logger.info(cree, evenement);
 				// essaim inactivé on affiche la liste des essaims
 				return "redirect:/essaim/liste";
 			} else {

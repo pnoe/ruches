@@ -175,9 +175,9 @@ public class PersonneController {
 		} else {
 			personne.setPassword(new BCryptPasswordEncoder().encode(password));
 		}
-		String action = ((personne.getId() == null)?"créée":"modifiée");
+		String action = (personne.getId() == null) ? "créée" : "modifiée";
 		personneRepository.save(personne);
-		logger.info("{} " + action, personne);
+		logger.info("{} {}", personne, action);
 		return "redirect:/personne/" + personne.getId();
 	}
 

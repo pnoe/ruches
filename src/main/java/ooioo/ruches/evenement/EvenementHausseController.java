@@ -46,7 +46,9 @@ public class EvenementHausseController {
 	private HausseService hausseService;
 
 	@Autowired
-	MessageSource messageSource;
+	private MessageSource messageSource;
+	
+	private static final String commForm = "hausse/hausseCommentaireForm";
 
 	/*
 	 * Liste événements remplissage hausse
@@ -121,7 +123,7 @@ public class EvenementHausseController {
 			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.COMMENTAIREHAUSSE, ruche, essaim,
 					rucher, hausse, null, null);
 			model.addAttribute(Const.EVENEMENT, evenement);
-			return "hausse/hausseCommentaireForm";
+			return commForm;
 		} else {
 			logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
 			model.addAttribute(Const.MESSAGE,
@@ -139,7 +141,7 @@ public class EvenementHausseController {
 		if (evenementOpt.isPresent()) {
 			Evenement evenement = evenementOpt.get();
 			model.addAttribute(Const.EVENEMENT, evenement);
-			return "hausse/hausseCommentaireForm";
+			return commForm;
 		} else {
 			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
 			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
@@ -275,12 +277,12 @@ public class EvenementHausseController {
 	@PostMapping("/commentaire/sauve")
 	public String commentaireSauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
-			return "hausse/hausseCommentaireForm";
+			return commForm;
 		}
 		evenement.setValeur(Utils.notifIntFmt(evenement.getValeur()));
-		String action = (evenement.getId() == null)?"créé":"modifié";
+		String action = (evenement.getId() == null) ? "créé" : "modifié";
 		evenementRepository.save(evenement);
-		logger.info("{} " + action, evenement);
+		logger.info("{} {}", evenement, action);
 		return "redirect:/hausse/" + evenement.getHausse().getId();
 	}
 
@@ -295,9 +297,9 @@ public class EvenementHausseController {
 		/*
 		 * if (bindingResult.hasErrors()) { return "essaim/essaimSucreForm"; }
 		 */
-		String action = (evenement.getId() == null)?"créé":"modifié";
+		String action = (evenement.getId() == null) ? "créé" : "modifié";
 		evenementRepository.save(evenement);
-		logger.info("{} " + action, evenement);
+		logger.info("{} {}", evenement, action);
 		return "redirect:/hausse/" + evenement.getHausse().getId();
 	}
 

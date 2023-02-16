@@ -264,7 +264,7 @@ public class EvenementController {
 		}
 		String action = (evenement.getId() == null)?"créé":"modifié";
 		evenementRepository.save(evenement);
-		logger.info("{} " + action, evenement);
+		logger.info("{} {}", evenement, action);
 		return REDIRECT_EVEN + evenement.getId();
 	}
 

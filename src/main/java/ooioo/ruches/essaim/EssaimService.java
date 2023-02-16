@@ -58,10 +58,11 @@ public class EssaimService {
 	private RucherRepository rucherRepository;
 
 	@Autowired
-	MessageSource messageSource;
+	private MessageSource messageSource;
+	
+	private static final String cree = "{} créé";
 
-	public String clone(HttpSession session, Model model,
-			Optional<Essaim> essaimOpt, String nomclones, String nomruches) {
+	public String clone(HttpSession session, Optional<Essaim> essaimOpt, String nomclones, String nomruches) {
 		Essaim essaim = essaimOpt.get();
 		List<String> noms = new ArrayList<>();
 		for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
@@ -85,10 +86,10 @@ public class EssaimService {
 					if (ruche.getEssaim() == null) {
 						ruche.setEssaim(clone);
 						rucheRepository.save(ruche);
-						Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, ruche,
-								clone, ruche.getRucher(), null, null, "Clone essaim " + essaim.getNom());
+						Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, ruche, clone,
+								ruche.getRucher(), null, null, "Clone essaim " + essaim.getNom());
 						evenementRepository.save(evenementAjout);
-						logger.info("{} créé", evenementAjout);
+						logger.info(cree, evenementAjout);
 					} else {
 						logger.error("Clone d'un essaim : {} la ruche {} n'est pas vide", nomarray[i],
 								nomruchesarray[i]);
@@ -98,8 +99,7 @@ public class EssaimService {
 		}
 		String nomsJoin = String.join(",", nomsCrees);
 		logger.info("Essaims {} créé(s)", nomsJoin);
-		return messageSource.getMessage("cloneessaimcrees", new Object[] { nomsJoin },
-				LocaleContextHolder.getLocale());
+		return messageSource.getMessage("cloneessaimcrees", new Object[] { nomsJoin }, LocaleContextHolder.getLocale());
 	}
 
 	/*
@@ -134,8 +134,9 @@ public class EssaimService {
 				int i = 0;
 				while (i < evensEssaimAjout.size() - 1) {
 					// calcul de la durée de séjour dans le rucher
-					durees.add(Duration.between(evensEssaimAjout.get(i).getDate(), evensEssaimAjout.get(i + 1).getDate())
-							.toDays());
+					durees.add(
+							Duration.between(evensEssaimAjout.get(i).getDate(), evensEssaimAjout.get(i + 1).getDate())
+									.toDays());
 					i++;
 				}
 				durees.add(Duration.between(evensEssaimAjout.get(i).getDate(), LocalDateTime.now()).toDays());
@@ -312,19 +313,13 @@ public class EssaimService {
 	 * Enregistrement de l'essaimage.
 	 *
 	 * @param essaimId l'id de l'essaim qui essaime.
-	 *
 	 * @param date la date saisie dans le formulaire d'essaimage.
-	 *
 	 * @param nom le nom du nouvel essaim restant dans la ruche saisi dans le
 	 * formulaire d'essaimage.
-	 *
 	 * @param commentaire le commentaire saisi dans le formulaire d'essaimage.
-	 *
 	 * @param essaimOpt l'essaim essaimId.
-	 *
-	 * @param nouvelEssaim le nouvel essaim à créer restant dans le ruche
 	 */
-	public Essaim essaimSauve(Model model, long essaimId, String date, String nom, String commentaire,
+	public Essaim essaimSauve(long essaimId, String date, String nom, String commentaire,
 			Optional<Essaim> essaimOpt) {
 		// L'essaim à disperser
 		Essaim essaim = essaimOpt.get();
@@ -348,7 +343,7 @@ public class EssaimService {
 		Evenement evenementAjout = new Evenement(dateEveAjout, TypeEvenement.AJOUTESSAIMRUCHE, ruche, nouvelEssaim,
 				ruche.getRucher(), null, null, commentaire);
 		evenementRepository.save(evenementAjout);
-		logger.info("{} créé", evenementAjout);
+		logger.info(cree, evenementAjout);
 		rucheRepository.save(ruche);
 		// On inactive l'essaim dispersé
 		essaim.setActif(false);
@@ -358,13 +353,13 @@ public class EssaimService {
 		Evenement evenement = new Evenement(dateEve, TypeEvenement.ESSAIMDISPERSION, ruche, essaim, ruche.getRucher(),
 				null, null, commentaire);
 		evenementRepository.save(evenement);
-		logger.info("{} créé", evenement);
+		logger.info(cree, evenement);
 		return nouvelEssaim;
 	}
 
 	/*
-	 * Ajoute au model Spring le dernier événement de type typeEvenement
-	 *  avec le nom d'attribut : Eve + typeEvenement.
+	 * Ajoute au model Spring le dernier événement de type typeEvenement avec le nom
+	 * d'attribut : Eve + typeEvenement.
 	 */
 	public void modelAddEve(Model model, Essaim essaim, TypeEvenement typeEvenement) {
 		Evenement evenement = evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim, typeEvenement);
@@ -376,23 +371,20 @@ public class EssaimService {
 	 * événement de type ESSAIMTRAITEMENT ou ESSAIMTRAITEMENTFIN
 	 */
 	/*
-	public void modelAddEvenTraitement(Model model, Essaim essaim) {
-		Evenement evenement = evenementRepository.findFirstTraitemenetByEssaim(essaim.getId(),
-				TypeEvenement.ESSAIMTRAITEMENT.ordinal(), TypeEvenement.ESSAIMTRAITEMENTFIN.ordinal());
-		if (evenement == null) {
-			model.addAttribute("dateTraitement", null);
-			model.addAttribute("commentaireTraitement", null);
-			model.addAttribute("typeTraitement", null);
-		} else {
-			// si la date de l'événement fin est avant le date de l'événement début
-			// ou si pas d'événement fin trouvé, on affiche l'événement
-			model.addAttribute("dateTraitement", evenement.getDate());
-			model.addAttribute("commentaireTraitement", evenement.getCommentaire());
-			model.addAttribute("typeTraitement",
-					(evenement.getType() == TypeEvenement.ESSAIMTRAITEMENT) ? "Début" : "Fin");
-		}
-	}
-	*/
+	 * public void modelAddEvenTraitement(Model model, Essaim essaim) { Evenement
+	 * evenement = evenementRepository.findFirstTraitemenetByEssaim(essaim.getId(),
+	 * TypeEvenement.ESSAIMTRAITEMENT.ordinal(),
+	 * TypeEvenement.ESSAIMTRAITEMENTFIN.ordinal()); if (evenement == null) {
+	 * model.addAttribute("dateTraitement", null);
+	 * model.addAttribute("commentaireTraitement", null);
+	 * model.addAttribute("typeTraitement", null); } else { // si la date de
+	 * l'événement fin est avant le date de l'événement début // ou si pas
+	 * d'événement fin trouvé, on affiche l'événement
+	 * model.addAttribute("dateTraitement", evenement.getDate());
+	 * model.addAttribute("commentaireTraitement", evenement.getCommentaire());
+	 * model.addAttribute("typeTraitement", (evenement.getType() ==
+	 * TypeEvenement.ESSAIMTRAITEMENT) ? "Début" : "Fin"); } }
+	 */
 
 	/**
 	 * Renvoie la liste des EssaimTree fils de l'essaim passé en paramètre

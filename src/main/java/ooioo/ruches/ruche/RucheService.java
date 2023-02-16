@@ -104,25 +104,6 @@ public class RucheService {
 	}
 
 	/*
-	 * Ajoute au model Spring les chaînes date, valeur et commentaire du
-	 * dernier événement de type typeEvenement
-	 */
-	public void modelAddEvenement(Model model, Ruche ruche, TypeEvenement typeEvenement) {
-		Evenement evenement = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
-				typeEvenement);
-		String type = typeEvenement.toString();
-		if (evenement == null) {
-			model.addAttribute(Const.DATE + type, null);
-			model.addAttribute(Const.VALEUR + type, null);
-			model.addAttribute(Const.COMMENTAIRE + type, null);
-		} else {
-			model.addAttribute(Const.DATE + type, evenement.getDate());
-			model.addAttribute(Const.VALEUR + type, evenement.getValeur());
-			model.addAttribute(Const.COMMENTAIRE + type, evenement.getCommentaire());
-		}
-	}
-
-	/*
 	 * Liste des ruches
 	 *  @plus à true pour liste détaillée
 	 */

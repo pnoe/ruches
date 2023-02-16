@@ -38,7 +38,7 @@ public class EvenementRucherController {
 	@Autowired
 	private RucherRepository rucherRepository;
 	@Autowired
-	MessageSource messageSource;
+	private MessageSource messageSource;
 
 	/*
 	 * Liste événements ajout ruche rucher
@@ -140,9 +140,9 @@ public class EvenementRucherController {
 			return "rucher/rucherCommentaireForm";
 		}
 		evenement.setValeur(Utils.notifIntFmt(evenement.getValeur()));
-		String action = (evenement.getId() == null)?"créé":"modifié";
+		String action = (evenement.getId() == null) ? "créé" : "modifié";
 		evenementRepository.save(evenement);
-		logger.info("{} " + action, evenement);
+		logger.info("{} {}", evenement, action);
 		return "redirect:/rucher/" + evenement.getRucher().getId();
 	}
 
@@ -152,9 +152,9 @@ public class EvenementRucherController {
 	 */
 	@PostMapping("/sauve")
 	public String sauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
-		String action = (evenement.getId() == null)?"créé":"modifié";
+		String action = (evenement.getId() == null) ? "créé" : "modifié";
 		evenementRepository.save(evenement);
-		logger.info("{} " + action, evenement);
+		logger.info("{} {}", evenement, action);
 		return "redirect:/rucher/" + evenement.getRucher().getId();
 	}
 

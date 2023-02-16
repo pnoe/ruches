@@ -31,7 +31,7 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
 	private final Logger loggerSecConfig = LoggerFactory.getLogger(SecurityConfig.class);
 
 	@Autowired
-	MessageSource messageSource;
+	private MessageSource messageSource;
 
 	@Resource(name = "userDetailService")
 	private UserDetailsService userDetailsService;

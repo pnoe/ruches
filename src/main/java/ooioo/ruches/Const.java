@@ -20,7 +20,6 @@ public final class Const {
 	public static final String IDESSAIMINCONNU = "Idessaiminconnu";
 	public static final String IDESSAIMXXINCONNU = "Id essaim {} inconnu";
 	public static final String REDIRECT_ESSAIM_ESSAIMID = "redirect:/essaim/{essaimId}";
-	public static final String RETOURESSAIM = "retourEssaim";
 
 	public static final String HAUSSE = "hausse";
 	public static final String HAUSSES = "hausses";
@@ -42,7 +41,6 @@ public final class Const {
 	public static final String EVENEMENTS = "evenements";
 	public static final String IDEVENEMENTINCONNU = "Id événement inconnu";
 	public static final String IDEVENEMENTXXINCONNU = "Id événement {} inconnu";
-	public static final String EVENEMENTXXENREGISTRE = "Événement {} enregistré";
 
 	public static final String EVEN_EVENLISTE = "evenement/evenementListe";
 
@@ -60,10 +58,6 @@ public final class Const {
 	public static final String COMMENTAIRE = "commentaire";
 	public static final String DATE = "date";
 	public static final String VALEUR = "valeur";
-
-	public static final String ACCUEILTITRE = "accueilTitre";
-
-	public static final String NULL = "Null";
 
 	private Const() {
 	    throw new IllegalStateException("Constant class");

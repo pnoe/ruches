@@ -75,7 +75,9 @@ public class RucheController {
 	private RucherService rucherService;
 
 	@Autowired
-	MessageSource messageSource;
+	private MessageSource messageSource;
+	
+	public static final String cree = "{} créé";
 
 	/**
 	 * Historique de l'ajout des hausses sur une ruche
@@ -120,7 +122,7 @@ public class RucheController {
 					Evenement eveAjout = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.RUCHEAJOUTRUCHER,
 							clone, null, ruche.getRucher(), null, null, commentaire);
 					evenementRepository.save(eveAjout);
-					logger.info("{} créé", eveAjout);
+					logger.info(cree, eveAjout);
 					nomsCrees.add(nom);
 					// pour éviter clone "a,a" : 2 fois le même nom dans la liste
 					noms.add(nom);
@@ -322,8 +324,8 @@ public class RucheController {
 	}
 
 	/**
-	 * Enregistrement de la ruche crée ou modifiée.
-	 * Si création de ruche, création de l'événement RUCHEAJOUTRUCHER dans le dépôt.
+	 * Enregistrement de la ruche crée ou modifiée. Si création de ruche, création
+	 * de l'événement RUCHEAJOUTRUCHER dans le dépôt.
 	 */
 	@PostMapping("/sauve")
 	public String sauve(Model model, @ModelAttribute Ruche ruche, BindingResult bindingResult) {
@@ -332,33 +334,34 @@ public class RucheController {
 		}
 		// Vérification de l'unicité du nom
 		Ruche rNom = rucheRepository.findByNom(ruche.getNom());
-		if (rNom != null &&  !rNom.getId().equals(ruche.getId())) {
+		if (rNom != null && !rNom.getId().equals(ruche.getId())) {
 			logger.error("Nom de ruche {} existant.", rNom.getNom());
 			model.addAttribute(Const.MESSAGE, "Nom de ruche existant.");
 			return Const.INDEX;
 		}
-		String action = ((ruche.getId() == null)?"créée":"modifiée");
 		// à sa création on met la ruche est au dépôt.
 		// Par contre on garde les coordonnées qui ont pu être
 		// être modifiées dans le formulaire.
+		String action = (ruche.getId() == null) ? "créée" : "modifiée";
 		if (ruche.getRucher() == null) {
 			Rucher rucher = rucherRepository.findByDepotIsTrue();
 			ruche.setRucher(rucher);
 			rucheRepository.save(ruche);
-			// Date eve mis au dépôt = date acquisition (LocalDate) de la ruche ou LocalDateTime.now()
-			//  (si date acquisition = LocalDate.now()).
+			// Date eve mis au dépôt = date acquisition (LocalDate) de la ruche ou
+			// LocalDateTime.now()
+			// (si date acquisition = LocalDate.now()).
 			// La date d'acquisition est un LocalDate d'où le asStartOfDay
 			// pour renseigner le heure, minutes...
 			Evenement eveAjout = new Evenement(
-					LocalDate.now().equals(ruche.getDateAcquisition()) ?
-							LocalDateTime.now() : ruche.getDateAcquisition().atStartOfDay(),
+					LocalDate.now().equals(ruche.getDateAcquisition()) ? LocalDateTime.now()
+							: ruche.getDateAcquisition().atStartOfDay(),
 					TypeEvenement.RUCHEAJOUTRUCHER, ruche, null, rucher, null, null, "Création de la ruche");
 			evenementRepository.save(eveAjout);
-			logger.info("{} créé", eveAjout);
+			logger.info(cree, eveAjout);
 		} else {
 			rucheRepository.save(ruche);
 		}
-		logger.info("{} " + action, ruche);
+		logger.info("{} {}", ruche, action);
 		return "redirect:/ruche/" + ruche.getId();
 	}
 
@@ -399,10 +402,10 @@ public class RucheController {
 				model.addAttribute("eveEssaim", evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
 						TypeEvenement.AJOUTESSAIMRUCHE));
 			}
-			model.addAttribute("eveRucher", evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
-					TypeEvenement.RUCHEAJOUTRUCHER));
-			model.addAttribute("eveComm", evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
-					TypeEvenement.COMMENTAIRERUCHE));
+			model.addAttribute("eveRucher",
+					evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.RUCHEAJOUTRUCHER));
+			model.addAttribute("eveComm",
+					evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.COMMENTAIRERUCHE));
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 			model.addAttribute(Const.MESSAGE,
@@ -437,7 +440,9 @@ public class RucheController {
 	/**
 	 * Enregistrer en base l'ordre des hausses modifié par drag and drop (appel
 	 * XMLHttpRequest).
-	 * @param hausses : tableau de ids des hausses dans l'ordre affiché dans la page html
+	 * 
+	 * @param hausses : tableau de ids des hausses dans l'ordre affiché dans la page
+	 *                html
 	 */
 	@PostMapping("/ordreHausses/{rucheId}")
 	@ResponseStatus(value = HttpStatus.OK)
@@ -463,8 +468,8 @@ public class RucheController {
 	}
 
 	/**
-	 * Ajoute une hausse sur une ruche.
-	 * Si la hausse est déjà sur une ruche, on la retire de cette ruche.
+	 * Ajoute une hausse sur une ruche. Si la hausse est déjà sur une ruche, on la
+	 * retire de cette ruche.
 	 */
 	@PostMapping("/hausse/ajout/{rucheId}/{hausseId}")
 	public String ajoutHausse(Model model, @PathVariable long rucheId, @PathVariable long hausseId,
@@ -479,14 +484,14 @@ public class RucheController {
 				Ruche rucheHausse = hausse.getRuche();
 				LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 				if (rucheHausse != null) {
-					// ajouter dans commentaire préfixe au commentaire d'ajout : "Pour ajout dans ruche.getNom())"
-					//  localisation...
+					// ajouter dans commentaire préfixe au commentaire d'ajout : "Pour ajout dans
+					// ruche.getNom())"
+					// localisation...
 					evenementRetrait = new Evenement(dateEve.withSecond(0).withNano(0).minusMinutes(1L),
-							TypeEvenement.HAUSSERETRAITRUCHE, rucheHausse,
-							rucheHausse.getEssaim(), rucheHausse.getRucher(), hausse,
-							hausse.getOrdreSurRuche().toString(), commentaire);
+							TypeEvenement.HAUSSERETRAITRUCHE, rucheHausse, rucheHausse.getEssaim(),
+							rucheHausse.getRucher(), hausse, hausse.getOrdreSurRuche().toString(), commentaire);
 					evenementRepository.save(evenementRetrait);
-					logger.info("{} créé", evenementRetrait);
+					logger.info(cree, evenementRetrait);
 					rucheService.ordonneHaussesRuche(rucheHausse.getId());
 					logger.info("Hausse {} retirée de la ruche {}", hausse.getNom(), rucheHausse.getNom());
 				}
@@ -499,7 +504,7 @@ public class RucheController {
 						ruche.getEssaim(), ruche.getRucher(), hausse, hausse.getOrdreSurRuche().toString(),
 						commentaire);
 				evenementRepository.save(evenementPose);
-				logger.info("{} créé", evenementPose);
+				logger.info(cree, evenementPose);
 				logger.info("Hausse {} posée sur la ruche {}", hausse.getNom(), ruche.getNom());
 			} else {
 				logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
@@ -517,8 +522,7 @@ public class RucheController {
 	}
 
 	/**
-	 * Retirer une hausse de sa ruche.
-	 * Recalcule l'ordre des hausses de cette ruche.
+	 * Retirer une hausse de sa ruche. Recalcule l'ordre des hausses de cette ruche.
 	 */
 	@PostMapping("/hausse/retrait/{rucheId}/{hausseId}")
 	public String retraitHausse(Model model, @PathVariable long rucheId, @PathVariable long hausseId,
@@ -529,29 +533,26 @@ public class RucheController {
 			if (hausseOpt.isPresent()) {
 				Hausse hausse = hausseOpt.get();
 				// création événement avant mise à null de la ruche
-				// Ruche ruche = hausse.getRuche();
 				Ruche ruche = rucheOpt.get();
 				// Si la hausse n'est pas sur la ruche, abandon et message d'erreur
-				if (hausse.getRuche() == null || (hausse.getRuche().getId() != ruche.getId())) {
+				if (hausse.getRuche() == null || !hausse.getRuche().getId().equals(ruche.getId())) {
 					logger.error("La hausse {} n'est pas sur la ruche {}", hausse.getNom(), ruche.getNom());
-					model.addAttribute(Const.MESSAGE, "Cette hausse n'est pas sur la ruche"
-							);
-							// messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale()));
+					model.addAttribute(Const.MESSAGE, "Cette hausse n'est pas sur la ruche");
+					// messageSource.getMessage(Const.IDHAUSSEINCONNU, null,
+					// LocaleContextHolder.getLocale()));
 					return Const.INDEX;
 				}
 				LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 				Essaim essaim = null;
 				Rucher rucher = null;
 				String rucheNom = "";
-				if (ruche != null) {
-					essaim = ruche.getEssaim();
-					rucher = ruche.getRucher();
-					rucheNom = ruche.getNom();
-				}
+				essaim = ruche.getEssaim();
+				rucher = ruche.getRucher();
+				rucheNom = ruche.getNom();
 				Evenement evenementRetrait = new Evenement(dateEve, TypeEvenement.HAUSSERETRAITRUCHE, ruche, essaim,
 						rucher, hausse, hausse.getOrdreSurRuche().toString(), commentaire);
 				evenementRepository.save(evenementRetrait);
-				logger.info("{} créé", evenementRetrait);
+				logger.info(cree, evenementRetrait);
 				hausse.setRuche(null);
 				hausse.setOrdreSurRuche(null);
 				hausseRepository.save(hausse);

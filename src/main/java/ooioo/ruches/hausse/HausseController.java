@@ -51,7 +51,7 @@ public class HausseController {
 	@Autowired
 	private RecolteHausseRepository recolteHausseRepository;
 	@Autowired
-	MessageSource messageSource;
+	private MessageSource messageSource;
 	@Autowired
 	private RucheService rucheService;
 
@@ -198,9 +198,9 @@ public class HausseController {
 				return Const.INDEX;
 			}
 		}
-		String action = ((hausse.getId() == null)?"créée":"modifiée");
+		String action = (hausse.getId() == null) ? "créée" : "modifiée";
 		hausseRepository.save(hausse);
-		logger.info("{} " + action, hausse);
+		logger.info("{} {}", hausse, action);
 		return "redirect:/hausse/" + hausse.getId();
 	}
 

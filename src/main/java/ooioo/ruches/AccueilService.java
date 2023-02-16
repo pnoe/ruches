@@ -104,11 +104,8 @@ public class AccueilService {
 						Itineraire result = restTemplate.getForObject(uri.toString(), Itineraire.class);
 						dr.setDist(Math.round(result.distance()));
 						dr.setTemps(Math.round(result.duration()));
-					} catch (HttpClientErrorException e) {
-						// erreur 4xx
-						logger.error(e.getMessage());
-					} catch (HttpServerErrorException e) {
-						// erreur 5xx
+					} catch (HttpClientErrorException|HttpServerErrorException e) {
+						// erreur 4xx ou 5xx
 						logger.error(e.getMessage());
 					}
 					drRepo.save(dr);

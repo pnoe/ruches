@@ -111,9 +111,9 @@ public class RecolteController {
 		if (bindingResult.hasErrors()) {
 			return RECOLTERECOLTEFORM;
 		}
-		String action = ((recolte.getId() == null)?"créée":"modifiée");
+		String action = (recolte.getId() == null) ? "créée" : "modifiée";
 		recolteRepository.save(recolte);
-		logger.info("{} " + action, recolte);
+		logger.info("{} {}", recolte, action);
 		return "redirect:/recolte/" + recolte.getId();
 	}
 
