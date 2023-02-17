@@ -453,9 +453,7 @@ public class EvenementEssaimController {
 				model.addAttribute("nomRuche", ruche.getNom());
 				model.addAttribute("essaimsRemerage", essaimsRemerage);
 			}
-
 			model.addAttribute(Const.RUCHE, ruche);
-
 			// Si le retour au dépôt est demandé dans le formulaire, il faudra
 			// que la date choisie soit postérieure à celle du dernier ajout
 			// de la ruche dans son rucher
@@ -468,13 +466,11 @@ public class EvenementEssaimController {
 			model.addAttribute("dateFirst", dateTimeFirst.format(dateFormat));
 			model.addAttribute("timeFirst", dateTimeFirst.format(timeFormat));
 			return prepareAppelFormulaire(session, model, essaimId, "essaim/essaimDispersionForm");
-
 		} else {
 			logger.error(ESSAIMPASDANSRUCHE);
 			model.addAttribute(Const.MESSAGE, ESSAIMPASDANSRUCHE);
 			return Const.INDEX;
 		}
-
 	}
 
 	/**
@@ -523,11 +519,10 @@ public class EvenementEssaimController {
 				if ((depot) && (remerageId == null) && (!rucher.getId().equals(rucherDepot.getId()))) {
 					// Met la ruche au dépôt et crée l'événement RUCHEAJOUTRUCHER
 					// Si la ruche est déjà au dépôt ou un remérage a été fait, on ne fait rien
-					String[] ruchesNoms = new String[] { ruche.getNom() };
-					rucherService.sauveAjouterRuches(rucherDepot, ruchesNoms, date,
+					Long[] ruchesIds = { ruche.getId() };
+					rucherService.sauveAjouterRuches(rucherDepot, ruchesIds, date,
 							"Dispersion essaim " + essaim.getNom() + ". " + commentaire);
 				}
-
 				Evenement evenement = new Evenement(dateEve, TypeEvenement.ESSAIMDISPERSION, ruche, essaim, rucher,
 						null, null, commentaire); // valeur
 				evenementRepository.save(evenement);

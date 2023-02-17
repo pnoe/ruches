@@ -574,30 +574,41 @@ public class RucherController {
 	}
 
 	/**
-	 * Appel du formulaire pour ajouter une liste de ruches dans un rucher
+	 * Appel du formulaire pour ajouter une liste de ruches dans un rucher. Ajoute à
+	 * model : dateTime, la date du dernier ajout des ruches de la liste. dateFirst
+	 * et timeFirst, la date et les heures minutes de la date ci-dessus plus 1
+	 * minute. ruchesNoms la liste des noms des ruches séparés par une virgule. rIds
+	 * la liste des ids des ruches séparés par une virgule.
 	 */
-	@GetMapping("/ruches/ajouter/{rucherId}/{ruchesNoms}")
+	@GetMapping("/ruches/ajouter/{rucherId}/{ruchesIds}")
 	public String ajouterRuches(HttpSession session, Model model, @PathVariable long rucherId,
-			@PathVariable String ruchesNoms) {
+			@PathVariable Long[] ruchesIds) {
 		// le formulaire affiche le nom du rucher et la liste des noms de ruche
 		// il permet le choix de la date et du commentaire
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
 			model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
 			model.addAttribute(Const.RUCHER, rucherOpt.get());
-			model.addAttribute("ruchesNoms", ruchesNoms);
+			// model.addAttribute("ruchesNoms", ruchesNoms);
 			// On cherche la date du dernier événement RUCHEAJOUTRUCHER
 			// pour imposer cette date comme min dans le formulaire
 			LocalDateTime dateTimeMin = LocalDateTime.MIN;
-			String[] ruchesNomsSplit = ruchesNoms.split(",");
-			for (String rucheNom : ruchesNomsSplit) {
-				Ruche ruche = rucheRepository.findByNom(rucheNom);
-				if (ruche != null) {
+			StringBuilder ruchesNoms = new StringBuilder();
+			StringBuilder rIds = new StringBuilder();
+			for (Long rucheId : ruchesIds) {
+				Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
+				if (rucheOpt.isPresent()) {
+					Ruche ruche = rucheOpt.get();
+					ruchesNoms.append(ruche.getNom() + ",");
+					rIds.append(ruche.getId() + ",");
 					Evenement evenFirst = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
 							ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER);
 					if (dateTimeMin.isBefore(evenFirst.getDate())) {
 						dateTimeMin = evenFirst.getDate();
 					}
+				} else {
+					// on continue le traitement des autres ruches
+					logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 				}
 			}
 			DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -606,7 +617,10 @@ public class RucherController {
 			LocalDateTime dateTimeFirst = dateTimeMin.plusMinutes(1);
 			model.addAttribute("dateFirst", dateTimeFirst.format(dateFormat));
 			model.addAttribute("timeFirst", dateTimeFirst.format(timeFormat));
-
+			ruchesNoms.deleteCharAt(ruchesNoms.length() - 1);
+			rIds.deleteCharAt(rIds.length() - 1);
+			model.addAttribute("ruchesNoms", ruchesNoms);
+			model.addAttribute("rIds", rIds);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
@@ -620,13 +634,13 @@ public class RucherController {
 	 * Ajoute une liste de ruches dans un rucher. Création de l'événement
 	 * RUCHEAJOUTRUCHER par ruche
 	 */
-	@PostMapping("/ruches/ajouter/sauve/{rucherId}/{ruchesNoms}")
-	public String sauveAjouterRuches(Model model, @PathVariable long rucherId, @PathVariable String[] ruchesNoms,
+	@PostMapping("/ruches/ajouter/sauve/{rucherId}/{ruchesIds}")
+	public String sauveAjouterRuches(Model model, @PathVariable long rucherId, @PathVariable Long[] ruchesIds,
 			@RequestParam String date, @RequestParam String commentaire) {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
-			rucherService.sauveAjouterRuches(rucher, ruchesNoms, date, commentaire);
+			rucherService.sauveAjouterRuches(rucher, ruchesIds, date, commentaire);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,

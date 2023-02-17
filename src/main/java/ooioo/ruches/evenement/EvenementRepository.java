@@ -16,23 +16,6 @@ import ooioo.ruches.rucher.Rucher;
 @RepositoryRestResource(collectionResourceRel = "evenementRepository")
 public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
-	// n'est pas utilisée et plante l'api rest, conflit avec la méthode List<Evenement> findNotification();
-	/*
-	@Query(value = """
-			select e
-			  from Evenement e
-			  where
-			    date >= ?1
-			    and e.valeur <> ''
-			    and (e.type = ooioo.ruches.evenement.TypeEvenement.COMMENTAIREESSAIM
-			    or e.type = ooioo.ruches.evenement.TypeEvenement.COMMENTAIREHAUSSE
-			    or e.type = ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHE
-			    or e.type = ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHER)
-			  order by e.date desc
-			""")
-	List<Evenement> findNotification(LocalDateTime dateNow);
-	*/
-
 	@Query(value = """
 			select e
 			  from Evenement e

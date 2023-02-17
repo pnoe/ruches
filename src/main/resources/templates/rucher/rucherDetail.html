@@ -69,7 +69,7 @@
 				&nbsp;
 				<a th:href="@{'/rucher/meteo/'+${rucher.id}}" 
 				  class="bi bi-sun" th:title="#{meteo}" aria-hidden="true"></a> 
-       			<a th:href="@{'/rucher/ruches/'+${rucher.id}}" 
+       			<a id="ajoutRuches" th:href="@{'/rucher/ruches/'+${rucher.id}}" 
        			  class="bi bi-grid-3x2-gap" th:title="#{ajoutRuches}" aria-hidden="true"></a>
        			<a id="supprime" th:href="@{'/rucher/supprime/'+${rucher.id}}" 
        			  class="confirmationsupp bi bi-trash" style="color:red" 

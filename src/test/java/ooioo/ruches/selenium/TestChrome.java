@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -19,9 +17,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeDriverService;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.Select;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -29,83 +24,25 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TestChrome {
-
+	
 	static WebDriver driver;
+	
 	static final String comment = "Test selenium chrome";
 
 	// Attention certains tests écrivent en base de donnée.
 	// Ne pas utiliser sur application en production !!!!!!!!!
 	// Démarrer l'application correspondant à cette url !!!!
-	static final String baseUrl = "http://localhost:8080/ruches/";
-
-	// Initialisation du navigateur Chrome et login
-	// Créer un admin, nom : xx, prénom : yy, login : test, password : testpwd, role
-	// : admin
-	// le nom et le prénom peuvent être quelconques
-	// Attention à ne pas mettre de mot de passe de production !
-	static final String user = "test";
-	static final String pwd = "testpwd";
-	static final String role = "[ROLE_admin]";
+	static String baseUrl;
 
 	static final String commentaire = "commentaire";
 	static final String modif = " - modifié";
 
 	static String depotId;
-
+	
 	@BeforeAll
 	static void initChrome() {
-		String pathChromeDriver = "/snap/bin/chromium.chromedriver";
-//		System.setProperty("webdriver.chrome.driver","/home/noe/selenium/driver/chrome109/chromedriver");
-//		System.setProperty("webdriver.chrome.driver", pathChromeDriver");
-//		https://github.com/SeleniumHQ/selenium/issues/10969
-//		https://github.com/SeleniumHQ/selenium/issues/7788
-//		driver = new ChromeDriver();
-//		erreur : unknown flag `port'
-
-//      logs voir commentaires dans :
-//		https://github.com/SeleniumHQ/selenium/blob/trunk/java/src/org/openqa/selenium/logging/LoggingPreferences.java
-//      dans application.properties, ne marche pas non plus :
-//		logging.level.org.openqa.selenium=INFO
-//		logging.level.org.junit.jupiter=INFO
-
-
-		ChromeOptions options = new ChromeOptions();
-		//   Pas d'effet sur les logs :
-		//		options.setLogLevel(ChromeDriverLogLevel.OFF);
-
-
-		driver = new ChromeDriver((new ChromeDriverService.Builder() {
-			@Override
-			protected File findDefaultExecutable() {
-				if (new File(pathChromeDriver).exists()) {
-					@SuppressWarnings("serial")
-					File f = new File(pathChromeDriver) {
-						@Override
-						public String getCanonicalPath() throws IOException {
-							return this.getAbsolutePath();
-						}
-					};
-					return f;
-				} else {
-					return super.findDefaultExecutable();
-				}
-			}
-		}).build(), options);
-
-
-
-//		https://www.selenium.dev/documentation/webdriver/elements/finders/
-//		https://www.selenium.dev/documentation/webdriver/elements/locators/
-		// ******************** Login **************************
-		driver.get(baseUrl + "login");
-		// Le titre de la page de connexion est "Connexion"
-		assertEquals("Connexion", driver.getTitle());
-		driver.findElement(By.name("username")).sendKeys(user);
-		driver.findElement(By.name("password")).sendKeys(pwd);
-		driver.findElement(By.xpath("//input[@type='submit']")).click();
-		// Le titre de la page après login est "ruches"
-		assertEquals("Ruches", driver.getTitle(),
-				() -> "La connexion a échoué, avez-vous créé un utilisateur 'test' ?");
+		driver = TestUtils.initChrome();
+		baseUrl = TestUtils.baseUrl;
 	}
 
 	@AfterAll
@@ -120,8 +57,8 @@ public class TestChrome {
 		// Le titre de la page d'accueil est "ruches"
 		assertEquals("Ruches", driver.getTitle());
 		// L'utilisateur est "test" avec un rôle admin
-		assertAll("login, rôle", () -> assertEquals(user, driver.findElement(By.id("login")).getText()),
-				() -> assertEquals(role, driver.findElement(By.id("role")).getText()));
+		assertAll("login, rôle", () -> assertEquals(TestUtils.user, driver.findElement(By.id("login")).getText()),
+				() -> assertEquals(TestUtils.role, driver.findElement(By.id("role")).getText()));
 	}
 
 	@Test

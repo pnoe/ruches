@@ -31,16 +31,7 @@ public class TestLotHausse {
 	// Attention certains tests écrivent en base de donnée.
 	// Ne pas utiliser sur application en production !!!!!!!!!
 	// Démarrer l'application correspondant à cette url !!!!
-	static final String baseUrl = "http://localhost:8080/ruches/";
-
-	// Initialisation du navigateur Chrome et login
-	// Créer un admin, nom : xx, prénom : yy, login : test, password : testpwd, role
-	// : admin
-	// le nom et le prénom peuvent être quelconques
-	// Attention à ne pas mettre de mot de passe de production !
-	static final String user = "test";
-	static final String pwd = "testpwd";
-	static final String role = "[ROLE_admin]";
+	static String baseUrl;
 
 	static final String commentaire = "commentaire";
 	static final String modif = " - modifié";
@@ -51,8 +42,8 @@ public class TestLotHausse {
 
 	@BeforeAll
 	static void initChrome() {
-		TestChrome.initChrome();
-		driver = TestChrome.driver;
+		driver = TestUtils.initChrome();
+		baseUrl= TestUtils.baseUrl;
 	}
 
 	@AfterAll
@@ -68,8 +59,8 @@ public class TestLotHausse {
 		// Le titre de la page d'accueil est "ruches"
 		assertEquals("Ruches", driver.getTitle());
 		// L'utilisateur est "test" avec un rôle admin
-		assertAll("login, rôle", () -> assertEquals(user, driver.findElement(By.id("login")).getText()),
-				() -> assertEquals(role, driver.findElement(By.id("role")).getText()));
+		assertAll("login, rôle", () -> assertEquals(TestUtils.user, driver.findElement(By.id("login")).getText()),
+				() -> assertEquals(TestUtils.role, driver.findElement(By.id("role")).getText()));
 	}
 
 	@Test

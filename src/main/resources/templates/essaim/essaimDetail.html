@@ -47,7 +47,7 @@
 					th:title="#{cloner}" aria-hidden="true"></span> <a
 					th:href="@{'/essaim/essaime/'+${essaim.id}}"
 					class="bi bi-box-arrow-left" th:title="#{essaimer}"
-					aria-hidden="true"></a> <a
+					aria-hidden="true"></a> <a id="assoRuche"
 					th:href="@{'/essaim/associe/'+${essaim.id}}"
 					class="bi bi-box-arrow-in-down-right"
 					th:title="#{associationruche}" aria-hidden="true"></a> <a
@@ -178,8 +178,7 @@
 				<tr>
 					<td><span th:if="${eveTraite != null}"
 						th:text="${T(ooioo.ruches.evenement.TypeEvenement).ESSAIMTRAITEMENT.equals(eveTraite?.type)}?#{Debut}:#{Fin}">
-						</span>
-					</td>
+					</span></td>
 					<td><a th:if="${eveTraite != null}"
 						th:href="@{'/evenement/'+${eveTraite?.id}+'?type=essaim'}"
 						th:text="${#temporals.format(eveTraite?.date, 'yyyy/MM/dd')}"></a>

@@ -160,8 +160,7 @@ public class RucherControllerMAJ {
 						}
 					} else {
 						// lire dans la transhumance l'événement tr.eveId()
-						// On met dans valeur l'id du rucher
-//						eve.setValeur(ruTr.getId().toString());
+						// On met dans valeur le nom du rucher
 						eve.setValeur(ruTr.getNom());
 						evenementRepository.save(eve);
 					}

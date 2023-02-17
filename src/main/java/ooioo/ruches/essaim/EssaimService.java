@@ -366,26 +366,6 @@ public class EssaimService {
 		model.addAttribute("Eve" + typeEvenement, evenement);
 	}
 
-	/*
-	 * Ajoute au model Spring les chaînes date, valeur et commentaire du dernier
-	 * événement de type ESSAIMTRAITEMENT ou ESSAIMTRAITEMENTFIN
-	 */
-	/*
-	 * public void modelAddEvenTraitement(Model model, Essaim essaim) { Evenement
-	 * evenement = evenementRepository.findFirstTraitemenetByEssaim(essaim.getId(),
-	 * TypeEvenement.ESSAIMTRAITEMENT.ordinal(),
-	 * TypeEvenement.ESSAIMTRAITEMENTFIN.ordinal()); if (evenement == null) {
-	 * model.addAttribute("dateTraitement", null);
-	 * model.addAttribute("commentaireTraitement", null);
-	 * model.addAttribute("typeTraitement", null); } else { // si la date de
-	 * l'événement fin est avant le date de l'événement début // ou si pas
-	 * d'événement fin trouvé, on affiche l'événement
-	 * model.addAttribute("dateTraitement", evenement.getDate());
-	 * model.addAttribute("commentaireTraitement", evenement.getCommentaire());
-	 * model.addAttribute("typeTraitement", (evenement.getType() ==
-	 * TypeEvenement.ESSAIMTRAITEMENT) ? "Début" : "Fin"); } }
-	 */
-
 	/**
 	 * Renvoie la liste des EssaimTree fils de l'essaim passé en paramètre
 	 */

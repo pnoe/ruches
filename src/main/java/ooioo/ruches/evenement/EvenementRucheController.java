@@ -52,6 +52,8 @@ public class EvenementRucheController {
 	private MessageSource messageSource;
 	@Autowired
 	private EssaimService essaimService;
+	
+	private static final String commForm = "ruche/rucheCommentaireForm";
 
 	/*
 	 * Liste événements poids ruche
@@ -178,7 +180,7 @@ public class EvenementRucheController {
 			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.COMMENTAIRERUCHE, ruche, essaim,
 					rucher, null, null, null);
 			model.addAttribute(Const.EVENEMENT, evenement);
-			return "ruche/rucheCommentaireForm";
+			return commForm;
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 			model.addAttribute(Const.MESSAGE,
@@ -196,7 +198,7 @@ public class EvenementRucheController {
 		if (evenementOpt.isPresent()) {
 			Evenement evenement = evenementOpt.get();
 			model.addAttribute(Const.EVENEMENT, evenement);
-			return "ruche/rucheCommentaireForm";
+			return commForm;
 		} else {
 			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
 			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
@@ -267,10 +269,7 @@ public class EvenementRucheController {
 			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.RUCHECADRE, ruche, essaim, rucher,
 					null, null, null);
 			model.addAttribute(Const.EVENEMENT, evenement);
-
-			// essaimService.modelAddEvenement(model, essaim, TypeEvenement.RUCHECADRE);
 			essaimService.modelAddEve(model, essaim, TypeEvenement.RUCHECADRE);
-
 			return "ruche/rucheCadreForm";
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
@@ -310,11 +309,7 @@ public class EvenementRucheController {
 			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.RUCHEPESEE, ruche, essaim, rucher,
 					null, null, null);
 			model.addAttribute(Const.EVENEMENT, evenement);
-			// rucheService.modelAddEvenement(model, ruche, TypeEvenement.RUCHEPESEE);
-			// essaimService.modelAddEvenement(model, essaim, TypeEvenement.RUCHEPESEE);
-
 			essaimService.modelAddEve(model, essaim, TypeEvenement.RUCHEPESEE);
-
 			return "ruche/ruchePeseeForm";
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
@@ -404,7 +399,7 @@ public class EvenementRucheController {
 	@PostMapping("/commentaire/sauve")
 	public String commentaireSauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
-			return "ruche/rucheCommentaireForm";
+			return commForm;
 		}
 		evenement.setValeur(Utils.notifIntFmt(evenement.getValeur()));
 		String action = (evenement.getId() == null) ? "créé" : "modifié";

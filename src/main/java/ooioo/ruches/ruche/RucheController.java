@@ -253,8 +253,8 @@ public class RucheController {
 			// si la ruche n'a pas été changée de rucher on ne crée pas d'événement
 			// ajouter éventuellement message "Pas de changement de rucher"
 			if (!ruche.getRucher().getId().equals(rucher.getId())) {
-				String[] ruchesNoms = new String[] { ruche.getNom() };
-				rucherService.sauveAjouterRuches(rucher, ruchesNoms, date, commentaire);
+				Long[] ruchesIds = { rucheId };
+				rucherService.sauveAjouterRuches(rucher, ruchesIds, date, commentaire);
 			}
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);

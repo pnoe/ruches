@@ -98,7 +98,6 @@ public class RucheService {
 				//  renvoyé par findByRucheIdOrderByOrdreSurRuche
 				hausseRuche.setOrdreSurRuche(i++);
 				hausseRepository.save(hausseRuche);
-				// System.out.println("i " + i + " ordre " + ordre);
 			}
 		}
 	}

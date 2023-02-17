@@ -40,6 +40,7 @@ public class EvenementRucherController {
 	@Autowired
 	private MessageSource messageSource;
 
+	private static final String commForm = "rucher/rucherCommentaireForm";
 	/*
 	 * Liste événements ajout ruche rucher
 	 */
@@ -104,7 +105,7 @@ public class EvenementRucherController {
 			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.COMMENTAIRERUCHER, null, null,
 					rucher, null, null, null);
 			model.addAttribute(Const.EVENEMENT, evenement);
-			return "rucher/rucherCommentaireForm";
+			return commForm;
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
@@ -122,7 +123,7 @@ public class EvenementRucherController {
 		if (evenementOpt.isPresent()) {
 			Evenement evenement = evenementOpt.get();
 			model.addAttribute(Const.EVENEMENT, evenement);
-			return "rucher/rucherCommentaireForm";
+			return commForm;
 		} else {
 			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
 			model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
@@ -137,7 +138,7 @@ public class EvenementRucherController {
 	@PostMapping("/commentaire/sauve")
 	public String commentaireSauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
-			return "rucher/rucherCommentaireForm";
+			return commForm;
 		}
 		evenement.setValeur(Utils.notifIntFmt(evenement.getValeur()));
 		String action = (evenement.getId() == null) ? "créé" : "modifié";

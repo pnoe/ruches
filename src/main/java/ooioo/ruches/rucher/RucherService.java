@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -277,20 +278,16 @@ public class RucherService {
 	 * RUCHEAJOUTRUCHER. Le nom du rucher de provenance est mis dans le champ
 	 * valeur. Le commentaire est le commentaire saisi dans le formulaire
 	 */
-	public void sauveAjouterRuches(Rucher rucher, String[] ruchesNoms, String date, String commentaire) {
+	public void sauveAjouterRuches(Rucher rucher, Long[] ruchesIds, String date, String commentaire) {
 		LocalDateTime dateEveAjout = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
-		for (String rucheNom : ruchesNoms) {
-			Ruche ruche = rucheRepository.findByNom(rucheNom);
-			// Si le nom de la ruche est inconnu, log de l'erreur puis on continue.
-			// L'utilisateur ne voit donc pas l'erreur (sauf s'il consulte les logs).
-			if (ruche == null) {
-				logger.info("Ruche {} inconnue.", rucheNom);
-				continue;
-			}
+		for (Long rucheId : ruchesIds) {
+			Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
+			if (rucheOpt.isPresent()) {
+				Ruche ruche = rucheOpt.get();
 			// Si la ruche est déjà dans le rucher, log de l'erreur puis on continue.
 			// L'utilisateur ne voit donc pas l'erreur (sauf s'il consulte les logs).
 			if ((ruche.getRucher() != null) && (ruche.getRucher().getId().equals(rucher.getId()))) {
-				logger.info("Ruche {} déjà présente dans le rucher {}", rucheNom, rucher.getNom());
+				logger.info("Ruche {} déjà présente dans le rucher {}", ruche.getNom(), rucher.getNom());
 				continue;
 			}
 			String provenance = (ruche.getRucher() == null) ? "" : ruche.getRucher().getNom();
@@ -306,6 +303,11 @@ public class RucherService {
 					rucher, null, provenance, commentaire); // valeur commentaire
 			evenementRepository.save(eveAjout);
 			logger.info("{} créé", eveAjout);
+			} else {
+				// Si l'id de la ruche est inconnu, log de l'erreur puis on continue.
+				// L'utilisateur ne voit donc pas l'erreur (sauf s'il consulte les logs).
+				logger.error(Const.IDRUCHEXXINCONNU, rucheId);
+			}
 		}
 	}
 

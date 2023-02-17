@@ -167,11 +167,10 @@ public class PersonneController {
 					return Const.INDEX;
 				}
 			}
-			// else {
+			// else
 			// la personne n'existe pas en base et son password est ""
 			// c'est possible pour une personne que n'a pas de login
-			// comme un simple contact pour un rucher
-			// }
+			// comme un simple contact pour un ruche
 		} else {
 			personne.setPassword(new BCryptPasswordEncoder().encode(password));
 		}

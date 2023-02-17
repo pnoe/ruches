@@ -78,7 +78,7 @@ public class AccueilService {
 		// https://geoservices.ign.fr/documentation/services/api-et-services-ogc/itineraires/documentation-du-service-du-calcul
 		// https://wxs.ign.fr/geoportail/itineraire/rest/1.0.0/getCapabilities
 		// avec resource = OSRM erreur
-		// String urlIgn = "https://wxs.ign.fr/calcul/geoportail/itineraire/rest/1.0.0/route?resource=bdtopo-pgr&getSteps=false&start=";
+		// https://wxs.ign.fr/calcul/geoportail/itineraire/rest/1.0.0/route?resource=bdtopo-pgr&getSteps=false&start=
 		Iterable<Rucher> ruchers = rucherRepository.findAll();
 		RestTemplate restTemplate = new RestTemplate();
 		if (reset) {

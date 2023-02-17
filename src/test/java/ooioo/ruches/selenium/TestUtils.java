@@ -1,5 +1,9 @@
 package ooioo.ruches.selenium;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.File;
+import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
@@ -7,6 +11,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,6 +21,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public final class TestUtils {
 
+	static WebDriver driver;
+	
+	// Attention certains tests écrivent en base de donnée.
+	// Ne pas utiliser sur application en production !!!!!!!!!
+	// Démarrer l'application correspondant à cette url !!!!
+	static final String baseUrl = "http://localhost:8080/ruches/";
+
+	// Initialisation du navigateur Chrome et login
+	// Créer un admin, nom : xx, prénom : yy, login : test, password : testpwd, role
+	// : admin
+	// le nom et le prénom peuvent être quelconques
+	// Attention à ne pas mettre de mot de passe de production !
+	static final String user = "test";
+	static final String pwd = "testpwd";
+	static final String role = "[ROLE_admin]";
+	
 	// Print pour debug
 	public static final void print(String txt) {
 		String sep =
@@ -21,6 +44,52 @@ public final class TestUtils {
 		System.out.println(sep);
 		System.out.println(txt);
 		System.out.println(sep);
+	}
+	
+	static final WebDriver initChrome() {
+		String pathChromeDriver = "/snap/bin/chromium.chromedriver";
+//		System.setProperty("webdriver.chrome.driver","/home/noe/selenium/driver/chrome109/chromedriver");
+//		System.setProperty("webdriver.chrome.driver", pathChromeDriver");
+//		https://github.com/SeleniumHQ/selenium/issues/10969
+//		https://github.com/SeleniumHQ/selenium/issues/7788
+//		driver = new ChromeDriver();
+//		erreur : unknown flag `port'
+
+//      logs voir commentaires dans :
+//		https://github.com/SeleniumHQ/selenium/blob/trunk/java/src/org/openqa/selenium/logging/LoggingPreferences.java
+//      dans application.properties, ne marche pas non plus :
+//		logging.level.org.openqa.selenium=INFO
+//		logging.level.org.junit.jupiter=INFO
+		ChromeOptions options = new ChromeOptions();
+		//   Pas d'effet sur les logs :
+		//		options.setLogLevel(ChromeDriverLogLevel.OFF);
+		driver = new ChromeDriver((new ChromeDriverService.Builder() {
+			@Override
+			protected File findDefaultExecutable() {
+				if (new File(pathChromeDriver).exists()) {
+					@SuppressWarnings("serial")
+					File f = new File(pathChromeDriver) {
+						@Override
+						public String getCanonicalPath() throws IOException {
+							return this.getAbsolutePath();
+						}
+					};
+					return f;
+				} else {
+					return super.findDefaultExecutable();
+				}
+			}
+		}).build(), options);
+		driver.get(baseUrl + "login");
+		// Le titre de la page de connexion est "Connexion"
+		assertEquals("Connexion", driver.getTitle());
+		driver.findElement(By.name("username")).sendKeys(user);
+		driver.findElement(By.name("password")).sendKeys(pwd);
+		driver.findElement(By.xpath("//input[@type='submit']")).click();
+		// Le titre de la page après login est "ruches"
+		assertEquals("Ruches", driver.getTitle(),
+				() -> "La connexion a échoué, avez-vous créé un utilisateur 'test' ?");
+		return driver;
 	}
 
 	// Renvoie un nom pour nommer les ruches, hausses et ruchers créés lors des
