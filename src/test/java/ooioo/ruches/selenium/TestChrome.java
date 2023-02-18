@@ -11,7 +11,10 @@ import java.time.format.DateTimeFormatter;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.openqa.selenium.By;
@@ -23,6 +26,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@TestMethodOrder(OrderAnnotation.class)
 public class TestChrome {
 	
 	static WebDriver driver;
@@ -51,6 +55,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(1)
 	@DisplayName("Page d'accueil")
 	void connecte() {
 		driver.get(baseUrl);
@@ -62,6 +67,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(2)
 	@DisplayName("Ruches liste")
 	void listeRuches() {
 		driver.get(baseUrl + "ruche/liste");
@@ -70,6 +76,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(3)
 	@DisplayName("Ruche Types liste")
 	void listeRucheTypes() {
 		driver.get(baseUrl + "rucheType/liste");
@@ -78,6 +85,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(4)
 	@DisplayName("Ruches liste plus")
 	void listeRuchesPlus() {
 		driver.get(baseUrl + "ruche/listeplus");
@@ -86,6 +94,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(5)
 	@DisplayName("Ruche type création")
 	void creeTypeRuche() {
 		// Création du type de ruche "TestRucheType" avec 8 cadres max.
@@ -102,6 +111,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(6)
 	@DisplayName("Ruche création/modif")
 	void creeModifRuche() {
 		// Création d'une ruche
@@ -125,6 +135,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(7)
 	@DisplayName("Hausses liste")
 	void listeHausses() {
 		driver.get(baseUrl + "hausse/liste");
@@ -133,6 +144,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(8)
 	@DisplayName("Hausse création/modif")
 	void creeModifHausse() {
 		// Création d'une hausse
@@ -155,6 +167,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(9)
 	@DisplayName("Ruchers liste")
 	void listeRuchers() {
 		driver.get(baseUrl + "rucher/liste");
@@ -163,6 +176,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(10)
 	@DisplayName("Ruchers carte Gg")
 	void mapGgRuchers() {
 		driver.get(baseUrl + "rucher/Gg");
@@ -171,6 +185,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(11)
 	@DisplayName("Ruchers carte IGN")
 	void mapIgnRuchers() {
 		driver.get(baseUrl + "rucher/Ign");
@@ -179,6 +194,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(12)
 	@DisplayName("Ruchers carte OSM")
 	void mapOsmRuchers() {
 		driver.get(baseUrl + "rucher/Osm");
@@ -187,6 +203,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(13)
 	@DisplayName("Ruchers statistiques")
 	void statistiquesRuchers() {
 		driver.get(baseUrl + "rucher/statistiques");
@@ -196,6 +213,7 @@ public class TestChrome {
 
 	@DisplayName("Ruchers Transhumances")
 	@ParameterizedTest
+	@Order(14)
 	@ValueSource(strings = { "true", "false" })
 	void transhumanceRuchers(String groupe) {
 		driver.get(baseUrl + "rucher/historiques/" + groupe);
@@ -204,6 +222,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(15)
 	@DisplayName("Rucher création/modif")
 	void creeModifRucher() {
 		// Création d'un rucher
@@ -226,6 +245,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(16)
 	@DisplayName("Rucher dépot carte Gg")
 	void mapGgDepot() {
 		if (depotId == null) {
@@ -241,6 +261,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(17)
 	@DisplayName("Rucher dépot carte IGN")
 	void mapIgnDepot() {
 		if (depotId == null) {
@@ -256,6 +277,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(18)
 	@DisplayName("Rucher dépot carte OSM")
 	void mapOsmDepot() {
 		if (depotId == null) {
@@ -271,6 +293,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(19)
 	@DisplayName("Rucher dépot Météo")
 	void meteoDepot() {
 		if (depotId == null) {
@@ -286,6 +309,7 @@ public class TestChrome {
 	}
 
 	@DisplayName("Rucher dépôt Transhumances")
+	@Order(20)
 	@ParameterizedTest
 	@ValueSource(strings = { "true", "false" })
 	void transhumDepot(String groupe) {
@@ -302,6 +326,7 @@ public class TestChrome {
 	}
 
 	@DisplayName("Rucher dépôt ajouter ruches")
+	@Order(21)
 	@Test
 	void rucherRucheDepot() {
 		if (depotId == null) {
@@ -317,6 +342,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(22)
 	@DisplayName("Personnes liste")
 	void listePersonnes() {
 		driver.get(baseUrl + "personne/liste");
@@ -325,6 +351,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(23)
 	@DisplayName("Personne création/modif")
 	void creeModifPersonne() {
 		// Création d'une personne
@@ -348,6 +375,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(24)
 	@DisplayName("Essaims liste")
 	void listeEssaims() {
 		driver.get(baseUrl + "essaim/liste");
@@ -356,6 +384,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(25)
 	@DisplayName("Essaim création/modif")
 	void creeModifEssaim() {
 		// Création d'un essaim
@@ -379,6 +408,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(26)
 	@DisplayName("Essaims statistiques")
 	void essaimStatistiques() {
 		driver.get(baseUrl + "essaim/statistiques");
@@ -387,6 +417,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(27)
 	@DisplayName("Essaims âge des reines")
 	void essaimAgeReines() {
 		driver.get(baseUrl + "essaim/statistiquesage");
@@ -395,6 +426,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(28)
 	@DisplayName("Récoltes liste")
 	void listeRecoltes() {
 		driver.get(baseUrl + "recolte/liste");
@@ -403,6 +435,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(29)
 	@DisplayName("Récolte création")
 	void creeRecolte() {
 		// Création d'une récolte
@@ -424,6 +457,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(30)
 	@DisplayName("Récoltes statistiques essaim")
 	void recoltesStatEssaim() {
 		driver.get(baseUrl + "recolte/statistiques/essaim");
@@ -432,14 +466,19 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(31)
 	@DisplayName("Récoltes statistiques production")
 	void recoltesStatProd() {
 		driver.get(baseUrl + "recolte/statprod");
 		// Le canevas d'id "ctx" est affiché
+		
+		// !!!!!!!!!! erreur sur base min !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		
 		assertEquals("canvas", driver.findElement(By.id("ctx")).getTagName());
 	}
 
 	@DisplayName("Événements liste")
+	@Order(32)
 	@ParameterizedTest
 	@ValueSource(strings = { "", "?periode=2" })
 	void listeEve(String periode) {
@@ -449,6 +488,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(33)
 	@DisplayName("Événements liste sucre")
 	void listeEveSucre() {
 		driver.get(baseUrl + "evenement/essaim/listeSucre");
@@ -457,6 +497,7 @@ public class TestChrome {
 	}
 
 	@DisplayName("Événements liste traitement")
+	@Order(34)
 	@ParameterizedTest
 	@ValueSource(strings = { "true", "false" })
 	void listeEveTraite(String tous) {
@@ -466,6 +507,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(35)
 	@DisplayName("Événements liste poids ruche")
 	void listeEvePoids() {
 		driver.get(baseUrl + "evenement/ruche/listePoidsRuche");
@@ -474,6 +516,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(36)
 	@DisplayName("Événements liste cadre ruche")
 	void listeEveCadre() {
 		driver.get(baseUrl + "evenement/ruche/listeCadreRuche");
@@ -482,6 +525,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(37)
 	@DisplayName("Événements liste remplissage")
 	void listeEveRemplissage() {
 		driver.get(baseUrl + "evenement/hausse/listeRemplissageHausse");
@@ -498,6 +542,7 @@ public class TestChrome {
 	}
 
 	@ParameterizedTest
+	@Order(38)
 	@ValueSource(strings = { "true", "false" })
 	@DisplayName("Événements liste notifications")
 	void listeEveNotif(String tous) {
@@ -507,6 +552,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(39)
 	@DisplayName("Événements liste rucher dépot")
 	void listeEveDepot() {
 		if (depotId == null) {
@@ -522,6 +568,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(40)
 	@DisplayName("Événements commentaire création rucher dépot")
 	void creeEveCommDepot() {
 		if (depotId == null) {
@@ -543,6 +590,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(41)
 	@DisplayName("Événement création/modif")
 	void creeEtModifEvenement() {
 		// Création d'un événement
@@ -575,6 +623,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(42)
 	@DisplayName("Admin paramètres")
 	void adminParam() {
 		driver.get(baseUrl + "parametres");
@@ -584,6 +633,7 @@ public class TestChrome {
 
 	// TODO API rest appeler chacunes des urls de la page /rest
 	@Test
+	@Order(43)
 	@DisplayName("Admin API REST")
 	void adminRest() {
 		driver.get(baseUrl + "rest");
@@ -599,6 +649,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(44)
 	@DisplayName("Admin logs")
 	void adminLog() {
 		driver.get(baseUrl + "admin/logs/logfile");
@@ -607,6 +658,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(45)
 	@DisplayName("Admin infos")
 	void adminInfos() {
 		driver.get(baseUrl + "infos");
@@ -616,6 +668,7 @@ public class TestChrome {
 
 	@Test
 	@DisplayName("Admin tests")
+	@Order(46)
 	void adminTests() {
 		driver.get(baseUrl + "tests");
 		// La div d'id "tests" est présente
@@ -623,6 +676,7 @@ public class TestChrome {
 	}
 
 	@Test
+	@Order(47)
 	@DisplayName("Admin documentation")
 	void adminDoc() {
 		driver.get(baseUrl + "doc/ruches.html");

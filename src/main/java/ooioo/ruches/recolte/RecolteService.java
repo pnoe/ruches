@@ -30,7 +30,11 @@ public class RecolteService {
 	 * actifs dans l'année. Diagramme à barres verticales (histogramme)/
 	 */
 	public void statprod(Model model) {
-		int debutAnnee = recolteRepository.findFirstByOrderByDateAsc().getDate().getYear();
+		Recolte recFirst = recolteRepository.findFirstByOrderByDateAsc();
+		if (recFirst == null) {
+			return;
+		}
+		int debutAnnee = recFirst.getDate().getYear();
 		LocalDate maintenant = LocalDate.now();
 		int finAnnee = maintenant.getYear();
 		int dureeAns = finAnnee - debutAnnee + 1;
