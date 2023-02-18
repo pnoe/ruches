@@ -27,7 +27,7 @@ import org.openqa.selenium.By;
 
 @TestMethodOrder(OrderAnnotation.class)
 public class TestEssaim {
-	
+
 	// private final Logger logger = LoggerFactory.getLogger(TestEssaim.class);
 
 	static final String comment = "Test selenium chrome";
@@ -81,7 +81,7 @@ public class TestEssaim {
 		String urlDetail = driver.getCurrentUrl();
 		rucheId = urlDetail.substring(urlDetail.lastIndexOf("/") + 1);
 	}
-	
+
 	@Test
 	@Order(3)
 	@DisplayName("Rucher création")
@@ -112,18 +112,17 @@ public class TestEssaim {
 		driver.findElement(By.id("actionAjoutRuches")).click();
 		assertEquals("form", driver.findElement(By.id("evenementForm")).getTagName());
 		driver.findElement(By.name(commentaire)).sendKeys(comment);
-		// On augmente la date du formulaire d'1 minute
-		//   sinon elle est rejetée par les controles javascript
+		// On augmente la date du formulaire de 2 minutes
+		// sinon elle est rejetée par les controles javascript
 		String dateS = driver.findElement(By.name("date")).getAttribute("value");
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
 		LocalDateTime dateTime = LocalDateTime.parse(dateS, formatter);
 		dateTime = dateTime.plusMinutes(2);
-		TestUtils.clearSend(driver, "date", dateTime.format(
-				DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
+		TestUtils.clearSend(driver, "date", dateTime.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
 		TestUtils.submit(driver);
 		assertEquals("table", driver.findElement(By.id("ajoutRuches")).getTagName());
 	}
-	
+
 	@Test
 	@Order(5)
 	@DisplayName("Essaim création")
@@ -131,7 +130,7 @@ public class TestEssaim {
 		// Création d'un essaim
 		// Attention écriture en base de données
 		driver.get(baseUrl + "essaim/cree");
-		// Formulaire de création de ruche
+		// Formulaire de création de l'essaim
 		assertEquals("form", driver.findElement(By.id("essaimForm")).getTagName());
 		driver.findElement(By.name("nom")).sendKeys(TestUtils.nomMilli());
 		driver.findElement(By.name(commentaire)).sendKeys(comment);
@@ -156,7 +155,7 @@ public class TestEssaim {
 		TestUtils.submit(driver);
 		assertEquals("div", driver.findElement(By.id("detailEssaim")).getTagName());
 	}
-	
+
 	@Test
 	@Order(7)
 	@DisplayName("Essaimage")
@@ -172,7 +171,35 @@ public class TestEssaim {
 		essaimIdNew = urlDetail.substring(urlDetail.lastIndexOf("/") + 1);
 		assertEquals("div", driver.findElement(By.id("detailEssaim")).getTagName());
 	}
-	
-	
+
+	@Test
+	@Order(8)
+	@DisplayName("Arbre de descendance")
+	void desc() {
+		driver.get(baseUrl + "essaim/" + essaimIdNew);
+		assertEquals("div", driver.findElement(By.id("detailEssaim")).getTagName());
+		driver.findElement(By.id("descend")).click();
+		assertEquals("div", driver.findElement(By.id("graph")).getTagName());
+	}
+
+	@Test
+	@Order(9)
+	@DisplayName("Dispersion essaim")
+	void dispersion() {
+		driver.get(baseUrl + "essaim/" + essaimIdNew);
+		assertEquals("div", driver.findElement(By.id("detailEssaim")).getTagName());
+		driver.findElement(By.id("dispersion")).click();
+		driver.findElement(By.name(commentaire)).sendKeys(comment);
+		// On augmente la date du formulaire de 5 minutes
+		// sinon elle est rejetée par les controles javascript
+		String dateS = driver.findElement(By.name("date")).getAttribute("value");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+		LocalDateTime dateTime = LocalDateTime.parse(dateS, formatter);
+		dateTime = dateTime.plusMinutes(5);
+		TestUtils.clearSend(driver, "date", dateTime.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
+		assertEquals("form", driver.findElement(By.id("evenementForm")).getTagName());
+		TestUtils.submit(driver);
+		assertEquals("table", driver.findElement(By.id("essaims")).getTagName());
+	}
 
 }
