@@ -22,7 +22,7 @@ import org.openqa.selenium.firefox.GeckoDriverService;
 public class TestFirefox {
 
 	static WebDriver driver;
-	static final String comment = "Test selenium chrome";
+	static final String comment = "Test selenium firefox";
 
 	// Attention certains tests écrivent en base de donnée.
 	// Ne pas utiliser sur application en production !!!!!!!!!
@@ -79,15 +79,16 @@ public class TestFirefox {
 	static void initFirefox() {
 
 
-        FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("-h", "-p 4444");
+        // FirefoxOptions options = new FirefoxOptions();
+        // options.addArguments("-h", "-p 4444");
 
 
 
         System.setProperty("webdriver.gecko.driver","/snap/bin/firefox.geckodriver");
 
 		// driver = getFirefoxDriver();
-		driver = new FirefoxDriver(options);
+//		driver = new FirefoxDriver(options);
+		driver = new FirefoxDriver();
 
 
 //		https://www.selenium.dev/documentation/webdriver/elements/finders/

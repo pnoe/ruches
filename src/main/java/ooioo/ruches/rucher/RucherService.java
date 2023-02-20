@@ -31,6 +31,7 @@ import com.google.protobuf.Duration;
 import ooioo.ruches.Const;
 import ooioo.ruches.LatLon;
 import ooioo.ruches.Nom;
+import ooioo.ruches.Utils;
 import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
@@ -195,7 +196,7 @@ public class RucherService {
 	/*
 	 * Calcul du chemin le plus court de visite des ruches du rucher.
 	 * https://developers.google.com/optimization/routing/tsp Le chemin est calculé
-	 * dans List<RucheParcours> cheminRet et la distance en retour de la fonction.
+	 * dans List<RucheParcours> cheminRet, et la distance en retour de la fonction.
 	 */
 	public double cheminRuchesRucher(List<RucheParcours> cheminRet, Rucher rucher, Iterable<Ruche> ruches,
 			boolean redraw) {
@@ -216,11 +217,12 @@ public class RucherService {
 		// Initialisation de la matrice d'int des distances entre les ruches
 		// les distances sont en mm
 		double dist;
+		double diametreTerre = 2 * Utils.rTerreLat(rucher.getLatitude());
 		for (int i = 1; i < cheminSize; i++) {
 			for (int j = 0; j < i; j++) {
 				RucheParcours ii = chemin.get(i);
 				RucheParcours jj = chemin.get(j);
-				dist = distance(ii.latitude(), jj.latitude(), ii.longitude(), jj.longitude());
+				dist = Utils.distance(diametreTerre, ii.latitude(), jj.latitude(), ii.longitude(), jj.longitude());
 				DataModel.distanceMatrix[i][j] = (long) (dist * 1000.0);
 				DataModel.distanceMatrix[j][i] = DataModel.distanceMatrix[i][j];
 			}
@@ -320,20 +322,6 @@ public class RucherService {
 		double t = 2d * Math.PI * Math.random();
 		return new LatLon(lat + (float) (w * Math.sin(t)),
 				lon + (float) (w * Math.cos(t) / Math.cos(Math.toRadians(lat))));
-	}
-
-	/**
-	 * Calcul de la distance entre deux points donnés en latitude, longitude Méthode
-	 * de Haversine, distance orhodromique avec rayon de la terre moyen 6371km
-	 */
-	public double distance(double lat1, double lat2, double lon1, double lon2) {
-		double sinLatDistance2 = Math.sin(Math.toRadians(lat2 - lat1) / 2d);
-		double sinLonDistance2 = Math.sin(Math.toRadians(lon2 - lon1) / 2d);
-		double a = sinLatDistance2 * sinLatDistance2
-				+ Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * sinLonDistance2 * sinLonDistance2;
-		return 12742000d * Math.asin(Math.sqrt(a));
-		// ou encore : return 12742000d * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-		// 12742000d diamètre de la terre en mètres
 	}
 
 }

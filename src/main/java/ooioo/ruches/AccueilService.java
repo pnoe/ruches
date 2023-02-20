@@ -28,7 +28,6 @@ import ooioo.ruches.rucher.DistRucher;
 import ooioo.ruches.rucher.DistRucherRepository;
 import ooioo.ruches.rucher.Rucher;
 import ooioo.ruches.rucher.RucherRepository;
-import ooioo.ruches.rucher.RucherService;
 
 @Service
 public class AccueilService {
@@ -49,8 +48,6 @@ public class AccueilService {
 	private HausseRepository hausseRepository;
 	@Autowired
 	private RecolteRepository recolteRepository;
-	@Autowired
-	private RucherService rucherService;
 
 	@Value("${dist.ruches.loins}")
 	private double distRuchesTropLoins;
@@ -214,8 +211,9 @@ public class AccueilService {
 			Float longRucher = rucher.getLongitude();
 			Float latRucher = rucher.getLatitude();
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucher.getId());
+			double diametreTerre = 2 * Utils.rTerreLat(rucher.getLatitude());
 			for (Ruche ruche : ruches) {
-				if (rucherService.distance(latRucher, ruche.getLatitude(), longRucher,
+				if (Utils.distance(diametreTerre, latRucher, ruche.getLatitude(), longRucher,
 						ruche.getLongitude()) > distRuchesTropLoins) {
 					ruchesTropLoins.add(ruche);
 				}
@@ -227,6 +225,7 @@ public class AccueilService {
 		List<Rucher> ruchersMalCales = new ArrayList<>();
 		List<Double> distances = new ArrayList<>();
 		for (Rucher rucher : ruchers) {
+			double diametreTerre = 2 * Utils.rTerreLat(rucher.getLatitude());
 			Float longitude;
 			Float latitude = 0f;
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucher.getId());
@@ -244,7 +243,7 @@ public class AccueilService {
 				continue;
 			longitude = (float) (Math.atan2(ylon, xlon) * 180d / Math.PI);
 			latitude /= nbRuches2;
-			double dist = rucherService.distance(latitude, rucher.getLatitude(), longitude, rucher.getLongitude());
+			double dist = Utils.distance(diametreTerre, latitude, rucher.getLatitude(), longitude, rucher.getLongitude());
 			if (dist > distRuchersTropLoins) {
 				ruchersMalCales.add(rucher);
 				distances.add(dist);

@@ -410,8 +410,9 @@ public class RucherController {
 			Float latRucher = rucher.getLatitude();
 			// liste des ruches de ce rucher
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
+			double diametreTerre = 2 * Utils.rTerreLat(rucher.getLatitude());
 			for (Ruche ruche : ruches) {
-				if (rucherService.distance(latRucher, ruche.getLatitude(), longRucher,
+				if (Utils.distance(diametreTerre, latRucher, ruche.getLatitude(), longRucher,
 						ruche.getLongitude()) > distMaxRuche) {
 					// On calcule un point près de l'entrée du rucher
 					LatLon latLon = rucherService.dispersion(rucher.getLatitude(), rucher.getLongitude());
