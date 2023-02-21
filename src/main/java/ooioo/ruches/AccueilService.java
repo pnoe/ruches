@@ -211,7 +211,8 @@ public class AccueilService {
 			Float longRucher = rucher.getLongitude();
 			Float latRucher = rucher.getLatitude();
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucher.getId());
-			double diametreTerre = 2 * Utils.rTerreLat(rucher.getLatitude());
+			double diametreTerre = ((rucher.getAltitude() == null) ? 0 : rucher.getAltitude()) +
+					2 * Utils.rTerreLat(rucher.getLatitude());
 			for (Ruche ruche : ruches) {
 				if (Utils.distance(diametreTerre, latRucher, ruche.getLatitude(), longRucher,
 						ruche.getLongitude()) > distRuchesTropLoins) {

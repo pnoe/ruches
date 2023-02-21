@@ -37,15 +37,6 @@ public final class TestUtils {
 	static final String pwd = "testpwd";
 	static final String role = "[ROLE_admin]";
 	
-	// Print pour debug
-	public static final void print(String txt) {
-		String sep =
-			"********************************************************************************************************";
-		System.out.println(sep);
-		System.out.println(txt);
-		System.out.println(sep);
-	}
-	
 	static final WebDriver initChrome() {
 		String pathChromeDriver = "/snap/bin/chromium.chromedriver";
 //		System.setProperty("webdriver.chrome.driver","/home/noe/selenium/driver/chrome109/chromedriver");
@@ -61,6 +52,8 @@ public final class TestUtils {
 //		logging.level.org.openqa.selenium=INFO
 //		logging.level.org.junit.jupiter=INFO
 		ChromeOptions options = new ChromeOptions();
+		// Pour tests sans interface graphique de Chrome
+		// options.addArguments("headless");
 		//   Pas d'effet sur les logs :
 		//		options.setLogLevel(ChromeDriverLogLevel.OFF);
 		driver = new ChromeDriver((new ChromeDriverService.Builder() {
@@ -132,6 +125,10 @@ public final class TestUtils {
 	public static final void xpathClick(WebDriver driver, String xpath) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].click();", driver.findElement(By.xpath(xpath)));
+	}
+	
+	private TestUtils() {
+		throw new IllegalStateException("Constant class");
 	}
 
 }

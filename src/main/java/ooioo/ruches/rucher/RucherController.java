@@ -410,7 +410,8 @@ public class RucherController {
 			Float latRucher = rucher.getLatitude();
 			// liste des ruches de ce rucher
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
-			double diametreTerre = 2 * Utils.rTerreLat(rucher.getLatitude());
+			double diametreTerre = ((rucher.getAltitude() == null) ? 0 : rucher.getAltitude()) +
+					2 * Utils.rTerreLat(rucher.getLatitude());
 			for (Ruche ruche : ruches) {
 				if (Utils.distance(diametreTerre, latRucher, ruche.getLatitude(), longRucher,
 						ruche.getLongitude()) > distMaxRuche) {

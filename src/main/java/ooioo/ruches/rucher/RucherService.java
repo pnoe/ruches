@@ -217,7 +217,8 @@ public class RucherService {
 		// Initialisation de la matrice d'int des distances entre les ruches
 		// les distances sont en mm
 		double dist;
-		double diametreTerre = 2 * Utils.rTerreLat(rucher.getLatitude());
+		double diametreTerre = ((rucher.getAltitude() == null) ? 0 : rucher.getAltitude()) +
+				2 * Utils.rTerreLat(rucher.getLatitude());
 		for (int i = 1; i < cheminSize; i++) {
 			for (int j = 0; j < i; j++) {
 				RucheParcours ii = chemin.get(i);

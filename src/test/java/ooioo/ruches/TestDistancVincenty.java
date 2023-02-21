@@ -1,6 +1,6 @@
 package ooioo.ruches;
 
-public class TestDistancVincenty {
+public final class TestDistancVincenty {
 
 	public static final double EQUATORIAL_RADIUS = 6378137.0;
 	public static final double INVERSE_FLATTENING = 298.257223563;
@@ -55,6 +55,10 @@ public class TestDistancVincenty {
 				- B / 6 * cos2SigmaM * (-3 + 4 * sinSigma * sinSigma) * (-3 + 4 * cos2SigmaM * cos2SigmaM)));
 		double s = POLAR_RADIUS * A * (sigma - deltaSigma);
 		return s;
+	}
+	
+	private TestDistancVincenty() {
+		throw new IllegalStateException("Constant class");
 	}
 
 }
