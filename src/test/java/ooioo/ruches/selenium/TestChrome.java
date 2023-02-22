@@ -1,5 +1,7 @@
 package ooioo.ruches.selenium;
 
+import static ooioo.ruches.selenium.TestUtils.baseUrl;
+import static ooioo.ruches.selenium.TestUtils.driver;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -18,7 +20,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
@@ -28,15 +29,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @TestMethodOrder(OrderAnnotation.class)
 public class TestChrome {
-	
-	static WebDriver driver;
-	
+		
 	static final String comment = "Test selenium chrome";
-
-	// Attention certains tests écrivent en base de donnée.
-	// Ne pas utiliser sur application en production !!!!!!!!!
-	// Démarrer l'application correspondant à cette url !!!!
-	static String baseUrl;
 
 	static final String commentaire = "commentaire";
 	static final String modif = " - modifié";
@@ -45,8 +39,7 @@ public class TestChrome {
 	
 	@BeforeAll
 	static void initChrome() {
-		driver = TestUtils.initChrome();
-		baseUrl = TestUtils.baseUrl;
+		TestUtils.initChrome();
 	}
 
 	@AfterAll

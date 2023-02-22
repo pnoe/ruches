@@ -25,7 +25,7 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 
 	Ruche findByEssaimId(Long id);
 
-	Collection<Ruche> findCollByRucherId(Long RucherId);
+	Collection<Ruche> findCollByRucherId(Long rucherId);
 
 	Collection<Nom> findAllProjectedBy();
 

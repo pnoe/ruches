@@ -124,7 +124,7 @@ public class EssaimController {
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isPresent()) {
 			Ruche ruche = rucheRepository.findByEssaimId(essaimId);
-			// if (ruche = null) ?
+			// TODO if (ruche = null) ?
 			List<String> noms = new ArrayList<>();
 			for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
 				noms.add(essaimNom.nom());
