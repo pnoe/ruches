@@ -9,7 +9,7 @@
 	const dateFirst = /*[[${dateFirst}]]*/null;
 	const timeFirst = /*[[${timeFirst}]]*/null;
 	$().ready(function() {
-		$.validator.addMethod( "greaterThanEqual", function( value, element, param ) {
+		$.validator.addMethod("greaterThan", function(value, element, param) {
 		    return Date.parse(value) > Date.parse(param);
 		}, doitEtreSupA + ' {0}');		
 		$("#evenementForm").validate({
@@ -20,7 +20,7 @@
 			rules : {
 				date : {
 					required : true,
-					greaterThanEqual : dateFirst + ' ' + timeFirst
+					greaterThan : dateFirst + ' ' + timeFirst
 				},
 				commentaire : {
 					maxlength : 255

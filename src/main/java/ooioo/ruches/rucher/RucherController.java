@@ -248,7 +248,7 @@ public class RucherController {
 	}
 
 	/**
-	 * Appel du formulaire de création d'un rucher
+	 * Appel du formulaire de création d'un rucher.
 	 */
 	@GetMapping("/cree")
 	public String cree(Model model) {
@@ -269,7 +269,7 @@ public class RucherController {
 	}
 
 	/**
-	 * Modifier un rucher
+	 * Appel du formulaire de modification d'un rucher.
 	 */
 	@GetMapping("/modifie/{rucherId}")
 	public String modifie(Model model, @PathVariable long rucherId) {
@@ -290,7 +290,7 @@ public class RucherController {
 	}
 
 	/**
-	 * Enregistrement du rucher créé ou modifié
+	 * Enregistrement du rucher créé ou modifié.
 	 */
 	@PostMapping("/sauve")
 	public String sauve(Model model, @ModelAttribute Rucher rucher, BindingResult bindingResult) {
@@ -311,7 +311,7 @@ public class RucherController {
 	}
 
 	/**
-	 * Afficher un rucher et ses ruches
+	 * Afficher un rucher et ses ruches.
 	 */
 	@GetMapping("/{rucherId}")
 	public String affiche(Model model, @PathVariable long rucherId) {
@@ -458,7 +458,7 @@ public class RucherController {
 	}
 
 	/**
-	 * Suppression d'un rucher. On ne peut pas supprimer le dépôt
+	 * Suppression d'un rucher. On ne peut pas supprimer le dépôt.
 	 */
 	@GetMapping("/supprime/{rucherId}")
 	public String supprime(Model model, @PathVariable long rucherId) {
@@ -500,7 +500,7 @@ public class RucherController {
 
 	/**
 	 * Affiche la carte avec les ruches du rucher rucherId. Gg google maps, Ign ou
-	 * Osm OpenStreetMap
+	 * Osm OpenStreetMap.
 	 */
 	@GetMapping({ "/Gg/{rucherId}", "/Ign/{rucherId}", "/Osm/{rucherId}" })
 	public String rucheMap(Model model, @PathVariable long rucherId, HttpServletRequest request) {
@@ -553,7 +553,7 @@ public class RucherController {
 
 	/**
 	 * Affiche la carte de tous les ruchers. Gg google maps, Ign ou Osm
-	 * OpenStreetMap
+	 * OpenStreetMap.
 	 */
 	@GetMapping({ "/Gg", "/Ign", "/Osm" })
 	public String rucherMap(HttpSession session, Model model, HttpServletRequest request) {
@@ -591,9 +591,9 @@ public class RucherController {
 		if (rucherOpt.isPresent()) {
 			model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
 			model.addAttribute(Const.RUCHER, rucherOpt.get());
-			// model.addAttribute("ruchesNoms", ruchesNoms);
 			// On cherche la date du dernier événement RUCHEAJOUTRUCHER
-			// pour imposer cette date comme min dans le formulaire
+			// pour imposer cette date comme min dans le datetimecalendar et
+			// dans la règle de validation jquery.
 			LocalDateTime dateTimeMin = LocalDateTime.MIN;
 			StringBuilder ruchesNoms = new StringBuilder();
 			StringBuilder rIds = new StringBuilder();
@@ -613,12 +613,14 @@ public class RucherController {
 					logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 				}
 			}
-			DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
+			// DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			// DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
 			model.addAttribute("dateTime", dateTimeMin);
-			LocalDateTime dateTimeFirst = dateTimeMin.plusMinutes(1);
-			model.addAttribute("dateFirst", dateTimeFirst.format(dateFormat));
-			model.addAttribute("timeFirst", dateTimeFirst.format(timeFormat));
+			// LocalDateTime dateTimeFirst = dateTimeMin.plusMinutes(1);
+			// model.addAttribute("dateFirst", dateTimeFirst.format(dateFormat));
+			// model.addAttribute("timeFirst", dateTimeFirst.format(timeFormat));
+			model.addAttribute("dateFirst", dateTimeMin.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+			model.addAttribute("timeFirst", dateTimeMin.format(DateTimeFormatter.ofPattern("HH:mm")));
 			ruchesNoms.deleteCharAt(ruchesNoms.length() - 1);
 			rIds.deleteCharAt(rIds.length() - 1);
 			model.addAttribute("ruchesNoms", ruchesNoms);
