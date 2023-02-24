@@ -8,6 +8,7 @@ public final class TestDistancVincenty {
 
 	/**
 	 * Calcule la distance en mètres entre deux points lat, long en degrés.
+	 * Renvoie 0 pour deux points sur l'équateur (lat = 0) !
 	 * Méthode de Vincenty utilisant un ellipsoide.
 	 * Cette méthode est plus longue que la méthode de Haversine et 
 	 * n'a pas d'intérêt pour des points proches, distants d'une centaine de mètres.
