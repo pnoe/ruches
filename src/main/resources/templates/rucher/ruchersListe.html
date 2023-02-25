@@ -3,21 +3,27 @@
 <head
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
-const buttontextprint = /*[[#{buttontextprint}]]*/null;
-const buttontextcol = /*[[#{buttontextcol}]]*/null;
-const listeRuchers = /*[[#{listeRuchers}]]*/null;
-$(document).ready(function() {
-    new DataTable('#ruchers', {
-        dom: 'Blftip',
-	    buttons: [
-	    	'csv',
-	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-	    		title: listeRuchers + " " + (new Date()).toLocaleDateString()},
-	        {extend: 'print', text: buttontextprint},
-	        {extend: 'colvis', text: buttontextcol}
-        ]
-    });
-});
+	const buttontextprint = /*[[#{buttontextprint}]]*/null;
+	const buttontextcol = /*[[#{buttontextcol}]]*/null;
+	const listeRuchers = /*[[#{listeRuchers}]]*/null;
+	$(document).ready(function() {
+		new DataTable('#ruchers', {
+			dom : 'Blftip',
+			buttons : [ 'csv', {
+				extend : 'pdf',
+				exportOptions : {
+					columns : ':visible'
+				},
+				title : listeRuchers + " " + (new Date()).toLocaleDateString()
+			}, {
+				extend : 'print',
+				text : buttontextprint
+			}, {
+				extend : 'colvis',
+				text : buttontextcol
+			} ]
+		});
+	});
 </script>
 </head>
 <body>
@@ -34,15 +40,15 @@ $(document).ready(function() {
 				<a id="cree" th:href="@{/rucher/cree}" class="bi bi-plus-lg"
 					th:title="#{ajouterRucher}" aria-hidden="true"></a> &nbsp; <a
 					th:href="@{/rucher/Gg/}" class="bi bi-google" th:title="#{carteGg}"
-					aria-hidden="true"></a> <a th:href="@{/rucher/Ign/}"
-					class="bi bi-map" th:title="#{carteIgn}" aria-hidden="true"></a> <a
+					aria-hidden="true"></a> <a th:href="@{'/rucher/Ign/'}"
+					th:title="#{carteIgn}" aria-hidden="true"><img
+					th:src="@{'/images/france.svg'}" style="margin-bottom: 2px;" /></a> <a
 					th:href="@{/rucher/Osm/}" class="bi bi-globe"
 					th:title="#{carteOsm}" aria-hidden="true"></a> &nbsp; <a
 					th:href="@{/rucher/statistiques}" class="bi bi-table"
 					th:title="#{statistiquesruchers}" aria-hidden="true"></a> &nbsp; <a
-					th:href="@{'/rucher/historiques/true'}"
-					class="bi bi-truck-front" th:title="#{transhumances}"
-					aria-hidden="true"></a>
+					th:href="@{'/rucher/historiques/true'}" class="bi bi-truck-front"
+					th:title="#{transhumances}" aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>

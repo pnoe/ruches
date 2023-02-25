@@ -62,8 +62,9 @@
 				&nbsp;
 				<a th:href="@{'/rucher/Gg/'+${rucher.id}}" 
 				  class="bi bi-google" th:title="#{carteGg}" aria-hidden="true"></a> 
-				<a th:href="@{'/rucher/Ign/'+${rucher.id}}" 
-				  class="bi bi-map" th:title="#{carteIgn}" aria-hidden="true"></a>	
+				<a th:href="@{'/rucher/Ign/'+${rucher.id}}" th:title="#{carteIgn}"
+					aria-hidden="true"><img th:src="@{'/images/france.svg'}"
+					style="margin-bottom: 2px;" /></a>
 				<a th:href="@{'/rucher/Osm/'+${rucher.id}}" 
 				  class="bi bi-globe" th:title="#{carteOsm}" aria-hidden="true"></a>
 				&nbsp;
