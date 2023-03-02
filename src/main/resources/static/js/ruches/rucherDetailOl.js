@@ -5,6 +5,11 @@
    ruchetxt, lesHausses, pasdehaussetxt, parcourstxt, ignCarteLiscense,
    parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token, dessinEnregistretxt */
 "use strict";
+let  map;
+let drawLayer;
+let drawControl;
+let iconFeatureEntree;
+let overlay;
 function rucherDetail(ign) {
 	const lang = navigator.language;
 	const digits2 = { maximumFractionDigits: 2 };
@@ -27,7 +32,8 @@ function rucherDetail(ign) {
 	});
 	const markerRuches = [];
 	const closer = document.getElementById('popup-closer');
-	const overlay = new ol.Overlay({
+	// const 
+	overlay = new ol.Overlay({
 		element: document.getElementById('popup'),
 		autoPan: true,
 		autoPanAnimation: {
@@ -71,7 +77,8 @@ function rucherDetail(ign) {
 	const coordsEntree = [];
 	coordsEntree.push(rucher.longitude);
 	coordsEntree.push(rucher.latitude);
-	const iconFeatureEntree = new ol.Feature({
+	// const
+	iconFeatureEntree = new ol.Feature({
 		type: 'geoMarker',
 		rucheid: 'entree',
 		geometry: new ol.geom.Point(ol.proj.fromLonLat(coordsEntree))
@@ -154,12 +161,14 @@ function rucherDetail(ign) {
 	// Ne fonctionne pas
 	const formatKML = new ol.format.KML({});
 	const dessinsFeatures = (rucher.dessin === null) ? new ol.Collection() : new ol.Collection(formatKML.readFeatures(rucher.dessin));
-	const drawLayer = new ol.layer.Vector({
+	// const
+	drawLayer = new ol.layer.Vector({
 		source: new ol.source.Vector({
 			features: dessinsFeatures
 		})
 	});
-	const map = new ol.Map({
+	// const map = 
+	map = new ol.Map({
 		interactions: ol.interaction.defaults({ doubleClickZoom: false }).extend([select, translate]),
 		controls: ol.control.defaults({
 			attribution: false
@@ -177,7 +186,8 @@ function rucherDetail(ign) {
 			zoom: 19
 		})
 	});
-	const drawControl = new ol.control.Drawing({
+	// const 
+	drawControl = new ol.control.Drawing({
 		layer: drawLayer,
 		tools: {
 			text: false
@@ -320,36 +330,12 @@ function rucherDetail(ign) {
 			})
 		});
 		layersMap.insertAt(0, beOrthoLayer);
-
-		// Québec 
-		// https://imagesgeo-atlas.mrnf.gouv.qc.ca/IDS_IMAGERIE_WMS/service.svc/get?request=GetCapabilities&service=WMS
-		// https://www.donneesquebec.ca/recherche/dataset/imagerie-aerienne-mosaiques-orthophotographiques
-		// https://openlayers.org/en/v6.15.1/apidoc/module-ol_source_TileWMS-TileWMS.html
-		/*
-				const quebecLayerURL = 'https://imagesgeo-atlas.mrnf.gouv.qc.ca/IDS_IMAGERIE_WMS/service.svc/get?';
-				const quebecLayer = new ol.layer.Tile({
-					source: new ol.source.TileWMS({
-						url: quebecLayerURL,
-						projection: 'EPSG:3857',
-						params: {
-							PROJECTION: 'EPSG:3857',
-							// LAYERS: 'Satellitaire_Sentinel-2_2019_2019_Sentinel-2_5m_b8-b11-b2',                // infrarouge !
-							// LAYERS: 'Orthomosaique_2020_2020_Partenariat_Centre-du-Quebec_20cm_RVB',            // yes ! 2020 ?
-							LAYERS: 'Orthomosaique_2022_2022_Partenariat_Laurentides_20cm_RVB',					   // une petite zone, dézoomer pour la voir
-							FORMAT: 'image/jpeg'
-						}
-					})
-				});
-				layersMap.insertAt(0, quebecLayer);
-		*/
-
 		map.addControl(layerSwitcher);
 		layerSwitcher.removeLayer(osmLayer);
 		layerSwitcher.addLayer(osmLayer, {
 			title: 'OpenStreetMap',
 			description: 'Carte OpenStreetMap'
 		});
-
 		// Belgique
 		const beLegendURL = 'https://cartoweb.wmts.ngi.be/legend/topo/default/legende_fr.png';
 		layerSwitcher.removeLayer(beLayer);
@@ -363,16 +349,6 @@ function rucherDetail(ign) {
 			title: 'Belgique OrhtoPhotos',
 			description: 'Ortho Belgique'
 		});
-
-		// Québec
-		/*
-		layerSwitcher.removeLayer(quebecLayer);
-		layerSwitcher.addLayer(quebecLayer, {
-			title: 'Québec OrhtoPhotos',
-			description: 'OrhtoPhotos Québec'
-		});
-		*/
-
 	}
 	map.addControl(new ol.control.MeasureLength());
 	map.addControl(new ol.control.MeasureArea());
@@ -464,6 +440,9 @@ function rucherDetail(ign) {
 	});
 	$('#export-kml').click(function() {
 		exportKml();
+	});
+	$('#geoloc').click(function() {
+		geoloc();
 	});
 	$('#parcours-redraw').click(function() {
 		document.getElementById('popup-content').innerHTML = 'Calcul en cours...';

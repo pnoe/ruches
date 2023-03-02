@@ -3,6 +3,56 @@
    rucheParcours, distParcours, ruches, rucher, nomHausses,
    ruchestxt, distancedeparcourstxt  */
 "use strict";
+
+function geoloc() {
+	// Note: In Firefox 55 and higher, only HTTPS pages will be able to request location.
+	// about:config  If the geo.enabled preference is bolded and "user set" to false, 
+	// double-click it to restore the default value of true
+	// https://developer.mozilla.org/fr/docs/Web/API/Geolocation_API
+	const options = {
+		enableHighAccuracy: true,
+		timeout: 60000,
+		maximumAge: 0,
+	};
+	function success(position) {
+		document.getElementById('popup-content').innerHTML = 
+		`Latitude ${position.coords.latitude}
+		Longitude ${position.coords.longitude}
+		Précision ${position.coords.accuracy}m
+		Altitude ${position.coords.altitude}
+		PrécisionAlt ${position.coords.altitudeAccuracy}m`;
+		const coords = [];
+		coords.push(position.coords.longitude);
+		coords.push(position.coords.latitude);
+		const iconFeature = new ol.Feature({
+			type: 'Point',
+			geometry: new ol.geom.Point(ol.proj.fromLonLat(coords)),
+		});
+		overlay.setPosition(iconFeature.getGeometry().getCoordinates());
+		iconFeature.setStyle(
+			new ol.style.Style({
+				image: new ol.style.Icon(drawControl._getIconStyleOptions(drawControl.options.markersList[0]))
+			})
+		);
+		drawControl._updateMeasure(iconFeature, 'Point');
+		drawLayer.getSource().addFeature(iconFeature);
+	}
+
+	function error() {
+		document.getElementById('popup-content').innerHTML = 'Désolé, pas de localisation possible.';
+	}
+
+	if ("geolocation" in navigator) {
+		document.getElementById('popup-content').innerHTML = 'Recherche position en cours...';
+		overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());
+		navigator.geolocation.getCurrentPosition(success, error, options);
+	} else {
+		alert("La localisation n'est pas possible avec votre navigateur");
+	}
+}
+
+
+
 function exportGpx() {
 	const lang = navigator.language;
 	const digits2 = { maximumFractionDigits: 2 };
