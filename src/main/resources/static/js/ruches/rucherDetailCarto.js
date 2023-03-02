@@ -1,5 +1,6 @@
 /* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals
+   ol, overlay, drawControl, drawLayer, iconFeatureEntree,
    rucheParcours, distParcours, ruches, rucher, nomHausses,
    ruchestxt, distancedeparcourstxt  */
 "use strict";
@@ -16,11 +17,9 @@ function geoloc() {
 	};
 	function success(position) {
 		document.getElementById('popup-content').innerHTML = 
-		`Latitude ${position.coords.latitude}
-		Longitude ${position.coords.longitude}
-		Précision ${position.coords.accuracy}m
-		Altitude ${position.coords.altitude}
-		PrécisionAlt ${position.coords.altitudeAccuracy}m`;
+		`Latitude ${position.coords.latitude.toFixed(4)}<br/>Longitude ${position.coords.longitude.toFixed(4)}<br/>
+		Précision ${position.coords.accuracy.toFixed(2)}m<br/>Altitude ${position.coords.altitude.toFixed(2)}<br/>
+		PrécisionAlt ${position.coords.altitudeAccuracy.toFixed(2)}m<br/>`;
 		const coords = [];
 		coords.push(position.coords.longitude);
 		coords.push(position.coords.latitude);

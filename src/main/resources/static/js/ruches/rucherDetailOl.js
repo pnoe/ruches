@@ -5,10 +5,10 @@
    ruchetxt, lesHausses, pasdehaussetxt, parcourstxt, ignCarteLiscense,
    parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token, dessinEnregistretxt */
 "use strict";
-let  map;
+
+let iconFeatureEntree;
 let drawLayer;
 let drawControl;
-let iconFeatureEntree;
 let overlay;
 function rucherDetail(ign) {
 	const lang = navigator.language;
@@ -32,7 +32,6 @@ function rucherDetail(ign) {
 	});
 	const markerRuches = [];
 	const closer = document.getElementById('popup-closer');
-	// const 
 	overlay = new ol.Overlay({
 		element: document.getElementById('popup'),
 		autoPan: true,
@@ -167,8 +166,7 @@ function rucherDetail(ign) {
 			features: dessinsFeatures
 		})
 	});
-	// const map = 
-	map = new ol.Map({
+	const map = new ol.Map({
 		interactions: ol.interaction.defaults({ doubleClickZoom: false }).extend([select, translate]),
 		controls: ol.control.defaults({
 			attribution: false
@@ -186,7 +184,6 @@ function rucherDetail(ign) {
 			zoom: 19
 		})
 	});
-	// const 
 	drawControl = new ol.control.Drawing({
 		layer: drawLayer,
 		tools: {
