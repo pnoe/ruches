@@ -124,7 +124,11 @@ public class EssaimController {
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isPresent()) {
 			Ruche ruche = rucheRepository.findByEssaimId(essaimId);
-			// TODO if (ruche = null) ?
+			if (ruche == null) {
+				logger.error("{} n'est pas dans un ruche", essaimOpt.get());
+				model.addAttribute(Const.MESSAGE, "L'essaim n'est pas dans une ruche");
+				return Const.INDEX;
+			}
 			List<String> noms = new ArrayList<>();
 			for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
 				noms.add(essaimNom.nom());

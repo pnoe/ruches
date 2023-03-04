@@ -13,6 +13,14 @@ function essaimDetail() {
 		}
 		return true;
     });
+
+    $('#essaime').on('click', function () {
+		if(!rucheEssaim) {
+			alert(pasderuchetxt);
+			return false;
+		}
+		return true;
+    });
     
  	$('#supprime').on('click', function () {
 		if(recolteHausses) {
