@@ -1,6 +1,6 @@
 package ooioo.ruches;
 
-public final class TestDistancVincenty {
+public final class DistancVincenty {
 
 	public static final double EQUATORIAL_RADIUS = 6378137.0;
 	public static final double INVERSE_FLATTENING = 298.257223563;
@@ -58,7 +58,7 @@ public final class TestDistancVincenty {
 		return s;
 	}
 	
-	private TestDistancVincenty() {
+	private DistancVincenty() {
 		throw new IllegalStateException("Constant class");
 	}
 

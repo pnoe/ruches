@@ -20,7 +20,7 @@ public class TestDistance {
 		double r2Lon = 5.5265d;
 		logger.info(
 				"**********************************************************************************");
-		double dVinc = TestDistancVincenty.vincentyDistance(r1Lat, r2Lat, r1Lon, r2Lon);
+		double dVinc = DistancVincenty.vincentyDistance(r1Lat, r2Lat, r1Lon, r2Lon);
 		double dHav = Utils.distance(Utils.rTerreLat(r1Lat) * 2d, r1Lat, r2Lat, r1Lon, r2Lon);
 		logger.info("Vincenty " + dVinc + " Haversine " + dHav + " Diff " + (dVinc - dHav));
 		assertEquals(dVinc, dHav, 0.1);
@@ -35,8 +35,8 @@ public class TestDistance {
 		double r2Lon = 90.0d;
 		logger.info(
 				"**********************************************************************************");
-		double dHav = Utils.distance(TestDistancVincenty.EQUATORIAL_RADIUS * 2d, r1Lat, r2Lat, r1Lon, r2Lon);
-		double pir = Math.PI * TestDistancVincenty.EQUATORIAL_RADIUS;
+		double dHav = Utils.distance(DistancVincenty.EQUATORIAL_RADIUS * 2d, r1Lat, r2Lat, r1Lon, r2Lon);
+		double pir = Math.PI * DistancVincenty.EQUATORIAL_RADIUS;
 		logger.info("PI R " + pir + " Haversine " + dHav + " Diff " + (pir - dHav));
 		assertEquals(pir, dHav, 0.01);
 	}
@@ -46,7 +46,7 @@ public class TestDistance {
 	void distance0() {
 		double rLat = 43.5384d;
 		double rLon = 5.5267d;
-		double dHav = Utils.distance(TestDistancVincenty.EQUATORIAL_RADIUS * 2d, rLat, rLat, rLon, rLon);
+		double dHav = Utils.distance(DistancVincenty.EQUATORIAL_RADIUS * 2d, rLat, rLat, rLon, rLon);
 		assertEquals(0.0d, dHav);
 	}
 

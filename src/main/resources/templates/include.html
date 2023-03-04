@@ -33,8 +33,7 @@
 	const urlDatatMessFr = /*[[@{/js/datatables_fr.json}]]*/null;
 	const datatPageLength = /*[[${@environment.getProperty('datatables.pageLength')}]]*/null;
 	const tout = /*[[#{Tout}]]*/null;
-	if ((window.navigator.language == 'fr')
-			|| (window.navigator.language.indexOf('fr') != -1)) {
+	if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('fr') != -1)) {
 		jQuery.getScript(urlValMessFr);
 		$.extend(true, $.fn.dataTable.defaults, {
 			language : {
@@ -70,12 +69,12 @@
 <script th:fragment="jsol" th:src="@{/js/ol-6.15.1/ol.js}"></script>
 <link th:fragment="cssol" rel="stylesheet" type="text/css" media="all"
 	th:href="@{/js/ol-6.15.1/ol.css}" />
-	
+
 <!--/* th:data-key="${@environment.getProperty('ign.data.key')}" */-->
 <!--/* th:attr="data-url=@{/js/autoconf.js}" */-->
 
 <script th:fragment="jsGpPluginOpenLayers"
-    th:attr="data-url=@{/js/autoconf.js}"
+	th:attr="data-url=@{/js/autoconf.js}"
 	th:src="@{/js/GpPluginOpenLayers-3.2.20/GpPluginOpenLayers.js}"></script>
 
 <script th:fragment="jsGpOsmPluginOpenLayers"
@@ -103,16 +102,14 @@
 <link th:fragment="cssdatetimepicker" rel="stylesheet" type="text/css"
 	media="all" th:href="@{/js/jquery.datetimepicker.min-2.5.20.css}" />
 <script th:fragment="localejsdatetimepicker">
-	$().ready(
-			function() {
-				$("#date").datetimepicker();
-				if ((window.navigator.language == 'fr')
-						|| (window.navigator.language.indexOf('fr') != -1)) {
-					$.datetimepicker.setLocale('fr');
-				} else {
-					$.datetimepicker.setLocale('en');
-				}
-			});
+	$().ready(function() {
+		$("#date").datetimepicker();
+		if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('fr') != -1)) {
+			$.datetimepicker.setLocale('fr');
+		} else {
+			$.datetimepicker.setLocale('en');
+		}
+	});
 </script>
 
 <script th:fragment="jquerydaterangepicker"
@@ -211,8 +208,28 @@
 		</div>
 	</nav>
 	<footer th:fragment="footer">
-		<small
-			th:text="#{include.footer} + ' Version ' + ${buildTime}"></small>
+		<small th:text="#{include.footer} + ' Version ' + ${buildTime}"></small>
 	</footer>
+
+	<img th:fragment="pencil"
+		th:src="@{'/images/bootstrap-icons-1.10.2/pencil.svg'}" width="16"
+		height="16">
+	<img th:fragment="collection"
+		th:src="@{'/images/bootstrap-icons-1.10.2/collection.svg'}" width="16"
+		height="16">
+	<img th:fragment="box-arrow-left"
+		th:src="@{'/images/bootstrap-icons-1.10.2/box-arrow-left.svg'}" width="16"
+		height="16">
+	<img th:fragment="box-arrow-in-down-right"
+		th:src="@{'/images/bootstrap-icons-1.10.2/box-arrow-in-down-right.svg'}" width="16"
+		height="16">
+	<img th:fragment="bi-trash" style="fill:red;"
+		th:src="@{'/images/bootstrap-icons-1.10.2/trash.svg'}" width="16"
+		height="16">
+		
+		
+
+
+
 </body>
 </html>

@@ -75,7 +75,8 @@ public final class TestUtils {
 		}).build(), options);
 		driver.get(baseUrl + "login");
 		// Le titre de la page de connexion est "Connexion"
-		assertEquals("Connexion", driver.getTitle());
+		assertEquals("Connexion", driver.getTitle(),
+				() -> "Avez-vous démarré l'application Ruches ?");
 		driver.findElement(By.name("username")).sendKeys(user);
 		driver.findElement(By.name("password")).sendKeys(pwd);
 		driver.findElement(By.xpath("//input[@type='submit']")).click();
