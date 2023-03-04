@@ -41,11 +41,9 @@
 			<th:block th:unless="${rucheId} or ${rucherId} or ${essaimId} or ${hausseId}">
 				<div class="col" >
 					<a id="cree" th:href="@{/evenement/cree}"
-					  class="bi bi-plus-lg" th:title="#{evenementCree}" aria-hidden="true">
-	   				</a>
+					  class="bi bi-plus-lg" th:title="#{evenementCree}" aria-hidden="true"></a>
    					<a th:href="@{/doc/ruches.html#%5F%5FRefHeading%5F%5F%5FToc1568_1905309782}"
-				  		class="bi bi-book" th:title="#{Doc}" target="_blank" aria-hidden="true">
-				  	</a>
+				  		class="bi bi-book" th:title="#{Doc}" target="_blank" aria-hidden="true"></a>
 				</div>
 				<div th:insert="includeForm :: evenementListeDates(retController='/evenement/liste')" class="col">
 				</div>

@@ -150,8 +150,6 @@ public class RucherControllerMAJ {
 						// deuxième chance, est-ce que le nom du rucher est déjà dans l'eve
 						Rucher ruEve = rucherRepository.findByNom(eve.getValeur());
 						if (ruEve != null) {
-							// On remplace la valeur nom de la ruche par son id
-//							eve.setValeur(ruEve.getId().toString());
 							eve.setValeur(ruEve.getNom());
 							evenementRepository.save(eve);
 						} else {

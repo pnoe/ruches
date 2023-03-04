@@ -41,84 +41,49 @@
 				</h1>
 			</div>
 			<div class="col">
-				<a th:href="@{'/essaim/modifie/'+${essaim.id}}" 
-					th:title="#{modifier}" 
-					class="bi bi-pencil"
-					aria-hidden="true">
-				</a>
-				&nbsp;
-				<a href="#"
-					th:title="#{cloner}"
-					id="clone"
-					class="bi bi-collection"
-					aria-hidden="true">
-				</a>
-				<a 	th:href="@{'/essaim/essaime/'+${essaim.id}}" 
-					th:title="#{essaimer}"
-					id="essaime"
-					class="bi bi-box-arrow-left"
-					aria-hidden="true">
-				</a>
-				<a th:href="@{'/essaim/associe/'+${essaim.id}}"
-					th:title="#{associationruche}"
-					id="assoRuche"
-					class="bi bi-box-arrow-in-down-right"
-					aria-hidden="true">
-				</a>
-				<a th:href="@{'/essaim/supprime/'+${essaim.id}}"
-					th:title="#{supprimer}"
-					id="supprime"
-					class="bi bi-trash"
-					style="color:red"
-					aria-hidden="true">
-				</a>
-				<a id="descend"
+				<a th:href="@{'/essaim/modifie/'+${essaim.id}}"
+					th:title="#{modifier}" class="bi bi-pencil" aria-hidden="true"></a>
+				&nbsp; <a href="#" th:title="#{cloner}" id="clone"
+					class="bi bi-collection" aria-hidden="true"></a> <a
+					th:href="@{'/essaim/essaime/'+${essaim.id}}" th:title="#{essaimer}"
+					id="essaime" class="bi bi-box-arrow-left" aria-hidden="true"></a> <a
+					th:href="@{'/essaim/associe/'+${essaim.id}}"
+					th:title="#{associationruche}" id="assoRuche"
+					class="bi bi-box-arrow-in-down-right" aria-hidden="true"></a> <a
+					th:href="@{'/essaim/supprime/'+${essaim.id}}"
+					th:title="#{supprimer}" id="supprime" class="bi bi-trash"
+					style="color: red" aria-hidden="true"></a> <a id="descend"
 					th:href="@{'/essaim/descendance/'+${essaim.id}}"
 					class="bi bi-diagram-3" th:title="#{graphedescendance}"
-					aria-hidden="true">
-				</a>
-				<a
+					aria-hidden="true"></a> <a
 					th:href="@{'/evenement/essaim/dispersion/'+${essaim.id}}"
 					id="dispersion" class="bi bi-box-arrow-up-left"
-					th:title="#{evenementDispersion}" aria-hidden="true">
-				</a>
-				&nbsp;
-				<a
+					th:title="#{evenementDispersion}" aria-hidden="true"></a> &nbsp; <a
 					th:href="@{'/evenement/essaim/'+${essaim.id}}"
 					class="padicons bi bi-list-ul" th:title="#{evenements}"
-					aria-hidden="true">
-				</a>
-				<a
+					aria-hidden="true"></a> <a
 					th:href="@{'/evenement/essaim/commentaire/cree/'+${essaim.id}}"
 					class="bi bi-chat-text" th:title="#{evenementCommentaireEssaim}"
-					aria-hidden="true">
-				</a>
-				<a
+					aria-hidden="true"></a> <a
 					th:href="@{'/evenement/essaim/sucre/cree/'+${essaim.id}}"
 					class="bi bi-bucket" th:title="#{evenementSucre}"
-					aria-hidden="true"></a>
-				<a
+					aria-hidden="true"></a> <a
 					th:href="@{'/evenement/essaim/traitement/cree/'+${essaim.id}}"
 					class="bi bi-bug" th:title="#{evenementTraitement}"
-					aria-hidden="true">
-				</a>
+					aria-hidden="true"></a>
 				<th:block th:if="${rucheEssaim}">
 					<a
 						th:href="@{'/evenement/ruche/pesee/cree/'+${rucheEssaim?.id}+'?retourEssaim=true'}"
 						class="bi bi-chevron-bar-down" th:title="#{evenementPesee}"
-						aria-hidden="true">
-					</a>
+						aria-hidden="true"></a>
 					<a
 						th:href="@{'/evenement/ruche/cadre/cree/'+${rucheEssaim?.id}+'?retourEssaim=true'}"
 						class="bi bi-layout-three-columns" th:title="#{evenementCadres}"
-						aria-hidden="true">
-					</a>
+						aria-hidden="true"></a>
 				</th:block>
-				&nbsp;
-				<a th:href="@{'/essaim/historique/'+${essaim.id}}"
+				&nbsp; <a th:href="@{'/essaim/historique/'+${essaim.id}}"
 					class="bi bi-calendar-check" th:title="#{histoRucheRucher}"
-					aria-hidden="true">
-				</a>
+					aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>

@@ -1,6 +1,6 @@
 package ooioo.ruches;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -85,7 +85,7 @@ public class TestRoutingSolver {
 			routeDistance += routing.getArcCostForVehicle(previousIndex, index, 0l);
 		}
 		logger.info("redraw " + redraw + ". Distance " + routeDistance);
-		assertTrue(routeDistance == 5777l);
+		assertEquals(routeDistance, 5777l);
 	}
 
 }

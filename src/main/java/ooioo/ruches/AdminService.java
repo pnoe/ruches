@@ -85,11 +85,11 @@ public class AdminService {
 
 	/**
 	 * Tests recherche les erreurs de l'ajout et du retrait des ruches dans les
-	 * ruchers En partant du rucher dans son état actuel et en ajoutant et retirant
+	 * ruchers. En partant du rucher dans son état actuel et en ajoutant et retirant
 	 * les ruches en parcourant les événements RUCHEAJOUTRUCHER dans l'orde
 	 * descendant des dates (plus récent au plus ancien) résultat dans la page
-	 * tests.html Tests de la validité des événements Tests erreurs ajout/retrait
-	 * des hausses sur les ruches
+	 * tests.html. Tests de la validité des événements Tests erreurs ajout/retrait
+	 * des hausses sur les ruches.
 	 */
 	public void tests(Model model) {
 		// Recherche des erreurs dans l'historique des ajouts de ruches dans les ruchers

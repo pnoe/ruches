@@ -613,12 +613,7 @@ public class RucherController {
 					logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 				}
 			}
-			// DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			// DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
 			model.addAttribute("dateTime", dateTimeMin);
-			// LocalDateTime dateTimeFirst = dateTimeMin.plusMinutes(1);
-			// model.addAttribute("dateFirst", dateTimeFirst.format(dateFormat));
-			// model.addAttribute("timeFirst", dateTimeFirst.format(timeFormat));
 			model.addAttribute("dateFirst", dateTimeMin.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 			model.addAttribute("timeFirst", dateTimeMin.format(DateTimeFormatter.ofPattern("HH:mm")));
 			ruchesNoms.deleteCharAt(ruchesNoms.length() - 1);
