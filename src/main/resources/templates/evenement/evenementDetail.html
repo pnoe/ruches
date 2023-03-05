@@ -55,10 +55,10 @@ $(document).ready(function() {
 			</div>
 			<div class="col">
 				<a th:href="@{'/evenement/modifie/'+${evenement.id}}"> <span
-					class="bi bi-pencil" th:title="#{modifier}" aria-hidden="true"></span>
+					class="bi-pencil" th:title="#{modifier}" aria-hidden="true"></span>
 				</a> <a id="supprime"
 					th:href="@{'/evenement/supprime/'+${evenement.id}}"> <span
-					class="confirmation bi bi-trash" style="color: red"
+					class="confirmation bi-trash" style="color: red"
 					th:title="#{supprimer}" aria-hidden="true"></span>
 				</a>
 			</div>

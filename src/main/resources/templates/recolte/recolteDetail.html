@@ -89,17 +89,17 @@ $(document).ready(function() {
 			</div>
 			<div class="col">
 				<a th:href="@{'/recolte/modifie/'+${recolte.id}}"
-					class="bi bi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
+					class="bi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
 				&nbsp; <a th:href="@{'/recolte/choixHausses/'+${recolte.id}}"
-					class="bi bi-justify" th:title="#{choixHausesRecolte}"
+					class="bi-justify" th:title="#{choixHausesRecolte}"
 					aria-hidden="true"></a> <span id="enlevehausses"
-					class="bi bi-reply-all cursorpointer"
+					class="bi-reply-all cursorpointer"
 					th:title="#{recolteHausseDepot}" aria-hidden="true"></span> <a
 					th:href="@{'/recolte/statistiques/essaim/'+${recolte.id}}"
-					class="bi bi-pie-chart" th:title="#{statistiquesessaims}"
+					class="bi-pie-chart" th:title="#{statistiquesessaims}"
 					aria-hidden="true"></a> <a id="supprime"
 					th:href="@{'/recolte/supprime/'+${recolte.id}}"
-					class="confirmationsupprime bi bi-trash" style="color: red"
+					class="confirmationsupprime bi-trash" style="color: red"
 					th:title="#{supprimer}" aria-hidden="true"></a> <input type="text"
 					id="date" name="date">
 				<button id="dateOK">Date retrait hausses</button>

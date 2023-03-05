@@ -83,23 +83,23 @@ $().ready(function() {
 			</div>
 			<div class="col">
 				<a th:href="@{'/hausse/modifie/'+${hausse.id}}"
-					class="bi bi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
+					class="bi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
 				&nbsp;
-				<span id="clone" class="bi bi-collection cursorpointer"
+				<span id="clone" class="bi-collection cursorpointer"
 					th:title="#{cloner}" aria-hidden="true">
 				</span>
 				<a id="supprime"
 					th:href="@{'/hausse/supprime/'+${hausse.id}}"
-					class="confirmation bi bi-trash" style="color: red"
+					class="confirmation bi-trash" style="color: red"
 					th:title="#{supprimer}" aria-hidden="true"></a>&nbsp;
 				<a th:href="@{'/evenement/hausse/'+${hausse.id}}"
-					class="padicons bi bi-list-ul" th:title="#{evenements}"
+					class="padicons bi-list-ul" th:title="#{evenements}"
 					aria-hidden="true"></a>
 				<a th:href="@{'/evenement/hausse/commentaire/cree/'+${hausse.id}}"
-					class="bi bi-chat-text" th:title="#{evenementCommentaire}"
+					class="bi-chat-text" th:title="#{evenementCommentaire}"
 					aria-hidden="true"></a>
 				<a th:href="@{'/evenement/hausse/remplissage/cree/'+${hausse.id}}"
-					class="bi bi-square-half" th:title="#{evenementRemplissage}"
+					class="bi-square-half" th:title="#{evenementRemplissage}"
 					aria-hidden="true"></a>
 			</div>
 		</div>

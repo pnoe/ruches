@@ -58,30 +58,30 @@
 			</div>
 			<div class="col">
 				<a th:href="@{'/rucher/modifie/'+${rucher.id}}" 
-				  class="bi bi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
+				  class="bi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
 				&nbsp;
 				<a th:href="@{'/rucher/Gg/'+${rucher.id}}" 
-				  class="bi bi-google" th:title="#{carteGg}" aria-hidden="true"></a> 
+				  class="bi-google" th:title="#{carteGg}" aria-hidden="true"></a> 
 				<a th:href="@{'/rucher/Ign/'+${rucher.id}}" th:title="#{carteIgn}"
 					aria-hidden="true"><img th:src="@{'/images/france.svg'}"
 					style="margin-bottom: 2px;" /></a>
 				<a th:href="@{'/rucher/Osm/'+${rucher.id}}" 
-				  class="bi bi-globe" th:title="#{carteOsm}" aria-hidden="true"></a>
+				  class="bi-globe" th:title="#{carteOsm}" aria-hidden="true"></a>
 				&nbsp;
 				<a th:href="@{'/rucher/meteo/'+${rucher.id}}" 
-				  class="bi bi-sun" th:title="#{meteo}" aria-hidden="true"></a> 
+				  class="bi-sun" th:title="#{meteo}" aria-hidden="true"></a> 
        			<a id="ajoutRuches" th:href="@{'/rucher/ruches/'+${rucher.id}}" 
-       			  class="bi bi-grid-3x2-gap" th:title="#{ajoutRuches}" aria-hidden="true"></a>
+       			  class="bi-grid-3x2-gap" th:title="#{ajoutRuches}" aria-hidden="true"></a>
        			<a id="supprime" th:href="@{'/rucher/supprime/'+${rucher.id}}" 
-       			  class="confirmationsupp bi bi-trash" style="color:red" 
+       			  class="confirmationsupp bi-trash" style="color:red" 
        			  th:title="#{supprimer}" aria-hidden="true"></a>&nbsp;
        			<a th:href="@{'/evenement/rucher/'+${rucher.id}}"
-       			  class="padicons bi bi-list-ul" th:title="#{evenements}" aria-hidden="true"></a>
+       			  class="padicons bi-list-ul" th:title="#{evenements}" aria-hidden="true"></a>
 				<a th:href="@{'/evenement/rucher/commentaire/cree/'+${rucher.id}}"
-				  class="bi bi-chat-text" th:title="#{evenementCommentaire}" aria-hidden="true"></a>  
+				  class="bi-chat-text" th:title="#{evenementCommentaire}" aria-hidden="true"></a>  
 				&nbsp;
 				<a th:href="@{'/rucher/historique/'+${rucher.id}+'/true'}"
-				  class="bi bi-truck-front" th:title="#{transhumances}" aria-hidden="true"></a>
+				  class="bi-truck-front" th:title="#{transhumances}" aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
