@@ -78,10 +78,11 @@
 				th:errorclass="fieldError" maxlength="35" />
 			<label class="form-label" th:text="#{motDePasse}" for="password"></label>
 		</div>
-		<div class="form-floating mb-3" sec:authorize="hasRole('ROLE_admin')">					
-			<input placeholder=""
-				class="form-control" type="text" th:field="*{roles}"
-				th:errorclass="fieldError" maxlength="35" />
+		<div class="form-floating mb-3" sec:authorize="hasRole('ROLE_admin')">	
+			<select	class="form-control" th:field="*{roles}">
+				<option th:text="#{aucun}" value=""></option>
+				<option th:text="admin" value="admin"></option>
+			</select>
 			<label class="form-label" th:text="#{roles}" for="roles"></label>
 		</div>
 		<div th:replace="includeForm :: activeField"></div>

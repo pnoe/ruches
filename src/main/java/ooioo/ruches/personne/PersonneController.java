@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,10 +48,15 @@ public class PersonneController {
 	}
 
 	/**
-	 * Appel du formulaire pour l'ajout d'une personne
+	 * Appel du formulaire pour l'ajout d'une personne.
+	 * Il faut être admin.
 	 */
 	@GetMapping("/cree")
-	public String cree(Model model) {
+	public String cree(Model model, Authentication authentication) {
+		// Il faut être admin.
+		if (pService.pasAdmin(authentication, model)) {
+			return Const.INDEX;
+		}
 		List<String> logins = new ArrayList<>();
 		for (PersonneLogin personneLogin : personneRepository.findAllProjectedBy()) {
 			if (!"".equals(personneLogin.getLogin())) {
@@ -70,15 +76,16 @@ public class PersonneController {
 	}
 
 	/**
-	 * Modifier une personne
+	 * Appel du formulaire pour modifier une personne.
+	 * Il faut être admin pour modifier une autre Personne que soi même.
 	 */
 	@GetMapping("/modifie/{personneId}")
 	public String modifie(Model model, @PathVariable long personneId, Authentication authentication) {
 		Optional<Personne> personneOpt = personneRepository.findById(personneId);
 		if (personneOpt.isPresent()) {
 			Personne personne = personneOpt.get();
-			// Il faut être admin pour modifier une autre Personne
-			if (pService.personneDroitsInsuffisants(personne, authentication, model)) {
+			// Il faut être admin pour modifier une autre Personne.
+			if (pService.droitsInsuffisants(personne, authentication, model)) {
 				return Const.INDEX;
 			}
 			model.addAttribute(Const.PERSONNE, personne);
@@ -91,15 +98,17 @@ public class PersonneController {
 	}
 
 	/**
-	 * Suppression d'une persoonne
+	 * Suppression d'une personne.
+	 * On peut se supprimer sauf si on est référencé dans des ruchers.
+	 * Il faut être admin pour supprimer une Personne.
 	 */
 	@GetMapping("/supprime/{personneId}")
 	public String supprime(Model model, @PathVariable long personneId, Authentication authentication) {
 		Optional<Personne> personneOpt = personneRepository.findById(personneId);
 		if (personneOpt.isPresent()) {
 			Personne personne = personneOpt.get();
-			// Il faut être admin pour supprimer une autre Personne
-			if (pService.personneDroitsInsuffisants(personne, authentication, model)) {
+			// Il faut être admin.
+			if (pService.pasAdmin(authentication, model)) {
 				return Const.INDEX;
 			}
 			Collection<Rucher> ruchers = rucherRepository.findByContactId(personneId);
@@ -125,8 +134,8 @@ public class PersonneController {
 	public String sauve(@ModelAttribute Personne personne, BindingResult bindingResult, Model model,
 			Authentication authentication) {
 		// Il faut être admin pour créer une Personne ou pour modifier une autre
-		// Personne que soi-même
-		if (pService.personneDroitsInsuffisants(personne, authentication, model)) {
+		// personne que soi-même. Un non admin ne peut changer son rôle.
+		if (pService.pDroitsInsufSauve(personne, authentication, model)) {
 			return Const.INDEX;
 		}
 		if (bindingResult.hasErrors()) {
@@ -167,10 +176,9 @@ public class PersonneController {
 					return Const.INDEX;
 				}
 			}
-			// else
-			// la personne n'existe pas en base et son password est ""
-			// c'est possible pour une personne que n'a pas de login
-			// comme un simple contact pour un ruche
+			// Sinon la personne n'existe pas en base et son password est "".
+			// C'est possible pour une personne que n'a pas de login
+			// comme un simple contact pour un rucher.
 		} else {
 			personne.setPassword(new BCryptPasswordEncoder().encode(password));
 		}

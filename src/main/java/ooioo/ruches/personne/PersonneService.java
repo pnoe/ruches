@@ -36,20 +36,72 @@ public class PersonneService {
 	}
 
 	/**
-	 * Vérification des droits utiliteurs pour créer ou modifier une "personne"
+	 * Vérification du droit admin. Si pas admin : log, message dans model et return
+	 * true.
 	 */
-	public boolean personneDroitsInsuffisants(Personne personne, Authentication authentication, Model model) {
-		// si l'utilisateur connecté n'est pas administrateur
+	public boolean pasAdmin(Authentication authentication, Model model) {
 		GrantedAuthority auth = authentication.getAuthorities().iterator().next();
 		String role = auth.getAuthority();
 		if (role == null) {
-			return false;
+			logger.error("Erreur rôle null.");
+			model.addAttribute(Const.MESSAGE, "Rôle incorrect.");
+			return true;
 		}
-		if (!"ROLE_admin".equals(role) && !authentication.getName().equals(personne.getLogin())) {
-			// si l'utilisateur connecté n'est pas admin et tente de modifier un autre utilisateur
-			logger.error("Erreur /personne/... Droits insuffisants.");
+		if (!"ROLE_admin".equals(role)) {
+			logger.error("Droits insuffisants.");
 			model.addAttribute(Const.MESSAGE, "Droits insuffisants.");
 			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Vérification des droits utiliteurs pour modifier une "personne". Il faut être
+	 * admin pour modifier la personne passée en paramètre si son login avant
+	 * modification est différent de la personne connectée.
+	 */
+	public boolean droitsInsuffisants(Personne personne, Authentication authentication, Model model) {
+		GrantedAuthority auth = authentication.getAuthorities().iterator().next();
+		// Rôle de l'utilisateur connecté
+		String role = auth.getAuthority();
+		if (role == null) {
+			logger.error("Erreur rôle null.");
+			model.addAttribute(Const.MESSAGE, "Erreur rôle incorrect.");
+			return true;
+		}
+		if (!"ROLE_admin".equals(role) && !authentication.getName().equals(personne.getLogin())) {
+			// si l'utilisateur connecté n'est pas admin et tente de modifier ou supprimer
+			// un autre utilisateur
+			logger.error("{} droits insuffisants.", personne);
+			model.addAttribute(Const.MESSAGE, "Droits insuffisants.");
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Vérification des droits utiliteurs pour modifier une "personne". Il faut être
+	 * admin pour modifier la personne passée en paramètre si son login avant
+	 * modification est différent de la personne connectée.
+	 */
+	public boolean pDroitsInsufSauve(Personne personne, Authentication authentication, Model model) {
+		GrantedAuthority auth = authentication.getAuthorities().iterator().next();
+		// Rôle de l'utilisateur connecté : ROLE_admin ou ROLE_
+		String role = auth.getAuthority();
+		if (role == null) {
+			logger.error("Erreur rôle null.");
+			model.addAttribute(Const.MESSAGE, "Erreur rôle incorrect.");
+			return true;
+		}
+		// Si utilisateur non admin
+		if (!"ROLE_admin".equals(role)) {
+			// le login de la personne qu'il modifie doit être le sien
+			// et son role ne doit pas être changé
+			if (!authentication.getName().equals(personne.getLogin()) || !role.equals("ROLE_" + personne.getRoles())) {
+				logger.error("{} droits insuffisants.", personne);
+				model.addAttribute(Const.MESSAGE, "Droits insuffisants.");
+				return true;
+			}
 		}
 		return false;
 	}
