@@ -23,6 +23,8 @@
 </script>
 </head>
 <body>
+	<div th:utext="${'&#128029; ' + @environment.getProperty('accueil.titre') + ' &#128029;'}"></div>
+	<br/>
 	<div th:if="${param.error}" th:text="#{nomOuPassIncorrect}"></div>
 	<div th:if="${param.logout}" th:text="#{deconnecte}"></div>
 	<br />
