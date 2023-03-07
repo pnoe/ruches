@@ -249,6 +249,8 @@ public class RucherController {
 
 	/**
 	 * Appel du formulaire de création d'un rucher.
+	 * Les coordonnées du nouveau rucher sont dans un cercle de rayon "dispersion" du dépôt.
+	 * Le contact est celui du dépôt.
 	 */
 	@GetMapping("/cree")
 	public String cree(Model model) {
@@ -263,6 +265,7 @@ public class RucherController {
 		LatLon latLon = rucherService.dispersion(rucherDepot.getLatitude(), rucherDepot.getLongitude());
 		rucher.setLatitude(latLon.lat());
 		rucher.setLongitude(latLon.lon());
+		rucher.setContact(rucherDepot.getContact());
 		model.addAttribute(Const.RUCHER, rucher);
 		model.addAttribute(Const.PERSONNES, personneRepository.findAll());
 		return RUCHER_RUCHERFORM;

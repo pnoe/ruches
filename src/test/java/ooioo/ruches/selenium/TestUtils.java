@@ -35,7 +35,7 @@ public final class TestUtils {
 	// Attention à ne pas mettre de mot de passe de production !
 	static final String user = "test";
 	static final String pwd = "testpwd";
-	static final String role = "[ROLE_admin]";
+	static final String role = "Admin";
 	
 	static final WebDriver initChrome() {
 		String pathChromeDriver = "/snap/bin/chromium.chromedriver";
