@@ -44,6 +44,7 @@ $bootstrap-icons-map: (
   "collection": "\f2cc",
   "diagram-3": "\f2ee",
   "dice-1": "\f2f3",
+  "geo-alt": "\f3e8",
   "globe": "\f3ee",
   "google": "\f3f0",
   "grid-3x2-gap": "\f3f6",
@@ -84,6 +85,7 @@ $bootstrap-icons-map: (
 .bi-collection::before { content: map-get($bootstrap-icons-map, "collection"); }
 .bi-diagram-3::before { content: map-get($bootstrap-icons-map, "diagram-3"); }
 .bi-dice-1::before { content: map-get($bootstrap-icons-map, "dice-1"); }
+.bi-geo-alt::before { content: map-get($bootstrap-icons-map, "geo-alt"); }
 .bi-globe::before { content: map-get($bootstrap-icons-map, "globe"); }
 .bi-google::before { content: map-get($bootstrap-icons-map, "google"); }
 .bi-grid-3x2-gap::before { content: map-get($bootstrap-icons-map, "grid-3x2-gap"); }

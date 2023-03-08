@@ -1,8 +1,8 @@
 @font-face {
   font-display: block;
   font-family: "bootstrap-icons";
-  src: url("./fonts/bootstrap-icons.woff2?25f2085e3ee55bbc8d6a7a9dba3175cb") format("woff2"),
-url("./fonts/bootstrap-icons.woff?25f2085e3ee55bbc8d6a7a9dba3175cb") format("woff");
+  src: url("./fonts/bootstrap-icons.woff2?4c51f8d3c726325879f719d32af6bcfb") format("woff2"),
+url("./fonts/bootstrap-icons.woff?4c51f8d3c726325879f719d32af6bcfb") format("woff");
 }
 
 .bi::before,
@@ -37,6 +37,7 @@ url("./fonts/bootstrap-icons.woff?25f2085e3ee55bbc8d6a7a9dba3175cb") format("wof
 .bi-collection::before { content: "\f2cc"; }
 .bi-diagram-3::before { content: "\f2ee"; }
 .bi-dice-1::before { content: "\f2f3"; }
+.bi-geo-alt::before { content: "\f3e8"; }
 .bi-globe::before { content: "\f3ee"; }
 .bi-google::before { content: "\f3f0"; }
 .bi-grid-3x2-gap::before { content: "\f3f6"; }
