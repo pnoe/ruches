@@ -88,17 +88,23 @@ public class TestW3cValidator {
 			assertEquals(200, respLogin.statusCode());
 			w3c(respLogin.body(), "index.html");
 		} catch (IOException | InterruptedException e) {
-			logger.error("Login -- " + e.getMessage());
+			logger.error("login() exception -- " + e.getMessage());
+			fail("login() exception -- " + e.getMessage());
 		}
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = { "ruche/liste", "rucheType/liste", "ruche/listeplus",
-			"hausse/liste", "rucher/liste", "rucher/Gg", "rucher/Ign", "rucher/Osm",
+	@ValueSource(strings = { "ruche/liste", "ruche/cree", 
+			"rucheType/liste", "rucheType/cree",
+			"ruche/listeplus",
+			"hausse/liste", "hausse/cree", 
+			"rucher/liste", "rucher/cree", "rucher/Gg", "rucher/Ign", "rucher/Osm",
 			"rucher/statistiques", "rucher/historiques/true", "rucher/historiques/false",
-			"personne/liste", "essaim/liste", "essaim/statistiques", "essaim/statistiquesage",
-			"recolte/liste", "recolte/statistiques/essaim", "recolte/statprod",
-			"evenement/liste", "evenement/essaim/listeSucre", "evenement/essaim/listeTraitement/true",
+			"personne/liste", "personne/cree", 
+			"essaim/liste", "essaim/cree", "essaim/statistiques", "essaim/statistiquesage",
+			"recolte/liste", "recolte/cree", "recolte/statistiques/essaim", "recolte/statprod",
+			"evenement/liste", "evenement/cree", 
+			"evenement/essaim/listeSucre", "evenement/essaim/listeTraitement/true",
 			"evenement/essaim/listeTraitement/false", "evenement/ruche/listePoidsRuche",
 			"evenement/ruche/listeCadreRuche", "evenement/hausse/listeRemplissageHausse",
 			"evenement/rucher/listeRucheAjout", "evenement/listeNotif/true", "evenement/listeNotif/false",
@@ -112,7 +118,8 @@ public class TestW3cValidator {
 			assertEquals(200, respRu.statusCode());
 			w3c(respRu.body(), url);
 		} catch (IOException | InterruptedException e) {
-			logger.error("Page " + url + " -- " + e.getMessage());
+			logger.error("pages() exception -- " + e.getMessage());
+			fail("pages() exception -- " + e.getMessage());
 		}
 	}
 

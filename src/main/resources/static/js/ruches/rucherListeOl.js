@@ -44,7 +44,6 @@ function rucherListeIgn(ign) {
 		coordsMarker.push(ruchers[i].longitude);
 		coordsMarker.push(ruchers[i].latitude);
 		const iconFeature = new ol.Feature({
-			type: 'geoMarker',
 			geometry: new ol.geom.Point(ol.proj.fromLonLat(coordsMarker)),
 			rucherid: ruchers[i].id,
 			ruchernom: ruchers[i].nom,

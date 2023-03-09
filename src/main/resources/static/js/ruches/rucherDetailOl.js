@@ -49,7 +49,6 @@ function rucherDetail(ign) {
 		coordsMarker.push(ruches[i].longitude);
 		coordsMarker.push(ruches[i].latitude);
 		const iconFeature = new ol.Feature({
-			type: 'geoMarker',
 			geometry: new ol.geom.Point(ol.proj.fromLonLat(coordsMarker)),
 			rucheid: ruches[i].id,
 			ruchenom: ruches[i].nom,
@@ -78,7 +77,6 @@ function rucherDetail(ign) {
 	coordsEntree.push(rucher.latitude);
 	// const
 	iconFeatureEntree = new ol.Feature({
-		type: 'geoMarker',
 		rucheid: 'entree',
 		geometry: new ol.geom.Point(ol.proj.fromLonLat(coordsEntree))
 	});
