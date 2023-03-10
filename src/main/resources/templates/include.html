@@ -208,8 +208,8 @@
 		</div>
 	</nav>
 	<footer th:fragment="footer">
-		<small th:utext="${'&#128029; ' + @environment.getProperty('accueil.titre') + ' &#128029; '} +
-		#{include.footer} + ' ' + ${buildTime}"></small>
+		<p th:utext="${'&#128029; ' + @environment.getProperty('accueil.titre') + ' &#128029; '}"></p>
+		<p th:text="#{include.footer} + ' Version ' + ${buildTime}"></p>
 	</footer>
 	<img th:fragment="pencil"
 		th:src="@{'/images/bootstrap-icons-1.10.2/pencil.svg'}" width="16"
@@ -227,9 +227,5 @@
 		th:src="@{'/images/bootstrap-icons-1.10.2/trash.svg'}" width="16"
 		height="16">
 		
-		
-
-
-
 </body>
 </html>
