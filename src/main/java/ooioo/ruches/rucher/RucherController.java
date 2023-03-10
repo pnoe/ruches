@@ -653,7 +653,7 @@ public class RucherController {
 	}
 
 	/**
-	 * Déplace un rucher (appel xmlhttp)
+	 * Déplace un rucher (appel xmlhttp).
 	 */
 	@PostMapping("/deplace/{rucherId}/{lat}/{lng}")
 	@ResponseStatus(value = HttpStatus.OK)
@@ -664,7 +664,7 @@ public class RucherController {
 			rucher.setLatitude(lat);
 			rucher.setLongitude(lng);
 			rucherRepository.save(rucher);
-			logger.info("Rucher {} déplacé, id {}", rucher.getNom(), rucher.getId());
+			logger.info("{} déplacé", rucher);
 			return "OK";
 		}
 		logger.error(Const.IDRUCHERXXINCONNU, rucherId);
