@@ -5,14 +5,18 @@
 <link th:replace="include :: cssdatetimepicker"/>
 <script th:replace="include :: localejsdatetimepicker"></script>
 <script th:inline="javascript">
+	const Essaimage = /*[[#{Essaimage}]]*/null;
+	const essaimNom = /*[[${essaim.nom}]]*/null;
+	const suffix = /*[[${@environment.getProperty('essaime.suffix')}]]*/null;
+	const essaimNoms = /*[[${essaimNoms}]]*/null;
+	const nomexiste = /*[[#{nomexiste}]]*/null;
 	$().ready(function() {
 		$("#nom").focus();
-		$("#commentaire").val([[#{Essaimage}]] + ' ' + [[${essaim.nom}]]);
-		$("#nom").val([[${essaim.nom}]] +
-				[[${@environment.getProperty('essaime.suffix')}]]);
+		$("#commentaire").val(Essaimage + ' ' + essaimNom);
+		$("#nom").val(essaimNom + suffix);
 		jQuery.validator.addMethod("nomExiste", function(value) {   
-    		return $.inArray(value, [[${essaimNoms}]]) == -1;
-			}, [[#{nomexiste}]]);
+    		return $.inArray(value, essaimNoms) == -1;
+			}, nomexiste);
 		$("#essaimeForm").validate({
 			errorClass: 'erreur-form',
 			errorPlacement: function(error, element) {

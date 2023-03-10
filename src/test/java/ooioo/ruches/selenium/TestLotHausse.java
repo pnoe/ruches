@@ -63,7 +63,6 @@ public class TestLotHausse {
 				() -> assertEquals(TestUtils.role, driver.findElement(By.id("role")).getText()));
 	}
 
-	@Test
 	@Order(2)
 	@RepeatedTest(1)
 	@DisplayName("Hausse création")

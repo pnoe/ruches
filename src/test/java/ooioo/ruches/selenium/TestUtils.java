@@ -52,6 +52,8 @@ public final class TestUtils {
 //		logging.level.org.openqa.selenium=INFO
 //		logging.level.org.junit.jupiter=INFO
 		ChromeOptions options = new ChromeOptions();
+//		https://groups.google.com/g/chromedriver-users/c/xL5-13_qGaA
+		options.addArguments("--remote-allow-origins=*");
 		// Pour tests sans interface graphique de Chrome
 		// options.addArguments("headless");
 		//   Pas d'effet sur les logs :
