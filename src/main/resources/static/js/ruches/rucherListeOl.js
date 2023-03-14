@@ -44,10 +44,8 @@ function rucherListeIgn(ign) {
 		coordsMarker.push(ruchers[i].longitude);
 		coordsMarker.push(ruchers[i].latitude);
 		const iconFeature = new ol.Feature({
+			idx: i,
 			geometry: new ol.geom.Point(ol.proj.fromLonLat(coordsMarker)),
-			rucherid: ruchers[i].id,
-			ruchernom: ruchers[i].nom,
-			ruchesnom: nomRuches[i]
 		});
 		iconFeature.setStyle(
 			new ol.style.Style({
@@ -217,13 +215,14 @@ function rucherListeIgn(ign) {
 	selectDoubleClick.on('select', function(e) {
 		// http://openlayers.org/en/latest/examples/popup.html
 		const feature = e.target.getFeatures().getArray()[0];
+		const idx = feature.get('idx');
 		document.getElementById('popup-content').innerHTML =
 			'<a href="' + urlruches + 'rucher/' +
-			(ign ? 'Ign/' : 'Osm/') + feature.get('rucherid') + '">' +
-			ruchertxt + ' ' + feature.get("ruchernom") +
+			(ign ? 'Ign/' : 'Osm/') + ruchers[idx].id + '">' +
+			ruchertxt + ' ' + ruchers[idx].nom +
 			'</a><br/>' +
-			((feature.get("ruchesnom") === '') ? pasderuchetxt :
-				lesRuchestxt + ' ' + feature.get("ruchesnom"));
+			((nomRuches[idx] === '') ? pasderuchetxt :
+				lesRuchestxt + ' ' + nomRuches[idx]);
 		overlay.setPosition(feature.getGeometry().getCoordinates());
 		selectDoubleClick.getFeatures().clear();
 	});
@@ -231,9 +230,12 @@ function rucherListeIgn(ign) {
 		const coord = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
 		const req = new XMLHttpRequest();
 		req.open('POST',
-			urlruches + 'rucher/deplace/' + evt.features.getArray()[0].get("rucherid") +
+			urlruches + 'rucher/deplace/' + ruchers[evt.features.getArray()[0].get("idx")].id +
 			'/' + coord[1] + '/' + coord[0],
 			true);
+		// met à jour les coords du rucher déplacé, idem rucherDetailOl.js
+		ruchers[idx].longitude = coord[0];
+		ruchers[idx].latitude = coord[1];
 		req.setRequestHeader('x-csrf-token', _csrf_token);
 		req.send(null);
 	});
