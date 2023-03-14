@@ -395,12 +395,12 @@ function rucherDetail(ign) {
 	map.addInteraction(selectDoubleClick);
 	selectDoubleClick.on('select', function(e) {
 		const feature = e.target.getFeatures().getArray()[0];
-		if (feature.get("idx") === -1) {
+		const idx = feature.get('idx');
+		if (idx === -1) {
 			document.getElementById('popup-content').innerHTML =
 				ruches.length + ' ' + ruchestxt + '<br/>' + distancedeparcourstxt +
 				' ' + distParcours.toLocaleString(lang, digits2) + ' m';
 		} else {
-			const idx = feature.get('idx');
 			const essnom = (ruches[idx].essaim == null) ? '' : ruches[idx].essaim.nom;
 			const essid = (ruches[idx].essaim == null) ? '' : ruches[idx].essaim.id;
 			document.getElementById('popup-content').innerHTML =
