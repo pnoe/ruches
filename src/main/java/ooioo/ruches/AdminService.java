@@ -122,7 +122,6 @@ public class AdminService {
 					// de la liste des ruches du rucher
 					if (!ruches.remove(eve.getRuche().getNom())) {
 						// erreur le rucher ne contient pas la ruche désignée par l'événement
-						// TODO rucher.getNom n'est pas dans eve ?
 						ruchersErr.add(rucher.getNom());
 						errsRucher.add("1");
 						eveRucherRuche.add(eve);

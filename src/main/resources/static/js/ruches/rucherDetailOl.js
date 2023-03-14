@@ -3,7 +3,11 @@
    rucheParcours, distParcours, longitudeCentre, latitudeCentre, rayonsButinage, cercles, distButinage, ruches, 
    rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
    ruchetxt, lesHausses, pasdehaussetxt, parcourstxt, ignCarteLiscense,
-   parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token, dessinEnregistretxt */
+   parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token, dessinEnregistretxt,
+   
+   distRuchesOk, distMaxRuche
+   
+   */
 "use strict";
 
 let iconFeatureEntree;
@@ -21,8 +25,43 @@ function rucherDetail(ign) {
 		'Registre parcellaire graphique : zones de culture déclarées par les exploitants en '
 		+ agriAnnee;
 	const agriTitle = 'Registre parcellaire graphique';
+	function rTerreLat(latitude) {
+		const a = 6378137.0;
+		const b = 6356752.3142;
+		// https://en.m.wikipedia.org/wiki/Earth_radius#Geocentric_radius
+		const fi = Math.PI * latitude / 180.;
+		const d1 = a * Math.cos(fi);
+		const d2 = b * Math.sin(fi);
+		const n1 = a * d1;
+		const n2 = b * d2;
+		return Math.sqrt((n1 * n1 + n2 * n2) / (d1 * d1 + d2 * d2));
+	}
+	function distanceTerre(diamTerre, lat2, lat1, lon2,	lon1) {
+		// ou utiliser ol.sphere.distance
+		const sinDiffLat = Math.sin(Math.PI * (lat2 - lat1) / 360.);
+		const sinDiffLon = Math.sin(Math.PI * (lon2 - lon1) / 360.);
+		const a = sinDiffLat * sinDiffLat
+			+ Math.cos(Math.PI * lat1 / 180.) * Math.cos(Math.PI * lat2 / 180.) * sinDiffLon * sinDiffLon;
+		return diamTerre * Math.asin(Math.sqrt(a));
+	}
 	$('.rapproche').on('click', function() {
-		return confirm(rapprochertxt);
+		const longRucher = rucher.longitude;
+		const latRucher = rucher.latitude;
+		const diametreTerre = (isNaN(rucher.altitude) ? 0 : rucher.altitude) +
+			2 * rTerreLat(rucher.latitude);	
+		let nb = 0;
+		for (let i = 0; i < ruches.length; i += 1) {
+			if (distanceTerre(diametreTerre, latRucher, ruches[i].latitude, longRucher,
+				ruches[i].longitude) > distMaxRuche) {
+				nb++;
+			}
+		}
+		if (nb > 0) {
+			return confirm(rapprochertxt);
+		} else {
+			alert(distRuchesOk);
+			return false;
+		}
 	});
 	$('.bi-question-lg').popover({
 		html: true
@@ -50,11 +89,7 @@ function rucherDetail(ign) {
 		coordsMarker.push(ruches[i].latitude);
 		const iconFeature = new ol.Feature({
 			geometry: new ol.geom.Point(ol.proj.fromLonLat(coordsMarker)),
-			rucheid: ruches[i].id,
-			ruchenom: ruches[i].nom,
-			essaimnom: (ruches[i].essaim == null) ? '' : ruches[i].essaim.nom,
-			essaimid: (ruches[i].essaim == null) ? '' : ruches[i].essaim.id,
-			haussesnom: nomHausses[i]
+			idx: i
 		});
 		iconFeature.setStyle(
 			new ol.style.Style({
@@ -77,7 +112,7 @@ function rucherDetail(ign) {
 	coordsEntree.push(rucher.latitude);
 	// const
 	iconFeatureEntree = new ol.Feature({
-		rucheid: 'entree',
+		idx: -1,
 		geometry: new ol.geom.Point(ol.proj.fromLonLat(coordsEntree))
 	});
 	iconFeatureEntree.setStyle(
@@ -360,34 +395,44 @@ function rucherDetail(ign) {
 	map.addInteraction(selectDoubleClick);
 	selectDoubleClick.on('select', function(e) {
 		const feature = e.target.getFeatures().getArray()[0];
-		if (feature.get("rucheid") === 'entree') {
+		if (feature.get("idx") === -1) {
 			document.getElementById('popup-content').innerHTML =
 				ruches.length + ' ' + ruchestxt + '<br/>' + distancedeparcourstxt +
 				' ' + distParcours.toLocaleString(lang, digits2) + ' m';
 		} else {
+			const idx = feature.get('idx');
+			const essnom = (ruches[idx].essaim == null) ? '' : ruches[idx].essaim.nom;
+			const essid = (ruches[idx].essaim == null) ? '' : ruches[idx].essaim.id;
 			document.getElementById('popup-content').innerHTML =
-				'<a href="' + ruchesurl + 'ruche/' + feature.get('rucheid') + '">' +
-				ruchetxt + ' ' + feature.get("ruchenom") +
+				'<a href="' + ruchesurl + 'ruche/' + ruches[idx].id + '">' +
+				ruchetxt + ' ' + ruches[idx].nom +
 				'</a><br/>' +
-				((feature.get("essaimnom") === '') ? pasdessaimtxt :
-					'<a href="' + ruchesurl + 'essaim/' + feature.get('essaimid') + '">' +
-					essaimtxt + ' ' + feature.get("essaimnom") + '</a>') +
+				((essnom === '') ? pasdessaimtxt :
+					'<a href="' + ruchesurl + 'essaim/' + essid + '">' +
+					essaimtxt + ' ' + essnom + '</a>') +
 				'<br/>' +
-				((feature.get("haussesnom") === '') ? pasdehaussetxt :
-					lesHausses + ' ' + feature.get("haussesnom"));
+				((nomHausses[idx] === '') ? pasdehaussetxt :
+					lesHausses + ' ' + nomHausses[idx]);
 		}
 		overlay.setPosition(feature.getGeometry().getCoordinates());
 		selectDoubleClick.getFeatures().clear();
 	});
 	translate.on('translateend', function(evt) {
+		// WGS 84 / Pseudo-Mercator - EPSG:3857 : projection
+		// EPSG:4326 - World Geodetic System 1984, used in GPS : lat lon
+		const idx = evt.features.getArray()[0].get("idx");
 		const coord = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
 		const req = new XMLHttpRequest();
-		if (evt.features.getArray()[0].get("rucheid") === 'entree') {
+		if (idx === -1) {
 			req.open('POST', ruchesurl + 'rucher/deplace/' + rucher.id +
 				'/' + coord[1] + '/' + coord[0], true);
+			rucher.longitude = coord[0];
+			rucher.latitude = coord[1];
 		} else {
-			req.open('POST', ruchesurl + 'ruche/deplace/' + evt.features.getArray()[0].get("rucheid") +
+			req.open('POST', ruchesurl + 'ruche/deplace/' + ruches[idx].id +
 				'/' + coord[1] + '/' + coord[0], true);
+			ruches[idx].longitude = coord[0];
+			ruches[idx].latitude = coord[1];
 		}
 		req.setRequestHeader('x-csrf-token', _csrf_token);
 		req.onload = function() {

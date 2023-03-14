@@ -258,7 +258,6 @@ public class EvenementEssaimController {
 	 */
 	@GetMapping("/commentaire/cree/{essaimId}")
 	public String commentaire(HttpSession session, Model model, @PathVariable long essaimId) {
-		// TODO factoriser avec even sucre si seul le formulaire de retour change
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isPresent()) {
 			Ruche ruche = rucheRepository.findByEssaimId(essaimId);
@@ -542,8 +541,6 @@ public class EvenementEssaimController {
 				// essaim inactivé on affiche la liste des essaims
 				return "redirect:/essaim/liste";
 			} else {
-				// TODO il faudrait rester sur le détail essaim et afficher
-				// le message d'erreur dans cette page
 				logger.error(ESSAIMPASDANSRUCHE);
 				model.addAttribute(Const.MESSAGE, ESSAIMPASDANSRUCHE);
 				return Const.INDEX;

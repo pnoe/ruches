@@ -21,9 +21,7 @@ public class PersonneService {
 	private PersonneRepository persRepository;
 
 	public static final String droitsInsuff = "Droits insuffisants.";
-	public static final String pDroitsInsuff = "{} droits insuffisants.";
 	public static final String roleIncorrect = "Erreur rôle incorrect.";
-	public static final String pRroleIncorrect = "{} rôle incorrect.";
 
 	/**
 	 * Ajoute la liste des Personnes au Model
@@ -41,19 +39,45 @@ public class PersonneService {
 	}
 
 	/**
-	 * Vérification du droit admin pour la personne connectée.
-	 * Si pas admin : log, message dans model et return true.
+	 * Vérification du droit admin pour la personne connectée. Si pas admin : log,
+	 * message dans model et return true.
 	 */
 	public boolean pasAdmin(Authentication authentication, Model model) {
 		GrantedAuthority auth = authentication.getAuthorities().iterator().next();
 		String role = auth.getAuthority();
 		if (role == null) {
-			logger.error(pRroleIncorrect, authentication.getName());
+			// authentication.getName() est déjà affiché par le logger
+			logger.error(roleIncorrect);
 			model.addAttribute(Const.MESSAGE, roleIncorrect);
 			return true;
 		}
 		if (!"ROLE_admin".equals(role)) {
-			logger.error(pDroitsInsuff, authentication.getName());
+			logger.error(roleIncorrect);
+			model.addAttribute(Const.MESSAGE, droitsInsuff);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Vérification des droits de l'utiliteur connecté pour afficher le formulaire
+	 * de modification d'une Personne. Il faut être admin pour modifier la personne
+	 * passée en paramètre si son login avant modification est différent de la
+	 * personne connectée.
+	 */
+	public boolean droitsInsuffisants(Personne personne, Authentication authentication, Model model) {
+		GrantedAuthority auth = authentication.getAuthorities().iterator().next();
+		// Rôle de l'utilisateur connecté
+		String role = auth.getAuthority();
+		if (role == null) {
+			logger.error(roleIncorrect);
+			model.addAttribute(Const.MESSAGE, roleIncorrect);
+			return true;
+		}
+		if (!"ROLE_admin".equals(role) && !authentication.getName().equals(personne.getLogin())) {
+			// si l'utilisateur connecté n'est pas admin et tente de modifier ou supprimer
+			// un autre utilisateur
+			logger.error(droitsInsuff);
 			model.addAttribute(Const.MESSAGE, droitsInsuff);
 			return true;
 		}
@@ -62,39 +86,15 @@ public class PersonneService {
 
 	/**
 	 * Vérification des droits de l'utiliteur connecté pour modifier une "personne".
-	 * Il faut être admin pour modifier la personne passée en paramètre si son login avant
-	 * modification est différent de la personne connectée.
-	 */
-	public boolean droitsInsuffisants(Personne personne, Authentication authentication, Model model) {
-		GrantedAuthority auth = authentication.getAuthorities().iterator().next();
-		// Rôle de l'utilisateur connecté
-		String role = auth.getAuthority();
-		if (role == null) {
-			logger.error(pRroleIncorrect, authentication.getName());
-			model.addAttribute(Const.MESSAGE, roleIncorrect);
-			return true;
-		}
-		if (!"ROLE_admin".equals(role) && !authentication.getName().equals(personne.getLogin())) {
-			// si l'utilisateur connecté n'est pas admin et tente de modifier ou supprimer
-			// un autre utilisateur
-			logger.error(pDroitsInsuff, authentication.getName());
-			model.addAttribute(Const.MESSAGE, droitsInsuff);
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Vérification des droits de l'utiliteur connecté pour modifier une "personne". Il faut être
-	 * admin pour modifier la personne passée en paramètre si son login avant
-	 * modification est différent de la personne connectée.
+	 * Il faut être admin pour modifier la personne passée en paramètre si son login
+	 * avant modification est différent de la personne connectée.
 	 */
 	public boolean pDroitsInsufSauve(Personne personne, Authentication authentication, Model model) {
 		GrantedAuthority auth = authentication.getAuthorities().iterator().next();
 		// Rôle de l'utilisateur connecté : ROLE_admin ou ROLE_
 		String role = auth.getAuthority();
 		if (role == null) {
-			logger.error(pRroleIncorrect, authentication.getName());
+			logger.error(roleIncorrect);
 			model.addAttribute(Const.MESSAGE, roleIncorrect);
 			return true;
 		}
@@ -103,7 +103,7 @@ public class PersonneService {
 			// le login de la personne qu'il modifie doit être le sien
 			// et son role ne doit pas être changé
 			if (!authentication.getName().equals(personne.getLogin()) || !role.equals("ROLE_" + personne.getRoles())) {
-				logger.error(pDroitsInsuff, authentication.getName());
+				logger.error(droitsInsuff);
 				model.addAttribute(Const.MESSAGE, droitsInsuff);
 				return true;
 			}

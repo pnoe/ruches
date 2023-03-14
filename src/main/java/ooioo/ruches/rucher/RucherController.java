@@ -401,7 +401,9 @@ public class RucherController {
 	}
 
 	/**
-	 * Rapprocher les ruches trop éloignées de leur rucher
+	 * Rapprocher les ruches trop éloignées de leur rucher.
+	 * Utilise ruche.dist.max comme distance max ruche - entrée du rucher.
+	 * Rapproche les ruches à une distance inférieure à rucher.ruche.dispersion de l'entrée.
 	 */
 	@GetMapping({ "/rapproche/Ign/{rucherId}", "/rapproche/Osm/{rucherId}" })
 	public String rapproche(Model model, @PathVariable long rucherId, HttpServletRequest request) {
@@ -545,6 +547,7 @@ public class RucherController {
 			model.addAttribute(Const.RUCHER, rucher);
 			model.addAttribute(Const.RUCHES, ruches);
 			model.addAttribute("ignCarteLiscense", ignCarteLiscense);
+			model.addAttribute("distMaxRuche", distMaxRuche);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
