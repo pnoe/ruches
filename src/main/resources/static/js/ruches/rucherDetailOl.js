@@ -4,7 +4,7 @@
    rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
    ruchetxt, lesHausses, pasdehaussetxt, parcourstxt, ignCarteLiscense,
    parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token, dessinEnregistretxt,
-   distRuchesOk, distMaxRuche
+   distRuchesOk, distMaxRuche, geoloc
    */
 "use strict";
 
@@ -20,14 +20,14 @@ function rucherDetail(ign) {
 		agriAnnee + '/legendes/LANDUSE.AGRICULTURE' + agriAnnee + '-legend.png';
 	const agriLayer = 'LANDUSE.AGRICULTURE' + agriAnnee;
 	const agriDescription =
-		'Registre parcellaire graphique : zones de culture déclarées par les exploitants en '
-		+ agriAnnee;
+		'Registre parcellaire graphique : zones de culture déclarées par les exploitants en ' +
+		agriAnnee;
 	const agriTitle = 'Registre parcellaire graphique';
 	function rTerreLat(latitude) {
 		const a = 6378137.0;
 		const b = 6356752.3142;
 		// https://en.m.wikipedia.org/wiki/Earth_radius#Geocentric_radius
-		const fi = Math.PI * latitude / 180.;
+		const fi = Math.PI * latitude / 180.0;
 		const d1 = a * Math.cos(fi);
 		const d2 = b * Math.sin(fi);
 		const n1 = a * d1;
@@ -36,10 +36,10 @@ function rucherDetail(ign) {
 	}
 	function distanceTerre(diamTerre, lat2, lat1, lon2,	lon1) {
 		// ou utiliser ol.sphere.distance
-		const sinDiffLat = Math.sin(Math.PI * (lat2 - lat1) / 360.);
-		const sinDiffLon = Math.sin(Math.PI * (lon2 - lon1) / 360.);
-		const a = sinDiffLat * sinDiffLat
-			+ Math.cos(Math.PI * lat1 / 180.) * Math.cos(Math.PI * lat2 / 180.) * sinDiffLon * sinDiffLon;
+		const sinDiffLat = Math.sin(Math.PI * (lat2 - lat1) / 360.0);
+		const sinDiffLon = Math.sin(Math.PI * (lon2 - lon1) / 360.0);
+		const a = sinDiffLat * sinDiffLat +
+			Math.cos(Math.PI * lat1 / 180.0) * Math.cos(Math.PI * lat2 / 180.0) * sinDiffLon * sinDiffLon;
 		return diamTerre * Math.asin(Math.sqrt(a));
 	}
 	$('.rapproche').on('click', function() {
