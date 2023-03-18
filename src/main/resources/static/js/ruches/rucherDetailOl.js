@@ -46,16 +46,16 @@ function rucherDetail(ign) {
 		const longRucher = rucher.longitude;
 		const latRucher = rucher.latitude;
 		const diametreTerre = (isNaN(rucher.altitude) ? 0 : rucher.altitude) +
-			2 * rTerreLat(rucher.latitude);	
-		let nb = 0;
+			2 * rTerreLat(latRucher);	
+		const rucheRapp = [];
 		for (let i = 0; i < ruches.length; i += 1) {
 			if (distanceTerre(diametreTerre, latRucher, ruches[i].latitude, longRucher,
 				ruches[i].longitude) > distMaxRuche) {
-				nb++;
+				rucheRapp.push(ruches[i].nom);
 			}
 		}
-		if (nb > 0) {
-			return confirm(rapprochertxt);
+		if (rucheRapp.length > 0) {
+			return confirm(rapprochertxt + ' (' + rucheRapp.join() + ') ?');
 		} else {
 			alert(distRuchesOk);
 			return false;
