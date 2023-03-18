@@ -225,6 +225,13 @@ function rucherDetail(ign) {
 		},
 	});
 	map.addControl(drawControl);
+	const paddExt = [1,1,-1,-1];
+    const zoomExtent = new ol.control.ZoomToExtent({
+      extent: vectorLayer.getSource().getExtent().map((item, index) => item - paddExt[index]) ,
+      label: 'Z',
+      tipLabel: 'Zoom Ruches',
+      });
+	map.addControl(zoomExtent);
 	ol.control.Drawing.prototype.onExportFeatureClick = function() {
 		const req = new XMLHttpRequest();
 		req.open('POST', ruchesurl + 'rucher/sauveDessin/' + rucher.id, true);
