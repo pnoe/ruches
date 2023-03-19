@@ -34,7 +34,7 @@ function rucherDetail(ign) {
 		const n2 = b * d2;
 		return Math.sqrt((n1 * n1 + n2 * n2) / (d1 * d1 + d2 * d2));
 	}
-	function distanceTerre(diamTerre, lat2, lat1, lon2,	lon1) {
+	function distanceTerre(diamTerre, lat2, lat1, lon2, lon1) {
 		// ou utiliser ol.sphere.distance
 		const sinDiffLat = Math.sin(Math.PI * (lat2 - lat1) / 360.0);
 		const sinDiffLon = Math.sin(Math.PI * (lon2 - lon1) / 360.0);
@@ -46,7 +46,7 @@ function rucherDetail(ign) {
 		const longRucher = rucher.longitude;
 		const latRucher = rucher.latitude;
 		const diametreTerre = (isNaN(rucher.altitude) ? 0 : rucher.altitude) +
-			2 * rTerreLat(latRucher);	
+			2 * rTerreLat(latRucher);
 		const rucheRapp = [];
 		for (let i = 0; i < ruches.length; i += 1) {
 			if (distanceTerre(diametreTerre, latRucher, ruches[i].latitude, longRucher,
@@ -191,7 +191,6 @@ function rucherDetail(ign) {
 	// Ne fonctionne pas
 	const formatKML = new ol.format.KML({});
 	const dessinsFeatures = (rucher.dessin === null) ? new ol.Collection() : new ol.Collection(formatKML.readFeatures(rucher.dessin));
-	// const
 	drawLayer = new ol.layer.Vector({
 		source: new ol.source.Vector({
 			features: dessinsFeatures
@@ -225,13 +224,11 @@ function rucherDetail(ign) {
 		},
 	});
 	map.addControl(drawControl);
-	const paddExt = [1,1,-1,-1];
-    const zoomExtent = new ol.control.ZoomToExtent({
-      extent: vectorLayer.getSource().getExtent().map((item, index) => item - paddExt[index]) ,
-      label: 'Z',
-      tipLabel: 'Zoom Ruches',
-      });
-	map.addControl(zoomExtent);
+	map.addControl(new ol.control.ZoomToExtent({
+		extent: vectorLayer.getSource().getExtent().map((item, index) => item - [1, 1, -1, -1][index]),
+		label: 'Z',
+		tipLabel: 'Zoom Ruches',
+	}));
 	ol.control.Drawing.prototype.onExportFeatureClick = function() {
 		const req = new XMLHttpRequest();
 		req.open('POST', ruchesurl + 'rucher/sauveDessin/' + rucher.id, true);
