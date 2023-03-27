@@ -5,6 +5,11 @@ footer {
 	line-height: 0.5em;
 }
 
+.ol-rotate {
+    top: 6.5em !important;
+    left: .5em !important;
+}
+
 .form-control {
 	background-color: LemonChiffon;
 }
