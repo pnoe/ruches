@@ -1,13 +1,12 @@
 footer {
 	padding-top: 0.2em;
 	padding-left: 0.4em;
-	font-size:0.8em;
+	font-size: 0.8em;
 	line-height: 0.5em;
 }
 
 .ol-rotate {
-    top: 6.5em !important;
-    left: .5em !important;
+	top: 5.5em !important;
 }
 
 .form-control {
@@ -118,14 +117,17 @@ div.dataTables_paginate {
 }
 
 .elegantshd {
-  font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
-  font-size: 92px;
-  padding: 80px 50px;
-  text-align: center;
-  text-rendering: optimizeLegibility;  color: #131313;
-  background-color: #DAB30A;
-  letter-spacing: .15em;
-  text-shadow: 1px -1px 0 #767676, -2px 4px 1px #767474, -4px 8px 1px #7b7a7a, -6px 12px 1px #828181, -8px 16px 1px #8b8a89;
+	font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic,
+		"AppleGothic", sans-serif;
+	font-size: 92px;
+	padding: 80px 50px;
+	text-align: center;
+	text-rendering: optimizeLegibility;
+	color: #131313;
+	background-color: #DAB30A;
+	letter-spacing: .15em;
+	text-shadow: 1px -1px 0 #767676, -2px 4px 1px #767474, -4px 8px 1px
+		#7b7a7a, -6px 12px 1px #828181, -8px 16px 1px #8b8a89;
 }
 
 .coloredrow {
