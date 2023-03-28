@@ -15,10 +15,10 @@ let overlay;
 function rucherDetail(ign) {
 	const lang = navigator.language;
 	const digits2 = { maximumFractionDigits: 2 };
-	const agriAnnee = '2020';
+	const agriAnnee = '2021';
 	const agriLegend = 'https://www.geoportail.gouv.fr/depot/layers/LANDUSE.AGRICULTURE' +
 		agriAnnee + '/legendes/LANDUSE.AGRICULTURE' + agriAnnee + '-legend.png';
-	const agriLayer = 'LANDUSE.AGRICULTURE' + agriAnnee;
+	const agriLayer = 'LANDUSE.AGRICULTURE.LATEST';
 	const agriDescription =
 		'Registre parcellaire graphique : zones de culture déclarées par les exploitants en ' +
 		agriAnnee;

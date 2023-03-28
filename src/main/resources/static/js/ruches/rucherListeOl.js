@@ -8,10 +8,10 @@
 function rucherListeIgn(ign) {
 	const urlbrgm = 'https://geoservices.brgm.fr/geologie';
 	const urlbrgmlegend = 'http://mapsref.brgm.fr/legendes/geoservices/Geologie1000_legende.jpg';
-	const agriAnnee = '2020';
+	const agriAnnee = '2021';
 	const agriLegend = 'https://www.geoportail.gouv.fr/depot/layers/LANDUSE.AGRICULTURE' +
 		agriAnnee + '/legendes/LANDUSE.AGRICULTURE' + agriAnnee + '-legend.png';
-	const agriLayer = 'LANDUSE.AGRICULTURE' + agriAnnee;
+	const agriLayer = 'LANDUSE.AGRICULTURE.LATEST';
 	const agriDescription =
 		'Registre parcellaire graphique : zones de culture déclarées par les exploitants en '
 		+ agriAnnee;
