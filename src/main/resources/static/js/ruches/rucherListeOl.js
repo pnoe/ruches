@@ -229,8 +229,9 @@ function rucherListeIgn(ign) {
 	translate.on('translateend', function(evt) {
 		const coord = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
 		const req = new XMLHttpRequest();
+		const idx = evt.features.getArray()[0].get("idx");
 		req.open('POST',
-			urlruches + 'rucher/deplace/' + ruchers[evt.features.getArray()[0].get("idx")].id +
+			urlruches + 'rucher/deplace/' + ruchers[idx].id +
 			'/' + coord[1] + '/' + coord[0],
 			true);
 		// met à jour les coords du rucher déplacé, idem rucherDetailOl.js

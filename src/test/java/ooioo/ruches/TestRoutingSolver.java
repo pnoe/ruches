@@ -85,7 +85,7 @@ public class TestRoutingSolver {
 			routeDistance += routing.getArcCostForVehicle(previousIndex, index, 0l);
 		}
 		logger.info("redraw " + redraw + ". Distance " + routeDistance);
-		assertEquals(routeDistance, 5777l);
+		assertEquals(5777l,routeDistance);
 	}
 
 }

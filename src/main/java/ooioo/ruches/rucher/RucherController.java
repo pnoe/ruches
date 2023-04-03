@@ -699,8 +699,10 @@ public class RucherController {
 	}
 
 	/**
-	 * Repositionne tous les ruchers au barycentre de leurs ruches
+	 * Repositionne tous les ruchers au barycentre de leurs ruches.
+	 * A supprimer, plus de lien pour l'appel.
 	 */
+	/*
 	@GetMapping("/recentre")
 	public String recentre(HttpSession session) {
 		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
@@ -742,6 +744,7 @@ public class RucherController {
 		}
 		return "redirect:/rucher/Ign";
 	}
+	*/
 
 	/**
 	 * Calcul du parcours des ruches d'un rucher (appel XMLHttpRequest). redraw = 0
