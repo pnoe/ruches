@@ -1,4 +1,4 @@
-package ooioo.ruches.ruche;
+package ooioo.ruches.ruche.type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

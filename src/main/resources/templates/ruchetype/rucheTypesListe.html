@@ -46,8 +46,8 @@ $(document).ready(function() {
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="rucheType : ${rucheTypes}">
-					<td><a th:href="@{'/rucheType/modifie/'+${rucheType.id}}"
+				<tr th:each="rucheType : ${rucheTypes}">				
+					<td><a th:href="@{'/rucheType/'+${rucheType.id}}"
 						th:text="*{rucheType.nom}"></a></td>
 					<td class="num" th:text="*{rucheType.nbCadresMax}"></td>
 				</tr>

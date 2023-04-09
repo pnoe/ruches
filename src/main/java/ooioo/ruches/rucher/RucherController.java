@@ -2,7 +2,6 @@ package ooioo.ruches.rucher;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -248,9 +247,9 @@ public class RucherController {
 	}
 
 	/**
-	 * Appel du formulaire de création d'un rucher.
-	 * Les coordonnées du nouveau rucher sont dans un cercle de rayon "dispersion" du dépôt.
-	 * Le contact est celui du dépôt.
+	 * Appel du formulaire de création d'un rucher. Les coordonnées du nouveau
+	 * rucher sont dans un cercle de rayon "dispersion" du dépôt. Le contact est
+	 * celui du dépôt.
 	 */
 	@GetMapping("/cree")
 	public String cree(Model model) {
@@ -401,9 +400,9 @@ public class RucherController {
 	}
 
 	/**
-	 * Rapprocher les ruches trop éloignées de leur rucher.
-	 * Utilise ruche.dist.max comme distance max ruche - entrée du rucher.
-	 * Rapproche les ruches à une distance inférieure à rucher.ruche.dispersion de l'entrée.
+	 * Rapprocher les ruches trop éloignées de leur rucher. Utilise ruche.dist.max
+	 * comme distance max ruche - entrée du rucher. Rapproche les ruches à une
+	 * distance inférieure à rucher.ruche.dispersion de l'entrée.
 	 */
 	@GetMapping({ "/rapproche/Ign/{rucherId}", "/rapproche/Osm/{rucherId}" })
 	public String rapproche(Model model, @PathVariable long rucherId, HttpServletRequest request) {
@@ -415,8 +414,8 @@ public class RucherController {
 			Float latRucher = rucher.getLatitude();
 			// liste des ruches de ce rucher
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
-			double diametreTerre = ((rucher.getAltitude() == null) ? 0 : rucher.getAltitude()) +
-					2 * Utils.rTerreLat(rucher.getLatitude());
+			double diametreTerre = ((rucher.getAltitude() == null) ? 0 : rucher.getAltitude())
+					+ 2 * Utils.rTerreLat(rucher.getLatitude());
 			for (Ruche ruche : ruches) {
 				if (Utils.distance(diametreTerre, latRucher, ruche.getLatitude(), longRucher,
 						ruche.getLongitude()) > distMaxRuche) {
@@ -697,54 +696,6 @@ public class RucherController {
 		}
 		return "rucher/rucherMeteo";
 	}
-
-	/**
-	 * Repositionne tous les ruchers au barycentre de leurs ruches.
-	 * A supprimer, plus de lien pour l'appel.
-	 */
-	/*
-	@GetMapping("/recentre")
-	public String recentre(HttpSession session) {
-		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
-		Iterable<Rucher> ruchers;
-		if (voirInactif != null && (boolean) voirInactif) {
-			ruchers = rucherRepository.findAllByOrderByNom();
-		} else {
-			ruchers = rucherRepository.findByActifOrderByNom(true);
-		}
-		for (Rucher rucher : ruchers) {
-			Float longitude;
-			Float latitude = 0f;
-			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucher.getId());
-			Float longitudeAvant = rucher.getLongitude();
-			Float latitudeAvant = rucher.getLatitude();
-			int nbRuches = 0;
-			double xlon = 0d;
-			double ylon = 0d;
-			for (Ruche ruche : ruches) {
-				nbRuches++;
-				Float longrad = (float) (ruche.getLongitude() * Math.PI / 180.0d);
-				xlon += Math.cos(longrad);
-				ylon += Math.sin(longrad);
-				latitude += ruche.getLatitude();
-			}
-			if (nbRuches == 0)
-				continue;
-			longitude = (float) (Math.atan2(ylon, xlon) * 180d / Math.PI);
-			latitude /= nbRuches;
-			NumberFormat nf = NumberFormat.getNumberInstance();
-			nf.setMaximumFractionDigits(6);
-			rucher.setLongitude(longitude);
-			rucher.setLatitude(latitude);
-			rucherRepository.save(rucher);
-			logger.info(
-					"Repositionnement du rucher {} au centre de ses ruches. Avant long {} lat {}. Après long {} lat {}.",
-					rucher.getNom(), nf.format(longitudeAvant), nf.format(latitudeAvant), nf.format(longitude),
-					nf.format(latitude));
-		}
-		return "redirect:/rucher/Ign";
-	}
-	*/
 
 	/**
 	 * Calcul du parcours des ruches d'un rucher (appel XMLHttpRequest). redraw = 0

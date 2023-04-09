@@ -43,6 +43,8 @@ import ooioo.ruches.hausse.Hausse;
 import ooioo.ruches.hausse.HausseRepository;
 import ooioo.ruches.recolte.RecolteHausse;
 import ooioo.ruches.recolte.RecolteHausseRepository;
+import ooioo.ruches.ruche.type.RucheType;
+import ooioo.ruches.ruche.type.RucheTypeRepository;
 import ooioo.ruches.rucher.Rucher;
 import ooioo.ruches.rucher.RucherRepository;
 import ooioo.ruches.rucher.RucherService;
@@ -190,7 +192,7 @@ public class RucheController {
 	}
 
 	/**
-	 * Appel du formulaire pour la création d'une ruche
+	 * Appel du formulaire pour la création d'une ruche.
 	 */
 	@GetMapping("/cree")
 	public String cree(HttpSession session, Model model) {
@@ -212,7 +214,7 @@ public class RucheController {
 	}
 
 	/**
-	 * Appel du formulaire pour le changement de rucher d'une ruche
+	 * Appel du formulaire pour le changement de rucher d'une ruche.
 	 */
 	@GetMapping("/rucher/{rucheId}")
 	public String rucher(HttpSession session, Model model, @PathVariable long rucheId) {
@@ -242,7 +244,7 @@ public class RucheController {
 	}
 
 	/**
-	 * Changement de rucher d'une ruche Création de l'événement RUCHEAJOUTRUCHER
+	 * Changement de rucher d'une ruche Création de l'événement RUCHEAJOUTRUCHER.
 	 */
 	@PostMapping("/sauverucher/{rucheId}")
 	public String sauveRucher(Model model, @RequestParam String date, @PathVariable long rucheId,
@@ -266,7 +268,7 @@ public class RucheController {
 	}
 
 	/**
-	 * Appel du formulaire pour modifier une ruche
+	 * Appel du formulaire pour modifier une ruche.
 	 */
 	@GetMapping("/modifie/{rucheId}")
 	public String modifie(Model model, @PathVariable long rucheId) {
@@ -288,7 +290,7 @@ public class RucheController {
 	}
 
 	/**
-	 * Suppression d'une ruche
+	 * Suppression d'une ruche.
 	 */
 	@GetMapping("/supprime/{rucheId}")
 	public String supprime(Model model, @PathVariable long rucheId) {

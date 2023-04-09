@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					<a th:href="@{'/rucheType/liste'}" th:text="#{rucheType}"></a>
+					<th:block th:text="' ' + ${rucheType.nom}"></th:block>
+				</h1>
+			</div>
+			<div class="col">
+				<a th:href="@{'/rucheType/modifie/'+${rucheType.id}}"
+					class="bi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid table-responsive" id="ruchetype">
+		<table class="table table-sm table-bordered">
+			<thead>
+				<tr>
+					<th th:text="#{nom}"></th>
+					<th th:text="#{nbCadresMax}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td th:text="${rucheType.nom}"></td>
+					<td class="num" th:text="${rucheType.nbCadresMax}"></td>
+
+					<!-- et production
+					<td th:text="${ruche.commentaire}"></td>
+					 -->
+
+				</tr>
+			</tbody>
+		</table>
+
+		<h6 th:unless="${#arrays.length(ruches)}" th:text="#{PasDeRuche}"></h6>
+		<th:block th:if="${#arrays.length(ruches)}">
+			<h6	th:text="#{listeXRuches(${#arrays.length(ruches)})}"></h6>
+			<table class="table table-sm table-bordered table-striped"
+				id="ruches">
+				<thead>
+					<tr>
+						<th th:text="#{nom}"></th>
+						<th th:text="#{essaim}"></th>
+						<th th:if="${session.voirInactif}" th:text="#{active}"></th>
+						<th th:text="#{dateAcquisition}"></th>
+						<th class="num" th:text="#{poidsVide}"></th>
+						
+						<!-- 
+						<th class="num" th:text="#{nbCadres}"></th>
+						-->
+						
+						<th style="background-color: PaleGoldenRod" class="num"
+							th:text="#{nbCadresMax}"></th>
+						
+						<!-- 
+						<th th:text="#{Hausses}"></th>
+						-->
+						
+						<th th:text="#{commentaire}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="ruche : ${ruches}">
+						<td><a th:href="@{'/ruche/'+${ruche.id}}"
+							th:text="${ruche.nom}"></a></td>
+						<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}"
+							th:text="${ruche.essaim?.nom}"></a></td>
+						<td th:if="${session.voirInactif}"
+							th:text="${ruche.active}? #{oui} : #{non}"></td>
+						<td th:text="${ruche.dateAcquisition}"></td>
+						<td class="num"
+							th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
+						
+						<!-- 	
+						<td class="num" th:text="${nbCadres[rucheStat.index]}"></td>
+						 -->
+						
+						<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
+						
+						<!-- 
+						<td class="num" th:text="${listNbHausses[rucheStat.index]}"></td>
+						-->
+						
+						<td th:text="${ruche.commentaire}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</th:block>
+	</div>
+	<br/>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

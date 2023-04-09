@@ -97,7 +97,7 @@ public class TestChrome {
 		driver.findElement(By.name("nom")).sendKeys(TestUtils.nomMilli());
 		// Pas de champ commentaire sur TypeRuche
 		driver.findElement(By.xpath("//input[@type='submit']")).click();
-		assertEquals("table", driver.findElement(By.id("ruchetypes")).getTagName());
+		assertEquals("div", driver.findElement(By.id("ruchetype")).getTagName());
 		// Modification de la valeur de l'événement
 		// pas de page détail après création d'un type de ruche
 		// api rest avec méthode dans repository findlastruchetype ?

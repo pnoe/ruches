@@ -2,6 +2,7 @@ package ooioo.ruches.ruche;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -44,6 +45,9 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	Iterable<Ruche> findByRucherIdOrderById(Long id);
 	Iterable<Ruche> findByActiveTrueAndRucherIdOrderById(Long id);
 
+	List<Ruche> findByTypeIdOrderByNom(Long id);
+	List<Ruche> findByActiveTrueAndTypeIdOrderByNom(Long id);
+	
 	long countByActiveTrue();
 
 	long countByEssaimNotNullAndActiveTrue();

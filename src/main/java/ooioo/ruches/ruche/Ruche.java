@@ -15,6 +15,7 @@ import javax.persistence.OneToOne;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import ooioo.ruches.essaim.Essaim;
+import ooioo.ruches.ruche.type.RucheType;
 import ooioo.ruches.rucher.Rucher;
 
 @Entity
