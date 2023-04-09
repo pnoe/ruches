@@ -29,14 +29,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @TestMethodOrder(OrderAnnotation.class)
 public class TestChrome {
-		
+
 	static final String comment = "Test selenium chrome";
 
 	static final String commentaire = "commentaire";
 	static final String modif = " - modifié";
 
 	static String depotId;
-	
+
 	@BeforeAll
 	static void initChrome() {
 		TestUtils.initChrome();
@@ -97,10 +97,15 @@ public class TestChrome {
 		driver.findElement(By.name("nom")).sendKeys(TestUtils.nomMilli());
 		// Pas de champ commentaire sur TypeRuche
 		driver.findElement(By.xpath("//input[@type='submit']")).click();
+		// Page détail du type de ruche créé
 		assertEquals("div", driver.findElement(By.id("ruchetype")).getTagName());
-		// Modification de la valeur de l'événement
-		// pas de page détail après création d'un type de ruche
-		// api rest avec méthode dans repository findlastruchetype ?
+		// Modification du type de ruche
+		String urlDetail = driver.getCurrentUrl();
+		driver.get(baseUrl + "rucheType/modifie" + urlDetail.substring(urlDetail.lastIndexOf("/")));
+		driver.findElement(By.name("nbCadresMax")).sendKeys("1000");
+		TestUtils.submit(driver);
+		// Page détail du type de ruche modifiée
+		assertEquals("div", driver.findElement(By.id("ruchetype")).getTagName());
 	}
 
 	@Test
@@ -464,9 +469,10 @@ public class TestChrome {
 	void recoltesStatProd() {
 		driver.get(baseUrl + "recolte/statprod");
 		// Le canevas d'id "ctx" est affiché
-		
-		// !!!!!!!!!! erreur sur base min !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		
+
+		// !!!!!!!!!! erreur sur base min
+		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 		assertEquals("canvas", driver.findElement(By.id("ctx")).getTagName());
 	}
 
@@ -572,8 +578,7 @@ public class TestChrome {
 		} else {
 			driver.get(baseUrl + "evenement/rucher/commentaire/cree/" + depotId);
 			LocalDateTime date = LocalDateTime.now().minusDays(2);
-			TestUtils.clearSend(driver, "date", date.format(
-					DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
+			TestUtils.clearSend(driver, "date", date.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
 			driver.findElement(By.name(commentaire)).sendKeys(comment);
 			driver.findElement(By.name("valeur")).sendKeys("5");
 			TestUtils.submit(driver);
