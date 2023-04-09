@@ -22,8 +22,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import ooioo.ruches.Const;
+import ooioo.ruches.evenement.Evenement;
+import ooioo.ruches.recolte.RecolteHausse;
 import ooioo.ruches.ruche.Ruche;
 import ooioo.ruches.ruche.RucheRepository;
+import ooioo.ruches.rucher.Rucher;
 
 @Controller
 @RequestMapping("/rucheType")
@@ -74,17 +77,18 @@ public class RucheTypeController {
 			model.addAttribute("rucheType", rucheType);
 			// Liste des ruches de ce type
 			Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
-			Iterable<Ruche> ruches;
+			List<Ruche> ruches;
+			long nbRuchesTotal = 0;
 			if (voirInactif != null && (boolean) voirInactif) {
 				// Si affichage des Inactifs demandé dans les Préférences
 				ruches = rucheRepository.findByTypeIdOrderByNom(rucheTypeId);
+				nbRuchesTotal = ruches.size();
 			} else {
 				ruches = rucheRepository.findByActiveTrueAndTypeIdOrderByNom(rucheTypeId);
+				nbRuchesTotal = rucheRepository.countByTypeIdOrderByNom(rucheTypeId);
 			}
 			model.addAttribute(Const.RUCHES, ruches);
-			
-			// TODO Ajouter au model bool indiquant l'existence de ruches de ce type (actives ou inactives)
-			
+			model.addAttribute("nbRuchesTotal", nbRuchesTotal);
 		} else {
 			logger.error(Const.IDRUCHETYPEXXINCONNU, rucheTypeId);
 			model.addAttribute(Const.MESSAGE,
@@ -125,6 +129,30 @@ public class RucheTypeController {
 		rucheTypeRepository.save(rucheType);
 		logger.info("{} {}", rucheType, action);
 		return "redirect:/rucheType/" + rucheType.getId();
+	}
+	
+	/**
+	 * Suppression d'un type de ruche.
+	 */
+	@GetMapping("/supprime/{rucheTypeId}")
+	public String supprime(Model model, @PathVariable long rucheTypeId) {
+		Optional<RucheType> rucheTypeOpt = rucheTypeRepository.findById(rucheTypeId);
+		if (rucheTypeOpt.isPresent()) {
+			RucheType rucheType = rucheTypeOpt.get();
+			long nbRuchesTotal = rucheRepository.countByTypeIdOrderByNom(rucheTypeId);
+			if (nbRuchesTotal == 0) {
+				rucheTypeRepository.delete(rucheType);
+				logger.info("{} supprimé", rucheType);
+			} else {
+				model.addAttribute(Const.MESSAGE, "Ce type de ruche ne peut être supprimé");
+				return Const.INDEX;
+			}
+		} else {
+			logger.error("IdRucheType {} inconnu.", rucheTypeId);
+			model.addAttribute(Const.MESSAGE, Const.IDRUCHETYPEINCONNU);
+			return Const.INDEX;
+		}
+		return "redirect:/rucheType/liste";
 	}
 
 }

@@ -46,6 +46,7 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	Iterable<Ruche> findByActiveTrueAndRucherIdOrderById(Long id);
 
 	List<Ruche> findByTypeIdOrderByNom(Long id);
+	long countByTypeIdOrderByNom(Long id);
 	List<Ruche> findByActiveTrueAndTypeIdOrderByNom(Long id);
 	
 	long countByActiveTrue();
