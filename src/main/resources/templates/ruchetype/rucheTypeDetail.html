@@ -93,8 +93,6 @@
 						<th th:if="${session.voirInactif}" th:text="#{active}"></th>
 						<th th:text="#{dateAcquisition}"></th>
 						<th class="num" th:text="#{poidsVide}"></th>
-						<th style="background-color: PaleGoldenRod" class="num"
-							th:text="#{nbCadresMax}"></th>
 						<th th:text="#{commentaire}"></th>
 					</tr>
 				</thead>
@@ -109,7 +107,6 @@
 						<td th:text="${ruche.dateAcquisition}"></td>
 						<td class="num"
 							th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
-						<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
 						<td th:text="${ruche.commentaire}"></td>
 					</tr>
 				</tbody>
