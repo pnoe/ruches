@@ -71,12 +71,14 @@
 				<tr>
 					<th th:text="#{nom}"></th>
 					<th th:text="#{nbCadresMax}"></th>
+					<th th:text="#{commentaire}"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
 					<td th:text="${rucheType.nom}"></td>
 					<td class="num" th:text="${rucheType.nbCadresMax}"></td>
+					<td th:text="${rucheType.commentaire}"></td>
 				</tr>
 			</tbody>
 		</table>

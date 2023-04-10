@@ -11,7 +11,7 @@ public class RucheType {
 
 	@Override
 	public String toString() {
-		return "RucheType [id=" + id + ", nom=" + nom + ", nbCadresMax=" + nbCadresMax + "]";
+		return "RucheType [id=" + id + ", nom=" + nom + ", nbCadresMax=" + nbCadresMax + ", commentaire=" + commentaire + "]";
 	}
 
 	@Id
@@ -25,6 +25,19 @@ public class RucheType {
 	 * Nombre de cadres maxi
 	 */
 	private Integer nbCadresMax = 10;
+	
+	/**
+	 * Commentaire
+	 */
+	private String commentaire;
+
+	public String getCommentaire() {
+		return commentaire;
+	}
+
+	public void setCommentaire(String commentaire) {
+		this.commentaire = commentaire;
+	}
 
 	public Long getId() {
 		return id;

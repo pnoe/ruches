@@ -59,6 +59,7 @@
 				id="nbCadresMax" name="nbCadresMax" /> <label class="form-label"
 				for="nbCadresMax" th:text="#{nbCadresMax}"></label>
 		</div>
+		<div th:replace="includeForm :: commentaireField"></div>
 		<div th:replace="includeForm :: BtnForm"></div>
 	</form>
 	<footer th:replace="include::footer"></footer>
