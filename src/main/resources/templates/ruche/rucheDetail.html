@@ -152,7 +152,7 @@ $().ready(function() {
 					<td><a th:href="@{/rucher/{id}(id=${ruche.rucher?.id})}"
 						th:text="${ruche.rucher?.nom}"></a></td>
 					<td><a
-					 	th:href="@{/evenement/{id}?type=ruche(id=${eveRucher?.id})}"
+					 	th:href="@{/evenement/{id}(id=${eveRucher?.id},type='ruche')}"
 						th:text="${#temporals.format(eveRucher?.date, 'yyyy/MM/dd')}"></a>
 					</td>
 					<td th:text="${eveRucher?.commentaire}"></td>
@@ -160,7 +160,7 @@ $().ready(function() {
 						th:href="@{/essaim/{id}(id=${ruche.essaim?.id})}"
 						th:text="${ruche.essaim?.nom}"></a></td>
 					<td><a th:if="${eveEssaim != null}"
-						th:href="@{/evenement/{id}?type=ruche(id=${eveEssaim?.id})}"
+						th:href="@{/evenement/{id}(id=${eveEssaim?.id},type='ruche')}"
 						th:text="${#temporals.format(eveEssaim?.date, 'yyyy/MM/dd')}"></a>
 					</td>
 					<td th:text="${eveEssaim?.commentaire}"></td>
@@ -181,7 +181,7 @@ $().ready(function() {
 					<tr>
 						<td th:text="${eveComm?.commentaire}"></td>
 						<td><a th:if="${eveComm != null}"
-							th:href="@{/evenement/{id}?type=ruche(id=${eveComm?.id})}"
+							th:href="@{/evenement/{id}(id=${eveComm?.id},type='ruche')}"
 							th:text="${#temporals.format(eveComm?.date, 'yyyy/MM/dd')}"></a>
 						</td>
 					</tr>
