@@ -188,7 +188,7 @@
 							<li><a class="dropdown-item" th:text="#{preferences}"
 								th:href="@{/parametres}"></a></li>
 							<li sec:authorize="hasRole('ROLE_admin')"><a
-								class="dropdown-item" th:text="#{apiRest}" th:target="_blank"
+								class="dropdown-item" th:text="#{apiRest}" target="_blank"
 								th:href="@{/rest}"></a></li>
 							<li sec:authorize="hasRole('ROLE_admin')"><a
 								class="dropdown-item" th:text="#{logs}"
@@ -198,7 +198,7 @@
 							<li sec:authorize="hasRole('ROLE_admin')"><a
 								class="dropdown-item" th:text="#{tests}" th:href="@{/tests}"></a></li>
 							<li><a class="dropdown-item" th:text="#{Doc}"
-								th:target="_blank" th:href="@{/doc/ruches.html}"></a></li>
+								target="_blank" th:href="@{/doc/ruches.html}"></a></li>
 						</ul></li>
 				</ul>
 			</div>
@@ -209,7 +209,7 @@
 	</nav>
 	<footer th:fragment="footer">
 		<p th:utext="${'&#128029; ' + @environment.getProperty('accueil.titre') + ' &#128029; '}"></p>
-		<p th:text="#{include.footer} + ' Version ' + ${buildTime}"></p>
+		<a target="_blank" href="https://gitlab.com/ruches/ruches" th:text="'Ruches ' + ${buildTime}"></a>
 	</footer>
 	<img th:fragment="pencil"
 		th:src="@{'/images/bootstrap-icons-1.10.2/pencil.svg'}" width="16"
