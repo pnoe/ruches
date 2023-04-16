@@ -10,6 +10,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import ooioo.ruches.IdNom;
 import ooioo.ruches.Nom;
+import ooioo.ruches.ruche.type.RucheType;
 import ooioo.ruches.rucher.Rucher;
 
 @RepositoryRestResource(collectionResourceRel = "rucheRepository")
@@ -89,5 +90,20 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 			  order by r.nom
 			""")
 	Iterable<Ruche> findActiveIdDiffOrderByNom(Long id);
-
+	
+	/*
+	@Query(value = """
+			select count(r) as nbruches
+			  from RucheType rt
+			  left join Ruche r on r.type = rt.id
+			  where
+			    r.active = 'true'
+			  group by rt.nom  
+			  order by rt.nom
+			""")
+	List<Integer> countNbRucheRucheType();
+	*/
+	
+	Integer countByTypeAndActiveTrue(RucheType rt);
+	
 }

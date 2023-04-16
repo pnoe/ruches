@@ -22,11 +22,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import ooioo.ruches.Const;
-import ooioo.ruches.evenement.Evenement;
-import ooioo.ruches.recolte.RecolteHausse;
 import ooioo.ruches.ruche.Ruche;
 import ooioo.ruches.ruche.RucheRepository;
-import ooioo.ruches.rucher.Rucher;
 
 @Controller
 @RequestMapping("/rucheType")
@@ -37,18 +34,24 @@ public class RucheTypeController {
 	final Logger logger = LoggerFactory.getLogger(RucheTypeController.class);
 
 	@Autowired
-	private RucheTypeRepository rucheTypeRepository;
+	private RucheTypeRepository rucheTypeRepo;
 	@Autowired
-	private RucheRepository rucheRepository;
+	private RucheRepository rucheRepo;
 	@Autowired
 	private MessageSource messageSource;
 
 	/**
-	 * Liste des types de ruche
+	 * Liste des types de ruche.
 	 */
 	@GetMapping("/liste")
 	public String liste(Model model) {
-		model.addAttribute(Const.RUCHETYPES, rucheTypeRepository.findAll());
+		List<RucheType> lRT = rucheTypeRepo.findAllByOrderByNom();
+		model.addAttribute(Const.RUCHETYPES, lRT);
+		List<Integer> nbRuches = new ArrayList<>();
+		for(RucheType rt : lRT) {
+			nbRuches.add(rucheRepo.countByTypeAndActiveTrue(rt));
+		}
+		model.addAttribute("NbRuches", nbRuches);
 		return "ruchetype/rucheTypesListe";
 	}
 
@@ -58,7 +61,7 @@ public class RucheTypeController {
 	@GetMapping("/cree")
 	public String cree(Model model) {
 		List<String> noms = new ArrayList<>();
-		for (RucheType rucheType : rucheTypeRepository.findAll()) {
+		for (RucheType rucheType : rucheTypeRepo.findAll()) {
 			noms.add(rucheType.getNom());
 		}
 		model.addAttribute("rucheTypeNoms", noms);
@@ -71,7 +74,7 @@ public class RucheTypeController {
 	 */
 	@GetMapping("/{rucheTypeId}")
 	public String affiche(HttpSession session, Model model, @PathVariable long rucheTypeId) {
-		Optional<RucheType> rucheTypeOpt = rucheTypeRepository.findById(rucheTypeId);
+		Optional<RucheType> rucheTypeOpt = rucheTypeRepo.findById(rucheTypeId);
 		if (rucheTypeOpt.isPresent()) {
 			RucheType rucheType = rucheTypeOpt.get();
 			model.addAttribute("rucheType", rucheType);
@@ -81,11 +84,11 @@ public class RucheTypeController {
 			long nbRuchesTotal = 0;
 			if (voirInactif != null && (boolean) voirInactif) {
 				// Si affichage des Inactifs demandé dans les Préférences
-				ruches = rucheRepository.findByTypeIdOrderByNom(rucheTypeId);
+				ruches = rucheRepo.findByTypeIdOrderByNom(rucheTypeId);
 				nbRuchesTotal = ruches.size();
 			} else {
-				ruches = rucheRepository.findByActiveTrueAndTypeIdOrderByNom(rucheTypeId);
-				nbRuchesTotal = rucheRepository.countByTypeIdOrderByNom(rucheTypeId);
+				ruches = rucheRepo.findByActiveTrueAndTypeIdOrderByNom(rucheTypeId);
+				nbRuchesTotal = rucheRepo.countByTypeIdOrderByNom(rucheTypeId);
 			}
 			model.addAttribute(Const.RUCHES, ruches);
 			model.addAttribute("nbRuchesTotal", nbRuchesTotal);
@@ -99,14 +102,14 @@ public class RucheTypeController {
 	}
 
 	/**
-	 * Modifie un type de ruche.
+	 * Appel du formulaire pour modifier un type de ruche.
 	 */
 	@GetMapping("/modifie/{rucheTypeId}")
 	public String modifie(Model model, @PathVariable long rucheTypeId) {
-		Optional<RucheType> rucheTypeOpt = rucheTypeRepository.findById(rucheTypeId);
+		Optional<RucheType> rucheTypeOpt = rucheTypeRepo.findById(rucheTypeId);
 		if (rucheTypeOpt.isPresent()) {
 			RucheType rucheType = rucheTypeOpt.get();
-			model.addAttribute("rucheTypeNoms", StreamSupport.stream(rucheTypeRepository.findAll().spliterator(), false)
+			model.addAttribute("rucheTypeNoms", StreamSupport.stream(rucheTypeRepo.findAll().spliterator(), false)
 					.map(RucheType::getNom).filter(nom -> !nom.equals(rucheType.getNom())).toList());
 			model.addAttribute("rucheType", rucheType);
 		} else {
@@ -126,7 +129,7 @@ public class RucheTypeController {
 			return RUCHE_RUCHETYPEFORM;
 		}
 		String action = (rucheType.getId() == null) ? "créé" : "modifié";
-		rucheTypeRepository.save(rucheType);
+		rucheTypeRepo.save(rucheType);
 		logger.info("{} {}", rucheType, action);
 		return "redirect:/rucheType/" + rucheType.getId();
 	}
@@ -136,12 +139,12 @@ public class RucheTypeController {
 	 */
 	@GetMapping("/supprime/{rucheTypeId}")
 	public String supprime(Model model, @PathVariable long rucheTypeId) {
-		Optional<RucheType> rucheTypeOpt = rucheTypeRepository.findById(rucheTypeId);
+		Optional<RucheType> rucheTypeOpt = rucheTypeRepo.findById(rucheTypeId);
 		if (rucheTypeOpt.isPresent()) {
 			RucheType rucheType = rucheTypeOpt.get();
-			long nbRuchesTotal = rucheRepository.countByTypeIdOrderByNom(rucheTypeId);
+			long nbRuchesTotal = rucheRepo.countByTypeIdOrderByNom(rucheTypeId);
 			if (nbRuchesTotal == 0) {
-				rucheTypeRepository.delete(rucheType);
+				rucheTypeRepo.delete(rucheType);
 				logger.info("{} supprimé", rucheType);
 			} else {
 				model.addAttribute(Const.MESSAGE, "Ce type de ruche ne peut être supprimé");

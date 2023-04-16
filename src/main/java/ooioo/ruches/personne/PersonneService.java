@@ -20,9 +20,10 @@ public class PersonneService {
 	@Autowired
 	private PersonneRepository persRepository;
 
-	public static final String droitsInsuff = "Droits insuffisants.";
-	public static final String roleIncorrect = "Erreur rôle incorrect.";
-
+	private static final String droitsInsuff = "Droits insuffisants.";
+	private static final String roleIncorrect = "Erreur rôle incorrect.";
+	private static final String roleAdmin = "ROLE_admin";
+	
 	/**
 	 * Ajoute la liste des Personnes au Model
 	 *
@@ -51,7 +52,7 @@ public class PersonneService {
 			model.addAttribute(Const.MESSAGE, roleIncorrect);
 			return true;
 		}
-		if (!"ROLE_admin".equals(role)) {
+		if (!roleAdmin.equals(role)) {
 			logger.error(roleIncorrect);
 			model.addAttribute(Const.MESSAGE, droitsInsuff);
 			return true;
@@ -74,7 +75,7 @@ public class PersonneService {
 			model.addAttribute(Const.MESSAGE, roleIncorrect);
 			return true;
 		}
-		if (!"ROLE_admin".equals(role) && !authentication.getName().equals(personne.getLogin())) {
+		if (!roleAdmin.equals(role) && !authentication.getName().equals(personne.getLogin())) {
 			// si l'utilisateur connecté n'est pas admin et tente de modifier ou supprimer
 			// un autre utilisateur
 			logger.error(droitsInsuff);
@@ -99,7 +100,7 @@ public class PersonneService {
 			return true;
 		}
 		// Si utilisateur non admin
-		if (!"ROLE_admin".equals(role)) {
+		if (!roleAdmin.equals(role)) {
 			// le login de la personne qu'il modifie doit être le sien
 			// et son role ne doit pas être changé
 			if (!authentication.getName().equals(personne.getLogin()) || !role.equals("ROLE_" + personne.getRoles())) {

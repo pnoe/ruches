@@ -66,9 +66,8 @@ public class TestLotRuche {
 				() -> assertEquals(TestUtils.role, driver.findElement(By.id("role")).getText()));
 	}
 
-	@Test
-	@Order(2)
 	@RepeatedTest(1)
+	@Order(2)
 	@DisplayName("Ruche création")
 	void creeRuche() {
 		// Création d'une ruche
