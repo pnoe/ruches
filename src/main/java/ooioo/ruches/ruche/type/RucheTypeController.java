@@ -30,6 +30,7 @@ import ooioo.ruches.ruche.RucheRepository;
 public class RucheTypeController {
 
 	private static final String RUCHE_RUCHETYPEFORM = "ruchetype/rucheTypeForm";
+	private static final String RUCHE_RUCHETYPE = "rucheType";
 
 	final Logger logger = LoggerFactory.getLogger(RucheTypeController.class);
 
@@ -65,7 +66,7 @@ public class RucheTypeController {
 			noms.add(rucheType.getNom());
 		}
 		model.addAttribute("rucheTypeNoms", noms);
-		model.addAttribute("rucheType", new RucheType());
+		model.addAttribute(RUCHE_RUCHETYPE, new RucheType());
 		return RUCHE_RUCHETYPEFORM;
 	}
 	
@@ -77,7 +78,7 @@ public class RucheTypeController {
 		Optional<RucheType> rucheTypeOpt = rucheTypeRepo.findById(rucheTypeId);
 		if (rucheTypeOpt.isPresent()) {
 			RucheType rucheType = rucheTypeOpt.get();
-			model.addAttribute("rucheType", rucheType);
+			model.addAttribute(RUCHE_RUCHETYPE, rucheType);
 			// Liste des ruches de ce type
 			Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
 			List<Ruche> ruches;
@@ -111,7 +112,7 @@ public class RucheTypeController {
 			RucheType rucheType = rucheTypeOpt.get();
 			model.addAttribute("rucheTypeNoms", StreamSupport.stream(rucheTypeRepo.findAll().spliterator(), false)
 					.map(RucheType::getNom).filter(nom -> !nom.equals(rucheType.getNom())).toList());
-			model.addAttribute("rucheType", rucheType);
+			model.addAttribute(RUCHE_RUCHETYPE, rucheType);
 		} else {
 			logger.error("IdRucheType {} inconnu.", rucheTypeId);
 			model.addAttribute(Const.MESSAGE, Const.IDRUCHETYPEINCONNU);

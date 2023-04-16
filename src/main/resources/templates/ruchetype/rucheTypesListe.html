@@ -43,9 +43,7 @@ $(document).ready(function() {
 				<tr>
 					<th th:text="#{nom}"></th>
 					<th th:text="#{nbCadresMax}"></th>
-					
 					<th th:text="#{nbRuches}"></th>
-					
 					<th th:text="#{commentaire}"></th>
 				</tr>
 			</thead>
@@ -54,9 +52,7 @@ $(document).ready(function() {
 					<td><a th:href="@{'/rucheType/'+${rucheType.id}}"
 						th:text="*{rucheType.nom}"></a></td>
 					<td class="num" th:text="*{rucheType.nbCadresMax}"></td>
-					
 					<td class="num" th:text="${NbRuches[rucheTypeStat.index]}"></td>
-					
 					<td th:text="${rucheType.commentaire}"></td>
 				</tr>
 			</tbody>
