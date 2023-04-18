@@ -166,9 +166,9 @@ public class RucherController {
 	}
 
 	/**
-	 * Statistiques tableau poids de miel par rucher
+	 * Statistiques tableau poids de miel par rucher.
 	 */
-	@RequestMapping("/statistiques")
+	@GetMapping("/statistiques")
 	public String statistiques(Model model) {
 		Iterable<Recolte> recoltes = recolteRepository.findAllByOrderByDateAsc();
 		Iterable<Rucher> ruchers = rucherRepository.findAll();
@@ -216,7 +216,7 @@ public class RucherController {
 	}
 
 	/**
-	 * Liste des ruchers
+	 * Liste des ruchers.
 	 */
 	@GetMapping("/liste")
 	public String liste(HttpSession session, Model model) {
@@ -299,10 +299,19 @@ public class RucherController {
 		if (bindingResult.hasErrors()) {
 			return RUCHER_RUCHERFORM;
 		}
+
+		// On enlève les blancs aux extémités du nom.
+		rucher.setNom(rucher.getNom().trim());
+		if ("".equals(rucher.getNom())) {
+			logger.error("{} nom incorrect.", rucher);
+			model.addAttribute(Const.MESSAGE, "Nom de rucher incorrect.");
+			return Const.INDEX;
+		}
+
 		// Vérification de l'unicité du nom
 		Rucher rNom = rucherRepository.findByNom(rucher.getNom());
 		if (rNom != null && !rNom.getId().equals(rucher.getId())) {
-			logger.error("Nom de rucher {} existant.", rNom.getNom());
+			logger.error("{} nom existant.", rucher);
 			model.addAttribute(Const.MESSAGE, "Nom de rucher existant.");
 			return Const.INDEX;
 		}

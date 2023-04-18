@@ -47,8 +47,7 @@ public class PersonneController {
 	}
 
 	/**
-	 * Appel du formulaire pour l'ajout d'une personne.
-	 * Il faut être admin.
+	 * Appel du formulaire pour l'ajout d'une personne. Il faut être admin.
 	 */
 	@GetMapping("/cree")
 	public String cree(Model model, Authentication authentication) {
@@ -75,8 +74,8 @@ public class PersonneController {
 	}
 
 	/**
-	 * Appel du formulaire pour modifier une personne.
-	 * Il faut être admin pour modifier une autre Personne que soi même.
+	 * Appel du formulaire pour modifier une personne. Il faut être admin pour
+	 * modifier une autre Personne que soi même.
 	 */
 	@GetMapping("/modifie/{personneId}")
 	public String modifie(Model model, @PathVariable long personneId, Authentication authentication) {
@@ -97,9 +96,8 @@ public class PersonneController {
 	}
 
 	/**
-	 * Suppression d'une personne.
-	 * On peut se supprimer sauf si on est référencé dans des ruchers.
-	 * Il faut être admin pour supprimer une Personne.
+	 * Suppression d'une personne. On peut se supprimer sauf si on est référencé
+	 * dans des ruchers. Il faut être admin pour supprimer une Personne.
 	 */
 	@GetMapping("/supprime/{personneId}")
 	public String supprime(Model model, @PathVariable long personneId, Authentication authentication) {
@@ -127,7 +125,7 @@ public class PersonneController {
 	}
 
 	/**
-	 * Enregistrement de la personne crée ou modifiée
+	 * Enregistrement de la personne crée ou modifiée.
 	 */
 	@PostMapping("/sauve")
 	public String sauve(@ModelAttribute Personne personne, BindingResult bindingResult, Model model,
@@ -140,6 +138,23 @@ public class PersonneController {
 		if (bindingResult.hasErrors()) {
 			return PERSONNE_PERSONNEFORM;
 		}
+
+		// On enlève les blancs aux extémités du nom.
+		personne.setNom(personne.getNom().trim());
+		if ("".equals(personne.getNom())) {
+			logger.error("{} nom incorrect.", personne);
+			model.addAttribute(Const.MESSAGE, "Nom de personne incorrect.");
+			return Const.INDEX;
+		}
+
+		// On enlève les blancs aux extémités du prénom.
+		personne.setPrenom(personne.getPrenom().trim());
+		if ("".equals(personne.getPrenom())) {
+			logger.error("{} prénom incorrect.", personne);
+			model.addAttribute(Const.MESSAGE, "Prénom de personne incorrect.");
+			return Const.INDEX;
+		}
+
 		// Vérification de l'unicité du login si différent de ""
 		// et si la personne retrouvée en base n'est pas la personne elle même
 		if (!"".equals(personne.getLogin())) {
@@ -153,7 +168,7 @@ public class PersonneController {
 		if (!"".equals(personne.getEmail())) {
 			// Vérification de l'unicité de l'email si différent de ""
 			Personne pE = personneRepository.findByEmail(personne.getEmail());
-			if (pE != null &&  !pE.getId().equals(personne.getId())) {
+			if (pE != null && !pE.getId().equals(personne.getId())) {
 				logger.error("Email {} existant.", pE.getEmail());
 				model.addAttribute(Const.MESSAGE, "Email existant.");
 				return Const.INDEX;

@@ -115,6 +115,10 @@
 			<artifactId>ortools-java</artifactId>
 			<version>9.6.2534</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
 	</dependencies>
 	<properties>
 		<java.version>17</java.version>

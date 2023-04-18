@@ -37,13 +37,16 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
 	private UserDetailsService userDetailsService;
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		/*
 		 * Pour Spring Boot 3
 		 * http.authorizeHttpRequests()
 		 * .requestMatchers("/forgotPassword", "/resetPassword", "/resetPasswordFin",
 		 * "/", "/css/**", "/js/**", "/images/**", "/doc/**", "/font/**")
 		 */
+		// Voir aussi https://spring.io/blog/2019/11/21/spring-security-lambda-dsl
+		//   conseillé par spring tools 
+		//      consider switching to httpsecurity lambda dsl syntax
 		http.authorizeRequests()
 				.antMatchers("/forgotPassword", "/resetPassword", "/resetPasswordFin", "/", "/css/**", "/js/**",
 						"/images/**", "/doc/**", "/font/**")
@@ -78,7 +81,7 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
 	 * for the id "null"
 	 */
 	@Bean
-	public static BCryptPasswordEncoder passwordEncoder() {
+	static BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 

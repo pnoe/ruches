@@ -4,12 +4,13 @@
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:replace="include :: jsdatepicker-fr"></script>
 <script th:inline="javascript">
+	const essaimNoms = /*[[${essaimNoms}]]*/null;
+	const nomexiste = /*[[#{nomexiste}]]*/null;
 	$().ready(function() {
-		const essaimNoms = [[${essaimNoms}]];
 		$("#nom").focus();
 		jQuery.validator.addMethod("nomExiste", function(value) {   
     		return $.inArray(value, essaimNoms) == -1;
-			}, [[#{nomexiste}]]);
+			}, nomexiste);
 		if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('fr') != -1)) {
 			$.datepicker.setDefaults(
 				$.datepicker.regional['fr']
@@ -32,7 +33,10 @@
 			rules : {
 				nom : {
 					required : true,
-					nomExiste : true
+					nomExiste : true,
+					normalizer : function(value) {
+						return $.trim(value);
+					}
 				},
 				dateAcquisition : {
 					'required' : true	

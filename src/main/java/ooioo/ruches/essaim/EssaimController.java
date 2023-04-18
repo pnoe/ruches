@@ -77,7 +77,7 @@ public class EssaimController {
 	 * Historique de la mise en ruchers d'un essaim. Les événements affichés dans
 	 * l'historique : - les mise en rucher de ruches ou l'essaim apparait - la
 	 * dispersion de l'essaim qui termine l'historique - la ou les mises en ruches
-	 * de l'essaim qui peuvent impliquer des déplacements
+	 * de l'essaim qui peuvent impliquer des déplacements.
 	 */
 	@GetMapping("/historique/{essaimId}")
 	public String historique(Model model, @PathVariable long essaimId) {
@@ -94,7 +94,7 @@ public class EssaimController {
 	 * Statistiques (chartjs barchart) âges des reines. Appel icône dans page liste
 	 * essaim.
 	 */
-	@RequestMapping("/statistiquesage")
+	@GetMapping("/statistiquesage")
 	public String statistiquesage(Model model) {
 		essaimService.statistiquesage(model);
 		return "essaim/essaimsStatAges";
@@ -109,7 +109,7 @@ public class EssaimController {
 	 *
 	 * @param masquerInactif pour masquer les essaims inactifs.
 	 */
-	@RequestMapping("/statistiques")
+	@GetMapping("/statistiques")
 	public String statistiques(Model model, @RequestParam(required = false) Long rucherId,
 			@RequestParam(defaultValue = "false") boolean masquerInactif) {
 		essaimService.statistiques(model, rucherId, masquerInactif);
@@ -117,7 +117,7 @@ public class EssaimController {
 	}
 
 	/**
-	 * Essaimer appel du formulaire d'essaimage
+	 * Appel du formulaire d'essaimage.
 	 */
 	@GetMapping("/essaime/{essaimId}")
 	public String essaimer(HttpSession session, Model model, @PathVariable long essaimId) {
@@ -148,14 +148,10 @@ public class EssaimController {
 
 	/*
 	 * Enregistrement de l'essaimage.
-	 *
 	 * @param essaimId l'id de l'essaim qui essaime.
-	 *
 	 * @param date la date saisie dans le formulaire d'essaimage.
-	 *
 	 * @param nom le nom du nouvel essaim restant dans la ruche saisi dans le
 	 * formulaire d'essaimage.
-	 *
 	 * @param commentaire le commentaire saisi dans le formulaire d'essaimage.
 	 */
 	@PostMapping("/essaime/sauve/{essaimId}")
@@ -241,7 +237,7 @@ public class EssaimController {
 	}
 
 	/**
-	 * Liste des essaims
+	 * Liste des essaims.
 	 */
 	@GetMapping("/liste")
 	public String liste(HttpSession session, Model model) {
@@ -258,7 +254,7 @@ public class EssaimController {
 	}
 
 	/**
-	 * Appel du formulaire pour l'ajout d'un essaim
+	 * Appel du formulaire pour l'ajout d'un essaim.
 	 */
 	@GetMapping("/cree")
 	public String cree(HttpSession session, Model model) {
@@ -374,10 +370,17 @@ public class EssaimController {
 		if (bindingResult.hasErrors()) {
 			return ESSAIM_ESSAIMFORM;
 		}
+		// On enlève les blancs aux extémités du nom.
+		essaim.setNom(essaim.getNom().trim());
+		if ("".equals(essaim.getNom())) {
+			logger.error("{} nom incorrect.", essaim);
+			model.addAttribute(Const.MESSAGE, "Nom d'essaim incorrect.");
+			return Const.INDEX;
+		}
 		// Vérification de l'unicité du nom
 		Essaim eNom = essaimRepository.findByNom(essaim.getNom());
 		if (eNom != null && !eNom.getId().equals(essaim.getId())) {
-			logger.error("Nom d'essaim {} existant.", eNom.getNom());
+			logger.error("{} nom existant.", essaim);
 			model.addAttribute(Const.MESSAGE, "Nom d'essaim existant.");
 			return Const.INDEX;
 		}

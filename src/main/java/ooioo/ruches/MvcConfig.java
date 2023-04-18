@@ -22,7 +22,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 public class MvcConfig implements WebMvcConfigurer {
 
 	@Bean
-	public LocaleResolver localeResolver() {
+	LocaleResolver localeResolver() {
 		// Voir aussi SessionLocaleResolver et CookieLocaleResolver
 		AcceptHeaderLocaleResolver lr = new AcceptHeaderLocaleResolver();
 		lr.setDefaultLocale(Locale.FRENCH);
@@ -30,7 +30,7 @@ public class MvcConfig implements WebMvcConfigurer {
 	}
 
 	@Bean
-	public LocaleChangeInterceptor localeChangeInterceptor() {
+	LocaleChangeInterceptor localeChangeInterceptor() {
 		LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
 		lci.setParamName("lang");
 		return lci;

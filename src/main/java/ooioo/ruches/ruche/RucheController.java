@@ -96,7 +96,7 @@ public class RucheController {
 	}
 
 	/**
-	 * Clonage multiple d'une ruche (appel XMLHttpRequest)
+	 * Clonage multiple d'une ruche (appel XMLHttpRequest).
 	 */
 	@PostMapping("/clone/{rucheId}")
 	@ResponseStatus(value = HttpStatus.OK)
@@ -140,7 +140,7 @@ public class RucheController {
 	}
 
 	/**
-	 * Liste des ruches
+	 * Liste des ruches.
 	 */
 	@GetMapping("/liste")
 	public String liste(HttpSession session, Model model) {
@@ -149,7 +149,7 @@ public class RucheController {
 	}
 
 	/**
-	 * Liste plus détaillée des ruches
+	 * Liste plus détaillée des ruches.
 	 */
 	@GetMapping("/listeplus")
 	public String listePlus(HttpSession session, Model model) {
@@ -158,7 +158,7 @@ public class RucheController {
 	}
 
 	/**
-	 * Liste des ruches d'un rucher paramètres parcours : pour l'ordre des ruches
+	 * Liste des ruches d'un rucher paramètres parcours : pour l'ordre des ruches.
 	 * plus : liste détaillée si true
 	 */
 	@GetMapping("/liste/{rucherId}")
@@ -334,14 +334,23 @@ public class RucheController {
 		if (bindingResult.hasErrors()) {
 			return RUCHE_RUCHEFORM;
 		}
-		// Vérification de l'unicité du nom
+
+		// On enlève les blancs aux extémités du nom.
+		ruche.setNom(ruche.getNom().trim());
+		if ("".equals(ruche.getNom())) {
+			logger.error("{} nom incorrect.", ruche);
+			model.addAttribute(Const.MESSAGE, "Nom de ruche incorrect.");
+			return Const.INDEX;
+		}
+		
+		// Vérification de l'unicité du nom en modification et en création d'une ruche
 		Ruche rNom = rucheRepository.findByNom(ruche.getNom());
 		if (rNom != null && !rNom.getId().equals(ruche.getId())) {
-			logger.error("Nom de ruche {} existant.", rNom.getNom());
+			logger.error("{} nom existant.", ruche);
 			model.addAttribute(Const.MESSAGE, "Nom de ruche existant.");
 			return Const.INDEX;
 		}
-		// à sa création on met la ruche est au dépôt.
+		// A sa création on met la ruche au dépôt.
 		// Par contre on garde les coordonnées qui ont pu être
 		// être modifiées dans le formulaire.
 		String action = (ruche.getId() == null) ? "créée" : "modifiée";

@@ -46,7 +46,7 @@ public class Notification {
 	private String pied;
 
 	@Bean
-	public TaskScheduler taskScheduler() {
+	TaskScheduler taskScheduler() {
 		return new ThreadPoolTaskScheduler();
 	}
 

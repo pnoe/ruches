@@ -56,7 +56,7 @@ public class HausseController {
 	private RucheService rucheService;
 
 	/**
-	 * Clonage multiple d'une hausse (appel XMLHttpRequest)
+	 * Clonage multiple d'une hausse (appel XMLHttpRequest).
 	 */
 	@PostMapping("/clone/{hausseId}")
 	@ResponseStatus(value = HttpStatus.OK)
@@ -91,7 +91,7 @@ public class HausseController {
 	}
 
 	/**
-	 * Liste des hausses et lien pour l'ajout de hausse
+	 * Liste des hausses et lien pour l'ajout de hausse.
 	 */
 	@GetMapping("/liste")
 	public String liste(HttpSession session, Model model) {
@@ -107,7 +107,7 @@ public class HausseController {
 	}
 
 	/**
-	 * Appel du formulaire pour l'ajout d'une hausse
+	 * Appel du formulaire pour l'ajout d'une hausse.
 	 */
 	@GetMapping("/cree")
 	public String cree(HttpSession session, Model model) {
@@ -123,7 +123,7 @@ public class HausseController {
 	}
 
 	/**
-	 * Modifier une hausse
+	 * Appel du formulaire pour modifier une hausse.
 	 */
 	@GetMapping("/modifie/{hausseId}")
 	public String modifie(Model model, @PathVariable long hausseId) {
@@ -143,7 +143,7 @@ public class HausseController {
 	}
 
 	/**
-	 * Supprimer une hausse
+	 * Supprimer une hausse.
 	 */
 	@GetMapping("/supprime/{hausseId}")
 	public String supprime(Model model, @PathVariable long hausseId) {
@@ -181,19 +181,28 @@ public class HausseController {
 	}
 
 	/**
-	 * Enregistrement de la hausse crée ou modifiée
+	 * Enregistrement de la hausse crée ou modifiée.
 	 */
 	@PostMapping("/sauve")
 	public String sauveHausse(Model model, @ModelAttribute Hausse hausse, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return HAUSSE_HAUSSEFORM;
 		}
+		
+		// On enlève les blancs aux extémités du nom.
+		hausse.setNom(hausse.getNom().trim());
+		if ("".equals(hausse.getNom())) {
+			logger.error("{} nom incorrect.", hausse);
+			model.addAttribute(Const.MESSAGE, "Nom de hausse incorrect.");
+			return Const.INDEX;
+		}
+		
 		// Vérification de l'unicité du nom
 		Optional <Hausse> optH = hausseRepository.findByNom(hausse.getNom());
 		if (optH.isPresent()) {
 			Hausse hNom = optH.get();
 			if (!hNom.getId().equals(hausse.getId())) {
-				logger.error("Nom de hausse {} existant.", hNom.getNom());
+				logger.error("{} nom existant.", hausse);
 				model.addAttribute(Const.MESSAGE, "Nom de hausse existant.");
 				return Const.INDEX;
 			}

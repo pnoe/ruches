@@ -29,7 +29,10 @@
 			rules : {
 				nom : {
 					required : true,
-					nomExiste : true
+					nomExiste : true,
+					normalizer : function(value) {
+						return $.trim(value);
+					}
 				},
 				dateAcquisition : {
 					required : true

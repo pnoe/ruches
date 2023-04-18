@@ -16,10 +16,15 @@
 			    error.insertBefore(element.closest('div'));
 			},
 			rules : {
+				/*
 				nom : {
 					required : true,
-					nomExiste : true
+					nomExiste : true,
+					normalizer : function(value) {
+						return $.trim(value);
+					}
 				}
+				*/
 			}
 		});
 	});

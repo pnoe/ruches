@@ -4,11 +4,13 @@
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:replace="include :: jsdatepicker-fr"></script>
 <script th:inline="javascript">
+	const hausseNoms = /*[[${hausseNoms}]]*/null;
+	const nomexiste = /*[[#{nomexiste}]]*/null;
 	$().ready(function() {
 		$("#nom").focus();
 		jQuery.validator.addMethod("nomExiste", function(value) {   
-    		return $.inArray(value, [[${hausseNoms}]]) == -1;
-			}, [[#{nomexiste}]]);
+    		return $.inArray(value, hausseNoms) == -1;
+			}, nomexiste);
 		if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('fr') != -1)) {
 			$.datepicker.setDefaults(
 				$.datepicker.regional['fr']
@@ -35,7 +37,10 @@
 			rules : {
 				nom : {
 					required : true,
-					nomExiste : true
+					nomExiste : true,
+					normalizer : function(value) {
+						return $.trim(value);
+					}
 				},
 				dateAcquisition : {
 					"required" : true
@@ -89,22 +94,20 @@
 		<div th:replace="includeForm :: activeField"></div>
 		<div th:replace="includeForm :: dateAcquisitionField"></div>
 		<div class="form-floating mb-3">
-			<input placeholder="5.000"
-				class="form-control" type="number" step="0.001" min="0" max="20"
-				th:field="*{poidsVide}" th:errorclass="fieldError" />
-			<label class="form-label" for="poidsVide" th:text="#{poidskg}"></label>
+			<input placeholder="5.000" class="form-control" type="number"
+				step="0.001" min="0" max="20" th:field="*{poidsVide}"
+				th:errorclass="fieldError" /> <label class="form-label"
+				for="poidsVide" th:text="#{poidskg}"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<input placeholder="9"
-				class="form-control" type="number" th:field="*{nbCadres}"
-				th:errorclass="fieldError" />
-			<label class="form-label" for="nbCadres" th:text="#{nombredecadres}"></label> 
+			<input placeholder="9" class="form-control" type="number"
+				th:field="*{nbCadres}" th:errorclass="fieldError" /> <label
+				class="form-label" for="nbCadres" th:text="#{nombredecadres}"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<input placeholder="9"
-				class="form-control" type="number" th:field="*{nbCadresMax}"
-				th:errorclass="fieldError" />
-			<label class="form-label" for="nbCadresMax" th:text="#{nombredecadresmax}"></label>
+			<input placeholder="9" class="form-control" type="number"
+				th:field="*{nbCadresMax}" th:errorclass="fieldError" /> <label
+				class="form-label" for="nbCadresMax" th:text="#{nombredecadresmax}"></label>
 		</div>
 		<div th:replace="includeForm :: commentaireField"></div>
 		<div th:replace="includeForm :: BtnForm"></div>

@@ -2,22 +2,36 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
+	const personneLogins = /*[[${personneLogins}]]*/null;
+	const loginexiste = /*[[#{loginexiste}]]*/null;
+	const personneEmails = /*[[${personneEmails}]]*/null;
+	const emailexiste = /*[[#{emailexiste}]]*/null;
 	$().ready(function() {
 		$("#nom").focus();
 		jQuery.validator.addMethod("loginExiste", function(value) {   
-    		return $.inArray(value, [[${personneLogins}]]) == -1;
-			}, [[#{nomexiste}]]);
+    		return $.inArray(value, personneLogins) == -1;
+			}, loginexiste);
 		jQuery.validator.addMethod("emailExiste", function(value) {   
-    		return $.inArray(value, [[${personneEmails}]]) == -1;
-			}, [[#{emailexiste}]]);
+    		return $.inArray(value, personneEmails) == -1;
+			}, emailexiste);
 		$("#personneForm").validate({
 			errorClass: 'erreur-form',
 			errorPlacement: function(error, element) {
 			    error.insertBefore(element.closest('div'));
 			},
 			rules : {
-				nom : "required",
-				prenom : "required",
+				nom : {
+					required : true,
+					normalizer : function(value) {
+						return $.trim(value);
+					}
+				},
+				prenom : {
+					required : true,
+					normalizer : function(value) {
+						return $.trim(value);
+					}
+				},
 				email : { email : true, emailExiste : true },
 				login : "loginExiste"
 			}

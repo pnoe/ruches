@@ -21,7 +21,7 @@ public class Application extends SpringBootServletInitializer {
 	}
 
 	@Bean
-	public MessageSource messageSource() {
+	MessageSource messageSource() {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 		messageSource.setBasename("locale/messages");
 		messageSource.setDefaultEncoding("UTF-8");
