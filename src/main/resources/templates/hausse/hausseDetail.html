@@ -37,7 +37,7 @@ $().ready(function() {
 		} else {
 			let tabNomExiste=[];
 			let tabNomOk=[];
-			noms.split(',').map(item => item.trim()).forEach(function(item){
+			noms.split(',').filter(s => s.trim()).map(item => item.trim()).forEach(function(item){
 				if (nomexiste(item)) {
 					tabNomExiste.push(item);
 				} else {

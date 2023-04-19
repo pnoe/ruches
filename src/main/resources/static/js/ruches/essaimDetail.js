@@ -1,58 +1,61 @@
 /* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals _csrf_token,_csrf_param_name, essaimnoms, ruchesvidesnoms, recolteHausses, rucheEssaim,
-    essaimsupprecolttxt, suppessaimevetxt, suppessaimtxt,  evenements, nomessaimsvirgule,
-    nexistPasOuPasVidtxt, nomexistdejatxt, Ruchestxt, Essaimstxt, creertxt, urlessaimclone,
-    essaimid, pasderuchetxt
+	essaimsupprecolttxt, suppessaimevetxt, suppessaimtxt,  evenements, nomessaimsvirgule,
+	nexistPasOuPasVidtxt, nomexistdejatxt, Ruchestxt, Essaimstxt, creertxt, urlessaimclone,
+	essaimid, pasderuchetxt
 */
 "use strict";
 function essaimDetail() {
-	$('#dispersion').on('click', function () {
-		if(!rucheEssaim) {
+	$('#dispersion').on('click', function() {
+		if (!rucheEssaim) {
 			alert(pasderuchetxt);
 			return false;
 		}
 		return true;
-    });
+	});
 
-    $('#essaime').on('click', function () {
-		if(!rucheEssaim) {
+	$('#essaime').on('click', function() {
+		if (!rucheEssaim) {
 			alert(pasderuchetxt);
 			return false;
 		}
 		return true;
-    });
-    
- 	$('#supprime').on('click', function () {
-		if(recolteHausses) {
+	});
+
+	$('#supprime').on('click', function() {
+		if (recolteHausses) {
 			alert(essaimsupprecolttxt);
 			return false;
 		} else if (evenements) {
-	        return confirm(suppessaimevetxt);			
+			return confirm(suppessaimevetxt);
 		} else {
 			return confirm(suppessaimtxt);
 		}
-    });
-    
+	});
+
 	$("#clone").on('click', function() {
 		/*[- Saisie des couples nomEssaim;nomRuche séparés par une "," -]*/
 		const noms = prompt(nomessaimsvirgule);
 		if (noms == null || noms == "") {
-		    return;
+			return;
 		}
-		const tabNomExiste=[];
-		const tabNomOk=[];
-		const tabNomRucheOk=[];
-		const tabNomRucheIncorrect=[];
-		const nomsarr = noms.split(',');
+		const tabNomExiste = [];
+		const tabNomOk = [];
+		const tabNomRucheOk = [];
+		const tabNomRucheIncorrect = [];
+		// filter : on ignore ",," ou ",  ,"  
+		const nomsarr = noms.split(',').filter(s => s.trim());
 		for (const item of nomsarr) {
 			const arr = item.split(';');
 			/*[- ne nom de l'essaim -]*/
 			const ne = arr[0].trim();
+			/*[- si le nom de ruche est vide ou blanc, on passe à la ruche suivante -]*/
+			if ("" === ne) { continue; }
 			let nr = "";
 			/*[- nr nom de la ruche -]*/
 			if (arr.length > 1) {
 				nr = arr[1].trim();
-			}		
+			}
 			if ($.inArray(ne, essaimnoms) != -1) {
 				/*[- l'essaim ne existe déjà -]*/
 				tabNomExiste.push(ne);
@@ -89,11 +92,11 @@ function essaimDetail() {
 			prompterreur = Ruchestxt + ' : ' + tabNomRucheIncorrect.join(',') + ' ' + nexistPasOuPasVidtxt;
 		}
 		if (tabNomExiste.length > 0) {
-			if (prompterreur != "") { prompterreur += '\n'; }		
+			if (prompterreur != "") { prompterreur += '\n'; }
 			prompterreur += Essaimstxt + ' : ' + tabNomExiste.join(',') + ' ' + nomexistdejatxt;
 			if (tabNomOk.length == 0) {
 				alert(prompterreur);
-				return false;					
+				return false;
 			}
 			if (!confirm(prompterreur + '. ' + creertxt + ' ' + tabNomOk.join(',') + ' ?')) {
 				return false;
@@ -103,12 +106,13 @@ function essaimDetail() {
 				return false;
 			}
 		}
-	    const requestData = {nomclones : tabNomOk.join(','), nomruches : tabNomRucheOk.join(',')};
-	    requestData[_csrf_param_name] = _csrf_token;
+		if (tabNomOk.length === 0) { return; }
+		const requestData = { nomclones: tabNomOk.join(','), nomruches: tabNomRucheOk.join(',') };
+		requestData[_csrf_param_name] = _csrf_token;
 		$.post(urlessaimclone + essaimid,
-				requestData).done(function (data) { 
-					alert( data );
-					document.location.reload(true);
-		});
+			requestData).done(function(data) {
+				alert(data);
+				document.location.reload(true);
+			});
 	});
 }

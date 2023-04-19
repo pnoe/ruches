@@ -35,7 +35,7 @@ $().ready(function() {
 		}
 		let tabNomExiste=[];
 		let tabNomOk=[];
-		noms.split(',').map(item => item.trim()).forEach(function(item){
+		noms.split(',').filter(s => s.trim()).map(item => item.trim()).forEach(function(item){
 			if ($.inArray(item, ruchenoms) !== -1) {
 				tabNomExiste.push(item);
 			} else {
