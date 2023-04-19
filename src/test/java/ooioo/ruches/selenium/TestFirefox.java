@@ -106,7 +106,7 @@ public class TestFirefox {
 	}
 
 	@AfterAll
-	static void quitChrome() {
+	static void quit() {
 		driver.quit();
 	}
 

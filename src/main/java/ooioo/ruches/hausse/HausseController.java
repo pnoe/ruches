@@ -56,7 +56,11 @@ public class HausseController {
 	private RucheService rucheService;
 
 	/**
-	 * Clonage multiple d'une hausse (appel XMLHttpRequest).
+	 * Clonage multiple d'une hausse (appel XMLHttpRequest de la page détail d'une hausse).
+	 * 	 
+	 * @param hausseId  l'id de la hausse à cloner
+	 * @param nomclones les noms des clones séparés par des virgules
+	 * @return String liste des hausses créées ou erreur
 	 */
 	@PostMapping("/clone/{hausseId}")
 	@ResponseStatus(value = HttpStatus.OK)
@@ -70,15 +74,19 @@ public class HausseController {
 			}
 			String[] nomhaussesarray = nomclones.split(",");
 			List<String> nomsCrees = new ArrayList<>();
-			for (String nomhausse : nomhaussesarray) {
-				if (noms.contains(nomhausse)) {
-					logger.error("Clone d'une hausse : {} nom existant", nomhausse);
+			for (String nom : nomhaussesarray) {
+				if ("".equals(nom)) {
+					// Si le nom de hausse est vide on l'ignore et on passe à la suivante
+					continue;
+				}
+				if (noms.contains(nom)) {
+					logger.error("Clone d'une hausse : {} nom existant", nom);
 				} else {
-					Hausse hausseclone = new Hausse(hausse, nomhausse);
+					Hausse hausseclone = new Hausse(hausse, nom);
 					hausseRepository.save(hausseclone);
-					nomsCrees.add(nomhausse);
+					nomsCrees.add(nom);
 					// pour éviter clone "a,a" : 2 fois le même nom dans la liste
-					noms.add(nomhausse);
+					noms.add(nom);
 				}
 			}
 			String nomsJoin = String.join(",", nomsCrees);

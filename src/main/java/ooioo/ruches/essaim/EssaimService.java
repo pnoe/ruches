@@ -59,20 +59,29 @@ public class EssaimService {
 
 	@Autowired
 	private MessageSource messageSource;
-	
+
 	private static final String cree = "{} créé";
 
+	/*
+	 * Clone d'un essaim.
+	 */
 	public String clone(HttpSession session, Optional<Essaim> essaimOpt, String nomclones, String nomruches) {
 		Essaim essaim = essaimOpt.get();
 		List<String> noms = new ArrayList<>();
 		for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
 			noms.add(essaimNom.nom());
 		}
+		// Les noms des essaims à créer
 		String[] nomarray = nomclones.split(",");
+		// Les noms des ruches à créer
 		String[] nomruchesarray = nomruches.split(",");
 		List<String> nomsCrees = new ArrayList<>();
 		LocalDateTime dateEve = Utils.dateTimeDecal(session);
 		for (int i = 0; i < nomarray.length; i++) {
+			if ("".equals(nomarray[i])) {
+				// si le nom d'essaim est vide on l'ignore et on passe au suivant
+				continue;
+			}
 			if (noms.contains(nomarray[i])) {
 				logger.error("Clone d'un essaim : {} nom existant", nomarray[i]);
 			} else {
@@ -82,6 +91,9 @@ public class EssaimService {
 				// pour éviter clone "a,a" : 2 fois le même nom dans la liste
 				noms.add(nomarray[i]);
 				if (i < nomruchesarray.length && !"".contentEquals(nomruchesarray[i])) {
+					// S'il n'y a pas de dépassement de la taille du tableau 
+					//  (liste des ruches incorrecte en paramètre) et si le nom de la
+					//  ruche est différent de ""
 					Ruche ruche = rucheRepository.findByNom(nomruchesarray[i]);
 					if (ruche.getEssaim() == null) {
 						ruche.setEssaim(clone);
@@ -313,14 +325,17 @@ public class EssaimService {
 	 * Enregistrement de l'essaimage.
 	 *
 	 * @param essaimId l'id de l'essaim qui essaime.
+	 * 
 	 * @param date la date saisie dans le formulaire d'essaimage.
+	 * 
 	 * @param nom le nom du nouvel essaim restant dans la ruche saisi dans le
 	 * formulaire d'essaimage.
+	 * 
 	 * @param commentaire le commentaire saisi dans le formulaire d'essaimage.
+	 * 
 	 * @param essaimOpt l'essaim essaimId.
 	 */
-	public Essaim essaimSauve(long essaimId, String date, String nom, String commentaire,
-			Optional<Essaim> essaimOpt) {
+	public Essaim essaimSauve(long essaimId, String date, String nom, String commentaire, Optional<Essaim> essaimOpt) {
 		// L'essaim à disperser
 		Essaim essaim = essaimOpt.get();
 		// La ruche dans laquelle on va mettre le nouvel essaim à créer

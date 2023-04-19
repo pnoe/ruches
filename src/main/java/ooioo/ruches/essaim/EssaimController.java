@@ -183,11 +183,11 @@ public class EssaimController {
 	 * essaim) avec mises en ruches éventuelles.
 	 *
 	 * @param session   pour gestion du décalage éventuel des dates
-	 * @param model
 	 * @param essaimId  l'id de l'essaim à cloner
 	 * @param nomclones les noms des clones séparés par des virgules
 	 * @param nomruches les noms des ruches pour mettre les clones séparés par des
-	 *                  virgules
+	 *                  virgules, même nombre d'items que nomclones avec des "" si
+	 *                  pas de ruche
 	 * @return String liste des essaims créés ou erreur
 	 */
 	@PostMapping("/clone/{essaimId}")

@@ -96,7 +96,11 @@ public class RucheController {
 	}
 
 	/**
-	 * Clonage multiple d'une ruche (appel XMLHttpRequest).
+	 * Clonage multiple d'une ruche (appel XMLHttpRequest de la page détail d'une ruche).
+	 *
+	 * @param rucheId  l'id de la ruche à cloner
+	 * @param nomclones les noms des clones séparés par des virgules
+	 * @return String liste des ruches créées ou erreur
 	 */
 	@PostMapping("/clone/{rucheId}")
 	@ResponseStatus(value = HttpStatus.OK)
@@ -115,6 +119,10 @@ public class RucheController {
 			String commentaire = "Clone ruche " + ruche.getNom();
 			List<String> nomsCrees = new ArrayList<>();
 			for (String nom : nomarray) {
+				if ("".equals(nom)) {
+					// si le nom de la ruche est vide on l'ignore et on passe à la suivante
+					continue;
+				}
 				if (noms.contains(nom)) {
 					logger.error("Clone d'une ruche : {} nom existant", nom);
 				} else {
