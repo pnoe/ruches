@@ -3,14 +3,15 @@
 <head
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
-const _csrf_token = [[${_csrf.token}]];
-const _csrf_param_name = [[${_csrf.parameterName}]];
+const _csrf_token = /*[[${_csrf.token}]]*/ null;
+const _csrf_param_name = /*[[${_csrf.parameterName}]]*/ null;
 const haussenoms = /*[[${haussenoms}]]*/ null;
 const recolteHausses = /*[[${recolteHausses}]]*/ null;
 const haussesupp = /*[[#{haussenonsupprimeerefrecolte}]]*/ null;
 const supphausseeve = /*[[#{supprimerhausseevenement}]]*/ null;
 const supphausse = /*[[#{supprimerhausse}]]*/ null;
 const nomhaussesv = /*[[#{nomhaussesvirgule}]]*/ null;
+const nomexistentdeja = /*[[#{nomexistentdeja}]]*/ null;
 const evenements = /*[[${evenements}]]*/ null;
 const urlclone = /*[[@{/hausse/clone/}]]*/ null;
 const hausseid = /*[[${hausse.id}]]*/ null;
@@ -32,6 +33,7 @@ $().ready(function() {
 		};
 	$( "#clone" ).click(function() {
 		const noms = prompt(nomhaussesv);
+		let iajout = 0;
 		if (noms == null || noms == "") {
 		    return;
 		} else {
@@ -44,15 +46,19 @@ $().ready(function() {
 					tabNomOk.push(item);
 					/*[- ce nom ne doit pas être réutilisé -]*/
 					haussenoms.push(item);
+					iajout++;
 				}
 			});
 			if (tabNomExiste.length > 0) {
-				let promptexistedeja = hausses + ' : ' + tabNomExiste.join(',') + ' ' + [[#{nomexistentdeja}]];
+				let promptexistedeja = hausses + ' : ' + tabNomExiste.join(',') + ' ' + nomexistentdeja;
 				if (tabNomOk.length == 0) {
 					alert(promptexistedeja);
 					return false;					
 				}
 				if (!confirm(promptexistedeja + '. ' + creer + ' ' + tabNomOk.join(',') + ' ?')) {
+					while (iajout--) {
+						haussenoms.pop();
+					}
 					return false;
 				}
 			}
@@ -82,23 +88,20 @@ $().ready(function() {
 				</h1>
 			</div>
 			<div class="col">
-				<a th:href="@{'/hausse/modifie/'+${hausse.id}}"
-					class="bi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
-				&nbsp;
-				<span id="clone" class="bi-collection cursorpointer"
-					th:title="#{cloner}" aria-hidden="true">
-				</span>
-				<a id="supprime"
+				<a th:href="@{'/hausse/modifie/'+${hausse.id}}" class="bi-pencil"
+					th:title="#{modifier}" aria-hidden="true"></a> &nbsp; <span
+					id="clone" class="bi-collection cursorpointer" th:title="#{cloner}"
+					aria-hidden="true"> </span> <a id="supprime"
 					th:href="@{'/hausse/supprime/'+${hausse.id}}"
 					class="confirmation bi-trash" style="color: red"
-					th:title="#{supprimer}" aria-hidden="true"></a>&nbsp;
-				<a th:href="@{'/evenement/hausse/'+${hausse.id}}"
+					th:title="#{supprimer}" aria-hidden="true"></a>&nbsp; <a
+					th:href="@{'/evenement/hausse/'+${hausse.id}}"
 					class="padicons bi-list-ul" th:title="#{evenements}"
-					aria-hidden="true"></a>
-				<a th:href="@{'/evenement/hausse/commentaire/cree/'+${hausse.id}}"
+					aria-hidden="true"></a> <a
+					th:href="@{'/evenement/hausse/commentaire/cree/'+${hausse.id}}"
 					class="bi-chat-text" th:title="#{evenementCommentaire}"
-					aria-hidden="true"></a>
-				<a th:href="@{'/evenement/hausse/remplissage/cree/'+${hausse.id}}"
+					aria-hidden="true"></a> <a
+					th:href="@{'/evenement/hausse/remplissage/cree/'+${hausse.id}}"
 					class="bi-square-half" th:title="#{evenementRemplissage}"
 					aria-hidden="true"></a>
 			</div>

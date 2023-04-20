@@ -30,11 +30,14 @@ $().ready(function() {
     });
 	$( "#clone" ).click(function() {
 		const noms = prompt(nruchvirg);
+		let iajout = 0;
 		if (noms == null || noms == "") {
 		    return;
 		}
-		let tabNomExiste=[];
-		let tabNomOk=[];
+		const tabNomExiste=[];
+		const tabNomOk=[];
+		/*[- filter supprime les noms vides ou blancs -]*/
+		/*[- map trim supprime les blancs aux extrémités des noms -]*/
 		noms.split(',').filter(s => s.trim()).map(item => item.trim()).forEach(function(item){
 			if ($.inArray(item, ruchenoms) !== -1) {
 				tabNomExiste.push(item);
@@ -43,19 +46,23 @@ $().ready(function() {
 				tabNomOk.push(item);
 				/*[- ce nom ne doit pas être réutilisé -]*/
 				ruchenoms.push(item);
+				iajout++;
 			}
 		});
 		if (tabNomExiste.length > 0) {
-			let promptexistedeja = Ruches + ' : ' + tabNomExiste.join(',') + ' ' + nexisted;
+			const promptexistedeja = Ruches + ' : ' + tabNomExiste.join(',') + ' ' + nexisted;
 			if (tabNomOk.length == 0) {
 				alert(promptexistedeja);
 				return false;					
 			}
 			if (!confirm(promptexistedeja + '. ' + creer + ' ' + tabNomOk.join(',') + ' ?')) {
+				while (iajout--) {
+					ruchenoms.pop();
+				}
 				return false;
 			}
 		}
-	    let requestData = {nomclones : tabNomOk.join(',')};
+	    const requestData = {nomclones : tabNomOk.join(',')};
 	    requestData[_csrf_param_name] = _csrf_token;
 		$.post( urlclone + rucheid,
 				requestData).done(function (data) { 
@@ -152,12 +159,11 @@ $().ready(function() {
 					<td><a th:href="@{/rucher/{id}(id=${ruche.rucher?.id})}"
 						th:text="${ruche.rucher?.nom}"></a></td>
 					<td><a
-					 	th:href="@{/evenement/{id}(id=${eveRucher?.id},type='ruche')}"
+						th:href="@{/evenement/{id}(id=${eveRucher?.id},type='ruche')}"
 						th:text="${#temporals.format(eveRucher?.date, 'yyyy/MM/dd')}"></a>
 					</td>
 					<td th:text="${eveRucher?.commentaire}"></td>
-					<td><a 
-						th:href="@{/essaim/{id}(id=${ruche.essaim?.id})}"
+					<td><a th:href="@{/essaim/{id}(id=${ruche.essaim?.id})}"
 						th:text="${ruche.essaim?.nom}"></a></td>
 					<td><a th:if="${eveEssaim != null}"
 						th:href="@{/evenement/{id}(id=${eveEssaim?.id},type='ruche')}"
