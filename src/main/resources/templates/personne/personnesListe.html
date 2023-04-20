@@ -2,15 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
+const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
+const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
+const listePersonnes = /*[[#{listePersonnes}]]*/ null;
 $(document).ready(function() {
     new DataTable('#personnes', {
         dom: 'Blftip',
 	    buttons: [
 	    	'csv',
 	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-	    		title: [[#{listePersonnes}]] + " " + (new Date()).toLocaleDateString()},
-	        {extend: 'print', text: [[#{buttontextprint}]]},
-	        {extend: 'colvis', text: [[#{buttontextcol}]]}
+	    		title: listePersonnes + " " + (new Date()).toLocaleDateString()},
+	        {extend: 'print', text: buttTxtPrint},
+	        {extend: 'colvis', text: buttTxtCol}
         ]
     });
 });

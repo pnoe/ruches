@@ -6,6 +6,7 @@
 <script th:inline="javascript">
 	const hausseNoms = /*[[${hausseNoms}]]*/null;
 	const nomexiste = /*[[#{nomexiste}]]*/null;
+	const saisirnbcadresinfmax = /*[[#{saisirnbcadresinfmax}]]*/null;
 	$().ready(function() {
 		$("#nom").focus();
 		jQuery.validator.addMethod("nomExiste", function(value) {   
@@ -59,7 +60,7 @@
 				}
 			},
 			messages : {
-				nbCadres : [[#{saisirnbcadresinfmax}]]
+				nbCadres : saisirnbcadresinfmax
 			}
 		});
 	});

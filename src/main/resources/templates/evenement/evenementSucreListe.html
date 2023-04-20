@@ -6,6 +6,9 @@
 <link th:replace="include :: cssjquerydaterangepicker"/>
 <script th:src="@{/js/ruches/evenementListe.js}"></script>
 <script th:inline="javascript">
+const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
+const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
+const listeEvenements = /*[[#{listeEvenements}]]*/ null;
 $(document).ready(function() {
     new DataTable('#evenementssucre', {
         order: [ [ 0, 'desc' ] ],
@@ -13,9 +16,9 @@ $(document).ready(function() {
         buttons: [
 	    	'csv',
 	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-	    		title: [[#{listeEvenements}]] + " " + (new Date()).toLocaleDateString()},
-	            {extend: 'print', text: [[#{buttontextprint}]]},
-	            {extend: 'colvis', text: [[#{buttontextcol}]]}
+	    		title: listeEvenements + " " + (new Date()).toLocaleDateString()},
+	            {extend: 'print', text: buttTxtPrint},
+	            {extend: 'colvis', text: buttTxtCol}
         ],   
         "footerCallback": function(row, data, start, end, display) {
             var api = this.api(), data;

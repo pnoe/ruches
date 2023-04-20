@@ -15,6 +15,7 @@ const enlevTtHauRec = /*[[#{enlevertoutesleshaussesrecolte}]]*/ null;
 const enlevHRecDe30 = /*[[#{enlverhaussesrecoltedelai(30)}]]*/ null;
 const urlRecHDepot = /*[[@{/recolte/haussesDepot/}]]*/ null;
 const recId = /*[[${recolte.id}]]*/ null;
+const totalPourLaRuche = /*[[#{totalPourLaRuche}]]*/ null;
 $(document).ready(function() {	
 	$('#date').hide();
 	$('#dateOK').hide();
@@ -63,7 +64,7 @@ $(document).ready(function() {
                         return a + parseFloat(b.replace(/,/g,'.'));
                     }, 0.00);
                 return $('<tr/>')
-                    .append( '<td colspan="4">'+[[#{totalPourLaRuche}]]+' '+group+'<\/td>' )
+                    .append( '<td colspan="4">'+totalPourLaRuche+' '+group+'<\/td>' )
                     .append( '<td class="num">'+new Intl.NumberFormat(navigator.language, 
                     	{minimumFractionDigits:2}).format(mielTotal)+'<\/td>' )
                     .append( '<td colspan="2"><\/td>' );

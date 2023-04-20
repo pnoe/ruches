@@ -2,10 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-
 <script th:inline="javascript">
+	const url = /*[[@{'/rucher/historique/'}+${rucher.id}+'/']]*/null;
 	$().ready(function() {
-		const url = /*[[@{'/rucher/historique/'}+${rucher.id}+'/']]*/null;
 		$('#groupe').on('change', function() {
 			location = url + ($(this).is(':checked'));
 		});
