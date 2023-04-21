@@ -53,7 +53,7 @@ function essaimDetail() {
 		// pour mémo ajout essaim dans essaimnoms
 		let iajout = 0;
 		// pour retrait ruche vide
-		const ruchesvidesmem = []; 
+		const ruchesvidesmem = [];
 
 		//  filter : on ignore ",," ou ",  ,"
 		const nomsarr = noms.split(',').filter(s => s.trim());
@@ -114,18 +114,25 @@ function essaimDetail() {
 			if (tabNomOk.length === 0) {
 				alert(prompterreur);
 				// Pas d'essaim ajouté
-				return false;
+				return;
 			}
 			if (!confirm(prompterreur + '. ' + creertxt + ' ' + tabNomOk.join(',') + ' ?')) {
 				annule();
-				return false;
+				return;
 			}
 		} else if (tabNomRucheIncorrect.length > 0) {
 			// Il n'y a pas d'erreur sur les noms d'essaim mais il y en a sur les 
 			//   noms de ruche
 			if (!confirm(prompterreur + '. ' + creertxt + ' ' + tabNomOk.join(',') + ' ?')) {
 				annule();
-				return false;
+				return;
+			}
+		} else if (tabNomOk.length === 0) {
+			return;
+		} else {
+			if (!confirm(creertxt + ' ' + tabNomOk.join(',') + ' ?')) {
+				annule();
+				return;
 			}
 		}
 		if (tabNomOk.length === 0) { return; }

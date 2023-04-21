@@ -29,6 +29,11 @@ $().ready(function() {
 		}
     });
 	$( "#clone" ).click(function() {
+		function annule () {
+			while (iajout--) {
+				ruchenoms.pop();
+			}
+		} 
 		const noms = prompt(nruchvirg);
 		let iajout = 0;
 		if (noms == null || noms == "") {
@@ -53,16 +58,21 @@ $().ready(function() {
 			const promptexistedeja = Ruches + ' : ' + tabNomExiste.join(',') + ' ' + nexisted;
 			if (tabNomOk.length == 0) {
 				alert(promptexistedeja);
-				return false;					
+				return;					
 			}
 			if (!confirm(promptexistedeja + '. ' + creer + ' ' + tabNomOk.join(',') + ' ?')) {
-				while (iajout--) {
-					ruchenoms.pop();
-				}
-				return false;
+				annule();
+				return;
+			}
+		} else if (tabNomOk.length === 0) { 
+			return; 
+		} else {
+			if (!confirm(creer + ' ' + tabNomOk.join(',') + ' ?')) {
+				annule();
+				return;
 			}
 		}
-	    const requestData = {nomclones : tabNomOk.join(',')};
+		const requestData = {nomclones : tabNomOk.join(',')};
 	    requestData[_csrf_param_name] = _csrf_token;
 		$.post( urlclone + rucheid,
 				requestData).done(function (data) { 

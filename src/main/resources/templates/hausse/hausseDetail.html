@@ -32,6 +32,11 @@ $().ready(function() {
 		return $.inArray(value, haussenoms) != -1;
 		};
 	$( "#clone" ).click(function() {
+		function annule () {
+			while (iajout--) {
+				haussenoms.pop();
+			}
+		}
 		const noms = prompt(nomhaussesv);
 		let iajout = 0;
 		if (noms == null || noms == "") {
@@ -53,13 +58,18 @@ $().ready(function() {
 				let promptexistedeja = hausses + ' : ' + tabNomExiste.join(',') + ' ' + nomexistentdeja;
 				if (tabNomOk.length == 0) {
 					alert(promptexistedeja);
-					return false;					
+					return;					
 				}
 				if (!confirm(promptexistedeja + '. ' + creer + ' ' + tabNomOk.join(',') + ' ?')) {
-					while (iajout--) {
-						haussenoms.pop();
-					}
-					return false;
+					annule();
+					return;
+				}
+			} else if (tabNomOk.length === 0) { 
+				return; 
+			} else {
+				if (!confirm(creer + ' ' + tabNomOk.join(',') + ' ?')) {
+					annule();
+					return;
 				}
 			}
 			let requestData = {nomclones : tabNomOk.join(',')};
