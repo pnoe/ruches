@@ -78,7 +78,7 @@ public class RucheController {
 
 	@Autowired
 	private MessageSource messageSource;
-	
+
 	public static final String eveCree = "{} créé";
 
 	/**
@@ -96,9 +96,10 @@ public class RucheController {
 	}
 
 	/**
-	 * Clonage multiple d'une ruche (appel XMLHttpRequest de la page détail d'une ruche).
+	 * Clonage multiple d'une ruche (appel XMLHttpRequest de la page détail d'une
+	 * ruche).
 	 *
-	 * @param rucheId  l'id de la ruche à cloner
+	 * @param rucheId   l'id de la ruche à cloner
 	 * @param nomclones les noms des clones séparés par des virgules
 	 * @return String liste des ruches créées ou erreur
 	 */
@@ -114,7 +115,8 @@ public class RucheController {
 				noms.add(rucheNom.nom());
 			}
 			Float longitude = ruche.getLongitude();
-			String[] nomarray = nomclones.split(",");
+			// split avec le séparateur "," et trim des chaines
+			String[] nomarray = nomclones.trim().split("\\s*,\\s*");
 			// TODO internationalisation clone ruche
 			String commentaire = "Clone ruche " + ruche.getNom();
 			List<String> nomsCrees = new ArrayList<>();
@@ -139,9 +141,13 @@ public class RucheController {
 				}
 			}
 			String nomsJoin = String.join(",", nomsCrees);
-			logger.info("Ruches {} créée(s)", nomsJoin);
-			return messageSource.getMessage("cloneruchecreees", new Object[] { nomsJoin },
-					LocaleContextHolder.getLocale());
+			if (nomsCrees.size() > 0) {
+				logger.info("Ruche(s) {} créée(s)", nomsJoin);
+				return messageSource.getMessage("cloneruchecreees", new Object[] { nomsJoin },
+						LocaleContextHolder.getLocale());
+			} else {
+				return messageSource.getMessage("PasDeRucheCree", null, LocaleContextHolder.getLocale());
+			}
 		}
 		logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 		return messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale());
@@ -350,7 +356,7 @@ public class RucheController {
 			model.addAttribute(Const.MESSAGE, "Nom de ruche incorrect.");
 			return Const.INDEX;
 		}
-		
+
 		// Vérification de l'unicité du nom en modification et en création d'une ruche
 		Ruche rNom = rucheRepository.findByNom(ruche.getNom());
 		if (rNom != null && !rNom.getId().equals(ruche.getId())) {

@@ -72,9 +72,10 @@ public class HausseController {
 			for (Nom hausseNom : hausseRepository.findAllProjectedBy()) {
 				noms.add(hausseNom.nom());
 			}
-			String[] nomhaussesarray = nomclones.split(",");
+			// split avec le séparateur "," et trim des chaines
+			String[] nomarray = nomclones.trim().split("\\s*,\\s*");
 			List<String> nomsCrees = new ArrayList<>();
-			for (String nom : nomhaussesarray) {
+			for (String nom : nomarray) {
 				if ("".equals(nom)) {
 					// Si le nom de hausse est vide on l'ignore et on passe à la suivante
 					continue;
@@ -90,9 +91,13 @@ public class HausseController {
 				}
 			}
 			String nomsJoin = String.join(",", nomsCrees);
-			logger.info("Hausses {} créée(s)", nomsJoin);
-			return messageSource.getMessage("clonehaussecreees", new Object[] { nomsJoin },
-					LocaleContextHolder.getLocale());
+			if (nomsCrees.size() > 0) {
+				logger.info("Hausses(s) {} créée(s)", nomsJoin);
+				return messageSource.getMessage("clonehaussecreees", new Object[] { nomsJoin },
+						LocaleContextHolder.getLocale());
+			} else {
+				return messageSource.getMessage("PasDeHausseCree", null, LocaleContextHolder.getLocale());
+			}
 		}
 		logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
 		return messageSource.getMessage(Const.IDHAUSSEINCONNU, null, LocaleContextHolder.getLocale());

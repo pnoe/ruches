@@ -71,7 +71,7 @@ $().ready(function() {
 					annule();
 					return;
 				}
-			}
+			}		
 			let requestData = {nomclones : tabNomOk.join(',')};
 		    requestData[_csrf_param_name] = _csrf_token;
 		    $.post( urlclone + hausseid,
