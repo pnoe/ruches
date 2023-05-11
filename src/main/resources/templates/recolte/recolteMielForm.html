@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+</head>
+<body>
+	<nav th:replace="include :: navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					<a th:href="@{'/recolte/'+${recolte.id}}"
+						th:text="#{recolte} + ' ' + ${#temporals.format(recolte.date, 'yyyy/MM/dd HH:mm')}"></a>
+				</h1>
+			</div>
+		</div>
+	</div>
+	<form action="#"
+		th:action="@{'/recolte/haussesMiel/sauve/'+${recolte.id}}"
+		method="post" id="recolteMielForm">
+		<fieldset>
+			<table class="table table-bordered table-striped dt-responsive"
+				id="recolteMielTable">
+				<thead>
+					<tr>
+						<th hidden></th>
+						<th th:text="#{hausse}"></th>
+						<th th:text="#{poidsAvant}"></th>
+						<th th:text="#{poidsApres}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="rHM, itemStat : ${recolteMiel.recolteHaussesMiel}">
+						<td hidden><input type="number"
+							th:name="|recolteHaussesMiel[${itemStat.index}].recolteHausseId|"
+							th:value="${rHM.recolteHausseId}" /></td>
+						<td th:text="${hausses[itemStat.index].nom}"></td>
+						<td><input type="number" th:min="${hausses[itemStat.index].poidsVide}" max="80" step="0.001"
+							th:name="|recolteHaussesMiel[${itemStat.index}].poidsAvant|"
+							th:value="${rHM.poidsAvant}" /></td>
+						<td><input type="number" th:min="${hausses[itemStat.index].poidsVide}" max="80" step="0.001"
+							th:name="|recolteHaussesMiel[${itemStat.index}].poidsApres|"
+							th:value="${rHM.poidsApres}" /></td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div th:replace="includeForm :: BtnForm"></div>
+		</fieldset>
+	</form>
+	<footer th:replace="include::footer"></footer>
+</body>
+</html>

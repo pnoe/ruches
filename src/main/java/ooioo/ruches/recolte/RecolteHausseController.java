@@ -6,6 +6,7 @@ import java.text.DecimalFormatSymbols;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,12 +77,89 @@ public class RecolteHausseController {
 	@Value("${hausse.reste.miel}")
 	private BigDecimal hausseResteMiel;
 
-
 	@Autowired
 	private RecolteHausseService recolteHausseService;
 
 	/**
-	 * Afficher une récolte avec ses hausses
+	 * Appel du formulaire pour la saisie tabulaire des poids de miel des hausses de
+	 * la récolte.
+	 */
+	@GetMapping("/haussesMiel/{recolteId}")
+	public String haussesMiel(Model model, @PathVariable long recolteId) {
+		Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
+		if (recolteOpt.isPresent()) {
+			Recolte recolte = recolteOpt.get();
+			model.addAttribute(Const.RECOLTE, recolte);
+			model.addAttribute("dateRecolteEpoch", recolte.getDate().toEpochSecond(ZoneOffset.UTC));
+			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByRecolteOrderByHausseNom(recolte);
+			// si pas de hausse afficher et log erreur
+			List<Hausse> hausses = new ArrayList<>();
+			// Initialiser RecolteMiel.java à partir des hausses.
+			List<RecolteHausseMiel> recolteHaussesMiel = new ArrayList<>();
+			for (RecolteHausse recolteHausse : recolteHausses) {
+				RecolteHausseMiel rHM = new RecolteHausseMiel();
+				rHM.setRecolteHausseId(recolteHausse.getId());
+				hausses.add(recolteHausse.getHausse());
+				rHM.setPoidsApres(recolteHausse.getPoidsApres());
+				rHM.setPoidsAvant(recolteHausse.getPoidsAvant());
+				recolteHaussesMiel.add(rHM);
+			}
+			RecolteMiel recolteMiel = new RecolteMiel();
+			recolteMiel.setRecolteHaussesMiel(recolteHaussesMiel);
+			model.addAttribute("recolteMiel", recolteMiel);
+			model.addAttribute("hausses", hausses);
+		} else {
+			logger.error(Const.IDRECOLTEXXINCONNU, recolteId);
+			model.addAttribute(Const.MESSAGE, Const.IDRECOLTEINCONNU);
+			return Const.INDEX;
+		}
+		return "recolte/recolteMielForm";
+	}
+
+	/**
+	 * Sauve la saisie tabulaire des poids de miel d'une récolte.
+	 */
+	@PostMapping("/haussesMiel/sauve/{recolteId}")
+	public String recolteHaussesMielSauve(Model model, @ModelAttribute RecolteMiel recolteMiel,
+			BindingResult bindingResult, @PathVariable long recolteId) {
+
+		Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
+		if (recolteOpt.isPresent()) {
+			
+			if (bindingResult.hasErrors()) {
+				Recolte recolte = recolteOpt.get();
+				model.addAttribute(Const.RECOLTE, recolte);
+				// TODO retour au formulaire plante, ${recolte} est inconnu
+				return "recolte/recolteMielForm";
+			}
+			for (RecolteHausseMiel rHM : recolteMiel.getRecolteHaussesMiel()) {
+				Optional<RecolteHausse> recolteHausseOpt = recolteHausseRepository.findById(rHM.getRecolteHausseId());
+				if (recolteHausseOpt.isPresent()) {
+					RecolteHausse recolteHausse = recolteHausseOpt.get();
+					if (recolteHausse.getRecolte().getId().equals(recolteId)) {
+						// si la hausse est bien une hausse de la récolte
+						recolteHausse.setPoidsApres(rHM.getPoidsApres());
+						recolteHausse.setPoidsAvant(rHM.getPoidsAvant());
+						recolteHausseRepository.save(recolteHausse);
+					} else {
+						logger.error("{} n'est pas de la récolte {}", recolteHausse, recolteId);
+					}
+				} else {
+					logger.error("{} inconnu", recolteHausseOpt);
+					model.addAttribute(Const.MESSAGE, "Recolte Hausse inconnue");
+					return Const.INDEX;
+				}
+			}
+			return "redirect:/recolte/" + recolteId;
+		} else {
+			logger.error(Const.IDRECOLTEXXINCONNU, recolteId);
+			model.addAttribute(Const.MESSAGE, Const.IDRECOLTEINCONNU);
+			return Const.INDEX;
+		}
+	}
+
+	/**
+	 * Afficher une récolte avec ses hausses.
 	 */
 	@GetMapping("/{recolteId}")
 	public String recolte(Model model, @PathVariable long recolteId) {
@@ -103,12 +181,16 @@ public class RecolteHausseController {
 	}
 
 	/**
-	 * Afficher le formulaire du détail d'une hausse d'une récolte
+	 * Afficher le formulaire du détail d'une hausse d'une récolte.
 	 */
 	@GetMapping("/modifie/hausse/{recolteId}/{recolteHausseId}")
 	public String modifie(Model model, @PathVariable long recolteHausseId, @PathVariable long recolteId) {
 		Optional<RecolteHausse> recolteHausseOpt = recolteHausseRepository.findById(recolteHausseId);
 		if (recolteHausseOpt.isPresent()) {
+
+			// TODO inutile, utiliser : recolteHausseOpt.get().getRecolte
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 			Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
 			if (recolteOpt.isPresent()) {
 				model.addAttribute(Const.RUCHES, rucheRepository.findAllProjectedIdNomByOrderByNom());
@@ -130,7 +212,7 @@ public class RecolteHausseController {
 	}
 
 	/**
-	 * Sauver le détail d'une hausse de la récolte
+	 * Sauver le détail d'une hausse de la récolte.
 	 */
 	@PostMapping("/detail/sauve")
 	public String recolteHausseSauve(@ModelAttribute RecolteHausse recolteHausse, BindingResult bindingResult) {
@@ -142,7 +224,7 @@ public class RecolteHausseController {
 	}
 
 	/**
-	 * Choix des hausses d'une récolte
+	 * Choix des hausses d'une récolte.
 	 */
 	@GetMapping("/choixHausses/{recolteId}")
 	public String choixHausses(Model model, @PathVariable long recolteId) {
@@ -161,7 +243,7 @@ public class RecolteHausseController {
 	}
 
 	/**
-	 * Ajout d'une série de hausses dans la récolte
+	 * Ajout d'une série de hausses dans la récolte.
 	 */
 	@GetMapping("/ajoutHausses/{recolteId}/{haussesIds}")
 	public String ajoutHausses(Model model, @PathVariable long recolteId, @PathVariable Long[] haussesIds) {
@@ -178,7 +260,7 @@ public class RecolteHausseController {
 						continue;
 					}
 					BigDecimal poids = hausse.getPoidsVide().add(hausseResteMiel);
-					RecolteHausse recolteHausse = new RecolteHausse(recolte, hausse, poids,	poids);
+					RecolteHausse recolteHausse = new RecolteHausse(recolte, hausse, poids, poids);
 					Ruche ruche = hausse.getRuche();
 					if (ruche == null) {
 						// la hausse n'est pas sur une ruche. On ne saura ni la ruche, ni le rucher,
@@ -221,7 +303,7 @@ public class RecolteHausseController {
 				if (hausseOpt.isPresent()) {
 					Hausse hausse = hausseOpt.get();
 					RecolteHausse recolteHausse = recolteHausseRepository.findByRecolteAndHausse(recolte, hausse);
-					if(recolteHausse == null) {
+					if (recolteHausse == null) {
 						logger.error("La hausse {} n'est pas dans le récolte {}", hausse.getNom(), recolte.getDate());
 						continue;
 					}
@@ -239,20 +321,19 @@ public class RecolteHausseController {
 	}
 
 	/**
-	 * Enlève toutes les hausses de la récolte des ruches.
-	 * Crée les événements retraits des hausses
-	 *   et remplissage à 0.
-	 *   (appel XMLHttpRequest)
+	 * Enlève toutes les hausses de la récolte des ruches. Crée les événements
+	 * retraits des hausses et remplissage à 0. (appel XMLHttpRequest)
 	 */
 	@PostMapping("/haussesDepot/{recolteId}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody String haussesDepot(HttpSession session, Model model, @PathVariable long recolteId,
-			@RequestParam @DateTimeFormat(pattern="yyyy/MM/dd HH:mm") LocalDateTime date) {
+			@RequestParam @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm") LocalDateTime date) {
 		Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
-		StringBuilder retHausses =  new StringBuilder();
+		StringBuilder retHausses = new StringBuilder();
 		StringBuilder retRuches = new StringBuilder();
 		if (recolteOpt.isPresent()) {
-			DecimalFormat decimalFormat = new DecimalFormat("0.00", new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
+			DecimalFormat decimalFormat = new DecimalFormat("0.00",
+					new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
 			Recolte recolte = recolteOpt.get();
 			model.addAttribute(Const.RECOLTE, recolte);
 			Iterable<Hausse> hausses = hausseRepository.findHaussesInRecolteId(recolteId);
@@ -265,8 +346,8 @@ public class RecolteHausseController {
 					retRuches.append(ruche.getNom());
 					retRuches.append(" ");
 					// Teste que la ruche sur laquelle est la hausse est la même que la ruche
-					//   de la hausseRécolte correspondante.
-					//   Si différente ne rien faire, la hausse a été replacée sur une autre ruche
+					// de la hausseRécolte correspondante.
+					// Si différente ne rien faire, la hausse a été replacée sur une autre ruche
 					// Pour renumérotation de l'ordre des hausses
 					Long rucheId = null;
 					Integer hausseOrdre;
@@ -283,18 +364,17 @@ public class RecolteHausseController {
 						essaim = ruche.getEssaim();
 						rucher = ruche.getRucher();
 					}
-					String commentaireEve = "Récolte " + recolte.getDate().
-							format(DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM)) + " " +
-							decimalFormat.format(recolteHausse.getPoidsAvant().subtract(recolteHausse.getPoidsApres())) +
-							"kg";
-					Evenement evenementRetrait = new Evenement(date,
-							TypeEvenement.HAUSSERETRAITRUCHE, ruche, essaim, rucher, hausse,
-							hausse.getOrdreSurRuche().toString(), commentaireEve);
+					String commentaireEve = "Récolte "
+							+ recolte.getDate().format(DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM)) + " "
+							+ decimalFormat.format(
+									recolteHausse.getPoidsAvant().subtract(recolteHausse.getPoidsApres()))
+							+ "kg";
+					Evenement evenementRetrait = new Evenement(date, TypeEvenement.HAUSSERETRAITRUCHE, ruche, essaim,
+							rucher, hausse, hausse.getOrdreSurRuche().toString(), commentaireEve);
 					evenementRepository.save(evenementRetrait);
 					logger.info("{} créé", evenementRetrait);
 					Evenement evenementRemplissage = new Evenement(Utils.dateTimeDecal(session),
-							TypeEvenement.HAUSSEREMPLISSAGE, ruche, essaim, rucher, hausse,
-							"0", commentaireEve);
+							TypeEvenement.HAUSSEREMPLISSAGE, ruche, essaim, rucher, hausse, "0", commentaireEve);
 					evenementRepository.save(evenementRemplissage);
 					logger.info("{} créé", evenementRemplissage);
 					hausse.setRuche(null);
@@ -326,7 +406,8 @@ public class RecolteHausseController {
 		if (retHausses.length() == 0) {
 			return messageSource.getMessage("pasDeHausseAenlever", null, LocaleContextHolder.getLocale());
 		} else {
-			return messageSource.getMessage("haussesEnlevees", new Object[] {retHausses, retRuches}, LocaleContextHolder.getLocale());
+			return messageSource.getMessage("haussesEnlevees", new Object[] { retHausses, retRuches },
+					LocaleContextHolder.getLocale());
 		}
 	}
 
