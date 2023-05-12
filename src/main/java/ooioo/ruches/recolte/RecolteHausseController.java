@@ -125,7 +125,7 @@ public class RecolteHausseController {
 
 		Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
 		if (recolteOpt.isPresent()) {
-			
+
 			if (bindingResult.hasErrors()) {
 				Recolte recolte = recolteOpt.get();
 				model.addAttribute(Const.RECOLTE, recolte);
@@ -181,28 +181,17 @@ public class RecolteHausseController {
 	}
 
 	/**
-	 * Afficher le formulaire du détail d'une hausse d'une récolte.
+	 * Affiche le formulaire d'une hausse d'une récolte.
 	 */
 	@GetMapping("/modifie/hausse/{recolteId}/{recolteHausseId}")
 	public String modifie(Model model, @PathVariable long recolteHausseId, @PathVariable long recolteId) {
 		Optional<RecolteHausse> recolteHausseOpt = recolteHausseRepository.findById(recolteHausseId);
 		if (recolteHausseOpt.isPresent()) {
-
-			// TODO inutile, utiliser : recolteHausseOpt.get().getRecolte
-			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-			Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
-			if (recolteOpt.isPresent()) {
-				model.addAttribute(Const.RUCHES, rucheRepository.findAllProjectedIdNomByOrderByNom());
-				model.addAttribute(Const.RUCHERS, rucherRepository.findAllProjectedIdNomByOrderByNom());
-				model.addAttribute(Const.ESSAIMS, essaimRepository.findAllProjectedIdNomByOrderByNom());
-				model.addAttribute("detailRecolte", recolteHausseOpt.get());
-				model.addAttribute("recolte", recolteOpt.get());
-			} else {
-				logger.error("Id récolte {} inconnu.", recolteId);
-				model.addAttribute(Const.MESSAGE, "Id récolte inconnu.");
-				return Const.INDEX;
-			}
+			model.addAttribute(Const.RUCHES, rucheRepository.findAllProjectedIdNomByOrderByNom());
+			model.addAttribute(Const.RUCHERS, rucherRepository.findAllProjectedIdNomByOrderByNom());
+			model.addAttribute(Const.ESSAIMS, essaimRepository.findAllProjectedIdNomByOrderByNom());
+			model.addAttribute("detailRecolte", recolteHausseOpt.get());
+			model.addAttribute("recolte", recolteHausseOpt.get().getRecolte());
 		} else {
 			logger.error("Id récolte hausse {} inconnu.", recolteHausseId);
 			model.addAttribute(Const.MESSAGE, "Id récolte hausse inconnu.");

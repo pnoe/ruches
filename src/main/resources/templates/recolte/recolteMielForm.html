@@ -5,6 +5,7 @@
 <script th:inline="javascript">
 	const pdsAvSupPdsAp = /*[[#{poidsAvantSupPoidsApres}]]*/ null;
 	$().ready(function() {
+		$(".avant").first().focus();
 		function validation(event) {
 			  const avant = document.querySelectorAll("input.avant");
 			  const apres = document.querySelectorAll("input.apres");
