@@ -2,6 +2,57 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:inline="javascript">
+	const pdsAvSupPdsAp = /*[[#{poidsAvantSupPoidsApres}]]*/ null;
+	$().ready(function() {
+		function validation(event) {
+			  const avant = document.querySelectorAll("input.avant");
+			  const apres = document.querySelectorAll("input.apres");
+			  let err = false;
+			  for (let i = 0; i < avant.length; i++) {
+				  if (parseFloat(avant[i].value) < parseFloat(apres[i].value)) {
+					  err = true;
+				  }
+			  }
+			  if (err) {
+				  alert(pdsAvSupPdsAp);
+				  event.preventDefault();  
+			  }
+			}
+		const form = document.getElementById("recolteMielForm");
+		form.addEventListener("submit", validation);
+		const inputs = document.querySelectorAll("input.modif");
+		for (elem of inputs) {
+			elem.addEventListener("input", function() {
+				// alert(parseFloat(this.dataset.initval) + " " + parseFloat(this.value));
+				// parseFloat renvoie NaN pour 10. sans partie décimale. Et 10 pour 10,
+				if (Math.abs(this.dataset.initval - this.value) > 1e-9) {
+					this.classList.add("changed");
+				} else {
+					this.classList.remove("changed");
+				}
+			});
+		}
+	});
+</script>
+<style>
+.changed {
+	background-color: gold;
+}
+
+.modif {
+	width: 6em;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+/* Firefox */
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
 </head>
 <body>
 	<nav th:replace="include :: navbar"></nav>
@@ -21,35 +72,36 @@
 	<form action="#"
 		th:action="@{'/recolte/haussesMiel/sauve/'+${recolte.id}}"
 		method="post" id="recolteMielForm">
-		<fieldset>
-			<table class="table table-bordered table-striped dt-responsive"
-				id="recolteMielTable">
-				<thead>
-					<tr>
-						<th hidden></th>
-						<th th:text="#{hausse}"></th>
-						<th th:text="#{poidsAvant}"></th>
-						<th th:text="#{poidsApres}"></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="rHM, itemStat : ${recolteMiel.recolteHaussesMiel}">
-						<td hidden><input type="number"
-							th:name="|recolteHaussesMiel[${itemStat.index}].recolteHausseId|"
-							th:value="${rHM.recolteHausseId}" /></td>
-						<td th:text="${hausses[itemStat.index].nom}"></td>
-						<td><input type="number" th:min="${hausses[itemStat.index].poidsVide}" max="80" step="0.001"
-							th:name="|recolteHaussesMiel[${itemStat.index}].poidsAvant|"
-							th:value="${rHM.poidsAvant}" /></td>
-						<td><input type="number" th:min="${hausses[itemStat.index].poidsVide}" max="80" step="0.001"
-							th:name="|recolteHaussesMiel[${itemStat.index}].poidsApres|"
-							th:value="${rHM.poidsApres}" /></td>
-					</tr>
-				</tbody>
-			</table>
-
-			<div th:replace="includeForm :: BtnForm"></div>
-		</fieldset>
+		<table class="table table-bordered table-striped table-responsive"
+			id="recolteMielTable">
+			<thead>
+				<tr>
+					<th hidden></th>
+					<th th:text="#{hausse}"></th>
+					<th th:text="#{poidsAv}"></th>
+					<th th:text="#{poidsAp}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="rHM, itemStat : ${recolteMiel.recolteHaussesMiel}">
+					<td hidden><input type="number"
+						th:name="|recolteHaussesMiel[${itemStat.index}].recolteHausseId|"
+						th:value="${rHM.recolteHausseId}" /></td>
+					<td th:text="${hausses[itemStat.index].nom}"></td>
+					<td><input type="number" class="modif avant"
+						th:min="${hausses[itemStat.index].poidsVide}" max="80"
+						step="0.001"
+						th:name="|recolteHaussesMiel[${itemStat.index}].poidsAvant|"
+						th:value="${rHM.poidsAvant}" th:data-initval="${rHM.poidsAvant}" /></td>
+					<td><input type="number" class="modif apres"
+						th:min="${hausses[itemStat.index].poidsVide}" max="80"
+						step="0.001"
+						th:name="|recolteHaussesMiel[${itemStat.index}].poidsApres|"
+						th:value="${rHM.poidsApres}" th:data-initval="${rHM.poidsApres}" /></td>
+				</tr>
+			</tbody>
+		</table>
+		<div th:replace="includeForm :: BtnForm"></div>
 	</form>
 	<footer th:replace="include::footer"></footer>
 </body>
