@@ -137,7 +137,7 @@ public class TestRecolte {
 	@Order(6)
 	@DisplayName("Récolte ajout hausse")
 	void recolteAjoutHausse() {
-		// Création d'une hausse
+		// Création d'une hausse de récolte.
 		// Attention écriture en base de données
 		driver.get(baseUrl + "recolte/choixHausses/" + recolteId);
 		// table liste des hausses à ajouter
@@ -149,5 +149,18 @@ public class TestRecolte {
 				driver.findElement(By.xpath("//table[@id='retraitHausseRecolte']//td[contains(., " + hausseId + ")]"))
 						.getTagName());
 	}
+	
+	@Test
+	@Order(7)
+	@DisplayName("Récolte saisie tabulaire poids de miel")
+	void modifHausseRecolte() {
+		// Affichage du formulaitre de saisie tabulaire poids de miel
+		// Attention écriture en base de données
+		driver.get(baseUrl + "recolte/" + recolteId);
+		assertEquals("div", driver.findElement(By.id("detailRecolte")).getTagName());
+		driver.get(baseUrl + "recolte/haussesMiel/" + recolteId);
+		assertEquals("table", driver.findElement(By.id("recolteMielTable")).getTagName());
+	}
+	
 
 }

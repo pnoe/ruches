@@ -91,7 +91,7 @@ public class HausseController {
 				}
 			}
 			String nomsJoin = String.join(",", nomsCrees);
-			if (nomsCrees.size() > 0) {
+			if (!nomsCrees.isEmpty()) {
 				logger.info("Hausses(s) {} créée(s)", nomsJoin);
 				return messageSource.getMessage("clonehaussecreees", new Object[] { nomsJoin },
 						LocaleContextHolder.getLocale());

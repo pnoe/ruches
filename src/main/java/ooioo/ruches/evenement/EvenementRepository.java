@@ -99,7 +99,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 	List<Evenement> findByTypeOrTypeOrderByDateDesc(TypeEvenement type1, TypeEvenement type2);
 
-	List<Evenement> findByTypeAndRucheNotNullAndRucherNotNullOrderByDateDesc(TypeEvenement typeEvenement);
+	// List<Evenement> findByTypeAndRucheNotNullAndRucherNotNullOrderByDateDesc(TypeEvenement typeEvenement);
 
 	@Query(value = """
 			select e from Evenement e

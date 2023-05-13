@@ -141,7 +141,7 @@ public class RucheController {
 				}
 			}
 			String nomsJoin = String.join(",", nomsCrees);
-			if (nomsCrees.size() > 0) {
+			if (!nomsCrees.isEmpty()) {
 				logger.info("Ruche(s) {} créée(s)", nomsJoin);
 				return messageSource.getMessage("cloneruchecreees", new Object[] { nomsJoin },
 						LocaleContextHolder.getLocale());

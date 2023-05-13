@@ -91,19 +91,6 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 			""")
 	Iterable<Ruche> findActiveIdDiffOrderByNom(Long id);
 	
-	/*
-	@Query(value = """
-			select count(r) as nbruches
-			  from RucheType rt
-			  left join Ruche r on r.type = rt.id
-			  where
-			    r.active = 'true'
-			  group by rt.nom  
-			  order by rt.nom
-			""")
-	List<Integer> countNbRucheRucheType();
-	*/
-	
 	Integer countByTypeAndActiveTrue(RucheType rt);
 	
 }

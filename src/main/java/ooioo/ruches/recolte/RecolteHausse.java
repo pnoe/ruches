@@ -20,8 +20,7 @@ public class RecolteHausse {
 		// constructeur par défaut nécessaire pour recolteDetail
 	}
 
-	public RecolteHausse(Recolte recolte, Hausse hausse,
-			BigDecimal poidsAvant, BigDecimal poidsApres) {
+	public RecolteHausse(Recolte recolte, Hausse hausse, BigDecimal poidsAvant, BigDecimal poidsApres) {
 		this.recolte = recolte;
 		this.hausse = hausse;
 		this.setPoidsAvant(poidsAvant);
@@ -132,6 +131,13 @@ public class RecolteHausse {
 
 	public void setRucher(Rucher rucher) {
 		this.rucher = rucher;
+	}
+
+	@Override
+	public String toString() {
+		return "RecolteHausse [id=" + id + ", recolte=" + recolte.getDate() + ", poidsAvant=" + poidsAvant + ", poidsApres="
+				+ poidsApres + ", hausse=" + hausse.getNom() + ", ruche=" + ruche.getNom() + ", essaim=" + essaim.getNom()
+				+ ", rucher=" + rucher.getNom() + "]";
 	}
 
 }
