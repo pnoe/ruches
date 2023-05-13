@@ -129,7 +129,7 @@ public class RecolteHausseController {
 			if (bindingResult.hasErrors()) {
 				Recolte recolte = recolteOpt.get();
 				model.addAttribute(Const.RECOLTE, recolte);
-				// TODO retour au formulaire plante, ${recolte} est inconnu
+				// TODO à vérifier en supprimant controle "number"
 				return "recolte/recolteMielForm";
 			}
 			for (RecolteHausseMiel rHM : recolteMiel.getRecolteHaussesMiel()) {
@@ -191,7 +191,6 @@ public class RecolteHausseController {
 			model.addAttribute(Const.RUCHERS, rucherRepository.findAllProjectedIdNomByOrderByNom());
 			model.addAttribute(Const.ESSAIMS, essaimRepository.findAllProjectedIdNomByOrderByNom());
 			model.addAttribute("detailRecolte", recolteHausseOpt.get());
-			model.addAttribute("recolte", recolteHausseOpt.get().getRecolte());
 		} else {
 			logger.error("Id récolte hausse {} inconnu.", recolteHausseId);
 			model.addAttribute(Const.MESSAGE, "Id récolte hausse inconnu.");
