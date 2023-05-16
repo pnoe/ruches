@@ -348,7 +348,6 @@ public class RucheController {
 		if (bindingResult.hasErrors()) {
 			return RUCHE_RUCHEFORM;
 		}
-
 		// On enlève les blancs aux extémités du nom.
 		ruche.setNom(ruche.getNom().trim());
 		if ("".equals(ruche.getNom())) {
@@ -356,7 +355,6 @@ public class RucheController {
 			model.addAttribute(Const.MESSAGE, "Nom de ruche incorrect.");
 			return Const.INDEX;
 		}
-
 		// Vérification de l'unicité du nom en modification et en création d'une ruche
 		Ruche rNom = rucheRepository.findByNom(ruche.getNom());
 		if (rNom != null && !rNom.getId().equals(ruche.getId())) {

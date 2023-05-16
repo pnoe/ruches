@@ -23,7 +23,8 @@ public class Ruche {
 
 	@Override
 	public String toString() {
-		return "Ruche [id=" + id + ", nom=" + nom + ", active=" + active + ", Acquisition=" + dateAcquisition
+		return "Ruche [id=" + id + ", nom=" + nom + ", active=" + active + 
+				", production=" + production + ", Acquisition=" + dateAcquisition
 				+ ", poidsVide=" + poidsVide + ", type=" + ((type == null) ? "null" : type.getNom()) +
 				", essaim="	+ ((essaim == null) ? "null" : essaim.getNom()) + 
 				", rucher=" + ((rucher == null) ? "null" : rucher.getNom()) +
@@ -43,6 +44,7 @@ public class Ruche {
 		this.longitude = longitude;
 		// champs identiques
 		this.active = ruche.getActive();
+		this.production = ruche.getProduction();
 		this.dateAcquisition = ruche.getDateAcquisition();
 		this.setPoidsVide(ruche.getPoidsVide());
 		this.type = ruche.getType();
@@ -62,6 +64,11 @@ public class Ruche {
 	 * Ruche active ?
 	 */
 	private boolean active = true;
+	
+	/**
+	 * Ruche de production ?
+	 */
+	private boolean production = true;
 
 	/**
 	 * Date d'acquisition de la ruche
@@ -130,6 +137,14 @@ public class Ruche {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public boolean getProduction() {
+		return production;
+	}
+
+	public void setProduction(boolean production) {
+		this.production = production;
 	}
 
 	public LocalDate getDateAcquisition() {

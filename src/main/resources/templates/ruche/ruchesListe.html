@@ -1,48 +1,62 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
-	const listeRuches = /*[[#{listeRuches}]]*/ null;
-	const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
-	const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
-	const urlCommLot = /*[[@{/evenement/ruche/commentaireLot/}]]*/ null;
-	const selectRuTrait = /*[[#{selectruchestraiter}]]*/ null;
-	$(document).ready(function() {
-		const table = new DataTable('#ruches', {
-	    	select: {style: 'multi+shift'},
-	        dom: 'Blftip',
-		    buttons: [
-		    	'csv',
-		    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-		    		title: listeRuches + " " + (new Date()).toLocaleDateString()},
-	            {extend: 'print', text: buttTxtPrint},
-	            {extend: 'colvis', text: buttTxtCol}
-	        ]
-	    });
-	    function updateLinks( e, dt, type, indexes ) {
-	    	if ( type === 'row' ) {
-	    		let noms = "";
-	            table.rows( { selected: true } ).data().pluck(0).each(function (value, index) {
-	            	const a = document.createElement('template');
-	            	a.innerHTML = value;
-	            	noms += a.content.children[0].getAttribute("href").
-	            		substring(a.content.children[0].getAttribute("href").lastIndexOf("/") + 1) + ",";
-	            });
-	            if (noms) { 
-	            	noms = noms.substring(0, noms.length-1);
-	            	$('#commentaire').attr('href', urlCommLot + noms);
-	            } else {
-	            	$('#commentaire').attr('href', "#");
-	            }      
-	        }
-		}
-	    table.on( 'select deselect', updateLinks);
-	    $('.selection').on('click', function () {
-	    	if ($(this).attr("href") == "#") {
-	    		alert(selectRuTrait);	
-	    	}      
-	    });
-	});
+	const listeRuches = /*[[#{listeRuches}]]*/null;
+	const buttTxtPrint = /*[[#{buttontextprint}]]*/null;
+	const buttTxtCol = /*[[#{buttontextcol}]]*/null;
+	const urlCommLot = /*[[@{/evenement/ruche/commentaireLot/}]]*/null;
+	const selectRuTrait = /*[[#{selectruchestraiter}]]*/null;
+	$(document).ready(
+			function() {
+				const table = new DataTable('#ruches', {
+					select : {
+						style : 'multi+shift'
+					},
+					dom : 'Blftip',
+					buttons : [ 'csv', {
+						extend : 'pdf',
+						exportOptions : {
+							columns : ':visible'
+						},
+						title : listeRuches + " " + (new Date()).toLocaleDateString()
+					}, {
+						extend : 'print',
+						text : buttTxtPrint
+					}, {
+						extend : 'colvis',
+						text : buttTxtCol
+					} ]
+				});
+				function updateLinks(e, dt, type, indexes) {
+					if (type === 'row') {
+						let noms = "";
+						table.rows({
+							selected : true
+						}).data().pluck(0).each(
+								function(value, index) {
+									const a = document.createElement('template');
+									a.innerHTML = value;
+									noms += a.content.children[0].getAttribute("href").substring(
+											a.content.children[0].getAttribute("href").lastIndexOf("/") + 1)
+											+ ",";
+								});
+						if (noms) {
+							noms = noms.substring(0, noms.length - 1);
+							$('#commentaire').attr('href', urlCommLot + noms);
+						} else {
+							$('#commentaire').attr('href', "#");
+						}
+					}
+				}
+				table.on('select deselect', updateLinks);
+				$('.selection').on('click', function() {
+					if ($(this).attr("href") == "#") {
+						alert(selectRuTrait);
+					}
+				});
+			});
 </script>
 </head>
 <body>
@@ -57,26 +71,27 @@
 			</div>
 			<div class="col">
 				<a id="cree" th:href="@{/ruche/cree}" class="bi-plus-lg"
-					th:title="#{ajouterRuche}" aria-hidden="true"></a>
-				&nbsp;
-				<a id="commentaire" href="#"
-				  class="selection bi-chat-text" th:title="#{evenementsCommentaire}" aria-hidden="true"></a>
+					th:title="#{ajouterRuche}" aria-hidden="true"></a> &nbsp; <a
+					id="commentaire" href="#" class="selection bi-chat-text"
+					th:title="#{evenementsCommentaire}" aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
 	<div class="container-fluid">
-		<table class="table table-bordered table-striped dt-responsive" id="ruches">
+		<table class="table table-bordered table-striped dt-responsive"
+			id="ruches">
 			<thead>
 				<tr>
-					<th style="background-color:LightGoldenRodYellow" th:text="#{nom}"></th>
+					<th style="background-color: LightGoldenRodYellow" th:text="#{nom}"></th>
 					<th th:text="#{essaim}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{rucher}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>
+					<th style="background-color: PaleGoldenRod" th:text="#{rucher}"></th>
+					<th style="background-color: PaleGoldenRod" th:text="#{date}"></th>
+					<th th:text="#{prod}"></th>
 					<th th:if="${session.voirInactif}" th:text="#{active}"></th>
 					<th th:text="#{dateAcquisition}"></th>
 					<th th:text="#{poidsVide}"></th>
-					<th style="background-color:Tomato" th:text="#{nbCadres}"></th>
-					<th style="background-color:Tomato" th:text="#{nbCadresMax}"></th>
+					<th style="background-color: Tomato" th:text="#{nbCadres}"></th>
+					<th style="background-color: Tomato" th:text="#{nbCadresMax}"></th>
 					<th th:text="#{type}"></th>
 					<th th:text="#{Hausses}"></th>
 					<th:block th:if="${session.voirLatLon}">
@@ -95,17 +110,22 @@
 					<td><a th:href="@{'/rucher/'+${ruche.rucher?.id}}"
 						th:text="${ruche.rucher?.nom}"></a></td>
 					<td th:text="${dateAjoutRucher[rucheStat.index]}"></td>
+					<td th:text="${ruche.production}? #{oui} : #{non}"></td>
 					<td th:if="${session.voirInactif}"
-						th:text="${ruche.active}? #{oui} : #{non}"></td>						
+						th:text="${ruche.active}? #{oui} : #{non}"></td>
 					<td th:text="${ruche.dateAcquisition}"></td>
-					<td class="num" th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
-					<td class="num" th:text="${listeEvenCadre[rucheStat.index]?.valeur}"></td>
+					<td class="num"
+						th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
+					<td class="num"
+						th:text="${listeEvenCadre[rucheStat.index]?.valeur}"></td>
 					<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
 					<td th:text="${ruche.type?.nom}"></td>
 					<td class="num" th:text="${nbHausses[rucheStat.index]}"></td>
 					<th:block th:if="${session.voirLatLon}">
-						<td class="num" th:text="${#numbers.formatDecimal(ruche.latitude,1,5)}"></td>
-						<td class="num" th:text="${#numbers.formatDecimal(ruche.longitude,1,5)}"></td>
+						<td class="num"
+							th:text="${#numbers.formatDecimal(ruche.latitude,1,5)}"></td>
+						<td class="num"
+							th:text="${#numbers.formatDecimal(ruche.longitude,1,5)}"></td>
 					</th:block>
 					<td th:text="${ruche.commentaire}"></td>
 				</tr>

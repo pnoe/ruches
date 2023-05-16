@@ -129,6 +129,7 @@ $().ready(function() {
 					<th th:text="#{poidsVide}"></th>
 					<th th:text="#{nbCadresMax}"></th>
 					<th th:text="#{type}"></th>
+					<th th:text="#{prod}"></th>
 					<th style="background-color: LemonChiffon" th:text="#{latitude}"></th>
 					<th style="background-color: LemonChiffon" th:text="#{longitude}"></th>
 					<th th:text="#{commentaire}"></th>
@@ -144,6 +145,7 @@ $().ready(function() {
 					<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
 					<td><a th:href="@{/rucheType/{id}(id=${ruche.type?.id})}"
 						th:text="${ruche.type?.nom}"></a></td>
+					<td th:text="${ruche.production}? #{oui} : #{non}"></td>
 					<td class="num"
 						th:text="${#numbers.formatDecimal(ruche.latitude,1,4)}"></td>
 					<td class="num"

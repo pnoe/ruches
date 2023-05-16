@@ -43,6 +43,7 @@ $(document).ready(function() {
 					<th style="background-color:LightGoldenRodYellow" th:text="#{nom}"></th>
 					<th th:text="#{essaim}"></th>
 					<th style="background-color:PaleGoldenRod" th:text="#{daterucher}"></th>
+					<th th:text="#{prod}"></th>
 					<th th:if="${session.voirInactif}" th:text="#{active}"></th>
 					<th th:text="#{dateAcquisition}"></th>
 					<th th:text="#{poidsVide}"></th>
@@ -65,6 +66,7 @@ $(document).ready(function() {
 					<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}"
 						th:text="${ruche.essaim?.nom}"></a></td>
 					<td th:text="${dateAjoutRucher[rucheStat.index]}"></td>
+					<td th:text="${ruche.production}? #{oui} : #{non}"></td>
 					<td th:if="${session.voirInactif}"
 						th:text="${ruche.active}? #{oui} : #{non}"></td>						
 					<td th:text="${ruche.dateAcquisition}"></td>

@@ -41,6 +41,7 @@
 					<th style="background-color:lightskyblue" th:text="#{commentaire}"></th>
 					<th style="background-color:PaleGoldenRod" th:text="#{rucher}"></th>					
 					<th style="background-color:PaleGoldenRod" th:text="#{date}"></th>
+					<th th:text="#{prod}"></th>
 					<th th:if="${session.voirInactif}" th:text="#{active}"></th>
 					<th th:text="#{dateAcquisition}"></th>
 					<th th:text="#{poidsVide}"></th>
@@ -78,6 +79,7 @@
 					<td><a th:href="@{'/rucher/'+${ruche.rucher?.id}}"
 						th:text="${ruche.rucher?.nom}"></a></td>					
 					<td th:text="${dateAjoutRucher[rucheStat.index]}"></td>
+					<td th:text="${ruche.production}? #{oui} : #{non}"></td>
 					<td th:if="${session.voirInactif}"
 						th:text="${ruche.active}? #{oui} : #{non}"></td>
 					<td th:text="${ruche.dateAcquisition}"></td>
