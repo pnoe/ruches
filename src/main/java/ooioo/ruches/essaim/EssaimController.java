@@ -51,6 +51,7 @@ import ooioo.ruches.rucher.Rucher;
 public class EssaimController {
 
 	private static final String ESSAIM_ESSAIMFORM = "essaim/essaimForm";
+	private static final String ESSAIMSRRR = "EssaimsRRr";
 
 	private final Logger logger = LoggerFactory.getLogger(EssaimController.class);
 
@@ -243,12 +244,9 @@ public class EssaimController {
 	public String liste(HttpSession session, Model model) {
 		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
 		if (voirInactif != null && (boolean) voirInactif) {
-			model.addAttribute(Const.ESSAIMS, essaimRepository.findAllByOrderByNom());
-			// Recherche des ruches et ruchers associés aux essaims
-			model.addAttribute(Const.RUCHES, essaimRepository.findRucheIdNomOrderByNom());
+			 model.addAttribute(ESSAIMSRRR, essaimRepository.findEssaimRucheRucherOrderByNom());
 		} else {
-			model.addAttribute(Const.ESSAIMS, essaimRepository.findByActifOrderByNom(true));
-			model.addAttribute(Const.RUCHES, essaimRepository.findRucheIdNomByActifOrderByNom(true));
+			 model.addAttribute(ESSAIMSRRR, essaimRepository.findEssaimRucheRucherOrderByNom(true));
 		}
 		return "essaim/essaimsListe";
 	}

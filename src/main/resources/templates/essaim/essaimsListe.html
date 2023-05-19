@@ -99,24 +99,24 @@ $(document).ready(function() {
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="essaim : ${essaims}">
-					<td><a th:href="@{'/essaim/'+${essaim.id}}"
-						th:text="${essaim.nom}"></a></td>
-					<td><a th:href="@{'/ruche/'+${ruches[essaimStat.index][0]}}"
-						th:text="${ruches[essaimStat.index][1]}"></a></td>
-					<td><a th:href="@{'/rucher/'+${ruches[essaimStat.index][2]}}"
-						th:text="${ruches[essaimStat.index][3]}"></a></td>
-					<td th:if="${session.voirInactif}" th:text="${essaim.actif}? #{oui} : #{non}"></td>
-					<td th:text="${essaim.dateAcquisition}"></td>
-					<td th:text="${essaim.reineMarquee}? #{oui} : #{non}"></td>
-					<td th:text="#{${essaim.reineCouleurMarquage}}"></td>
-					<td th:text="${essaim.reineDateNaissance}"></td>
-					<td><a th:href="@{'/essaim/'+${essaim.souche?.id}}"
-						th:text="${essaim.souche?.nom}"></a>
+				<tr th:each="eRRr : ${EssaimsRRr}">
+					<td><a th:href="@{'/essaim/'+${eRRr.essaim.id}}"
+						th:text="${eRRr.essaim.nom}"></a></td>
+					<td><a th:href="@{'/ruche/'+ ${eRRr.idRuche}}"
+						th:text="${eRRr.nomRuche}"></a></td>
+					<td><a th:href="@{'/rucher/'+ ${eRRr.idRucher}}"
+						th:text="${eRRr.nomRucher}"></a></td>
+					<td th:if="${session.voirInactif}" th:text="${eRRr.essaim.actif}? #{oui} : #{non}"></td>
+					<td th:text="${eRRr.essaim.dateAcquisition}"></td>
+					<td th:text="${eRRr.essaim.reineMarquee}? #{oui} : #{non}"></td>
+					<td th:text="#{${eRRr.essaim.reineCouleurMarquage}}"></td>
+					<td th:text="${eRRr.essaim.reineDateNaissance}"></td>
+					<td><a th:href="@{'/essaim/'+${eRRr.essaim.souche?.id}}"
+						th:text="${eRRr.essaim.souche?.nom}"></a>
 					</td>
-					<td th:text="${essaim.agressivite}"></td>
-					<td th:text="${essaim.proprete}"></td>
-					<td th:text="${essaim.commentaire}"></td>
+					<td th:text="${eRRr.essaim.agressivite}"></td>
+					<td th:text="${eRRr.essaim.proprete}"></td>
+					<td th:text="${eRRr.essaim.commentaire}"></td>
 				</tr>
 			</tbody>
 		</table>
