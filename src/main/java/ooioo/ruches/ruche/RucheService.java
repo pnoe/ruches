@@ -120,7 +120,7 @@ public class RucheService {
 		if (voirInactif != null && (boolean) voirInactif) {
 			ruches = rucheRepository.findAllByOrderByNom();
 		} else {
-			ruches = rucheRepository.findByActiveOrderByNom(true);
+			ruches = rucheRepository.findByActiveTrueOrderByNom();
 		}
 		for (Ruche ruche : ruches) {
 			nbHausses.add(hausseRepository.countByRucheId(ruche.getId()));

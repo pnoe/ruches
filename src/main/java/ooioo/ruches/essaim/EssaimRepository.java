@@ -15,39 +15,21 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 
 	Iterable<Essaim> findBySouche(Essaim essaim);
 
-	Iterable<Essaim> findAllByOrderByNom();
-
-	Iterable<Essaim> findByActifOrderByNom(boolean actif);
 	Iterable<Essaim> findByActif(boolean actif);
 
 	Collection<Nom> findAllProjectedBy();
-
-	// Liste ordonnée par nom d'essaims, des id et nom de la ruche associée et 
-	//  id et nom de son rucher.
-	// En paramètre essaim actif ou non.
-	/*
-	@Query(value = """
-			select ruche.id, ruche.nom, rucher.id, rucher.nom
-			  from Essaim essaim
-			    left join Ruche ruche on ruche.essaim.id = essaim.id
-			    left join Rucher rucher on ruche.rucher.id = rucher.id
-			  where essaim.actif = ?1 order by essaim.nom
-			""")
-	Iterable<Object[]> findRucheIdNomByActifOrderByNom(boolean actif);
-	*/
 	
-	// Liste ordonnée par nom d'essaims, des id et nom de la ruche associée et 
+	// Liste ordonnée par nom d'essaims, des essaims, id et nom de la ruche associée et 
 	//  id et nom de son rucher.
-	// En paramètre essaim actif ou non.
 	// https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#projections
 	@Query(value = """
 			select new ooioo.ruches.essaim.EssaimRucheRucher(essaim, ruche.id, ruche.nom, rucher.id, rucher.nom)
 			  from Essaim essaim
 			    left join Ruche ruche on ruche.essaim.id = essaim.id
 			    left join Rucher rucher on ruche.rucher.id = rucher.id
-			  where essaim.actif = ?1 order by essaim.nom
+			  where essaim.actif = true order by essaim.nom
 			""")
-	Iterable<EssaimRucheRucher> findEssaimRucheRucherOrderByNom(boolean actif);
+	Iterable<EssaimRucheRucher> findEssaimActifRucheRucherOrderByNom();
 
 	// Liste ordonnée par nom d'essaims, des id et nom de la ruche associée et 
 	//  id et nom de son rucher.
@@ -60,21 +42,6 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 			  order by essaim.nom
 			""")
 	Iterable<EssaimRucheRucher> findEssaimRucheRucherOrderByNom();
-
-	
-	
-	// Liste ordonnée par nom d'essaims, des id et nom de la ruche associée et 
-	//  id et nom de son rucher.
-	/*
-	@Query(value = """
-			select ruche.id, ruche.nom, rucher.id, rucher.nom
-			  from Essaim essaim
-			    left join Ruche ruche on ruche.essaim.id = essaim.id
-			    left join Rucher rucher on ruche.rucher.id = rucher.id
-			  order by essaim.nom
-			""")
-	Iterable<Object[]> findRucheIdNomOrderByNom();
-	*/
 	
 	Iterable<IdNom> findAllProjectedIdNomByOrderByNom();
 
@@ -93,7 +60,7 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 	@Query(value = """
 			select essaim
 			  from Essaim essaim
-			  where essaim.actif = 'true' and essaim not in
+			  where essaim.actif = true and essaim not in
 			    (select essaim
 			       from Essaim essaim, Ruche ruche
 			       where ruche.essaim = essaim)
@@ -116,7 +83,5 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 			  where essaim.reineDateNaissance > essaim.dateAcquisition
 			""")
 	Iterable<Essaim> findEssaimDateNaissSupAcquis();
-
-
 
 }

@@ -12,7 +12,7 @@ import ooioo.ruches.Nom;
 @RepositoryRestResource(collectionResourceRel = "rucherRepository")
 public interface RucherRepository extends CrudRepository<Rucher, Long> {
 
-	Rucher findByDepotIsTrue();
+	Rucher findByDepotTrue();
 
 	Rucher findByNom(String nom);
 
@@ -22,13 +22,15 @@ public interface RucherRepository extends CrudRepository<Rucher, Long> {
 
 	Iterable<Rucher> findByActifOrderByNom(boolean actif);
 
-	List<Rucher> findByActif(boolean actif);
+//	List<Rucher> findByActif(boolean actif);
+	List<Rucher> findByActifTrue();
 
 	Collection<Nom> findAllProjectedBy();
 
 	Collection<IdNom> findAllProjectedIdNomByOrderByNom();
 
-	Collection<IdNom> findProjectedIdNomByActifAndIdNotOrderByNom(boolean actif, Long id);
+//	Collection<IdNom> findProjectedIdNomByActifAndIdNotOrderByNom(boolean actif, Long id);
+	Collection<IdNom> findProjectedIdNomByActifTrueAndIdNotOrderByNom(Long id);
 
 	long countByActifTrue();
 }

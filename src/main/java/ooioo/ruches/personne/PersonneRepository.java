@@ -9,7 +9,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 public interface PersonneRepository extends CrudRepository<Personne, Long> {
 	Iterable<Personne> findAllByOrderByNom();
 
-	Iterable<Personne> findByActiveOrderByNom(boolean actif);
+	Iterable<Personne> findByActiveTrueOrderByNom();
 
 	Personne findByLogin(String login);
 

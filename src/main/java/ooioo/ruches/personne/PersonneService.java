@@ -35,7 +35,7 @@ public class PersonneService {
 		if (voirInactif != null && (boolean) voirInactif) {
 			model.addAttribute(Const.PERSONNES, persRepository.findAllByOrderByNom());
 		} else {
-			model.addAttribute(Const.PERSONNES, persRepository.findByActiveOrderByNom(true));
+			model.addAttribute(Const.PERSONNES, persRepository.findByActiveTrueOrderByNom());
 		}
 	}
 

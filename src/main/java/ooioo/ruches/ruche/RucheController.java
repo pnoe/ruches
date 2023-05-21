@@ -218,7 +218,7 @@ public class RucheController {
 		// récupération des coordonnées du dépôt
 		Ruche ruche = new Ruche();
 		ruche.setDateAcquisition(Utils.dateDecal(session));
-		Rucher rucher = rucherRepository.findByDepotIsTrue();
+		Rucher rucher = rucherRepository.findByDepotTrue();
 		LatLon latLon = rucherService.dispersion(rucher.getLatitude(), rucher.getLongitude());
 		ruche.setLatitude(latLon.lat());
 		ruche.setLongitude(latLon.lon());
@@ -236,9 +236,9 @@ public class RucheController {
 		if (rucheOpt.isPresent()) {
 			Ruche ruche = rucheOpt.get();
 			model.addAttribute(Const.RUCHE, ruche);
-			model.addAttribute(Const.RUCHERS, rucherRepository.findProjectedIdNomByActifAndIdNotOrderByNom(true,
+			model.addAttribute(Const.RUCHERS, rucherRepository.findProjectedIdNomByActifTrueAndIdNotOrderByNom(
 					(ruche.getRucher() == null) ? null : ruche.getRucher().getId()));
-			model.addAttribute("depotId", rucherRepository.findByDepotIsTrue().getId());
+			model.addAttribute("depotId", rucherRepository.findByDepotTrue().getId());
 			model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
 			Evenement evenFirst = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
 					ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER);
@@ -367,7 +367,7 @@ public class RucheController {
 		// être modifiées dans le formulaire.
 		String action = (ruche.getId() == null) ? "créée" : "modifiée";
 		if (ruche.getRucher() == null) {
-			Rucher rucher = rucherRepository.findByDepotIsTrue();
+			Rucher rucher = rucherRepository.findByDepotTrue();
 			ruche.setRucher(rucher);
 			rucheRepository.save(ruche);
 			// Date eve mis au dépôt = date acquisition (LocalDate) de la ruche ou

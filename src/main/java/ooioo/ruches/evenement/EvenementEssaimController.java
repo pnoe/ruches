@@ -490,7 +490,7 @@ public class EvenementEssaimController {
 			Essaim essaim = essaimOpt.get();
 			Ruche ruche = rucheRepository.findByEssaimId(essaimId);
 			Rucher rucher = null;
-			Rucher rucherDepot = rucherRepository.findByDepotIsTrue();
+			Rucher rucherDepot = rucherRepository.findByDepotTrue();
 			if (ruche != null) {
 				rucher = ruche.getRucher();
 				// Tester si remérage demandé

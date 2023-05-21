@@ -41,7 +41,7 @@ public class RucherControllerMAJ {
 	@GetMapping("/majValeurEveRAR")
 	public String historiques(Model model) {
 		boolean group = false;
-		List<Rucher> ruchers = rucherRepository.findByActif(true);
+		List<Rucher> ruchers = rucherRepository.findByActifTrue();
 		List<Transhumance> histoAll = new ArrayList<>();
 		for (Rucher rucher : ruchers) {
 			// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date

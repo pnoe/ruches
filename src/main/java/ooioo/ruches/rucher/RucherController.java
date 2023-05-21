@@ -135,7 +135,7 @@ public class RucherController {
 	 */
 	@GetMapping("/historiques/{group}")
 	public String historiques(Model model, @PathVariable boolean group) {
-		List<Rucher> ruchers = rucherRepository.findByActif(true);
+		List<Rucher> ruchers = rucherRepository.findByActifTrue();
 		List<Transhumance> histoAll = new ArrayList<>(); // si non groupés
 		List<Transhumance> histoGroup = new ArrayList<>(); // si groupés
 		for (Rucher rucher : ruchers) {
@@ -260,7 +260,7 @@ public class RucherController {
 		model.addAttribute(Const.RUCHERNOMS, noms);
 		Rucher rucher = new Rucher();
 		// Récupération des coordonnées du dépôt
-		Rucher rucherDepot = rucherRepository.findByDepotIsTrue();
+		Rucher rucherDepot = rucherRepository.findByDepotTrue();
 		LatLon latLon = rucherService.dispersion(rucherDepot.getLatitude(), rucherDepot.getLongitude());
 		rucher.setLatitude(latLon.lat());
 		rucher.setLongitude(latLon.lon());
@@ -342,7 +342,7 @@ public class RucherController {
 			} else {
 				// lecture en base de la distance et du temps pour aller du dépôt
 				// à ce rucher
-				Rucher depot = rucherRepository.findByDepotIsTrue();
+				Rucher depot = rucherRepository.findByDepotTrue();
 				DistRucher dr = (depot.getId().intValue() > rucher.getId().intValue())
 						? drRepo.findByRucherStartAndRucherEnd(rucher, depot)
 						: drRepo.findByRucherStartAndRucherEnd(depot, rucher);
@@ -477,7 +477,7 @@ public class RucherController {
 	public String supprime(Model model, @PathVariable long rucherId) {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
-			Rucher rucherDepot = rucherRepository.findByDepotIsTrue();
+			Rucher rucherDepot = rucherRepository.findByDepotTrue();
 			Rucher rucher = rucherOpt.get();
 			if (rucher.getDepot()) {
 				model.addAttribute(Const.MESSAGE, "On ne peut pas supprimer le rucher dépôt");

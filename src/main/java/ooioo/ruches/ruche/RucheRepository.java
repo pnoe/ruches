@@ -19,7 +19,7 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 
 	Iterable<Ruche> findAllByOrderByNom();
 
-	Iterable<Ruche> findByActiveOrderByNom(boolean actif);
+	Iterable<Ruche> findByActiveTrueOrderByNom();
 
 	Iterable<Ruche> findByRucherIdOrderByNom(Long id);
 
@@ -63,7 +63,7 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	@Query(value = """
 			select r
 			  from Ruche r, Hausse h
-			  where r.rucher.depot = 'true' and h.ruche = r
+			  where r.rucher.depot = true and h.ruche = r
 			""")
 	Iterable<Ruche> findByHaussesAndDepot();
 
@@ -74,7 +74,7 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	@Query(value = """
 			select r
 			  from Ruche r
-			  where r.active = 'true' and r.rucher.depot = 'false'
+			  where r.active = true and r.rucher.depot = false
 			    and r not in
 			      (select distinct r
 			        from Ruche r, Evenement e
@@ -86,7 +86,7 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	@Query(value = """
 			select r
 			  from Ruche r
-			  where r.active = 'true' and r.id != ?1
+			  where r.active = true and r.id != ?1
 			  order by r.nom
 			""")
 	Iterable<Ruche> findActiveIdDiffOrderByNom(Long id);

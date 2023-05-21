@@ -246,7 +246,7 @@ public class EssaimController {
 		if (voirInactif != null && (boolean) voirInactif) {
 			 model.addAttribute(ESSAIMSRRR, essaimRepository.findEssaimRucheRucherOrderByNom());
 		} else {
-			 model.addAttribute(ESSAIMSRRR, essaimRepository.findEssaimRucheRucherOrderByNom(true));
+			 model.addAttribute(ESSAIMSRRR, essaimRepository.findEssaimActifRucheRucherOrderByNom());
 		}
 		return "essaim/essaimsListe";
 	}
@@ -492,7 +492,7 @@ public class EssaimController {
 			Ruche ruche = rucheRepository.findByEssaimId(essaimId);
 
 			model.addAttribute("rucheEssaim", ruche);
-			model.addAttribute("ruches", ruche == null ? rucheRepository.findByActiveOrderByNom(true)
+			model.addAttribute("ruches", ruche == null ? rucheRepository.findByActiveTrueOrderByNom()
 					: rucheRepository.findActiveIdDiffOrderByNom(ruche.getId()));
 
 		} else {

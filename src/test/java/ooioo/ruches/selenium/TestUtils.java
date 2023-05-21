@@ -113,7 +113,7 @@ public final class TestUtils {
 
 	public static final String getDepotId(WebDriver driver, String baseUrl) {
 		// recherche de l'id du dépot avec l'api rest
-		driver.get(baseUrl + "rest/ruchers/search/findByDepotIsTrue");
+		driver.get(baseUrl + "rest/ruchers/search/findByDepotTrue");
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode actualObj = mapper.readTree(driver.findElement(By.tagName("pre")).getText());
