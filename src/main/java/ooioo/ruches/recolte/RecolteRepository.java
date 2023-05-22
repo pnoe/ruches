@@ -26,7 +26,7 @@ public interface RecolteRepository extends CrudRepository<Recolte, Long> {
 				from recolte
 				where date_part('year', date) = ?1
 			""", nativeQuery = true)
-	Optional<Double> findPoidsMielByYear(Double year);
+	Optional<Double> findPoidsMielByYear(int year);
 
 	/*
 	 * Renvoie le poids de miel récolté dans les hausses pour l'année passée en paramètre

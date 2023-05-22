@@ -67,12 +67,13 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 			""")
 	Iterable<Essaim> findEssaimByActifSansRuche();
 
+	// Nombre d'essaims créés dans l'année passée en paramètre.
 	@Query(value = """
 			select count(*) as nbessaims
 			  from Essaim
 			  where date_part('year', dateAcquisition)=?1
 			""")
-	Integer countEssaimsCreesDate(Double date);
+	Integer countEssaimsCreesDate(int date);
 
 	Essaim findFirstByOrderByDateAcquisition();
 	Essaim findFirstByOrderByDateAcquisitionDesc();

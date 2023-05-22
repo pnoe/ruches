@@ -137,28 +137,31 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	Evenement findFirstByRucheAndHausseInAndTypeOrderByDateDesc(Ruche ruche, List<Hausse> hausse,
 			TypeEvenement typeEvenement);
 
+	// Nombre d'essaims dispersés dans l'année passée en paramètre.
 	@Query(value = """
 			select count(*) as nbeven
 			from Evenement
 			where type=ooioo.ruches.evenement.TypeEvenement.ESSAIMDISPERSION
 				and date_part('year', date)=?1
 			""")
-	Integer countDispersionEssaimParAnnee(Double date);
+	Integer countDispersionEssaimParAnnee(int date);
 
+	// Quantité de sucre distribuée dans l'année passée en paramètre.
 	@Query(value = """
 			select sum(cast(valeur as double)) as sucre
 			  from Evenement
 			  where type=ooioo.ruches.evenement.TypeEvenement.ESSAIMSUCRE
 				and date_part('year', date)=?1
 			""")
-	Double sucreEssaimParAnnee(Double date);
+	Double sucreEssaimParAnnee(int date);
 
+	// Nombre d'événements traitements faits dans l'année passée en paramètre.
 	@Query(value = """
 			select count(*) as nbtraitements
 			  from Evenement
 			  where type=ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENT
 				and date_part('year', date)=?1
 			""")
-	Integer countTraitementsEssaimParAnnee(Double date);
+	Integer countTraitementsEssaimParAnnee(int date);
 
 }

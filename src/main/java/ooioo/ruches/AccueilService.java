@@ -149,29 +149,95 @@ public class AccueilService {
 		long nbHaussesSurRuchesAvecEssaim = hausseRepository
 				.countByActiveTrueAndRucheNotNullAndRucheActiveTrueAndRucheEssaimNotNull();
 		model.addAttribute("nbHaussesSurRuchesAvecEssaim", nbHaussesSurRuchesAvecEssaim);
-
 		// Distances de butinage : les rayons des cercles de butinages affichables sur
 		// les cartes des ruchers.
 		model.addAttribute("rayonsButinage", rayonsButinage);
-		// Valeurs par année
-		
+		// Valeurs par année : poids de miel mis en pots, nb d'essaims, nb d'essaims
+		// créés, nb essaims dispersés,
+		// sucre, nb traitements.
+		Essaim premierEssaim = essaimRepository.findFirstByOrderByDateAcquisition();
+		// Calcul de l'année initiale du tableau à afficher.
+		int dateDebut;
+		if (premierEssaim == null) {
+			dateDebut = 1;
+		} else {
+			dateDebut = premierEssaim.getDateAcquisition().getYear();
+		}
+		// Calcul de l'année finale du tableau.
+		Essaim dernierEssaim = essaimRepository.findFirstByOrderByDateAcquisitionDesc();
+		Recolte derniereRecolte = recolteRepository.findFirstByOrderByDateDesc();
+		int dateFin;
+		if ((dernierEssaim == null) || (derniereRecolte == null)) {
+			dateFin = 0;
+		} else {
+			dateFin = java.lang.Math.max(dernierEssaim.getDateAcquisition().getYear(),
+					derniereRecolte.getDate().getYear());
+		}
+		List<Integer> annees = new ArrayList<>();
+		List<Double> pdsMiel = new ArrayList<>();
+		List<Integer> nbEssaims = new ArrayList<>();
+		List<Integer> nbCreationEssaims = new ArrayList<>();
+		List<Integer> nbDispersionEssaims = new ArrayList<>();
+		List<Double> sucreEssaims = new ArrayList<>();
+		List<Integer> nbTraitementsEssaims = new ArrayList<>();
+		Double pdsMielTotal = 0d;
+		Integer nbCreationEssaimsTotal = 0;
+		Integer nbDispersionEssaimsTotal = 0;
+		Double sucreEssaimsTotal = 0.0;
+		Integer nbTraitementsEssaimsTotal = 0;
+		for (int date = dateDebut; date <= dateFin; date++) {
+			annees.add(date);
+			Optional<Double> poidsOpt = recolteRepository.findPoidsMielByYear(date);
+			Double poids = poidsOpt.isPresent() ? poidsOpt.get() : 0.0;
+			pdsMiel.add(poids == null ? 0 : poids);
+			pdsMielTotal += (poids == null ? 0 : poids);
+			// Nombre d'essaims créés dans l'année (année acquisition = date)
+			Integer nbCree = essaimRepository.countEssaimsCreesDate(date);
+			nbCreationEssaimsTotal += nbCree;
+			nbCreationEssaims.add(nbCree);
+			Integer nbDisperse = evenementRepository.countDispersionEssaimParAnnee(date);
+			nbDispersionEssaimsTotal += nbDisperse;
+			nbDispersionEssaims.add(nbDisperse);
+			nbEssaims.add(nbCree - nbDisperse);
+			Double sucreAnneeEssaims = evenementRepository.sucreEssaimParAnnee(date);
+			if (sucreAnneeEssaims == null) {
+				sucreAnneeEssaims = 0.0;
+			}
+			sucreEssaimsTotal += sucreAnneeEssaims;
+			sucreEssaims.add(sucreAnneeEssaims);
+			Integer nbTraitements = evenementRepository.countTraitementsEssaimParAnnee(date);
+			nbTraitementsEssaimsTotal += nbTraitements;
+			nbTraitementsEssaims.add(nbTraitements);
+		}
+		pdsMiel.add(pdsMielTotal);
+		nbCreationEssaims.add(nbCreationEssaimsTotal);
+		nbTraitementsEssaims.add(nbTraitementsEssaimsTotal);
+		sucreEssaims.add(sucreEssaimsTotal);
+		nbDispersionEssaims.add(nbDispersionEssaimsTotal);
+		for (int j = 1; j < nbEssaims.size(); j++) {
+			nbEssaims.set(j, nbEssaims.get(j) + nbEssaims.get(j - 1));
+		}
+		model.addAttribute("annees", annees);
+		model.addAttribute("pdsMiel", pdsMiel);
+		model.addAttribute("nbEssaims", nbEssaims);
+		model.addAttribute("nbCreationEssaims", nbCreationEssaims);
+		model.addAttribute("nbDispersionEssaims", nbDispersionEssaims);
+		model.addAttribute("sucreEssaims", sucreEssaims);
+		model.addAttribute("nbTraitementsEssaims", nbTraitementsEssaims);
 		// Liste des ruches actives au dépôt avec essaim.
 		Iterable<Ruche> ruchesDepotEssaim = rucheRepository.findByActiveTrueAndEssaimNotNullAndRucherDepotTrue();
 		model.addAttribute("ruchesDepotEssaim", ruchesDepotEssaim);
 		// Liste des ruches actives au dépôt avec des hausses.
 		Iterable<Ruche> ruchesDepotHausses = rucheRepository.findByHaussesAndDepot();
 		model.addAttribute("ruchesDepotHausses", ruchesDepotHausses);
-
 		// Liste des ruches actives sans essaim qui ne sont pas au dépôt.
 		Iterable<Ruche> ruchesPasDepotSansEssaim = rucheRepository.findByActiveTrueAndEssaimNullAndRucherDepotFalse();
 		model.addAttribute("ruchesPasDepotSansEssaim", ruchesPasDepotSansEssaim);
-
 		// Essaims actifs hors ruche.
 		Iterable<Essaim> essaimsActifSansRuche = essaimRepository.findEssaimByActifSansRuche();
 		model.addAttribute("essaimsActifSansRuche", essaimsActifSansRuche);
-
-		// Liste des ruchers actifs (coordonées de leur entrée) à plus de 20m du barycentre de
-		// leurs ruches.
+		// Liste des ruchers actifs (coordonées de leur entrée) à plus de 20m du
+		// barycentre de leurs ruches.
 		model.addAttribute("distRuchersTropLoins", distRuchersTropLoins);
 		Iterable<Rucher> ruchers = rucherRepository.findByActifOrderByNom(true);
 		List<Rucher> ruchersMalCales = new ArrayList<>();
@@ -206,8 +272,6 @@ public class AccueilService {
 		}
 		model.addAttribute("ruchersMalCales", ruchersMalCales);
 		model.addAttribute("distances", distances);
-
-		
 		// Liste de ruches actives trop éloignées de leurs ruchers.
 		List<Ruche> ruchesTropLoins = new ArrayList<>();
 		for (Rucher rucher : ruchers) {
@@ -225,92 +289,15 @@ public class AccueilService {
 		}
 		model.addAttribute("ruchesTropLoins", ruchesTropLoins);
 		model.addAttribute("distRuchesTropLoins", distRuchesTropLoins);
-
-		
-		
 		// Liste des ruches actives et pas au dépôt sans événements depuis 4 semaines.
 		model.addAttribute("retardRucheEvenement", retardRucheEvenement);
 		LocalDateTime date4sem = LocalDateTime.now().minus(retardRucheEvenement, ChronoUnit.WEEKS);
 		Iterable<Ruche> ruchesPasDEvenement = rucheRepository.findPasDEvenementAvant(date4sem);
 		model.addAttribute("ruchesPasDEvenement", ruchesPasDEvenement);
-
-		// Liste des essaims actifs dont la date naissance de la reine est supérieure à date
-		// acquisition.
+		// Liste des essaims actifs dont la date naissance de la reine est supérieure à
+		// la date d'acquisition.
 		Iterable<Essaim> essaimDateNaissSupAcquis = essaimRepository.findEssaimDateNaissSupAcquis();
 		model.addAttribute("essaimDateNaissSupAcquis", essaimDateNaissSupAcquis);
-
-
-		Essaim premierEssaim = essaimRepository.findFirstByOrderByDateAcquisition();
-		int dateDebut;
-		if (premierEssaim == null) {
-			dateDebut = 1;
-		} else {
-			dateDebut = premierEssaim.getDateAcquisition().getYear();
-		}
-		Essaim dernierEssaim = essaimRepository.findFirstByOrderByDateAcquisitionDesc();
-		Recolte derniereRecolte = recolteRepository.findFirstByOrderByDateDesc();
-		int dateFin;
-		if ((dernierEssaim == null) || (derniereRecolte == null)) {
-			dateFin = 0;
-		} else {
-			dateFin = java.lang.Math.max(dernierEssaim.getDateAcquisition().getYear(),
-					derniereRecolte.getDate().getYear());
-		}
-		List<Integer> nbEssaims = new ArrayList<>();
-		List<Integer> nbCreationEssaims = new ArrayList<>();
-		List<Double> pdsMiel = new ArrayList<>();
-		List<Double> annees = new ArrayList<>();
-		Integer nbCreationEssaimsTotal = 0;
-		Integer nbDispersionEssaimsTotal = 0;
-		List<Integer> nbDispersionEssaims = new ArrayList<>();
-		Double sucreEssaimsTotal = 0.0;
-		List<Double> sucreEssaims = new ArrayList<>();
-		Integer nbTraitementsEssaimsTotal = 0;
-		List<Integer> nbTraitementsEssaims = new ArrayList<>();
-		Double pdsMielTotal = 0d;
-		for (int i = dateDebut; i <= dateFin; i++) {
-			Double date = Double.valueOf(i);
-			annees.add(date);
-			Optional<Double> poidsOpt = recolteRepository.findPoidsMielByYear(date);
-			Double poids = poidsOpt.isPresent() ? poidsOpt.get() : 0.0;
-			pdsMiel.add(poids == null ? 0 : poids);
-			pdsMielTotal += (poids == null ? 0 : poids);
-			Integer nbCree = essaimRepository.countEssaimsCreesDate(date);
-			nbCreationEssaimsTotal += nbCree;
-			nbCreationEssaims.add(nbCree);
-			Integer nbDisperse = evenementRepository.countDispersionEssaimParAnnee(date);
-			nbDispersionEssaimsTotal += nbDisperse;
-			nbDispersionEssaims.add(nbDisperse);
-			nbEssaims.add(nbCree - nbDisperse);
-			Double sucreAnneeEssaims = evenementRepository.sucreEssaimParAnnee(date);
-			if (sucreAnneeEssaims == null) {
-				sucreAnneeEssaims = 0.0;
-			}
-			sucreEssaimsTotal += sucreAnneeEssaims;
-			sucreEssaims.add(sucreAnneeEssaims);
-			Integer nbTraitements = evenementRepository.countTraitementsEssaimParAnnee(date);
-			nbTraitementsEssaimsTotal += nbTraitements;
-			nbTraitementsEssaims.add(nbTraitements);
-		}
-		pdsMiel.add(pdsMielTotal);
-		nbCreationEssaims.add(nbCreationEssaimsTotal);
-		nbTraitementsEssaims.add(nbTraitementsEssaimsTotal);
-		sucreEssaims.add(sucreEssaimsTotal);
-		nbDispersionEssaims.add(nbDispersionEssaimsTotal);
-		for (int j = 1; j < nbEssaims.size(); j++) {
-			nbEssaims.set(j, nbEssaims.get(j) + nbEssaims.get(j - 1));
-		}
-		model.addAttribute("nbTraitementsEssaims", nbTraitementsEssaims);
-		model.addAttribute("sucreEssaims", sucreEssaims);
-		model.addAttribute("nbEssaims", nbEssaims);
-		model.addAttribute("nbDispersionEssaims", nbDispersionEssaims);
-		model.addAttribute("nbCreationEssaims", nbCreationEssaims);
-		model.addAttribute("pdsMiel", pdsMiel);
-		model.addAttribute("annees", annees);
-
-
-
-
 	}
 
 }
