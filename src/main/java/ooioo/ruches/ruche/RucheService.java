@@ -14,12 +14,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import ooioo.ruches.Const;
+import ooioo.ruches.LatLon;
+import ooioo.ruches.Nom;
+import ooioo.ruches.Utils;
 import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
 import ooioo.ruches.hausse.Hausse;
 import ooioo.ruches.hausse.HausseRepository;
+import ooioo.ruches.ruche.type.RucheTypeRepository;
 import ooioo.ruches.rucher.Rucher;
+import ooioo.ruches.rucher.RucherRepository;
+import ooioo.ruches.rucher.RucherService;
 
 @Service
 public class RucheService {
@@ -32,6 +38,12 @@ public class RucheService {
 	private HausseRepository hausseRepository;
 	@Autowired
 	private RucheRepository rucheRepository;
+	@Autowired
+	private RucheTypeRepository rucheTypeRepository;
+	@Autowired
+	private RucherRepository rucherRepository;
+	@Autowired
+	private RucherService rucherService;
 
 	/**
 	 * Historique de l'ajout des hausses sur une ruche
@@ -217,5 +229,26 @@ public class RucheService {
 			model.addAttribute("evensPoidsRuches", evensPoidsRuches);
 		}
 	}
+	
+	/**
+	 * Appel du formulaire pour la création d'une ruche. 
+	 */
+	public void cree(HttpSession session, Model model) {
+		List<String> noms = new ArrayList<>();
+		for (Nom rucheNom : rucheRepository.findAllProjectedBy()) {
+			noms.add(rucheNom.nom());
+		}
+		model.addAttribute(Const.RUCHENOMS, noms);
+		// récupération des coordonnées du dépôt
+		Ruche ruche = new Ruche();
+		ruche.setDateAcquisition(Utils.dateDecal(session));
+		Rucher rucher = rucherRepository.findByDepotTrue();
+		LatLon latLon = rucherService.dispersion(rucher.getLatitude(), rucher.getLongitude());
+		ruche.setLatitude(latLon.lat());
+		ruche.setLongitude(latLon.lon());
+		model.addAttribute(Const.RUCHE, ruche);
+		model.addAttribute(Const.RUCHETYPES, rucheTypeRepository.findAll());
+	}
+	
 
 }

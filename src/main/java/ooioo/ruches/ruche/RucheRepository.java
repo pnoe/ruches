@@ -67,7 +67,7 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	// Les ruches actives au dépôt qui ont un essaim
 	Iterable<Ruche> findByActiveTrueAndEssaimNotNullAndRucherDepotTrue();
 
-	Iterable<Ruche> findByEssaimNotNullAndRucherDepotTrueAndProductionTrue();
+	// Iterable<Ruche> findByEssaimNotNullAndRucherDepotTrueAndProductionTrue();
 
 	// Les ruches actives au dépôt qui ont au moins une hausse.
 	@Query(value = """

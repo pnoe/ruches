@@ -32,7 +32,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ooioo.ruches.Const;
-import ooioo.ruches.LatLon;
 import ooioo.ruches.Nom;
 import ooioo.ruches.Utils;
 import ooioo.ruches.essaim.Essaim;
@@ -210,20 +209,7 @@ public class RucheController {
 	 */
 	@GetMapping("/cree")
 	public String cree(HttpSession session, Model model) {
-		List<String> noms = new ArrayList<>();
-		for (Nom rucheNom : rucheRepository.findAllProjectedBy()) {
-			noms.add(rucheNom.nom());
-		}
-		model.addAttribute(Const.RUCHENOMS, noms);
-		// récupération des coordonnées du dépôt
-		Ruche ruche = new Ruche();
-		ruche.setDateAcquisition(Utils.dateDecal(session));
-		Rucher rucher = rucherRepository.findByDepotTrue();
-		LatLon latLon = rucherService.dispersion(rucher.getLatitude(), rucher.getLongitude());
-		ruche.setLatitude(latLon.lat());
-		ruche.setLongitude(latLon.lon());
-		model.addAttribute(Const.RUCHE, ruche);
-		model.addAttribute(Const.RUCHETYPES, rucheTypeRepository.findAll());
+		rucheService.cree(session, model);
 		return RUCHE_RUCHEFORM;
 	}
 
