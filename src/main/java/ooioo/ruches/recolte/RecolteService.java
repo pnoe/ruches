@@ -44,7 +44,7 @@ public class RecolteService {
 			Optional<Integer> pMHOpt = recolteRepository
 					.findPoidsHaussesByYear(Double.valueOf((double) debutAnnee + i));
 			poidsMielHausses[i] = pMHOpt.isPresent() ? pMHOpt.get() / 1000 : 0;
-			Optional<Double> pMPOpt = recolteRepository.findPoidsMielByYear(Double.valueOf((double) debutAnnee + i));
+			Optional<Double> pMPOpt = recolteRepository.findPoidsMielByYear(debutAnnee + i);
 			poidsMielPots[i] = pMPOpt.isPresent() ? pMPOpt.get().intValue() / 1000 : 0;
 		}
 		float[] nbEssaims = new float[dureeAns]; // nombre d'essaims actifs par année de production
