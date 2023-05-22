@@ -80,7 +80,7 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 	@Query(value = """
 			select essaim
 			  from Essaim essaim
-			  where essaim.reineDateNaissance > essaim.dateAcquisition
+			  where essaim.actif = true and essaim.reineDateNaissance > essaim.dateAcquisition
 			""")
 	Iterable<Essaim> findEssaimDateNaissSupAcquis();
 

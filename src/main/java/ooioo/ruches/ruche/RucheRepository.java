@@ -23,6 +23,8 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 
 	Iterable<Ruche> findByRucherIdOrderByNom(Long id);
 
+	List<Ruche> findByRucherIdAndActiveTrueOrderByNom(Long id);
+	
 	Iterable<Ruche> findByRucherIdNotOrderByNom(Long id);
 
 	Ruche findByEssaimId(Long id);
@@ -51,24 +53,32 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	List<Ruche> findByActiveTrueAndTypeIdOrderByNom(Long id);
 	
 	long countByActiveTrue();
+	
+	long countByActiveTrueAndProductionTrue();
 
 	long countByEssaimNotNullAndActiveTrue();
 
 	long countByActiveTrueAndRucherDepotTrue();
 
-	// Les ruches au dépôt qui ont un essaim
-	Iterable<Ruche> findByEssaimNotNullAndRucherDepotTrue();
+	long countByActiveTrueAndRucherDepotTrueAndProductionTrue();
+	
+	long countByEssaimNotNullAndActiveTrueAndProductionTrue();
 
-	// Les ruches au dépôt qui ont au moins une hausse
+	// Les ruches actives au dépôt qui ont un essaim
+	Iterable<Ruche> findByActiveTrueAndEssaimNotNullAndRucherDepotTrue();
+
+	Iterable<Ruche> findByEssaimNotNullAndRucherDepotTrueAndProductionTrue();
+
+	// Les ruches actives au dépôt qui ont au moins une hausse.
 	@Query(value = """
 			select r
 			  from Ruche r, Hausse h
-			  where r.rucher.depot = true and h.ruche = r
+			  where r.active = true and r.rucher.depot = true and h.ruche = r
 			""")
 	Iterable<Ruche> findByHaussesAndDepot();
 
-	// Les ruches qui ne sont pas au dépôt et qui n'ont pas d'essaim
-	Iterable<Ruche> findByEssaimNullAndRucherDepotFalse();
+	// Les ruches actives qui ne sont pas au dépôt et qui n'ont pas d'essaim
+	Iterable<Ruche> findByActiveTrueAndEssaimNullAndRucherDepotFalse();
 
 	// Les ruches actives et pas au dépôt qui n'ont pas eu d'événement depuis "date"
 	@Query(value = """

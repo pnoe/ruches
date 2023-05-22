@@ -79,7 +79,8 @@ public class AccueilService {
 		Iterable<Rucher> ruchers = rucherRepository.findAll();
 		RestTemplate restTemplate = new RestTemplate();
 		if (reset) {
-			// Effacer la table dist_rucher sinon les distances déjà calculées apparaîtront deux fois
+			// Effacer la table dist_rucher sinon les distances déjà calculées apparaîtront
+			// deux fois
 			drRepo.deleteAll();
 		}
 		for (Rucher r1 : ruchers) {
@@ -101,31 +102,144 @@ public class AccueilService {
 						Itineraire result = restTemplate.getForObject(uri.toString(), Itineraire.class);
 						dr.setDist(Math.round(result.distance()));
 						dr.setTemps(Math.round(result.duration()));
-					} catch (HttpClientErrorException|HttpServerErrorException e) {
+					} catch (HttpClientErrorException | HttpServerErrorException e) {
 						// erreur 4xx ou 5xx
 						logger.error(e.getMessage());
 					}
 					drRepo.save(dr);
-					logger.info("{} => {}, distance {}m et temps {}min, enregistrés", r1.getNom(), r2.getNom(), dr.getDist(), dr.getTemps());
+					logger.info("{} => {}, distance {}m et temps {}min, enregistrés", r1.getNom(), r2.getNom(),
+							dr.getDist(), dr.getTemps());
 				}
 			}
 		}
 	}
 
+	/**
+	 * Infos
+	 */
 	public void infos(Model model) {
-		model.addAttribute("rayonsButinage", rayonsButinage);
+		// Nombre de ruchers actifs.
+		long nbRuchers = rucherRepository.countByActifTrue();
+		model.addAttribute("nbRuchers", nbRuchers);
+		// Nombre de ruches actives, nb production, nb élevage
 		long nbRuches = rucheRepository.countByActiveTrue();
+		long nbRuchesProd = rucheRepository.countByActiveTrueAndProductionTrue();
+		model.addAttribute("nbRuches", nbRuches);
+		model.addAttribute("nbRuchesProd", nbRuchesProd);
+		model.addAttribute("nbRuchesElev", nbRuches - nbRuchesProd);
+		// Hausses actives.
+		long nbHausses = hausseRepository.countByActiveTrue();
+		model.addAttribute("nbHausses", nbHausses);
+		// Ruches actives au dépôt, nb production, nb élevage
+		long nbRuchesAuDepot = rucheRepository.countByActiveTrueAndRucherDepotTrue();
+		model.addAttribute("nbRuchesAuDepot", nbRuchesAuDepot);
+		long nbRuchesAuDepotProd = rucheRepository.countByActiveTrueAndRucherDepotTrueAndProductionTrue();
+		model.addAttribute("nbRuchesAuDepotProd", nbRuchesAuDepotProd);
+		model.addAttribute("nbRuchesAuDepotElev", nbRuchesAuDepot - nbRuchesAuDepotProd);
+		// Hausses actives non posées.
+		long nbHaussesHorsRuche = hausseRepository.countByActiveTrueAndRucheNull();
+		model.addAttribute("nbHaussesHorsRuche", nbHaussesHorsRuche);
+		// Nombre de ruches actives avec essaim
 		long nbRuchesAvecEssaim = rucheRepository.countByEssaimNotNullAndActiveTrue();
+		model.addAttribute("nbRuchesAvecEssaim", nbRuchesAvecEssaim);
+		long nbRuchesAvecEssaimProd = rucheRepository.countByEssaimNotNullAndActiveTrueAndProductionTrue();
+		model.addAttribute("nbRuchesAvecEssaimProd", nbRuchesAvecEssaimProd);
+		model.addAttribute("nbRuchesAvecEssaimElev", nbRuchesAvecEssaim - nbRuchesAvecEssaimProd);
+		// Nombre de hausses actives posées sur des ruches avec essaim.
 		long nbHaussesSurRuchesAvecEssaim = hausseRepository
 				.countByActiveTrueAndRucheNotNullAndRucheActiveTrueAndRucheEssaimNotNull();
-		long nbHausses = hausseRepository.countByActiveTrue();
-		long nbHaussesHorsRuche = hausseRepository.countByActiveTrueAndRucheNull();
-		long nbRuchesAuDepot = rucheRepository.countByActiveTrueAndRucherDepotTrue();
-		long nbRuchers = rucherRepository.countByActifTrue();
-		Iterable<Ruche> ruchesDepotEssaim = rucheRepository.findByEssaimNotNullAndRucherDepotTrue();
+		model.addAttribute("nbHaussesSurRuchesAvecEssaim", nbHaussesSurRuchesAvecEssaim);
+
+		// Distances de butinage : les rayons des cercles de butinages affichables sur
+		// les cartes des ruchers.
+		model.addAttribute("rayonsButinage", rayonsButinage);
+		// Valeurs par année
+		
+		// Liste des ruches actives au dépôt avec essaim.
+		Iterable<Ruche> ruchesDepotEssaim = rucheRepository.findByActiveTrueAndEssaimNotNullAndRucherDepotTrue();
+		model.addAttribute("ruchesDepotEssaim", ruchesDepotEssaim);
+		// Liste des ruches actives au dépôt avec des hausses.
 		Iterable<Ruche> ruchesDepotHausses = rucheRepository.findByHaussesAndDepot();
-		Iterable<Ruche> ruchesPasDepotSansEssaim = rucheRepository.findByEssaimNullAndRucherDepotFalse();
+		model.addAttribute("ruchesDepotHausses", ruchesDepotHausses);
+
+		// Liste des ruches actives sans essaim qui ne sont pas au dépôt.
+		Iterable<Ruche> ruchesPasDepotSansEssaim = rucheRepository.findByActiveTrueAndEssaimNullAndRucherDepotFalse();
+		model.addAttribute("ruchesPasDepotSansEssaim", ruchesPasDepotSansEssaim);
+
+		// Essaims actifs hors ruche.
 		Iterable<Essaim> essaimsActifSansRuche = essaimRepository.findEssaimByActifSansRuche();
+		model.addAttribute("essaimsActifSansRuche", essaimsActifSansRuche);
+
+		// Liste des ruchers actifs (coordonées de leur entrée) à plus de 20m du barycentre de
+		// leurs ruches.
+		model.addAttribute("distRuchersTropLoins", distRuchersTropLoins);
+		Iterable<Rucher> ruchers = rucherRepository.findByActifOrderByNom(true);
+		List<Rucher> ruchersMalCales = new ArrayList<>();
+		List<Double> distances = new ArrayList<>();
+		for (Rucher rucher : ruchers) {
+			// Calcul de la latitude et longitude du barycentre des ruches.
+			double diametreTerre = 2 * Utils.rTerreLat(rucher.getLatitude());
+			Float longitude;
+			Float latitude = 0f;
+			Iterable<Ruche> ruches = rucheRepository.findByRucherIdAndActiveTrueOrderByNom(rucher.getId());
+			int nbRuches2 = 0;
+			double xlon = 0d;
+			double ylon = 0d;
+			for (Ruche ruche : ruches) {
+				nbRuches2++;
+				Float longrad = (float) (ruche.getLongitude() * Math.PI / 180.0d);
+				xlon += Math.cos(longrad);
+				ylon += Math.sin(longrad);
+				latitude += ruche.getLatitude();
+			}
+			if (nbRuches2 == 0) {
+				continue;
+			}
+			longitude = (float) (Math.atan2(ylon, xlon) * 180d / Math.PI);
+			latitude /= nbRuches2;
+			double dist = Utils.distance(diametreTerre, latitude, rucher.getLatitude(), longitude,
+					rucher.getLongitude());
+			if (dist > distRuchersTropLoins) {
+				ruchersMalCales.add(rucher);
+				distances.add(dist);
+			}
+		}
+		model.addAttribute("ruchersMalCales", ruchersMalCales);
+		model.addAttribute("distances", distances);
+
+		
+		// Liste de ruches actives trop éloignées de leurs ruchers.
+		List<Ruche> ruchesTropLoins = new ArrayList<>();
+		for (Rucher rucher : ruchers) {
+			Float longRucher = rucher.getLongitude();
+			Float latRucher = rucher.getLatitude();
+			Iterable<Ruche> ruches = rucheRepository.findByRucherIdAndActiveTrueOrderByNom(rucher.getId());
+			double diametreTerre = ((rucher.getAltitude() == null) ? 0 : rucher.getAltitude())
+					+ 2 * Utils.rTerreLat(rucher.getLatitude());
+			for (Ruche ruche : ruches) {
+				if (Utils.distance(diametreTerre, latRucher, ruche.getLatitude(), longRucher,
+						ruche.getLongitude()) > distRuchesTropLoins) {
+					ruchesTropLoins.add(ruche);
+				}
+			}
+		}
+		model.addAttribute("ruchesTropLoins", ruchesTropLoins);
+		model.addAttribute("distRuchesTropLoins", distRuchesTropLoins);
+
+		
+		
+		// Liste des ruches actives et pas au dépôt sans événements depuis 4 semaines.
+		model.addAttribute("retardRucheEvenement", retardRucheEvenement);
+		LocalDateTime date4sem = LocalDateTime.now().minus(retardRucheEvenement, ChronoUnit.WEEKS);
+		Iterable<Ruche> ruchesPasDEvenement = rucheRepository.findPasDEvenementAvant(date4sem);
+		model.addAttribute("ruchesPasDEvenement", ruchesPasDEvenement);
+
+		// Liste des essaims actifs dont la date naissance de la reine est supérieure à date
+		// acquisition.
+		Iterable<Essaim> essaimDateNaissSupAcquis = essaimRepository.findEssaimDateNaissSupAcquis();
+		model.addAttribute("essaimDateNaissSupAcquis", essaimDateNaissSupAcquis);
+
+
 		Essaim premierEssaim = essaimRepository.findFirstByOrderByDateAcquisition();
 		int dateDebut;
 		if (premierEssaim == null) {
@@ -193,72 +307,10 @@ public class AccueilService {
 		model.addAttribute("nbCreationEssaims", nbCreationEssaims);
 		model.addAttribute("pdsMiel", pdsMiel);
 		model.addAttribute("annees", annees);
-		model.addAttribute("nbRuchesAuDepot", nbRuchesAuDepot);
-		model.addAttribute("nbRuches", nbRuches);
-		model.addAttribute("nbRuchers", nbRuchers);
-		model.addAttribute("nbRuchesAvecEssaim", nbRuchesAvecEssaim);
-		model.addAttribute("nbHausses", nbHausses);
-		model.addAttribute("nbHaussesHorsRuche", nbHaussesHorsRuche);
-		model.addAttribute("nbHaussesSurRuchesAvecEssaim", nbHaussesSurRuchesAvecEssaim);
-		model.addAttribute("ruchesDepotEssaim", ruchesDepotEssaim);
-		model.addAttribute("ruchesDepotHausses", ruchesDepotHausses);
-		model.addAttribute("ruchesPasDepotSansEssaim", ruchesPasDepotSansEssaim);
-		model.addAttribute("essaimsActifSansRuche", essaimsActifSansRuche);
-		// ruches trop éloignées de leurs ruchers
-		Iterable<Rucher> ruchers = rucherRepository.findByActifOrderByNom(true);
-		List<Ruche> ruchesTropLoins = new ArrayList<>();
-		for (Rucher rucher : ruchers) {
-			Float longRucher = rucher.getLongitude();
-			Float latRucher = rucher.getLatitude();
-			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucher.getId());
-			double diametreTerre = ((rucher.getAltitude() == null) ? 0 : rucher.getAltitude()) +
-					2 * Utils.rTerreLat(rucher.getLatitude());
-			for (Ruche ruche : ruches) {
-				if (Utils.distance(diametreTerre, latRucher, ruche.getLatitude(), longRucher,
-						ruche.getLongitude()) > distRuchesTropLoins) {
-					ruchesTropLoins.add(ruche);
-				}
-			}
-		}
-		model.addAttribute("ruchesTropLoins", ruchesTropLoins);
-		model.addAttribute("distRuchesTropLoins", distRuchesTropLoins);
-		// rucher trop éloignés du barycentre de ses ruches
-		List<Rucher> ruchersMalCales = new ArrayList<>();
-		List<Double> distances = new ArrayList<>();
-		for (Rucher rucher : ruchers) {
-			double diametreTerre = 2 * Utils.rTerreLat(rucher.getLatitude());
-			Float longitude;
-			Float latitude = 0f;
-			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucher.getId());
-			int nbRuches2 = 0;
-			double xlon = 0d;
-			double ylon = 0d;
-			for (Ruche ruche : ruches) {
-				nbRuches2++;
-				Float longrad = (float) (ruche.getLongitude() * Math.PI / 180.0d);
-				xlon += Math.cos(longrad);
-				ylon += Math.sin(longrad);
-				latitude += ruche.getLatitude();
-			}
-			if (nbRuches2 == 0)
-				continue;
-			longitude = (float) (Math.atan2(ylon, xlon) * 180d / Math.PI);
-			latitude /= nbRuches2;
-			double dist = Utils.distance(diametreTerre, latitude, rucher.getLatitude(), longitude, rucher.getLongitude());
-			if (dist > distRuchersTropLoins) {
-				ruchersMalCales.add(rucher);
-				distances.add(dist);
-			}
-		}
-		model.addAttribute("ruchersMalCales", ruchersMalCales);
-		model.addAttribute("distances", distances);
-		model.addAttribute("distRuchersTropLoins", distRuchersTropLoins);
-		LocalDateTime date = LocalDateTime.now().minus(retardRucheEvenement, ChronoUnit.WEEKS);
-		Iterable<Ruche> ruchesPasDEvenement = rucheRepository.findPasDEvenementAvant(date);
-		model.addAttribute("ruchesPasDEvenement", ruchesPasDEvenement);
-		model.addAttribute("retardRucheEvenement", retardRucheEvenement);
-		Iterable<Essaim> essaimDateNaissSupAcquis = essaimRepository.findEssaimDateNaissSupAcquis();
-		model.addAttribute("essaimDateNaissSupAcquis", essaimDateNaissSupAcquis);
+
+
+
+
 	}
 
 }

@@ -9,12 +9,11 @@
 			searching : false,
 			info : false
 		});
-		$( ".accordion" ).accordion({
+		$(".accordion").accordion({
 			active : false,
 			collapsible : true
 		});
 	});
-	
 </script>
 </head>
 <body>
@@ -29,13 +28,16 @@
 		</div>
 		<div class="row">
 			<ul>
-				<li th:text="${nbRuchers} + ' ' + #{ruchersdepot}"></li>
+				<li th:text="|${nbRuchers} #{ruchersdepot}|"></li>
 				<li
-					th:text="${nbRuches} + ' ' + #{rucheset} + ${nbHausses} + ' ' + #{haussesactives}"></li>
+					th:text="|${nbRuches} #{ruches} (${nbRuchesProd} #{production} + ${nbRuchesElev} #{elevage})|"></li>
+				<li th:text="|${nbHausses} #{hausses}|"></li>
 				<li
-					th:text="${nbRuchesAuDepot} + ' ' + #{ruchesaudepot} + ${nbHaussesHorsRuche} + ' ' + #{haussesnonposees}"></li>
+					th:text="|${nbRuchesAuDepot} #{ruchesaudepot} (${nbRuchesAuDepotProd} #{production} + ${nbRuchesAuDepotElev} #{elevage})|"></li>
+				<li th:text="|${nbHaussesHorsRuche} #{haussesnonposees}|"></li>
 				<li
-					th:text="${nbRuchesAvecEssaim} + ' ' + #{ruchesavecessaim} + ${nbHaussesSurRuchesAvecEssaim} + ' ' + #{haussesposees}"></li>
+					th:text="|${nbRuchesAvecEssaim} #{ruchesavecessaim} (${nbRuchesAvecEssaimProd} #{production} + ${nbRuchesAvecEssaimElev} #{elevage})|"></li>
+				<li th:text="|${nbHaussesSurRuchesAvecEssaim} #{haussesposees}|"></li>
 			</ul>
 		</div>
 	</div>
@@ -51,7 +53,8 @@
 			<tbody>
 				<tr th:each="rayon : ${rayonsButinage}">
 					<td th:text="${#numbers.formatDecimal(rayon/1000.0,1,3)}"></td>
-					<td th:text="${#numbers.formatDecimal(rayon*rayon*3.141592653589793/1000000.0,1,3)}"></td>
+					<td
+						th:text="${#numbers.formatDecimal(rayon*rayon*3.141592653589793/1000000.0,1,3)}"></td>
 				</tr>
 
 			</tbody>
@@ -76,10 +79,9 @@
 				</tr>
 				<tr>
 					<th scope="row" th:text="#{nbEssaims}"></th>
-					<td th:each="nbE : ${nbEssaims}"
-						th:text="${nbE}"></td>
+					<td th:each="nbE : ${nbEssaims}" th:text="${nbE}"></td>
 					<td></td>
-				</tr>	
+				</tr>
 				<tr>
 					<th scope="row" th:text="#{poidsMiel_nbEssaims}"></th>
 					<td th:each="nbE : ${nbEssaims}"
@@ -88,13 +90,11 @@
 				</tr>
 				<tr>
 					<th scope="row" th:text="#{nbEssaimsCrees}"></th>
-					<td th:each="nbCree : ${nbCreationEssaims}"
-						th:text="${nbCree}"></td>
+					<td th:each="nbCree : ${nbCreationEssaims}" th:text="${nbCree}"></td>
 				</tr>
 				<tr>
 					<th scope="row" th:text="#{nbEssaimsDisperses}"></th>
-					<td th:each="nbDisp : ${nbDispersionEssaims}"
-						th:text="${nbDisp}"></td>
+					<td th:each="nbDisp : ${nbDispersionEssaims}" th:text="${nbDisp}"></td>
 				</tr>
 				<tr>
 					<th scope="row" th:text="#{actionSucre}"></th>
@@ -111,45 +111,49 @@
 	</div>
 	<div th:if="${#arrays.length(ruchesDepotEssaim)} &gt; 0"
 		class="container-fluid accordion">
-		<h1 class="item" th:text="${#arrays.length(ruchesDepotEssaim)} + ' ' +
+		<h1 class="item"
+			th:text="${#arrays.length(ruchesDepotEssaim)} + ' ' +
 			#{ruchesAvecEssaimDepot}"></h1>
 		<div>
-		<table class="table table-bordered table-striped datatable-tri dt-responsive">
-			<thead>
-				<tr>
-					<th scope="col" th:text="#{nom}"></th>
-					<th scope="col" th:text="#{essaim}"></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="rucheDepotEssaim : ${ruchesDepotEssaim}">
-					<td><a th:href="@{'/ruche/'+${rucheDepotEssaim.id}}"
-						th:text="${rucheDepotEssaim.nom}"></a></td>
-					<td><a th:href="@{'/essaim/'+${rucheDepotEssaim.essaim?.id}}"
-						th:text="${rucheDepotEssaim.essaim?.nom}"></a></td>
-				</tr>
-			</tbody>
-		</table>
+			<table
+				class="table table-bordered table-striped datatable-tri dt-responsive">
+				<thead>
+					<tr>
+						<th scope="col" th:text="#{nom}"></th>
+						<th scope="col" th:text="#{essaim}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="rucheDepotEssaim : ${ruchesDepotEssaim}">
+						<td><a th:href="@{'/ruche/'+${rucheDepotEssaim.id}}"
+							th:text="${rucheDepotEssaim.nom}"></a></td>
+						<td><a th:href="@{'/essaim/'+${rucheDepotEssaim.essaim?.id}}"
+							th:text="${rucheDepotEssaim.essaim?.nom}"></a></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 	<div th:if="${#arrays.length(ruchesDepotHausses)} &gt; 0"
 		class="container-fluid accordion">
-		<h1 class="item" th:text="${#arrays.length(ruchesDepotHausses)} + ' ' +
+		<h1 class="item"
+			th:text="${#arrays.length(ruchesDepotHausses)} + ' ' +
 			#{ruchesAvecHaussesDepot}"></h1>
 		<div>
-		<table class="table table-bordered table-striped datatable-tri dt-responsive">
-			<thead>
-				<tr>
-					<th scope="col" th:text="#{nom}"></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="rucheDepotHausses : ${ruchesDepotHausses}">
-					<td><a th:href="@{'/ruche/'+${rucheDepotHausses.id}}"
-						th:text="${rucheDepotHausses.nom}"></a></td>
-				</tr>
-			</tbody>
-		</table>
+			<table
+				class="table table-bordered table-striped datatable-tri dt-responsive">
+				<thead>
+					<tr>
+						<th scope="col" th:text="#{nom}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="rucheDepotHausses : ${ruchesDepotHausses}">
+						<td><a th:href="@{'/ruche/'+${rucheDepotHausses.id}}"
+							th:text="${rucheDepotHausses.nom}"></a></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 	<div th:if="${#arrays.length(ruchesPasDepotSansEssaim)} &gt; 0"
@@ -158,43 +162,46 @@
 			th:text="${#arrays.length(ruchesPasDepotSansEssaim)} + ' ' + 
 				#{ruchesSansEssaimPasDepot}"></h1>
 		<div>
-		<table class="table table-bordered table-striped datatable-tri dt-responsive">
-			<thead>
-				<tr>
-					<th scope="col" th:text="#{nom}"></th>
-					<th scope="col" th:text="#{rucher}"></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="ruchePasDepotSansEssaim : ${ruchesPasDepotSansEssaim}">
-					<td><a th:href="@{'/ruche/'+${ruchePasDepotSansEssaim.id}}"
-						th:text="${ruchePasDepotSansEssaim.nom}"></a></td>
-					<td><a
-						th:href="@{'/rucher/'+${ruchePasDepotSansEssaim.rucher?.id}}"
-						th:text="${ruchePasDepotSansEssaim.rucher?.nom}"></a></td>
-				</tr>
-			</tbody>
-		</table>
+			<table
+				class="table table-bordered table-striped datatable-tri dt-responsive">
+				<thead>
+					<tr>
+						<th scope="col" th:text="#{nom}"></th>
+						<th scope="col" th:text="#{rucher}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="ruchePasDepotSansEssaim : ${ruchesPasDepotSansEssaim}">
+						<td><a th:href="@{'/ruche/'+${ruchePasDepotSansEssaim.id}}"
+							th:text="${ruchePasDepotSansEssaim.nom}"></a></td>
+						<td><a
+							th:href="@{'/rucher/'+${ruchePasDepotSansEssaim.rucher?.id}}"
+							th:text="${ruchePasDepotSansEssaim.rucher?.nom}"></a></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 	<div th:if="${#arrays.length(essaimsActifSansRuche)} &gt; 0"
 		class="container-fluid accordion">
-		<h1 class="item" th:text="${#arrays.length(essaimsActifSansRuche)} + ' ' +
-			#{essaimsActifsHorsRuche}"></h1>
+		<h1 class="item"
+			th:text="${#arrays.length(essaimsActifSansRuche)} + ' ' +
+			#{essaimsHorsRuche}"></h1>
 		<div>
-		<table class="table table-bordered table-striped datatable-tri dt-responsive">
-			<thead>
-				<tr>
-					<th scope="col" th:text="#{nom}"></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="essaimActifSansRuche : ${essaimsActifSansRuche}">
-					<td><a th:href="@{'/essaim/'+${essaimActifSansRuche.id}}"
-						th:text="${essaimActifSansRuche.nom}"></a></td>
-				</tr>
-			</tbody>
-		</table>
+			<table
+				class="table table-bordered table-striped datatable-tri dt-responsive">
+				<thead>
+					<tr>
+						<th scope="col" th:text="#{nom}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="essaimActifSansRuche : ${essaimsActifSansRuche}">
+						<td><a th:href="@{'/essaim/'+${essaimActifSansRuche.id}}"
+							th:text="${essaimActifSansRuche.nom}"></a></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 	<div th:if="${#arrays.length(ruchersMalCales)} &gt; 0"
@@ -203,45 +210,48 @@
 			th:text="${#arrays.length(ruchersMalCales)} + ' ' +
 			#{ruchersLoinDeLeursRuches(${#numbers.formatDecimal(distRuchersTropLoins,1,0)})}"></h1>
 		<div>
-		<table class="table table-bordered table-striped datatable-tri dt-responsive">
-			<thead>
-				<tr>
-					<th scope="col" th:text="#{nom}"></th>
-					<th scope="col" th:text="#{Distance}"></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="rucherMalCale : ${ruchersMalCales}">
-					<td><a th:href="@{'/rucher/'+${rucherMalCale.id}}"
-						th:text="${rucherMalCale.nom}"></a></td>
-					<td
-						th:text="${#numbers.formatDecimal(distances[rucherMalCaleStat.index],1,0)}"></td>
-				</tr>
-			</tbody>
-		</table>
+			<table
+				class="table table-bordered table-striped datatable-tri dt-responsive">
+				<thead>
+					<tr>
+						<th scope="col" th:text="#{nom}"></th>
+						<th scope="col" th:text="#{Distance}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="rucherMalCale : ${ruchersMalCales}">
+						<td><a th:href="@{'/rucher/'+${rucherMalCale.id}}"
+							th:text="${rucherMalCale.nom}"></a></td>
+						<td
+							th:text="${#numbers.formatDecimal(distances[rucherMalCaleStat.index],1,0)}"></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 	<div th:if="${#arrays.length(ruchesTropLoins)} &gt; 0"
 		class="container-fluid accordion">
-		<h1 class="item" th:text="${#arrays.length(ruchesTropLoins)} + ' ' +
+		<h1 class="item"
+			th:text="${#arrays.length(ruchesTropLoins)} + ' ' +
 			#{ruchesAPlusde(${#numbers.formatDecimal(distRuchesTropLoins,1,0)})}"></h1>
 		<div>
-		<table class="table table-bordered table-striped datatable-tri dt-responsive">
-			<thead>
-				<tr>
-					<th scope="col" th:text="#{nom}"></th>
-					<th scope="col" th:text="#{rucher}"></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="rucheTropLoin : ${ruchesTropLoins}">
-					<td><a th:href="@{'/ruche/'+${rucheTropLoin.id}}"
-						th:text="${rucheTropLoin.nom}"></a></td>
-					<td><a th:href="@{'/rucher/'+${rucheTropLoin.rucher?.id}}"
-						th:text="${rucheTropLoin.rucher?.nom}"></a></td>
-				</tr>
-			</tbody>
-		</table>
+			<table
+				class="table table-bordered table-striped datatable-tri dt-responsive">
+				<thead>
+					<tr>
+						<th scope="col" th:text="#{nom}"></th>
+						<th scope="col" th:text="#{rucher}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="rucheTropLoin : ${ruchesTropLoins}">
+						<td><a th:href="@{'/ruche/'+${rucheTropLoin.id}}"
+							th:text="${rucheTropLoin.nom}"></a></td>
+						<td><a th:href="@{'/rucher/'+${rucheTropLoin.rucher?.id}}"
+							th:text="${rucheTropLoin.rucher?.nom}"></a></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 	<div th:if="${#arrays.length(ruchesPasDEvenement)} &gt; 0"
@@ -250,7 +260,8 @@
 			th:text="${#arrays.length(ruchesPasDEvenement)} + ' ' +
 				#{ruchesSansEven(${retardRucheEvenement})}"></h1>
 		<div>
-			<table class="table table-bordered table-striped datatable-tri dt-responsive">
+			<table
+				class="table table-bordered table-striped datatable-tri dt-responsive">
 				<thead>
 					<tr>
 						<th scope="col" th:text="#{nom}"></th>
@@ -271,30 +282,34 @@
 	</div>
 	<div th:if="${#arrays.length(essaimDateNaissSupAcquis)} &gt; 0"
 		class="container-fluid accordion">
-		<h1 class="item" th:text="${#arrays.length(essaimDateNaissSupAcquis)} + ' ' +
+		<h1 class="item"
+			th:text="${#arrays.length(essaimDateNaissSupAcquis)} + ' ' +
 			#{essaimDateNaissSupAcquis}"></h1>
 		<div>
-		<table class="table table-bordered table-striped datatable-tri dt-responsive">
-			<thead>
-				<tr>
-					<th scope="col" th:text="#{nom}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{reineDateNaissance}"></th>
-					<th th:text="#{dateAcquisition}"></th>
-					<th th:text="#{diff}"></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="essaim : ${essaimDateNaissSupAcquis}"
-					th:with="N=${essaim.reineDateNaissance},A=${essaim.dateAcquisition},D=${T(java.time.Duration)}">
-					<td><a th:href="@{'/essaim/'+${essaim.id}}"
-						th:text="${essaim.nom}"></a></td>
-					<td th:text="${N}"></td>
-					<td th:text="${A}"></td>
-					<td th:text="${D.between(A.atStartOfDay(),N.atStartOfDay()).toDays()}"></td>
-						
-				</tr>
-			</tbody>
-		</table>
+			<table
+				class="table table-bordered table-striped datatable-tri dt-responsive">
+				<thead>
+					<tr>
+						<th scope="col" th:text="#{nom}"></th>
+						<th style="background-color: LemonChiffon"
+							th:text="#{reineDateNaissance}"></th>
+						<th th:text="#{dateAcquisition}"></th>
+						<th th:text="#{diff}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="essaim : ${essaimDateNaissSupAcquis}"
+						th:with="N=${essaim.reineDateNaissance},A=${essaim.dateAcquisition},D=${T(java.time.Duration)}">
+						<td><a th:href="@{'/essaim/'+${essaim.id}}"
+							th:text="${essaim.nom}"></a></td>
+						<td th:text="${N}"></td>
+						<td th:text="${A}"></td>
+						<td
+							th:text="${D.between(A.atStartOfDay(),N.atStartOfDay()).toDays()}"></td>
+
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 	<br />
