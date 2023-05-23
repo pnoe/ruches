@@ -140,6 +140,10 @@ public class RecolteHausseController {
 						// si la hausse est bien une hausse de la récolte
 						recolteHausse.setPoidsApres(rHM.getPoidsApres());
 						recolteHausse.setPoidsAvant(rHM.getPoidsAvant());
+						// Optimisation : ajouter recolteHausse dans une liste et faire saveAll
+						//   Avant la boucle : List<RecolteHausse> RHlist = new ArrayList<>();
+						//   RHlist.add(recolteHausse);
+						//   et après la boucle : recolteHausseRepository.saveAll(RHlist);
 						recolteHausseRepository.save(recolteHausse);
 					} else {
 						logger.error("{} n'est pas de la récolte {}", recolteHausse, recolteId);
