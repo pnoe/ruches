@@ -39,15 +39,12 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		/*
-		 * Pour Spring Boot 3
-		 * http.authorizeHttpRequests()
+		 * Pour Spring Boot 3 http.authorizeHttpRequests()
 		 * .requestMatchers("/forgotPassword", "/resetPassword", "/resetPasswordFin",
 		 * "/", "/css/**", "/js/**", "/images/**", "/doc/**", "/font/**")
 		 */
-		// Voir aussi https://spring.io/blog/2019/11/21/spring-security-lambda-dsl
-		//   conseillé par spring tools 
-		//      consider switching to httpsecurity lambda dsl syntax
-		http.authorizeRequests()
+		// https://docs.spring.io/spring-security/reference/migration-7/configuration.html
+		http.authorizeHttpRequests()
 				.antMatchers("/forgotPassword", "/resetPassword", "/resetPasswordFin", "/", "/css/**", "/js/**",
 						"/images/**", "/doc/**", "/font/**")
 				.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll()
@@ -65,8 +62,7 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
 				// désactivation du csrf pour l'api rest
 				.and().csrf().ignoringAntMatchers("/rest/**");
 		/*
-		 * Pour Spring Boot 3
-		 * .and().csrf().ignoringRequestMatchers("/rest/**");
+		 * Pour Spring Boot 3 .and().csrf().ignoringRequestMatchers("/rest/**");
 		 */
 		return http.build();
 	}
