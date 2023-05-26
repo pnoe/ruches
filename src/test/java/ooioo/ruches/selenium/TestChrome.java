@@ -629,23 +629,8 @@ public class TestChrome {
 		assertEquals("form", driver.findElement(By.id("parametresForm")).getTagName());
 	}
 
-	// TODO API rest appeler chacunes des urls de la page /rest
-	@Test
-	@Order(43)
-	@DisplayName("Admin API REST")
-	void adminRest() {
-		driver.get(baseUrl + "rest");
-		// api rest, json test sur lien vers repository recolteHausses
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			JsonNode actualObj = mapper.readTree(driver.findElement(By.tagName("pre")).getText());
-			JsonNode jsonNode = actualObj.get("_links").get("recolteHausses").get("href");
-			assertTrue(jsonNode.textValue().endsWith("rest/recolteHausses"));
-		} catch (JsonProcessingException e) {
-			fail(e.getMessage());
-		}
-	}
-
+	// 43 déplacée dans TestRest.java
+	
 	@Test
 	@Order(44)
 	@DisplayName("Admin logs")
