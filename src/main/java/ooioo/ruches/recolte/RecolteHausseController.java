@@ -122,16 +122,13 @@ public class RecolteHausseController {
 	@PostMapping("/haussesMiel/sauve/{recolteId}")
 	public String recolteHaussesMielSauve(Model model, @ModelAttribute RecolteMiel recolteMiel,
 			BindingResult bindingResult, @PathVariable long recolteId) {
-
+		if (bindingResult.hasErrors()) {
+			logger.error("Erreur formulaire miel, récolte {}", recolteId);
+			model.addAttribute(Const.MESSAGE, "Erreur formulaire miel");
+			return Const.INDEX;
+		}
 		Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
 		if (recolteOpt.isPresent()) {
-
-			if (bindingResult.hasErrors()) {
-				Recolte recolte = recolteOpt.get();
-				model.addAttribute(Const.RECOLTE, recolte);
-				// TODO à vérifier en supprimant controle "number"
-				return "recolte/recolteMielForm";
-			}
 			for (RecolteHausseMiel rHM : recolteMiel.getRecolteHaussesMiel()) {
 				Optional<RecolteHausse> recolteHausseOpt = recolteHausseRepository.findById(rHM.getRecolteHausseId());
 				if (recolteHausseOpt.isPresent()) {
