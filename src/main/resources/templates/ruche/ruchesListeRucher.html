@@ -5,13 +5,16 @@
 const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
 const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
 const listeRuches = /*[[#{listeRuches}]]*/ null;
+const rucher = /*[[#{rucher}]]*/ null;
+const nomrucher = /*[[${rucher.nom}]]*/ null;
 $(document).ready(function() {
     new DataTable('#ruches', {
         dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
 	    buttons: [
 	    	'csv',
 	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-	    		title: listeRuches + " " + (new Date()).toLocaleDateString()},
+	    		title: `${listeRuches} ${rucher} ${nomrucher} ${(new Date()).toLocaleDateString()}`,
+				orientation : 'landscape'},
             {extend: 'print', text: buttTxtPrint},
             {extend: 'colvis', text: buttTxtCol}
         ]

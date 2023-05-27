@@ -3,7 +3,7 @@
 <head
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
-	const listeRuches = /*[[#{listeRuches}]]*/null;
+	const Recoltes = /*[[#{Recoltes}]]*/null;
 	const buttontextprint = /*[[#{buttontextprint}]]*/null;
 	const buttontextcol = /*[[#{buttontextcol}]]*/null;
 	$(document).ready(function() {
@@ -14,7 +14,7 @@
 				exportOptions : {
 					columns : ':visible'
 				},
-				title : listeRuches + " " + (new Date()).toLocaleDateString()
+				title : Recoltes + " " + (new Date()).toLocaleDateString()
 			}, {
 				extend : 'print',
 				text : buttontextprint

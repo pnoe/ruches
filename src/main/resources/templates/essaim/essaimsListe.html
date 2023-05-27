@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
-const listeEssaims = /*[[#{listeEssaims}]]*/ null;
+const Essaims = /*[[#{Essaims}]]*/ null;
 const buttontextprint = /*[[#{buttontextprint}]]*/ null;
 const buttontextcol = /*[[#{buttontextcol}]]*/ null;
 const urlTraitLot = /*[[@{/evenement/essaim/traitementLot/}]]*/ null;
@@ -16,7 +16,8 @@ $(document).ready(function() {
         buttons: [
 	    	'csv',
 	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-	    		title: listeEssaims + " " + (new Date()).toLocaleDateString()},
+	    		title: Essaims + " " + (new Date()).toLocaleDateString(),
+	    		orientation : 'landscape'},
 	        {extend: 'print', text: buttontextprint},
 	        {extend: 'colvis', text: buttontextcol}
         ]

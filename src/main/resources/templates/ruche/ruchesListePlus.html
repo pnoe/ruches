@@ -2,16 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
+	const Ruches = /*[[#{Ruches}]]*/null;
 	const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
 	const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
-	const listeRuches = /*[[#{listeRuches}]]*/ null;
 	$(document).ready(function() {
 	    new DataTable('#ruchesplus', {
 	        dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
 		    buttons: [
 		    	'csv',
 		    	{extend: 'pdf', exportOptions: {columns: ':visible', pageSize: 'A3', oriention: 'landscape'}, 
-		    		title: listeRuches + " " + (new Date()).toLocaleDateString()},
+		    		title: Ruches + " " + (new Date()).toLocaleDateString(),
+					orientation : 'landscape'},
 		        {extend: 'print', text: buttTxtPrint, exportOptions: {columns: ':visible', pageSize: 'A3', oriention: 'landscape'}},
 		        {extend: 'colvis', text: buttTxtCol}
 	         ]

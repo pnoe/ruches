@@ -11,7 +11,7 @@ function evenementListe(initDatatable) {
 				'csv',
 				{
 					extend: 'pdf', exportOptions: { columns: ':visible' },
-					title: listeEvenements + " " + (new Date()).toLocaleDateString()
+					title: Evenements + " " + (new Date()).toLocaleDateString()
 				},
 				{ extend: 'print', text: buttontextprint },
 				{ extend: 'colvis', text: buttontextcol }

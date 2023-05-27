@@ -5,7 +5,7 @@
 <script th:inline="javascript">
 	const buttontextprint = /*[[#{buttontextprint}]]*/null;
 	const buttontextcol = /*[[#{buttontextcol}]]*/null;
-	const listeRuchers = /*[[#{listeRuchers}]]*/null;
+	const Ruchers = /*[[#{Ruchers}]]*/null;
 	$(document).ready(function() {
 		new DataTable('#ruchers', {
 			dom : 'Blftip',
@@ -14,7 +14,7 @@
 				exportOptions : {
 					columns : ':visible'
 				},
-				title : listeRuchers + " " + (new Date()).toLocaleDateString()
+				title : Ruchers + " " + (new Date()).toLocaleDateString()
 			}, {
 				extend : 'print',
 				text : buttontextprint

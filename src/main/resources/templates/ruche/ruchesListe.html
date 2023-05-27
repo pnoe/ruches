@@ -3,7 +3,7 @@
 <head
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
-	const listeRuches = /*[[#{listeRuches}]]*/null;
+	const Ruches = /*[[#{Ruches}]]*/null;
 	const buttTxtPrint = /*[[#{buttontextprint}]]*/null;
 	const buttTxtCol = /*[[#{buttontextcol}]]*/null;
 	const urlCommLot = /*[[@{/evenement/ruche/commentaireLot/}]]*/null;
@@ -20,7 +20,8 @@
 						exportOptions : {
 							columns : ':visible'
 						},
-						title : listeRuches + " " + (new Date()).toLocaleDateString()
+						title : Ruches + " " + (new Date()).toLocaleDateString(),
+						orientation : 'landscape'
 					}, {
 						extend : 'print',
 						text : buttTxtPrint
