@@ -4,10 +4,23 @@
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
 	const url = /*[[@{'/rucher/historiques/'}]]*/null;
+	const buttontextprint = /*[[#{buttontextprint}]]*/null;
+	const buttontextcol = /*[[#{buttontextcol}]]*/null;
+	const transhumances = /*[[#{transhumances}]]*/null;
 	$().ready(function() {
 		$('#groupe').on('change', function() {
 			location = url + ($(this).is(':checked'));
 		});
+	    new DataTable('#transhumances', {
+	    	dom: 'Blftip',
+		    buttons: [
+		    	'csv',
+		    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
+		    		title: transhumances + " " + (new Date()).toLocaleDateString()},
+		        {extend: 'print', text: buttontextprint},
+		        {extend: 'colvis', text: buttontextcol}
+	        ]
+	    });
 	});
 </script>
 </head>
@@ -35,7 +48,7 @@
 		</div>
 	</div>
 	<div class="container-fluid">
-		<table class="table table-bordered" id="transhumances">
+		<table class="table table-bordered dt-responsive" id="transhumances">
 			<thead>
 				<tr>
 					<th th:text="#{date}"></th>

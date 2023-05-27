@@ -4,7 +4,7 @@
 <script th:inline="javascript">
 const buttontextprint = /*[[#{buttontextprint}]]*/null;
 const buttontextcol = /*[[#{buttontextcol}]]*/null;
-const listeRuchers = /*[[#{listeRuchers}]]*/null;
+const ruchersProdRecolte = /*[[#{ruchersProdRecolte}]]*/null;
 $(document).ready(function() {
 	$('.bi-question-lg').popover({
         html: true
@@ -17,7 +17,7 @@ $(document).ready(function() {
 	    buttons: [
 	    	'csv',
 	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-	    		title: listeRuchers + " " + (new Date()).toLocaleDateString()},
+	    		title: ruchersProdRecolte + " " + (new Date()).toLocaleDateString()},
 	        {extend: 'print', text: buttontextprint},
 	        {extend: 'colvis', text: buttontextcol}
         ]
