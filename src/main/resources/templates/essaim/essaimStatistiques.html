@@ -4,7 +4,7 @@
 <script th:inline="javascript">
 const buttontextprint = /*[[#{buttontextprint}]]*/ null;
 const buttontextcol = /*[[#{buttontextcol}]]*/ null;
-const listeEssaims = /*[[#{listeEssaims}]]*/ null;
+const Essaims = /*[[#{Essaims}]]*/ null;
 const Production = /*[[#{Production}]]*/ null;
 $(document).ready(function() {
     $('.bi-question-lg').popover({
@@ -18,7 +18,7 @@ $(document).ready(function() {
 	    buttons: [
 	    	'csv',
 	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-	    		title: Production + " " + listeEssaims + " " + (new Date()).toLocaleDateString()},
+	    		title: Essaims + " " + Production + " " + (new Date()).toLocaleDateString()},
 	        {extend: 'print', text: buttontextprint},
 	        {extend: 'colvis', text: buttontextcol}
         ]
