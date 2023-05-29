@@ -4,7 +4,8 @@
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
 	const url = /*[[@{'/evenement/listeNotif/'}]]*/null;
-	const listeve = /*[[#{listeEvenements}]]*/null;
+	const Evenements = /*[[#{evenements}]]*/ null;
+	const Notifications = /*[[#{Notifications}]]*/ null;
 	const btp = /*[[#{buttontextprint}]]*/null;
 	const btc = /*[[#{buttontextcol}]]*/null;
 	$(document).ready(function() {
@@ -25,7 +26,7 @@
 				exportOptions : {
 					columns : ':visible'
 				},
-				title : listeve + " " + (new Date()).toLocaleDateString()
+				title : Evenements + " " + Notifications + " " + (new Date()).toLocaleDateString()
 			}, {
 				extend : 'print',
 				text : btp
