@@ -48,11 +48,14 @@ public class RucheTypeController {
 	public String liste(Model model) {
 		List<RucheType> lRT = rucheTypeRepo.findAllByOrderByNom();
 		model.addAttribute(Const.RUCHETYPES, lRT);
-		List<Integer> nbRuches = new ArrayList<>();
+		List<Integer> nbRuchesEssaim = new ArrayList<>();
+		List<Integer> nbRuchesSansEssaim = new ArrayList<>();
 		for(RucheType rt : lRT) {
-			nbRuches.add(rucheRepo.countByTypeAndActiveTrue(rt));
+			nbRuchesEssaim.add(rucheRepo.countByTypeAndActiveTrueAndEssaimNotNull(rt));
+			nbRuchesSansEssaim.add(rucheRepo.countByTypeAndActiveTrueAndEssaimNull(rt));
 		}
-		model.addAttribute("NbRuches", nbRuches);
+		model.addAttribute("nbRuchesEssaim", nbRuchesEssaim);
+		model.addAttribute("nbRuchesSansEssaim", nbRuchesSansEssaim);
 		return "ruchetype/rucheTypesListe";
 	}
 

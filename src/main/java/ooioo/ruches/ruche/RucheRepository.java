@@ -101,6 +101,8 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 			""")
 	Iterable<Ruche> findActiveIdDiffOrderByNom(Long id);
 	
-	Integer countByTypeAndActiveTrue(RucheType rt);
-	
+	Integer countByTypeAndActiveTrueAndEssaimNotNull(RucheType rt);
+
+	Integer countByTypeAndActiveTrueAndEssaimNull(RucheType rt);
+
 }
