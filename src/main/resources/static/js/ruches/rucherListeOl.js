@@ -177,8 +177,7 @@ function rucherListeIgn(ign) {
 		map.addControl(new ol.control.ElevationPath());
 		map.addControl(new ol.control.Route());
 		map.addControl(new ol.control.GeoportalMousePosition({
-			collapsed: true,
-			displayCoordinates: false
+			collapsed: true
 		}));
 		map.addControl(layerSwitcher);
 		layerSwitcher.removeLayer(olAgriLayer);

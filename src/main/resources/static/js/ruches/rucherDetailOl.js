@@ -325,8 +325,7 @@ function rucherDetail(ign) {
 			legends: [{ url: agriLegend }]
 		});
 		map.addControl(new ol.control.GeoportalMousePosition({
-			collapsed: true,
-			displayCoordinates: false
+			collapsed: true
 		}));
 	} else {
 		const osmLayer = new ol.layer.Tile({
