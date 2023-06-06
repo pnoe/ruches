@@ -19,11 +19,12 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 	// correction spring boot 2.2.0 iterable -> list
 	List<Hausse> findByRucheIdOrderByOrdreSurRuche(Long rucheId);
 
+	// spring boot 3 : erreur sur !=. Remplacé par <>
 	@Query(value = """
 			select h
 				from Hausse h
 				where h.active = true
-				  and (h.ruche is null or h.ruche.id != ?1)
+				  and (h.ruche is null or h.ruche.id <> ?1)
 			""")
 	List<Hausse> findHaussesPourAjout(Long rucheId);
 

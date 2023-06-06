@@ -2,11 +2,6 @@ package ooioo.ruches;
 
 import java.io.IOException;
 
-import javax.annotation.Resource;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +18,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+
+import jakarta.annotation.Resource;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
@@ -45,7 +45,9 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
 		 */
 		// https://docs.spring.io/spring-security/reference/migration-7/configuration.html
 		http.authorizeHttpRequests()
-				.antMatchers("/forgotPassword", "/resetPassword", "/resetPasswordFin", "/", "/css/**", "/js/**",
+				//.antMatchers("/forgotPassword", "/resetPassword", "/resetPasswordFin", "/", "/css/**", "/js/**",
+				//		"/images/**", "/doc/**", "/font/**")
+				.requestMatchers("/forgotPassword", "/resetPassword", "/resetPasswordFin", "/", "/css/**", "/js/**",
 						"/images/**", "/doc/**", "/font/**")
 				.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll()
 				.successHandler(new SavedRequestAwareAuthenticationSuccessHandler() {
@@ -60,7 +62,8 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
 					}
 				}).and().logout().permitAll()
 				// désactivation du csrf pour l'api rest
-				.and().csrf().ignoringAntMatchers("/rest/**");
+				// .and().csrf().ignoringAntMatchers("/rest/**");
+				.and().csrf().ignoringRequestMatchers("/rest/**");
 		/*
 		 * Pour Spring Boot 3 .and().csrf().ignoringRequestMatchers("/rest/**");
 		 */

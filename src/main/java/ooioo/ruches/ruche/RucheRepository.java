@@ -93,10 +93,11 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	Iterable<Ruche> findPasDEvenementAvant(LocalDateTime date);
 
 	// Les ruches actives dont l'id est différent de id triées par nom
+	// spring boot 3 : erreur sur !=. Remplacé par <>
 	@Query(value = """
 			select r
 			  from Ruche r
-			  where r.active = true and r.id != ?1
+			  where r.active = true and r.id <> ?1
 			  order by r.nom
 			""")
 	Iterable<Ruche> findActiveIdDiffOrderByNom(Long id);

@@ -58,6 +58,8 @@ public final class TestUtils {
 		// options.addArguments("headless");
 		//   Pas d'effet sur les logs :
 		//		options.setLogLevel(ChromeDriverLogLevel.OFF);
+		
+		/*
 		driver = new ChromeDriver((new ChromeDriverService.Builder() {
 			@Override
 			protected File findDefaultExecutable() {
@@ -75,6 +77,21 @@ public final class TestUtils {
 				}
 			}
 		}).build(), options);
+		*/
+		// driver = new ChromeDriver();
+		
+		// https://www.selenium.dev/documentation/webdriver/drivers/service/
+		@SuppressWarnings("serial")
+		ChromeDriverService service = new ChromeDriverService.Builder()
+		        .usingDriverExecutable(new File(pathChromeDriver) {
+					@Override
+					public String getCanonicalPath() throws IOException {
+						return this.getAbsolutePath();
+					}
+				})
+		        .build();
+		driver = new ChromeDriver(service);
+		
 		driver.get(baseUrl + "login");
 		// Le titre de la page de connexion est "Connexion"
 		assertEquals("Connexion", driver.getTitle(),
