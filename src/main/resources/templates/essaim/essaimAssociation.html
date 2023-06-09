@@ -20,6 +20,7 @@
     });
 	const table = new DataTable('#associerRucheEssaim', {
         "dom": '<"toolbar">lftip',
+        scrollX: true,
         fnInitComplete: function(){
             $('div.toolbar').html(
             	'<label class="form-label" for="avecEssaim">Avec Essaim</label> <input type="checkbox" id="avecEssaim"/> ');
@@ -66,7 +67,7 @@
 	<div class="container-fluid">
 		<h6 th:if="${rucheEssaim}" th:text="#{essaimdanslaruche}+' '+${rucheEssaim.nom}"></h6>
 		<h6 th:text="#{mettreessaimdanslaruche}"></h6>
-		<table class="table table-bordered table-striped dt-responsive" id="associerRucheEssaim" >
+		<table class="table table-bordered table-striped table-sm" id="associerRucheEssaim" >
 			<thead>
 				<tr>
 					<th th:text="#{ruche}"></th>
