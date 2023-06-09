@@ -11,6 +11,7 @@ $(document).ready(function() {
     const table = new DataTable('#hausses', {
     	select: {style: 'multi+shift'},
         dom: 'Blftip',
+        scrollX: true,
         buttons: [
 	    	'csv',
 	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
@@ -66,7 +67,7 @@ $(document).ready(function() {
 		</div>
 	</div>
 	<div class="container-fluid">
-		<table class="table table-bordered table-striped dt-responsive" id="hausses">
+		<table class="table table-bordered table-striped table-sm" id="hausses">
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>
