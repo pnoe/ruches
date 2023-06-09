@@ -38,35 +38,27 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		/*
-		 * Pour Spring Boot 3 http.authorizeHttpRequests()
-		 * .requestMatchers("/forgotPassword", "/resetPassword", "/resetPasswordFin",
-		 * "/", "/css/**", "/js/**", "/images/**", "/doc/**", "/font/**")
-		 */
 		// https://docs.spring.io/spring-security/reference/migration-7/configuration.html
-		http.authorizeHttpRequests()
-				//.antMatchers("/forgotPassword", "/resetPassword", "/resetPasswordFin", "/", "/css/**", "/js/**",
-				//		"/images/**", "/doc/**", "/font/**")
-				.requestMatchers("/forgotPassword", "/resetPassword", "/resetPasswordFin", "/", "/css/**", "/js/**",
-						"/images/**", "/doc/**", "/font/**")
-				.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll()
-				.successHandler(new SavedRequestAwareAuthenticationSuccessHandler() {
-					@Override
-					public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-							Authentication authentication) throws IOException, ServletException {
-						UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-						loggerSecConfig.info(
-								messageSource.getMessage("CONNECTE", null, LocaleContextHolder.getLocale()),
-								userDetails.getUsername());
-						super.onAuthenticationSuccess(request, response, authentication);
-					}
-				}).and().logout().permitAll()
-				// désactivation du csrf pour l'api rest
-				// .and().csrf().ignoringAntMatchers("/rest/**");
-				.and().csrf().ignoringRequestMatchers("/rest/**");
-		/*
-		 * Pour Spring Boot 3 .and().csrf().ignoringRequestMatchers("/rest/**");
-		 */
+		http.authorizeHttpRequests(authorize -> authorize.requestMatchers("/forgotPassword", "/resetPassword",
+				"/resetPasswordFin", "/", "/css/**", "/js/**", "/images/**", "/doc/**", "/font/**").permitAll()
+				.anyRequest().authenticated())
+				.formLogin(formLogin -> formLogin.loginPage("/login").permitAll()
+						.successHandler(new SavedRequestAwareAuthenticationSuccessHandler() {
+							@Override
+							public void onAuthenticationSuccess(HttpServletRequest request,
+									HttpServletResponse response, Authentication authentication)
+									throws IOException, ServletException {
+								UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+								loggerSecConfig.info(
+										messageSource.getMessage("CONNECTE", null, LocaleContextHolder.getLocale()),
+										userDetails.getUsername());
+								super.onAuthenticationSuccess(request, response, authentication);
+							}
+						}))
+				.logout((logout) -> logout.permitAll())
+				.csrf((csrf) -> csrf.ignoringRequestMatchers("/rest/**"));
+		// sans logout on n'a pas immédiatement le message "Vous avez été déconnecté" et
+		// pour se reconnecter il faut le faire deux fois !
 		return http.build();
 	}
 
