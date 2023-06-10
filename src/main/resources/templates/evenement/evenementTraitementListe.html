@@ -7,7 +7,7 @@
 <link th:replace="include :: cssjquerydaterangepicker" />
 <script th:src="@{/js/ruches/evenementListe.js}"></script>
 <script th:inline="javascript">
-	const Evenements = /*[[#{evenements}]]*/ null;
+	const Evenements = /*[[#{evenementstraitement}]]*/ null;
 	const buttontextprint = /*[[#{buttontextprint}]]*/null;
 	const buttontextcol = /*[[#{buttontextcol}]]*/null;
 	const url = /*[[@{'/evenement/essaim/listeTraitement/'}]]*/null;
@@ -26,7 +26,9 @@
 	<br />
 	<div class="container-fluid">
 		<div class="row">
-			<div id="titre" class="col" th:text="${tous} ? #{traitement} : #{eveDebutTraitement}"></div>
+			<div id="titre" class="col">
+				<h1 class="item" th:text="${tous} ? #{traitement} : #{eveDebutTraitement}">
+			</div>
 			<div class="col">
 				<span class="padicons"> <input type="checkbox" id="groupe"
 					th:title="#{tous}" th:checked="${tous}" /> <label for="tous"

@@ -6,7 +6,7 @@
 <link th:replace="include :: cssjquerydaterangepicker"/>
 <script th:src="@{/js/ruches/evenementListe.js}"></script>
 <script th:inline="javascript">
-	const Evenements = /*[[#{evenements}]]*/ null;
+	const Evenements = /*[[#{evenementspoidsruche}]]*/ null;
 	const buttontextprint = /*[[#{buttontextprint}]]*/null;
 	const buttontextcol = /*[[#{buttontextcol}]]*/null;
 	$(document).ready(function() {
@@ -21,7 +21,8 @@
 	<br />
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col" th:text="#{evenementspoidsruche}">
+			<div class="col">
+				<h1 class="item" th:text="#{evenementspoidsruche}">
 			</div>
 			<div th:insert="includeForm :: evenementListeDates(retController='/evenement/ruche/listePoidsRuche')" class="col">
 			</div>

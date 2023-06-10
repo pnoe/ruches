@@ -8,15 +8,15 @@
 <script th:inline="javascript">
 const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
 const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
-const listeEvenements = /*[[#{listeEvenements}]]*/ null;
+const Evenements = /*[[#{evenementssucre}]]*/ null;
 $(document).ready(function() {
-    new DataTable('#evenementssucre', {
+	new DataTable('#evenementssucre', {
         order: [ [ 0, 'desc' ] ],
         dom: 'Blftip',
         buttons: [
 	    	'csv',
 	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-	    		title: listeEvenements + " " + (new Date()).toLocaleDateString()},
+	    		title: Evenements + " " + (new Date()).toLocaleDateString()},
 	            {extend: 'print', text: buttTxtPrint},
 	            {extend: 'colvis', text: buttTxtCol}
         ],   
@@ -63,7 +63,8 @@ $(document).ready(function() {
 	<br />
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col" th:text="#{evenementssucre}">
+			<div class="col">
+				<h1 class="item" th:text="#{evenementssucre}">
 			</div>
 			<div th:insert="includeForm :: evenementListeDates(retController='/evenement/essaim/listeSucre')" class="col">
 			</div>
