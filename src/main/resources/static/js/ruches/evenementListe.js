@@ -7,6 +7,7 @@ function evenementListe(initDatatable) {
 		$('#evenements').DataTable({
 			order: [[0, 'desc']],
 			dom: 'Blftip',
+			scrollX: true,
 			buttons: [
 				'csv',
 				{

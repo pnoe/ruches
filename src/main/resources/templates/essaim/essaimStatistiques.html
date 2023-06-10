@@ -15,6 +15,7 @@ $(document).ready(function() {
     });
     new DataTable('#statistiques', {
     	dom: 'Blftip',
+    	scrollX: true,
 	    buttons: [
 	    	'csv',
 	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
@@ -71,7 +72,7 @@ $(document).ready(function() {
 		</form>
     </div>
 	<div class="container-fluid">
-	<table class="table dt-responsive table-bordered table-striped" id="statistiques">
+	<table class="table table-bordered table-striped table-sm" id="statistiques">
 			<thead>
 			    <tr>
 					<th th:text="#{essaim}"></th>

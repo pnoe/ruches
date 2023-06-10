@@ -15,6 +15,7 @@
 		});
 	    new DataTable('#transhumances', {
 	    	dom: 'Blftip',
+	    	scrollX: true,
 		    buttons: [
 		    	'csv',
 		    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
@@ -52,7 +53,7 @@
 		</div>
 	</div>
 	<div class="container-fluid">
-		<table class="table table-bordered dt-responsive" id="transhumances">
+		<table class="table table-bordered table-sm" id="transhumances">
 			<thead>
 				<tr>
 					<th th:text="#{date}"></th>

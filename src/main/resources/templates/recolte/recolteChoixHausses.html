@@ -76,7 +76,6 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<th:block th:text="#{ajoutretraithaussesrecolte}"></th:block>
 					<a th:href="@{'/recolte/'+${recolte.id}}"
 						th:text="#{recolte} + ' ' + ${#temporals.format(recolte.date, 'yyyy/MM/dd HH:mm')}"></a>
 				</h1>
@@ -93,7 +92,7 @@
 		<h6>
 			<a id="retirerHausses" href="#" th:text="#{retirerHausses}"></a>
 		</h6>
-		<table class="table table-bordered table-striped dt-responsive"
+		<table class="table table-bordered table-striped table-sm"
 			id="retraitHausseRecolte">
 			<thead>
 				<tr>
@@ -118,7 +117,7 @@
 		<h6>
 			<a id="ajouterHausses" href="#" th:text="#{ajouterHausses}"></a>
 		</h6>
-		<table class="table table-bordered table-striped dt-responsive"
+		<table class="table table-bordered table-striped table-sm"
 			id="ajoutHausseRecolte">
 			<thead>
 				<tr>
