@@ -2,6 +2,8 @@ package ooioo.ruches.evenement;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -57,19 +59,20 @@ public class EvenementEssaimController {
 	private RucherService rucherService;
 	@Autowired
 	private EssaimService essaimService;
-	
+
 	private static final String commForm = "essaim/essaimCommentaireForm";
 	private static final String cree = "{} créé";
 
 	/*
-	 * Liste événements essaim sucre
+	 * Liste événements essaim sucre.
+	 *   Période moins d'un an par défaut (value = "p", defaultValue = "2").
 	 */
 	@GetMapping("/listeSucre")
 	public String listeSucre(Model model, @RequestParam(required = false) Integer periode,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext,
-			@CookieValue(value = "p", defaultValue = "1") Integer pCookie,
+			@CookieValue(value = "p", defaultValue = "2") Integer pCookie,
 			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
 			@CookieValue(value = "d1", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
 			@CookieValue(value = "d2", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie) {
@@ -81,33 +84,39 @@ public class EvenementEssaimController {
 				datestext = dxCookie;
 			}
 		}
+		List<Evenement> evSucre;
 		switch (periode) {
 		case 1: // toute période
-			model.addAttribute(Const.EVENEMENTS,
-					evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.ESSAIMSUCRE));
+			evSucre = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.ESSAIMSUCRE);
+			// xx = evenementRepository.findEveSucrePoseHausse();
 			break;
 		case 2: // moins d'un an
-			model.addAttribute(Const.EVENEMENTS,
-					evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusYears(1)));
+			evSucre = evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusYears(1));
 			break;
 		case 3: // moins d'un mois
-			model.addAttribute(Const.EVENEMENTS,
-					evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusMonths(1)));
+			evSucre = evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE,
+					LocalDateTime.now().minusMonths(1));
 			break;
 		case 4: // moins d'une semaine
-			model.addAttribute(Const.EVENEMENTS,
-					evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusWeeks(1)));
+			evSucre = evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusWeeks(1));
 			break;
 		case 5: // moins d'un jour
-			model.addAttribute(Const.EVENEMENTS,
-					evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusDays(1)));
+			evSucre = evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusDays(1));
 			break;
 		default:
 			// ajouter tests date1 et date2 non null
-			model.addAttribute(Const.EVENEMENTS,
-					evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, date1, date2));
+			evSucre = evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, date1, date2);
 			model.addAttribute("datestext", datestext);
 		}
+		model.addAttribute(Const.EVENEMENTS, evSucre);
+		List<Evenement> evePose = new ArrayList<>();
+		for (Evenement eve : evSucre) {
+			evePose.add(evenementRepository.findSucreEveAjoutHausse(eve.getRuche(), eve.getEssaim(), eve.getDate()));
+		}
+		model.addAttribute("evePose", evePose);
+
+//		model.addAttribute("xx", xx);
+
 		model.addAttribute("periode", periode);
 		return "evenement/evenementSucreListe";
 	}

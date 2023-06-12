@@ -47,7 +47,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			  from Evenement evenement
 			  where evenement.type = ?1 and evenement.date > ?2
 			""")
-	Iterable<Evenement> findTypePeriode(TypeEvenement typeEvenement, LocalDateTime date);
+	List<Evenement> findTypePeriode(TypeEvenement typeEvenement, LocalDateTime date);
 
 	@RestResource(path = "findPeriodeTypeDate1Date2")
 	@Query(value = """
@@ -55,7 +55,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			  from Evenement evenement
 			  where evenement.type = ?1 and evenement.date > ?2 and evenement.date < ?3
 			""")
-	Iterable<Evenement> findTypePeriode(TypeEvenement typeEvenement, LocalDateTime date1, LocalDateTime date2);
+	List<Evenement> findTypePeriode(TypeEvenement typeEvenement, LocalDateTime date1, LocalDateTime date2);
 
 
 
@@ -96,6 +96,53 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	Iterable<Evenement> findByRucherId(Long rucherId);
 
 	List<Evenement> findByTypeOrderByDateDesc(TypeEvenement typeEvenement);
+	
+	// Recherche événement pose hausse suivant un événement donné en paramètre
+	//  ruche et essaim identiques.
+	@Query(value = """
+			select e from Evenement e
+			  where e.type = ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE
+			    and e.ruche = :ruche
+			    and e.essaim = :essaim
+			    and e.date > :date
+			  order by date desc
+			  limit 1
+			""")
+	Evenement findSucreEveAjoutHausse(Ruche ruche, Essaim essaim, LocalDateTime date);
+	
+	// à tester https://www.postgresql.org/docs/15/queries-table-expressions.html
+	/*
+	@Query(value = """
+			select es, ep from Evenement es
+              left join lateral (select ep from Evenement ep 
+                where ep.type = ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE
+			    and ep.ruche = es.ruche
+			    and ep.essaim = es.essaim
+			    and ep.date > es.date
+			  order by date desc
+			  limit 1)
+			  where es.type = ooioo.ruches.evenement.TypeEvenement.ESSAIMSUCRE
+			  order by date desc
+			""")
+	 List<Object[]> findEveSucrePoseHausse();
+	 */
+	
+	/*
+	 @Query(value = """
+				select es.*, ep.* from Evenement es
+	              left join lateral (select ep.* from Evenement ep 
+	                where ep.type = 2
+				    and ep.ruche_id = es.ruche_id
+				    and ep.essaim_id = es.essaim_id
+				    and ep.date > es.date
+				  order by date desc
+				  limit 1) oo
+				  where es.type = 7
+				  order by date desc
+				""", nativeQuery = true)
+		 List<Object[]> findEveSucrePoseHausse();
+	*/
+	
 
 	List<Evenement> findByTypeOrTypeOrderByDateDesc(TypeEvenement type1, TypeEvenement type2);
 

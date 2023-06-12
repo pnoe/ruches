@@ -1,59 +1,60 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<head
+	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:replace="include :: moment"></script>
 <script th:replace="include :: jquerydaterangepicker"></script>
-<link th:replace="include :: cssjquerydaterangepicker"/>
+<link th:replace="include :: cssjquerydaterangepicker" />
 <script th:src="@{/js/ruches/evenementListe.js}"></script>
 <script th:inline="javascript">
-const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
-const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
-const Evenements = /*[[#{evenementssucre}]]*/ null;
-$(document).ready(function() {
-	new DataTable('#evenementssucre', {
-        order: [ [ 0, 'desc' ] ],
-        dom: 'Blftip',
-        buttons: [
-	    	'csv',
-	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-	    		title: Evenements + " " + (new Date()).toLocaleDateString()},
-	            {extend: 'print', text: buttTxtPrint},
-	            {extend: 'colvis', text: buttTxtCol}
-        ],   
-        "footerCallback": function(row, data, start, end, display) {
-            var api = this.api(), data;
-            // Remove the formatting to get integer data for summation
-            var intVal = function (i) {
-                return typeof i === 'string' ?
-                    i.replace(',','')*1 :
-                    typeof i === 'number' ?
-                        i : 0;
-            };
-            var valPoids = function ( i ) {
-                return typeof i === 'string' ?
-                    i.replace(/[,]/, '.')*1 :
-                    typeof i === 'number' ?
-                        i : 0;
-            };
- 			let coltotal=4;
-            let total = api
-                .column(coltotal, {search:'applied'})
-                .data()
-                .reduce(function (a, b) {
-                    return valPoids(a) + valPoids(b);
-                }, 0);
-            let pageTotal = api
-                .column( coltotal, {page: 'current'})
-                .data()
-                .reduce(function (a, b) {
-                    return valPoids(a) + valPoids(b);
-                }, 0);
-            $(api.column(coltotal).footer()).html(
-            		Number.parseFloat(total).toFixed(2) +'<br/>page '+ Number.parseFloat(pageTotal).toFixed(2));
-        }  
-    });
-    evenementListe(false);
-});
+	const buttTxtPrint = /*[[#{buttontextprint}]]*/null;
+	const buttTxtCol = /*[[#{buttontextcol}]]*/null;
+	const Evenements = /*[[#{evenementssucre}]]*/null;
+	$(document).ready(
+			function() {
+				new DataTable('#evenementssucre', {
+					order : [ [ 0, 'desc' ] ],
+					dom : 'Blftip',
+					buttons : [ 'csv', {
+						extend : 'pdf',
+						exportOptions : {
+							columns : ':visible'
+						},
+						title : Evenements + " " + (new Date()).toLocaleDateString()
+					}, {
+						extend : 'print',
+						text : buttTxtPrint
+					}, {
+						extend : 'colvis',
+						text : buttTxtCol
+					} ],
+					"footerCallback" : function(row, data, start, end, display) {
+						var api = this.api(), data;
+						// Remove the formatting to get integer data for summation
+						var intVal = function(i) {
+							return typeof i === 'string' ? i.replace(',', '') * 1 : typeof i === 'number' ? i : 0;
+						};
+						var valPoids = function(i) {
+							return typeof i === 'string' ? i.replace(/[,]/, '.') * 1 : typeof i === 'number' ? i : 0;
+						};
+						let coltotal = 4;
+						let total = api.column(coltotal, {
+							search : 'applied'
+						}).data().reduce(function(a, b) {
+							return valPoids(a) + valPoids(b);
+						}, 0);
+						let pageTotal = api.column(coltotal, {
+							page : 'current'
+						}).data().reduce(function(a, b) {
+							return valPoids(a) + valPoids(b);
+						}, 0);
+						$(api.column(coltotal).footer()).html(
+								Number.parseFloat(total).toFixed(2) + '<br/>page '
+										+ Number.parseFloat(pageTotal).toFixed(2));
+					}
+				});
+				evenementListe(false);
+			});
 </script>
 </head>
 <body>
@@ -66,38 +67,64 @@ $(document).ready(function() {
 			<div class="col">
 				<h1 class="item" th:text="#{evenementssucre}">
 			</div>
-			<div th:insert="includeForm :: evenementListeDates(retController='/evenement/essaim/listeSucre')" class="col">
-			</div>
+			<div
+				th:insert="includeForm :: evenementListeDates(retController='/evenement/essaim/listeSucre')"
+				class="col"></div>
 		</div>
 	</div>
 	<div class="container-fluid">
-		<table class="table table-bordered table-striped table-sm" id="evenementssucre">
+		<table class="table table-bordered table-striped table-sm"
+			id="evenementssucre">
 			<thead>
 				<tr>
 					<th th:text="#{date}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{ruche}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{essaim}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{rucher}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{poidsVide}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{commentaire}"></th>
+					<th style="background-color: PaleGoldenRod" th:text="#{ruche}"></th>
+					<th style="background-color: PaleGoldenRod" th:text="#{essaim}"></th>
+					<th style="background-color: PaleGoldenRod" th:text="#{rucher}"></th>
+					<th style="background-color: LemonChiffon" th:text="#{poidsVide}"></th>
+					<th style="background-color: LemonChiffon" th:text="#{commentaire}"></th>
+					<th th:text="#{HAUSSEPOSERUCHE}"></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="evenement : ${evenements}">
-					<td>
-						<a th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
-							th:href="@{'/evenement/'+${evenement.id}}+'?type=sucre'"></a>
-					</td>
-					<td th:text="${evenement.ruche?.nom}"></td>
-					<td th:text="${evenement.essaim?.nom}"></td>
-					<td th:text="${evenement.rucher?.nom}"></td>
-					<td class="num" th:text="${#numbers.formatDecimal(evenement.valeur,1,2,'COMMA')}"></td>
-					<td th:text="${evenement.commentaire}"></td>
-				</tr>				
+				<tr th:each="eve : ${evenements}">
+					<td><a
+						th:text="${#temporals.format(eve.date, 'yyyy/MM/dd HH:mm')}"
+						th:href="@{'/evenement/'+${eve.id}}+'?type=sucre'"></a></td>
+					<td th:text="${eve.ruche?.nom}"></td>
+					<td th:text="${eve.essaim?.nom}"></td>
+					<td th:text="${eve.rucher?.nom}"></td>
+					<td class="num"
+						th:text="${#numbers.formatDecimal(eve.valeur,1,2,'COMMA')}"></td>
+					<td th:text="${eve.commentaire}"></td>
+					<td th:with="ep=${evePose[eveStat.index]}">
+						<a
+						th:if="${ep != null}"
+						th:text="${#temporals.format(ep.date, 'yyyy/MM/dd HH:mm')}"
+						th:href="@{'/evenement/'+${ep.id}}+'?type=sucre'"></a></td>
+				</tr>
+			<!--/* 
+			<tr th:each="x : ${xx}">
+					<td><a
+						th:text="${#temporals.format(x[0].date, 'yyyy/MM/dd HH:mm')}"
+						th:href="@{'/evenement/'+${x[0].id}}+'?type=sucre'"></a></td>
+					<td th:text="${x[0].ruche?.nom}"></td>
+					<td th:text="${x[0].essaim?.nom}"></td>
+					<td th:text="${x[0].rucher?.nom}"></td>
+					<td class="num"
+						th:text="${#numbers.formatDecimal(x[0].valeur,1,2,'COMMA')}"></td>
+					<td th:text="${x[0].commentaire}"></td>
+					<td th:with="ep=${x[1][eveStat.index]}">
+						<a
+						th:if="${ep != null}"
+						th:text="${#temporals.format(ep.date, 'yyyy/MM/dd HH:mm')}"
+						th:href="@{'/evenement/'+${ep.id}}+'?type=sucre'"></a></td>
+				</tr>
+			*/-->
 			</tbody>
 			<tfoot>
 				<tr>
-					<th colspan="4" style="text-align:right" th:text="#{Total}"></th>
+					<th colspan="4" style="text-align: right" th:text="#{Total}"></th>
 					<th></th>
 					<th></th>
 				</tr>
