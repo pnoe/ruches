@@ -88,7 +88,6 @@ public class EvenementEssaimController {
 		switch (periode) {
 		case 1: // toute période
 			evSucre = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.ESSAIMSUCRE);
-			// xx = evenementRepository.findEveSucrePoseHausse();
 			break;
 		case 2: // moins d'un an
 			evSucre = evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusYears(1));
@@ -114,9 +113,6 @@ public class EvenementEssaimController {
 			evePose.add(evenementRepository.findSucreEveAjoutHausse(eve.getRuche(), eve.getEssaim(), eve.getDate()));
 		}
 		model.addAttribute("evePose", evePose);
-
-//		model.addAttribute("xx", xx);
-
 		model.addAttribute("periode", periode);
 		return "evenement/evenementSucreListe";
 	}

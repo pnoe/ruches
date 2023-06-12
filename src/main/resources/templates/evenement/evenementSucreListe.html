@@ -20,7 +20,15 @@
 						exportOptions : {
 							columns : ':visible'
 						},
-						title : Evenements + " " + (new Date()).toLocaleDateString()
+						title : Evenements + " " + (new Date()).toLocaleDateString(),
+						action: function (e, dt, node, config)
+						{
+							const inputSearch = $.trim($('#evenementssucre_filter label input').val());
+							if (inputSearch.length !== 0) {
+						    	config.title += " <" + inputSearch + ">";
+							}
+							$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this ,e, dt, node, config);
+						}
 					}, {
 						extend : 'print',
 						text : buttTxtPrint
@@ -65,7 +73,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<h1 class="item" th:text="#{evenementssucre}">
+				<h1 class="item" th:text="#{evenementssucre}"></h1>
 			</div>
 			<div
 				th:insert="includeForm :: evenementListeDates(retController='/evenement/essaim/listeSucre')"
@@ -103,24 +111,6 @@
 						th:text="${#temporals.format(ep.date, 'yyyy/MM/dd HH:mm')}"
 						th:href="@{'/evenement/'+${ep.id}}+'?type=sucre'"></a></td>
 				</tr>
-			<!--/* 
-			<tr th:each="x : ${xx}">
-					<td><a
-						th:text="${#temporals.format(x[0].date, 'yyyy/MM/dd HH:mm')}"
-						th:href="@{'/evenement/'+${x[0].id}}+'?type=sucre'"></a></td>
-					<td th:text="${x[0].ruche?.nom}"></td>
-					<td th:text="${x[0].essaim?.nom}"></td>
-					<td th:text="${x[0].rucher?.nom}"></td>
-					<td class="num"
-						th:text="${#numbers.formatDecimal(x[0].valeur,1,2,'COMMA')}"></td>
-					<td th:text="${x[0].commentaire}"></td>
-					<td th:with="ep=${x[1][eveStat.index]}">
-						<a
-						th:if="${ep != null}"
-						th:text="${#temporals.format(ep.date, 'yyyy/MM/dd HH:mm')}"
-						th:href="@{'/evenement/'+${ep.id}}+'?type=sucre'"></a></td>
-				</tr>
-			*/-->
 			</tbody>
 			<tfoot>
 				<tr>

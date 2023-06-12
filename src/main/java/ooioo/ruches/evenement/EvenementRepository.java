@@ -109,44 +109,8 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			  limit 1
 			""")
 	Evenement findSucreEveAjoutHausse(Ruche ruche, Essaim essaim, LocalDateTime date);
-	
-	// à tester https://www.postgresql.org/docs/15/queries-table-expressions.html
-	/*
-	@Query(value = """
-			select es, ep from Evenement es
-              left join lateral (select ep from Evenement ep 
-                where ep.type = ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE
-			    and ep.ruche = es.ruche
-			    and ep.essaim = es.essaim
-			    and ep.date > es.date
-			  order by date desc
-			  limit 1)
-			  where es.type = ooioo.ruches.evenement.TypeEvenement.ESSAIMSUCRE
-			  order by date desc
-			""")
-	 List<Object[]> findEveSucrePoseHausse();
-	 */
-	
-	/*
-	 @Query(value = """
-				select es.*, ep.* from Evenement es
-	              left join lateral (select ep.* from Evenement ep 
-	                where ep.type = 2
-				    and ep.ruche_id = es.ruche_id
-				    and ep.essaim_id = es.essaim_id
-				    and ep.date > es.date
-				  order by date desc
-				  limit 1) oo
-				  where es.type = 7
-				  order by date desc
-				""", nativeQuery = true)
-		 List<Object[]> findEveSucrePoseHausse();
-	*/
-	
 
 	List<Evenement> findByTypeOrTypeOrderByDateDesc(TypeEvenement type1, TypeEvenement type2);
-
-	// List<Evenement> findByTypeAndRucheNotNullAndRucherNotNullOrderByDateDesc(TypeEvenement typeEvenement);
 
 	@Query(value = """
 			select e from Evenement e
