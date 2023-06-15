@@ -107,7 +107,7 @@
 					<td th:text="${eve.commentaire}"></td>
 					<td th:with="ep=${evePose[eveStat.index]}">
 						<a
-						th:if="${ep != null}"
+						th:if="${ep} != null"
 						th:text="${#temporals.format(ep.date, 'yyyy/MM/dd HH:mm')}"
 						th:href="@{'/evenement/'+${ep.id}}+'?type=sucre'"></a></td>
 				</tr>

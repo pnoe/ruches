@@ -448,7 +448,7 @@ public class RucheController {
 	/**
 	 * Enregistrer en base l'ordre des hausses modifié par drag and drop (appel
 	 * XMLHttpRequest).
-	 * 
+	 *
 	 * @param hausses : tableau de ids des hausses dans l'ordre affiché dans la page
 	 *                html
 	 */

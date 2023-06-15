@@ -1,32 +1,34 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:src="@{/js/ruches/rucherDetailGg.js}"></script>
-<script th:src="@{/js/ruches/rucherDetailCarto.js}"></script>
-<script th:inline="javascript">
-	let rucheParcours = /*[[${rucheParcours}]]*/ null;
-	let distParcours = /*[[${distParcours}]]*/ null;
-	const rucher = /*[[${rucher}]]*/ null;
-	const rucherMapZoom = /*[[${@environment.getProperty('rucher.map.zoom')}]]*/ null;
-	const longitudeCentre = /*[[${longitudeCentre}]]*/ null;
-	const latitudeCentre = /*[[${latitudeCentre}]]*/ null;
-	const rayonsButinage = /*[[${rayonsButinage}]]*/ null;
-	const distButinage = /*[[#{distButinage}]]*/ null;
-	const urlruches = /*[[@{/}]]*/ null;
-	const nomHausses = /*[[${hausseNoms}]]*/ null;
-	const essaimtxt = /*[[#{essaim}]]*/ null;
-	const pasdessaimtxt = /*[[#{Pasdessaim}]]*/ null;
-	const ruchetxt = /*[[#{ruche}]]*/ null;
-	const haussestxt = /*[[#{Hausses}]]*/ null;
-	const pasdehaussetxt = /*[[#{Pasdehausse}]]*/ null;
-	const ruches = /*[[${ruches}]]*/ null;
-	const ruchestxt= /*[[#{ruches}]]*/ null;
-	const distancedeparcourstxt = /*[[#{distancedeparcours}]]*/ null;
-	const entreetxt = /*[[#{Entree}]]*/ null;	
-    const _csrf_token = /*[[${_csrf.token}]]*/ null;
-</script>
-<script async defer	th:src="${@environment.getProperty('gg.map.url')}"></script>
+	<script th:src="@{/js/ruches/rucherDetailGg.js}"></script>
+	<script th:src="@{/js/ruches/rucherDetailCarto.js}"></script>
+	<script th:inline="javascript">
+		let rucheParcours = /*[[${rucheParcours}]]*/ null;
+		let distParcours = /*[[${distParcours}]]*/ null;
+		const rucher = /*[[${rucher}]]*/ null;
+		const rucherMapZoom = /*[[${@environment.getProperty('rucher.map.zoom')}]]*/ null;
+		const longitudeCentre = /*[[${longitudeCentre}]]*/ null;
+		const latitudeCentre = /*[[${latitudeCentre}]]*/ null;
+		const rayonsButinage = /*[[${rayonsButinage}]]*/ null;
+		const distButinage = /*[[#{distButinage}]]*/ null;
+		const urlruches = /*[[@{/}]]*/ null;
+		const nomHausses = /*[[${hausseNoms}]]*/ null;
+		const essaimtxt = /*[[#{essaim}]]*/ null;
+		const pasdessaimtxt = /*[[#{Pasdessaim}]]*/ null;
+		const ruchetxt = /*[[#{ruche}]]*/ null;
+		const haussestxt = /*[[#{Hausses}]]*/ null;
+		const pasdehaussetxt = /*[[#{Pasdehausse}]]*/ null;
+		const ruches = /*[[${ruches}]]*/ null;
+		const ruchestxt = /*[[#{ruches}]]*/ null;
+		const distancedeparcourstxt = /*[[#{distancedeparcours}]]*/ null;
+		const entreetxt = /*[[#{Entree}]]*/ null;
+		const _csrf_token = /*[[${_csrf.token}]]*/ null;
+	</script>
+	<script async defer th:src="${@environment.getProperty('gg.map.url')}"></script>
 </head>
+
 <body>
 	<nav th:replace="include :: navbar"></nav>
 	<br />
@@ -37,17 +39,18 @@
 			<div class="col">
 				<h1 class="item">
 					<th:block th:text="#{carteGg}+' '"></th:block>
-					<a th:href="@{'/rucher/'+${rucher.id}}"
-						th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+					<a th:href="@{'/rucher/'+${rucher.id}}" th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
 				</h1>
 			</div>
 			<div class="col">
-				<input type="text" th:placeholder="#{recherche}" id="searchtext"/>
-       			<span class="padicons">
-       				<input type="checkbox" id="dragMarker" th:title="#{markerFixes}" checked/>
+				<input type="text" th:placeholder="#{recherche}" id="searchtext" />
+				<span class="padicons">
+					<input type="checkbox" id="dragMarker" th:title="#{markerFixes}" checked />
 				</span>
-				<span id="liste" class="liste bi-list-ul cursorpointer" th:title="#{listeRuchesOrdonnees}" aria-hidden="true"></span>
-		 		<span id="listeplus" class="liste bi-list-stars cursorpointer" th:title="#{listePlusRuchesOrdonnees}" aria-hidden="true"></span>					
+				<span id="liste" class="liste bi-list-ul cursorpointer" th:title="#{listeRuchesOrdonnees}"
+					aria-hidden="true"></span>
+				<span id="listeplus" class="liste bi-list-stars cursorpointer" th:title="#{listePlusRuchesOrdonnees}"
+					aria-hidden="true"></span>
 				<span id="export-gpx" class="bi-arrow-up-right-circle cursorpointer" th:title="#{exportGPX}"
 					aria-hidden="true"></span>
 				<a id="gpx-download"></a>
@@ -63,4 +66,5 @@
 	<div id="map"></div>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

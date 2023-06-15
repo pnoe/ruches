@@ -22,10 +22,10 @@ public class Ruche {
 
 	@Override
 	public String toString() {
-		return "Ruche [id=" + id + ", nom=" + nom + ", active=" + active + 
+		return "Ruche [id=" + id + ", nom=" + nom + ", active=" + active +
 				", production=" + production + ", Acquisition=" + dateAcquisition
 				+ ", poidsVide=" + poidsVide + ", type=" + ((type == null) ? "null" : type.getNom()) +
-				", essaim="	+ ((essaim == null) ? "null" : essaim.getNom()) + 
+				", essaim="	+ ((essaim == null) ? "null" : essaim.getNom()) +
 				", rucher=" + ((rucher == null) ? "null" : rucher.getNom()) +
 				", longitude=" + longitude + ", latitude=" + latitude + ", commentaire=" + commentaire + "]";
 	}
@@ -63,7 +63,7 @@ public class Ruche {
 	 * Ruche active ?
 	 */
 	private boolean active = true;
-	
+
 	/**
 	 * Ruche de production ?
 	 */

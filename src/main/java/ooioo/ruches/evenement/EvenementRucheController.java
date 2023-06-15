@@ -51,7 +51,7 @@ public class EvenementRucheController {
 	private MessageSource messageSource;
 	@Autowired
 	private EssaimService essaimService;
-	
+
 	private static final String commForm = "ruche/rucheCommentaireForm";
 
 	/*

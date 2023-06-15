@@ -18,8 +18,8 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 	Iterable<Essaim> findByActif(boolean actif);
 
 	Collection<Nom> findAllProjectedBy();
-	
-	// Liste ordonnée par nom d'essaims, des essaims, id et nom de la ruche associée et 
+
+	// Liste ordonnée par nom d'essaims, des essaims, id et nom de la ruche associée et
 	//  id et nom de son rucher.
 	// https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#projections
 	@Query(value = """
@@ -31,7 +31,7 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 			""")
 	Iterable<EssaimRucheRucher> findEssaimActifRucheRucherOrderByNom();
 
-	// Liste ordonnée par nom d'essaims, des id et nom de la ruche associée et 
+	// Liste ordonnée par nom d'essaims, des id et nom de la ruche associée et
 	//  id et nom de son rucher.
 	// https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#projections
 	@Query(value = """
@@ -42,7 +42,7 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 			  order by essaim.nom
 			""")
 	Iterable<EssaimRucheRucher> findEssaimRucheRucherOrderByNom();
-	
+
 	Iterable<IdNom> findAllProjectedIdNomByOrderByNom();
 
 	// Pour remérage dans formulaire dispersion

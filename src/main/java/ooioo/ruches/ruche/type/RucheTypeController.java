@@ -71,7 +71,7 @@ public class RucheTypeController {
 		model.addAttribute(RUCHE_RUCHETYPE, new RucheType());
 		return RUCHE_RUCHETYPEFORM;
 	}
-	
+
 	/**
 	 * Afficher un type de ruche.
 	 */
@@ -136,7 +136,7 @@ public class RucheTypeController {
 		logger.info("{} {}", rucheType, action);
 		return "redirect:/rucheType/" + rucheType.getId();
 	}
-	
+
 	/**
 	 * Suppression d'un type de ruche.
 	 */

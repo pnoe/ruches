@@ -10,7 +10,7 @@ public final class DistancVincenty {
 	 * Calcule la distance en mètres entre deux points lat, long en degrés.
 	 * Renvoie 0 pour deux points sur l'équateur (lat = 0) !
 	 * Méthode de Vincenty utilisant un ellipsoide.
-	 * Cette méthode est plus longue que la méthode de Haversine et 
+	 * Cette méthode est plus longue que la méthode de Haversine et
 	 * n'a pas d'intérêt pour des points proches, distants d'une centaine de mètres.
 	 * https://en.m.wikipedia.org/wiki/Earth_radius#Geocentric_radius
 	 * http://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf
@@ -57,7 +57,7 @@ public final class DistancVincenty {
 		double s = POLAR_RADIUS * A * (sigma - deltaSigma);
 		return s;
 	}
-	
+
 	private DistancVincenty() {
 		throw new IllegalStateException("Constant class");
 	}

@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public final class TestUtils {
 
 	static WebDriver driver;
-	
+
 	// Attention certains tests écrivent en base de donnée.
 	// Ne pas utiliser sur application en production !!!!!!!!!
 	// Démarrer l'application correspondant à cette url !!!!
@@ -36,7 +36,7 @@ public final class TestUtils {
 	static final String user = "test";
 	static final String pwd = "testpwd";
 	static final String role = "Admin";
-	
+
 	static final WebDriver initChrome() {
 		String pathChromeDriver = "/snap/bin/chromium.chromedriver";
 //		System.setProperty("webdriver.chrome.driver","/home/noe/selenium/driver/chrome109/chromedriver");
@@ -58,7 +58,7 @@ public final class TestUtils {
 		// options.addArguments("headless");
 		//   Pas d'effet sur les logs :
 		//		options.setLogLevel(ChromeDriverLogLevel.OFF);
-		
+
 		/*
 		driver = new ChromeDriver((new ChromeDriverService.Builder() {
 			@Override
@@ -79,7 +79,7 @@ public final class TestUtils {
 		}).build(), options);
 		*/
 		// driver = new ChromeDriver();
-		
+
 		// https://www.selenium.dev/documentation/webdriver/drivers/service/
 		@SuppressWarnings("serial")
 		ChromeDriverService service = new ChromeDriverService.Builder()
@@ -91,7 +91,7 @@ public final class TestUtils {
 				})
 		        .build();
 		driver = new ChromeDriver(service);
-		
+
 		driver.get(baseUrl + "login");
 		// Le titre de la page de connexion est "Connexion"
 		assertEquals("Connexion", driver.getTitle(),
@@ -146,7 +146,7 @@ public final class TestUtils {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].click();", driver.findElement(By.xpath(xpath)));
 	}
-	
+
 	private TestUtils() {
 		throw new IllegalStateException("Constant class");
 	}

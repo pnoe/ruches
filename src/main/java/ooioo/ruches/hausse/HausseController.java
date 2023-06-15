@@ -56,7 +56,7 @@ public class HausseController {
 
 	/**
 	 * Clonage multiple d'une hausse (appel XMLHttpRequest de la page détail d'une hausse).
-	 * 	 
+	 *
 	 * @param hausseId  l'id de la hausse à cloner
 	 * @param nomclones les noms des clones séparés par des virgules
 	 * @return String liste des hausses créées ou erreur
@@ -200,7 +200,7 @@ public class HausseController {
 		if (bindingResult.hasErrors()) {
 			return HAUSSE_HAUSSEFORM;
 		}
-		
+
 		// On enlève les blancs aux extémités du nom.
 		hausse.setNom(hausse.getNom().trim());
 		if ("".equals(hausse.getNom())) {
@@ -208,7 +208,7 @@ public class HausseController {
 			model.addAttribute(Const.MESSAGE, "Nom de hausse incorrect.");
 			return Const.INDEX;
 		}
-		
+
 		// Vérification de l'unicité du nom
 		Optional <Hausse> optH = hausseRepository.findByNom(hausse.getNom());
 		if (optH.isPresent()) {

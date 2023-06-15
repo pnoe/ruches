@@ -90,7 +90,7 @@ public class EssaimService {
 				// pour éviter clone "a,a" : 2 fois le même nom dans la liste
 				noms.add(nomarray[i]);
 				if (i < nomruchesarray.length && !"".contentEquals(nomruchesarray[i])) {
-					// S'il n'y a pas de dépassement de la taille du tableau 
+					// S'il n'y a pas de dépassement de la taille du tableau
 					//  (liste des ruches incorrecte en paramètre) et si le nom de la
 					//  ruche est différent de ""
 					Ruche ruche = rucheRepository.findByNom(nomruchesarray[i]);
@@ -324,14 +324,14 @@ public class EssaimService {
 	 * Enregistrement de l'essaimage.
 	 *
 	 * @param essaimId l'id de l'essaim qui essaime.
-	 * 
+	 *
 	 * @param date la date saisie dans le formulaire d'essaimage.
-	 * 
+	 *
 	 * @param nom le nom du nouvel essaim restant dans la ruche saisi dans le
 	 * formulaire d'essaimage.
-	 * 
+	 *
 	 * @param commentaire le commentaire saisi dans le formulaire d'essaimage.
-	 * 
+	 *
 	 * @param essaimOpt l'essaim essaimId.
 	 */
 	public Essaim essaimSauve(long essaimId, String date, String nom, String commentaire, Optional<Essaim> essaimOpt) {

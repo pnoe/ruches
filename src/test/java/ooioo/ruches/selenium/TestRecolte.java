@@ -23,7 +23,7 @@ public class TestRecolte {
 
 	static WebDriver driver;
 	static final String comment = "Test selenium chrome";
-	
+
 	// Attention certains tests écrivent en base de donnée.
 	// Ne pas utiliser sur application en production !!!!!!!!!
 	// Démarrer l'application correspondant à cette url !!!!
@@ -149,7 +149,7 @@ public class TestRecolte {
 				driver.findElement(By.xpath("//table[@id='retraitHausseRecolte']//td[contains(., " + hausseId + ")]"))
 						.getTagName());
 	}
-	
+
 	@Test
 	@Order(7)
 	@DisplayName("Récolte saisie tabulaire poids de miel")
@@ -161,6 +161,6 @@ public class TestRecolte {
 		driver.get(baseUrl + "recolte/haussesMiel/" + recolteId);
 		assertEquals("table", driver.findElement(By.id("recolteMielTable")).getTagName());
 	}
-	
+
 
 }

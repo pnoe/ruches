@@ -1,18 +1,20 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:replace="include :: jsChart"></script>
-<script th:replace="include :: d3-color"></script>
-<script th:replace="include :: d3-interpolate"></script>
-<script th:replace="include :: d3-scale-chromatic"></script>
-<script th:src="@{/js/ruches/recoltesStat.js}"></script>
-<script th:inline="javascript">
-	const poidsmiel = /*[[${poids}]]*/ null;
-	const nomsessaims = /*[[${noms}]]*/ null;
-	const poidsTotal = /*[[${poidsTotal}]]*/ null;
-	$(document).ready(function() { graphe(); });
-</script>
+	<script th:replace="include :: jsChart"></script>
+	<script th:replace="include :: d3-color"></script>
+	<script th:replace="include :: d3-interpolate"></script>
+	<script th:replace="include :: d3-scale-chromatic"></script>
+	<script th:src="@{/js/ruches/recoltesStat.js}"></script>
+	<script th:inline="javascript">
+		const poidsmiel = /*[[${poids}]]*/ null;
+		const nomsessaims = /*[[${noms}]]*/ null;
+		const poidsTotal = /*[[${poidsTotal}]]*/ null;
+		$(document).ready(function () {graphe();});
+	</script>
 </head>
+
 <body>
 	<nav th:replace="include :: navbar"></nav>
 	<br />
@@ -21,22 +23,23 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-			<h1 class="item">
-			    <th:block th:text="#{productionessaim} + ' '"></th:block>
-				<a th:href="@{'/recolte/'+${recolte.id}}"
+				<h1 class="item">
+					<th:block th:text="#{productionessaim} + ' '"></th:block>
+					<a th:href="@{'/recolte/'+${recolte.id}}"
 						th:text="#{recolte} + ' ' + ${#temporals.format(recolte.date, 'yy/MM/dd HH:mm')}"></a>
-			</h1>
+				</h1>
 			</div>
 			<div class="col">
-			  <span th:text="#{poidsMielHausses} + ' ' + 
+				<span th:text="#{poidsMielHausses} + ' ' + 
 			  	${#numbers.formatDecimal(poidsTotal/1000.0,1,2,'DEFAULT')} + 'kg'">
-			  </span>
+				</span>
 			</div>
-        </div>
-    </div>
+		</div>
+	</div>
 	<div class="container-fluid">
 		<canvas id="ctx"></canvas>
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

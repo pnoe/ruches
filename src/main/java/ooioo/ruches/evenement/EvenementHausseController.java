@@ -46,7 +46,7 @@ public class EvenementHausseController {
 
 	@Autowired
 	private MessageSource messageSource;
-	
+
 	private static final String commForm = "hausse/hausseCommentaireForm";
 
 	/*

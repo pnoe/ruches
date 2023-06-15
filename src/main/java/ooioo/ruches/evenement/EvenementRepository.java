@@ -96,11 +96,11 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	Iterable<Evenement> findByRucherId(Long rucherId);
 
 	List<Evenement> findByTypeOrderByDateDesc(TypeEvenement typeEvenement);
-	
+
 	// Recherche événement pose hausse suivant un événement donné en paramètre
 	//  ruche et essaim identiques.
 	@Query(value = """
-			select e from Evenement e
+			select new ooioo.ruches.evenement.IdDate(e.id, e.date) from Evenement e
 			  where e.type = ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE
 			    and e.ruche = :ruche
 			    and e.essaim = :essaim
@@ -108,8 +108,8 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			  order by date desc
 			  limit 1
 			""")
-	Evenement findSucreEveAjoutHausse(Ruche ruche, Essaim essaim, LocalDateTime date);
-
+	IdDate findSucreEveAjoutHausse(Ruche ruche, Essaim essaim, LocalDateTime date);
+		
 	List<Evenement> findByTypeOrTypeOrderByDateDesc(TypeEvenement type1, TypeEvenement type2);
 
 	@Query(value = """

@@ -47,7 +47,7 @@ public final class Const {
 	public static final String IDRUCHETYPEINCONNU = "Id type de ruche inconnu";
 	public static final String RUCHETYPES = "rucheTypes";
 	public static final String IDRUCHETYPEXXINCONNU = "Id type de ruche {} inconnu";
-	
+
 	public static final String INDEX = "index";
 	public static final String MESSAGE = "message";
 	public static final String YYYYMMDDHHMM = "yyyy/MM/dd HH:mm";

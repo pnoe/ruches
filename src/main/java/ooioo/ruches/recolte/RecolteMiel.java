@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Liste de hausses de récolte pour saisie tabulaire de leurs poids de miel. 
+ * Liste de hausses de récolte pour saisie tabulaire de leurs poids de miel.
  */
 public class RecolteMiel {
 

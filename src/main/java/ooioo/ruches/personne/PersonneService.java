@@ -22,7 +22,7 @@ public class PersonneService {
 	private static final String droitsInsuff = "Droits insuffisants.";
 	private static final String roleIncorrect = "Erreur rôle incorrect.";
 	private static final String roleAdmin = "ROLE_admin";
-	
+
 	/**
 	 * Ajoute la liste des Personnes au Model
 	 *

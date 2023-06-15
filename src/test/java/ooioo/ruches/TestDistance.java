@@ -40,7 +40,7 @@ public class TestDistance {
 		logger.info("PI R " + pir + " Haversine " + dHav + " Diff " + (pir - dHav));
 		assertEquals(pir, dHav, 0.01);
 	}
-	
+
 	@Test
 	@DisplayName("Point départ et arrivée identiques")
 	void distance0() {

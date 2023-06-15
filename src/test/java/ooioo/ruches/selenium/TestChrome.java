@@ -629,7 +629,7 @@ public class TestChrome {
 	}
 
 	// 43 déplacée dans TestRest.java
-	
+
 	@Test
 	@Order(44)
 	@DisplayName("Admin logs")

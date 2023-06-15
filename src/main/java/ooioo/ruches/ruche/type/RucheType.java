@@ -25,7 +25,7 @@ public class RucheType {
 	 * Nombre de cadres maxi
 	 */
 	private Integer nbCadresMax = 10;
-	
+
 	/**
 	 * Commentaire
 	 */

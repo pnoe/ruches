@@ -64,8 +64,8 @@ public class EvenementEssaimController {
 	private static final String cree = "{} créé";
 
 	/*
-	 * Liste événements essaim sucre.
-	 *   Période moins d'un an par défaut (value = "p", defaultValue = "2").
+	 * Liste événements essaim sucre. Période moins d'un an par défaut (value = "p",
+	 * defaultValue = "2").
 	 */
 	@GetMapping("/listeSucre")
 	public String listeSucre(Model model, @RequestParam(required = false) Integer periode,
@@ -108,7 +108,7 @@ public class EvenementEssaimController {
 			model.addAttribute("datestext", datestext);
 		}
 		model.addAttribute(Const.EVENEMENTS, evSucre);
-		List<Evenement> evePose = new ArrayList<>();
+		List<IdDate> evePose = new ArrayList<>();
 		for (Evenement eve : evSucre) {
 			evePose.add(evenementRepository.findSucreEveAjoutHausse(eve.getRuche(), eve.getEssaim(), eve.getDate()));
 		}

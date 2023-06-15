@@ -228,9 +228,9 @@ public class RucheService {
 			model.addAttribute("evensPoidsRuches", evensPoidsRuches);
 		}
 	}
-	
+
 	/**
-	 * Appel du formulaire pour la création d'une ruche. 
+	 * Appel du formulaire pour la création d'une ruche.
 	 */
 	public void cree(HttpSession session, Model model) {
 		List<String> noms = new ArrayList<>();
@@ -248,6 +248,6 @@ public class RucheService {
 		model.addAttribute(Const.RUCHE, ruche);
 		model.addAttribute(Const.RUCHETYPES, rucheTypeRepository.findAll());
 	}
-	
+
 
 }

@@ -17,7 +17,7 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 	RecolteHausse findFirstByRecolteAndEssaim(Recolte recolte, Essaim essaim);
 
 	List<RecolteHausse> findByRecolte(Recolte recolte);
-	
+
 	List<RecolteHausse> findByRecolteOrderByHausseNom(Recolte recolte);
 
 	@Query(value = """

@@ -24,7 +24,7 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	Iterable<Ruche> findByRucherIdOrderByNom(Long id);
 
 	List<Ruche> findByRucherIdAndActiveTrueOrderByNom(Long id);
-	
+
 	Iterable<Ruche> findByRucherIdNotOrderByNom(Long id);
 
 	Ruche findByEssaimId(Long id);
@@ -51,9 +51,9 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	List<Ruche> findByTypeIdOrderByNom(Long id);
 	long countByTypeIdOrderByNom(Long id);
 	List<Ruche> findByActiveTrueAndTypeIdOrderByNom(Long id);
-	
+
 	long countByActiveTrue();
-	
+
 	long countByActiveTrueAndProductionTrue();
 
 	long countByEssaimNotNullAndActiveTrue();
@@ -61,7 +61,7 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	long countByActiveTrueAndRucherDepotTrue();
 
 	long countByActiveTrueAndRucherDepotTrueAndProductionTrue();
-	
+
 	long countByEssaimNotNullAndActiveTrueAndProductionTrue();
 
 	// Les ruches actives au dépôt qui ont un essaim
@@ -101,7 +101,7 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 			  order by r.nom
 			""")
 	Iterable<Ruche> findActiveIdDiffOrderByNom(Long id);
-	
+
 	Integer countByTypeAndActiveTrueAndEssaimNotNull(RucheType rt);
 
 	Integer countByTypeAndActiveTrueAndEssaimNull(RucheType rt);

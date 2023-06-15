@@ -112,7 +112,7 @@ public final class Utils {
 		// https://github.com/openlayers/openlayers/blob/main/src/ol/sphere.js D =
 		// 12742017.6
 		// https://en.wikipedia.org/wiki/Earth_radius#Mean_radius
-//			
+//
 	}
 
 	/**

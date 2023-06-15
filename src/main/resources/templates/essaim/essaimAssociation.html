@@ -1,52 +1,54 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:inline="javascript">
-  const recolteHausses = /*[[${recolteHausses}]]*/ null;
-  const evenements = /*[[${evenements}]]*/ null;
-  const essaimsupprimerecoltetxt = /*[[#{essaimsupprimerecolte}]]*/ null;
-  const supprimeressaimevenementstxt = /*[[#{supprimeressaimevenements}]]*/ null;
-  const supprimeressaimtxt = /*[[#{supprimeressaim}]]*/ null;
-  $(document).ready(function() {
-	$('.confirmation').on('click', function () {
-		if(recolteHausses) {
-			alert(essaimsupprimerecoltetxt);
-			return false;
-		} else if (evenements) {
-	        return confirm(supprimeressaimevenementstxt);			
-		} else {
-			return confirm(supprimeressaimtxt);
+	<script th:inline="javascript">
+		const recolteHausses = /*[[${recolteHausses}]]*/ null;
+		const evenements = /*[[${evenements}]]*/ null;
+		const essaimsupprimerecoltetxt = /*[[#{essaimsupprimerecolte}]]*/ null;
+		const supprimeressaimevenementstxt = /*[[#{supprimeressaimevenements}]]*/ null;
+		const supprimeressaimtxt = /*[[#{supprimeressaim}]]*/ null;
+		$(document).ready(function () {
+			$('.confirmation').on('click', function () {
+				if (recolteHausses) {
+					alert(essaimsupprimerecoltetxt);
+					return false;
+				} else if (evenements) {
+					return confirm(supprimeressaimevenementstxt);
+				} else {
+					return confirm(supprimeressaimtxt);
+				}
+			});
+			const table = new DataTable('#associerRucheEssaim', {
+				"dom": '<"toolbar">lftip',
+				scrollX: true,
+				fnInitComplete: function () {
+					$('div.toolbar').html(
+						'<label class="form-label" for="avecEssaim">Avec Essaim</label> <input type="checkbox" id="avecEssaim"/> ');
+					$("#avecEssaim").click(function () {
+						table.draw();
+					});
+				}
+			});
+			$.fn.dataTable.ext.search.push(
+				function (settings, searchData, index, rowData, counter) {
+					const checked = $('#avecEssaim').is(':checked');
+					if (checked && searchData[1] !== '') {
+						return true;
+					} else if (!checked && searchData[1] === '') {
+						return true;
+					}
+					return false;
+				});
+		});
+	</script>
+	<style>
+		.toolbar {
+			float: left;
 		}
-    });
-	const table = new DataTable('#associerRucheEssaim', {
-        "dom": '<"toolbar">lftip',
-        scrollX: true,
-        fnInitComplete: function(){
-            $('div.toolbar').html(
-            	'<label class="form-label" for="avecEssaim">Avec Essaim</label> <input type="checkbox" id="avecEssaim"/> ');
-            $("#avecEssaim").click(function() {
-            	table.draw();
-        	});
-          }
-    } );
-    $.fn.dataTable.ext.search.push(
-    	    function (settings, searchData, index, rowData, counter) {   	      
-    	      const checked = $('#avecEssaim').is(':checked');
-    	      if (checked && searchData[1] !== '') {
-    	        return true;
-    	      } else if (!checked && searchData[1] === '') {
-      	        return true;
-      	      }
-    	      return false;
-    });  
- });
-</script>
-<style>
-.toolbar {
-    float: left;
-}
-</style>
+	</style>
 </head>
+
 <body>
 	<nav th:replace="include :: navbar"></nav>
 	<br />
@@ -56,32 +58,31 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-				 <th:block th:text="#{associationruche}"></th:block>
-				 <a th:href="@{'/essaim/'+${essaim.id}}"
-					th:text="#{essaim} + ' ' + ${essaim.nom}"></a>
-				 </h1>
+					<th:block th:text="#{associationruche}"></th:block>
+					<a th:href="@{'/essaim/'+${essaim.id}}" th:text="#{essaim} + ' ' + ${essaim.nom}"></a>
+				</h1>
 			</div>
 		</div>
 	</div>
-	<br/>
+	<br />
 	<div class="container-fluid">
 		<h6 th:if="${rucheEssaim}" th:text="#{essaimdanslaruche}+' '+${rucheEssaim.nom}"></h6>
 		<h6 th:text="#{mettreessaimdanslaruche}"></h6>
-		<table class="table table-bordered table-striped table-sm" id="associerRucheEssaim" >
+		<table class="table table-bordered table-striped table-sm" id="associerRucheEssaim">
 			<thead>
 				<tr>
 					<th th:text="#{ruche}"></th>
 					<th th:text="#{essaim}"></th>
-				    <th th:text="#{dateAcquisition}"></th>
+					<th th:text="#{dateAcquisition}"></th>
 					<th th:text="#{type}"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="ruche : ${ruches}">
-					<td><a  data-bs-toggle="tooltip" th:title="#{mettreessaimdansruche}"
-						th:href="@{'/essaim/ruche/associe/'+${ruche.id}+'/'+${essaim.id}}"
-						th:text="${ruche.nom}"></a></td>
-					<td th:text="${ruche.essaim?.nom}"></td>	
+					<td><a data-bs-toggle="tooltip" th:title="#{mettreessaimdansruche}"
+							th:href="@{'/essaim/ruche/associe/'+${ruche.id}+'/'+${essaim.id}}"
+							th:text="${ruche.nom}"></a></td>
+					<td th:text="${ruche.essaim?.nom}"></td>
 					<td th:text="${ruche.dateAcquisition}"></td>
 					<td th:text="${ruche.type?.nom}"></td>
 				</tr>
@@ -90,4 +91,5 @@
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

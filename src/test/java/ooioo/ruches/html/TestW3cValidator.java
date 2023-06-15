@@ -94,16 +94,16 @@ public class TestW3cValidator {
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = { "ruche/liste", "ruche/cree", 
+	@ValueSource(strings = { "ruche/liste", "ruche/cree",
 			"rucheType/liste", "rucheType/cree",
 			"ruche/listeplus",
-			"hausse/liste", "hausse/cree", 
+			"hausse/liste", "hausse/cree",
 			"rucher/liste", "rucher/cree", "rucher/Gg", "rucher/Ign", "rucher/Osm",
 			"rucher/statistiques", "rucher/historiques/true", "rucher/historiques/false",
-			"personne/liste", "personne/cree", 
+			"personne/liste", "personne/cree",
 			"essaim/liste", "essaim/cree", "essaim/statistiques", "essaim/statistiquesage",
 			"recolte/liste", "recolte/cree", "recolte/statistiques/essaim", "recolte/statprod",
-			"evenement/liste", "evenement/cree", 
+			"evenement/liste", "evenement/cree",
 			"evenement/essaim/listeSucre", "evenement/essaim/listeTraitement/true",
 			"evenement/essaim/listeTraitement/false", "evenement/ruche/listePoidsRuche",
 			"evenement/ruche/listeCadreRuche", "evenement/hausse/listeRemplissageHausse",
