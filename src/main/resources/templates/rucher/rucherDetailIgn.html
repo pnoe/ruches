@@ -4,10 +4,8 @@
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 	<script th:replace="include :: jsol"></script>
 	<script th:replace="include :: jsGpPluginOpenLayers"></script>
-	<link th:replace="include :: cssol">
-	</link>
-	<link th:replace="include :: cssGpPluginOpenLayers">
-	</link>
+	<link th:replace="include :: cssol" />
+	<link th:replace="include :: cssGpPluginOpenLayers" />
 	<script th:src="@{/js/ruches/rucherDetailOl.js}"></script>
 	<script th:src="@{/js/ruches/rucherDetailCarto.js}"></script>
 	<script th:replace="include :: dom-to-image"></script>
