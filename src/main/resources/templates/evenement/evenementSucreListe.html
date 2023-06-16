@@ -12,7 +12,8 @@
 	const Evenements = /*[[#{evenementssucre}]]*/null;
 	$(document).ready(
 			function() {
-				new DataTable('#evenementssucre', {
+				const idTbl = '#evenementssucre';
+				new DataTable(idTbl, {
 					order : [ [ 0, 'desc' ] ],
 					dom : 'Blftip',
 					buttons : [ 'csv', {
@@ -20,10 +21,11 @@
 						exportOptions : {
 							columns : ':visible'
 						},
-						title : Evenements + " " + (new Date()).toLocaleDateString(),
+						title : "",
 						action: function (e, dt, node, config)
 						{
-							const inputSearch = $.trim($('#evenementssucre_filter label input').val());
+							config.title = Evenements + " " + (new Date()).toLocaleDateString();
+							const inputSearch = $.trim($(`${idTbl}_filter label input`).val());
 							if (inputSearch.length !== 0) {
 						    	config.title += " <" + inputSearch + ">";
 							}

@@ -10,7 +10,8 @@
 	const selectRuTrait = /*[[#{selectruchestraiter}]]*/null;
 	$(document).ready(
 			function() {
-				const table = new DataTable('#ruches', {
+				const idTbl = '#ruches';
+				const table = new DataTable(idTbl, {
 					select : {
 						style : 'multi+shift'
 					},
@@ -21,7 +22,14 @@
 						exportOptions : {
 							columns : ':visible'
 						},
-						title : Ruches + " " + (new Date()).toLocaleDateString(),
+						action: function (e, dt, node, config) {
+							config.title = Ruches + " " + (new Date()).toLocaleDateString();
+							const inputSearch = $.trim($(`${idTbl}_filter label input`).val());
+							if (inputSearch.length !== 0) {
+								config.title += " <" + inputSearch + ">";
+							}
+							$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, node, config);
+						},
 						orientation : 'landscape'
 					}, {
 						extend : 'print',

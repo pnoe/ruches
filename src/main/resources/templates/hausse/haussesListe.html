@@ -1,52 +1,64 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:inline="javascript">
-const Hausses = /*[[#{Hausses}]]*/ null;
-const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
-const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
-const urlCommLot = /*[[@{/evenement/hausse/commentaireLot/}]]*/ null;
-const selectHaTrait = /*[[#{selecthaussestraiter}]]*/ null;
-$(document).ready(function() {
-    const table = new DataTable('#hausses', {
-    	select: {style: 'multi+shift'},
-        dom: 'Blftip',
-        scrollX: true,
-        buttons: [
-	    	'csv',
-	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-	    		title: Hausses + " " + (new Date()).toLocaleDateString()},
-	        {extend: 'print', text: buttTxtPrint},
-	        {extend: 'colvis', text: buttTxtCol}
-        ]
-    });
-    function updateLinks( e, dt, type, indexes ) {
-    	if ( type === 'row' ) {
-    		let noms = "";
-            table.rows( { selected: true } ).data().pluck(0).each(function (value, index) {
-            	const a = document.createElement('template');
-            	a.innerHTML = value;
-            	noms += a.content.children[0].getAttribute("href").
-            		substring(a.content.children[0].getAttribute("href").lastIndexOf("/") + 1) + ",";
-            });
-            if (noms) { 
-            	noms = noms.substring(0, noms.length-1);
-            	$('#commentaire').attr('href', urlCommLot + noms);
-            } else {
-            	$('#commentaire').attr('href', "#");
-            }      
-        }
-	}
-    table.on( 'select deselect', updateLinks);
-    $('.selection').on('click', function () {
-    	if ($(this).attr("href") == "#") {
-    		alert(selectHaTrait);	
-    	}      
-    });
-    
-});
-</script>
+	<script th:inline="javascript">
+		const Hausses = /*[[#{Hausses}]]*/ null;
+		const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
+		const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
+		const urlCommLot = /*[[@{/evenement/hausse/commentaireLot/}]]*/ null;
+		const selectHaTrait = /*[[#{selecthaussestraiter}]]*/ null;
+		$(document).ready(function () {
+			const idTbl = '#hausses';
+			const table = new DataTable(idTbl, {
+				select: {style: 'multi+shift'},
+				dom: 'Blftip',
+				scrollX: true,
+				buttons: [
+					'csv',
+					{
+						extend: 'pdf', exportOptions: {columns: ':visible'},
+						action: function (e, dt, node, config) {
+							config.title = Hausses + " " + (new Date()).toLocaleDateString();
+							const inputSearch = $.trim($(`${idTbl}_filter label input`).val());
+							if (inputSearch.length !== 0) {
+								config.title += " <" + inputSearch + ">";
+							}
+							$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, node, config);
+						}
+					},
+					{extend: 'print', text: buttTxtPrint},
+					{extend: 'colvis', text: buttTxtCol}
+				]
+			});
+			function updateLinks(e, dt, type, indexes) {
+				if (type === 'row') {
+					let noms = "";
+					table.rows({selected: true}).data().pluck(0).each(function (value, index) {
+						const a = document.createElement('template');
+						a.innerHTML = value;
+						noms += a.content.children[0].getAttribute("href").
+							substring(a.content.children[0].getAttribute("href").lastIndexOf("/") + 1) + ",";
+					});
+					if (noms) {
+						noms = noms.substring(0, noms.length - 1);
+						$('#commentaire').attr('href', urlCommLot + noms);
+					} else {
+						$('#commentaire').attr('href', "#");
+					}
+				}
+			}
+			table.on('select deselect', updateLinks);
+			$('.selection').on('click', function () {
+				if ($(this).attr("href") == "#") {
+					alert(selectHaTrait);
+				}
+			});
+
+		});
+	</script>
 </head>
+
 <body>
 	<nav th:replace="include :: navbar"></nav>
 	<br />
@@ -58,11 +70,11 @@ $(document).ready(function() {
 				<h1 class="item" th:text="#{Hausses}"></h1>
 			</div>
 			<div class="col">
-				<a id="cree" th:href="@{/hausse/cree}"
-				  class="bi-plus-lg" th:title="#{ajouterHausse}" aria-hidden="true"></a>
+				<a id="cree" th:href="@{/hausse/cree}" class="bi-plus-lg" th:title="#{ajouterHausse}"
+					aria-hidden="true"></a>
 				&nbsp;
-				<a id="commentaire" href="#"
-				  class="selection bi-chat-text" th:title="#{evenementsCommentaire}" aria-hidden="true"></a>
+				<a id="commentaire" href="#" class="selection bi-chat-text" th:title="#{evenementsCommentaire}"
+					aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
@@ -84,14 +96,12 @@ $(document).ready(function() {
 			</thead>
 			<tbody>
 				<tr th:each="hausse : ${hausses}">
-					<td><a th:href="@{'/hausse/'+${hausse.id}}"
-						th:text="${hausse.nom}"></a></td>
-					<td><a th:href="@{'/ruche/'+${hausse.ruche?.id}}"
-						th:text="${hausse.ruche?.nom}"></a></td>
+					<td><a th:href="@{'/hausse/'+${hausse.id}}" th:text="${hausse.nom}"></a></td>
+					<td><a th:href="@{'/ruche/'+${hausse.ruche?.id}}" th:text="${hausse.ruche?.nom}"></a></td>
 					<td><a th:href="@{'/essaim/'+${hausse.ruche?.essaim?.id}}"
-						th:text="${hausse.ruche?.essaim?.nom}"></a></td>
+							th:text="${hausse.ruche?.essaim?.nom}"></a></td>
 					<td><a th:href="@{'/rucher/'+${hausse.ruche?.rucher?.id}}"
-						th:text="${hausse.ruche?.rucher?.nom}"></a></td>
+							th:text="${hausse.ruche?.rucher?.nom}"></a></td>
 					<td th:text="${hausse.dateAcquisition}"></td>
 					<td th:if="${session.voirInactif}" th:text="${hausse.active}? #{oui} : #{non}"></td>
 					<td class="num" th:text="${#numbers.formatDecimal(hausse.poidsVide,1,2,'DEFAULT')}"></td>
@@ -104,4 +114,5 @@ $(document).ready(function() {
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

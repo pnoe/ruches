@@ -1,59 +1,71 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:inline="javascript">
-const Essaims = /*[[#{Essaims}]]*/ null;
-const buttontextprint = /*[[#{buttontextprint}]]*/ null;
-const buttontextcol = /*[[#{buttontextcol}]]*/ null;
-const urlTraitLot = /*[[@{/evenement/essaim/traitementLot/}]]*/ null;
-const urlSucreLot = /*[[@{/evenement/essaim/sucreLot/}]]*/ null;
-const urlCommLot = /*[[@{/evenement/essaim/commentaireLot/}]]*/ null;
-const selectEssTrt = /*[[#{selectessaimstraiter}]]*/ null;
-$(document).ready(function() {
-	const table = new DataTable('#essaims', {
-    	select: {style: 'multi+shift'},
-        dom: 'Blftip',
-        scrollX: true,
-        buttons: [
-	    	'csv',
-	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-	    		title: Essaims + " " + (new Date()).toLocaleDateString(),
-	    		orientation : 'landscape'},
-	        {extend: 'print', text: buttontextprint},
-	        {extend: 'colvis', text: buttontextcol}
-        ]
-    });
-	function updateLinks( e, dt, type, indexes ) {
-    	if ( type === 'row' ) {
-    		let noms = "";
-            table.rows( { selected: true } ).data().pluck(0).each(function (value, index) {
-            	const a = document.createElement('template');
-            	a.innerHTML = value;
-            	noms += a.content.children[0].getAttribute("href").
-            		substring(a.content.children[0].getAttribute("href").lastIndexOf("/") + 1) + ",";
-            });
-            if (noms) { 
-            	/*[- on enlève la dernière virgule et met à jour l'url de traitement -]*/
-            	noms = noms.substring(0, noms.length-1);
-            	$('#traitement').attr('href', urlTraitLot + noms);
-            	$('#sucre').attr('href', urlSucreLot + noms);
-            	$('#commentaire').attr('href', urlCommLot + noms);
-            } else {
-            	$('#traitement').attr('href', "#");
-            	$('#sucre').attr('href', "#");
-            	$('#commentaire').attr('href', "#");
-            }      
-        }
-	}
-    table.on( 'select deselect', updateLinks);
-    $('.selection').on('click', function () {
-    	if ($(this).attr("href") == "#") {
-    		alert(selectEssTrt);	
-    	}      
-    });
-});
-</script>
+	<script th:inline="javascript">
+		const Essaims = /*[[#{Essaims}]]*/ null;
+		const buttontextprint = /*[[#{buttontextprint}]]*/ null;
+		const buttontextcol = /*[[#{buttontextcol}]]*/ null;
+		const urlTraitLot = /*[[@{/evenement/essaim/traitementLot/}]]*/ null;
+		const urlSucreLot = /*[[@{/evenement/essaim/sucreLot/}]]*/ null;
+		const urlCommLot = /*[[@{/evenement/essaim/commentaireLot/}]]*/ null;
+		const selectEssTrt = /*[[#{selectessaimstraiter}]]*/ null;
+		$(document).ready(function () {
+			const idTbl = '#essaims';
+			const table = new DataTable(idTbl, {
+				select: {style: 'multi+shift'},
+				dom: 'Blftip',
+				scrollX: true,
+				buttons: [
+					'csv',
+					{
+						extend: 'pdf', exportOptions: {columns: ':visible'},
+						action: function (e, dt, node, config) {
+							config.title = Essaims + " " + (new Date()).toLocaleDateString();
+							const inputSearch = $.trim($(`${idTbl}_filter label input`).val());
+							if (inputSearch.length !== 0) {
+								config.title += " <" + inputSearch + ">";
+							}
+							$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, node, config);
+						},
+	    		orientation: 'landscape'
+					},
+					{extend: 'print', text: buttontextprint},
+					{extend: 'colvis', text: buttontextcol}
+				]
+			});
+			function updateLinks(e, dt, type, indexes) {
+				if (type === 'row') {
+					let noms = "";
+					table.rows({selected: true}).data().pluck(0).each(function (value, index) {
+						const a = document.createElement('template');
+						a.innerHTML = value;
+						noms += a.content.children[0].getAttribute("href").
+							substring(a.content.children[0].getAttribute("href").lastIndexOf("/") + 1) + ",";
+					});
+					if (noms) {
+						/*[- on enlève la dernière virgule et met à jour l'url de traitement -]*/
+						noms = noms.substring(0, noms.length - 1);
+						$('#traitement').attr('href', urlTraitLot + noms);
+						$('#sucre').attr('href', urlSucreLot + noms);
+						$('#commentaire').attr('href', urlCommLot + noms);
+					} else {
+						$('#traitement').attr('href', "#");
+						$('#sucre').attr('href', "#");
+						$('#commentaire').attr('href', "#");
+					}
+				}
+			}
+			table.on('select deselect', updateLinks);
+			$('.selection').on('click', function () {
+				if ($(this).attr("href") == "#") {
+					alert(selectEssTrt);
+				}
+			});
+		});
+	</script>
 </head>
+
 <body>
 	<nav th:replace="include :: navbar"></nav>
 	<br />
@@ -65,25 +77,24 @@ $(document).ready(function() {
 				<h1 class="item" th:text="#{Essaims}"></h1>
 			</div>
 			<div class="col">
-				<a id="cree" th:href="@{/essaim/cree}"
-				  class="bi-plus-lg" th:title="#{ajouterEssaim}" aria-hidden="true"></a>
-       			&nbsp;	
-       			<a id="commentaire" href="#"
-				  class="selection bi-chat-text" th:title="#{evenementsCommentaire}" aria-hidden="true"></a>
-				<a id="sucre" href="#"
-				  class="selection bi-bucket" th:title="#{evenementsSucre}" aria-hidden="true"></a>
-				 <a id="traitement" href="#"
-					class="selection bi-bug" th:title="#{evenementsTraitement}" aria-hidden="true"></a>
+				<a id="cree" th:href="@{/essaim/cree}" class="bi-plus-lg" th:title="#{ajouterEssaim}"
+					aria-hidden="true"></a>
 				&nbsp;
-				<a th:href="@{/essaim/statistiques}"
-				  class="bi-table" th:title="#{statistiquesproduction}" aria-hidden="true"></a>
-				<a th:href="@{/essaim/statistiquesage}"
-				  class="bi-bar-chart" th:title="#{statistiquesage}" aria-hidden="true"></a>
-        	</div>
-        </div>
-    </div>
+				<a id="commentaire" href="#" class="selection bi-chat-text" th:title="#{evenementsCommentaire}"
+					aria-hidden="true"></a>
+				<a id="sucre" href="#" class="selection bi-bucket" th:title="#{evenementsSucre}" aria-hidden="true"></a>
+				<a id="traitement" href="#" class="selection bi-bug" th:title="#{evenementsTraitement}"
+					aria-hidden="true"></a>
+				&nbsp;
+				<a th:href="@{/essaim/statistiques}" class="bi-table" th:title="#{statistiquesproduction}"
+					aria-hidden="true"></a>
+				<a th:href="@{/essaim/statistiquesage}" class="bi-bar-chart" th:title="#{statistiquesage}"
+					aria-hidden="true"></a>
+			</div>
+		</div>
+	</div>
 	<div class="container-fluid">
-		<table class="table table-bordered table-striped table-sm" id="essaims">			
+		<table class="table table-bordered table-striped table-sm" id="essaims">
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>
@@ -96,25 +107,21 @@ $(document).ready(function() {
 					<th style="background-color:LemonChiffon" th:text="#{reineDateNaissance}"></th>
 					<th th:text="#{souche}"></th>
 					<th th:text="#{agressivite}"></th>
-					<th th:text="#{proprete}"></th>						
+					<th th:text="#{proprete}"></th>
 					<th th:text="#{commentaire}"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="eRRr : ${EssaimsRRr}">
-					<td><a th:href="@{'/essaim/'+${eRRr.essaim.id}}"
-						th:text="${eRRr.essaim.nom}"></a></td>
-					<td><a th:href="@{'/ruche/'+ ${eRRr.idRuche}}"
-						th:text="${eRRr.nomRuche}"></a></td>
-					<td><a th:href="@{'/rucher/'+ ${eRRr.idRucher}}"
-						th:text="${eRRr.nomRucher}"></a></td>
+					<td><a th:href="@{'/essaim/'+${eRRr.essaim.id}}" th:text="${eRRr.essaim.nom}"></a></td>
+					<td><a th:href="@{'/ruche/'+ ${eRRr.idRuche}}" th:text="${eRRr.nomRuche}"></a></td>
+					<td><a th:href="@{'/rucher/'+ ${eRRr.idRucher}}" th:text="${eRRr.nomRucher}"></a></td>
 					<td th:if="${session.voirInactif}" th:text="${eRRr.essaim.actif}? #{oui} : #{non}"></td>
 					<td th:text="${eRRr.essaim.dateAcquisition}"></td>
 					<td th:text="${eRRr.essaim.reineMarquee}? #{oui} : #{non}"></td>
 					<td th:text="#{${eRRr.essaim.reineCouleurMarquage}}"></td>
 					<td th:text="${eRRr.essaim.reineDateNaissance}"></td>
-					<td><a th:href="@{'/essaim/'+${eRRr.essaim.souche?.id}}"
-						th:text="${eRRr.essaim.souche?.nom}"></a>
+					<td><a th:href="@{'/essaim/'+${eRRr.essaim.souche?.id}}" th:text="${eRRr.essaim.souche?.nom}"></a>
 					</td>
 					<td th:text="${eRRr.essaim.agressivite}"></td>
 					<td th:text="${eRRr.essaim.proprete}"></td>
@@ -125,4 +132,5 @@ $(document).ready(function() {
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>
