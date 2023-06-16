@@ -35,48 +35,48 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 //	https://docs.spring.io/spring-data/rest/docs/current/reference/html/#customizing-sdr.configuring-the-rest-url-path
 	@RestResource(path = "findPeriodeDate1Date2")
 	@Query(value = """
-			select evenement
-			  from Evenement evenement
-			  where evenement.date > ?1 and evenement.date < ?2
+			select e
+			  from Evenement e
+			  where e.date > ?1 and e.date < ?2
 			""")
 	Iterable<Evenement> findPeriode(LocalDateTime date1, LocalDateTime date2);
 
 	@RestResource(path = "findPeriodeTypeDate")
 	@Query(value = """
-			select evenement
-			  from Evenement evenement
-			  where evenement.type = ?1 and evenement.date > ?2
+			select e
+			  from Evenement e
+			  where e.type = ?1 and e.date > ?2
 			""")
 	List<Evenement> findTypePeriode(TypeEvenement typeEvenement, LocalDateTime date);
 
 	@RestResource(path = "findPeriodeTypeDate1Date2")
 	@Query(value = """
-			select evenement
-			  from Evenement evenement
-			  where evenement.type = ?1 and evenement.date > ?2 and evenement.date < ?3
+			select e
+			  from Evenement e
+			  where e.type = ?1 and e.date > ?2 and e.date < ?3
 			""")
 	List<Evenement> findTypePeriode(TypeEvenement typeEvenement, LocalDateTime date1, LocalDateTime date2);
 
-
-
-	// pour TypeEvenement.ESSAIMTRAITEMENT et TypeEvenement.ESSAIMTRAITEMENTFIN
 	@RestResource(path = "findPeriodeType1Type2Date1")
 	@Query(value = """
-			select evenement
-			  from Evenement evenement
-			  where (evenement.type = ?1 or evenement.type = ?2) and evenement.date > ?3
+			select e
+			  from Evenement e
+			  where (e.type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENT
+			    or e.type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENTFIN)
+			    and e.date > ?1
 			""")
-	Iterable<Evenement> findTypePeriode(TypeEvenement type1, TypeEvenement type2, LocalDateTime date);
-
-	// pour TypeEvenement.ESSAIMTRAITEMENT et TypeEvenement.ESSAIMTRAITEMENTFIN
+	Iterable<Evenement> findTypePeriode(LocalDateTime date);
+	
 	@RestResource(path = "findPeriodeType1Type2Date1Date2")
 	@Query(value = """
-			select evenement
-			  from Evenement evenement
-			  where (evenement.type = ?1 or evenement.type = ?2) and evenement.date > ?3 and evenement.date < ?4
+			select e
+			  from Evenement e
+			  where (e.type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENT
+			      or e.type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENTFIN)
+			    and e.date > ?1 and e.date < ?2
 			""")
-	Iterable<Evenement> findTypePeriode(TypeEvenement type1, TypeEvenement type2, LocalDateTime date1, LocalDateTime date2);
-
+	Iterable<Evenement> findTypePeriode(LocalDateTime date1, LocalDateTime date2);
+	
 	List<Evenement> findByRucheId(Long rucheId);
 	Iterable<Evenement> findByEssaimId(Long essaimId);
 	@Query(value = """
@@ -111,7 +111,13 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			""")
 	IdDate findSucreEveAjoutHausse(Ruche ruche, Essaim essaim, LocalDateTime date);
 
-	List<Evenement> findByTypeOrTypeOrderByDateDesc(TypeEvenement type1, TypeEvenement type2);
+	@Query(value = """
+			select e
+			  from Evenement e
+			  where e.type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENT
+			    or e.type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENTFIN
+			""")
+	List<Evenement> findTraitementDateDesc();
 
 	@Query(value = """
 			select e from Evenement e
@@ -135,12 +141,14 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	Iterable<Evenement> findFirst3ByEssaimAndTypeOrderByDateDesc(Essaim essaim, TypeEvenement typeEvenement);
 
 	@Query(value = """
-			select *
-			  from evenement
-			  where essaim_id = ?1 and ((type = ?2) or (type = ?3))
+			select e
+			  from Evenement e
+			  where e.essaim = ?1 and 
+			    (e.type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENT or 
+			      e.type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENTFIN)
 			  order by date desc limit 1
-			""", nativeQuery = true)
-	Evenement findFirstTraitemenetByEssaim(Long essaimId, int t1, int t2);
+			""")
+	Evenement findFirstTraitemenetByEssaim(Essaim essaim);
 
 	Evenement findFirstByRucheAndHausseAndTypeOrderByDateDesc(Ruche ruche, Hausse hausse, TypeEvenement typeEvenement);
 

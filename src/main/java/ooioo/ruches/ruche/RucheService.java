@@ -136,13 +136,17 @@ public class RucheService {
 		for (Ruche ruche : ruches) {
 			nbHausses.add(hausseRepository.countByRucheId(ruche.getId()));
 			if (plus) {
+				// Les noms des hausses présentes sur la ruche.
 				nomHausses.add(hausseRepository.hausseNomsByRucheId(ruche.getId()));
+				// Les 3 derniers événements commentaire de l'essaim.
 				listeEvensCommentaireEssaim.add(evenementRepository
 						.findFirst3ByEssaimAndTypeOrderByDateDesc(ruche.getEssaim(), TypeEvenement.COMMENTAIREESSAIM));
-				// il faut trouver le dernier evenement hausseposeruche dont la hausse est effectivement
-				//  présente sur la ruche
+				
+				
+				// Dernier événement hausseposeruche dont la hausse est effectivement présente sur la ruche.
 				List<Hausse> hausses = hausseRepository.findByRucheIdOrderByOrdreSurRuche(ruche.getId());
 				evensHaussesRuches.add(evenementRepository.findFirstByRucheAndHausseInAndTypeOrderByDateDesc(ruche, hausses, TypeEvenement.HAUSSEPOSERUCHE));
+				// Dernier événement pesée de la ruche.
 				evensPoidsRuches.add(evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.RUCHEPESEE));
 			}
 			Evenement evenAjoutRucher = evenementRepository

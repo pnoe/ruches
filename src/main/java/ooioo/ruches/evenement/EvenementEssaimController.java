@@ -142,35 +142,34 @@ public class EvenementEssaimController {
 			}
 		}
 		TypeEvenement typD = TypeEvenement.ESSAIMTRAITEMENT;
-		TypeEvenement typF = TypeEvenement.ESSAIMTRAITEMENTFIN;
 		switch (periode) {
 		case 1: // toute période
-			model.addAttribute(Const.EVENEMENTS, tous ? evenementRepository.findByTypeOrTypeOrderByDateDesc(typD, typF)
-					: evenementRepository.findByTypeOrderByDateDesc(typD));
+			model.addAttribute(Const.EVENEMENTS, tous ? evenementRepository.findTraitementDateDesc()
+									: evenementRepository.findByTypeOrderByDateDesc(typD));
 			break;
 		case 2: // moins d'un an
 			model.addAttribute(Const.EVENEMENTS,
-					tous ? evenementRepository.findTypePeriode(typD, typF, LocalDateTime.now().minusYears(1))
+					tous ? evenementRepository.findTypePeriode(LocalDateTime.now().minusYears(1))
 							: evenementRepository.findTypePeriode(typD, LocalDateTime.now().minusYears(1)));
 			break;
 		case 3: // moins d'un mois
 			model.addAttribute(Const.EVENEMENTS,
-					tous ? evenementRepository.findTypePeriode(typD, typF, LocalDateTime.now().minusMonths(1))
+					tous ? evenementRepository.findTypePeriode(LocalDateTime.now().minusMonths(1))
 							: evenementRepository.findTypePeriode(typD, LocalDateTime.now().minusMonths(1)));
 			break;
 		case 4: // moins d'une semaine
 			model.addAttribute(Const.EVENEMENTS,
-					tous ? evenementRepository.findTypePeriode(typD, typF, LocalDateTime.now().minusWeeks(1))
+					tous ? evenementRepository.findTypePeriode(LocalDateTime.now().minusWeeks(1))
 							: evenementRepository.findTypePeriode(typD, LocalDateTime.now().minusWeeks(1)));
 			break;
 		case 5: // moins d'un jour
 			model.addAttribute(Const.EVENEMENTS,
-					tous ? evenementRepository.findTypePeriode(typD, typF, LocalDateTime.now().minusDays(1))
+					tous ? evenementRepository.findTypePeriode(LocalDateTime.now().minusDays(1))
 							: evenementRepository.findTypePeriode(typD, LocalDateTime.now().minusDays(1)));
 			break;
 		default:
 			// ajouter tests date1 et date2 non null
-			model.addAttribute(Const.EVENEMENTS, tous ? evenementRepository.findTypePeriode(typD, typF, date1, date2)
+			model.addAttribute(Const.EVENEMENTS, tous ? evenementRepository.findTypePeriode(date1, date2)
 					: evenementRepository.findTypePeriode(typD, date1, date2));
 			model.addAttribute("datestext", datestext);
 		}
