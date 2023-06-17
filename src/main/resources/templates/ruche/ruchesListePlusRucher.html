@@ -67,9 +67,10 @@ $(document).ready(function() {
 					<th style="background-color:LemonChiffon" th:text="#{reineMarquee}"></th>
 					<th style="background-color:LemonChiffon" th:text="#{reineCouleurMarquage}"></th>
 					<th style="background-color:LemonChiffon" th:text="#{reineDateNaissance}"></th>
-					<th style="background-color:lightskyblue" th:text="#{commentaire1}"></th>
-					<th style="background-color:lightskyblue" th:text="#{commentaire2}"></th>
-					<th style="background-color:lightskyblue" th:text="#{commentaire3}"></th>
+					<th style="background-color:lightskyblue" th:text="#{evenement1}"></th>
+					<th style="background-color:lightskyblue" th:text="#{evenement2}"></th>
+					<th style="background-color:lightskyblue" th:text="#{evenement3}"></th>
+
 				</tr>
 			</thead>
 			<tbody th:with="f='dd/MM/yyyy'">
@@ -105,14 +106,8 @@ $(document).ready(function() {
 					<td th:text="${ruche.essaim?.reineMarquee}? #{oui} : #{non}"></td>
 					<td th:text="${ruche.essaim}? #{${ruche.essaim.reineCouleurMarquage}} : '-'"></td>
 					<td th:text="${ruche.essaim?.reineDateNaissance}"></td>
-					<td th:text=
-					  "${#arrays.length(e)} &gt; 0 ? ${#temporals.format(e[0].date, f)} + ' ' + ${e[0].commentaire}"
-					></td>
-					<td th:text=
-					  "${#arrays.length(e)} &gt; 1 ? ${#temporals.format(e[1].date, f)} + ' ' + ${e[1].commentaire}"
-					></td>
-					<td th:text=
-					  "${#arrays.length(e)} &gt; 2 ? ${#temporals.format(e[2].date, f)} + ' ' + ${e[2].commentaire}"
+					<td th:each="i : ${ {0,1,2} }" th:text="${#arrays.length(e)} &gt; ${i} ?
+					#{${e[i].type}} + ' ' + (${e[i].valeur != null} ? ${e[i].valeur} + ' ' : '') + ${#temporals.format(e[i].date, f)} + ' ' + ${e[i].commentaire}"
 					></td>
 				</tr>
 			</tbody>

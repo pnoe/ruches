@@ -138,7 +138,9 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 	Evenement findFirstByEssaimAndTypeOrderByDateDesc(Essaim essaim, TypeEvenement typeEvenement);
 
-	Iterable<Evenement> findFirst3ByEssaimAndTypeOrderByDateDesc(Essaim essaim, TypeEvenement typeEvenement);
+	// Iterable<Evenement> findFirst3ByEssaimAndTypeOrderByDateDesc(Essaim essaim, TypeEvenement typeEvenement);
+	
+	Iterable<Evenement> findFirst3ByRucheOrderByDateDesc(Ruche ruche);
 
 	@Query(value = """
 			select e
