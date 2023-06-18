@@ -34,12 +34,14 @@ public class RecolteHausse {
 	private Recolte recolte;
 
 	/**
-	 * Poids de la hausse avant récolte
+	 * Poids de la hausse avant récolte, en g.
+	 * Attention get et set en kg.
 	 */
 	private Integer poidsAvant = 0;
 
 	/**
-	 * Poids de la hausse après récolte
+	 * Poids de la hausse après récolte, en g.
+	 * Attention get et set en kg.
 	 */
 	private Integer poidsApres = 0;
 

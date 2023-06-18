@@ -1,6 +1,5 @@
 package ooioo.ruches.recolte;
 
-import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -175,13 +174,13 @@ public class RecolteController {
 		Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
 		if (recolteOpt.isPresent()) {
 			Recolte recolte = recolteOpt.get();
-			ArrayList<Integer> poidsListe = new ArrayList<>();
+			ArrayList<Long> poidsListe = new ArrayList<>();
 			ArrayList<String> nomListe = new ArrayList<>();
-			Integer poidsTotal = 0;
+			Long poidsTotal = 0l;
 			Iterable <Object[]> poidsNomEssaim = recolteHausseRepository.findPoidsMielNomEssaimByRecolte(recolteId);
-			int poids;
+			Long poids;
 			for (Object[] i:poidsNomEssaim) {
-				poids = ((BigInteger)i[0]).intValue();
+				poids = ((Long)i[0]);
 				if (poids > 0) {
 					poidsListe.add(poids);
 					nomListe.add((String)i[1]);
