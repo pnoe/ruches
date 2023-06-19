@@ -22,7 +22,8 @@ public class Personne {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(nullable = false, unique = true)
+	// login pas unique (personnes sans login)
+	@Column(nullable = false)
 	private String login;
 
 	private String password;
@@ -58,8 +59,8 @@ public class Personne {
 
 	/**
 	 * Email
+	 *  L'email peut être ""
 	 */
-	@Column(unique = true)
 	private String email;
 
 	/**

@@ -64,7 +64,7 @@ public class TestLotHausse {
 	}
 
 	@Order(2)
-	@RepeatedTest(1)
+	@RepeatedTest(2)
 	@DisplayName("Hausse création")
 	void creeHausse() {
 		// Création d'une Hausse

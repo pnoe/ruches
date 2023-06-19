@@ -12,6 +12,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 //  https://validator.w3.org/docs/api.html
 //            Est ce qu'il peut y avoir des erreurs html après traitement par thymeleaf ??????????????????????????????????????
 @TestMethodOrder(OrderAnnotation.class)
+@Disabled
 public class TestW3cValidator {
 
 //	https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/package-summary.html

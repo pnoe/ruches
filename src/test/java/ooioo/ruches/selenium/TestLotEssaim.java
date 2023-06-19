@@ -65,7 +65,7 @@ public class TestLotEssaim {
 	}
 
 	@Order(2)
-	@RepeatedTest(1)
+	@RepeatedTest(2)
 	@DisplayName("Essaim création")
 	void creeEssaim() {
 		// Création d'une essaim

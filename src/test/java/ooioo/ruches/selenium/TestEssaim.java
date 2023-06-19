@@ -150,7 +150,7 @@ public class TestEssaim {
 		assertEquals("div", driver.findElement(By.id("detailEssaim")).getTagName());
 		driver.findElement(By.id("assoRuche")).click();
 		assertEquals("table", driver.findElement(By.id("associerRucheEssaim")).getTagName());
-		TestUtils.xpathClick(driver, "//a[contains(@href, " + rucheId + ")]");
+		TestUtils.xpathClick(driver, "//a[contains(@href, '/" + rucheId + "/')]");
 		// On valide le formulaire pour l'eve essaim mis dans ruche
 		TestUtils.submit(driver);
 		assertEquals("div", driver.findElement(By.id("detailEssaim")).getTagName());
