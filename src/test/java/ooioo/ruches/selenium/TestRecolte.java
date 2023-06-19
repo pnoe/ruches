@@ -161,6 +161,16 @@ public class TestRecolte {
 		driver.get(baseUrl + "recolte/haussesMiel/" + recolteId);
 		assertEquals("table", driver.findElement(By.id("recolteMielTable")).getTagName());
 	}
-
-
+	
+	@Test
+	@Order(8)
+	@DisplayName("Récolte statistiques poids de miel")
+	void statRecoltePoids() {
+		// Attention écriture en base de données
+		driver.get(baseUrl + "recolte/" + recolteId);
+		assertEquals("div", driver.findElement(By.id("detailRecolte")).getTagName());
+		driver.get(baseUrl + "recolte/statistiques/essaim/" + recolteId);
+		assertEquals("canvas", driver.findElement(By.id("ctx")).getTagName());
+	}
+	
 }
