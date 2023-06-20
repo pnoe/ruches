@@ -10,7 +10,7 @@ const nomrucher = /*[[${rucher.nom}]]*/ null;
 $(document).ready(function() {
     new DataTable('#ruches', {
         dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
-        scrollX: true,
+        // scrollX: true,
 	    buttons: [
 	    	'csv',
 	    	{extend: 'pdf', exportOptions: {columns: ':visible', pageSize: 'A3', oriention: 'landscape'}, 

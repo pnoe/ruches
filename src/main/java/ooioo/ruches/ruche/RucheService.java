@@ -138,11 +138,7 @@ public class RucheService {
 			if (plus) {
 				// Les noms des hausses présentes sur la ruche.
 				nomHausses.add(hausseRepository.hausseNomsByRucheId(ruche.getId()));
-				// Les 3 derniers événements commentaire de l'essaim.
-				// listeEvensCommentaireEssaim.add(evenementRepository
-				//		.findFirst3ByEssaimAndTypeOrderByDateDesc(ruche.getEssaim(), TypeEvenement.COMMENTAIREESSAIM));
-				// Les 3 derniers événements de l'essaim. 
-				// TODO : A renommer.
+				// Les 3 derniers événements de la ruche. 
 				listeEvensCommentaireEssaim.add(evenementRepository
 						.findFirst3ByRucheOrderByDateDesc(ruche));
 				// Dernier événement hausseposeruche dont la hausse est effectivement présente sur la ruche.
@@ -205,12 +201,9 @@ public class RucheService {
 			nbHausses.add(hausseRepository.countByRucheId(ruche.getId()));
 			if (plus) {
 				nomHausses.add(hausseRepository.hausseNomsByRucheId(ruche.getId()));
-//				listeEvensCommentaireEssaim.add(evenementRepository
-//						.findFirst3ByEssaimAndTypeOrderByDateDesc(ruche.getEssaim(), TypeEvenement.COMMENTAIREESSAIM));
-				// TODO : A renommer.
 				listeEvensCommentaireEssaim.add(evenementRepository
 						.findFirst3ByRucheOrderByDateDesc(ruche));
-				// il faut trouver le dernier evenement hausseposeruche dont la hausse est effectivement
+				// Dernier evenement hausseposeruche dont la hausse est effectivement
 				//  présente sur la ruche
 				List<Hausse> hausses = hausseRepository.findByRucheIdOrderByOrdreSurRuche(ruche.getId());
 				evensHaussesRuches.add(evenementRepository.findFirstByRucheAndHausseInAndTypeOrderByDateDesc(ruche, hausses, TypeEvenement.HAUSSEPOSERUCHE));
