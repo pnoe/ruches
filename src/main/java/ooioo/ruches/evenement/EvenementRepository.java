@@ -138,9 +138,15 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 	Evenement findFirstByEssaimAndTypeOrderByDateDesc(Essaim essaim, TypeEvenement typeEvenement);
 
-	// Iterable<Evenement> findFirst3ByEssaimAndTypeOrderByDateDesc(Essaim essaim, TypeEvenement typeEvenement);
-	
-	Iterable<Evenement> findFirst3ByRucheOrderByDateDesc(Ruche ruche);
+	@Query(value = """
+			select e
+			  from Evenement e
+			  where e.ruche = :ruche and 
+			    e.type <> ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE and
+			    e.type <> ooioo.ruches.evenement.TypeEvenement.RUCHEPESEE
+			  order by date desc limit 3
+			""")	
+	List<Evenement> find3EveListePlus(Ruche ruche);
 
 	@Query(value = """
 			select e
@@ -156,7 +162,9 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 	Evenement findFirstByRucheAndRucherAndTypeOrderByDateDesc(Ruche ruche, Rucher rucher, TypeEvenement typeEvenement);
 
-	Evenement findFirstByRucheAndHausseInAndTypeOrderByDateDesc(Ruche ruche, List<Hausse> hausse,
+//	Evenement findFirstByRucheAndHausseInAndTypeOrderByDateDesc(Ruche ruche, List<Hausse> hausse,
+//			TypeEvenement typeEvenement);
+	List<Evenement> findByRucheAndHausseInAndTypeOrderByDateDesc(Ruche ruche, List<Hausse> hausse,
 			TypeEvenement typeEvenement);
 
 	// Nombre d'essaims dispersés dans l'année passée en paramètre.

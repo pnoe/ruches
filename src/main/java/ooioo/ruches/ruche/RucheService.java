@@ -82,7 +82,7 @@ public class RucheService {
 				}
 			}
 			// if (!hausses.isEmpty()) {
-				// erreur
+			// erreur
 			// }
 			model.addAttribute("ruche", ruche);
 			model.addAttribute("haussesList", haussesList);
@@ -93,8 +93,7 @@ public class RucheService {
 	}
 
 	/*
-	 * Ré-ordonne les hausses d'une ruche utilisé après retrait d'une
-	 * hausse.
+	 * Ré-ordonne les hausses d'une ruche utilisé après retrait d'une hausse.
 	 */
 	public void ordonneHaussesRuche(long rucheId) {
 		Iterable<Hausse> haussesRuche = hausseRepository.findByRucheIdOrderByOrdreSurRuche(rucheId);
@@ -106,7 +105,7 @@ public class RucheService {
 			}
 			if ((ordre == null) || (ordre != i)) {
 				// On corrige l'ordre s'il est null ou s'il est différent de l'ordre
-				//  renvoyé par findByRucheIdOrderByOrdreSurRuche
+				// renvoyé par findByRucheIdOrderByOrdreSurRuche
 				hausseRuche.setOrdreSurRuche(i++);
 				hausseRepository.save(hausseRuche);
 			}
@@ -115,7 +114,8 @@ public class RucheService {
 
 	/*
 	 * Liste des ruches
-	 *  @plus à true pour liste détaillée
+	 * 
+	 * @plus à true pour liste détaillée
 	 */
 	public void liste(HttpSession session, Model model, boolean plus) {
 		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
@@ -125,7 +125,7 @@ public class RucheService {
 		List<String> dateAjoutRucher = new ArrayList<>();
 		List<Iterable<Evenement>> listeEvensCommentaireEssaim = new ArrayList<>();
 		List<Evenement> listeEvenCadre = new ArrayList<>();
-		List<Evenement> evensHaussesRuches = new ArrayList<>();
+		List<List<Evenement>> evensHaussesRuches = new ArrayList<>();
 		List<Evenement> evensPoidsRuches = new ArrayList<>();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		if (voirInactif != null && (boolean) voirInactif) {
@@ -137,19 +137,21 @@ public class RucheService {
 			nbHausses.add(hausseRepository.countByRucheId(ruche.getId()));
 			if (plus) {
 				// Les noms des hausses présentes sur la ruche.
+				// TODO à supprimer, et à remplacer par liste hausses et événements pose
 				nomHausses.add(hausseRepository.hausseNomsByRucheId(ruche.getId()));
-				// Les 3 derniers événements de la ruche. 
-				listeEvensCommentaireEssaim.add(evenementRepository
-						.findFirst3ByRucheOrderByDateDesc(ruche));
-				// Dernier événement hausseposeruche dont la hausse est effectivement présente sur la ruche.
+				// Les 3 derniers événements de la ruche (hors HAUSSEPOSERUCHE).
+				listeEvensCommentaireEssaim.add(evenementRepository.find3EveListePlus(ruche));
+				// Dernier événement hausseposeruche dont la hausse est effectivement présente
+				// sur la ruche.
 				List<Hausse> hausses = hausseRepository.findByRucheIdOrderByOrdreSurRuche(ruche.getId());
-				evensHaussesRuches.add(evenementRepository.findFirstByRucheAndHausseInAndTypeOrderByDateDesc(ruche, hausses, TypeEvenement.HAUSSEPOSERUCHE));
+				evensHaussesRuches.add(evenementRepository.findByRucheAndHausseInAndTypeOrderByDateDesc(ruche, hausses,
+						TypeEvenement.HAUSSEPOSERUCHE));
 				// Dernier événement pesée de la ruche.
-				evensPoidsRuches.add(evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.RUCHEPESEE));
+				evensPoidsRuches.add(
+						evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.RUCHEPESEE));
 			}
-			Evenement evenAjoutRucher = evenementRepository
-					.findFirstByRucheAndRucherAndTypeOrderByDateDesc(ruche, ruche.getRucher(),
-							TypeEvenement.RUCHEAJOUTRUCHER);
+			Evenement evenAjoutRucher = evenementRepository.findFirstByRucheAndRucherAndTypeOrderByDateDesc(ruche,
+					ruche.getRucher(), TypeEvenement.RUCHEAJOUTRUCHER);
 			dateAjoutRucher.add((evenAjoutRucher == null) ? "" : evenAjoutRucher.getDate().format(formatter));
 			Evenement evenCadres = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
 					TypeEvenement.RUCHECADRE);
@@ -168,10 +170,10 @@ public class RucheService {
 	}
 
 	/*
-	 * Liste des ruches d'un rucher
-	 *  avec ordre de parcours.
+	 * Liste des ruches d'un rucher avec ordre de parcours.
 	 */
-	public void listePlusRucher(HttpSession session, Model model, Rucher rucher, List<RucheParcours> chemin, boolean plus) {
+	public void listePlusRucher(HttpSession session, Model model, Rucher rucher, List<RucheParcours> chemin,
+			boolean plus) {
 		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
 		Iterable<Ruche> ruches;
 		List<Integer> nbHausses = new ArrayList<>();
@@ -179,7 +181,7 @@ public class RucheService {
 		List<String> dateAjoutRucher = new ArrayList<>();
 		List<Iterable<Evenement>> listeEvensCommentaireEssaim = new ArrayList<>();
 		List<Evenement> listeEvenCadre = new ArrayList<>();
-		List<Evenement> evensHaussesRuches = new ArrayList<>();
+		List<List<Evenement>> evensHaussesRuches = new ArrayList<>();
 		List<Evenement> evensPoidsRuches = new ArrayList<>();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		if (voirInactif != null && (boolean) voirInactif) {
@@ -201,17 +203,17 @@ public class RucheService {
 			nbHausses.add(hausseRepository.countByRucheId(ruche.getId()));
 			if (plus) {
 				nomHausses.add(hausseRepository.hausseNomsByRucheId(ruche.getId()));
-				listeEvensCommentaireEssaim.add(evenementRepository
-						.findFirst3ByRucheOrderByDateDesc(ruche));
+				listeEvensCommentaireEssaim.add(evenementRepository.find3EveListePlus(ruche));
 				// Dernier evenement hausseposeruche dont la hausse est effectivement
-				//  présente sur la ruche
+				// présente sur la ruche
 				List<Hausse> hausses = hausseRepository.findByRucheIdOrderByOrdreSurRuche(ruche.getId());
-				evensHaussesRuches.add(evenementRepository.findFirstByRucheAndHausseInAndTypeOrderByDateDesc(ruche, hausses, TypeEvenement.HAUSSEPOSERUCHE));
-				evensPoidsRuches.add(evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.RUCHEPESEE));
+				evensHaussesRuches.add(evenementRepository.findByRucheAndHausseInAndTypeOrderByDateDesc(ruche, hausses,
+						TypeEvenement.HAUSSEPOSERUCHE));
+				evensPoidsRuches.add(
+						evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.RUCHEPESEE));
 			}
-			Evenement evenAjoutRucher = evenementRepository
-					.findFirstByRucheAndRucherAndTypeOrderByDateDesc(ruche, ruche.getRucher(),
-							TypeEvenement.RUCHEAJOUTRUCHER);
+			Evenement evenAjoutRucher = evenementRepository.findFirstByRucheAndRucherAndTypeOrderByDateDesc(ruche,
+					ruche.getRucher(), TypeEvenement.RUCHEAJOUTRUCHER);
 			dateAjoutRucher.add((evenAjoutRucher == null) ? "" : evenAjoutRucher.getDate().format(formatter));
 			Evenement evenCadres = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
 					TypeEvenement.RUCHECADRE);
@@ -250,6 +252,5 @@ public class RucheService {
 		model.addAttribute(Const.RUCHE, ruche);
 		model.addAttribute(Const.RUCHETYPES, rucheTypeRepository.findAll());
 	}
-
 
 }

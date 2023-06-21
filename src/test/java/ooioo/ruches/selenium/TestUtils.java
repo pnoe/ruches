@@ -33,8 +33,8 @@ public final class TestUtils {
 	// : admin
 	// le nom et le prénom peuvent être quelconques
 	// Attention à ne pas mettre de mot de passe de production !
-	static final String user = "admin"; // "test";
-	static final String pwd = "admin"; // "testpwd";
+	static final String user = "test";
+	static final String pwd = "testpwd";
 	static final String role = "Admin";
 
 	static final WebDriver initChrome() {
