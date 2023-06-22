@@ -14,7 +14,8 @@
 				buttons: [
 					'csv',
 					{
-						extend: 'pdf', exportOptions: {columns: ':visible'},
+						extend: 'pdf',
+						exportOptions: {columns: ':visible'},
 						action: function (e, dt, node, config) {
 							config.title = Ruches + " " + (new Date()).toLocaleDateString();
 							const inputSearch = $.trim($(`${idTbl}_filter label input`).val());
@@ -25,7 +26,12 @@
 						},
 						orientation: 'landscape'
 					},
-					{extend: 'print', text: buttTxtPrint, exportOptions: {columns: ':visible', pageSize: 'A3', oriention: 'landscape'}},
+					{
+						extend: 'print',
+						text: buttTxtPrint,
+						exportOptions: {columns: ':visible'},
+						orientation: 'landscape'
+					},
 					{extend: 'colvis', text: buttTxtCol}
 				]
 			});
