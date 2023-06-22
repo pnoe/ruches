@@ -4,17 +4,25 @@
 <script th:inline="javascript">
 const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
 const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
-const listeRuches = /*[[#{listeRuches}]]*/ null;
+const Ruches = /*[[#{Ruches}]]*/ null;
 const rucher = /*[[#{rucher}]]*/ null;
 const nomrucher = /*[[${rucher.nom}]]*/ null;
 $(document).ready(function() {
-    new DataTable('#ruches', {
+	const idTbl = '#ruches';
+    new DataTable(idTbl, {
         dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
-        // scrollX: true,
+        scrollX: true,
 	    buttons: [
 	    	'csv',
-	    	{extend: 'pdf', exportOptions: {columns: ':visible', pageSize: 'A3', oriention: 'landscape'}, 
-	    		title: `${listeRuches} ${rucher} ${nomrucher} ${(new Date()).toLocaleDateString()}`,
+	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
+			action: function (e, dt, node, config) {
+							config.title = `${Ruches} ${rucher} ${nomrucher} ${(new Date()).toLocaleDateString()}`;
+							const inputSearch = $.trim($(`${idTbl}_filter label input`).val());
+							if (inputSearch.length !== 0) {
+								config.title += " <" + inputSearch + ">";
+							}
+							$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, node, config);
+						},
 				orientation : 'landscape'},
 	        {extend: 'print', text: buttTxtPrint, exportOptions: {columns: ':visible', pageSize: 'A3', oriention: 'landscape'}},
 	        {extend: 'colvis', text: buttTxtCol}
@@ -47,7 +55,7 @@ $(document).ready(function() {
 					<th style="background-color:LightGoldenRodYellow" th:text="#{nom}"></th>
 					<th style="background-color:lightskyblue" th:text="#{essaim}"></th>
 					<th style="background-color:lightskyblue" th:text="#{dateAcquisition}"></th>
-					<th style="background-color:lightskyblue" th:text="#{commentaire}"></th>
+					<th style="background-color:lightskyblue" th:text="#{COMMENTAIREESSAIM}"></th>
 					<th style="background-color:PaleGoldenRod" th:text="#{daterucher}"></th>
 					<th th:text="#{prod}"></th>
 					<th th:if="${session.voirInactif}" th:text="#{active}"></th>
@@ -62,14 +70,13 @@ $(document).ready(function() {
 						<th style="background-color: LemonChiffon" th:text="#{latitude}"></th>
 						<th style="background-color: LemonChiffon" th:text="#{longitude}"></th>
 					</th:block>
-					<th th:text="#{commentaire}"></th>
+					<th th:text="#{COMMENTAIRERUCHE}"></th>
 					<th style="background-color:LemonChiffon" th:text="#{reineMarquee}"></th>
 					<th style="background-color:LemonChiffon" th:text="#{reineCouleurMarquage}"></th>
 					<th style="background-color:LemonChiffon" th:text="#{reineDateNaissance}"></th>
 					<th style="background-color:lightskyblue" th:text="#{evenement1}"></th>
 					<th style="background-color:lightskyblue" th:text="#{evenement2}"></th>
 					<th style="background-color:lightskyblue" th:text="#{evenement3}"></th>
-
 				</tr>
 			</thead>
 			<tbody th:with="f='dd/MM/yyyy'">

@@ -143,7 +143,8 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			  from Evenement e
 			  where e.ruche = :ruche and 
 			    e.type <> ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE and
-			    e.type <> ooioo.ruches.evenement.TypeEvenement.RUCHEPESEE
+			    e.type <> ooioo.ruches.evenement.TypeEvenement.RUCHEPESEE and
+			    e.type <> ooioo.ruches.evenement.TypeEvenement.RUCHECADRE
 			  order by date desc limit 3
 			""")	
 	List<Evenement> find3EveListePlus(Ruche ruche);

@@ -18,10 +18,7 @@
 					dom : 'Blftip',
 					scrollX: true,
 					buttons : [ 'csv', {
-						extend : 'pdf',
-						exportOptions : {
-							columns : ':visible'
-						},
+						extend : 'pdf',	exportOptions : {columns : ':visible'},
 						action: function (e, dt, node, config) {
 							config.title = Ruches + " " + (new Date()).toLocaleDateString();
 							const inputSearch = $.trim($(`${idTbl}_filter label input`).val());
@@ -108,7 +105,7 @@
 						<th style="background-color: LemonChiffon" th:text="#{latitude}"></th>
 						<th style="background-color: LemonChiffon" th:text="#{longitude}"></th>
 					</th:block>
-					<th th:text="#{commentaire}"></th>
+					<th th:text="#{COMMENTAIRERUCHE}"></th>
 				</tr>
 			</thead>
 			<tbody>

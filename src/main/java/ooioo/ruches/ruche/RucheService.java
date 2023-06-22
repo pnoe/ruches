@@ -137,9 +137,8 @@ public class RucheService {
 			nbHausses.add(hausseRepository.countByRucheId(ruche.getId()));
 			if (plus) {
 				// Les noms des hausses présentes sur la ruche.
-				// TODO à supprimer, et à remplacer par liste hausses et événements pose
 				nomHausses.add(hausseRepository.hausseNomsByRucheId(ruche.getId()));
-				// Les 3 derniers événements de la ruche (hors HAUSSEPOSERUCHE).
+				// Les 3 derniers événements de la ruche (hors HAUSSEPOSERUCHE, RUCHEPESEE et RUCHECADRE).
 				listeEvensCommentaireEssaim.add(evenementRepository.find3EveListePlus(ruche));
 				// Dernier événement hausseposeruche dont la hausse est effectivement présente
 				// sur la ruche.
