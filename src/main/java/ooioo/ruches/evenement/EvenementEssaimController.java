@@ -118,10 +118,12 @@ public class EvenementEssaimController {
 	}
 
 	/*
-	 * Liste événements essaim traitement
+	 * Liste événements essaim traitement.
+	 *  "tous" est en @PathVariable donc pas sur la même url si true ou false
+	 *    la période sauvée en cookies n'est donc pas la même...
 	 *
 	 * @param tous : événements traitement début et fin si true, début seulement
-	 * sinon
+	 * sinon.
 	 */
 	@GetMapping("/listeTraitement/{tous}")
 	public String listeTraitement(Model model, @PathVariable boolean tous,
