@@ -458,7 +458,7 @@ public class TestChrome {
 		// La tables d'id "recoltes" est affichée
 		assertEquals("table", driver.findElement(By.id("recoltes")).getTagName());
 		// TODO Tester afficher inactifs on puis clic sur filter
-		//  ci-dessous test sans clic en envoyant directement les bons paramètres
+		// ci-dessous test sans clic en envoyant directement les bons paramètres
 		driver.get(baseUrl + "recolte/statistiques/essaim?rucherId=0&masquerInactif=on");
 	}
 
