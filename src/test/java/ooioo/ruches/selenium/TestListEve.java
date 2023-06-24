@@ -2,13 +2,14 @@ package ooioo.ruches.selenium;
 
 import static ooioo.ruches.selenium.TestUtils.baseUrl;
 import static ooioo.ruches.selenium.TestUtils.driver;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -55,16 +56,12 @@ public class TestListEve {
 	}
 
 	private static Stream<Arguments> provideParameters() {
-	    return Stream.of(
-	            Arguments.of("true", "1", "Toute période"),
-	            Arguments.of("false", "1", "Toute période"),
-	            Arguments.of("true", "2", "Moins d'un an"),
-	            Arguments.of("false", "2", "Moins d'un an")
-	    );
+		return Stream.of(Arguments.of("true", "1", "Toute période"), Arguments.of("false", "1", "Toute période"),
+				Arguments.of("true", "2", "Moins d'un an"), Arguments.of("false", "2", "Moins d'un an"));
 	}
-	
+
 	// https://www.selenium.dev/documentation/webdriver/support_features/select_lists/
-    // https://stackoverflow.com/questions/61483452/parameterized-test-with-two-arguments-in-junit-5-jupiter
+	// https://stackoverflow.com/questions/61483452/parameterized-test-with-two-arguments-in-junit-5-jupiter
 	@DisplayName("Événements liste traitement")
 	@Order(4)
 	@ParameterizedTest
@@ -78,7 +75,7 @@ public class TestListEve {
 		select.selectByVisibleText(peridodeTxt);
 		assertEquals("table", driver.findElement(By.id("evenements")).getTagName());
 		// on vérifie que le select à bien fonctionné
-		WebElement el = driver.findElement(By.cssSelector("option[value='" +  periodeVal + "']"));
+		WebElement el = driver.findElement(By.cssSelector("option[value='" + periodeVal + "']"));
 		assertTrue(el.isSelected());
 	}
 
