@@ -9,13 +9,7 @@
 	const btp = /*[[#{buttontextprint}]]*/null;
 	const btc = /*[[#{buttontextcol}]]*/null;
 	$(document).ready(function() {
-		$('.bi-question-lg').popover({
-			html : true
-		});
-		$('.popover-dismiss').popover({
-			trigger : 'focus'
-		});
-		$('#groupe').on('change', function() {
+		$('#tous').on('change', function() {
 			location = url + ($(this).is(':checked'));
 		});
 		new DataTable('#evenementsnotif', {
@@ -54,7 +48,7 @@
 					data-bs-trigger="focus" tabindex="0" role="button"
 					th:attr="data-bs-content=${dests}"></a>
 				<span class="padicons">
-					<input type="checkbox" id="groupe" th:title="#{tous}"
+					<input type="checkbox" id="tous" th:title="#{tous}"
 					th:checked="${tous}" /> <label for="tous" th:text="#{tous}"></label>
 				</span>
 			</div>
