@@ -163,10 +163,21 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 	Evenement findFirstByRucheAndRucherAndTypeOrderByDateDesc(Ruche ruche, Rucher rucher, TypeEvenement typeEvenement);
 
-//	Evenement findFirstByRucheAndHausseInAndTypeOrderByDateDesc(Ruche ruche, List<Hausse> hausse,
-//			TypeEvenement typeEvenement);
-	List<Evenement> findByRucheAndHausseInAndTypeOrderByDateDesc(Ruche ruche, List<Hausse> hausse,
-			TypeEvenement typeEvenement);
+	// Pour chaque hausse posée sur une ruche, on trouve le dernier événement pose hausse 
+	//  correspondant.
+	@Query(value = """
+			select e
+			 from Evenement e
+			 where e.hausse in :hausse and
+			   e in (
+			     select ee
+			       from Evenement ee
+			         where ee.hausse = e.hausse and  
+			         ee.type = ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE
+			       order by ee.date desc
+			       limit 1)
+			""")
+	List<Evenement> findEvePoseHausse(List<Hausse> hausse);
 
 	// Nombre d'essaims dispersés dans l'année passée en paramètre.
 	@Query(value = """
