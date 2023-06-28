@@ -74,12 +74,6 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 
 	Collection<IdNom> findAllProjectedIdNomByOrderByNom();
 
-	// en nativeQuery à cause de string_agg
-	@Query(value =
-			"select string_agg(nom, ', ') from Hausse where ruche_id = ?1",
-			nativeQuery = true)
-	String hausseNomsByRucheId(Long rucheId);
-
 	long countByActiveTrue();
 
 	long countByActiveTrueAndRucheNotNullAndRucheActiveTrueAndRucheEssaimNotNull();
