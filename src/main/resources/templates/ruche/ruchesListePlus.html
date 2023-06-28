@@ -84,10 +84,11 @@
 				</tr>
 			</thead>
 			<tbody th:with="f='dd/MM/yyyy'">
-				<tr th:with="e=${listeEvensCommentaireEsaim[rucheStat.index]}, 
-						eh=${evensHaussesRuches[rucheStat.index]}, 
+				<tr th:each="ruche : ${ruches}" th:with="e=${listeEvensCommentaireEsaim[rucheStat.index]}, 
+						eh=${evensHaussesRuches[rucheStat.index]},
+						h=${hausses[rucheStat.index]}, 
 						ec=${listeEvenCadre[rucheStat.index]},
-						ep=${evensPoidsRuches[rucheStat.index]}" th:each="ruche : ${ruches}">
+						ep=${evensPoidsRuches[rucheStat.index]}">
 					<td><a th:href="@{'/ruche/'+${ruche.id}}" th:text="${ruche.nom}"></a></td>
 					<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}" th:text="${ruche.essaim?.nom}"></a></td>
 					<td th:text="${ruche.essaim?.dateAcquisition}"></td>
@@ -107,9 +108,9 @@
 					<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
 					<td th:text="${ruche.type?.nom}"></td>
 					<td>
-				      <th:block th:each="ehh : ${eh}"
-						 th:text="${ehh.hausse.nom} + ' ' + ${#temporals.format(ehh.date, f)} + ' ' + ${ehh.commentaire} + ' '">
-					  </th:block>
+						<th:block th:each="hh : ${h}" th:with="ev=${eh[hhStat.index]}" th:text="${hh.nom} + ' ' + (${ev == null}?'':${#temporals.format(ev.date, f)})
+						    + ' ' + (${ev == null}?'':${ev.commentaire}) + ' '">
+						</th:block>
 					</td>
 					<th:block th:if="${session.voirLatLon}">
 						<td class="num" th:text="${#numbers.formatDecimal(ruche.latitude,1,5)}"></td>
@@ -119,9 +120,10 @@
 					<td th:text="${ruche.essaim?.reineMarquee}? #{oui} : #{non}"></td>
 					<td th:text="${ruche.essaim}? #{${ruche.essaim.reineCouleurMarquage}} : '-'"></td>
 					<td th:text="${ruche.essaim?.reineDateNaissance}"></td>
-					<td th:each="i : ${ {0,1,2} }" th:text="${#arrays.length(e)} &gt; ${i} ?
-					#{${e[i].type}} + ' ' + (${e[i].valeur != null} ? ${e[i].valeur} + ' ' : '') + ${#temporals.format(e[i].date, f)} + ' ' + ${e[i].commentaire}"
-					></td>
+					<td th:each="i : ${ {0,1,2} }"
+						th:text="${#arrays.length(e)} &gt; ${i} ?
+					#{${e[i].type}} + ' ' + (${e[i].valeur != null} ? ${e[i].valeur} + ' ' : '') + ${#temporals.format(e[i].date, f)} + ' ' + ${e[i].commentaire}">
+					</td>
 				</tr>
 			</tbody>
 		</table>

@@ -124,7 +124,10 @@ public class RucheService {
 		List<String> dateAjoutRucher = new ArrayList<>();
 		List<Iterable<Evenement>> listeEvensCommentaireEssaim = new ArrayList<>();
 		List<Evenement> listeEvenCadre = new ArrayList<>();
+		
+		List<List<Hausse>> haussesRuches = new ArrayList<>();
 		List<List<Evenement>> evensHaussesRuches = new ArrayList<>();
+
 		List<Evenement> evensPoidsRuches = new ArrayList<>();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		if (voirInactif != null && (boolean) voirInactif) {
@@ -137,10 +140,15 @@ public class RucheService {
 			if (plus) {
 				// Les 3 derniers événements de la ruche (hors HAUSSEPOSERUCHE, RUCHEPESEE et RUCHECADRE).
 				listeEvensCommentaireEssaim.add(evenementRepository.find3EveListePlus(ruche));
-				// Derniers événements hausseposeruche dont la hausse est effectivement présente
-				// sur la ruche.
+				// hausses et eve pose hausses en deux listes séparées pour
+				//   afficher les hausses même si les eves ont été effacés.
 				List<Hausse> hausses = hausseRepository.findByRucheIdOrderByOrdreSurRuche(ruche.getId());
-				evensHaussesRuches.add(evenementRepository.findEvePoseHausse(hausses));
+				haussesRuches.add(hausses);
+				List<Evenement> eveHaussesRuche = new ArrayList<>();
+				for (Hausse h : hausses) {
+					eveHaussesRuche.add(evenementRepository.findEvePoseHausse(ruche, h));
+				}
+				evensHaussesRuches.add(eveHaussesRuche);
 				// Dernier événement pesée de la ruche.
 				evensPoidsRuches.add(
 						evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.RUCHEPESEE));
@@ -158,6 +166,7 @@ public class RucheService {
 		model.addAttribute(Const.RUCHES, ruches);
 		if (plus) {
 			model.addAttribute("listeEvensCommentaireEsaim", listeEvensCommentaireEssaim);
+			model.addAttribute(Const.HAUSSES, haussesRuches);
 			model.addAttribute("evensHaussesRuches", evensHaussesRuches);
 			model.addAttribute("evensPoidsRuches", evensPoidsRuches);
 		}
@@ -174,6 +183,7 @@ public class RucheService {
 		List<String> dateAjoutRucher = new ArrayList<>();
 		List<Iterable<Evenement>> listeEvensCommentaireEssaim = new ArrayList<>();
 		List<Evenement> listeEvenCadre = new ArrayList<>();
+		List<List<Hausse>> haussesRuches = new ArrayList<>();
 		List<List<Evenement>> evensHaussesRuches = new ArrayList<>();
 		List<Evenement> evensPoidsRuches = new ArrayList<>();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -196,10 +206,15 @@ public class RucheService {
 			nbHausses.add(hausseRepository.countByRucheId(ruche.getId()));
 			if (plus) {
 				listeEvensCommentaireEssaim.add(evenementRepository.find3EveListePlus(ruche));
-				// Dernier evenement hausseposeruche dont la hausse est effectivement
-				// présente sur la ruche
+				// hausses et eve pose hausses en deux listes séparées pour
+				//   afficher les hausses même si les eves ont été effacés.
 				List<Hausse> hausses = hausseRepository.findByRucheIdOrderByOrdreSurRuche(ruche.getId());
-				evensHaussesRuches.add(evenementRepository.findEvePoseHausse(hausses));
+				haussesRuches.add(hausses);
+				List<Evenement> eveHaussesRuche = new ArrayList<>();
+				for (Hausse h : hausses) {
+					eveHaussesRuche.add(evenementRepository.findEvePoseHausse(ruche, h));
+				}
+				evensHaussesRuches.add(eveHaussesRuche);
 				evensPoidsRuches.add(
 						evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.RUCHEPESEE));
 			}
@@ -218,6 +233,7 @@ public class RucheService {
 		model.addAttribute(Const.RUCHER, rucher);
 		if (plus) {
 			model.addAttribute("listeEvensCommentaireEsaim", listeEvensCommentaireEssaim);
+			model.addAttribute(Const.HAUSSES, haussesRuches);
 			model.addAttribute("evensHaussesRuches", evensHaussesRuches);
 			model.addAttribute("evensPoidsRuches", evensPoidsRuches);
 		}
