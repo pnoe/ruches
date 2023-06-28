@@ -162,37 +162,19 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	Evenement findFirstByRucheAndHausseAndTypeOrderByDateDesc(Ruche ruche, Hausse hausse, TypeEvenement typeEvenement);
 
 	Evenement findFirstByRucheAndRucherAndTypeOrderByDateDesc(Ruche ruche, Rucher rucher, TypeEvenement typeEvenement);
-
-	// Pour chaque hausse posée sur une ruche, on trouve le dernier événement pose hausse 
-	//  correspondant.
-/*
-	@Query(value = """
-			select e
-			 from Evenement e
-			 where e.hausse in :hausse and
-			   e in (
-			     select ee
-			       from Evenement ee
-			         where ee.hausse = e.hausse and
-			          ee.ruche = :ruche and
-			         ee.type = ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE
-			       order by ee.date desc
-			       limit 1)
-			""")
-	List<Evenement> findEvePoseHausse(Ruche ruche, List<Hausse> hausse);
-*/
 	
+    // https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definitions
+	//   pour éviter de passer ruche en param.
 	@Query(value = """
 			select e
 			 from Evenement e
 			 where e.hausse = :hausse and
-			   e.ruche = :ruche and
+			   e.ruche = :#{#hausse.ruche} and
 			   e.type = ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE
 			 order by e.date desc
 			 limit 1
 			""")
-	Evenement findEvePoseHausse(Ruche ruche, Hausse hausse);
-
+	Evenement findEvePoseHausse(Hausse hausse);
 
 	// Nombre d'essaims dispersés dans l'année passée en paramètre.
 	@Query(value = """

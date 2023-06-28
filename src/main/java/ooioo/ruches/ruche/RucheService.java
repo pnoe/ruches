@@ -124,10 +124,8 @@ public class RucheService {
 		List<String> dateAjoutRucher = new ArrayList<>();
 		List<Iterable<Evenement>> listeEvensCommentaireEssaim = new ArrayList<>();
 		List<Evenement> listeEvenCadre = new ArrayList<>();
-		
 		List<List<Hausse>> haussesRuches = new ArrayList<>();
 		List<List<Evenement>> evensHaussesRuches = new ArrayList<>();
-
 		List<Evenement> evensPoidsRuches = new ArrayList<>();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		if (voirInactif != null && (boolean) voirInactif) {
@@ -146,7 +144,7 @@ public class RucheService {
 				haussesRuches.add(hausses);
 				List<Evenement> eveHaussesRuche = new ArrayList<>();
 				for (Hausse h : hausses) {
-					eveHaussesRuche.add(evenementRepository.findEvePoseHausse(ruche, h));
+					eveHaussesRuche.add(evenementRepository.findEvePoseHausse(h));
 				}
 				evensHaussesRuches.add(eveHaussesRuche);
 				// Dernier événement pesée de la ruche.
@@ -212,7 +210,7 @@ public class RucheService {
 				haussesRuches.add(hausses);
 				List<Evenement> eveHaussesRuche = new ArrayList<>();
 				for (Hausse h : hausses) {
-					eveHaussesRuche.add(evenementRepository.findEvePoseHausse(ruche, h));
+					eveHaussesRuche.add(evenementRepository.findEvePoseHausse(h));
 				}
 				evensHaussesRuches.add(eveHaussesRuche);
 				evensPoidsRuches.add(
