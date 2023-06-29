@@ -43,6 +43,9 @@ $(document).ready(function() {
     });
 } );
 </script>
+<style>
+	.v {writing-mode: sideways-lr;}	
+</style>
 </head>
 <body>
 	<nav th:replace="include :: navbar"></nav>
@@ -60,12 +63,13 @@ $(document).ready(function() {
         </div>
     </div>
 	<div class="container-fluid table-responsive">
-		<table class="table table-bordered table-striped" id="recoltes">
+		<table class="table table-bordered table-striped table-sm" id="recoltes">
 			<thead>
 				<tr>
 					<th th:text="#{essaim}"></th>
 					<th:block th:each="recolte : ${recoltes}">
-						<td th:text="${#temporals.format(recolte.date, 'yy/MM/dd')}"></td>
+						<td class="v"
+						  th:text="${#temporals.format(recolte.date, 'yy/MM/dd')}"></td>
 					</th:block>
 					<th th:text="#{Total}"></th>
 				</tr>
