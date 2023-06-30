@@ -160,7 +160,7 @@ public class RecolteController {
 					poidsListe.add("");
 				}
 			}
-			if (tous | (poidsTotal != 0)) {
+			if (tous || (poidsTotal != 0)) {
 				// Si tous est false, on n'affiche que les essaims qui ont produit du miel
 				poidsListe.add(decimalFormat.format(poidsTotal/1000.0));
 				essaimsRecoltes.add(poidsListe);

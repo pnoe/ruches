@@ -22,10 +22,4 @@ public class RecolteMiel {
 		this.recolteHaussesMiel = rhm;
 	}
 
-	/*
-	public void addRecolteHausseMiel(RecolteHausseMiel rhm) {
-		this.recolteHaussesMiel.add(rhm);
-	}
-	*/
-
 }

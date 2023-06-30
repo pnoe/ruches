@@ -131,9 +131,8 @@ public class AccueilController {
 			personne.setToken(token);
 			personne.setTokenExpiration(LocalDateTime.now().plusMinutes(tokenValidite));
 			personneRepository.save(personne);
-			StringBuffer appUrl = request.getRequestURL();
 			emailService.sendSimpleMessage(email, "Réinitialisation du mot de passe",
-					"Pour réinitialiser votre mot de passe, cliquez sur le lien ci-dessous:\n" + appUrl + "?token="
+					"Pour réinitialiser votre mot de passe, cliquez sur le lien ci-dessous:\n" + request.getRequestURL() + "?token="
 							+ token);
 		}
 		model.addAttribute(Const.MESSAGE, "Un email a été envoyé à cette adresse");

@@ -26,7 +26,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
 	private final Logger loggerSecConfig = LoggerFactory.getLogger(SecurityConfig.class);
 
@@ -55,8 +55,8 @@ public class SecurityConfig { // extends WebSecurityConfigurerAdapter {
 								super.onAuthenticationSuccess(request, response, authentication);
 							}
 						}))
-				.logout((logout) -> logout.permitAll())
-				.csrf((csrf) -> csrf.ignoringRequestMatchers("/rest/**"));
+				.logout(logout -> logout.permitAll())
+				.csrf(csrf -> csrf.ignoringRequestMatchers("/rest/**"));
 		// sans logout on n'a pas immédiatement le message "Vous avez été déconnecté" et
 		// pour se reconnecter il faut le faire deux fois !
 		return http.build();

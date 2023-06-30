@@ -440,7 +440,6 @@ public class EssaimController {
 			Iterable<Evenement> evenements = evenementRepository.findByEssaimId(essaimId);
 			model.addAttribute(Const.EVENEMENTS, evenements.iterator().hasNext());
 			model.addAttribute("eveTraite", evenementRepository.findFirstTraitemenetByEssaim(essaim));
-					// TypeEvenement.ESSAIMTRAITEMENT.ordinal(), TypeEvenement.ESSAIMTRAITEMENTFIN.ordinal()));
 			model.addAttribute("eveSucre",
 					evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim, TypeEvenement.ESSAIMSUCRE));
 			model.addAttribute("eveComm", evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim,
