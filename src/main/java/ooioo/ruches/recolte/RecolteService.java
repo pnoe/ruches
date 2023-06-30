@@ -22,23 +22,27 @@ public class RecolteService {
 	@Autowired
 	private EssaimRepository essaimRepository;
 	@Autowired
-	private	EvenementRepository evenementRepository;
+	private EvenementRepository evenementRepository;
 
 	/*
-	 * Statistiques de production de miel par année. Miel pesé dans les hausses,
-	 * miel mis en pot et miel dans les hausses rapporté au nombre d'essaims moyen
-	 * actifs dans l'année. Diagramme à barres verticales (histogramme)/
+	 * Statistiques de production de miel par année. Miel pesé dans les hausses de
+	 * récolte, miel mis en pot et miel dans les hausses rapporté au nombre
+	 * d'essaims moyen actifs dans l'année. Diagramme à barres verticales
+	 * (histogramme).
 	 */
 	public void statprod(Model model) {
 		Recolte recFirst = recolteRepository.findFirstByOrderByDateAsc();
 		if (recFirst == null) {
+			// Pas encore de récolte.
 			return;
 		}
 		int debutAnnee = recFirst.getDate().getYear();
 		LocalDate maintenant = LocalDate.now();
 		int finAnnee = maintenant.getYear();
 		int dureeAns = finAnnee - debutAnnee + 1;
+		// Poids de miel pesé dans les hausses de récolte par année
 		int[] poidsMielHausses = new int[dureeAns];
+		// Poids de miel mis en pot par année
 		int[] poidsMielPots = new int[dureeAns];
 		for (int i = 0; i < dureeAns; i++) {
 			Optional<Integer> pMHOpt = recolteRepository
