@@ -104,7 +104,7 @@ public class TestW3cValidator {
 			"rucher/statistiques", "rucher/historiques/true", "rucher/historiques/false",
 			"personne/liste", "personne/cree",
 			"essaim/liste", "essaim/cree", "essaim/statistiques", "essaim/statistiquesage",
-			"recolte/liste", "recolte/cree", "recolte/statistiques/essaim", "recolte/statprod",
+			"recolte/liste", "recolte/cree", "recolte/stat/essaim", "recolte/statprod",
 			"evenement/liste", "evenement/cree",
 			"evenement/essaim/listeSucre", "evenement/essaim/listeTraitement/true",
 			"evenement/essaim/listeTraitement/false", "evenement/ruche/listePoidsRuche",

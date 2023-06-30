@@ -4,7 +4,11 @@
 <script th:inline="javascript">
 const btnTxtPrint = /*[[#{buttontextprint}]]*/ null;
 const recoltes = /*[[${recoltes}]]*/ null;
+const url = /*[[@{'/recolte/stat/essaim/'}]]*/null;
 $(document).ready(function() {
+	$('#tous').on('change', function() {
+			location = url + ($(this).is(':checked'));
+		});
     new DataTable('#recoltes', {
     	dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
 	    buttons: [
@@ -60,6 +64,15 @@ $(document).ready(function() {
 					<a th:href="@{'/recolte/liste'}" th:text="#{Recoltes}"></a>
 				</h1>
 			</div>
+			
+			<div class="col">
+				<span class="padicons"> <input type="checkbox" id="tous"
+					th:title="#{tousEssaims}" th:checked="${tous}" /> <label for="tous"
+					th:text="#{tous}"></label>
+				</span>
+			</div>
+			
+			
         </div>
     </div>
 	<div class="container-fluid table-responsive">

@@ -137,10 +137,12 @@ public class RecolteController {
 		return "redirect:/recolte/liste";	}
 
 	/**
-	 * Statistiques tableau poids de miel par essaim et par récolte
+	 * Statistiques tableau poids de miel par essaim et par récolte.
+	 * 
+	 * @param tous si false n'affiche pas les essaims n'ayant jamais produit de miel.
 	 */
-	@GetMapping("/statistiques/essaim")
-	public String statistiquesEssaim(Model model) {
+	@GetMapping("/stat/essaim/{tous}")
+	public String statistiquesEssaim(Model model, @PathVariable boolean tous) {
 		Iterable<Recolte> recoltes = recolteRepository.findAllByOrderByDateAsc();
 		Iterable<Essaim> essaims = essaimRepository.findAll();
 		List<List<String>> essaimsRecoltes = new ArrayList<>();
@@ -158,8 +160,11 @@ public class RecolteController {
 					poidsListe.add("");
 				}
 			}
-			poidsListe.add(decimalFormat.format(poidsTotal/1000.0));
-			essaimsRecoltes.add(poidsListe);
+			if (tous | (poidsTotal != 0)) {
+				// Si tous est false, on n'affiche que les essaims qui ont produit du miel
+				poidsListe.add(decimalFormat.format(poidsTotal/1000.0));
+				essaimsRecoltes.add(poidsListe);
+			}
 		}
 		model.addAttribute("recoltes", recoltes);
 		model.addAttribute("essaimsRecoltes", essaimsRecoltes);
