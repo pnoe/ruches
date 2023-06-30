@@ -454,7 +454,7 @@ public class TestChrome {
 	@Order(30)
 	@DisplayName("Récoltes statistiques essaim")
 	void recoltesStatEssaim() {
-		driver.get(baseUrl + "recolte/stat/essaim");
+		driver.get(baseUrl + "recolte/stat/essaim/false");
 		// La tables d'id "recoltes" est affichée
 		assertEquals("table", driver.findElement(By.id("recoltes")).getTagName());
 		// TODO Tester afficher inactifs on puis clic sur filter
