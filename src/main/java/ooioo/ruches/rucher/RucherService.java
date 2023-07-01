@@ -61,7 +61,7 @@ public class RucherService {
 	 * @param histo En retour les transhumances si pas de regroupement
 	 * @param histoGroup En retour les transhumances si pas de regroupement
 	 */
-	public void transhum(Rucher rucher, List<Evenement> evensRucheAjout, boolean group, List<Transhumance> histo,
+	void transhum(Rucher rucher, List<Evenement> evensRucheAjout, boolean group, List<Transhumance> histo,
 			List<Transhumance> histoGroup) {
 		// Les nom des ruches présentes dans le rucher
 		Collection<Nom> nomRuchesX = rucheRepository.findNomsByRucherId(rucher.getId());
@@ -198,7 +198,7 @@ public class RucherService {
 	 * https://developers.google.com/optimization/routing/tsp Le chemin est calculé
 	 * dans List<RucheParcours> cheminRet, et la distance en retour de la fonction.
 	 */
-	public double cheminRuchesRucher(List<RucheParcours> cheminRet, Rucher rucher, Iterable<Ruche> ruches,
+	double cheminRuchesRucher(List<RucheParcours> cheminRet, Rucher rucher, Iterable<Ruche> ruches,
 			boolean redraw) {
 		RucheParcours entree = new RucheParcours(0l, 0, rucher.getLongitude(), rucher.getLatitude());
 		List<RucheParcours> chemin = new ArrayList<>();

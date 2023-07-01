@@ -71,7 +71,7 @@ public class AccueilService {
 	 * les distances sont effacées puis recalculées, si /dist seules les distances
 	 * non enregistées sont recalculées
 	 */
-	public void dist(boolean reset) {
+	void dist(boolean reset) {
 		// https://geoservices.ign.fr/documentation/services/api-et-services-ogc/itineraires/documentation-du-service-du-calcul
 		// https://wxs.ign.fr/geoportail/itineraire/rest/1.0.0/getCapabilities
 		// avec resource = OSRM erreur
@@ -117,7 +117,7 @@ public class AccueilService {
 	/**
 	 * Infos
 	 */
-	public void infos(Model model) {
+	void infos(Model model) {
 		// Nombre de ruchers actifs.
 		long nbRuchers = rucherRepository.countByActifTrue();
 		model.addAttribute("nbRuchers", nbRuchers);

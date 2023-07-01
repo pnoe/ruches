@@ -29,7 +29,7 @@ public class PersonneService {
 	 * @param model
 	 * @param session Pour masquer éventuellement les personnnes inactivées
 	 */
-	public void modelPersonnes(Model model, HttpSession session) {
+	void modelPersonnes(Model model, HttpSession session) {
 		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
 		if (voirInactif != null && (boolean) voirInactif) {
 			model.addAttribute(Const.PERSONNES, persRepository.findAllByOrderByNom());
@@ -42,7 +42,7 @@ public class PersonneService {
 	 * Vérification du droit admin pour la personne connectée. Si pas admin : log,
 	 * message dans model et return true.
 	 */
-	public boolean pasAdmin(Authentication authentication, Model model) {
+	boolean pasAdmin(Authentication authentication, Model model) {
 		GrantedAuthority auth = authentication.getAuthorities().iterator().next();
 		String role = auth.getAuthority();
 		if (role == null) {
@@ -65,7 +65,7 @@ public class PersonneService {
 	 * passée en paramètre si son login avant modification est différent de la
 	 * personne connectée.
 	 */
-	public boolean droitsInsuffisants(Personne personne, Authentication authentication, Model model) {
+	boolean droitsInsuffisants(Personne personne, Authentication authentication, Model model) {
 		GrantedAuthority auth = authentication.getAuthorities().iterator().next();
 		// Rôle de l'utilisateur connecté
 		String role = auth.getAuthority();
@@ -89,7 +89,7 @@ public class PersonneService {
 	 * Il faut être admin pour modifier la personne passée en paramètre si son login
 	 * avant modification est différent de la personne connectée.
 	 */
-	public boolean pDroitsInsufSauve(Personne personne, Authentication authentication, Model model) {
+	boolean pDroitsInsufSauve(Personne personne, Authentication authentication, Model model) {
 		GrantedAuthority auth = authentication.getAuthorities().iterator().next();
 		// Rôle de l'utilisateur connecté : ROLE_admin ou ROLE_
 		String role = auth.getAuthority();

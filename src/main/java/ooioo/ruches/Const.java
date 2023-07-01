@@ -52,8 +52,8 @@ public final class Const {
 	public static final String MESSAGE = "message";
 	public static final String YYYYMMDDHHMM = "yyyy/MM/dd HH:mm";
 	public static final String VOIRINACTIF = "voirInactif";
-	public static final String VOIRLATLON = "voirLatLon";
-	public static final String DECALAGETEMPS = "decalagetemps";
+	static final String VOIRLATLON = "voirLatLon";
+	static final String DECALAGETEMPS = "decalagetemps";
 
 
 	public static final String COMMENTAIRE = "commentaire";

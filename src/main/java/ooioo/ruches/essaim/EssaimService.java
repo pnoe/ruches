@@ -64,7 +64,7 @@ public class EssaimService {
 	/*
 	 * Clone d'un essaim.
 	 */
-	public String clone(HttpSession session, Optional<Essaim> essaimOpt, String nomclones, String nomruches) {
+	String clone(HttpSession session, Optional<Essaim> essaimOpt, String nomclones, String nomruches) {
 		Essaim essaim = essaimOpt.get();
 		List<String> noms = new ArrayList<>();
 		for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
@@ -119,7 +119,7 @@ public class EssaimService {
 	 * dispersion de l'essaim qui termine l'historique - la ou les mises en ruches
 	 * de l'essaim qui peuvent impliquer des déplacements
 	 */
-	public boolean historique(Model model, Long essaimId) {
+	boolean historique(Model model, Long essaimId) {
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isPresent()) {
 			Essaim essaim = essaimOpt.get();
@@ -161,7 +161,7 @@ public class EssaimService {
 	/*
 	 * Calcul des statistiques sur l'âge des reines.
 	 */
-	public void statistiquesage(Model model) {
+	void statistiquesage(Model model) {
 		Iterable<Essaim> essaims = essaimRepository.findByActif(true);
 		int pas = 6;
 		int maxAgeMois = 95; // reine ignorée si plus ancienne (96 mois, 8 ans)
@@ -240,7 +240,7 @@ public class EssaimService {
 	 *                       récolte dans ce rucher.
 	 * @param masquerInactif pour masquer les essaims inactifs.
 	 */
-	public void statistiques(Model model, Long rucherId, boolean masquerInactif) {
+	void statistiques(Model model, Long rucherId, boolean masquerInactif) {
 		// pour équivalence appel Get ou Post avec rucherId = 0
 		if ((rucherId != null) && rucherId.equals(0L)) {
 			rucherId = null;
@@ -334,7 +334,7 @@ public class EssaimService {
 	 *
 	 * @param essaimOpt l'essaim essaimId.
 	 */
-	public Essaim essaimSauve(long essaimId, String date, String nom, String commentaire, Optional<Essaim> essaimOpt) {
+	Essaim essaimSauve(long essaimId, String date, String nom, String commentaire, Optional<Essaim> essaimOpt) {
 		// L'essaim à disperser
 		Essaim essaim = essaimOpt.get();
 		// La ruche dans laquelle on va mettre le nouvel essaim à créer
@@ -383,7 +383,7 @@ public class EssaimService {
 	/**
 	 * Renvoie la liste des EssaimTree fils de l'essaim passé en paramètre
 	 */
-	public List<EssaimTree> listeEssaimsFils(Essaim essaim) {
+	List<EssaimTree> listeEssaimsFils(Essaim essaim) {
 		List<EssaimTree> essaimTree = new ArrayList<>();
 		calculeEssaimsFils(essaimTree, essaim);
 		return essaimTree;

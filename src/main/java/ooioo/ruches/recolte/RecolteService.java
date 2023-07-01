@@ -30,7 +30,7 @@ public class RecolteService {
 	 * d'essaims moyen actifs dans l'année. Diagramme à barres verticales
 	 * (histogramme).
 	 */
-	public void statprod(Model model) {
+	void statprod(Model model) {
 		Recolte recFirst = recolteRepository.findFirstByOrderByDateAsc();
 		if (recFirst == null) {
 			// Pas encore de récolte.

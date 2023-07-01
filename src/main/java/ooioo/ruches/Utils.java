@@ -44,7 +44,7 @@ public final class Utils {
 	/*
 	 * Pourcentage ? Renvoie true si str est un int compris entre 0 et 100
 	 */
-	public static boolean isPourCent(String str) {
+	static boolean isPourCent(String str) {
 		if (str == null) {
 			return false;
 		}
@@ -63,7 +63,7 @@ public final class Utils {
 	 * Pour test nb hausses correct Renvoie true si str est un int compris entre 0
 	 * et 10
 	 */
-	public static boolean isIntInf10(String str) {
+	static boolean isIntInf10(String str) {
 		if (str == null) {
 			return false;
 		}
@@ -81,7 +81,7 @@ public final class Utils {
 	/*
 	 * Renvoie true si str est numérique
 	 */
-	public static boolean isNum(String str) {
+	static boolean isNum(String str) {
 		if (str == null) {
 			return false;
 		}

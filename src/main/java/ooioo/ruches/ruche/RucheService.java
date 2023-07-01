@@ -47,7 +47,7 @@ public class RucheService {
 	/**
 	 * Historique de l'ajout des hausses sur une ruche.
 	 */
-	public boolean historique(Model model, Long rucheId) {
+	boolean historique(Model model, Long rucheId) {
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 		if (rucheOpt.isPresent()) {
 			Ruche ruche = rucheOpt.get();
@@ -117,7 +117,7 @@ public class RucheService {
 	 * 
 	 * @param plus true pour liste détaillée
 	 */
-	public void liste(HttpSession session, Model model, boolean plus) {
+	void liste(HttpSession session, Model model, boolean plus) {
 		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
 		Iterable<Ruche> ruches;
 		List<Integer> nbHausses = new ArrayList<>();
@@ -136,10 +136,11 @@ public class RucheService {
 		for (Ruche ruche : ruches) {
 			nbHausses.add(hausseRepository.countByRucheId(ruche.getId()));
 			if (plus) {
-				// Les 3 derniers événements de la ruche (hors HAUSSEPOSERUCHE, RUCHEPESEE et RUCHECADRE).
+				// Les 3 derniers événements de la ruche (hors HAUSSEPOSERUCHE, RUCHEPESEE et
+				// RUCHECADRE).
 				listeEvensCommentaireEssaim.add(evenementRepository.find3EveListePlus(ruche));
 				// hausses et eve pose hausses en deux listes séparées pour
-				//   afficher les hausses même si les eves ont été effacés.
+				// afficher les hausses même si les eves ont été effacés.
 				List<Hausse> hausses = hausseRepository.findByRucheIdOrderByOrdreSurRuche(ruche.getId());
 				haussesRuches.add(hausses);
 				List<Evenement> eveHaussesRuche = new ArrayList<>();
@@ -173,8 +174,7 @@ public class RucheService {
 	/*
 	 * Liste des ruches d'un rucher avec ordre de parcours.
 	 */
-	public void listePlusRucher(HttpSession session, Model model, Rucher rucher, List<RucheParcours> chemin,
-			boolean plus) {
+	void listePlusRucher(HttpSession session, Model model, Rucher rucher, List<RucheParcours> chemin, boolean plus) {
 		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
 		Iterable<Ruche> ruches;
 		List<Integer> nbHausses = new ArrayList<>();
@@ -205,7 +205,7 @@ public class RucheService {
 			if (plus) {
 				listeEvensCommentaireEssaim.add(evenementRepository.find3EveListePlus(ruche));
 				// hausses et eve pose hausses en deux listes séparées pour
-				//   afficher les hausses même si les eves ont été effacés.
+				// afficher les hausses même si les eves ont été effacés.
 				List<Hausse> hausses = hausseRepository.findByRucheIdOrderByOrdreSurRuche(ruche.getId());
 				haussesRuches.add(hausses);
 				List<Evenement> eveHaussesRuche = new ArrayList<>();
@@ -240,7 +240,7 @@ public class RucheService {
 	/**
 	 * Appel du formulaire pour la création d'une ruche.
 	 */
-	public void cree(HttpSession session, Model model) {
+	void cree(HttpSession session, Model model) {
 		List<String> noms = new ArrayList<>();
 		for (Nom rucheNom : rucheRepository.findAllProjectedBy()) {
 			noms.add(rucheNom.nom());
