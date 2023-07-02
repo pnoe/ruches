@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
@@ -51,6 +53,9 @@ public class EvenementController {
 	private EssaimRepository essaimRepository;
 	@Autowired
 	private RucherRepository rucherRepository;
+	
+	@Autowired
+	private MessageSource messageSource;
 
 	@Value("${notification.destinataires}")
 	private String[] notifDest;
@@ -145,7 +150,13 @@ public class EvenementController {
 		}
 		model.addAttribute(Const.EVENEMENTS, evens);
 		model.addAttribute("jAvants", jAvants);
-		model.addAttribute("dests", "Destinataires :<br/>" + String.join("<br/>", notifDest));
+		model.addAttribute("dests", 
+				messageSource.getMessage("Destinataires", null, LocaleContextHolder.getLocale()) +
+				" :<br/>" + String.join("<br/>", notifDest));
+		
+		
+
+
 		return "evenement/evenementNotifListe";
 	}
 
