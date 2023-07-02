@@ -268,8 +268,8 @@ public class EssaimService {
 					if ((recoltehausse == null) || !recoltehausse.getRucher().getId().equals(rucherId)) {
 						continue;
 					}
+					rucherOK = true;
 				}
-				rucherOK = true;
 				Integer poids = recolteHausseRepository.findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId());
 				if (poids != null) {
 					pTotal += poids;
@@ -297,7 +297,7 @@ public class EssaimService {
 					LocalDateTime dateFin = (dispersion == null) ? LocalDateTime.now() : dispersion.getDate();
 					long duree = ChronoUnit.DAYS.between(essaim.getDateAcquisition().atStartOfDay(), dateFin);
 					if (duree <= 0) {
-						essaimPoids.put("pMoyen", "Erreur durée");
+						essaimPoids.put("pMoyen", "");
 					} else {
 						float pMoyen = pTotal * 0.365242f / duree;
 						essaimPoids.put("pMoyen", decimalFormat.format(pMoyen));
