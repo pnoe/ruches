@@ -9,6 +9,12 @@
 	const btp = /*[[#{buttontextprint}]]*/null;
 	const btc = /*[[#{buttontextcol}]]*/null;
 	$(document).ready(function() {
+		$('.bi-question-lg').popover({
+	        html: true
+	    });
+	    $('.popover-dismiss').popover({
+	        trigger: 'focus'
+	    });		
 		$('#tous').on('change', function() {
 			location = url + ($(this).is(':checked'));
 		});
