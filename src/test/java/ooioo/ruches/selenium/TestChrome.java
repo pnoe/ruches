@@ -401,11 +401,18 @@ public class TestChrome {
 
 	}
 
-	@Test
-	@Order(26)
 	@DisplayName("Essaims statistiques")
-	void essaimStatistiques() {
-		driver.get(baseUrl + "essaim/statistiques");
+	@Order(26)
+	@ParameterizedTest
+	@ValueSource(strings = { "", "?masquerInactif=on", "depot" })
+	void essaimStatistiques(String param) {
+		if (param.equals("depot")) {
+			if (depotId == null) {
+				depotId = TestUtils.getDepotId(driver, baseUrl);
+			}
+			param = "?rucherId=" + depotId;
+		}
+		driver.get(baseUrl + "essaim/statistiques" + param);
 		// La table d'id "statistiques" est affichée
 		assertEquals("table", driver.findElement(By.id("statistiques")).getTagName());
 	}
