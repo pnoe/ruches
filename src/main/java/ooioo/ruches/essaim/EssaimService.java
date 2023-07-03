@@ -31,7 +31,6 @@ import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
 import ooioo.ruches.recolte.Recolte;
-import ooioo.ruches.recolte.RecolteHausse;
 import ooioo.ruches.recolte.RecolteHausseRepository;
 import ooioo.ruches.recolte.RecolteRepository;
 import ooioo.ruches.ruche.Ruche;
@@ -91,8 +90,8 @@ public class EssaimService {
 				noms.add(nomarray[i]);
 				if (i < nomruchesarray.length && !"".contentEquals(nomruchesarray[i])) {
 					// S'il n'y a pas de dépassement de la taille du tableau
-					//  (liste des ruches incorrecte en paramètre) et si le nom de la
-					//  ruche est différent de ""
+					// (liste des ruches incorrecte en paramètre) et si le nom de la
+					// ruche est différent de ""
 					Ruche ruche = rucheRepository.findByNom(nomruchesarray[i]);
 					if (ruche.getEssaim() == null) {
 						ruche.setEssaim(clone);
@@ -253,25 +252,20 @@ public class EssaimService {
 		Integer pTotal; // poids de miel total produit par l'essaim
 		Integer pMax; // poids de miel max lors d'une récolte
 		Integer pMin; // poids de miel min lors d'une récolte
-		boolean rucherOK;
+		boolean essaimOK;
 		for (Essaim essaim : essaims) {
 			pTotal = 0;
 			pMax = 0;
 			pMin = 1000000;
-			rucherOK = false;
+			essaimOK = false;
 			for (Recolte recolte : recoltes) {
-				// si rucherId non null, tester ou était l'essaim pour cette récolte
-				// en regardant le rucher dans une des hausseRécolte de cette récolte
-				// si différent de rucherId "continue"
-				if (rucherId != null) {
-					RecolteHausse recoltehausse = recolteHausseRepository.findFirstByRecolteAndEssaim(recolte, essaim);
-					if ((recoltehausse == null) || !recoltehausse.getRucher().getId().equals(rucherId)) {
-						continue;
-					}
-					rucherOK = true;
-				}
-				Integer poids = recolteHausseRepository.findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId());
+				Integer poids = (rucherId == null)
+						? recolteHausseRepository.findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId())
+						: recolteHausseRepository.findPoidsMielEssaimRecolteRucher(essaim.getId(), recolte.getId(),
+								rucherId);
 				if (poids != null) {
+					// L'essaim à participé à au moins une récolte même si le poids est nul.
+					essaimOK = true;
 					pTotal += poids;
 					pMax = Math.max(pMax, poids);
 					pMin = Math.min(pMin, poids);
@@ -280,10 +274,8 @@ public class EssaimService {
 			if (pMin == 1000000) {
 				pMin = 0;
 			}
-			// si rucherId non null
-			// et rucherOK false ignorer cet essaim, il n'a pas produit dans le rucher
-			// rucherId
-			if ((rucherId == null) || rucherOK) {
+			// Si l'essaim n'a participé à aucune récolte, on ne l'affiche pas dans le tableau.
+			if (essaimOK) {
 				Map<String, String> essaimPoids = new HashMap<>();
 				essaimPoids.put("nom", essaim.getNom());
 				essaimPoids.put("id", essaim.getId().toString());
@@ -320,18 +312,14 @@ public class EssaimService {
 		model.addAttribute("masquerInactif", masquerInactif);
 	}
 
-	/*
+	/**
 	 * Enregistrement de l'essaimage.
 	 *
 	 * @param essaimId l'id de l'essaim qui essaime.
-	 *
 	 * @param date la date saisie dans le formulaire d'essaimage.
-	 *
 	 * @param nom le nom du nouvel essaim restant dans la ruche saisi dans le
 	 * formulaire d'essaimage.
-	 *
 	 * @param commentaire le commentaire saisi dans le formulaire d'essaimage.
-	 *
 	 * @param essaimOpt l'essaim essaimId.
 	 */
 	Essaim essaimSauve(long essaimId, String date, String nom, String commentaire, Optional<Essaim> essaimOpt) {

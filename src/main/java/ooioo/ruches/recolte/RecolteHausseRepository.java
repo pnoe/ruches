@@ -41,6 +41,13 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 			  where essaim.id=?1 and recolte.id=?2
 			""")
 	Integer findPoidsMielByEssaimByRecolte(Long essaimId, Long recolteId);
+	
+	@Query(value = """
+			select sum(poidsAvant) - sum(poidsApres) as poids
+			  from RecolteHausse
+			  where essaim.id = :essaimId and recolte.id = :recolteId and rucher.id = :rucherId
+			""")
+	Integer findPoidsMielEssaimRecolteRucher(Long essaimId, Long recolteId, Long rucherId);
 
 	@Query(value = """
 			select sum(poids_avant) - sum(poids_apres) as p, e.nom
