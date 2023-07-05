@@ -109,10 +109,11 @@ public class RucherController {
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
 			model.addAttribute(Const.RUCHER, rucher);
+			// evenementRepository.findAjoutRucheOK
 			// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date
-			// descendante avec les champs ruche et rucher non null
-			List<Transhumance> histoAll = new ArrayList<>(); // si non groupés
-			List<Transhumance> histoGroup = new ArrayList<>(); // si groupés
+			// descendante avec les champs ruche et rucher non null.
+			List<Transhumance> histoAll = new ArrayList<>(); // si non groupées
+			List<Transhumance> histoGroup = new ArrayList<>(); // si groupées
 			rucherService.transhum(rucher, evenementRepository.findAjoutRucheOK(), group, histoAll, histoGroup);
 			if (group) {
 				model.addAttribute(HISTO, histoGroup);

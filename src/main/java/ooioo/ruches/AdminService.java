@@ -132,8 +132,9 @@ public class AdminService {
 					for (int j = i + 1; j < levens; j++) {
 						Evenement eveJ = evensListe.get(j);
 						if (eveJ.getRuche().getId().equals(eve.getRuche().getId())) {
-							// si ajout de la même ruche dans un rucher
-							if (eveJ.getRuche().getId().equals(rucher.getId())) {
+							// si ajout de la ruche dans le même rucher
+							// noe 5 juillet 2023 correction getRucher et non getRuche
+							if (eveJ.getRucher().getId().equals(rucher.getId())) {
 								// si même rucher
 								// c'est une erreur, deux ajouts successifs dans le même rucher
 								ruchersErr.add(rucher.getNom());

@@ -67,7 +67,7 @@ public class RucherControllerMAJ {
 					Evenement evePrec = null;
 					for (int j = i + 1; j < levens; j++) {
 						if ((evensRucheAjout.get(j).getRuche().getId().equals(eve.getRuche().getId()))
-								&& !(evensRucheAjout.get(j).getRuche().getId().equals(rucher.getId()))) {
+								&& !(evensRucheAjout.get(j).getRucher().getId().equals(rucher.getId()))) {
 							// si (evensRucheAjout.get(j).getRuche().getId().equals(rucherId))
 							// c'est une erreur, deux ajouts successifs dans le même rucher
 							evePrec = evensRucheAjout.get(j);

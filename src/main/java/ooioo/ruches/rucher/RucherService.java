@@ -56,10 +56,10 @@ public class RucherService {
 	 * Calcul des transhumances d'un rucher.
 	 *
 	 * @param rucher Le rucher dont on liste les transhumances
-	 * @param evensRucheAjout Tous les événements Ruche Ajout dans Rucher
+	 * @param evensRucheAjout Tous les événements Ruche Ajout dans Rucher triés par ordre de date
 	 * @param group Si true les transhumances sont regroupées par date
 	 * @param histo En retour les transhumances si pas de regroupement
-	 * @param histoGroup En retour les transhumances si pas de regroupement
+	 * @param histoGroup En retour les transhumances si regroupement
 	 */
 	void transhum(Rucher rucher, List<Evenement> evensRucheAjout, boolean group, List<Transhumance> histo,
 			List<Transhumance> histoGroup) {
@@ -70,27 +70,32 @@ public class RucherService {
 			ruches.add(nomR.nom());
 		}
 		for (int i = 0, levens = evensRucheAjout.size(); i < levens; i++) {
+			// Pour chaque événement eve ruche ajout dans rucher, du plus récent
+			//  au plus ancien
 			Evenement eve = evensRucheAjout.get(i);
 			if (eve.getRucher().getId().equals(rucher.getId())) {
 				// si l'événement est un ajout dans le rucher,
-				// on retire après l'affichage la ruche de l'événement
-				// de la liste des ruches du rucher.
 				// On cherche l'événement précédent ajout de cette ruche
 				// pour indication de sa provenance.
 				Evenement evePrec = null;
 				for (int j = i + 1; j < levens; j++) {
 					if ((evensRucheAjout.get(j).getRuche().getId().equals(eve.getRuche().getId()))
-							&& !(evensRucheAjout.get(j).getRuche().getId().equals(rucher.getId()))) {
-						// si (evensRucheAjout.get(j).getRuche().getId().equals(rucherId))
+							// même ruche
+							&& !(evensRucheAjout.get(j).getRucher().getId().equals(rucher.getId()))
+							// et rucher différent
+							) {
+						// si (evensRucheAjout.get(j).getRucher().getId().equals(rucherId))
 						// c'est une erreur, deux ajouts successifs dans le même rucher
 						evePrec = evensRucheAjout.get(j);
 						break;
 					}
 				}
+				// on stocke l'événement ajout dans histo
 				histo.add(new Transhumance(rucher, true, // type = true Ajout
 						eve.getDate(),
 						Collections.singleton(evePrec == null ? "Inconnue" : evePrec.getRucher().getNom()),
 						Arrays.asList(eve.getRuche().getNom()), new ArrayList<>(ruches), eve.getId()));
+				// on retire le nom de la ruche de la liste des noms de ruches du rucher
 				if (!ruches.remove(eve.getRuche().getNom())) {
 					logger.error("Événement {} le rucher {} ne contient pas la ruche {}", eve.getDate(),
 							eve.getRucher().getNom(), eve.getRuche().getNom());
