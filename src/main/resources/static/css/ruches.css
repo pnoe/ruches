@@ -5,6 +5,10 @@ footer {
 	line-height: 0.5em;
 }
 
+.menurac {
+	text-decoration: underline red;
+}
+
 .ol-rotate {
 	top: 5.5em !important;
 }
