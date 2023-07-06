@@ -93,22 +93,25 @@ public class RucheService {
 	}
 
 	/*
-	 * Ré-ordonne les hausses d'une ruche utilisé après retrait d'une hausse.
+	 * Ré-ordonne les hausses d'une ruche.
+	 * Permet de remettre un ordre 1, 2, 3... après suppression d'une hausse
+	 *  par exemple.
 	 */
 	public void ordonneHaussesRuche(long rucheId) {
 		Iterable<Hausse> haussesRuche = hausseRepository.findByRucheIdOrderByOrdreSurRuche(rucheId);
 		int i = 1;
-		for (Hausse hausseRuche : haussesRuche) {
-			Integer ordre = hausseRuche.getOrdreSurRuche();
+		for (Hausse hr : haussesRuche) {
+			Integer ordre = hr.getOrdreSurRuche();
 			if (ordre == null) {
-				logger.error("Ruche {} Ordre hausse {} null.", rucheId, hausseRuche.getNom());
+				logger.error("Ruche {} Ordre hausse {} null.", rucheId, hr.getNom());
 			}
 			if ((ordre == null) || (ordre != i)) {
 				// On corrige l'ordre s'il est null ou s'il est différent de l'ordre
 				// renvoyé par findByRucheIdOrderByOrdreSurRuche
-				hausseRuche.setOrdreSurRuche(i++);
-				hausseRepository.save(hausseRuche);
+				hr.setOrdreSurRuche(i);
+				hausseRepository.save(hr);
 			}
+			i++;
 		}
 	}
 
