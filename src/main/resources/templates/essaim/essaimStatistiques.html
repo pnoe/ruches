@@ -54,6 +54,12 @@ $(document).ready(function() {
 				<label for="rucherId" th:text="#{rucher}"
 				  class="col-sm-2 col-form-label"></label>
 				<select class="form-control col-sm-10" id="rucherId" name="rucherId">
+					
+					<option th:text="#{tous}" value="0"  
+								th:selected="0 == (${rucherId}==null?'0':${rucherId})">
+					</option>
+					
+					
 					<option th:each="rucheropt : ${rucherIdNom}" th:value="${rucheropt.id}"
 								th:text="${rucheropt.nom}"  
 								th:selected="${rucheropt.id} == (${rucherId}==null?'0':${rucherId})">

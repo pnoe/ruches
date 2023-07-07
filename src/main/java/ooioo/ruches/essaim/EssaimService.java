@@ -303,10 +303,7 @@ public class EssaimService {
 			}
 		}
 		model.addAttribute("essaimsPoids", essaimsPoids);
-		Collection<IdNom> rucherIdNom2 = rucherRepository.findAllProjectedIdNomByOrderByNom();
-		List<IdNom> rucherIdNom = new ArrayList<>();
-		rucherIdNom.add(new IdNom(0L, "Tous"));
-		rucherIdNom.addAll(rucherIdNom2);
+		Collection<IdNom> rucherIdNom = rucherRepository.findAllProjectedIdNomByOrderByNom();
 		model.addAttribute("rucherIdNom", rucherIdNom);
 		model.addAttribute("rucherId", rucherId);
 		model.addAttribute("masquerInactif", masquerInactif);
