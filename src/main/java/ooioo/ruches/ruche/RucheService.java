@@ -2,6 +2,7 @@ package ooioo.ruches.ruche;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -136,6 +137,7 @@ public class RucheService {
 		} else {
 			ruches = rucheRepository.findByActiveTrueOrderByNom();
 		}
+		List<String> ruchersNoms = new ArrayList<>(); 
 		for (Ruche ruche : ruches) {
 			nbHausses.add(hausseRepository.countByRucheId(ruche.getId()));
 			if (plus) {
@@ -154,6 +156,12 @@ public class RucheService {
 				// Dernier événement pesée de la ruche.
 				evensPoidsRuches.add(
 						evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.RUCHEPESEE));
+				
+				Rucher rr = ruche.getRucher();
+				if ((rr != null) && (!ruchersNoms.contains(rr.getNom()))) {
+					ruchersNoms.add(rr.getNom());
+				}
+				
 			}
 			Evenement evenAjoutRucher = evenementRepository.findFirstByRucheAndRucherAndTypeOrderByDateDesc(ruche,
 					ruche.getRucher(), TypeEvenement.RUCHEAJOUTRUCHER);
@@ -171,6 +179,10 @@ public class RucheService {
 			model.addAttribute(Const.HAUSSES, haussesRuches);
 			model.addAttribute("evensHaussesRuches", evensHaussesRuches);
 			model.addAttribute("evensPoidsRuches", evensPoidsRuches);
+			
+			Collections.sort(ruchersNoms);
+			model.addAttribute("ruchersNoms", ruchersNoms);
+			
 		}
 	}
 
