@@ -155,13 +155,11 @@ public class RucheService {
 				evensHaussesRuches.add(eveHaussesRuche);
 				// Dernier événement pesée de la ruche.
 				evensPoidsRuches.add(
-						evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.RUCHEPESEE));
-				
-				Rucher rr = ruche.getRucher();
-				if ((rr != null) && (!ruchersNoms.contains(rr.getNom()))) {
-					ruchersNoms.add(rr.getNom());
-				}
-				
+						evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.RUCHEPESEE));	
+			}
+			Rucher rr = ruche.getRucher();
+			if ((rr != null) && (!ruchersNoms.contains(rr.getNom()))) {
+				ruchersNoms.add(rr.getNom());
 			}
 			Evenement evenAjoutRucher = evenementRepository.findFirstByRucheAndRucherAndTypeOrderByDateDesc(ruche,
 					ruche.getRucher(), TypeEvenement.RUCHEAJOUTRUCHER);
@@ -174,15 +172,13 @@ public class RucheService {
 		model.addAttribute("listeEvenCadre", listeEvenCadre);
 		model.addAttribute(Const.NBHAUSSES, nbHausses);
 		model.addAttribute(Const.RUCHES, ruches);
+		Collections.sort(ruchersNoms);
+		model.addAttribute("ruchersNoms", ruchersNoms);
 		if (plus) {
 			model.addAttribute("listeEvensCommentaireEsaim", listeEvensCommentaireEssaim);
 			model.addAttribute(Const.HAUSSES, haussesRuches);
 			model.addAttribute("evensHaussesRuches", evensHaussesRuches);
-			model.addAttribute("evensPoidsRuches", evensPoidsRuches);
-			
-			Collections.sort(ruchersNoms);
-			model.addAttribute("ruchersNoms", ruchersNoms);
-			
+			model.addAttribute("evensPoidsRuches", evensPoidsRuches);			
 		}
 	}
 

@@ -8,15 +8,10 @@
 		const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
 		$(document).ready(function () {
 			$("#rucher").on("change", function() {
-				if (this.value === "Tous") {
-					tbl.columns(4).search("").draw();	
-				} else {
-					tbl.columns(4).search(this.value).draw();
-				}
+				table.columns(4).search(this.value).draw();
 			});
-			
 			const idTbl = '#ruchesplus';
-			const tbl = new DataTable(idTbl, {
+			const table = new DataTable(idTbl, {
 				dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
 				scrollX: true,
 				buttons: [
@@ -46,7 +41,6 @@
 		});
 	</script>
 </head>
-
 <body>
 	<nav th:replace="include :: navbar">Menu</nav>
 	<br />
@@ -58,15 +52,12 @@
 				<h1 class="item" th:text="#{Ruches}"></h1>
 			</div>
 			<div class="col">
-				
 				<select class="form-control" id="rucher" name="rucher">
 					<option value="" th:text="#{tous}"></option>
 					<option th:each="rucheropt : ${ruchersNoms}" th:value="${rucheropt}"
 								th:text="${rucheropt}" >
 					</option>
-					
 				</select>
-
 			</div>
 		</div>
 	</div>

@@ -10,6 +10,9 @@
 	const selectRuTrait = /*[[#{selectruchestraiter}]]*/null;
 	$(document).ready(
 			function() {
+				$("#rucher").on("change", function() {
+					table.columns(2).search(this.value).draw();
+				});
 				const idTbl = '#ruches';
 				const table = new DataTable(idTbl, {
 					select : {
@@ -81,6 +84,14 @@
 					th:title="#{ajouterRuche}" aria-hidden="true"></a> &nbsp; <a
 					id="commentaire" href="#" class="selection bi-chat-text"
 					th:title="#{evenementsCommentaire}" aria-hidden="true"></a>
+			</div>
+			<div class="col">
+				<select class="form-control" id="rucher" name="rucher">
+					<option value="" th:text="#{tous}"></option>
+					<option th:each="rucheropt : ${ruchersNoms}" th:value="${rucheropt}"
+								th:text="${rucheropt}" >
+					</option>
+				</select>
 			</div>
 		</div>
 	</div>
