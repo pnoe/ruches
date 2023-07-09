@@ -1,3 +1,8 @@
+/* https://datatables.net/forums/discussion/76671 */
+.dt-button {
+  position: relative;
+}
+
 footer {
 	padding-top: 0.2em;
 	padding-left: 0.4em;
