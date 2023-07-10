@@ -146,13 +146,13 @@ $().ready(function() {
 			th:if="${(eveHausse != null) or (eveRucher != null) or (eveRuche != null)}">
 			<thead>
 				<tr>
-					<th style="background-color: PaleGoldenRod" th:text="#{ruche}"></th>
-					<th style="background-color: PaleGoldenRod" th:text="#{Ordre}"></th>
-					<th style="background-color: PaleGoldenRod" th:text="#{date}"></th>
-					<th style="background-color: LemonChiffon" th:text="#{rucher}"></th>
-					<th style="background-color: LemonChiffon" th:text="#{date}"></th>
-					<th style="background-color: PaleGoldenRod" th:text="#{essaim}"></th>
-					<th style="background-color: PaleGoldenRod" th:text="#{date}"></th>
+					<th th:text="#{ruche}"></th>
+					<th th:text="#{Ordre}"></th>
+					<th th:text="#{dateRuche}"></th>
+					<th th:text="#{rucher}"></th>
+					<th th:text="#{daterucher}"></th>
+					<th th:text="#{essaim}"></th>
+					<th th:text="#{dateEssaim}"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -184,14 +184,14 @@ $().ready(function() {
 			<table class="table table-sm table-bordered">
 				<thead>
 					<tr>
-						<th style="background-color: PaleGoldenRod"
+						<th
 							th:text="#{remplissage}"></th>
-						<th style="background-color: PaleGoldenRod" th:text="#{date}"></th>
-						<th style="background-color: PaleGoldenRod"
-							th:text="#{commentaire}"></th>
-						<th style="background-color: LemonChiffon"
+						<th th:text="#{date}"></th>
+						<th
+							th:text="#{commentaireremplissage}"></th>
+						<th
 							th:text="#{COMMENTAIREHAUSSE}"></th>
-						<th style="background-color: LemonChiffon" th:text="#{date}"></th>
+						<th th:text="#{date}"></th>
 					</tr>
 				</thead>
 				<tbody>

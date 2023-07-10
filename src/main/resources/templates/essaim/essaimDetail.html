@@ -93,12 +93,9 @@
 				<tr>
 					<th th:if="${session.voirInactif}" th:text="#{actif}"></th>
 					<th th:text="#{dateAcquisition}"></th>
-					<th style="background-color: LemonChiffon"
-						th:text="#{reineMarquee}"></th>
-					<th style="background-color: LemonChiffon"
-						th:text="#{reineCouleurMarquage}"></th>
-					<th style="background-color: LemonChiffon"
-						th:text="#{reineDateNaissance}"></th>
+					<th th:text="#{reineMarquee}"></th>
+					<th th:text="#{reineCouleurMarquage}"></th>
+					<th th:text="#{reineDateNaissance}"></th>
 					<th th:text="#{souche}"></th>
 					<th th:text="#{agressivite}"></th>
 					<th th:text="#{proprete}"></th>
@@ -125,13 +122,12 @@
 		<table class="table table-sm table-bordered" th:if="${rucheEssaim}">
 			<thead>
 				<tr>
-					<th style="background-color: PaleGoldenRod" th:text="#{ruche}"></th>
-					<th style="background-color: PaleGoldenRod" th:text="#{date}"></th>
-					<th style="background-color: PaleGoldenRod"
-						th:text="#{commentaire}"></th>
-					<th style="background-color: LemonChiffon" th:text="#{rucher}"></th>
-					<th style="background-color: LemonChiffon" th:text="#{date}"></th>
-					<th style="background-color: LemonChiffon" th:text="#{commentaire}"></th>
+					<th th:text="#{ruche}"></th>
+					<th th:text="#{dateRuche}"></th>
+					<th th:text="#{COMMENTAIRERUCHE}"></th>
+					<th th:text="#{rucher}"></th>
+					<th th:text="#{daterucher}"></th>
+					<th th:text="#{COMMENTAIRERUCHER}"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -161,16 +157,14 @@
 			th:if="${(eveTraite != null) or (eveSucre != null) or (eveComm != null)}">
 			<thead>
 				<tr>
-					<th style="background-color: PaleGoldenRod" th:text="#{traitement}"></th>
-					<th style="background-color: PaleGoldenRod" th:text="#{date}"></th>
-					<th style="background-color: PaleGoldenRod"
-						th:text="#{commentaire}"></th>
-					<th style="background-color: LemonChiffon" th:text="#{actionSucre}"></th>
-					<th style="background-color: LemonChiffon" th:text="#{date}"></th>
-					<th style="background-color: LemonChiffon" th:text="#{commentaire}"></th>
-					<th style="background-color: PaleGoldenRod"
-						th:text="#{COMMENTAIREESSAIM}"></th>
-					<th style="background-color: PaleGoldenRod" th:text="#{date}"></th>
+					<th th:text="#{traitement}"></th>
+					<th th:text="#{dateTraitement}"></th>
+					<th th:text="#{commentaireTraitement}"></th>
+					<th th:text="#{actionSucre}"></th>
+					<th th:text="#{dateSucre}"></th>
+					<th th:text="#{commentaireSucre}"></th>
+					<th th:text="#{COMMENTAIREESSAIM}"></th>
+					<th th:text="#{dateEssaim}"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -201,13 +195,12 @@
 			th:if="${(evePesee != null) or (eveCadre != null)}">
 			<thead>
 				<tr>
-					<th style="background-color: PaleGoldenRod" th:text="#{poidsVide}"></th>
-					<th style="background-color: PaleGoldenRod" th:text="#{date}"></th>
-					<th style="background-color: PaleGoldenRod"
-						th:text="#{commentaire}"></th>
-					<th style="background-color: LemonChiffon" th:text="#{nbCadres}"></th>
-					<th style="background-color: LemonChiffon" th:text="#{date}"></th>
-					<th style="background-color: LemonChiffon" th:text="#{commentaire}"></th>
+					<th th:text="#{poidsVide}"></th>
+					<th th:text="#{datePesee}"></th>
+					<th th:text="#{commentairePesee}"></th>
+					<th th:text="#{nbCadres}"></th>
+					<th th:text="#{dateCadre}"></th>
+					<th th:text="#{commentaireCadre}"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -232,23 +225,23 @@
 			class="table table-sm table-bordered">
 			<thead>
 				<tr>
-					<th style="background-color: LightCyan" th:text="#{recolte}"></th>
+					<th th:text="#{recolte}"></th>
 					<td th:each="recolte : ${recoltesListe}"><a
 						th:href="@{'/recolte/'+${recolte.id}}"
 						th:text="${#temporals.format(recolte.date, 'yyyy/MM/dd')}"></a></td>
-					<th style="background-color: LightCyan" th:text="#{Total}"></th>
+					<th th:text="#{Total}"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<th style="background-color: LightCyan" th:text="#{rucher}"></th>
+					<th th:text="#{rucher}"></th>
 					<td th:each="rucher : ${rucherRecolteListe}"><a
 						th:href="@{'/rucher/'+${rucher?.id}}" th:text="${rucher?.nom}"></a>
 					</td>
 					<td></td>
 				</tr>
 				<tr>
-					<th style="background-color: LightCyan" th:text="#{poidskg}"></th>
+					<th th:text="#{poidskg}"></th>
 					<td th:each="poids : ${poidsListe}"
 						th:text="${#numbers.formatDecimal(poids/1000.0,1,2,'DEFAULT')}"></td>
 					<td

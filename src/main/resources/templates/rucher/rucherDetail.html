@@ -92,13 +92,13 @@
 					<th th:if="${session.voirInactif}" th:text="#{actif}"></th>
 					<th th:text="#{depot}"></th>
 					<th th:text="#{contact}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{adresse}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{latitude}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{longitude}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{altitude}"></th>
+					<th th:text="#{adresse}"></th>
+					<th th:text="#{latitude}"></th>
+					<th th:text="#{longitude}"></th>
+					<th th:text="#{altitude}"></th>
 					<th:block th:if="!${rucher.depot} and (${dist} != null)">
-						<th style="background-color:PaleGoldenRod">Distance</th>
-						<th style="background-color:PaleGoldenRod">Temps</th>
+						<th th:text="#{distance}"></th>
+						<th th:text="#{temps}"></th>
 					</th:block>
 					<th th:text="#{ressource}"></th>
 					<th th:text="#{commentaire}"></th>
@@ -136,8 +136,8 @@
 					<th th:text="#{dateAcquisition}"></th>
 					<th class="num" th:text="#{poidsVide}"></th>
 					<th class="num" th:text="#{nbCadres}"></th>
-					<th style="background-color:PaleGoldenRod" class="num" th:text="#{nbCadresMax}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{type}"></th>
+					<th  class="num" th:text="#{nbCadresMax}"></th>
+					<th  th:text="#{type}"></th>
 					<th th:text="#{Hausses}"></th>
 					<th th:text="#{commentaire}"></th>
 				</tr>
@@ -163,26 +163,26 @@
 		<table th:unless="${#lists.isEmpty(poidsListe)}" class="table table-sm table-bordered">			
 		<thead>
 			<tr>
-				<th style="background-color:LightCyan" th:text="#{recolte}"></th>
+				<th th:text="#{recolte}"></th>
 				<td th:each="recolte : ${recoltesListe}">
 					<a th:href="@{'/recolte/'+${recolte.id}}" th:text="${#temporals.format(recolte.date, 'yyyy/MM/dd')}"></a>
 				</td>
-				<th style="background-color:LightCyan" th:text="#{Total}"></th>
+				<th th:text="#{Total}"></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-				<th style="background-color:LightCyan" th:text="#{poidskg}"></th>
+				<th th:text="#{poidskg}"></th>
 				<td th:each="poids : ${poidsListe}" th:text="${#numbers.formatDecimal(poids/1000.0,1,2,'DEFAULT')}"></td>
 				<td th:text="${#numbers.formatDecimal(poidsTotal/1000.0,1,2,'DEFAULT')}"></td>		
 			</tr>
 			<tr>
-				<th style="background-color:LightCyan" th:text="#{Ruches}"></th>
+				<th th:text="#{Ruches}"></th>
 				<td th:each="nb : ${recoltesNbRuches}" th:text="${nb}"></td>
 				<td></td>		
 			</tr>
 			<tr>
-				<th style="background-color:LightCyan" th:text="#{poidsParRuches}"></th>
+				<th th:text="#{poidsParRuches}"></th>
 				<td th:each="poids, iterStat : ${poidsListe}" 
 					th:text="${#numbers.formatDecimal(poids/recoltesNbRuches[iterStat.index]/1000.0,1,2,'DEFAULT')}"></td>
 				<td></td>		

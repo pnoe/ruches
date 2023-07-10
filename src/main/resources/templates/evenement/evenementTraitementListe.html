@@ -46,13 +46,21 @@
 			<thead>
 				<tr>
 					<th th:text="#{date}"></th>
-					<th th:if="${tous}" style="background-color: PaleGoldenRod"
+					<!--/*
+					<th th:if="${tous}"
 						th:text="#{type}"></th>
-					<th style="background-color: PaleGoldenRod" th:text="#{ruche}"></th>
-					<th style="background-color: PaleGoldenRod" th:text="#{essaim}"></th>
-					<th style="background-color: PaleGoldenRod" th:text="#{rucher}"></th>
-					<th style="background-color: LemonChiffon" th:text="#{valeur}"></th>
-					<th style="background-color: LemonChiffon" th:text="#{commentaire}"></th>
+					<th th:text="#{ruche}"></th>
+					<th th:text="#{essaim}"></th>
+					<th th:text="#{rucher}"></th>
+					<th th:text="#{valeur}"></th>
+					<th th:text="#{commentaire}"></th>
+					*/-->
+					<th th:if="${tous}" th:text="#{type}"></th>
+					<th th:text="#{ruche}"></th>
+					<th th:text="#{essaim}"></th>
+					<th th:text="#{rucher}"></th>
+					<th th:text="#{valeur}"></th>
+					<th th:text="#{commentaire}"></th>
 				</tr>
 			</thead>
 			<tbody>

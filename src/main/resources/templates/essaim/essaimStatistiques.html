@@ -82,9 +82,9 @@ $(document).ready(function() {
 			<thead>
 			    <tr>
 					<th th:text="#{essaim}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{dateAcquisition}"></th>
-					<th style="background-color:LemonChiffon" th:unless="${masquerInactif}" th:text="#{dispersion}"></th>
-					<th style="background-color:LemonChiffon" th:if="${rucherId == null}" th:text="#{Duree}"></th>
+					<th th:text="#{dateAcquisition}"></th>
+					<th th:unless="${masquerInactif}" th:text="#{dispersion}"></th>
+					<th th:if="${rucherId == null}" th:text="#{Duree}"></th>
 					<th th:text="#{Total}"></th>
 					<th th:text="#{Max}"></th>
 					<th th:text="#{Min}"></th>

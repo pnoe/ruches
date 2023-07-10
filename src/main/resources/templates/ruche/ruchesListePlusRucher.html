@@ -60,32 +60,32 @@
 		<table class="table table-bordered table-striped table-sm" id="ruches">
 			<thead>
 				<tr>
-					<th style="background-color:LightGoldenRodYellow" th:text="#{Ordre}"></th>
-					<th style="background-color:LightGoldenRodYellow" th:text="#{nom}"></th>
-					<th style="background-color:lightskyblue" th:text="#{essaim}"></th>
-					<th style="background-color:lightskyblue" th:text="#{dateAcquisition}"></th>
-					<th style="background-color:lightskyblue" th:text="#{COMMENTAIREESSAIM}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{daterucher}"></th>
+					<th th:text="#{Ordre}"></th>
+					<th th:text="#{nom}"></th>
+					<th th:text="#{essaim}"></th>
+					<th th:text="#{essaimAcquisition}"></th>
+					<th th:text="#{COMMENTAIREESSAIM}"></th>
+					<th th:text="#{daterucher}"></th>
 					<th th:text="#{prod}"></th>
 					<th th:if="${session.voirInactif}" th:text="#{active}"></th>
 					<th th:text="#{dateAcquisition}"></th>
 					<th th:text="#{poidsVide}"></th>
 					<th th:text="#{PoidsTotal}"></th>
-					<th style="background-color:Tomato" th:text="#{nbCadres}"></th>
-					<th style="background-color:Tomato" th:text="#{nbCadresMax}"></th>
+					<th th:text="#{nbCadres}"></th>
+					<th th:text="#{nbCadresMax}"></th>
 					<th th:text="#{type}"></th>
-					<th style="background-color:PaleGoldenRod" th:text="#{Hausses}"></th>
+					<th th:text="#{Hausses}"></th>
 					<th:block th:if="${session.voirLatLon}">
-						<th style="background-color: LemonChiffon" th:text="#{latitude}"></th>
-						<th style="background-color: LemonChiffon" th:text="#{longitude}"></th>
+						<th th:text="#{latitude}"></th>
+						<th th:text="#{longitude}"></th>
 					</th:block>
 					<th th:text="#{COMMENTAIRERUCHE}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{reineMarquee}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{reineCouleurMarquage}"></th>
-					<th style="background-color:LemonChiffon" th:text="#{reineDateNaissance}"></th>
-					<th style="background-color:lightskyblue" th:text="#{evenement1}"></th>
-					<th style="background-color:lightskyblue" th:text="#{evenement2}"></th>
-					<th style="background-color:lightskyblue" th:text="#{evenement3}"></th>
+					<th th:text="#{reineMarquee}"></th>
+					<th th:text="#{reineCouleurMarquage}"></th>
+					<th th:text="#{reineDateNaissance}"></th>
+					<th th:text="#{evenement1}"></th>
+					<th th:text="#{evenement2}"></th>
+					<th th:text="#{evenement3}"></th>
 				</tr>
 			</thead>
 			<tbody th:with="f='dd/MM/yyyy'">

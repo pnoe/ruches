@@ -65,12 +65,12 @@
 					<th th:text="#{nom}"></th>
 					<th th:if="${session.voirInactif}" th:text="#{actif}"></th>
 					<th th:text="#{contact}"></th>
-					<th style="background-color: LemonChiffon" th:text="#{adresse}"></th>
+					<th th:text="#{adresse}"></th>
 					<th:block th:if="${session.voirLatLon}">
-						<th style="background-color: LemonChiffon" th:text="#{latitude}"></th>
-						<th style="background-color: LemonChiffon" th:text="#{longitude}"></th>
+						<th th:text="#{latitude}"></th>
+						<th th:text="#{longitude}"></th>
 					</th:block>
-					<th style="background-color: LemonChiffon" th:text="#{altitude}"></th>
+					<th th:text="#{altitude}"></th>
 					<th th:text="#{ressource}"></th>
 					<th th:text="#{Ruches}"></th>
 					<th th:text="#{Hausses}"></th>

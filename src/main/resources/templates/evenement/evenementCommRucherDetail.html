@@ -51,15 +51,15 @@
 			<thead>
 				<tr>
 					<th th:text="#{evenement}"></th>
-					<th style="background-color: PaleGoldenRod" th:text="#{rucher}"></th>
+					<th th:text="#{rucher}"></th>
 					<th:block th:switch="${val}">
 						<th:block th:case="''"></th:block>
-						<th th:case="'-'" style="background-color: LemonChiffon"
+						<th th:case="'-'"
 							th:text="#{NotificationJoursApres}"></th>
-						<th th:case="*" style="background-color: LemonChiffon"
+						<th th:case="*"
 							th:text="#{NotificationJoursAvant}"></th>
 					</th:block>
-					<th style="background-color: LemonChiffon" th:text="#{commentaire}"></th>
+					<th th:text="#{commentaire}"></th>
 				</tr>
 			</thead>
 			<tbody>
