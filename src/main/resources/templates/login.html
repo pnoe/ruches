@@ -1,49 +1,42 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-<title th:text="#{connexion}"></title>
-<meta charset="UTF-8" />
-<link rel="manifest" th:href="@{/js/manifest.webmanifest}" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link rel="icon" type="image/png" th:href="@{/images/ruchesicon.png}" />
-<script th:inline="javascript">
-	function showhidepass() {
-		const x = document.getElementById("password");
-		if (x.type === "password") {
-			x.type = "text";
-		} else {
-			x.type = "password";
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+	<script th:inline="javascript">
+		function showhidepass() {
+			const x = document.getElementById("password");
+			if (x.type === "password") {
+				x.type = "text";
+			} else {
+				x.type = "password";
+			}
 		}
-	}
-	window.onload = function() {
-		document.getElementById("username").focus();
-	}
-</script>
-</head>
+		window.onload = function () {
+			document.getElementById("username").focus();
+		}
+	</script>
+
 <body>
 	<div th:utext="${'&#128029; ' + @environment.getProperty('accueil.titre') + ' &#128029;'}"></div>
-	<br/>
+	<br />
 	<div th:if="${param.error}" th:text="#{nomOuPassIncorrect}"></div>
 	<div th:if="${param.logout}" th:text="#{deconnecte}"></div>
 	<br />
 	<form th:action="@{/login}" method="post">
-		<label for="username" th:text="#{nomUtilisateur}"></label><br/>
+		<label for="username" th:text="#{nomUtilisateur}"></label><br />
 		<input type="text" id="username" name="username" autofocus />
-		<br/><br/>
-		<label for="password" th:text="#{motDePasse}"></label><br/>
+		<br /><br />
+		<label for="password" th:text="#{motDePasse}"></label><br />
 		<input type="password" id="password" name="password" />
-		<br/><br/>
-		<input type="checkbox" id="showhide"
-				name="showhide" onclick="showhidepass()" />
+		<br /><br />
+		<input type="checkbox" id="showhide" name="showhide" onclick="showhidepass()" />
 		<label for="showhide" th:text="#{affichermotdepasse}"></label>
-		<br/><br/>
+		<br /><br />
 		<input type="submit" th:value="#{connexion}" />
 	</form>
 	<br />
 	<br />
-	<a th:href="@{'/forgotPassword'}"
-		th:utext="#{forgotPassword}"></a>
+	<a th:href="@{'/forgotPassword'}" th:utext="#{forgotPassword}"></a>
 </body>
+
 </html>
