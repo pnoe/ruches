@@ -1,6 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
+<html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 	<script th:inline="javascript">
 		function showhidepass() {
@@ -15,7 +14,7 @@
 			document.getElementById("username").focus();
 		}
 	</script>
-
+</head>
 <body>
 	<div th:utext="${'&#128029; ' + @environment.getProperty('accueil.titre') + ' &#128029;'}"></div>
 	<br />
