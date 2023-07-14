@@ -1,50 +1,55 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head
-	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:replace="include :: jsdatepicker-fr"></script>
-<script th:inline="javascript">
-	const rucheNoms = /*[[${rucheNoms}]]*/null;
-	const nomexiste = /*[[#{nomexiste}]]*/null;
-	$().ready(function() {
-		$("#nom").focus();
-		jQuery.validator.addMethod("nomExiste", function(value) {
-			return $.inArray(value, rucheNoms) == -1;
-		}, nomexiste);
-		if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('fr') != -1)) {
-			$.datepicker.setDefaults($.datepicker.regional['fr']);
-		} else {
-			$.datepicker.setDefaults($.datepicker.regional['en']);
-		}
-		$.datepicker.setDefaults({
-			dateFormat : 'yy-mm-dd',
-			changeYear : true
-		});
-		$("#dateAcquisition").datepicker();
-		$("#rucheForm").validate({
-			errorClass : 'erreur-form',
-			errorPlacement : function(error, element) {
-				error.insertBefore(element.closest('div'));
-			},
-			rules : {
-				nom : {
-					required : true,
-					nomExiste : true,
-					normalizer : function(value) {
-						return $.trim(value);
-					}
-				},
-				dateAcquisition : {
-					required : true
-				},
-				poidsVide : {
-					required : true
-				}
+
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+	<script th:replace="include :: jsdatetimepicker"></script>
+	<link th:replace="include :: cssdatetimepicker" />
+	<script th:inline="javascript">
+		const rucheNoms = /*[[${rucheNoms}]]*/null;
+		const nomexiste = /*[[#{nomexiste}]]*/null;
+		$().ready(function () {
+			$("#dateAcquisition").datetimepicker(
+				{timepicker: false, format: 'Y-m-d'});
+			$.datetimepicker.setLocale(window.navigator.language.substring(0, 2));
+			$("#nom").focus();
+			jQuery.validator.addMethod("nomExiste", function (value) {
+				return $.inArray(value, rucheNoms) == -1;
+			}, nomexiste);
+			if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('fr') != -1)) {
+				$.datepicker.setDefaults($.datepicker.regional['fr']);
+			} else {
+				$.datepicker.setDefaults($.datepicker.regional['en']);
 			}
+			$.datepicker.setDefaults({
+				dateFormat: 'yy-mm-dd',
+				changeYear: true
+			});
+			$("#dateAcquisition").datepicker();
+			$("#rucheForm").validate({
+				errorClass: 'erreur-form',
+				errorPlacement: function (error, element) {
+					error.insertBefore(element.closest('div'));
+				},
+				rules: {
+					nom: {
+						required: true,
+						nomExiste: true,
+						normalizer: function (value) {
+							return $.trim(value);
+						}
+					},
+					dateAcquisition: {
+						required: true
+					},
+					poidsVide: {
+						required: true
+					}
+				}
+			});
 		});
-	});
-</script>
+	</script>
 </head>
+
 <body>
 	<nav th:replace="include :: navbar"></nav>
 	<br />
@@ -59,16 +64,14 @@
 				</h1>
 				<h1 class="item" th:if="${ruche.id}">
 					<th:block th:text="#{modification}"></th:block>
-					<a th:href="@{'/ruche/'+${ruche.id}}"
-						th:text="#{ruche} + ' ' + ${ruche.nom}"></a>
+					<a th:href="@{'/ruche/'+${ruche.id}}" th:text="#{ruche} + ' ' + ${ruche.nom}"></a>
 				</h1>
 			</div>
 		</div>
 	</div>
-	<form action="#" th:action="@{/ruche/sauve}" th:object="${ruche}"
-		method="post" id="rucheForm">
-		<input type="hidden" th:field="*{id}" /> <input type="hidden"
-			th:field="*{essaim}" /> <input type="hidden" th:field="*{rucher}" />
+	<form action="#" th:action="@{/ruche/sauve}" th:object="${ruche}" method="post" id="rucheForm">
+		<input type="hidden" th:field="*{id}" /> <input type="hidden" th:field="*{essaim}" /> <input type="hidden"
+			th:field="*{rucher}" />
 		<div th:replace="includeForm :: nomField"></div>
 		<div th:replace="includeForm :: activeField"></div>
 		<div class="form-check">
@@ -76,15 +79,13 @@
 			<label class="form-check-label" for="production" th:text="#{Production}"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<input class="form-control" placeholder="15.000" type="number"
-				step="0.001" min="0" max="80" th:field="*{poidsVide}"
-				th:errorclass="fieldError" /> <label class="form-label"
-				for="poidsVide" th:text="#{poidskg}"></label>
+			<input class="form-control" placeholder="15.000" type="number" step="0.001" min="0" max="80"
+				th:field="*{poidsVide}" th:errorclass="fieldError" /> <label class="form-label" for="poidsVide"
+				th:text="#{poidskg}"></label>
 		</div>
 		<div class="form-floating mb-3">
 			<select class="form-control" th:field="*{type}">
-				<option th:each="type : ${rucheTypes}" th:value="${type.id}"
-					th:text="${type.nom}"></option>
+				<option th:each="type : ${rucheTypes}" th:value="${type.id}" th:text="${type.nom}"></option>
 			</select> <label class="form-label" for="type" th:text="#{type}"></label>
 		</div>
 		<div th:replace="includeForm :: dateAcquisitionField"></div>
@@ -95,4 +96,5 @@
 	</form>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

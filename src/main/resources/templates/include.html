@@ -1,7 +1,5 @@
 <!DOCTYPE HTML>
-<html
-	xmlns:th="https://www.thymeleaf.org"
-	xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="https://www.thymeleaf.org">
 <head th:fragment="common_header(scripts,styles,links)">
 <title th:text="#{Ruches}"></title>
 <meta charset="UTF-8" />
@@ -9,19 +7,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/png" th:href="@{/images/ruchesicon.png}" />
 <link rel="stylesheet" type="text/css" media="all"
-	th:href="@{/js/jquery-ui-1.13.2/jquery-ui.min.css}" />
-<link rel="stylesheet" type="text/css" media="all"
-	th:href="@{/js/jquery-ui-1.13.2/jquery-ui.structure.min.css}" />
-<link rel="stylesheet" type="text/css" media="all"
-	th:href="@{/js/jquery-ui-1.13.2/jquery-ui.theme.min.css}" />
-<link rel="stylesheet" type="text/css" media="all"
 	th:href="@{/css/ruches.css}" />
 <link rel="stylesheet" type="text/css" media="all"
 	th:href="@{/js/datatables-1.13.5-1/datatables.min.css}" />
 <link rel="stylesheet" type="text/css" media="all"
 	th:href="@{/images/bootstrap-icons-1.10.2/bootstrap-icons.css}" />
 <script th:src="@{/js/jquery-3.7.0.min.js}"></script>
-<script th:src="@{/js/jquery-ui-1.13.2/jquery-ui.min.js}"></script>
 <script th:src="@{/js/jquery.validate.min-1.19.5.js}"></script>
 <script th:src="@{/js/bootstrap-5.3.0-2/bootstrap.bundle.min.js}"></script>
 <link rel="stylesheet" type="text/css" media="all"
@@ -91,7 +82,6 @@
 <script th:fragment="dom-to-image"
 	th:src="@{/js/dom-to-image-more.min-2.15.0.js}"></script>
 <script th:fragment="jspdf" th:src="@{/js/jspdf-2.5.1.umd.min.js}"></script>
-<script th:fragment="jsdatepicker-fr" th:src="@{/js/datepicker-fr.js}"></script>
 
 <script th:fragment="jsChart" th:src="@{/js/chart.umd-4.3.0.js}"></script>
 
@@ -102,20 +92,18 @@
 	media="all"
 	th:href="@{/css/weather-icons-2.0.12/css/weather-icons-wind.min.css}" />
 
+
 <script th:fragment="jsdatetimepicker"
-	th:src="@{/js/jquery.datetimepicker.full.min-2.5.20.js}"></script>
+	th:src="@{/js/jquery.datetimepicker.full.min-2.5.21.js}"></script>
 <link th:fragment="cssdatetimepicker" rel="stylesheet" type="text/css"
-	media="all" th:href="@{/js/jquery.datetimepicker.min-2.5.20.css}" />
+	media="all" th:href="@{/js/jquery.datetimepicker.min-2.5.21.css}" />
 <script th:fragment="localejsdatetimepicker">
 	$().ready(function() {
 		$("#date").datetimepicker();
-		if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('fr') != -1)) {
-			$.datetimepicker.setLocale('fr');
-		} else {
-			$.datetimepicker.setLocale('en');
-		}
+		$.datetimepicker.setLocale(window.navigator.language.substring(0, 2));
 	});
 </script>
+
 
 <script th:fragment="jquerydaterangepicker"
 	th:src="@{/js/jquery-date-range-picker-0.21.1/jquery.daterangepicker.min.js}"></script>

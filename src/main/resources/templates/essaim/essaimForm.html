@@ -1,51 +1,42 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head
-	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:replace="include :: jsdatepicker-fr"></script>
-<script th:inline="javascript">
-	const essaimNoms = /*[[${essaimNoms}]]*/null;
-	const nomexiste = /*[[#{nomexiste}]]*/null;
-	$().ready(function() {
-		$("#nom").focus();
-		jQuery.validator.addMethod("nomExiste", function(value) {   
-    		return $.inArray(value, essaimNoms) == -1;
+
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+	<script th:replace="include :: jsdatetimepicker"></script>
+	<link th:replace="include :: cssdatetimepicker" />
+	<script th:inline="javascript">
+		const essaimNoms = /*[[${essaimNoms}]]*/null;
+		const nomexiste = /*[[#{nomexiste}]]*/null;
+		$().ready(function () {
+			$("#reineDateNaissance, #dateAcquisition").datetimepicker(
+				{timepicker: false, format: 'Y-m-d'});
+			$.datetimepicker.setLocale(window.navigator.language.substring(0, 2));
+			$("#nom").focus();
+			jQuery.validator.addMethod("nomExiste", function (value) {
+				return $.inArray(value, essaimNoms) == -1;
 			}, nomexiste);
-		if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('fr') != -1)) {
-			$.datepicker.setDefaults(
-				$.datepicker.regional['fr']
-			);
-		} else {
-			$.datepicker.setDefaults(
-					$.datepicker.regional['en']
-				);
-		}
-		$.datepicker.setDefaults({
-				dateFormat : 'yy-mm-dd',
-				changeYear: true
-			});
-		$("#reineDateNaissance,#dateAcquisition").datepicker();
-		$("#essaimForm").validate({
-		  	errorClass: 'erreur-form',
-			errorPlacement: function(error, element) {
-			    error.insertBefore(element.closest('div'));
-			},
-			rules : {
-				nom : {
-					required : true,
-					nomExiste : true,
-					normalizer : function(value) {
-						return $.trim(value);
-					}
+			$("#essaimForm").validate({
+				errorClass: 'erreur-form',
+				errorPlacement: function (error, element) {
+					error.insertBefore(element.closest('div'));
 				},
-				dateAcquisition : {
-					'required' : true	
+				rules: {
+					nom: {
+						required: true,
+						nomExiste: true,
+						normalizer: function (value) {
+							return $.trim(value);
+						}
+					},
+					dateAcquisition: {
+						'required': true
+					}
 				}
-			}
+			});
 		});
-	});
-</script>
+	</script>
 </head>
+
 <body>
 	<nav th:replace="include :: navbar"></nav>
 	<br />
@@ -60,51 +51,45 @@
 				</h1>
 				<h1 class="item" th:if="${essaim.id}">
 					<th:block th:text="#{modification}"></th:block>
-					<a th:href="@{'/essaim/'+${essaim.id}}"
-						th:text="#{essaim} + ' ' + ${essaim.nom}"></a>
+					<a th:href="@{'/essaim/'+${essaim.id}}" th:text="#{essaim} + ' ' + ${essaim.nom}"></a>
 				</h1>
 			</div>
 		</div>
 	</div>
-	<form action="#" th:action="@{/essaim/sauve}" th:object="${essaim}"
-		method="post" id="essaimForm">
+	<form action="#" th:action="@{/essaim/sauve}" th:object="${essaim}" method="post" id="essaimForm">
 		<input class="form-control" type="hidden" th:field="*{id}" />
 		<div th:replace="includeForm :: nomField"></div>
 		<div class="mb-3 form-check">
-			<input class="form-check-input" type="checkbox"
-				th:field="*{reineMarquee}" /> <label class="form-check-label"
-				for="reineMarquee" th:text="#{reineMarquee}"></label>
+			<input class="form-check-input" type="checkbox" th:field="*{reineMarquee}" /> <label
+				class="form-check-label" for="reineMarquee" th:text="#{reineMarquee}"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<input class="form-control" type="text" placeholder="2021-03-26"
-				th:field="*{reineDateNaissance}" th:errorclass="fieldError" />
+			<input class="form-control" type="text" placeholder="2021-03-26" th:field="*{reineDateNaissance}"
+				th:errorclass="fieldError" />
 			<label class="form-label" th:text="#{reineDateNaissance}" for="reineDateNaissance"></label>
-			
+
 		</div>
 		<div th:replace="includeForm :: actifField"></div>
 		<div th:replace="includeForm :: dateAcquisitionField"></div>
 		<div th:replace="includeForm :: commentaireField"></div>
 		<div class="form-floating mb-3">
-			<select
-				class="form-control" th:field="*{souche}">
+			<select class="form-control datepicker" th:field="*{souche}">
 				<option th:text="#{aucune}" value=""></option>
-				<option th:each="essaimopt : ${essaims}" th:value="${essaimopt.id}"
-					th:text="${essaimopt.nom}"></option>
+				<option th:each="essaimopt : ${essaims}" th:value="${essaimopt.id}" th:text="${essaimopt.nom}"></option>
 			</select>
 			<label class="form-label" for="essaim" th:text="#{souche}"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<input class="form-control" type="number" min="1" max="5" 
-				th:field="*{agressivite}" placeholder="1"/>
-			<label class="form-label" th:text="#{agressivite}" for="agressivite"></label> 
+			<input class="form-control" type="number" min="1" max="5" th:field="*{agressivite}" placeholder="1" />
+			<label class="form-label" th:text="#{agressivite}" for="agressivite"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<input class="form-control" type="number" min="1" max="5"
-				th:field="*{proprete}" placeholder="1"/>
-			<label class="form-label" th:text="#{proprete}" for="proprete"></label> 
+			<input class="form-control" type="number" min="1" max="5" th:field="*{proprete}" placeholder="1" />
+			<label class="form-label" th:text="#{proprete}" for="proprete"></label>
 		</div>
 		<div th:replace="includeForm :: BtnForm"></div>
 	</form>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

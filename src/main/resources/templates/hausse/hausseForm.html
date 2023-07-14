@@ -2,12 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:replace="include :: jsdatepicker-fr"></script>
+	<script th:replace="include :: jsdatetimepicker"></script>
+	<link th:replace="include :: cssdatetimepicker" />
 <script th:inline="javascript">
 	const hausseNoms = /*[[${hausseNoms}]]*/null;
 	const nomexiste = /*[[#{nomexiste}]]*/null;
 	const saisirnbcadresinfmax = /*[[#{saisirnbcadresinfmax}]]*/null;
 	$().ready(function() {
+		$("#dateAcquisition").datetimepicker(
+				{timepicker: false, format: 'Y-m-d'});
+		$.datetimepicker.setLocale(window.navigator.language.substring(0, 2));
 		$("#nom").focus();
 		jQuery.validator.addMethod("nomExiste", function(value) {   
     		return $.inArray(value, hausseNoms) == -1;
