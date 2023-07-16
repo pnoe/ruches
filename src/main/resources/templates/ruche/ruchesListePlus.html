@@ -7,7 +7,7 @@
 		const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
 		const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
 		$(document).ready(function () {
-			$("#rucher").on("change", function() {
+			$("#rucher").on("change", function () {
 				table.columns(4).search(this.value).draw();
 			});
 			const idTbl = '#ruchesplus';
@@ -25,6 +25,11 @@
 							if (inputSearch.length !== 0) {
 								config.title += " <" + inputSearch + ">";
 							}
+							const sru = document.getElementById("rucher");
+							const valr = sru.options[sru.selectedIndex].value;
+							if (valr !== "") {
+								config.title += " [" + valr + "]";
+							}
 							$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, node, config);
 						},
 						orientation: 'landscape'
@@ -41,6 +46,7 @@
 		});
 	</script>
 </head>
+
 <body>
 	<nav th:replace="include :: navbar">Menu</nav>
 	<br />
@@ -54,8 +60,7 @@
 			<div class="col">
 				<select class="form-control" id="rucher" name="rucher">
 					<option value="" th:text="#{tous}"></option>
-					<option th:each="rucheropt : ${ruchersNoms}" th:value="${rucheropt}"
-								th:text="${rucheropt}" >
+					<option th:each="rucheropt : ${ruchersNoms}" th:value="${rucheropt}" th:text="${rucheropt}">
 					</option>
 				</select>
 			</div>

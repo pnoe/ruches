@@ -28,6 +28,11 @@
 							if (inputSearch.length !== 0) {
 								config.title += " <" + inputSearch + ">";
 							}
+							const sru = document.getElementById("rucher");
+							const valr = sru.options[sru.selectedIndex].value;
+							if (valr !== "") {
+								config.title += " [" + valr + "]";
+							}
 							$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, node, config);
 						},
 						orientation : 'landscape'
