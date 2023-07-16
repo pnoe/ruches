@@ -661,7 +661,7 @@ public class TestChrome {
 	void adminTests() {
 		driver.get(baseUrl + "tests");
 		// La div d'id "tests" est présente
-		assertEquals("div", driver.findElement(By.id("tests")).getTagName());
+		assertEquals("div", driver.findElement(By.id("accordion")).getTagName());
 	}
 
 	@Test
