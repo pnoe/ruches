@@ -86,10 +86,6 @@ public class EvenementController {
 			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
 			@CookieValue(value = "d1", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
 			@CookieValue(value = "d2", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie) {
-		
-		logger.info(periode + " " + date1 + " " + date2 + " " + datestext);
-		
-		
 		if (periode == null) {
 			periode = pCookie;
 			if (pCookie == 6) {
@@ -115,12 +111,6 @@ public class EvenementController {
 			model.addAttribute(Const.EVENEMENTS, evenementRepository.findPeriode(LocalDateTime.now().minusDays(1)));
 			break;
 		default:
-			// ajouter tests date1 et fin non null
-			
-			logger.info(date1 + " " + date2);
-			
-			
-			
 			model.addAttribute(Const.EVENEMENTS, evenementRepository.findPeriode(date1, date2));
 			model.addAttribute("datestext", datestext);
 		}
