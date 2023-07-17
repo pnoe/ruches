@@ -67,9 +67,9 @@ public class EvenementController {
 	 * spécifiques
 	 *
 	 * @param periode   1 tous, moins d'un : 2 an, 3 mois, 4 semaine, 5 jour,
-	 *                  default période entre debut et fin
-	 * @param debut     début de période (si periode != 1, 2, 3, 4 ou 5)
-	 * @param fin       fin de période
+	 *                  default période entre date1 et date2
+	 * @param date1     début de période (si periode != 1, 2, 3, 4 ou 5)
+	 * @param date2       fin de période
 	 * @param datestext le texte des dates de début et fin de période à afficher
 	 * @param pCookie   période
 	 * @param dxCookie  le texte des dates
@@ -79,18 +79,22 @@ public class EvenementController {
 	 */
 	@GetMapping("/liste")
 	public String liste(Model model, @RequestParam(required = false) Integer periode,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime debut,
-			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fin,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext,
 			@CookieValue(value = "p", defaultValue = "3") Integer pCookie,
 			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
 			@CookieValue(value = "d1", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
 			@CookieValue(value = "d2", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie) {
+		
+		logger.info(periode + " " + date1 + " " + date2 + " " + datestext);
+		
+		
 		if (periode == null) {
 			periode = pCookie;
 			if (pCookie == 6) {
-				debut = d1Cookie;
-				fin = d2Cookie;
+				date1 = d1Cookie;
+				date2 = d2Cookie;
 				datestext = dxCookie;
 			}
 		}
@@ -111,8 +115,13 @@ public class EvenementController {
 			model.addAttribute(Const.EVENEMENTS, evenementRepository.findPeriode(LocalDateTime.now().minusDays(1)));
 			break;
 		default:
-			// ajouter tests debut et fin non null
-			model.addAttribute(Const.EVENEMENTS, evenementRepository.findPeriode(debut, fin));
+			// ajouter tests date1 et fin non null
+			
+			logger.info(date1 + " " + date2);
+			
+			
+			
+			model.addAttribute(Const.EVENEMENTS, evenementRepository.findPeriode(date1, date2));
 			model.addAttribute("datestext", datestext);
 		}
 		model.addAttribute("periode", periode);
@@ -153,10 +162,6 @@ public class EvenementController {
 		model.addAttribute("dests", 
 				messageSource.getMessage("Destinataires", null, LocaleContextHolder.getLocale()) +
 				" :<br/>" + String.join("<br/>", notifDest));
-		
-		
-
-
 		return "evenement/evenementNotifListe";
 	}
 

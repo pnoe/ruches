@@ -29,6 +29,7 @@ function evenementListe(initDatatable) {
 		if ($(this).parent().val() === '6') {
 			$(this).parent().dateRangePicker({
 				autoClose: true,
+				language : (window.navigator.language.substring(0, 2)),
 				startOfWeek: 'monday',
 				separator: ' - ',
 				setValue: function(s) {
