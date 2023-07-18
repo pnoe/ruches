@@ -55,13 +55,6 @@
 <script th:fragment="d3-scale-chromatic"
 	th:src="@{/js/d3-scale-chromatic.min-3.0.1.js}"></script>
 
-<script th:fragment="jsgantt"
-	th:src="@{/js/gantt-0.6.1/frappe-gantt.min.js}"></script>
-<script th:fragment="snapsvg" th:src="@{/js/snap.svg-min-0.5.1.js}"></script>
-<link th:fragment="cssgantt" rel="stylesheet" type="text/css"
-	media="all" th:href="@{/js/gantt-0.6.1/frappe-gantt.min.css}" />
-
-
 <script th:fragment="jsol" th:src="@{/js/ol-6.15.1/ol.js}"></script>
 <link th:fragment="cssol" rel="stylesheet" type="text/css" media="all"
 	th:href="@{/js/ol-6.15.1/ol.css}" />
@@ -93,7 +86,7 @@
 	th:href="@{/css/weather-icons-2.0.12/css/weather-icons-wind.min.css}" />
 
 
-<script th:fragment="jsdatetimepicker"
+<script th:fragment="jsdatetimepicker" defer
 	th:src="@{/js/jquery.datetimepicker.full.min-2.5.21.js}"></script>
 <link th:fragment="cssdatetimepicker" rel="stylesheet" type="text/css"
 	media="all" th:href="@{/js/jquery.datetimepicker.min-2.5.21.css}" />
@@ -105,13 +98,13 @@
 </script>
 
 
-<script th:fragment="jquerydaterangepicker"
+<script th:fragment="jquerydaterangepicker" defer
 	th:src="@{/js/jquery-date-range-picker-0.21.1/jquery.daterangepicker.min.js}"></script>
 <link th:fragment="cssjquerydaterangepicker" rel="stylesheet"
 	type="text/css" media="all"
 	th:href="@{/js/jquery-date-range-picker-0.21.1/daterangepicker.min.css}" />
 <script th:fragment="moment"
-	th:src="@{/js/moment-with-locales.min-2.29.4.js}"></script>
+	th:src="@{/js/moment-min-2.29.4.js}"></script>
 
 <body>
 	<!--/*    https://getbootstrap.com/docs/5.3/components/navbar/    */-->
