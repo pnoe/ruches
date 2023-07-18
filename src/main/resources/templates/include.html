@@ -72,9 +72,9 @@
 	type="text/css" media="all"
 	th:href="@{/js/GpPluginOpenLayers-3.2.22/GpPluginOpenLayers.css}" />
 
-<script th:fragment="dom-to-image"
+<script defer th:fragment="dom-to-image"
 	th:src="@{/js/dom-to-image-more.min-2.15.0.js}"></script>
-<script th:fragment="jspdf" th:src="@{/js/jspdf-2.5.1.umd.min.js}"></script>
+<script defer th:fragment="jspdf" th:src="@{/js/jspdf-2.5.1.umd.min.js}"></script>
 
 <script th:fragment="jsChart" th:src="@{/js/chart.umd-4.3.0.js}"></script>
 
@@ -103,7 +103,7 @@
 <link th:fragment="cssjquerydaterangepicker" rel="stylesheet"
 	type="text/css" media="all"
 	th:href="@{/js/jquery-date-range-picker-0.21.1/daterangepicker.min.css}" />
-<script th:fragment="moment"
+<script th:fragment="moment" defer
 	th:src="@{/js/moment-min-2.29.4.js}"></script>
 
 <body>
