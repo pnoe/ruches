@@ -1,42 +1,27 @@
-{
+	{
     "emptyTable": "Aucune donnée disponible dans le tableau",
-    "loadingRecords": "Chargement...",
-    "processing": "Traitement...",
     "aria": {
         "sortAscending": ": activer pour trier la colonne par ordre croissant",
         "sortDescending": ": activer pour trier la colonne par ordre décroissant"
     },
     "select": {
         "rows": {
-            "_": "&nbsp; %d sélectionnés",
-            "1": "&nbsp; 1 sélectionné"
+            "_": "%d sélectionnées",
+            "1": "1 sélectionnée"
         }
     },
     "buttons": {
         "collection": "Collection",
         "colvis": "Visibilité colonnes",
-        "colvisRestore": "Rétablir visibilité",
-        "copy": "Copier",
-        "copySuccess": {
-            "1": "1 ligne copiée dans le presse-papier",
-            "_": "%ds lignes copiées dans le presse-papier"
-        },
-        "copyTitle": "Copier dans le presse-papier",
         "csv": "CSV",
-        "excel": "Excel",
-        "pageLength": {
-            "-1": "Afficher toutes les lignes",
-            "_": "Afficher %d lignes"
-        },
         "pdf": "PDF",
-        "print": "Imprimer",
-    	"copyKeys": "Appuyer sur ctrl ou u2318 + C pour copier les données du tableau dans votre presse-papier."
+        "print": "Imprimer"
         },
     "decimal": ",",
     "search": "Rechercher",
     "info": "Affichage de _START_ à _END_ sur _TOTAL_",
     "infoEmpty": "Affichage de 0 à 0 sur 0",
-    "infoFiltered": "(filtrés depuis un total de _MAX_ éléments)",    
+    "infoFiltered": "(filtrées depuis un total de _MAX_)",    
     "lengthMenu": "Afficher _MENU_ éléments",
     "paginate": {
         "first": "Premier",
