@@ -1,35 +1,36 @@
-	{
-    "emptyTable": "Aucune donnée disponible dans le tableau",
-    "aria": {
-        "sortAscending": ": activer pour trier la colonne par ordre croissant",
-        "sortDescending": ": activer pour trier la colonne par ordre décroissant"
-    },
-    "select": {
-        "rows": {
-            "_": "%d sélectionnées",
-            "1": "1 sélectionnée"
-        }
-    },
-    "buttons": {
-        "collection": "Collection",
-        "colvis": "Visibilité colonnes",
-        "csv": "CSV",
-        "pdf": "PDF",
-        "print": "Imprimer"
-        },
-    "decimal": ",",
-    "search": "Rechercher",
-    "info": "Affichage de _START_ à _END_ sur _TOTAL_",
-    "infoEmpty": "Affichage de 0 à 0 sur 0",
-    "infoFiltered": "(filtrées depuis un total de _MAX_)",    
-    "lengthMenu": "Afficher _MENU_ éléments",
-    "paginate": {
-        "first": "Premier",
-        "last": "Dernier",
-        "previous": "<",
-        "next": ">"
-    },
-    "zeroRecords": "Aucun élément correspondant trouvé",
-    "infoThousands": "\u2009",
-    "thousands": "\u2009"
+{
+	"emptyTable": "Aucune donnée disponible dans le tableau",
+	"aria": {
+		"sortAscending": ": activer pour trier la colonne par ordre croissant",
+		"sortDescending": ": activer pour trier la colonne par ordre décroissant"
+	},
+	"select": {
+		"rows": {
+			"_": "&nbsp;%d sélectionnées",
+			"1": "&nbsp;1 sélectionnée",
+			"0": ""
+		}
+	},
+	"buttons": {
+		"collection": "Collection",
+		"colvis": "Visibilité colonnes",
+		"csv": "CSV",
+		"pdf": "PDF",
+		"print": "Imprimer"
+	},
+	"decimal": ",",
+	"search": "Rechercher",
+	"info": "Affichage de _START_ à _END_ sur _TOTAL_",
+	"infoEmpty": "Affichage de 0 à 0 sur 0",
+	"infoFiltered": "(filtrées depuis un total de _MAX_)",
+	"lengthMenu": "Afficher _MENU_ éléments",
+	"paginate": {
+		"first": "Premier",
+		"last": "Dernier",
+		"previous": "<",
+		"next": ">"
+	},
+	"zeroRecords": "Aucun élément correspondant trouvé",
+	"infoThousands": "\u2009",
+	"thousands": "\u2009"
 }  
