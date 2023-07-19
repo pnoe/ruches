@@ -10,7 +10,8 @@
 		const urlSucreLot = /*[[@{/evenement/essaim/sucreLot/}]]*/ null;
 		const urlCommLot = /*[[@{/evenement/essaim/commentaireLot/}]]*/ null;
 		const selectEssTrt = /*[[#{selectessaimstraiter}]]*/ null;
-		$(document).ready(function () {
+		document.addEventListener("DOMContentLoaded", () => {
+		// $(document).ready(function () {
 			const idTbl = '#essaims';
 			const table = new DataTable(idTbl, {
 				select: {style: 'multi+shift'},

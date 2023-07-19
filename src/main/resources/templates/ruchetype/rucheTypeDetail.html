@@ -11,8 +11,7 @@
 	const nbRuchesTotal = /*[[${nbRuchesTotal}]]*/null;
 	const suppTypeRuche = /*[[#{suppTypeRuche}]]*/null;
 	const typeRucheSuppNon = /*[[#{typeRucheSuppNon}]]*/null;
-	$().ready(
-			function() {
+	document.addEventListener("DOMContentLoaded", () => {
 				$('.confirmationsupp').on('click', function() {
 					if (nbRuchesTotal != "0") {
 						alert(typeRucheSuppNon);

@@ -7,7 +7,7 @@
 	const buttontextprint = /*[[#{buttontextprint}]]*/null;
 	const buttontextcol = /*[[#{buttontextcol}]]*/null;
 	const transhumances = /*[[#{transhumances}]]*/null;
-	$().ready(function() {
+	document.addEventListener("DOMContentLoaded", () => {
 		$('#groupe').on('change', function() {
 			location = url + ($(this).is(':checked'));
 		});

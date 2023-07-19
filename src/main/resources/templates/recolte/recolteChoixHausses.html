@@ -8,8 +8,7 @@
 	const recolteId = /*[[${recolte.id}]]*/null;
 	const selHausRet = /*[[#{selecthaussesretirer}]]*/null;
 	const selHausAjout = /*[[#{selecthaussesajouter}]]*/null;
-	$(document).ready(
-			function() {
+	document.addEventListener("DOMContentLoaded", () => {
 				function updateLinks(e, dt, type, indexes) {
 					let id;
 					let href;

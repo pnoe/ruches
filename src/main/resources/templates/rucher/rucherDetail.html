@@ -14,7 +14,7 @@
 	const listeRuches = /*[[#{listeRuches}]]*/ null;
 	const buttontextprint = /*[[#{buttontextprint}]]*/ null;
 	const buttontextcol = /*[[#{buttontextcol}]]*/ null;
-	$().ready(function() {
+	document.addEventListener("DOMContentLoaded", () => {
 		$('.confirmationsupp').on('click', function () {
 			if (rucherDepot) {
 				alert(depotNPES);

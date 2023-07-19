@@ -3,7 +3,7 @@
 
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 	<script>
-		$(document).ready(function () {
+		document.addEventListener("DOMContentLoaded", () => {
 			$(".accordion").accordion({
 				active: false,
 				collapsible: true

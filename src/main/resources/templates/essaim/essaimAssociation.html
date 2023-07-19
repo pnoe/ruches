@@ -8,7 +8,7 @@
 		const essaimsupprimerecoltetxt = /*[[#{essaimsupprimerecolte}]]*/ null;
 		const supprimeressaimevenementstxt = /*[[#{supprimeressaimevenements}]]*/ null;
 		const supprimeressaimtxt = /*[[#{supprimeressaim}]]*/ null;
-		$(document).ready(function () {
+		document.addEventListener("DOMContentLoaded", () => {
 			$('.confirmation').on('click', function () {
 				if (recolteHausses) {
 					alert(essaimsupprimerecoltetxt);

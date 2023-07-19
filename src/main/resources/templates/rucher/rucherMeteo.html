@@ -8,7 +8,7 @@
 	const latitude = /*[[${rucher.latitude}]]*/ null;
 	const openweathermapKey = /*[[${@environment.getProperty('openweathermap.key')}]]*/ null;
 	const urlPrefix='https://api.openweathermap.org/data/2.5/onecall';
-	$().ready(function() {
+	document.addEventListener("DOMContentLoaded", () => {
 		rucherMeteo();
 	});
 </script>

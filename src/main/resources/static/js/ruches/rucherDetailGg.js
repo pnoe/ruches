@@ -222,7 +222,7 @@ function newParcours() {
 	parcours.setMap(map);
 }
 
-$(document).ready(function() {
+document.addEventListener("DOMContentLoaded", () => {
 	$('#dragMarker').change(function() {
 		for (const markersR of markersRuche) {
 			markersR.setDraggable(!this.checked);

@@ -3,7 +3,7 @@
 
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 	<script>
-		$(document).ready(function () {
+		document.addEventListener("DOMContentLoaded", () => {
 			new DataTable('.datatable-tri', {
 				paging: false,
 				searching: false,

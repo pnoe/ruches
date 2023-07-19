@@ -6,7 +6,7 @@
 const notListEmpty = /*[[${not #lists.isEmpty(ruchers)}]]*/ null;
 const pnnonsupp = /*[[#{personnenonsupprimeerefrrucher}]]*/ null;
 const supppers = /*[[#{supprimercettepersonne}]]*/ null;
-$().ready(function() {
+document.addEventListener("DOMContentLoaded", () => {
 	$('.confirmation').on('click', function () {
 		if(notListEmpty) {
 			alert(pnnonsupp);

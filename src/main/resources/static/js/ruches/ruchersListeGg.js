@@ -56,7 +56,7 @@ function initMap() {
 	}
 }
 
-$(document).ready(function() {
+document.addEventListener("DOMContentLoaded", () => {
 	$('#dragMarker').change(function() 
 	  {
 	    for (const marker of markersRucher) {

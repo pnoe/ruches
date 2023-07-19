@@ -6,7 +6,7 @@
 	const loginexiste = /*[[#{loginexiste}]]*/null;
 	const personneEmails = /*[[${personneEmails}]]*/null;
 	const emailexiste = /*[[#{emailexiste}]]*/null;
-	$().ready(function() {
+	document.addEventListener("DOMContentLoaded", () => {
 		$("#nom").focus();
 		jQuery.validator.addMethod("loginExiste", function(value) {   
     		return $.inArray(value, personneLogins) == -1;

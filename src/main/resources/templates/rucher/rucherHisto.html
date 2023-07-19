@@ -9,7 +9,7 @@
 		const buttontextcol = /*[[#{buttontextcol}]]*/null;
 		const transhumances = /*[[#{transhumances}]]*/null;
 		const rucher = /*[[#{rucher}]]*/null;
-		$(document).ready(function () {
+		document.addEventListener("DOMContentLoaded", () => {
 			$('#groupe').on('change', function () {
 				location = url + ($(this).is(':checked'));
 			});

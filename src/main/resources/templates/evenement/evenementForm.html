@@ -7,7 +7,7 @@
 <script th:replace="include ::  localejsdatetimepicker"></script>
 <script th:inline="javascript">
 	const complet = /*[[${complet}]]*/ null;
-	$().ready(function() {
+	document.addEventListener("DOMContentLoaded", () => {
 		if (complet === "true") {
 			$('#showruches').prop('checked', true);
 			$(".ruches").show();

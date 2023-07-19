@@ -17,7 +17,7 @@ const urlclone = /*[[@{/hausse/clone/}]]*/ null;
 const hausseid = /*[[${hausse.id}]]*/ null;
 const hausses = /*[[#{Hausses}]]*/ null;
 const creer = /*[[#{creer}]]*/ null;
-$().ready(function() {
+document.addEventListener("DOMContentLoaded", () => {
 	$('.confirmation').on('click', function () {
 		if(recolteHausses) {
 			alert(haussesupp);

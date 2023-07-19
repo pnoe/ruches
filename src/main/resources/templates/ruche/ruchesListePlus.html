@@ -6,7 +6,7 @@
 		const Ruches = /*[[#{Ruches}]]*/null;
 		const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
 		const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
-		$(document).ready(function () {
+		document.addEventListener("DOMContentLoaded", () => {
 			$("#rucher").on("change", function () {
 				table.columns(4).search(this.value).draw();
 			});

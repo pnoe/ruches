@@ -6,7 +6,7 @@
 	const urlAjout = /*[[@{/rucher/ruches/ajouter/}]]*/null;
 	const rucherId = /*[[${rucher.id}]]*/null;
 	const selRuchesAjout = /*[[#{selectruchesajout}]]*/null;
-	$().ready(function() {
+	document.addEventListener("DOMContentLoaded", () => {
 		let tableajout = new DataTable('#ajoutRuches', {
 			select : {
 				style : 'multi+shift'

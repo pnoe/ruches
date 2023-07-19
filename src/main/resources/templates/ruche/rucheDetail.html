@@ -17,7 +17,7 @@ const Ruches = /*[[#{Ruches}]]*/ null;
 const creer = /*[[#{creer}]]*/ null;
 const urlclone = /*[[@{/ruche/clone/}]]*/ null;
 const rucheid = /*[[${ruche.id}]]*/ null;
-$().ready(function() {
+document.addEventListener("DOMContentLoaded", () => {
 	$('.confirmation').on('click', function () {
 		if (recolteHausses) {
 			alert(rnpsupprec);

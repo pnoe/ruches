@@ -11,7 +11,7 @@
 	const buttontextprint = /*[[#{buttontextprint}]]*/null;
 	const buttontextcol = /*[[#{buttontextcol}]]*/null;
 	const url = /*[[@{'/evenement/essaim/listeTraitement/'}]]*/null;
-	$(document).ready(function() {
+	document.addEventListener("DOMContentLoaded", () => {
 		$('#groupe').on('change', function() {
 			location = url + ($(this).is(':checked'));
 		});

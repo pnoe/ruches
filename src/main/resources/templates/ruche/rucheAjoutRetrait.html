@@ -7,7 +7,7 @@
 	const _csrf_param_name = /*[[${_csrf.parameterName}]]*/null;
 	const urlRucheOdreHause = /*[[@{/ruche/ordreHausses/}]]*/null;
 	const rucheId = /*[[${ruche.id}]]*/null;
-	$(document).ready(function() {
+	document.addEventListener("DOMContentLoaded", () => {
 		const tableRetrait = new DataTable('#retraitHausses', {
 			paging: false,
 			searching: false,

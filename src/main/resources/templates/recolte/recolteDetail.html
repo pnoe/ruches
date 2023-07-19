@@ -15,8 +15,7 @@
 	const urlRecHDepot = /*[[@{/recolte/haussesDepot/}]]*/null;
 	const recId = /*[[${recolte.id}]]*/null;
 	const totalPourLaRuche = /*[[#{totalPourLaRuche}]]*/null;
-	$(document).ready(
-			function() {
+	document.addEventListener("DOMContentLoaded", () => {
 				$('#date').hide();
 				$('#dateOK').hide();
 				$("#enlevehausses").click(function() {

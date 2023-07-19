@@ -26,8 +26,6 @@ public class RucherControllerMAJ {
 
 	@Autowired
 	private RucherRepository rucherRepository;
-	// @Autowired
-	// private RucheRepository rucheRepository;
 	@Autowired
 	private EvenementRepository evenementRepository;
 	@Autowired

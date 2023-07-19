@@ -8,7 +8,7 @@
 		const Ruches = /*[[#{Ruches}]]*/ null;
 		const rucher = /*[[#{rucher}]]*/ null;
 		const nomrucher = /*[[${rucher.nom}]]*/ null;
-		$(document).ready(function () {
+		document.addEventListener("DOMContentLoaded", () => {
 			const idTbl = '#ruches';
 			new DataTable(idTbl, {
 				dom: '<"buttonsData" Blf>t<"buttonsData" ip>',

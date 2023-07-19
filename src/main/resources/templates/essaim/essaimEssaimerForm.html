@@ -10,7 +10,7 @@
 	const suffix = /*[[${@environment.getProperty('essaime.suffix')}]]*/null;
 	const essaimNoms = /*[[${essaimNoms}]]*/null;
 	const nomexiste = /*[[#{nomexiste}]]*/null;
-	$().ready(function() {
+	document.addEventListener("DOMContentLoaded", () => {
 		$("#nom").focus();
 		$("#commentaire").val(Essaimage + ' ' + essaimNom);
 		$("#nom").val(essaimNom + suffix);
