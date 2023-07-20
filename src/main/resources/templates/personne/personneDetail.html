@@ -10,10 +10,13 @@ document.addEventListener("DOMContentLoaded", () => {
 	document.getElementById('supprime').addEventListener("click", (event) => {
 		if(notListEmpty) {
 			alert(pnnonsupp);
-			event.preventDefault();
 		} else {
-			return confirm(supppers);
+			if (confirm(supppers)) {
+				return true;
+			}
 		}
+		event.preventDefault();
+		return false;
 	}, false);
 });
 </script>

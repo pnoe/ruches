@@ -5,9 +5,13 @@
 <script th:inline="javascript">
 	const suppeve = /*[[#{supprimerevenement}]]*/null;
 	document.addEventListener("DOMContentLoaded", () => {
-		$('.confirmation').on('click', function() {
-			return confirm(suppeve);
-		});
+		document.getElementById('supprime').addEventListener("click", (event) => {
+				if (confirm(suppeve)) {
+					return true;
+				}
+				event.preventDefault();
+				return false;
+			}, false);
 	});
 </script>
 </head>
@@ -39,7 +43,7 @@
 					aria-hidden="true"></span>
 				</a> <a id="supprime"
 					th:href="@{'/evenement/supprime/'+${evenement.id}}"> <span
-					class="confirmation bi-trash" style="color: red"
+					class="bi-trash" style="color: red"
 					th:title="#{supprimer}" aria-hidden="true"></span>
 				</a>
 			</div>

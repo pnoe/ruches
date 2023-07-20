@@ -18,16 +18,21 @@ const hausseid = /*[[${hausse.id}]]*/ null;
 const hausses = /*[[#{Hausses}]]*/ null;
 const creer = /*[[#{creer}]]*/ null;
 document.addEventListener("DOMContentLoaded", () => {
-	$('.confirmation').on('click', function () {
+	document.getElementById('supprime').addEventListener("click", (event) => {
 		if(recolteHausses) {
 			alert(haussesupp);
-			return false;
 		} else if (evenements) {
-	        return confirm(supphausseeve);			
+	        if (confirm(supphausseeve)) {
+				return true;
+			}
 		} else {
-			return confirm(supphausse);
+			if (confirm(supphausse)) {
+				return true;
+			}
 		}
-    });
+		event.preventDefault();
+		return false;
+	}, false);
 	function nomexiste (value) {   
 		return $.inArray(value, haussenoms) != -1;
 		};
@@ -103,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					id="clone" class="bi-collection cursorpointer" th:title="#{cloner}"
 					aria-hidden="true"> </span> <a id="supprime"
 					th:href="@{'/hausse/supprime/'+${hausse.id}}"
-					class="confirmation bi-trash" style="color: red"
+					class="bi-trash" style="color: red"
 					th:title="#{supprimer}" aria-hidden="true"></a>&nbsp; <a
 					th:href="@{'/evenement/hausse/'+${hausse.id}}"
 					class="padicons bi-list-ul" th:title="#{evenements}"

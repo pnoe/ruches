@@ -1,48 +1,50 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head
-	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:inline="javascript">
-	const rucheTypeNom = /*[[${rucheType.nom}]]*/null;
-	const rucheTypetxt = /*[[#{rucheType}]]*/null;
-	const listeRuches = /*[[#{listeRuches}]]*/null;
-	const buttontextprint = /*[[#{buttontextprint}]]*/null;
-	const buttontextcol = /*[[#{buttontextcol}]]*/null;
-	const nbRuchesTotal = /*[[${nbRuchesTotal}]]*/null;
-	const suppTypeRuche = /*[[#{suppTypeRuche}]]*/null;
-	const typeRucheSuppNon = /*[[#{typeRucheSuppNon}]]*/null;
-	document.addEventListener("DOMContentLoaded", () => {
-				$('.confirmationsupp').on('click', function() {
-					if (nbRuchesTotal != "0") {
-						alert(typeRucheSuppNon);
-						return false;
-					} else {
-						return confirm(suppTypeRuche);
-					}
-				});
-				new DataTable('#ruches', {
-					dom : '<"buttonsData" Blf>t<"buttonsData" ip>',
-					scrollX: true,
-					buttons : [
-							'csv',
-							{
-								extend : 'pdf',
-								exportOptions : {
-									columns : ':visible'
-								},
-								title : rucheTypetxt + ' : ' + rucheTypeNom + ' - ' + listeRuches + " "
-										+ (new Date()).toLocaleDateString()
-							}, {
-								extend : 'print',
-								text : buttontextprint
-							}, {
-								extend : 'colvis',
-								text : buttontextcol
-							} ]
-				});
+
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+	<script th:inline="javascript">
+		const rucheTypeNom = /*[[${rucheType.nom}]]*/null;
+		const rucheTypetxt = /*[[#{rucheType}]]*/null;
+		const listeRuches = /*[[#{listeRuches}]]*/null;
+		const buttontextprint = /*[[#{buttontextprint}]]*/null;
+		const buttontextcol = /*[[#{buttontextcol}]]*/null;
+		const nbRuchesTotal = /*[[${nbRuchesTotal}]]*/null;
+		const suppTypeRuche = /*[[#{suppTypeRuche}]]*/null;
+		const typeRucheSuppNon = /*[[#{typeRucheSuppNon}]]*/null;
+		document.addEventListener("DOMContentLoaded", () => {
+			document.getElementById('supprime').addEventListener("click", (event) => {
+				if (nbRuchesTotal != "0") {
+					alert(typeRucheSuppNon);
+				} else if (confirm(suppTypeRuche)) {
+					return true;
+				}
+				event.preventDefault();
+				return false;
+			}, false);
+			new DataTable('#ruches', {
+				dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
+				scrollX: true,
+				buttons: [
+					'csv',
+					{
+						extend: 'pdf',
+						exportOptions: {
+							columns: ':visible'
+						},
+						title: rucheTypetxt + ' : ' + rucheTypeNom + ' - ' + listeRuches + " "
+							+ (new Date()).toLocaleDateString()
+					}, {
+						extend: 'print',
+						text: buttontextprint
+					}, {
+						extend: 'colvis',
+						text: buttontextcol
+					}]
 			});
-</script>
+		});
+	</script>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar"></nav>
 	<br />
@@ -57,11 +59,9 @@
 				</h1>
 			</div>
 			<div class="col">
-				<a th:href="@{'/rucheType/modifie/'+${rucheType.id}}"
-					class="bi-pencil" th:title="#{modifier}" aria-hidden="true"></a> <a
-					id="supprime" th:href="@{'/rucheType/supprime/'+${rucheType.id}}"
-					class="confirmationsupp bi-trash" style="color: red"
-					th:title="#{supprimer}" aria-hidden="true"></a>
+				<a th:href="@{'/rucheType/modifie/'+${rucheType.id}}" class="bi-pencil" th:title="#{modifier}"
+					aria-hidden="true"></a> <a id="supprime" th:href="@{'/rucheType/supprime/'+${rucheType.id}}"
+					class="bi-trash" style="color: red" th:title="#{supprimer}" aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
@@ -86,8 +86,7 @@
 		<h6 th:unless="${#arrays.length(ruches)}" th:text="#{PasDeRuche}"></h6>
 		<th:block th:if="${#arrays.length(ruches)}">
 			<h6 th:text="#{listeXRuches(${#arrays.length(ruches)})}"></h6>
-			<table class="table table-sm table-bordered table-striped table-sm"
-				id="ruches">
+			<table class="table table-sm table-bordered table-striped table-sm" id="ruches">
 				<thead>
 					<tr>
 						<th th:text="#{nom}"></th>
@@ -100,15 +99,11 @@
 				</thead>
 				<tbody>
 					<tr th:each="ruche : ${ruches}">
-						<td><a th:href="@{'/ruche/'+${ruche.id}}"
-							th:text="${ruche.nom}"></a></td>
-						<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}"
-							th:text="${ruche.essaim?.nom}"></a></td>
-						<td th:if="${session.voirInactif}"
-							th:text="${ruche.active}? #{oui} : #{non}"></td>
+						<td><a th:href="@{'/ruche/'+${ruche.id}}" th:text="${ruche.nom}"></a></td>
+						<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}" th:text="${ruche.essaim?.nom}"></a></td>
+						<td th:if="${session.voirInactif}" th:text="${ruche.active}? #{oui} : #{non}"></td>
 						<td th:text="${ruche.dateAcquisition}"></td>
-						<td class="num"
-							th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
+						<td class="num" th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
 						<td th:text="${ruche.commentaire}"></td>
 					</tr>
 				</tbody>
@@ -118,4 +113,5 @@
 	<br />
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

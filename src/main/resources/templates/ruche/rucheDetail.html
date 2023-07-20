@@ -1,88 +1,94 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head
-	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:inline="javascript">
-const _csrf_token = /*[[${_csrf.token}]]*/ null;
-const _csrf_param_name = /*[[${_csrf.parameterName}]]*/ null;
-const ruchenoms = /*[[${ruchenoms}]]*/ null;
-const rnpsupprec = /*[[#{ruchenepeutetresupprimeerecolte}]]*/ null;
-const recolteHausses = /*[[${recolteHausses}]]*/ null;
-const evenements = /*[[${evenements}]]*/ null;
-const suppreven = /*[[#{supprimerrucheeteven?}]]*/ null;
-const suppruche = /*[[#{supprimercetteruche?}]]*/ null;
-const nruchvirg = /*[[#{nomruchesvirgule}]]*/ null;
-const nexisted = /*[[#{nomexistentdeja}]]*/ null;
-const Ruches = /*[[#{Ruches}]]*/ null;
-const creer = /*[[#{creer}]]*/ null;
-const urlclone = /*[[@{/ruche/clone/}]]*/ null;
-const rucheid = /*[[${ruche.id}]]*/ null;
-document.addEventListener("DOMContentLoaded", () => {
-	$('.confirmation').on('click', function () {
-		if (recolteHausses) {
-			alert(rnpsupprec);
-			return false;
-		} else if (evenements > 0) {
-			return confirm(suppreven);
-		} else {
-			return confirm(suppruche);
-		}
-    });
-	$( "#clone" ).click(function() {
-		function annule () {
-			while (iajout--) {
-				ruchenoms.pop();
-			}
-		} 
-		const noms = prompt(nruchvirg);
-		let iajout = 0;
-		if (noms == null || noms == "") {
-		    return;
-		}
-		const tabNomExiste=[];
-		const tabNomOk=[];
-		/*[- filter supprime les noms vides ou blancs -]*/
-		/*[- map trim supprime les blancs aux extrémités des noms -]*/
-		noms.split(',').filter(s => s.trim()).map(item => item.trim()).forEach(function(item){
-			if ($.inArray(item, ruchenoms) !== -1) {
-				tabNomExiste.push(item);
-			} else {
-				/*[- on crée la ruche item -]*/
-				tabNomOk.push(item);
-				/*[- ce nom ne doit pas être réutilisé -]*/
-				ruchenoms.push(item);
-				iajout++;
-			}
+
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+	<script th:inline="javascript">
+		const _csrf_token = /*[[${_csrf.token}]]*/ null;
+		const _csrf_param_name = /*[[${_csrf.parameterName}]]*/ null;
+		const ruchenoms = /*[[${ruchenoms}]]*/ null;
+		const rnpsupprec = /*[[#{ruchenepeutetresupprimeerecolte}]]*/ null;
+		const recolteHausses = /*[[${recolteHausses}]]*/ null;
+		const evenements = /*[[${evenements}]]*/ null;
+		const suppreven = /*[[#{supprimerrucheeteven?}]]*/ null;
+		const suppruche = /*[[#{supprimercetteruche?}]]*/ null;
+		const nruchvirg = /*[[#{nomruchesvirgule}]]*/ null;
+		const nexisted = /*[[#{nomexistentdeja}]]*/ null;
+		const Ruches = /*[[#{Ruches}]]*/ null;
+		const creer = /*[[#{creer}]]*/ null;
+		const urlclone = /*[[@{/ruche/clone/}]]*/ null;
+		const rucheid = /*[[${ruche.id}]]*/ null;
+		document.addEventListener("DOMContentLoaded", () => {
+			document.getElementById('supprime').addEventListener("click", (event) => {
+				if (recolteHausses) {
+					alert(rnpsupprec);
+				} else if (evenements > 0) {
+					if (confirm(suppreven)) {
+						return true;
+					}
+				} else {
+					if (confirm(suppruche)) {
+						return true;
+					}
+				}
+				event.preventDefault();
+				return false;
+			}, false);
+			$("#clone").click(function () {
+				function annule() {
+					while (iajout--) {
+						ruchenoms.pop();
+					}
+				}
+				const noms = prompt(nruchvirg);
+				let iajout = 0;
+				if (noms == null || noms == "") {
+					return;
+				}
+				const tabNomExiste = [];
+				const tabNomOk = [];
+				/*[- filter supprime les noms vides ou blancs -]*/
+				/*[- map trim supprime les blancs aux extrémités des noms -]*/
+				noms.split(',').filter(s => s.trim()).map(item => item.trim()).forEach(function (item) {
+					if ($.inArray(item, ruchenoms) !== -1) {
+						tabNomExiste.push(item);
+					} else {
+						/*[- on crée la ruche item -]*/
+						tabNomOk.push(item);
+						/*[- ce nom ne doit pas être réutilisé -]*/
+						ruchenoms.push(item);
+						iajout++;
+					}
+				});
+				if (tabNomExiste.length > 0) {
+					const promptexistedeja = Ruches + ' : ' + tabNomExiste.join(',') + ' ' + nexisted;
+					if (tabNomOk.length == 0) {
+						alert(promptexistedeja);
+						return;
+					}
+					if (!confirm(promptexistedeja + '. ' + creer + ' ' + tabNomOk.join(',') + ' ?')) {
+						annule();
+						return;
+					}
+				} else if (tabNomOk.length === 0) {
+					return;
+				} else {
+					if (!confirm(creer + ' ' + tabNomOk.join(',') + ' ?')) {
+						annule();
+						return;
+					}
+				}
+				const requestData = {nomclones: tabNomOk.join(',')};
+				requestData[_csrf_param_name] = _csrf_token;
+				$.post(urlclone + rucheid,
+					requestData).done(function (data) {
+						alert(data);
+						document.location.reload(true);
+					});
+			});
 		});
-		if (tabNomExiste.length > 0) {
-			const promptexistedeja = Ruches + ' : ' + tabNomExiste.join(',') + ' ' + nexisted;
-			if (tabNomOk.length == 0) {
-				alert(promptexistedeja);
-				return;					
-			}
-			if (!confirm(promptexistedeja + '. ' + creer + ' ' + tabNomOk.join(',') + ' ?')) {
-				annule();
-				return;
-			}
-		} else if (tabNomOk.length === 0) { 
-			return; 
-		} else {
-			if (!confirm(creer + ' ' + tabNomOk.join(',') + ' ?')) {
-				annule();
-				return;
-			}
-		}
-		const requestData = {nomclones : tabNomOk.join(',')};
-	    requestData[_csrf_param_name] = _csrf_token;
-		$.post( urlclone + rucheid,
-				requestData).done(function (data) { 
-					alert( data );
-					document.location.reload(true);
-		});		
-	});
-});
-</script>
+	</script>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar"></nav>
 	<br />
@@ -97,25 +103,18 @@ document.addEventListener("DOMContentLoaded", () => {
 				</h1>
 			</div>
 			<div class="col">
-				<a th:href="@{'/ruche/modifie/'+${ruche.id}}" class="bi-pencil"
-					th:title="#{modifier}" aria-hidden="true"></a> &nbsp; <span
-					id="clone" class="bi-collection cursorpointer" th:title="#{cloner}"
-					aria-hidden="true"></span> <a
-					th:href="@{'/ruche/hausses/'+${ruche.id}}" class="bi-justify"
-					th:title="#{ajoutRetraitHausses}" aria-hidden="true"></a> <a
-					th:href="@{'/ruche/rucher/'+${ruche.id}}" class="bi-house"
-					th:title="#{changerDeRucher}" aria-hidden="true"></a> <a
-					id="supprime" th:href="@{'/ruche/supprime/'+${ruche.id}}"
-					class="confirmation bi-trash" style="color: red"
-					th:title="#{supprimer}" aria-hidden="true"></a> &nbsp; <a
-					th:href="@{'/evenement/ruche/'+${ruche.id}}"
-					class="padicons bi-list-ul" th:title="#{evenements}"
-					aria-hidden="true"></a> <a
-					th:href="@{'/evenement/ruche/commentaire/cree/'+${ruche.id}}"
-					class="bi-chat-text" th:title="#{evenementCommentaire}"
-					aria-hidden="true"></a> &nbsp; <a
-					th:href="@{'/ruche/historique/'+${ruche.id}}"
-					class="bi-calendar-check" th:title="#{histoHausses}"
+				<a th:href="@{'/ruche/modifie/'+${ruche.id}}" class="bi-pencil" th:title="#{modifier}"
+					aria-hidden="true"></a> &nbsp; <span id="clone" class="bi-collection cursorpointer"
+					th:title="#{cloner}" aria-hidden="true"></span> <a th:href="@{'/ruche/hausses/'+${ruche.id}}"
+					class="bi-justify" th:title="#{ajoutRetraitHausses}" aria-hidden="true"></a> <a
+					th:href="@{'/ruche/rucher/'+${ruche.id}}" class="bi-house" th:title="#{changerDeRucher}"
+					aria-hidden="true"></a> <a id="supprime" th:href="@{'/ruche/supprime/'+${ruche.id}}"
+					class="bi-trash" style="color: red" th:title="#{supprimer}" aria-hidden="true"></a>
+				&nbsp; <a th:href="@{'/evenement/ruche/'+${ruche.id}}" class="padicons bi-list-ul"
+					th:title="#{evenements}" aria-hidden="true"></a> <a
+					th:href="@{'/evenement/ruche/commentaire/cree/'+${ruche.id}}" class="bi-chat-text"
+					th:title="#{evenementCommentaire}" aria-hidden="true"></a> &nbsp; <a
+					th:href="@{'/ruche/historique/'+${ruche.id}}" class="bi-calendar-check" th:title="#{histoHausses}"
 					aria-hidden="true"></a>
 			</div>
 		</div>
@@ -137,19 +136,14 @@ document.addEventListener("DOMContentLoaded", () => {
 			</thead>
 			<tbody>
 				<tr>
-					<td th:if="${session.voirInactif}"
-						th:text="${ruche.active}? #{oui} : #{non}"></td>
+					<td th:if="${session.voirInactif}" th:text="${ruche.active}? #{oui} : #{non}"></td>
 					<td th:text="${ruche.dateAcquisition}"></td>
-					<td class="num"
-						th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
 					<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
-					<td><a th:href="@{/rucheType/{id}(id=${ruche.type?.id})}"
-						th:text="${ruche.type?.nom}"></a></td>
+					<td><a th:href="@{/rucheType/{id}(id=${ruche.type?.id})}" th:text="${ruche.type?.nom}"></a></td>
 					<td th:text="${ruche.production}? #{oui} : #{non}"></td>
-					<td class="num"
-						th:text="${#numbers.formatDecimal(ruche.latitude,1,4)}"></td>
-					<td class="num"
-						th:text="${#numbers.formatDecimal(ruche.longitude,1,4)}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(ruche.latitude,1,4)}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(ruche.longitude,1,4)}"></td>
 					<td th:text="${ruche.commentaire}"></td>
 				</tr>
 			</tbody>
@@ -167,18 +161,14 @@ document.addEventListener("DOMContentLoaded", () => {
 			</thead>
 			<tbody>
 				<tr>
-					<td><a th:href="@{/rucher/{id}(id=${ruche.rucher?.id})}"
-						th:text="${ruche.rucher?.nom}"></a></td>
-					<td><a
-						th:href="@{/evenement/{id}(id=${eveRucher?.id},type='ruche')}"
-						th:text="${#temporals.format(eveRucher?.date, 'yyyy/MM/dd')}"></a>
+					<td><a th:href="@{/rucher/{id}(id=${ruche.rucher?.id})}" th:text="${ruche.rucher?.nom}"></a></td>
+					<td><a th:href="@{/evenement/{id}(id=${eveRucher?.id},type='ruche')}"
+							th:text="${#temporals.format(eveRucher?.date, 'yyyy/MM/dd')}"></a>
 					</td>
 					<td th:text="${eveRucher?.commentaire}"></td>
-					<td><a th:href="@{/essaim/{id}(id=${ruche.essaim?.id})}"
-						th:text="${ruche.essaim?.nom}"></a></td>
-					<td><a th:if="${eveEssaim != null}"
-						th:href="@{/evenement/{id}(id=${eveEssaim?.id},type='ruche')}"
-						th:text="${#temporals.format(eveEssaim?.date, 'yyyy/MM/dd')}"></a>
+					<td><a th:href="@{/essaim/{id}(id=${ruche.essaim?.id})}" th:text="${ruche.essaim?.nom}"></a></td>
+					<td><a th:if="${eveEssaim != null}" th:href="@{/evenement/{id}(id=${eveEssaim?.id},type='ruche')}"
+							th:text="${#temporals.format(eveEssaim?.date, 'yyyy/MM/dd')}"></a>
 					</td>
 					<td th:text="${eveEssaim?.commentaire}"></td>
 				</tr>
@@ -196,9 +186,8 @@ document.addEventListener("DOMContentLoaded", () => {
 				<tbody>
 					<tr>
 						<td th:text="${eveComm?.commentaire}"></td>
-						<td><a th:if="${eveComm != null}"
-							th:href="@{/evenement/{id}(id=${eveComm?.id},type='ruche')}"
-							th:text="${#temporals.format(eveComm?.date, 'yyyy/MM/dd')}"></a>
+						<td><a th:if="${eveComm != null}" th:href="@{/evenement/{id}(id=${eveComm?.id},type='ruche')}"
+								th:text="${#temporals.format(eveComm?.date, 'yyyy/MM/dd')}"></a>
 						</td>
 					</tr>
 				</tbody>
@@ -223,18 +212,14 @@ document.addEventListener("DOMContentLoaded", () => {
 				</thead>
 				<tbody>
 					<tr th:each="hausseRuche : ${haussesRuche}">
-						<td><a href="/retraitHausse"
-							th:href="@{/hausse/{id}(id=${hausseRuche.id})}"
-							th:text="${hausseRuche.nom}"></a></td>
+						<td><a href="/retraitHausse" th:href="@{/hausse/{id}(id=${hausseRuche.id})}"
+								th:text="${hausseRuche.nom}"></a></td>
 						<td th:text="${hausseRuche.ordreSurRuche}"></td>
-						<td
-							th:text="${#temporals.format( datesPoseHausse[hausseRucheStat.index] , 'yyyy/MM/dd')}">
+						<td th:text="${#temporals.format( datesPoseHausse[hausseRucheStat.index] , 'yyyy/MM/dd')}">
 						</td>
-						<td th:if="${session.voirInactif}"
-							th:text="${hausseRuche.active}? #{oui} : #{non}"></td>
+						<td th:if="${session.voirInactif}" th:text="${hausseRuche.active}? #{oui} : #{non}"></td>
 						<td th:text="${hausseRuche.dateAcquisition}"></td>
-						<td class="num"
-							th:text="${#numbers.formatDecimal(hausseRuche.poidsVide,1,1,'DEFAULT')}"></td>
+						<td class="num" th:text="${#numbers.formatDecimal(hausseRuche.poidsVide,1,1,'DEFAULT')}"></td>
 						<td class="num" th:text="${hausseRuche.nbCadres}"></td>
 						<td class="num" th:text="${hausseRuche.nbCadresMax}"></td>
 						<td th:text="${hausseRuche.commentaire}"></td>
@@ -245,4 +230,5 @@ document.addEventListener("DOMContentLoaded", () => {
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

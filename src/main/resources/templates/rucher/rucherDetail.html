@@ -1,48 +1,58 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:inline="javascript">
-	const depotNPES = /*[[#{depotNePeutEtreSupprime}]]*/ null;
-	const rucherNSRR = /*[[#{ruchernonsupprimerefrecolte}]]*/ null;
-	const suppRucherEtEve = /*[[#{supprimerruchereteven}]]*/ null;
-	const suppCeRucher = /*[[#{supprimercerucher?}]]*/ null;
-	const rucherDepot = /*[[${rucher.depot}]]*/ null;
-	const recolteHausses = /*[[${recolteHausses}]]*/ null;
-	const evenements = /*[[${evenements}]]*/ null;
-	const rucherNom = /*[[${rucher.nom}]]*/ null;
-	const ruchertxt = /*[[#{rucher}]]*/ null;
-	const listeRuches = /*[[#{listeRuches}]]*/ null;
-	const buttontextprint = /*[[#{buttontextprint}]]*/ null;
-	const buttontextcol = /*[[#{buttontextcol}]]*/ null;
-	document.addEventListener("DOMContentLoaded", () => {
-		$('.confirmationsupp').on('click', function () {
-			if (rucherDepot) {
-				alert(depotNPES);
-				return false;
-			} else {
-				if(recolteHausses) {
-					alert(rucherNSRR);
-					return false;
-				} else if (evenements) {
-			        return confirm(suppRucherEtEve);			
+	<script th:inline="javascript">
+		const depotNPES = /*[[#{depotNePeutEtreSupprime}]]*/ null;
+		const rucherNSRR = /*[[#{ruchernonsupprimerefrecolte}]]*/ null;
+		const suppRucherEtEve = /*[[#{supprimerruchereteven}]]*/ null;
+		const suppCeRucher = /*[[#{supprimercerucher?}]]*/ null;
+		const rucherDepot = /*[[${rucher.depot}]]*/ null;
+		const recolteHausses = /*[[${recolteHausses}]]*/ null;
+		const evenements = /*[[${evenements}]]*/ null;
+		const rucherNom = /*[[${rucher.nom}]]*/ null;
+		const ruchertxt = /*[[#{rucher}]]*/ null;
+		const listeRuches = /*[[#{listeRuches}]]*/ null;
+		const buttontextprint = /*[[#{buttontextprint}]]*/ null;
+		const buttontextcol = /*[[#{buttontextcol}]]*/ null;
+		document.addEventListener("DOMContentLoaded", () => {
+			document.getElementById('supprime').addEventListener("click", (event) => {
+				if (rucherDepot) {
+					alert(depotNPES);
+
 				} else {
-					return confirm(suppCeRucher);
+					if (recolteHausses) {
+						alert(rucherNSRR);
+
+					} else if (evenements) {
+						if (confirm(suppRucherEtEve)) {
+							return true;
+						}
+					} else {
+						if (confirm(suppCeRucher)) {
+							return true;
+						}
+					}
 				}
-			}
-	    });		
-		new DataTable('#ruches', {
-	        dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
-		    buttons: [
-	             'csv',
-	             {extend: 'pdf',  exportOptions: {columns: ':visible'}, 
-	            	 title: ruchertxt + ' : ' + rucherNom + ' - ' + listeRuches + " " + (new Date()).toLocaleDateString()},
-	                 {extend: 'print', text: buttontextprint},
-	                 {extend: 'colvis', text: buttontextcol}
-	         ]
-	       });  
-	});
-</script>
+				event.preventDefault();
+				return false;
+			}, false);
+			new DataTable('#ruches', {
+				dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
+				buttons: [
+					'csv',
+					{
+						extend: 'pdf', exportOptions: {columns: ':visible'},
+						title: ruchertxt + ' : ' + rucherNom + ' - ' + listeRuches + " " + (new Date()).toLocaleDateString()
+					},
+					{extend: 'print', text: buttontextprint},
+					{extend: 'colvis', text: buttontextcol}
+				]
+			});
+		});
+	</script>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar"></nav>
 	<br />
@@ -57,31 +67,28 @@
 				</h1>
 			</div>
 			<div class="col">
-				<a th:href="@{'/rucher/modifie/'+${rucher.id}}" 
-				  class="bi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
+				<a th:href="@{'/rucher/modifie/'+${rucher.id}}" class="bi-pencil" th:title="#{modifier}"
+					aria-hidden="true"></a>
 				&nbsp;
-				<a th:href="@{'/rucher/Gg/'+${rucher.id}}" 
-				  class="bi-google" th:title="#{carteGg}" aria-hidden="true"></a> 
-				<a th:href="@{'/rucher/Ign/'+${rucher.id}}" th:title="#{carteIgn}"
-					aria-hidden="true"><img th:src="@{'/images/france.svg'}"
-					style="margin-bottom: 2px;" /></a>
-				<a th:href="@{'/rucher/Osm/'+${rucher.id}}" 
-				  class="bi-globe" th:title="#{carteOsm}" aria-hidden="true"></a>
+				<a th:href="@{'/rucher/Gg/'+${rucher.id}}" class="bi-google" th:title="#{carteGg}"
+					aria-hidden="true"></a>
+				<a th:href="@{'/rucher/Ign/'+${rucher.id}}" th:title="#{carteIgn}" aria-hidden="true"><img
+						th:src="@{'/images/france.svg'}" style="margin-bottom: 2px;" /></a>
+				<a th:href="@{'/rucher/Osm/'+${rucher.id}}" class="bi-globe" th:title="#{carteOsm}"
+					aria-hidden="true"></a>
 				&nbsp;
-				<a th:href="@{'/rucher/meteo/'+${rucher.id}}" 
-				  class="bi-sun" th:title="#{meteo}" aria-hidden="true"></a> 
-       			<a id="ajoutRuches" th:href="@{'/rucher/ruches/'+${rucher.id}}" 
-       			  class="bi-grid-3x2-gap" th:title="#{ajoutRuches}" aria-hidden="true"></a>
-       			<a id="supprime" th:href="@{'/rucher/supprime/'+${rucher.id}}" 
-       			  class="confirmationsupp bi-trash" style="color:red" 
-       			  th:title="#{supprimer}" aria-hidden="true"></a>&nbsp;
-       			<a th:href="@{'/evenement/rucher/'+${rucher.id}}"
-       			  class="padicons bi-list-ul" th:title="#{evenements}" aria-hidden="true"></a>
-				<a th:href="@{'/evenement/rucher/commentaire/cree/'+${rucher.id}}"
-				  class="bi-chat-text" th:title="#{evenementCommentaire}" aria-hidden="true"></a>  
+				<a th:href="@{'/rucher/meteo/'+${rucher.id}}" class="bi-sun" th:title="#{meteo}" aria-hidden="true"></a>
+				<a id="ajoutRuches" th:href="@{'/rucher/ruches/'+${rucher.id}}" class="bi-grid-3x2-gap"
+					th:title="#{ajoutRuches}" aria-hidden="true"></a>
+				<a id="supprime" th:href="@{'/rucher/supprime/'+${rucher.id}}" class="bi-trash" style="color:red"
+					th:title="#{supprimer}" aria-hidden="true"></a>&nbsp;
+				<a th:href="@{'/evenement/rucher/'+${rucher.id}}" class="padicons bi-list-ul" th:title="#{evenements}"
+					aria-hidden="true"></a>
+				<a th:href="@{'/evenement/rucher/commentaire/cree/'+${rucher.id}}" class="bi-chat-text"
+					th:title="#{evenementCommentaire}" aria-hidden="true"></a>
 				&nbsp;
-				<a th:href="@{'/rucher/historique/'+${rucher.id}+'/true'}"
-				  class="bi-truck-front" th:title="#{transhumances}" aria-hidden="true"></a>
+				<a th:href="@{'/rucher/historique/'+${rucher.id}+'/true'}" class="bi-truck-front"
+					th:title="#{transhumances}" aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
@@ -110,8 +117,8 @@
 					<td th:text="${rucher.depot}? #{oui} : #{non}"></td>
 					<td><a th:href="@{'/personne/'+${rucher.contact?.id}}" th:text="${rucher.contact?.nom}"></a></td>
 					<td th:text="${rucher.adresse}"></td>
-					<td><a class="num" th:href="@{'geo:'+${rucher.latitude}+','+${rucher.longitude}}" 
-					  th:text="${#numbers.formatDecimal(rucher.latitude,1,4)}"></a></td>
+					<td><a class="num" th:href="@{'geo:'+${rucher.latitude}+','+${rucher.longitude}}"
+							th:text="${#numbers.formatDecimal(rucher.latitude,1,4)}"></a></td>
 					<td class="num" th:text="${#numbers.formatDecimal(rucher.longitude,1,4)}"></td>
 					<td class="num" th:text="${rucher.altitude}"></td>
 					<th:block th:if="!${rucher.depot} and (${dist} != null)">
@@ -123,24 +130,25 @@
 				</tr>
 			</tbody>
 		</table>
-		<h6	th:unless="${#arrays.length(ruches)}" th:text="#{Pasderuche}"></h6>
+		<h6 th:unless="${#arrays.length(ruches)}" th:text="#{Pasderuche}"></h6>
 		<th:block th:if="${#arrays.length(ruches)}">
-			<h6	th:if="${nbHausses}" th:text="#{listeXRuches(${#arrays.length(ruches)})} + '. ' + #{nbXHausses(${nbHausses})}"></h6>
-			<h6	th:unless="${nbHausses}" th:text="#{listeXRuches(${#arrays.length(ruches)})}"></h6>
+			<h6 th:if="${nbHausses}"
+				th:text="#{listeXRuches(${#arrays.length(ruches)})} + '. ' + #{nbXHausses(${nbHausses})}"></h6>
+			<h6 th:unless="${nbHausses}" th:text="#{listeXRuches(${#arrays.length(ruches)})}"></h6>
 			<table class="table table-sm table-bordered table-striped" id="ruches">
 				<thead>
-				<tr>
-					<th th:text="#{ruche}"></th>
-					<th th:text="#{essaim}"></th>
-					<th th:if="${session.voirInactif}" th:text="#{active}"></th>
-					<th th:text="#{dateAcquisition}"></th>
-					<th class="num" th:text="#{poidsVide}"></th>
-					<th class="num" th:text="#{nbCadres}"></th>
-					<th  class="num" th:text="#{nbCadresMax}"></th>
-					<th  th:text="#{type}"></th>
-					<th th:text="#{Hausses}"></th>
-					<th th:text="#{commentaire}"></th>
-				</tr>
+					<tr>
+						<th th:text="#{ruche}"></th>
+						<th th:text="#{essaim}"></th>
+						<th th:if="${session.voirInactif}" th:text="#{active}"></th>
+						<th th:text="#{dateAcquisition}"></th>
+						<th class="num" th:text="#{poidsVide}"></th>
+						<th class="num" th:text="#{nbCadres}"></th>
+						<th class="num" th:text="#{nbCadresMax}"></th>
+						<th th:text="#{type}"></th>
+						<th th:text="#{Hausses}"></th>
+						<th th:text="#{commentaire}"></th>
+					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="ruche : ${ruches}">
@@ -158,39 +166,43 @@
 				</tbody>
 			</table>
 		</th:block>
-		<br/>
-		<h6 th:text="#{PasDeRecolte}" th:if="${#lists.isEmpty(poidsListe)}"></h6>	
-		<table th:unless="${#lists.isEmpty(poidsListe)}" class="table table-sm table-bordered">			
-		<thead>
-			<tr>
-				<th th:text="#{recolte}"></th>
-				<td th:each="recolte : ${recoltesListe}">
-					<a th:href="@{'/recolte/'+${recolte.id}}" th:text="${#temporals.format(recolte.date, 'yyyy/MM/dd')}"></a>
-				</td>
-				<th th:text="#{Total}"></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<th th:text="#{poidskg}"></th>
-				<td th:each="poids : ${poidsListe}" th:text="${#numbers.formatDecimal(poids/1000.0,1,2,'DEFAULT')}"></td>
-				<td th:text="${#numbers.formatDecimal(poidsTotal/1000.0,1,2,'DEFAULT')}"></td>		
-			</tr>
-			<tr>
-				<th th:text="#{Ruches}"></th>
-				<td th:each="nb : ${recoltesNbRuches}" th:text="${nb}"></td>
-				<td></td>		
-			</tr>
-			<tr>
-				<th th:text="#{poidsParRuches}"></th>
-				<td th:each="poids, iterStat : ${poidsListe}" 
-					th:text="${#numbers.formatDecimal(poids/recoltesNbRuches[iterStat.index]/1000.0,1,2,'DEFAULT')}"></td>
-				<td></td>		
-			</tr>
-		</tbody>
-	</table>
+		<br />
+		<h6 th:text="#{PasDeRecolte}" th:if="${#lists.isEmpty(poidsListe)}"></h6>
+		<table th:unless="${#lists.isEmpty(poidsListe)}" class="table table-sm table-bordered">
+			<thead>
+				<tr>
+					<th th:text="#{recolte}"></th>
+					<td th:each="recolte : ${recoltesListe}">
+						<a th:href="@{'/recolte/'+${recolte.id}}"
+							th:text="${#temporals.format(recolte.date, 'yyyy/MM/dd')}"></a>
+					</td>
+					<th th:text="#{Total}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th th:text="#{poidskg}"></th>
+					<td th:each="poids : ${poidsListe}" th:text="${#numbers.formatDecimal(poids/1000.0,1,2,'DEFAULT')}">
+					</td>
+					<td th:text="${#numbers.formatDecimal(poidsTotal/1000.0,1,2,'DEFAULT')}"></td>
+				</tr>
+				<tr>
+					<th th:text="#{Ruches}"></th>
+					<td th:each="nb : ${recoltesNbRuches}" th:text="${nb}"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th th:text="#{poidsParRuches}"></th>
+					<td th:each="poids, iterStat : ${poidsListe}"
+						th:text="${#numbers.formatDecimal(poids/recoltesNbRuches[iterStat.index]/1000.0,1,2,'DEFAULT')}">
+					</td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
-	<br/>
+	<br />
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

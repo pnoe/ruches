@@ -1,74 +1,79 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head
-	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:replace="include :: jsdatetimepicker"></script>
-<link th:replace="include :: cssdatetimepicker" />
-<script th:replace="include ::  localejsdatetimepicker"></script>
-<script th:inline="javascript">
-	const _csrf_token = /*[[${_csrf.token}]]*/null;
-	const _csrf_param_name = /*[[${_csrf.parameterName}]]*/null;
-	const suppRecHauss = /*[[#{supprimerrecolteethausses}]]*/null;
-	const dateRecEpoch = /*[[${dateRecolteEpoch}]]*/null;
-	const enlevTtHauRec = /*[[#{enlevertoutesleshaussesrecolte}]]*/null;
-	const enlevHRecDe30 = /*[[#{enlverhaussesrecoltedelai(30)}]]*/null;
-	const urlRecHDepot = /*[[@{/recolte/haussesDepot/}]]*/null;
-	const recId = /*[[${recolte.id}]]*/null;
-	const totalPourLaRuche = /*[[#{totalPourLaRuche}]]*/null;
-	document.addEventListener("DOMContentLoaded", () => {
+
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+	<script th:replace="include :: jsdatetimepicker"></script>
+	<link th:replace="include :: cssdatetimepicker" />
+	<script th:replace="include ::  localejsdatetimepicker"></script>
+	<script th:inline="javascript">
+		const _csrf_token = /*[[${_csrf.token}]]*/null;
+		const _csrf_param_name = /*[[${_csrf.parameterName}]]*/null;
+		const suppRecHauss = /*[[#{supprimerrecolteethausses}]]*/null;
+		const dateRecEpoch = /*[[${dateRecolteEpoch}]]*/null;
+		const enlevTtHauRec = /*[[#{enlevertoutesleshaussesrecolte}]]*/null;
+		const enlevHRecDe30 = /*[[#{enlverhaussesrecoltedelai(30)}]]*/null;
+		const urlRecHDepot = /*[[@{/recolte/haussesDepot/}]]*/null;
+		const recId = /*[[${recolte.id}]]*/null;
+		const totalPourLaRuche = /*[[#{totalPourLaRuche}]]*/null;
+		document.addEventListener("DOMContentLoaded", () => {
+			$('#date').hide();
+			$('#dateOK').hide();
+			$("#enlevehausses").click(function () {
+				/*[- */
+				// La fonction est désactivée après 30 jours 
+				// 30 * 24 * 3600 * 1000 =  2592000000 
+				/* -]*/
+				if (Date.now() > dateRecEpoch * 1000 + 2592000000) {
+					alert(enlevHRecDe30);
+					return;
+				}
+				if (!confirm(enlevTtHauRec)) {
+					return;
+				}
+				$('#date').show();
+				$('#dateOK').show();
+				const d = new Date().toISOString().replace('T', ' ');
+				$('#date').attr('value', d.slice(0, d.lastIndexOf(':')));
+				$('#date').focus();
+			});
+			$('#dateOK').on('click', function () {
+				const date = $('#date').val();
 				$('#date').hide();
 				$('#dateOK').hide();
-				$("#enlevehausses").click(function() {
-					/*[- */
-					// La fonction est désactivée après 30 jours 
-					// 30 * 24 * 3600 * 1000 =  2592000000 
-					/* -]*/
-					if (Date.now() > dateRecEpoch * 1000 + 2592000000) {
-						alert(enlevHRecDe30);
-						return;
-					}
-					if (!confirm(enlevTtHauRec)) {
-						return;
-					}
-					$('#date').show();
-					$('#dateOK').show();
-					const d = new Date().toISOString().replace('T',' ');
-					$('#date').attr('value', d.slice(0, d.lastIndexOf(':')));
-					$('#date').focus();
-				});
-				$('#dateOK').on('click', function() {
-					const date = $('#date').val();
-					$('#date').hide();
-					$('#dateOK').hide();
-					let requestData = {};
-					requestData[_csrf_param_name] = _csrf_token;
-					requestData['date'] = date;
-					$.post(urlRecHDepot + recId, requestData).done(function(data) {
-						alert(data);
-					});
-				});
-				$('.confirmationsupprime').on('click', function() {
-					return confirm(suppRecHauss);
-				});
-				new DataTable('#hausses', {
-					order : [ [ 1, 'asc' ], [ 0, 'asc' ] ],
-					rowGroup : {
-						dataSrc : 1, // on groupe sur les ruches
-						startRender : null,
-						endRender : function(rows, group) {
-							let mielTotal = rows.data().pluck(4).reduce(function(a, b) {
-								return a + parseFloat(b.replace(/,/g, '.'));
-							}, 0.00);
-							return $('<tr/>').append('<td colspan="4">' + totalPourLaRuche + ' ' + group + '<\/td>')
-									.append('<td class="num">' + new Intl.NumberFormat(navigator.language, {
-										minimumFractionDigits : 2
-									}).format(mielTotal) + '<\/td>').append('<td colspan="2"><\/td>');
-						}
-					}
+				let requestData = {};
+				requestData[_csrf_param_name] = _csrf_token;
+				requestData['date'] = date;
+				$.post(urlRecHDepot + recId, requestData).done(function (data) {
+					alert(data);
 				});
 			});
-</script>
+			document.getElementById('supprime').addEventListener("click", (event) => {
+				if (confirm(suppRecHauss)) {
+					return true;
+				}
+				event.preventDefault();
+				return false;
+			}, false);
+			new DataTable('#hausses', {
+				order: [ [1, 'asc'], [0, 'asc'] ],
+				rowGroup: {
+					dataSrc: 1, // on groupe sur les ruches
+					startRender: null,
+					endRender: function (rows, group) {
+						let mielTotal = rows.data().pluck(4).reduce(function (a, b) {
+							return a + parseFloat(b.replace(/,/g, '.'));
+						}, 0.00);
+						return $('<tr/>').append('<td colspan="4">' + totalPourLaRuche + ' ' + group + '<\/td>')
+							.append('<td class="num">' + new Intl.NumberFormat(navigator.language, {
+								minimumFractionDigits: 2
+							}).format(mielTotal) + '<\/td>').append('<td colspan="2"><\/td>');
+					}
+				}
+			});
+		});
+	</script>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar"></nav>
 	<br />
@@ -79,44 +84,35 @@
 			<div class="col">
 				<h1 class="item">
 					<a th:href="@{'/recolte/liste'}" th:text="#{recolte}"></a>
-					<th:block
-						th:text="' '+${#temporals.format(recolte.date, 'yyyy/MM/dd HH:mm')}"></th:block>
+					<th:block th:text="' '+${#temporals.format(recolte.date, 'yyyy/MM/dd HH:mm')}"></th:block>
 				</h1>
 			</div>
 			<div class="col">
-				<a th:href="@{'/recolte/modifie/'+${recolte.id}}" class="bi-pencil"
-					th:title="#{modifier}" aria-hidden="true"></a> &nbsp; <a
-					th:href="@{'/recolte/choixHausses/'+${recolte.id}}"
-					class="bi-justify" th:title="#{choixHausesRecolte}"
-					aria-hidden="true"></a> <a
-					th:href="@{'/recolte/haussesMiel/'+${recolte.id}}" class="bi-table"
-					th:title="#{SaisiePoidsMiel}" aria-hidden="true"></a> <span
-					id="enlevehausses" class="bi-reply-all cursorpointer"
+				<a th:href="@{'/recolte/modifie/'+${recolte.id}}" class="bi-pencil" th:title="#{modifier}"
+					aria-hidden="true"></a> &nbsp; <a th:href="@{'/recolte/choixHausses/'+${recolte.id}}"
+					class="bi-justify" th:title="#{choixHausesRecolte}" aria-hidden="true"></a> <a
+					th:href="@{'/recolte/haussesMiel/'+${recolte.id}}" class="bi-table" th:title="#{SaisiePoidsMiel}"
+					aria-hidden="true"></a> <span id="enlevehausses" class="bi-reply-all cursorpointer"
 					th:title="#{recolteHausseDepot}" aria-hidden="true"></span> <a
-					th:href="@{'/recolte/statistiques/essaim/'+${recolte.id}}"
-					class="bi-pie-chart" th:title="#{statistiquesessaims}"
-					aria-hidden="true"></a> <a id="supprime"
-					th:href="@{'/recolte/supprime/'+${recolte.id}}"
-					class="confirmationsupprime bi-trash" style="color: red"
-					th:title="#{supprimer}" aria-hidden="true"></a> <input type="text"
-					id="date" name="date">
+					th:href="@{'/recolte/statistiques/essaim/'+${recolte.id}}" class="bi-pie-chart"
+					th:title="#{statistiquesessaims}" aria-hidden="true"></a> <a id="supprime"
+					th:href="@{'/recolte/supprime/'+${recolte.id}}" class="bi-trash"
+					style="color: red" th:title="#{supprimer}" aria-hidden="true"></a> <input type="text" id="date"
+					name="date">
 				<button id="dateOK">Date retrait hausses</button>
 
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid table-responsive" id="detailRecolte"
-		th:with="pdsMiel=(${nbruches}==0) ? 0.00 : 
+	<div class="container-fluid table-responsive" id="detailRecolte" th:with="pdsMiel=(${nbruches}==0) ? 0.00 : 
 			${#aggregates.sum(detailsRecolte.![poidsAvant])} - ${#aggregates.sum(detailsRecolte.![poidsApres])}">
 		<table class="table table-sm table-bordered">
 			<thead>
 				<tr>
 					<th th:text="#{typeMiel}"></th>
 					<th th:text="#{RucherS}"></th>
-					<th
-						th:text="#{poidsMielHausses}"></th>
-					<th
-						th:text="#{poidsMielPot}"></th>
+					<th th:text="#{poidsMielHausses}"></th>
+					<th th:text="#{poidsMielPot}"></th>
 					<th th:text="#{commentaire}"></th>
 					<th th:text="#{Hausses}"></th>
 					<th th:text="#{Ruches}"></th>
@@ -126,28 +122,27 @@
 			<tbody>
 				<tr>
 					<td th:text="#{${recolte.typeMiel}}"></td>
-					<td><th:block th:each="idn, iterStat : ${rucher}">
+					<td>
+						<th:block th:each="idn, iterStat : ${rucher}">
 							<a th:href="@{'/rucher/'+${idn.id}}" th:text="${idn.nom}"></a>
 							<th:block th:text="${iterStat.last} ? '' :'&nbsp;'"></th:block>
-						</th:block></td>
+						</th:block>
+					</td>
 					<td class="num" th:if="${#lists.isEmpty(detailsRecolte)}">0,00</td>
 					<td class="num" th:unless="${#lists.isEmpty(detailsRecolte)}"
 						th:text="${#numbers.formatDecimal(pdsMiel,1,2,'DEFAULT')}"></td>
-					<td class="num"
-						th:text="${#numbers.formatDecimal(recolte.poidsMiel,1,2,'DEFAULT')}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(recolte.poidsMiel,1,2,'DEFAULT')}"></td>
 					<td th:text="${recolte.commentaire}"></td>
 					<td th:text="${#arrays.length(detailsRecolte)}"></td>
 					<td th:text="${nbruches}"></td>
-					<td
-						th:text="(${nbruches}==0) ? '' : ${#numbers.formatDecimal(pdsMiel/nbruches,1,3,'DEFAULT')}"></td>
+					<td th:text="(${nbruches}==0) ? '' : ${#numbers.formatDecimal(pdsMiel/nbruches,1,3,'DEFAULT')}">
+					</td>
 				</tr>
 			</tbody>
 		</table>
 		<h6 th:text="#{Pasdehausse}" th:if="${#lists.isEmpty(detailsRecolte)}"></h6>
-		<h6 th:text="#{haussesRecolte}"
-			th:unless="${#lists.isEmpty(detailsRecolte)}"></h6>
-		<table class="table table-sm table-bordered" id="hausses"
-			th:unless="${#lists.isEmpty(detailsRecolte)}">
+		<h6 th:text="#{haussesRecolte}" th:unless="${#lists.isEmpty(detailsRecolte)}"></h6>
+		<table class="table table-sm table-bordered" id="hausses" th:unless="${#lists.isEmpty(detailsRecolte)}">
 			<thead>
 				<tr>
 					<th th:text="#{hausse}"></th>
@@ -162,20 +157,19 @@
 			<tbody>
 				<tr th:each="detailRecolte : ${detailsRecolte}">
 					<td><a data-bs-toggle="tooltip" th:title="#{saisirpoids}"
-						th:href="@{'/recolte/modifie/hausse/'+${recolte.id}+'/'+${detailRecolte.id}}"
-						th:text="${detailRecolte.hausse.nom}"></a></td>
-					<td><a th:href="@{'/ruche/'+${detailRecolte.ruche?.id}}"
-						th:text="${detailRecolte.ruche?.nom}"></a></td>
+							th:href="@{'/recolte/modifie/hausse/'+${recolte.id}+'/'+${detailRecolte.id}}"
+							th:text="${detailRecolte.hausse.nom}"></a></td>
+					<td><a th:href="@{'/ruche/'+${detailRecolte.ruche?.id}}" th:text="${detailRecolte.ruche?.nom}"></a>
+					</td>
 					<td><a th:href="@{'/essaim/'+${detailRecolte.essaim?.id}}"
-						th:text="${detailRecolte.essaim?.nom}"></a></td>
+							th:text="${detailRecolte.essaim?.nom}"></a></td>
 					<td><a th:href="@{'/rucher/'+${detailRecolte.rucher?.id}}"
-						th:text="${detailRecolte.rucher?.nom}"></a></td>
+							th:text="${detailRecolte.rucher?.nom}"></a></td>
 					<td class="num"
-						th:text="${#numbers.formatDecimal(detailRecolte.poidsAvant - detailRecolte.poidsApres,1,2,'DEFAULT')}"></td>
-					<td class="num"
-						th:text="${#numbers.formatDecimal(detailRecolte.poidsAvant,1,2,'DEFAULT')}"></td>
-					<td class="num"
-						th:text="${#numbers.formatDecimal(detailRecolte.poidsApres,1,2,'DEFAULT')}"></td>
+						th:text="${#numbers.formatDecimal(detailRecolte.poidsAvant - detailRecolte.poidsApres,1,2,'DEFAULT')}">
+					</td>
+					<td class="num" th:text="${#numbers.formatDecimal(detailRecolte.poidsAvant,1,2,'DEFAULT')}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(detailRecolte.poidsApres,1,2,'DEFAULT')}"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -183,4 +177,5 @@
 	<br />
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>
