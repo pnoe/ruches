@@ -39,7 +39,7 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		// https://docs.spring.io/spring-security/reference/migration-7/configuration.html
-		http.authorizeHttpRequests(authorize -> authorize.requestMatchers("/forgotPassword", "/resetPassword",
+		http.authorizeHttpRequests((autz) -> autz.requestMatchers("/forgotPassword", "/resetPassword",
 				"/resetPasswordFin", "/", "/css/**", "/js/**", "/images/**", "/doc/**", "/font/**").permitAll()
 				.anyRequest().authenticated())
 				.formLogin(formLogin -> formLogin.loginPage("/login").permitAll()

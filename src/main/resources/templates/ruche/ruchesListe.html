@@ -1,78 +1,79 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head
-	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:inline="javascript">
-	const Ruches = /*[[#{Ruches}]]*/null;
-	const buttTxtPrint = /*[[#{buttontextprint}]]*/null;
-	const buttTxtCol = /*[[#{buttontextcol}]]*/null;
-	const urlCommLot = /*[[@{/evenement/ruche/commentaireLot/}]]*/null;
-	const selectRuTrait = /*[[#{selectruchestraiter}]]*/null;
-	document.addEventListener("DOMContentLoaded", () => {
-				$("#rucher").on("change", function() {
-					table.columns(2).search(this.value).draw();
-				});
-				const idTbl = '#ruches';
-				const table = new DataTable(idTbl, {
-					select : {
-						style : 'multi+shift'
-					},
-					dom : 'Blftip',
-					scrollX: true,
-					buttons : [ 'csv', {
-						extend : 'pdf',	exportOptions : {columns : ':visible'},
-						action: function (e, dt, node, config) {
-							config.title = Ruches + " " + (new Date()).toLocaleDateString();
-							const inputSearch = $.trim($(`${idTbl}_filter label input`).val());
-							if (inputSearch.length !== 0) {
-								config.title += " <" + inputSearch + ">";
-							}
-							const sru = document.getElementById("rucher");
-							const valr = sru.options[sru.selectedIndex].value;
-							if (valr !== "") {
-								config.title += " [" + valr + "]";
-							}
-							$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, node, config);
-						},
-						orientation : 'landscape'
-					}, {
-						extend : 'print',
-						text : buttTxtPrint
-					}, {
-						extend : 'colvis',
-						text : buttTxtCol
-					} ]
-				});
-				function updateLinks(e, dt, type, indexes) {
-					if (type === 'row') {
-						let noms = "";
-						table.rows({
-							selected : true
-						}).data().pluck(0).each(
-								function(value, index) {
-									const a = document.createElement('template');
-									a.innerHTML = value;
-									noms += a.content.children[0].getAttribute("href").substring(
-											a.content.children[0].getAttribute("href").lastIndexOf("/") + 1)
-											+ ",";
-								});
-						if (noms) {
-							noms = noms.substring(0, noms.length - 1);
-							$('#commentaire').attr('href', urlCommLot + noms);
-						} else {
-							$('#commentaire').attr('href', "#");
+
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+	<script th:inline="javascript">
+		const Ruches = /*[[#{Ruches}]]*/null;
+		const buttTxtPrint = /*[[#{buttontextprint}]]*/null;
+		const buttTxtCol = /*[[#{buttontextcol}]]*/null;
+		const urlCommLot = /*[[@{/evenement/ruche/commentaireLot/}]]*/null;
+		const selectRuTrait = /*[[#{selectruchestraiter}]]*/null;
+		document.addEventListener("DOMContentLoaded", () => {
+			document.getElementById('rucher').addEventListener("change", (event) => {
+				table.columns(2).search(event.target.value).draw();
+			});
+			const idTbl = '#ruches';
+			const table = new DataTable(idTbl, {
+				select: {
+					style: 'multi+shift'
+				},
+				dom: 'Blftip',
+				scrollX: true,
+				buttons: ['csv', {
+					extend: 'pdf', exportOptions: {columns: ':visible'},
+					action: function (e, dt, node, config) {
+						config.title = Ruches + " " + (new Date()).toLocaleDateString();
+						const inputSearch = $.trim($(`${idTbl}_filter label input`).val());
+						if (inputSearch.length !== 0) {
+							config.title += " <" + inputSearch + ">";
 						}
+						const sru = document.getElementById("rucher");
+						const valr = sru.options[sru.selectedIndex].value;
+						if (valr !== "") {
+							config.title += " [" + valr + "]";
+						}
+						$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, node, config);
+					},
+					orientation: 'landscape'
+				}, {
+						extend: 'print',
+						text: buttTxtPrint
+					}, {
+						extend: 'colvis',
+						text: buttTxtCol
+					}]
+			});
+			function updateLinks(e, dt, type, indexes) {
+				if (type === 'row') {
+					let noms = "";
+					table.rows({
+						selected: true
+					}).data().pluck(0).each(
+						function (value, index) {
+							const a = document.createElement('template');
+							a.innerHTML = value;
+							noms += a.content.children[0].getAttribute("href").substring(
+								a.content.children[0].getAttribute("href").lastIndexOf("/") + 1)
+								+ ",";
+						});
+					if (noms) {
+						document.getElementById('commentaire').setAttribute('href', 
+							urlCommLot + noms.substring(0, noms.length - 1));
+					} else {
+						document.getElementById('commentaire').setAttribute('href', "#");
 					}
 				}
-				table.on('select deselect', updateLinks);
-				$('.selection').on('click', function() {
-					if ($(this).attr("href") == "#") {
-						alert(selectRuTrait);
-					}
-				});
+			}
+			table.on('select deselect', updateLinks);
+			document.getElementById('commentaire').addEventListener("click", (event) => {
+				if (event.target.getAttribute("href") === "#") {
+					alert(selectRuTrait);
+				}
 			});
-</script>
+		});
+	</script>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar">Menu</nav>
 	<br />
@@ -84,24 +85,21 @@
 				<h1 class="item" th:text="#{Ruches}"></h1>
 			</div>
 			<div class="col">
-				<a id="cree" th:href="@{/ruche/cree}" class="bi-plus-lg"
-					th:title="#{ajouterRuche}" aria-hidden="true"></a> &nbsp; <a
-					id="commentaire" href="#" class="selection bi-chat-text"
+				<a id="cree" th:href="@{/ruche/cree}" class="bi-plus-lg" th:title="#{ajouterRuche}"
+					aria-hidden="true"></a> &nbsp; <a id="commentaire" href="#" class="bi-chat-text"
 					th:title="#{evenementsCommentaire}" aria-hidden="true"></a>
 			</div>
 			<div class="col">
 				<select class="form-control" id="rucher" name="rucher">
 					<option value="" th:text="#{tous}"></option>
-					<option th:each="rucheropt : ${ruchersNoms}" th:value="${rucheropt}"
-								th:text="${rucheropt}" >
+					<option th:each="rucheropt : ${ruchersNoms}" th:value="${rucheropt}" th:text="${rucheropt}">
 					</option>
 				</select>
 			</div>
 		</div>
 	</div>
 	<div class="container-fluid">
-		<table class="table table-bordered table-striped table-sm"
-			id="ruches">
+		<table class="table table-bordered table-striped table-sm" id="ruches">
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>
@@ -125,29 +123,21 @@
 			</thead>
 			<tbody>
 				<tr th:each="ruche : ${ruches}">
-					<td><a th:href="@{'/ruche/'+${ruche.id}}"
-						th:text="${ruche.nom}"></a></td>
-					<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}"
-						th:text="${ruche.essaim?.nom}"></a></td>
-					<td><a th:href="@{'/rucher/'+${ruche.rucher?.id}}"
-						th:text="${ruche.rucher?.nom}"></a></td>
+					<td><a th:href="@{'/ruche/'+${ruche.id}}" th:text="${ruche.nom}"></a></td>
+					<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}" th:text="${ruche.essaim?.nom}"></a></td>
+					<td><a th:href="@{'/rucher/'+${ruche.rucher?.id}}" th:text="${ruche.rucher?.nom}"></a></td>
 					<td th:text="${dateAjoutRucher[rucheStat.index]}"></td>
 					<td th:text="${ruche.production}? #{oui} : #{non}"></td>
-					<td th:if="${session.voirInactif}"
-						th:text="${ruche.active}? #{oui} : #{non}"></td>
+					<td th:if="${session.voirInactif}" th:text="${ruche.active}? #{oui} : #{non}"></td>
 					<td th:text="${ruche.dateAcquisition}"></td>
-					<td class="num"
-						th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
-					<td class="num"
-						th:text="${listeEvenCadre[rucheStat.index]?.valeur}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
+					<td class="num" th:text="${listeEvenCadre[rucheStat.index]?.valeur}"></td>
 					<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
 					<td th:text="${ruche.type?.nom}"></td>
 					<td class="num" th:text="${nbHausses[rucheStat.index]}"></td>
 					<th:block th:if="${session.voirLatLon}">
-						<td class="num"
-							th:text="${#numbers.formatDecimal(ruche.latitude,1,5)}"></td>
-						<td class="num"
-							th:text="${#numbers.formatDecimal(ruche.longitude,1,5)}"></td>
+						<td class="num" th:text="${#numbers.formatDecimal(ruche.latitude,1,5)}"></td>
+						<td class="num" th:text="${#numbers.formatDecimal(ruche.longitude,1,5)}"></td>
 					</th:block>
 					<td th:text="${ruche.commentaire}"></td>
 				</tr>
@@ -156,4 +146,5 @@
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>
