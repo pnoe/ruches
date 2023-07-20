@@ -1,23 +1,31 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:replace="include :: jsChart"></script>
-<script th:src="@{/js/ruches/rucherMeteo.js}"></script>
-<script th:inline="javascript">
-	const longitude = /*[[${rucher.longitude}]]*/ null;
-	const latitude = /*[[${rucher.latitude}]]*/ null;
-	const openweathermapKey = /*[[${@environment.getProperty('openweathermap.key')}]]*/ null;
-	const urlPrefix='https://api.openweathermap.org/data/2.5/onecall';
-	document.addEventListener("DOMContentLoaded", () => {
-		rucherMeteo();
-	});
-</script>
-<style>
-	th {background-color:aliceblue;}
-	.wi {font-size: 20px;}
-</style>
-<link th:replace="include :: weather-icons"></link>
-<link th:replace="include :: weather-icons-wind"></link>
+	<script th:replace="include :: jsChart"></script>
+	<script th:src="@{/js/ruches/rucherMeteo.js}"></script>
+	<script th:inline="javascript">
+		const longitude = /*[[${rucher.longitude}]]*/ null;
+		const latitude = /*[[${rucher.latitude}]]*/ null;
+		const openweathermapKey = /*[[${@environment.getProperty('openweathermap.key')}]]*/ null;
+		const urlPrefix = 'https://api.openweathermap.org/data/2.5/onecall';
+		document.addEventListener("DOMContentLoaded", () => {
+			rucherMeteo();
+		});
+	</script>
+	<style>
+		th {
+			background-color: aliceblue;
+		}
+
+		.wi {
+			font-size: 20px;
+		}
+	</style>
+	<link th:replace="include :: weather-icons">
+	</link>
+	<link th:replace="include :: weather-icons-wind">
+	</link>
 </head>
 <body>
 	<nav th:replace="navbar::navbar"></nav>
@@ -29,138 +37,173 @@
 			<div class="col">
 				<h1 class="item">
 					<th:block th:text="#{meteo}+' '"></th:block>
-					<a th:href="@{'/rucher/'+${rucher.id}}"
-						th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+					<a th:href="@{'/rucher/'+${rucher.id}}" th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
 				</h1>
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid" id="accordion">
-		<h1 class="item" th:text="#{aujourdhui}"></h1>
-		<div>
-		<table class="table">
-			<thead>
-				<tr>
-					<th th:text="#{date}"></th>
-					<th th:text="#{temperature}"></th>
-					<th th:text="#{humidite}"></th>
-					<th th:text="#{rosee}"></th>
-					<th th:text="#{pression}"></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-				    <td id="date"></td>
-				    <td id="temperature"></td>
-				    <td id="humidite"></td>
-					<td id="rosee"></td>
-					<td id="pression"></td>
-				</tr>
-			</tbody>
-		</table>	
-			<table class="table">
-				<thead>
-					<tr>
-						<th th:text="#{tempRessentie}"></th>
-						<th th:text="#{uvi}"></th>
-						<th th:text="#{ventVitesse}"></th>
-						<th th:text="#{ventDirection}"></th>
-						<th th:text="#{ventRafales}"></th>	
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td id="tempRessentie"></td>
-						<td id="uvi"></td>
-						<td id="ventVitesse"></td>
-						<td id="ventDirection"></td>
-						<td id="ventRafales"></td>	
-					</tr>
-				</tbody>
-			</table>
-			<table class="table">
-				<thead>
-					<tr>
-						<th th:text="#{description}"></th>
-						<th th:text="#{nuages}"></th>
-						<th th:text="#{visibilite}"></th>
-						<th th:text="#{pluieVol1h}"></th>
-						<th th:text="#{neigeVol1h}"></th>
-						
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td id="description"></td>
-					    <td id="nuages"></td>
-						<td id="visibilite"></td>
-						<td id="pluieVol1h"></td>
-						<td id="neigeVol1h"></td>
-					</tr>
-				</tbody>
-			</table>		
-			<table class="table">
-				<thead>
-					<tr>	
-						<th th:text="#{leverSoleil}"></th>
-						<th th:text="#{coucherSoleil}"></th>
-						<th th:text="#{leverLune}"></th>
-						<th th:text="#{coucherLune}"></th>
-						<th th:text="#{phaseLune}"></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td id="leverSoleil"></td>
-						<td id="coucherSoleil"></td>
-						<td id="leverLune"></td>
-						<td id="coucherLune"></td>
-						<td id="phaseLune"></td>
-					</tr>
-				</tbody>
-			</table>
+	<div class="accordion" id="accordion">
+		<div class="accordion-item">
+			<h1 class="accordion-header">
+				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+					data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse0" th:text="#{aujourdhui}">
+				</button>
+			</h1>
+			<div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#accordion">
+				<div class="accordion-body">
+					<table class="table">
+						<thead>
+							<tr>
+								<th th:text="#{date}"></th>
+								<th th:text="#{temperature}"></th>
+								<th th:text="#{humidite}"></th>
+								<th th:text="#{rosee}"></th>
+								<th th:text="#{pression}"></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td id="date"></td>
+								<td id="temperature"></td>
+								<td id="humidite"></td>
+								<td id="rosee"></td>
+								<td id="pression"></td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="table">
+						<thead>
+							<tr>
+								<th th:text="#{tempRessentie}"></th>
+								<th th:text="#{uvi}"></th>
+								<th th:text="#{ventVitesse}"></th>
+								<th th:text="#{ventDirection}"></th>
+								<th th:text="#{ventRafales}"></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td id="tempRessentie"></td>
+								<td id="uvi"></td>
+								<td id="ventVitesse"></td>
+								<td id="ventDirection"></td>
+								<td id="ventRafales"></td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="table">
+						<thead>
+							<tr>
+								<th th:text="#{description}"></th>
+								<th th:text="#{nuages}"></th>
+								<th th:text="#{visibilite}"></th>
+								<th th:text="#{pluieVol1h}"></th>
+								<th th:text="#{neigeVol1h}"></th>
+
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td id="description"></td>
+								<td id="nuages"></td>
+								<td id="visibilite"></td>
+								<td id="pluieVol1h"></td>
+								<td id="neigeVol1h"></td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="table">
+						<thead>
+							<tr>
+								<th th:text="#{leverSoleil}"></th>
+								<th th:text="#{coucherSoleil}"></th>
+								<th th:text="#{leverLune}"></th>
+								<th th:text="#{coucherLune}"></th>
+								<th th:text="#{phaseLune}"></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td id="leverSoleil"></td>
+								<td id="coucherSoleil"></td>
+								<td id="leverLune"></td>
+								<td id="coucherLune"></td>
+								<td id="phaseLune"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
-		<h1 class="item" th:text="#{TempPress}"></h1>
-		<canvas id="tempGraphe"></canvas>
-		<h1 class="item" th:text="#{previsions}"></h1>
-		<div>
-			<table class="table table-bordered">
-				<thead>
-					<tr>	
-						<th th:text="#{date}"></th>
-						<th th:text="#{tempMin}"></th>
-						<th th:text="#{tempMax}"></th>
-						<th th:text="#{nuages}"></th>
-						<th th:text="#{pluie}"></th>
-						<th th:text="#{proba}"></th>
-						<th th:text="#{leverSoleil}"></th>
-						<th th:text="#{coucherSoleil}"></th>
-						<th th:text="#{leverLune}"></th>
-						<th th:text="#{coucherLune}"></th>
-						<th th:text="#{phaseLune}"></th>
-					</tr>
-				</thead>
-				<tbody id="previsions">
-				</tbody>
-			</table>
+		<div class="accordion-item">
+			<h1 class="accordion-header">
+				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+					data-bs-target="#collapse2" aria-expanded="true" aria-controls="collapse0" th:text="#{TempPress}">
+				</button>
+			</h1>
+			<div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#accordion">
+				<div class="accordion-body">
+					<canvas id="tempGraphe"></canvas>
+				</div>
+			</div>
 		</div>
-		<h1 class="item" th:text="#{historique}"></h1>
-		<div>
-			<table class="table table-bordered">
-				<thead>
-					<tr>	
-						<th th:text="#{date}"></th>
-						<th th:text="#{temperature}"></th>
-						<th th:text="#{nuages}"></th>
-						<th th:text="#{ventVitesse}"></th>
-						<th th:text="#{ventDirection}"></th>
-					</tr>
-				</thead>
-				<tbody id="historique">
-				</tbody>
-			</table>
+		<div class="accordion-item">
+			<h1 class="accordion-header">
+				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+					data-bs-target="#collapse3" aria-expanded="true" aria-controls="collapse0" th:text="#{previsions}">
+				</button>
+			</h1>
+			<div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#accordion">
+				<div class="accordion-body">
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th th:text="#{date}"></th>
+								<th th:text="#{tempMin}"></th>
+								<th th:text="#{tempMax}"></th>
+								<th th:text="#{nuages}"></th>
+								<th th:text="#{pluie}"></th>
+								<th th:text="#{proba}"></th>
+								<th th:text="#{leverSoleil}"></th>
+								<th th:text="#{coucherSoleil}"></th>
+								<th th:text="#{leverLune}"></th>
+								<th th:text="#{coucherLune}"></th>
+								<th th:text="#{phaseLune}"></th>
+							</tr>
+						</thead>
+						<tbody id="previsions">
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
+		<div class="accordion-item">
+			<h1 class="accordion-header">
+				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+					data-bs-target="#collapse4" aria-expanded="true" aria-controls="collapse0" th:text="#{historique}">
+				</button>
+			</h1>
+			<div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#accordion">
+				<div class="accordion-body">
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th th:text="#{date}"></th>
+								<th th:text="#{temperature}"></th>
+								<th th:text="#{nuages}"></th>
+								<th th:text="#{ventVitesse}"></th>
+								<th th:text="#{ventDirection}"></th>
+							</tr>
+						</thead>
+						<tbody id="historique">
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

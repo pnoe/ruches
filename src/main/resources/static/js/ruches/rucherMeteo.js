@@ -4,18 +4,11 @@
 function rucherMeteo() {
 	//	https://erikflowers.github.io/weather-icons/
 	//	https://openweathermap.org/api/one-call-api
-	$("#accordion").accordion({
-		active: 0,
-		collapsible: true,
-		heightStyle: 'content'
-	});
 	const optDateTime = { day: "numeric", month: "numeric", hour: "numeric", minute: "numeric" };
 	const optDate = { day: "numeric", month: "numeric" };
-	
 	const lang = navigator.language;
 	const digits1 = {maximumFractionDigits:1};
 	const digits2 = {maximumFractionDigits:2};
-	
 	const urlOneCall = urlPrefix + '?lat=' +
 		latitude + '&lon=' + longitude +
 		'&units=metric&lang=fr&APPID=' + openweathermapKey;
