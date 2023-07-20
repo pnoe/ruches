@@ -4,7 +4,7 @@
 function evenementListe(initDatatable) {
 	const cookieOpt = ";SameSite=Strict;path=" + window.location.pathname;
 	if (initDatatable) {
-		$('#evenements').DataTable({
+		new DataTable('#evenements', {
 			order: [[0, 'desc']],
 			dom: 'Blftip',
 			scrollX: true,
@@ -19,17 +19,17 @@ function evenementListe(initDatatable) {
 			]
 		});
 	}
-	$('#periode').on('change', function() {
-		if ($(this).val() !== '6') {
-			document.cookie = "p=" + $(this).val() + cookieOpt;
-			this.form.submit();
+	document.getElementById('periode').addEventListener("change", (event) => {
+		if (event.target.value !== '6') {
+			document.cookie = "p=" + event.target.value + cookieOpt;
+			event.target.form.submit();
 		}
 	});
 	$('#cal').on('click', function() {
 		if ($(this).parent().val() === '6') {
 			$(this).parent().dateRangePicker({
 				autoClose: true,
-				language : (window.navigator.language.substring(0, 2)),
+				language: (window.navigator.language.substring(0, 2)),
 				startOfWeek: 'monday',
 				separator: ' - ',
 				setValue: function(s) {
@@ -42,7 +42,7 @@ function evenementListe(initDatatable) {
 				window.document.cookie = "p=6" + cookieOpt;
 				window.document.cookie = "d1=" + d1 + cookieOpt;
 				window.document.cookie = "d2=" + d2 + cookieOpt;
-				window.document.cookie = "dx=" +  encodeURIComponent(obj.value) + cookieOpt;
+				window.document.cookie = "dx=" + encodeURIComponent(obj.value) + cookieOpt;
 				$('#date1').val(d1);
 				$('#date2').val(d2);
 				$('#datestext').val(obj.value);
