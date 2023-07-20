@@ -7,14 +7,14 @@ const notListEmpty = /*[[${not #lists.isEmpty(ruchers)}]]*/ null;
 const pnnonsupp = /*[[#{personnenonsupprimeerefrrucher}]]*/ null;
 const supppers = /*[[#{supprimercettepersonne}]]*/ null;
 document.addEventListener("DOMContentLoaded", () => {
-	$('.confirmation').on('click', function () {
+	document.getElementById('supprime').addEventListener("click", (event) => {
 		if(notListEmpty) {
 			alert(pnnonsupp);
-			return false;
+			event.preventDefault();
 		} else {
 			return confirm(supppers);
 		}
-    });
+	}, false);
 });
 </script>
 </head>
@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				<a th:href="@{'/personne/modifie/'+${personne.id}}"
 				 class="bi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
 			    <a id="supprime" th:href="@{'/personne/supprime/'+${personne.id}}"
-			      class="confirmation bi-trash" th:title="#{supprimer}" 
+			      class="bi-trash" th:title="#{supprimer}" 
 			      style="color:red" aria-hidden="true"></a>
 			</div>
 		</div>
