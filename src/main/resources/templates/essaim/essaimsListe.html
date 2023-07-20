@@ -11,7 +11,6 @@
 		const urlCommLot = /*[[@{/evenement/essaim/commentaireLot/}]]*/ null;
 		const selectEssTrt = /*[[#{selectessaimstraiter}]]*/ null;
 		document.addEventListener("DOMContentLoaded", () => {
-		// $(document).ready(function () {
 			const idTbl = '#essaims';
 			const table = new DataTable(idTbl, {
 				select: {style: 'multi+shift'},
@@ -23,7 +22,7 @@
 						extend: 'pdf', exportOptions: {columns: ':visible'},
 						action: function (e, dt, node, config) {
 							config.title = Essaims + " " + (new Date()).toLocaleDateString();
-							const inputSearch = $.trim($(`${idTbl}_filter label input`).val());
+							const inputSearch = table.search();
 							if (inputSearch.length !== 0) {
 								config.title += " <" + inputSearch + ">";
 							}
@@ -47,22 +46,27 @@
 					if (noms) {
 						/*[- on enlève la dernière virgule et met à jour l'url de traitement -]*/
 						noms = noms.substring(0, noms.length - 1);
-						$('#traitement').attr('href', urlTraitLot + noms);
-						$('#sucre').attr('href', urlSucreLot + noms);
-						$('#commentaire').attr('href', urlCommLot + noms);
+						document.getElementById('traitement').setAttribute('href', 
+							urlTraitLot + noms);
+						document.getElementById('sucre').setAttribute('href', 
+							urlSucreLot + noms);
+						document.getElementById('commentaire').setAttribute('href', 
+							urlCommLot + noms);
 					} else {
-						$('#traitement').attr('href', "#");
-						$('#sucre').attr('href', "#");
-						$('#commentaire').attr('href', "#");
+						document.getElementById('traitement').setAttribute('href', "#");
+						document.getElementById('sucre').setAttribute('href', "#");
+						document.getElementById('commentaire').setAttribute('href', "#");
 					}
 				}
 			}
 			table.on('select deselect', updateLinks);
-			$('.selection').on('click', function () {
-				if ($(this).attr("href") == "#") {
-					alert(selectEssTrt);
-				}
-			});
+			document.querySelectorAll('.selection').forEach(sel => {
+  				sel.addEventListener('click', event => {
+ 					if (event.target.getAttribute("href") === "#") {
+						alert(selectEssTrt);
+					}
+  				});
+  			});
 		});
 	</script>
 </head>

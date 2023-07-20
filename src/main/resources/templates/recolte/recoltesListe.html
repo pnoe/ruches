@@ -18,7 +18,7 @@
 					},
 					action: function (e, dt, node, config) {
 						config.title = Recoltes + " " + (new Date()).toLocaleDateString();
-						const inputSearch = $.trim($(`${idTbl}_filter label input`).val());
+						const inputSearch = table.search();
 						if (inputSearch.length !== 0) {
 							config.title += " <" + inputSearch + ">";
 						}

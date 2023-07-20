@@ -20,7 +20,7 @@
 						extend: 'pdf', exportOptions: {columns: ':visible'},
 						action: function (e, dt, node, config) {
 							config.title = Hausses + " " + (new Date()).toLocaleDateString();
-							const inputSearch = $.trim($(`${idTbl}_filter label input`).val());
+							const inputSearch = table.search();
 							if (inputSearch.length !== 0) {
 								config.title += " <" + inputSearch + ">";
 							}
@@ -42,19 +42,19 @@
 					});
 					if (noms) {
 						noms = noms.substring(0, noms.length - 1);
-						$('#commentaire').attr('href', urlCommLot + noms);
+						document.getElementById('commentaire').setAttribute('href', 
+							urlCommLot + noms);
 					} else {
-						$('#commentaire').attr('href', "#");
+						document.getElementById('commentaire').setAttribute('href', "#");
 					}
 				}
 			}
 			table.on('select deselect', updateLinks);
-			$('.selection').on('click', function () {
-				if ($(this).attr("href") == "#") {
+			document.getElementById('commentaire').addEventListener("click", (event) => {
+				if (event.target.getAttribute("href") === "#") {
 					alert(selectHaTrait);
 				}
 			});
-
 		});
 	</script>
 </head>
@@ -73,7 +73,7 @@
 				<a id="cree" th:href="@{/hausse/cree}" class="bi-plus-lg" th:title="#{ajouterHausse}"
 					aria-hidden="true"></a>
 				&nbsp;
-				<a id="commentaire" href="#" class="selection bi-chat-text" th:title="#{evenementsCommentaire}"
+				<a id="commentaire" href="#" class="bi-chat-text" th:title="#{evenementsCommentaire}"
 					aria-hidden="true"></a>
 			</div>
 		</div>
