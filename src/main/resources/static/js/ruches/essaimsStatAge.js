@@ -30,7 +30,7 @@ function graphe() {
 		useEndAsStart: false
 	};
 	const colors = interpolateColors(agesHisto.length, colorScale, colorRangeInfo);
-	let labels = [];
+	const labels = [];
 	for (let i = 0; i < agesHisto.length; i++) {
 		labels[i] = (i * pas) + '-' + ((i + 1) * pas) + 'mois';
 	}
@@ -61,10 +61,6 @@ function graphe() {
 							Max + ' ' + ageMaxJours + ' ' +
 							Moyenne + ' ' + ageMoyenJours + ' ' +
 							EcartType + ' ' + ageVarianceJours + ' jours',
-							// +
-							//EnCouveuse + ' ' + nbCouveuse + ' - ' +
-							//horsRucheTxt + ' ' + horsRuche,
-						color: 'black',
 						font: {
 							size: 14,
 						},

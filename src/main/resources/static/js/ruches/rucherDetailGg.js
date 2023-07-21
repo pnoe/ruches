@@ -164,7 +164,7 @@ function parcoursRedraw(redraw = false) {
 					return;
 				}
 				if (redraw) { parcours.setMap(null); }
-				let dist = distParcours;
+				const dist = distParcours;
 				distParcours = response.distParcours;
 				rucheParcours = response.rucheParcours;
 				newParcours();
