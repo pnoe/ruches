@@ -71,7 +71,6 @@ function graphe() {
 					title: {
 						display: true,
 						text: 'Nombre de reines Total ' + agesHisto.reduce((a, c) => a + c, 0),
-						color: 'black',
 						font: {
 							size: 12,
 						},
