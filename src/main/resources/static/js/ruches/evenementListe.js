@@ -31,10 +31,11 @@ function evenementListe(initDatatable) {
 				autoClose: true,
 				language: (window.navigator.language.substring(0, 2)),
 				startOfWeek: 'monday',
-				separator: ' - ',
+				separator: ' - '
+				/*,
 				setValue: function(s) {
 					$(this).parent().find("option:selected").text(s);
-				}
+				}*/
 			}).bind('datepicker-change', function(evt, obj) {
 				evt.stopPropagation();
 				const d1 = obj.date1.toISOString();
