@@ -15,6 +15,18 @@ import ooioo.ruches.rucher.Rucher;
 
 @RepositoryRestResource(collectionResourceRel = "evenementRepository")
 public interface EvenementRepository extends CrudRepository<Evenement, Long> {
+	
+	// Evénement dispersion concernant des essaims actifs
+	@Query(value = """
+			select e
+			  from Evenement e, Essaim s
+			  where
+			    e.type =  ooioo.ruches.evenement.TypeEvenement.ESSAIMDISPERSION
+			    and e.essaim.id = s.id
+			    and e.essaim.actif = true
+			  order by e.date desc
+			""")
+	List<Evenement> findEssaimActifDisperse();
 
 	@Query(value = """
 			select e

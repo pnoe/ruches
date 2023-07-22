@@ -1,6 +1,7 @@
 package ooioo.ruches.essaim;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -19,8 +20,26 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 
 	Collection<Nom> findAllProjectedBy();
 
-	// Liste ordonnée par nom d'essaims, des essaims, id et nom de la ruche associée et
-	//  id et nom de son rucher.
+	// Essaims inactifs sans événement dispersion
+	@Query(value = """
+			select essaim
+			  from Essaim essaim
+			  where essaim.actif = false
+			   and essaim.id not in 
+			     (select e.essaim.id 
+			       from Evenement e 
+			       where type = ooioo.ruches.evenement.TypeEvenement.ESSAIMDISPERSION)
+			""")
+	List<Essaim> findEssaimInactifPasDipserse();
+
+	/*
+	 * and essaim.id not in (select e.essaim.id from evenement e where type =
+	 * ooioo.ruches.evenement.TypeEvenement.ESSAIMDISPERSION)
+	 */
+
+	// Liste ordonnée par nom d'essaims, des essaims, id et nom de la ruche associée
+	// et
+	// id et nom de son rucher.
 	// https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#projections
 	@Query(value = """
 			select new ooioo.ruches.essaim.EssaimRucheRucher(essaim, ruche.id, ruche.nom, rucher.id, rucher.nom)
@@ -32,7 +51,7 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 	Iterable<EssaimRucheRucher> findEssaimActifRucheRucherOrderByNom();
 
 	// Liste ordonnée par nom d'essaims, des id et nom de la ruche associée et
-	//  id et nom de son rucher.
+	// id et nom de son rucher.
 	// https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#projections
 	@Query(value = """
 			select new ooioo.ruches.essaim.EssaimRucheRucher(essaim, ruche.id, ruche.nom, rucher.id, rucher.nom)
@@ -46,7 +65,8 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 	Iterable<IdNom> findAllProjectedIdNomByOrderByNom();
 
 	// Pour remérage dans formulaire dispersion
-	// liste des essaims actifs qui ne sont pas dans des ruches ordonnés par date décroissante
+	// liste des essaims actifs qui ne sont pas dans des ruches ordonnés par date
+	// décroissante
 	// spring boot 3 : "is true" remplacé par "= true"
 	@Query(value = """
 			select essaim.id, essaim.nom
@@ -76,6 +96,7 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 	Integer countEssaimsCreesDate(int date);
 
 	Essaim findFirstByOrderByDateAcquisition();
+
 	Essaim findFirstByOrderByDateAcquisitionDesc();
 
 	@Query(value = """
