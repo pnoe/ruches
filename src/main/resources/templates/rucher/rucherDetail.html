@@ -125,7 +125,7 @@
 						<td><a th:href="@{'/rucher/dists/'+${rucher.id}}"
 						  th:text="${rucher.depot}?'0.000':${#numbers.formatDecimal(dist,1,3)}"></a>
 						</td>
-						<td th:text="${temps}"></td>
+						<td th:text="${#temporals.format(temps, 'HH:mm')}"></td>
 					</th:block>	
 					<td th:text="${rucher.ressource}"></td>
 					<td th:text="${rucher.commentaire}"></td>

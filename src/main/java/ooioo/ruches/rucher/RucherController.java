@@ -2,7 +2,9 @@ package ooioo.ruches.rucher;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -100,7 +102,8 @@ public class RucherController {
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
 			List<Float> dist = new ArrayList<>();
-			List<String> temps = new ArrayList<>();
+			// List<String> temps = new ArrayList<>();
+			List<LocalTime> temps = new ArrayList<>();
 			List<Double> distOiseau = new ArrayList<>();
 			List<Rucher> rrs = new ArrayList<>();
 			List<Rucher> ruchers = rucherRepository.findByActifTrue();
@@ -116,11 +119,10 @@ public class RucherController {
 						: drRepo.findByRucherStartAndRucherEnd(rr, rucher);
 				if (dr == null) {
 					dist.add(0f);
-					temps.add("");
+					temps.add(null);
 				} else {
 					dist.add(dr.getDist() / 1000f);
-					int t = dr.getTemps() / 60;
-					temps.add(((t == 0) ? "" : t + "h ") + dr.getTemps() % 60 + "min");
+					temps.add(LocalTime.MIN.plus(Duration.ofMinutes(dr.getTemps())));
 				}
 				double diametreTerre = ((rr.getAltitude() == null) ? 0 : rr.getAltitude())
 						+ 2 * Utils.rTerreLat(rucher.getLatitude());
@@ -401,8 +403,7 @@ public class RucherController {
 					// distance en km
 					model.addAttribute("dist", dr.getDist() / 1000.);
 					// temps en h et min
-					int t = dr.getTemps() / 60;
-					model.addAttribute("temps", ((t == 0) ? "" : t + "h ") + dr.getTemps() % 60 + "min");
+					model.addAttribute("temps", LocalTime.MIN.plus(Duration.ofMinutes(dr.getTemps())));
 				}
 			}
 			model.addAttribute("nbHausses", nbHausses);
