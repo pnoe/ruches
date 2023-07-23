@@ -2,6 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+	<script th:inline="javascript">
+		document.addEventListener("DOMContentLoaded", () => {
+			new DataTable('#distsRuchers', {
+				paging: false,
+				searching: false
+			});
+		});
+	</script>
 </head>
 
 <body>
@@ -13,20 +21,20 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<th:block th:text="#{distance}+' '"></th:block>
+					<th:block th:text="#{Distances}+' '"></th:block>
 					<a th:href="@{'/rucher/'+${rucher.id}}" th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
 				</h1>
 			</div>
 		</div>
 	</div>
 	<div class="container-fluid " id="ajouterRetirerRuches">
-		<table class="table table-bordered table-striped" id="retraitRuches">
+		<table class="table table-bordered table-striped" id="distsRuchers">
 			<thead>
 				<tr>
 					<th th:text="#{rucher}"></th>
-					<th th:text="#{distance}"></th>
-					<th th:text="#{temps}"></th>
-					<th th:text="#{distance}"></th>
+					<th th:text="#{DistanceV}"></th>
+					<th th:text="#{TempsV}"></th>
+					<th th:text="#{DistanceO}"></th>
 				</tr>
 			</thead>
 			<tbody>
