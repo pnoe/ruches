@@ -103,8 +103,10 @@
 					<th th:text="#{latitude}"></th>
 					<th th:text="#{longitude}"></th>
 					<th th:text="#{altitude}"></th>
-					<th th:text="#{Distance}"></th>
-					<th th:text="#{temps}"></th>
+					<th:block th:if="${rucher.depot or dist != null}">
+						<th th:text="#{Distance}"></th>
+						<th th:text="#{temps}"></th>
+					</th:block>
 					<th th:text="#{ressource}"></th>
 					<th th:text="#{commentaire}"></th>
 				</tr>
@@ -119,10 +121,12 @@
 							th:text="${#numbers.formatDecimal(rucher.latitude,1,4)}"></a></td>
 					<td class="num" th:text="${#numbers.formatDecimal(rucher.longitude,1,4)}"></td>
 					<td class="num" th:text="${rucher.altitude}"></td>
-					<td><a th:href="@{'/rucher/dists/'+${rucher.id}}"
-					  th:text="${rucher.depot}?'0.000':${#numbers.formatDecimal(dist,1,3)}"></a>
-					</td>
-					<td th:text="${temps}"></td>
+					<th:block th:if="${rucher.depot or dist != null}">
+						<td><a th:href="@{'/rucher/dists/'+${rucher.id}}"
+						  th:text="${rucher.depot}?'0.000':${#numbers.formatDecimal(dist,1,3)}"></a>
+						</td>
+						<td th:text="${temps}"></td>
+					</th:block>	
 					<td th:text="${rucher.ressource}"></td>
 					<td th:text="${rucher.commentaire}"></td>
 				</tr>

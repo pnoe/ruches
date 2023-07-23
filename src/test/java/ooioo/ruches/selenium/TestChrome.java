@@ -672,5 +672,21 @@ public class TestChrome {
 		// La page de doc contient "LibreOffice"
 		assertTrue(driver.getPageSource().contains("LibreOffice"));
 	}
+	
+	@Test
+	@Order(48)
+	@DisplayName("Rucher dépot distances ruchers")
+	void distsDepot() {
+		if (depotId == null) {
+			depotId = TestUtils.getDepotId(driver, baseUrl);
+		}
+		if ("".equals(depotId)) {
+			fail("Api rest recherche de l'id du dépôt");
+		} else {
+			driver.get(baseUrl + "rucher/dists/" + depotId);
+			// La talbe d'id "distsRuchers" est affichée
+			assertEquals("table", driver.findElement(By.id("distsRuchers")).getTagName());
+		}
+	}
 
 }

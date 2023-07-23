@@ -91,8 +91,8 @@ public class RucherController {
 	private float distMaxRuche;
 
 	/**
-	 * Affiche les distances et temps de déplacement en voiture du rucher rucherId aux autres ruchers actifs.
-	 * Affiche aussi les distances à vol d'oiseau.
+	 * Affiche les distances et temps de déplacement en voiture du rucher rucherId
+	 * aux autres ruchers actifs. Affiche aussi les distances à vol d'oiseau.
 	 */
 	@GetMapping("/dists/{rucherId}")
 	public String dists(Model model, @PathVariable long rucherId) {
@@ -109,7 +109,7 @@ public class RucherController {
 					continue;
 				}
 				rrs.add(rr);
-				// lecture en base de la distance et du temps pour aller 
+				// lecture en base de la distance et du temps pour aller
 				// à ce rucher.
 				DistRucher dr = (rr.getId().intValue() > rucher.getId().intValue())
 						? drRepo.findByRucherStartAndRucherEnd(rucher, rr)
@@ -120,22 +120,18 @@ public class RucherController {
 				} else {
 					dist.add(dr.getDist() / 1000f);
 					int t = dr.getTemps() / 60;
-					temps.add(
-							((t == 0) ? "" : t + "h ") + dr.getTemps() % 60 + "min"
-					);
-					double diametreTerre = ((rr.getAltitude() == null) ? 0 : rr.getAltitude()) +
-							2 * Utils.rTerreLat(rucher.getLatitude());
-					distOiseau.add(
-							Utils.distance(diametreTerre, rr.getLatitude(),rucher.getLatitude(), 
-									rr.getLongitude(), rucher.getLongitude()) / 1000f
-							);
+					temps.add(((t == 0) ? "" : t + "h ") + dr.getTemps() % 60 + "min");
 				}
-				model.addAttribute("dist", dist);
-				model.addAttribute("temps", temps);
-				model.addAttribute("distOiseau", distOiseau);
-				model.addAttribute("rucher", rucher);
-				model.addAttribute("rrs", rrs);
+				double diametreTerre = ((rr.getAltitude() == null) ? 0 : rr.getAltitude())
+						+ 2 * Utils.rTerreLat(rucher.getLatitude());
+				distOiseau.add(Utils.distance(diametreTerre, rr.getLatitude(), rucher.getLatitude(), rr.getLongitude(),
+						rucher.getLongitude()) / 1000f);
 			}
+			model.addAttribute("dist", dist);
+			model.addAttribute("temps", temps);
+			model.addAttribute("distOiseau", distOiseau);
+			model.addAttribute("rucher", rucher);
+			model.addAttribute("rrs", rrs);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
