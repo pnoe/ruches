@@ -65,6 +65,7 @@ public class RucherControllerMAJ {
 	 * @param histoAll les transhumances de tous les ruchers
 	 */
 	private void majEve(List<Transhumance> histoAll) {
+		int i = 0;
 		for (Transhumance tr : histoAll) {
 			if (tr.type()) { // true : Ajout dans rucher
 				Optional<Evenement> eveOpt = evenementRepository.findById(tr.eveid());
@@ -75,13 +76,14 @@ public class RucherControllerMAJ {
 					Rucher ruTr = rucherRepository.findByNom(tr.destProv().iterator().next());
 					if (ruTr != null) {
 						// On met dans la valeur de l'événmeent ajout, le nom du rucher si différent
-						//   de celui trouvé par l'analyse des transhumances
-						if (!eve.getValeur().equals(ruTr.getNom())) {
-							// mémo val avant save eve pour log
-							String val = eve.getValeur();
+						//   de celui trouvé par l'analyse des transhumances.
+						// Mémo eve.getValeur avant save eve pour log.
+						String val = eve.getValeur();
+						if (val == null || !val.equals(ruTr.getNom())) {
 							eve.setValeur(ruTr.getNom());
 							evenementRepository.save(eve);
 							logger.info("{} provenance {} corrigée", eve, val);
+							i++;
 						}
 					}
 				} else {
@@ -89,6 +91,7 @@ public class RucherControllerMAJ {
 				}
 			}
 		}
+		logger.info("{} provenance(s) corrigée(s)", i);
 	}
 
 }
