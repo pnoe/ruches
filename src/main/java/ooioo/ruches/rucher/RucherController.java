@@ -91,6 +91,61 @@ public class RucherController {
 	private float distMaxRuche;
 
 	/**
+	 * Affiche les distances et temps de déplacement en voiture du rucher rucherId aux autres ruchers actifs.
+	 * Affiche aussi les distances à vol d'oiseau.
+	 */
+	@GetMapping("/dists/{rucherId}")
+	public String dists(Model model, @PathVariable long rucherId) {
+		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
+		if (rucherOpt.isPresent()) {
+			Rucher rucher = rucherOpt.get();
+			List<Float> dist = new ArrayList<>();
+			List<String> temps = new ArrayList<>();
+			List<Double> distOiseau = new ArrayList<>();
+			List<Rucher> rrs = new ArrayList<>();
+			List<Rucher> ruchers = rucherRepository.findByActifTrue();
+			for (Rucher rr : ruchers) {
+				if (rr.getId().equals(rucherId)) {
+					continue;
+				}
+				rrs.add(rr);
+				// lecture en base de la distance et du temps pour aller 
+				// à ce rucher.
+				DistRucher dr = (rr.getId().intValue() > rucher.getId().intValue())
+						? drRepo.findByRucherStartAndRucherEnd(rucher, rr)
+						: drRepo.findByRucherStartAndRucherEnd(rr, rucher);
+				if (dr == null) {
+					dist.add(0f);
+					temps.add("");
+				} else {
+					dist.add(dr.getDist() / 1000f);
+					int t = dr.getTemps() / 60;
+					temps.add(
+							((t == 0) ? "" : t + "h ") + dr.getTemps() % 60 + "min"
+					);
+					double diametreTerre = ((rr.getAltitude() == null) ? 0 : rr.getAltitude()) +
+							2 * Utils.rTerreLat(rucher.getLatitude());
+					distOiseau.add(
+							Utils.distance(diametreTerre, rr.getLatitude(),rucher.getLatitude(), 
+									rr.getLongitude(), rucher.getLongitude()) / 1000f
+							);
+				}
+				model.addAttribute("dist", dist);
+				model.addAttribute("temps", temps);
+				model.addAttribute("distOiseau", distOiseau);
+				model.addAttribute("rucher", rucher);
+				model.addAttribute("rrs", rrs);
+			}
+		} else {
+			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
+			model.addAttribute(Const.MESSAGE,
+					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
+			return Const.INDEX;
+		}
+		return "rucher/rucherDists";
+	}
+
+	/**
 	 * Transhumances d'un rucher.
 	 *
 	 * Les événements sont utilisés par date décroissante : du plus récent au plus

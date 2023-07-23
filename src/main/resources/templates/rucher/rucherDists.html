@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+</head>
+
+<body>
+	<nav th:replace="navbar::navbar"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					<th:block th:text="#{distance}+' '"></th:block>
+					<a th:href="@{'/rucher/'+${rucher.id}}" th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+				</h1>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid " id="ajouterRetirerRuches">
+		<table class="table table-bordered table-striped" id="retraitRuches">
+			<thead>
+				<tr>
+					<th th:text="#{rucher}"></th>
+					<th th:text="#{distance}"></th>
+					<th th:text="#{temps}"></th>
+					<th th:text="#{distance}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="rr : ${rrs}">
+					<td><a th:text="${rr.nom}" th:href="@{'/rucher/'+${rr.id}}"></td>
+					<td th:text="${#numbers.formatDecimal(dist[rrStat.index],1,3)}"></td>
+					<td th:text="${temps[rrStat.index]}"></td>
+					<td th:text="${#numbers.formatDecimal(distOiseau[rrStat.index],1,3)}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer th:replace="include::footer"></footer>
+</body>
+
+</html>

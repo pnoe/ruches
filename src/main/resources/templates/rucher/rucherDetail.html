@@ -122,7 +122,10 @@
 					<td class="num" th:text="${#numbers.formatDecimal(rucher.longitude,1,4)}"></td>
 					<td class="num" th:text="${rucher.altitude}"></td>
 					<th:block th:if="!${rucher.depot} and (${dist} != null)">
-						<td th:text="${#numbers.formatDecimal(dist,1,3)}"></td>
+						<!-- <td th:text="${#numbers.formatDecimal(dist,1,3)}"></td> -->
+						<td><a th:href="@{'/rucher/dists/'+${rucher.id}}"
+						  th:text="${#numbers.formatDecimal(dist,1,3)}"></a>
+						</td>
 						<td th:text="${temps}"></td>
 					</th:block>
 					<td th:text="${rucher.ressource}"></td>

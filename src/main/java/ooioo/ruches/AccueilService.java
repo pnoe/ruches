@@ -67,9 +67,9 @@ public class AccueilService {
 	 * Id. Ne stocke pas la distance d'un rucher à lui même. En cas d'erreur
 	 * renvoyée par l'api ign met 0 comme distance et temps de parcours. Pour
 	 * éventuel intégration dans un calcul de distances parcourues pour les
-	 * transhumances ou affichage brut du tableau Si appel /dist?reset=true toutes
+	 * transhumances ou affichage brut du tableau. Si appel /dist?reset=true toutes
 	 * les distances sont effacées puis recalculées, si /dist seules les distances
-	 * non enregistées sont recalculées
+	 * non enregistées sont recalculées.
 	 */
 	void dist(boolean reset) {
 		// https://geoservices.ign.fr/documentation/services/api-et-services-ogc/itineraires/documentation-du-service-du-calcul
