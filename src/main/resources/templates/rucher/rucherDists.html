@@ -6,7 +6,8 @@
 		document.addEventListener("DOMContentLoaded", () => {
 			new DataTable('#distsRuchers', {
 				paging: false,
-				searching: false
+				searching: false,
+				scrollX: true
 			});
 		});
 	</script>
@@ -27,8 +28,8 @@
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid " id="ajouterRetirerRuches">
-		<table class="table table-bordered table-striped" id="distsRuchers">
+	<div class="container-fluid">
+		<table class="table table-bordered table-striped table-sm" id="distsRuchers">
 			<thead>
 				<tr>
 					<th th:text="#{rucher}"></th>
