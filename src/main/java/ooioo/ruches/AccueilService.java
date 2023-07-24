@@ -103,8 +103,9 @@ public class AccueilService {
 						dr.setDist(Math.round(result.distance()));
 						dr.setTemps(Math.round(result.duration()));
 					} catch (HttpClientErrorException | HttpServerErrorException e) {
-						// erreur 4xx ou 5xx
-						logger.error(e.getMessage());
+						// erreur 4xx ou 5xx, on n'enregistre pas la distance et le temps
+						logger.error("{} => {} - {}", r1.getNom(), r2.getNom(), e.getMessage());
+						continue;
 					}
 					drRepo.save(dr);
 					logger.info("{} => {}, distance {}m et temps {}min, enregistrés", r1.getNom(), r2.getNom(),
