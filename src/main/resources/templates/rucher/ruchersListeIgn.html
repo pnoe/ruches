@@ -17,9 +17,7 @@
 	const urlruches = /*[[@{/}]]*/ null;
 	const _csrf_token = /*[[${_csrf.token}]]*/ null;
 	const ignCarteLiscense = /*[[${ignCarteLiscense}]]*/ null;
-	window.onload = function () {
-		rucherListeIgn(true); 			
-	}
+	window.addEventListener('load', () => rucherListeIgn(true));
 </script>
 <script th:replace="include :: cssol"></script>
 <script th:replace="include :: cssGpPluginOpenLayers"></script>

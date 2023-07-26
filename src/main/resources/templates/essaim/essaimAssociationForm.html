@@ -11,12 +11,12 @@
 	const rucherucherid = /*[[${ruche.rucher?.id}]]*/ null;
 	const ruchesourcerucherid = /*[[${rucheSource?.rucher?.id}]]*/ null;
 	document.addEventListener('DOMContentLoaded', () => {
-		$.validator.addMethod( "greaterThanEqual", function( value, element, param ) {
-			return ($('#swapPositions').is(":checked") &&
+		$.validator.addMethod( 'greaterThanEqual', function( value, element, param ) {
+			return ($('#swapPositions').is(':checked') &&
 				(rucherucherid != ruchesourcerucherid))
 			? (Date.parse(value) > Date.parse(param)) : true;
 		}, doitEtreSupA + ' {0}');
-		$("#evenementForm").validate({
+		$('#evenementForm').validate({
 			errorClass: 'erreur-form',
 			errorPlacement: function(error, element) {
 			    error.insertBefore(element.closest('div'));
@@ -36,7 +36,7 @@
 			minTime: false
 		});
 		function swapChange() {
-			const isChk =  $('#swapPositions').is(":checked") &&
+			const isChk =  $('#swapPositions').is(':checked') &&
 				(rucherucherid != ruchesourcerucherid);
 			$('#date').datetimepicker({
 				minDate: isChk ? dateFirst : false,

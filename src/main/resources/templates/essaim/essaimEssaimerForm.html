@@ -11,13 +11,13 @@
 	const essaimNoms = /*[[${essaimNoms}]]*/null;
 	const nomexiste = /*[[#{nomexiste}]]*/null;
 	document.addEventListener('DOMContentLoaded', () => {
-		$("#nom").focus();
-		$("#commentaire").val(Essaimage + ' ' + essaimNom);
-		$("#nom").val(essaimNom + suffix);
-		jQuery.validator.addMethod("nomExiste", function(value) {   
+		$('#nom').focus();
+		$('#commentaire').val(Essaimage + ' ' + essaimNom);
+		$('#nom').val(essaimNom + suffix);
+		jQuery.validator.addMethod('nomExiste', function(value) {   
     		return $.inArray(value, essaimNoms) == -1;
 			}, nomexiste);
-		$("#essaimeForm").validate({
+		$('#essaimeForm').validate({
 			errorClass: 'erreur-form',
 			errorPlacement: function(error, element) {
 			    error.insertBefore(element.closest('div'));

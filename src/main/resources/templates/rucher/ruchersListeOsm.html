@@ -16,9 +16,7 @@
 	const pleinecrantxt = /*[[#{pleinecran}]]*/ null;
 	const urlruches = /*[[@{/}]]*/ null;
 	const _csrf_token = /*[[${_csrf.token}]]*/ null;
-	window.onload = function () {
-		rucherListeIgn(false); 			
-	}
+	document.addEventListener('DOMContentLoaded', () => rucherListeIgn(false));
 </script>
 <script th:replace="include :: cssol"></script>
 <script th:replace="include :: cssGpPluginOpenLayers"></script>

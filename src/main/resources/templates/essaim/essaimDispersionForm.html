@@ -10,8 +10,8 @@
 	const dateFirst = /*[[${dateFirst}]]*/null;
 	const timeFirst = /*[[${timeFirst}]]*/null;
 	document.addEventListener('DOMContentLoaded', () => {
-		$.validator.addMethod( "greaterThanEqual", function( value, element, param ) {
-			return $('#depot').is(":checked") ? (Date.parse(value) > Date.parse(param)) : true;
+		$.validator.addMethod( 'greaterThanEqual', function( value, element, param ) {
+			return $('#depot').is(':checked') ? (Date.parse(value) > Date.parse(param)) : true;
 		}, doitEtreSupA + ' {0}');
 	    $('.bi-question-lg').popover({
 	        html: true
@@ -19,8 +19,8 @@
 	    $('.popover-dismiss').popover({
 	        trigger: 'focus'
 	    });
-		$("#commentaire").focus();
-		$("#evenementForm").validate({
+		$('#commentaire').focus();
+		$('#evenementForm').validate({
 			errorClass: 'erreur-form',
 			errorPlacement: function(error, element) {
 			    error.insertBefore(element.closest('div'));

@@ -21,10 +21,10 @@
 					{
 						extend: 'pdf', exportOptions: {columns: ':visible'},
 						action: function (e, dt, node, config) {
-							config.title = Essaims + " " + (new Date()).toLocaleDateString();
+							config.title = Essaims + ' ' + (new Date()).toLocaleDateString();
 							const inputSearch = table.search();
 							if (inputSearch.length !== 0) {
-								config.title += " <" + inputSearch + ">";
+								config.title += ' <' + inputSearch + '>';
 							}
 							$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, node, config);
 						},
@@ -40,8 +40,8 @@
 					table.rows({selected: true}).data().pluck(0).each(function (value, index) {
 						const a = document.createElement('template');
 						a.innerHTML = value;
-						noms += a.content.children[0].getAttribute("href").
-							substring(a.content.children[0].getAttribute("href").lastIndexOf("/") + 1) + ",";
+						noms += a.content.children[0].getAttribute('href').
+							substring(a.content.children[0].getAttribute('href').lastIndexOf('/') + 1) + ',';
 					});
 					if (noms) {
 						/*[- on enlève la dernière virgule et met à jour l'url de traitement -]*/
@@ -62,7 +62,7 @@
 			table.on('select deselect', updateLinks);
 			document.querySelectorAll('.selection').forEach(sel => {
   				sel.addEventListener('click', event => {
- 					if (event.target.getAttribute("href") === "#") {
+ 					if (event.target.getAttribute('href') === "#") {
 						alert(selectEssTrt);
 					}
   				});

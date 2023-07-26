@@ -39,10 +39,8 @@
 		const dessinEnregistretxt = /*[[#{dessinEnregistre}]]*/ null;
 		const ignCarteLiscense = /*[[${ignCarteLiscense}]]*/ null;
 		const distRuchesOk = /*[[#{distRuchesOk}]]*/ null;
-		const distMaxRuche = /*[[${distMaxRuche}]]*/ null;
-		window.onload = function () {
-			rucherDetail(true);
-		}
+		const distMaxRuche = /*[[${distMaxRuche}]]*/ null;	
+		window.addEventListener('load', () => rucherDetail(true));
 	</script>
 	<script th:replace="include :: cssol"></script>
 	<script th:replace="include :: cssGpPluginOpenLayers"></script>

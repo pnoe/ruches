@@ -7,12 +7,12 @@
 <script th:replace="include ::  localejsdatetimepicker"></script>
 <script>
 	document.addEventListener('DOMContentLoaded', () => {
-		$("#commentaire").focus();
+		$('#commentaire').focus();
 		$('#finTraitement').on('click', function() {
 			if ($(this).is(':checked')) {
-				$('#typeEvenement').attr('value', "ESSAIMTRAITEMENTFIN");
+				$('#typeEvenement').attr('value', 'ESSAIMTRAITEMENTFIN');
 			} else {
-				$('#typeEvenement').attr('value', "ESSAIMTRAITEMENT");
+				$('#typeEvenement').attr('value', 'ESSAIMTRAITEMENT');
 			}
 		});
 		$("#evenementForm").validate({

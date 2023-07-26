@@ -39,9 +39,7 @@
 	const dessinEnregistretxt = /*[[#{dessinEnregistre}]]*/ null;
 	const distRuchesOk = /*[[#{distRuchesOk}]]*/ null;
 	const distMaxRuche = /*[[${distMaxRuche}]]*/ null;
-	window.onload = function () {
- 		rucherDetail(false);
-	}
+	document.addEventListener('DOMContentLoaded', () => rucherDetail(false));
 </script>
 <script th:replace="include :: cssol"></script>
 <script th:replace="include :: cssGpPluginOpenLayers"></script>

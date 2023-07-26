@@ -8,19 +8,19 @@
 <script th:inline="javascript">
 	const complet = /*[[${complet}]]*/ null;
 	document.addEventListener('DOMContentLoaded', () => {
-		if (complet === "true") {
+		if (complet === 'true') {
 			$('#showruches').prop('checked', true);
-			$(".ruches").show();
+			$('.ruches').show();
 		}
 		$('#showruches').on('click', function () {
-			if($(this).is(":checked")) {
-				$(".ruches").show();
+			if($(this).is(':checked')) {
+				$('.ruches').show();
 			} else {
-				$(".ruches").hide();
+				$('.ruches').hide();
 			}
 		});
-		const form = $("#evenementForm");
-		const typ = $("#type");
+		const form = $('#evenementForm');
+		const typ = $('#type');
 		form.validate({
 			errorClass: 'erreur-form',
 			errorPlacement: function(error, element) {
