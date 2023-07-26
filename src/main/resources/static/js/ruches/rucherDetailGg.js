@@ -1,10 +1,11 @@
 /* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals google, exportGpx, exportKml,
-	rucheParcours, distParcours, rucher, rucherMapZoom, longitudeCentre, latitudeCentre,
+	rucheParcours:writable, distParcours:writable, rucher, rucherMapZoom, longitudeCentre, latitudeCentre,
 	 rayonsButinage, distButinage, urlruches, nomHausses, essaimtxt, pasdessaimtxt,
 	 ruchetxt, haussestxt, pasdehaussetxt, ruches, ruchestxt, distancedeparcourstxt,
 	 entreetxt, _csrf_token */
-"use strict";
+/* exported initMap */
+'use strict';
 let parcours;
 let map;
 const markersRuche = [];
@@ -32,7 +33,7 @@ function initMap() {
 			},
 			map: map,
 			icon: {
-				path: "M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0",
+				path: 'M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0',
 				fillColor: (ruches[i].essaim == null) ? '#FE00FE' : ruches[i].essaim.reineCouleurMarquage,
 				fillOpacity: 0.5,
 				anchor: new google.maps.Point(0, 0),
@@ -55,7 +56,7 @@ function initMap() {
 		google.maps.event.addListener(markerRuche, 'click', function() {
 			infowindow.setContent(
 				'<a href="' + urlruches + 'ruche/' + markerRuche.rucheid + '">' +
-				ruchetxt + ' ' + markerRuche.label.text + "</a><br/>" +
+				ruchetxt + ' ' + markerRuche.label.text + '</a><br/>' +
 				((markerRuche.essaimnom === '') ? pasdessaimtxt :
 					'<a href="' + urlruches + 'essaim/' + markerRuche.essaimid + '">' +
 					essaimtxt + ' ' + markerRuche.essaimnom + '</a>') +
@@ -74,7 +75,7 @@ function initMap() {
 		},
 		map: map,
 		icon: {
-			path: "M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0",
+			path: 'M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0',
 			fillColor: '#FFFFFF',
 			fillOpacity: 0.5,
 			anchor: new google.maps.Point(0, 0),
@@ -100,10 +101,10 @@ function initMap() {
 	newParcours();
 	for (const r of rayonsButinage) {
 		circlesButinage.push(new google.maps.Circle({
-			strokeColor: "#0000FF",
+			strokeColor: '#0000FF',
 			strokeOpacity: 0.8,
 			strokeWeight: 1,
-			fillColor: "#0000FF",
+			fillColor: '#0000FF',
 			fillOpacity: 0.02,
 			map,
 			center: {
@@ -125,7 +126,7 @@ function sauveRucherPosition(e) {
 	req.onload = function() {
 		if (req.readyState === 4) {
 			if (req.status === 200) {
-				if (req.responseText !== "OK") {
+				if (req.responseText !== 'OK') {
 					alert(req.responseText);
 				} else {
 					parcours.setMap(null);
@@ -193,7 +194,7 @@ function sauveRuchePosition(e, markerRuche) {
 	req.onload = function() {
 		if (req.readyState === 4) {
 			if (req.status === 200) {
-				if (req.responseText !== "OK") {
+				if (req.responseText !== 'OK') {
 					alert(req.responseText);
 				} else {
 					parcours.setMap(null);
@@ -222,7 +223,7 @@ function newParcours() {
 	parcours.setMap(map);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
 	$('#dragMarker').change(function() {
 		for (const markersR of markersRuche) {
 			markersR.setDraggable(!this.checked);
@@ -242,9 +243,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	$('#parcours-redraw').click(function() {
 		parcoursRedraw(true);
 	});
-	$("#searchtext").keyup(function(event) {
+	$('#searchtext').keyup(function(event) {
 		if (event.keyCode === 13) {
-			let searchtext = $("#searchtext").val().toUpperCase();
+			let searchtext = $('#searchtext').val().toUpperCase();
 			for (const marker of markersRuche) {
 				if ((marker.label.text.toUpperCase() === searchtext) ||
 					(marker.label.text.toUpperCase() === '*' + searchtext) ||
@@ -254,7 +255,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			}
 		}
 	});
-	$('#cercles').attr("title", distButinage + ' ' + rayonsButinage.join(', ') + ' m');
+	$('#cercles').attr('title', distButinage + ' ' + rayonsButinage.join(', ') + ' m');
 	$('#cercles').click(function() {
 		const visi = !circlesButinage[0].getVisible();
 		for (const c of circlesButinage) {

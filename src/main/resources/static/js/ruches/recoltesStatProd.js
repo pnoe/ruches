@@ -1,8 +1,9 @@
 /* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals Chart, Hausses, Pots, HaussesEssaim,
-      poidsMielHausses, poidsMielPots, debutAnnee, nbIEssaims
+	  poidsMielHausses, poidsMielPots, debutAnnee, nbIEssaims
 */
-"use strict";
+/* exported grapheRecolte */
+'use strict';
 function grapheRecolte() {
 	const labels = [];
 	for (let i = 0; i < poidsMielHausses.length; i++) {
@@ -41,20 +42,20 @@ function grapheRecolte() {
 				},
 			},
 			scales: {
-					ypoids: {
-						type: 'linear',
-						display: 'auto',
-						position: 'left'
-					},
-					ypoidsessaim: {
-						type: 'linear',
-						display: 'auto',
-						position: 'right',
-						grid: {
-          					drawOnChartArea: false
-        				}
+				ypoids: {
+					type: 'linear',
+					display: 'auto',
+					position: 'left'
+				},
+				ypoidsessaim: {
+					type: 'linear',
+					display: 'auto',
+					position: 'right',
+					grid: {
+						drawOnChartArea: false
 					}
 				}
+			}
 		},
 	});
 }

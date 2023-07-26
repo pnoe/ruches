@@ -1,12 +1,13 @@
 /* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals ol, domtoimage, jsPDF, exportGpx, exportKml,
-   rucheParcours, distParcours, longitudeCentre, latitudeCentre, rayonsButinage, cercles, distButinage, ruches, 
+   rucheParcours:writable, distParcours:writable, longitudeCentre, latitudeCentre, rayonsButinage, cercles, distButinage, ruches, 
    rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
    ruchetxt, lesHausses, pasdehaussetxt, parcourstxt, ignCarteLiscense,
    parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token, dessinEnregistretxt,
    distRuchesOk, distMaxRuche, geoloc
    */
-"use strict";
+/* exported rucherDetail jsPDF */
+'use strict';
 
 let iconFeatureEntree;
 let drawLayer;
@@ -236,7 +237,7 @@ function rucherDetail(ign) {
 		req.onload = function() {
 			if (req.readyState === 4) {
 				if (req.status === 200) {
-					if (req.responseText !== "OK") {
+					if (req.responseText !== 'OK') {
 						alert(req.responseText);
 					} else {
 						alert(dessinEnregistretxt);
@@ -297,24 +298,24 @@ function rucherDetail(ign) {
 		});
 		layersMap.insertAt(0, olAgriLayer);
 		layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
-			layer: "CADASTRALPARCELS.PARCELS",
+			layer: 'CADASTRALPARCELS.PARCELS',
 			olParams: {
 				visible: false
 			}
 		}));
 		if (ignCarteLiscense) {
 			layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
-				layer: "GEOGRAPHICALGRIDSYSTEMS.MAPS"
+				layer: 'GEOGRAPHICALGRIDSYSTEMS.MAPS'
 			}));
 		}
 		layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
-			layer: "GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2",
+			layer: 'GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2',
 			olParams: {
 				visible: !ignCarteLiscense
 			}
 		}));
 		layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
-			layer: "ORTHOIMAGERY.ORTHOPHOTOS"
+			layer: 'ORTHOIMAGERY.ORTHOPHOTOS'
 		}));
 		map.addControl(new ol.control.ElevationPath());
 		map.addControl(layerSwitcher);
@@ -350,7 +351,7 @@ function rucherDetail(ign) {
 		// https://geoportail.wallonie.be/catalogue/949d31b0-4994-488d-a454-3a10232e8785.html
 		// https://metawal.wallonie.be/geonetwork/srv/fre/catalog.search#/metadata/949d31b0-4994-488d-a454-3a10232e8785
 		// Belgique Wallonie SPW couche ortho (1)
-		const beOrthoURL = "https://geoservices.wallonie.be/INSPIRE/WMS/OI/MapServer/WmsServer?";
+		const beOrthoURL = 'https://geoservices.wallonie.be/INSPIRE/WMS/OI/MapServer/WmsServer?';
 		const beOrthoLayer = new ol.layer.Tile({
 			extent: belgiumExtent,
 			source: new ol.source.TileWMS({
@@ -421,7 +422,7 @@ function rucherDetail(ign) {
 	translate.on('translateend', function(evt) {
 		// WGS 84 / Pseudo-Mercator - EPSG:3857 : projection
 		// EPSG:4326 - World Geodetic System 1984, used in GPS : lat lon
-		const idx = evt.features.getArray()[0].get("idx");
+		const idx = evt.features.getArray()[0].get('idx');
 		const coord = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
 		const req = new XMLHttpRequest();
 		if (idx === -1) {
@@ -439,7 +440,7 @@ function rucherDetail(ign) {
 		req.onload = function() {
 			if (req.readyState === 4) {
 				if (req.status === 200) {
-					if (req.responseText !== "OK") {
+					if (req.responseText !== 'OK') {
 						alert(req.responseText);
 					} else {
 						parcoursRedraw();
@@ -452,13 +453,13 @@ function rucherDetail(ign) {
 		};
 		req.send(null);
 	});
-	$("#searchtext").keyup(function(event) {
+	$('#searchtext').keyup(function(event) {
 		if (event.keyCode === 13) {
-			let searchtext = $("#searchtext").val().toUpperCase();
+			let searchtext = $('#searchtext').val().toUpperCase();
 			for (const marker of markerRuches) {
 				if ((marker.getStyle().getText().getText().toUpperCase() === searchtext) ||
 					(marker.getStyle().getText().getText().toUpperCase() === '*' + searchtext) ||
-					(marker.get("essaimnom").toUpperCase() === searchtext)) {
+					(marker.get('essaimnom').toUpperCase() === searchtext)) {
 					selectDoubleClick.getFeatures().clear();
 					selectDoubleClick.getFeatures().push(marker);
 					selectDoubleClick.dispatchEvent({
@@ -526,7 +527,7 @@ function rucherDetail(ign) {
 				let exportOptions = {};
 				exportOptions.width = width;
 				exportOptions.height = height;
-				domtoimage.toJpeg(map.getTargetElement().getElementsByClassName("ol-layers")[0], exportOptions)
+				domtoimage.toJpeg(map.getTargetElement().getElementsByClassName('ol-layers')[0], exportOptions)
 					.then(function(dataURL) {
 						let pdf = new jsPDF('landscape', undefined, format);
 						pdf.addImage(dataURL, 'JPEG', 0, 0, dim[0], dim[1]);

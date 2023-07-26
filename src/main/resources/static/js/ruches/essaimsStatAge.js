@@ -2,7 +2,8 @@
 /* globals d3, Chart, agesHisto, pas, ageMinJours, ageMaxJours, Max, Min, ageMoyenJours, 
     EcartType, ageVarianceJours, Moyenne
 */
-"use strict";
+/* exported graphe */
+'use strict';
 // https://github.com/code-nebula/chart-color-generator
 function calculatePoint(i, intervalSize, colorRangeInfo) {
 	const { colorStart, colorEnd, useEndAsStart } = colorRangeInfo;

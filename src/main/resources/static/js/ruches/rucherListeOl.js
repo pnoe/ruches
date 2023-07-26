@@ -4,7 +4,8 @@
 	ruchertxt, couchemarqueursrucherstxt, ignCarteLiscense,
 	pleinecrantxt, urlruches, _csrf_token
 */
-"use strict";
+/* exported rucherListeIgn */
+'use strict';
 function rucherListeIgn(ign) {
 	const urlbrgm = 'https://geoservices.brgm.fr/geologie';
 	const urlbrgmlegend = 'http://mapsref.brgm.fr/legendes/geoservices/Geologie1000_legende.jpg';
@@ -145,30 +146,30 @@ function rucherListeIgn(ign) {
 		});
 		layersMap.insertAt(0, olAgriLayer);
 		layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
-			layer: "CADASTRALPARCELS.PARCELS",
+			layer: 'CADASTRALPARCELS.PARCELS',
 			olParams: {
 				visible: false
 			}
 		}));
 		layersMap.insertAt(0, new ol.layer.GeoportalWMS({
-			layer: "LIMITES_ADMINISTRATIVES_EXPRESS.LATEST",
+			layer: 'LIMITES_ADMINISTRATIVES_EXPRESS.LATEST',
 			olParams: {
 				visible: false
 			}
 		}));
 		if (ignCarteLiscense) {
 			layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
-				layer: "GEOGRAPHICALGRIDSYSTEMS.MAPS"
+				layer: 'GEOGRAPHICALGRIDSYSTEMS.MAPS'
 			}));
 		}
 		layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
-			layer: "GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2",
+			layer: 'GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2',
 			olParams: {
 				visible: !ignCarteLiscense
 			}
 		}));
 		layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
-			layer: "ORTHOIMAGERY.ORTHOPHOTOS",
+			layer: 'ORTHOIMAGERY.ORTHOPHOTOS',
 			olParams: {
 				visible: false
 			}
@@ -228,7 +229,7 @@ function rucherListeIgn(ign) {
 	translate.on('translateend', function(evt) {
 		const coord = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
 		const req = new XMLHttpRequest();
-		const idx = evt.features.getArray()[0].get("idx");
+		const idx = evt.features.getArray()[0].get('idx');
 		req.open('POST',
 			urlruches + 'rucher/deplace/' + ruchers[idx].id +
 			'/' + coord[1] + '/' + coord[0],
@@ -239,9 +240,9 @@ function rucherListeIgn(ign) {
 		req.setRequestHeader('x-csrf-token', _csrf_token);
 		req.send(null);
 	});
-	$("#searchtext").keyup(function(event) {
+	$('#searchtext').keyup(function(event) {
 		if (event.keyCode === 13) {
-			let searchtext = $("#searchtext").val().toUpperCase();
+			let searchtext = $('#searchtext').val().toUpperCase();
 			for (const marker of markerRuchers) {
 				if (marker.getStyle().getText().getText().toUpperCase().includes(searchtext)) {
 					selectDoubleClick.getFeatures().clear();

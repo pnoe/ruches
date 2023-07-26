@@ -2,7 +2,8 @@
 /* globals d3, Chart,
    poidsmiel, nomsessaims, poidsTotal
 */
-"use strict";
+/* exported graphe */
+'use strict';
 // https://github.com/code-nebula/chart-color-generator
 function calculatePoint(i, intervalSize, colorRangeInfo) {
 	const { colorStart, colorEnd, useEndAsStart } = colorRangeInfo;

@@ -4,7 +4,8 @@
 	nexistPasOuPasVidtxt, nomexistdejatxt, Ruchestxt, Essaimstxt, creertxt, urlessaimclone,
 	essaimid, pasderuchetxt
 */
-"use strict";
+/* exported essaimDetail */
+'use strict';
 function essaimDetail() {
 	$('#dispersion').on('click', function() {
 		if (!rucheEssaim) {
@@ -33,7 +34,12 @@ function essaimDetail() {
 		}
 	});
 
-	$("#clone").on('click', function() {
+	$('#clone').on('click', function() {
+		// pour mémo ajout essaim dans essaimnoms
+		let iajout = 0;
+		// pour retrait ruche vide
+		const ruchesvidesmem = [];
+
 		function annule() {
 			while (iajout--) {
 				essaimnoms.pop();
@@ -42,7 +48,7 @@ function essaimDetail() {
 		}
 		// Saisie des couples nomEssaim;nomRuche séparés par une ","
 		const noms = prompt(nomessaimsvirgule);
-		if (noms == null || noms == "") {
+		if (noms == null || noms == '') {
 			return;
 		}
 		const tabNomExiste = [];
@@ -50,10 +56,6 @@ function essaimDetail() {
 		const tabNomRucheOk = [];
 		const tabNomRucheIncorrect = [];
 
-		// pour mémo ajout essaim dans essaimnoms
-		let iajout = 0;
-		// pour retrait ruche vide
-		const ruchesvidesmem = [];
 
 		//  filter : on ignore ",," ou ",  ,"
 		const nomsarr = noms.split(',').filter(s => s.trim());
@@ -62,8 +64,8 @@ function essaimDetail() {
 			// ne nom de l'essaim
 			const ne = arr[0].trim();
 			// Si le nom de ruche est vide ou blanc, on passe à la ruche suivante
-			if ("" === ne) { continue; }
-			let nr = "";
+			if ('' === ne) { continue; }
+			let nr = '';
 			// nr nom de la ruche
 			if (arr.length > 1) {
 				nr = arr[1].trim();
@@ -71,7 +73,7 @@ function essaimDetail() {
 			if ($.inArray(ne, essaimnoms) != -1) {
 				// l'essaim ne existe déjà
 				tabNomExiste.push(ne);
-				if ((nr != "") && ($.inArray(nr, ruchesvidesnoms) == -1)) {
+				if ((nr != '') && ($.inArray(nr, ruchesvidesnoms) == -1)) {
 					// ruche nr incorrecte
 					tabNomRucheIncorrect.push(nr);
 				}
@@ -81,12 +83,12 @@ function essaimDetail() {
 				// ce nom ne doit pas être réutilisé
 				essaimnoms.push(ne);
 				iajout++;
-				if (nr == "") {
+				if (nr == '') {
 					// pas de ruche
-					tabNomRucheOk.push("");
+					tabNomRucheOk.push('');
 				} else if ($.inArray(nr, ruchesvidesnoms) == -1) {
 					// ruche nr incorrecte
-					tabNomRucheOk.push("");
+					tabNomRucheOk.push('');
 					tabNomRucheIncorrect.push(nr);
 				} else {
 					// on met l'essaim ne dans la ruche nr
@@ -104,12 +106,12 @@ function essaimDetail() {
 				}
 			}
 		}
-		let prompterreur = "";
+		let prompterreur = '';
 		if (tabNomRucheIncorrect.length > 0) {
 			prompterreur = Ruchestxt + ' : ' + tabNomRucheIncorrect.join(',') + ' ' + nexistPasOuPasVidtxt;
 		}
 		if (tabNomExiste.length > 0) {
-			if (prompterreur != "") { prompterreur += '\n'; }
+			if (prompterreur != '') { prompterreur += '\n'; }
 			prompterreur += Essaimstxt + ' : ' + tabNomExiste.join(',') + ' ' + nomexistdejatxt;
 			if (tabNomOk.length === 0) {
 				alert(prompterreur);

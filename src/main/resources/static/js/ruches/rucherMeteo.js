@@ -1,14 +1,19 @@
 /* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals longitude,latitude,openweathermapKey,urlPrefix,Chart */
-"use strict";
+/* exported rucherMeteo */
+
+// TODO https://eslint.org/docs/latest/rules/no-prototype-builtins#rule-details
+
+
+'use strict';
 function rucherMeteo() {
 	//	https://erikflowers.github.io/weather-icons/
 	//	https://openweathermap.org/api/one-call-api
-	const optDateTime = { day: "numeric", month: "numeric", hour: "numeric", minute: "numeric" };
-	const optDate = { day: "numeric", month: "numeric" };
+	const optDateTime = { day: 'numeric', month: 'numeric', hour: 'numeric', minute: 'numeric' };
+	const optDate = { day: 'numeric', month: 'numeric' };
 	const lang = navigator.language;
-	const digits1 = {maximumFractionDigits:1};
-	const digits2 = {maximumFractionDigits:2};
+	const digits1 = { maximumFractionDigits: 1 };
+	const digits2 = { maximumFractionDigits: 2 };
 	const urlOneCall = urlPrefix + '?lat=' +
 		latitude + '&lon=' + longitude +
 		'&units=metric&lang=fr&APPID=' + openweathermapKey;
@@ -72,10 +77,10 @@ function rucherMeteo() {
 	function tempChart(dh) {
 		let jour = 'xx';
 		const labels = dh.map(x => {
-				const ddhh = new Date(x.dt * 1000).toLocaleString(undefined,	{ day: "numeric", hour: "numeric" });
-				const ret = (jour === ddhh.substring(0, 2)) ? ddhh.substring(ddhh.lastIndexOf(',') + 1) : ddhh;
-				jour = ddhh.substring(0, 2);
-				return ret;
+			const ddhh = new Date(x.dt * 1000).toLocaleString(undefined, { day: 'numeric', hour: 'numeric' 	});
+			const ret = (jour === ddhh.substring(0, 2)) ? ddhh.substring(ddhh.lastIndexOf(',') + 1) : ddhh;
+			jour = ddhh.substring(0, 2);
+			return ret;
 		});
 		new Chart('tempGraphe', {
 			type: 'line',
@@ -117,8 +122,8 @@ function rucherMeteo() {
 						display: true,
 						position: 'right',
 						grid: {
-          					drawOnChartArea: false
-        				}
+							drawOnChartArea: false
+						}
 					}
 				}
 			}
@@ -152,18 +157,18 @@ function rucherMeteo() {
 	function fd(t) {
 		return new Date(t * 1000).toLocaleString(undefined, optDate);
 	}
-	
+
 	function degToCard(deg) {
-		return ["N","NNE","NE","ENE","E","ESE",
-		  "SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"][Math.round(deg / 22.5) % 16];
+		return ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE',
+			'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'][Math.round(deg / 22.5) % 16];
 	}
-	
+
 	function moonIcon(phase) {
-		return ['new','waxing-crescent-1','waxing-crescent-2','waxing-crescent-3','waxing-crescent-4','waxing-crescent-5',
-		  'waxing-crescent-6','first-quarter','waxing-gibbous-1','waxing-gibbous-2','waxing-gibbous-3','waxing-gibbous-4',
-		  'waxing-gibbous-5','waxing-gibbous-6','full','waning-gibbous-1','waning-gibbous-2','waning-gibbous-3','waning-gibbous-4',
-		  'waning-gibbous-5','waning-gibbous-6','third-quarter','waning-crescent-1','waning-crescent-2','waning-crescent-3',
-		  'waning-crescent-4','waning-crescent-5','waning-crescent-6'][Math.floor(phase * 28) % 28];  
+		return ['new', 'waxing-crescent-1', 'waxing-crescent-2', 'waxing-crescent-3', 'waxing-crescent-4', 'waxing-crescent-5',
+			'waxing-crescent-6', 'first-quarter', 'waxing-gibbous-1', 'waxing-gibbous-2', 'waxing-gibbous-3', 'waxing-gibbous-4',
+			'waxing-gibbous-5', 'waxing-gibbous-6', 'full', 'waning-gibbous-1', 'waning-gibbous-2', 'waning-gibbous-3', 'waning-gibbous-4',
+			'waning-gibbous-5', 'waning-gibbous-6', 'third-quarter', 'waning-crescent-1', 'waning-crescent-2', 'waning-crescent-3',
+			'waning-crescent-4', 'waning-crescent-5', 'waning-crescent-6'][Math.floor(phase * 28) % 28];
 	}
-	
+
 }

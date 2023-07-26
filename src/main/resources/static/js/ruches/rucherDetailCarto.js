@@ -3,7 +3,8 @@
    ol, overlay, drawControl, drawLayer, iconFeatureEntree,
    rucheParcours, distParcours, ruches, rucher, nomHausses,
    ruchestxt, distancedeparcourstxt  */
-"use strict";
+/* exported geoloc exportGpx exportKml */
+'use strict';
 
 function geoloc() {
 	// Note: In Firefox 55 and higher, only HTTPS pages will be able to request location.
@@ -41,7 +42,7 @@ function geoloc() {
 		document.getElementById('popup-content').innerHTML = 'Désolé, pas de localisation possible.';
 	}
 
-	if ("geolocation" in navigator) {
+	if ('geolocation' in navigator) {
 		document.getElementById('popup-content').innerHTML = 'Recherche position en cours...';
 		overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());
 		navigator.geolocation.getCurrentPosition(success, error, options);
@@ -67,7 +68,7 @@ function exportGpx() {
 		gpxcontent += '<wpt lat="' + rucheP.latitude +
 			'" lon="' + rucheP.longitude + '"><desc><![CDATA[';
 		if (rucheP.id === 0) {
-			gpxcontent += "Entrée";
+			gpxcontent += 'Entrée';
 		} else {
 			let rucheidx = ruches.findIndex(x => x.id === rucheP.id);
 			let ruche = ruches[rucheidx];
@@ -89,7 +90,7 @@ function exportGpx() {
 	let link = document.getElementById('gpx-download');
 	const file = new Blob([gpxcontent], { type: 'application/gpx+xml;charset=utf-8' });
 	link.href = URL.createObjectURL(file);
-	link.download = rucher.nom + ".gpx";
+	link.download = rucher.nom + '.gpx';
 	link.click();
 	URL.revokeObjectURL(link.href);
 }
@@ -165,7 +166,7 @@ function exportKml() {
 	let link = document.getElementById('kml-download');
 	const file = new Blob([kmlcontent], { type: 'vnd.google-earth.kml+xml;charset=utf-8' });
 	link.href = URL.createObjectURL(file);
-	link.download = rucher.nom + ".kml";
+	link.download = rucher.nom + '.kml';
 	link.click();
 	URL.revokeObjectURL(link.href);
 }
