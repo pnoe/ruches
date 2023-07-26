@@ -10,7 +10,7 @@
 	const timeFirst = /*[[${timeFirst}]]*/ null;
 	const rucherucherid = /*[[${ruche.rucher?.id}]]*/ null;
 	const ruchesourcerucherid = /*[[${rucheSource?.rucher?.id}]]*/ null;
-	document.addEventListener("DOMContentLoaded", () => {
+	document.addEventListener('DOMContentLoaded', () => {
 		$.validator.addMethod( "greaterThanEqual", function( value, element, param ) {
 			return ($('#swapPositions').is(":checked") &&
 				(rucherucherid != ruchesourcerucherid))

@@ -9,7 +9,7 @@
 	const dateFirst = /*[[${dateFirst}]]*/null;
 	const timeFirst = /*[[${timeFirst}]]*/null;
 	const doitEtreSupA = /*[[#{doitEtreSupA}]]*/null;
-	document.addEventListener("DOMContentLoaded", () => {
+	document.addEventListener('DOMContentLoaded', () => {
 		$.validator.addMethod("greaterThanEqual", function(value, element, param) {
 			return Date.parse(value) > Date.parse(param);
 		}, doitEtreSupA + ' {0}');

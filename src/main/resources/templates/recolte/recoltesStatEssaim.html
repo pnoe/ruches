@@ -5,7 +5,7 @@
 const btnTxtPrint = /*[[#{buttontextprint}]]*/ null;
 const recoltes = /*[[${recoltes}]]*/ null;
 const url = /*[[@{'/recolte/stat/essaim/'}]]*/null;
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
 	$('#tous').on('change', function() {
 			location = url + ($(this).is(':checked'));
 		});

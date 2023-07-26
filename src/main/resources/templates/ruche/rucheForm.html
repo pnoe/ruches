@@ -7,7 +7,7 @@
 	<script th:inline="javascript">
 		const rucheNoms = /*[[${rucheNoms}]]*/null;
 		const nomexiste = /*[[#{nomexiste}]]*/null;
-		document.addEventListener("DOMContentLoaded", () => {
+		document.addEventListener('DOMContentLoaded', () => {
 			$("#dateAcquisition").datetimepicker(
 				{timepicker: false, format: 'Y-m-d'});
 			$.datetimepicker.setLocale(window.navigator.language.substring(0, 2));

@@ -5,7 +5,7 @@
 <script th:inline="javascript">
 	const nomexiste = /*[[#{nomexiste}]]*/ null;
 	const rucherNoms = /*[[${rucherNoms}]]*/ null;
-	document.addEventListener("DOMContentLoaded", () => {
+	document.addEventListener('DOMContentLoaded', () => {
 		$("#nom").focus();
 		jQuery.validator.addMethod("nomExiste", function(value) {   
     		return $.inArray(value, rucherNoms) == -1;

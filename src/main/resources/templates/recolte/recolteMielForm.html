@@ -4,7 +4,7 @@
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:inline="javascript">
 	const pdsAvSupPdsAp = /*[[#{poidsAvantSupPoidsApres}]]*/ null;
-	document.addEventListener("DOMContentLoaded", () => {
+	document.addEventListener('DOMContentLoaded', () => {
 		$(".avant").first().focus();
 		function validation(event) {
 			  const avant = document.querySelectorAll("input.avant");

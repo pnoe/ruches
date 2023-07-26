@@ -8,7 +8,7 @@
 		const buttTxtCol = /*[[#{buttontextcol}]]*/null;
 		const urlCommLot = /*[[@{/evenement/ruche/commentaireLot/}]]*/null;
 		const selectRuTrait = /*[[#{selectruchestraiter}]]*/null;
-		document.addEventListener("DOMContentLoaded", () => {
+		document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById('rucher').addEventListener("change", (event) => {
 				table.columns(2).search(event.target.value).draw();
 			});
