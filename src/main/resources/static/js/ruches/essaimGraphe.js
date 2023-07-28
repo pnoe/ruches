@@ -1,9 +1,8 @@
 /* globals d3,
 	data, essaimnom, essaimtxt,	ruchetxt, ruchertxt,
 	MielKgtxt, MielDescKgtxt, Actif, Inactif, urlessaim	*/
-/* exported essaimGraphe */
 'use strict';
-function essaimGraphe() {
+document.addEventListener('DOMContentLoaded', () => {
 	const lang = navigator.language;
 	const digits2 = { maximumFractionDigits: 2 };
 	const dataMap = data.reduce(function(map, node) {
@@ -109,4 +108,4 @@ function essaimGraphe() {
 		trigger: 'focus'
 	});
 
-}
+});

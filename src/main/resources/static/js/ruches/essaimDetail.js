@@ -2,36 +2,36 @@
 	essaimsupprecolttxt, suppessaimevetxt, suppessaimtxt,  evenements, nomessaimsvirgule,
 	nexistPasOuPasVidtxt, nomexistdejatxt, Ruchestxt, Essaimstxt, creertxt, urlessaimclone,
 	essaimid, pasderuchetxt */
-/* exported essaimDetail */
 'use strict';
-function essaimDetail() {
-	$('#dispersion').on('click', function() {
+document.addEventListener('DOMContentLoaded', () => {
+
+	document.getElementById('dispersion').addEventListener('click', function(event) {
 		if (!rucheEssaim) {
 			alert(pasderuchetxt);
-			return false;
+			event.preventDefault();
 		}
-		return true;
 	});
 
-	$('#essaime').on('click', function() {
+	document.getElementById('essaime').addEventListener('click', function(event) {
 		if (!rucheEssaim) {
 			alert(pasderuchetxt);
-			return false;
+			event.preventDefault();
 		}
-		return true;
 	});
 
-	$('#supprime').on('click', function() {
+	document.getElementById('supprime').addEventListener('click', function(event) {
 		if (recolteHausses) {
 			alert(essaimsupprecolttxt);
-			return false;
+			event.preventDefault();
 		} else if (evenements) {
-			return confirm(suppessaimevetxt);
+			if (!confirm(suppessaimevetxt)) { event.preventDefault(); }
 		} else {
-			return confirm(suppessaimtxt);
+			if (!confirm(suppessaimtxt)) { event.preventDefault(); }
 		}
 	});
 
+	// Attention utiliser  event.preventDefault()
+	//   pour supprimer $('#clone').on('click'
 	$('#clone').on('click', function() {
 		// pour mémo ajout essaim dans essaimnoms
 		let iajout = 0;
@@ -144,4 +144,4 @@ function essaimDetail() {
 				document.location.reload(true);
 			});
 	});
-}
+});

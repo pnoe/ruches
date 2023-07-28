@@ -1,8 +1,7 @@
 /* globals Essaims, buttontextprint, buttontextcol, urlTraitLot, urlSucreLot,
 	urlCommLot, selectEssTrt DataTable */
-/* exported essaimListe */
 'use strict';
-function essaimListe() {
+document.addEventListener('DOMContentLoaded', () => {
 	const idTbl = '#essaims';
 	const table = new DataTable(idTbl, {
 		select: { style: 'multi+shift' },
@@ -59,4 +58,4 @@ function essaimListe() {
 			}
 		});
 	});
-}
+});

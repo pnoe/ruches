@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-	<script th:src="@{/js/ruches/essaimsListe.js}"></script>
 	<script th:inline="javascript">
 		const Essaims = /*[[#{Essaims}]]*/ null;
 		const buttontextprint = /*[[#{buttontextprint}]]*/ null;
@@ -11,8 +10,8 @@
 		const urlSucreLot = /*[[@{/evenement/essaim/sucreLot/}]]*/ null;
 		const urlCommLot = /*[[@{/evenement/essaim/commentaireLot/}]]*/ null;
 		const selectEssTrt = /*[[#{selectessaimstraiter}]]*/ null;
-		document.addEventListener('DOMContentLoaded', essaimListe);
 	</script>
+	<script th:src="@{/js/ruches/essaimsListe.js}"></script>
 </head>
 
 <body>

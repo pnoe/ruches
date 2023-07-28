@@ -15,6 +15,7 @@ module.exports = {
     	"func-style": ["error", "declaration"],
     	"no-constant-binary-expression": "error",
     	"no-eval": "error",
+    	"no-extra-semi": "error",
     	"no-self-compare": "error",
     	"no-negated-condition": "error",
     	"no-unmodified-loop-condition": "error",
@@ -25,5 +26,6 @@ module.exports = {
     	"prefer-const": "error",
     	"quotes": ["error", "single", {"avoidEscape": true }],
     	"quote-props": ["error", "as-needed"],
+    	"semi-style": "error",
     }
 }
