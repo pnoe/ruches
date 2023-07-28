@@ -1,71 +1,18 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head
-	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:inline="javascript">
-	const urlRetrait = /*[[@{/recolte/retraitHausses/}]]*/null;
-	const urlAjout = /*[[@{/recolte/ajoutHausses/}]]*/null;
-	const recolteId = /*[[${recolte.id}]]*/null;
-	const selHausRet = /*[[#{selecthaussesretirer}]]*/null;
-	const selHausAjout = /*[[#{selecthaussesajouter}]]*/null;
-	document.addEventListener('DOMContentLoaded', () => {
-				function updateLinks(e, dt, type, indexes) {
-					let id;
-					let href;
-					let table;
-					if (this.id == "ajoutHausseRecolte") {
-						id = $('#ajouterHausses');
-						href = urlAjout;
-						table = tableAjout;
-					} else {
-						id = $('#retirerHausses');
-						href = urlRetrait;
-						table = tableRetrait;
-					}
-					if (type === 'row') {
-						let hausseNoms = "";
-						table.rows({
-							selected : true
-						}).data().pluck(1).each(function(value, index) {
-							hausseNoms += value + ",";							
-						});
-						if (hausseNoms) {
-							/*[- on enlève la dernière virgule et met à jour l'url de traitement -]*/
-							hausseNoms = hausseNoms.substring(0,
-									hausseNoms.length - 1);
-							id
-									.attr('href', href + recolteId + '/'
-											+ hausseNoms);
-						} else {
-							id.attr('href', "#");
-						}
-					}
-				}
-				const tableRetrait = new DataTable('#retraitHausseRecolte', {
-					select : {
-						style : 'multi+shift'
-					}
-				});
-				tableRetrait.on('select deselect', updateLinks);
-				$('#retirerHausses').on('click', function() {
-					if ($(this).attr("href") == "#") {
-						alert(selHausRet);
-					}
-				});
-				const tableAjout = new DataTable('#ajoutHausseRecolte', {
-					select : {
-						style : 'multi+shift'
-					}
-				});
-				tableAjout.on('select deselect', updateLinks);
-				$('#ajouterHausses').on('click', function() {
-					if ($(this).attr("href") == "#") {
-						alert(selHausAjout);
-					}
-				});
-			});
-</script>
+
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+	<script th:src="@{/js/ruches/recolteChoixHausses.js}"></script>
+	<script th:inline="javascript">
+		const urlRetrait = /*[[@{/recolte/retraitHausses/}]]*/null;
+		const urlAjout = /*[[@{/recolte/ajoutHausses/}]]*/null;
+		const recolteId = /*[[${recolte.id}]]*/null;
+		const selHausRet = /*[[#{selecthaussesretirer}]]*/null;
+		const selHausAjout = /*[[#{selecthaussesajouter}]]*/null;
+		document.addEventListener('DOMContentLoaded', recolteChoixHausses);
+	</script>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar"></nav>
 	<br />
@@ -80,9 +27,7 @@
 				</h1>
 			</div>
 			<div class="col">
-				<a
-					th:href="@{#{urldoc}+'3782_3476563104'}"
-					class="bi-book" th:title="#{Doc}" target="_blank"
+				<a th:href="@{#{urldoc}+'3782_3476563104'}" class="bi-book" th:title="#{Doc}" target="_blank"
 					aria-hidden="true"></a>
 			</div>
 		</div>
@@ -91,8 +36,7 @@
 		<h6>
 			<a id="retirerHausses" href="#" th:text="#{retirerHausses}"></a>
 		</h6>
-		<table class="table table-bordered table-striped table-sm"
-			id="retraitHausseRecolte">
+		<table class="table table-bordered table-striped table-sm" id="retraitHausseRecolte">
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>
@@ -116,8 +60,7 @@
 		<h6>
 			<a id="ajouterHausses" href="#" th:text="#{ajouterHausses}"></a>
 		</h6>
-		<table class="table table-bordered table-striped table-sm"
-			id="ajoutHausseRecolte">
+		<table class="table table-bordered table-striped table-sm" id="ajoutHausseRecolte">
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>
@@ -129,8 +72,8 @@
 			</thead>
 			<tbody>
 				<tr th:each="hausseNotInRecolte : ${haussesNotInRecolte}">
-					<td th:text="${hausseNotInRecolte.nom}"></td>				
-					<td hidden th:text="${hausseNotInRecolte.id}"></td>	
+					<td th:text="${hausseNotInRecolte.nom}"></td>
+					<td hidden th:text="${hausseNotInRecolte.id}"></td>
 					<td th:text="${hausseNotInRecolte.ruche?.rucher?.nom}"></td>
 					<td th:text="${hausseNotInRecolte.ruche?.nom}"></td>
 					<td th:text="${hausseNotInRecolte.ruche?.essaim?.nom}"></td>
@@ -140,4 +83,5 @@
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

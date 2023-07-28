@@ -5,6 +5,7 @@
 	<script th:replace="include :: jsdatetimepicker"></script>
 	<link th:replace="include :: cssdatetimepicker" />
 	<script th:replace="include ::  localejsdatetimepicker"></script>
+	<script th:src="@{/js/ruches/recolteDetail.js}"></script>
 	<script th:inline="javascript">
 		const _csrf_token = /*[[${_csrf.token}]]*/null;
 		const _csrf_param_name = /*[[${_csrf.parameterName}]]*/null;
@@ -15,62 +16,7 @@
 		const urlRecHDepot = /*[[@{/recolte/haussesDepot/}]]*/null;
 		const recId = /*[[${recolte.id}]]*/null;
 		const totalPourLaRuche = /*[[#{totalPourLaRuche}]]*/null;
-		document.addEventListener('DOMContentLoaded', () => {
-			$('#date').hide();
-			$('#dateOK').hide();
-			$("#enlevehausses").click(function () {
-				/*[- */
-				// La fonction est désactivée après 30 jours 
-				// 30 * 24 * 3600 * 1000 =  2592000000 
-				/* -]*/
-				if (Date.now() > dateRecEpoch * 1000 + 2592000000) {
-					alert(enlevHRecDe30);
-					return;
-				}
-				if (!confirm(enlevTtHauRec)) {
-					return;
-				}
-				$('#date').show();
-				$('#dateOK').show();
-				const d = new Date().toISOString().replace('T', ' ');
-				$('#date').attr('value', d.slice(0, d.lastIndexOf(':')));
-				$('#date').focus();
-			});
-			$('#dateOK').on('click', function () {
-				const date = $('#date').val();
-				$('#date').hide();
-				$('#dateOK').hide();
-				let requestData = {};
-				requestData[_csrf_param_name] = _csrf_token;
-				requestData['date'] = date;
-				$.post(urlRecHDepot + recId, requestData).done(function (data) {
-					alert(data);
-				});
-			});
-			document.getElementById('supprime').addEventListener("click", (event) => {
-				if (confirm(suppRecHauss)) {
-					return true;
-				}
-				event.preventDefault();
-				return false;
-			});
-			new DataTable('#hausses', {
-				order: [ [1, 'asc'], [0, 'asc'] ],
-				rowGroup: {
-					dataSrc: 1, // on groupe sur les ruches
-					startRender: null,
-					endRender: function (rows, group) {
-						let mielTotal = rows.data().pluck(4).reduce(function (a, b) {
-							return a + parseFloat(b.replace(/,/g, '.'));
-						}, 0.00);
-						return $('<tr/>').append('<td colspan="4">' + totalPourLaRuche + ' ' + group + '<\/td>')
-							.append('<td class="num">' + new Intl.NumberFormat(navigator.language, {
-								minimumFractionDigits: 2
-							}).format(mielTotal) + '<\/td>').append('<td colspan="2"><\/td>');
-					}
-				}
-			});
-		});
+		document.addEventListener('DOMContentLoaded', recolteDetail);
 	</script>
 </head>
 
@@ -96,9 +42,8 @@
 					th:title="#{recolteHausseDepot}" aria-hidden="true"></span> <a
 					th:href="@{'/recolte/statistiques/essaim/'+${recolte.id}}" class="bi-pie-chart"
 					th:title="#{statistiquesessaims}" aria-hidden="true"></a> <a id="supprime"
-					th:href="@{'/recolte/supprime/'+${recolte.id}}" class="bi-trash"
-					style="color: red" th:title="#{supprimer}" aria-hidden="true"></a> <input type="text" id="date"
-					name="date">
+					th:href="@{'/recolte/supprime/'+${recolte.id}}" class="bi-trash" style="color: red"
+					th:title="#{supprimer}" aria-hidden="true"></a> <input type="text" id="date" name="date">
 				<button id="dateOK">Date retrait hausses</button>
 
 			</div>

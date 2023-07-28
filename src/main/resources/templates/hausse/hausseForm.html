@@ -9,11 +9,11 @@
 	const nomexiste = /*[[#{nomexiste}]]*/null;
 	const saisirnbcadresinfmax = /*[[#{saisirnbcadresinfmax}]]*/null;
 	document.addEventListener('DOMContentLoaded', () => {
-		$("#dateAcquisition").datetimepicker(
+		$('#dateAcquisition').datetimepicker(
 				{timepicker: false, format: 'Y-m-d'});
 		$.datetimepicker.setLocale(window.navigator.language.substring(0, 2));
-		$("#nom").focus();
-		jQuery.validator.addMethod("nomExiste", function(value) {   
+		document.getElementById('nom').focus();
+		jQuery.validator.addMethod('nomExiste', function(value) {   
     		return $.inArray(value, hausseNoms) == -1;
 			}, nomexiste);
 		if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('fr') != -1)) {
@@ -29,12 +29,12 @@
 				dateFormat : 'yy-mm-dd',
 				changeYear: true
 			});
-		$("#dateAcquisition").datepicker();
-		$.validator.addMethod("lowerOrEqualThan", function(value, element, param) {
+		$('#dateAcquisition').datepicker();
+		$.validator.addMethod('lowerOrEqualThan', function(value, element, param) {
 			let $otherElement = $(param);
 			return parseInt(value, 10) <= parseInt($otherElement.val(), 10);
 		});
-		$("#hausseForm").validate({
+		$('#hausseForm').validate({
 			errorClass: 'erreur-form',
 			errorPlacement: function(error, element) {
 			    error.insertBefore(element.closest('div'));
@@ -56,7 +56,7 @@
 				nbCadres : {
 					required : true,
 					digits : true,
-					lowerOrEqualThan : "#nbCadresMax"
+					lowerOrEqualThan : '#nbCadresMax'
 				},
 				nbCadresMax : {
 					required : true,

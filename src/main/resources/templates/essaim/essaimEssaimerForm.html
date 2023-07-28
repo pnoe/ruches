@@ -11,7 +11,7 @@
 	const essaimNoms = /*[[${essaimNoms}]]*/null;
 	const nomexiste = /*[[#{nomexiste}]]*/null;
 	document.addEventListener('DOMContentLoaded', () => {
-		$('#nom').focus();
+		document.getElementById('nom').focus();
 		$('#commentaire').val(Essaimage + ' ' + essaimNom);
 		$('#nom').val(essaimNom + suffix);
 		jQuery.validator.addMethod('nomExiste', function(value) {   

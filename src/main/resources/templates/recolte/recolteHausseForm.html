@@ -7,11 +7,11 @@
 	document.addEventListener('DOMContentLoaded', () => {
 		$.validator.addMethod( "greaterThanEqual", function( value, element, param ) {
 		    var target = $( param );
-		    if (target.val() === "") {
+		    if (target.val() === '') {
 		     	return true;
 		    }
-		    if ( this.settings.onfocusout && target.not( ".validate-greaterThanEqual-blur" ).length ) {
-		        target.addClass( "validate-greaterThanEqual-blur" ).on( "blur.validate-greaterThanEqual", function() {
+		    if ( this.settings.onfocusout && target.not( '.validate-greaterThanEqual-blur' ).length ) {
+		        target.addClass( 'validate-greaterThanEqual-blur' ).on( 'blur.validate-greaterThanEqual', function() {
 		            $( element ).valid();
 		        } );
 		    }
@@ -21,17 +21,17 @@
 			rules : {
 				poidsAvant : {
 					required: true,
-					greaterThanEqual : "#poidsApres"
+					greaterThanEqual : '#poidsApres'
 				},
 				poidsApres : {
 					required: true
 				}
 			}
 		});
-		$("#poidsAvant").focus().select();
-		$(".toggleplus").hide();
-		$("#toggleplus").click(function() {
-			$(".toggleplus").toggle();
+		document.getElementById('poidsAvant').focus();
+		$('.toggleplus').hide();
+		$('#toggleplus').click(function() {
+			$('.toggleplus').toggle();
 		});
 	});
 </script>

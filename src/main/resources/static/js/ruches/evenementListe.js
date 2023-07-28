@@ -1,4 +1,3 @@
-/* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals Evenements, buttontextprint, buttontextcol, DataTable */
 /* exported evenementListe */
 'use strict';

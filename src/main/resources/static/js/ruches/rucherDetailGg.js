@@ -1,4 +1,3 @@
-/* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals google, exportGpx, exportKml,
 	rucheParcours:writable, distParcours:writable, rucher, rucherMapZoom, longitudeCentre, latitudeCentre,
 	 rayonsButinage, distButinage, urlruches, nomHausses, essaimtxt, pasdessaimtxt,
@@ -13,7 +12,7 @@ let markerRucher;
 let infowindowp;
 const circlesButinage = [];
 const lang = navigator.language;
-const digits2 = {maximumFractionDigits:2};
+const digits2 = { maximumFractionDigits: 2 };
 
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
@@ -34,20 +33,20 @@ function initMap() {
 			map: map,
 			icon: {
 				path: 'M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0',
-				fillColor: (ruches[i].essaim == null) ? '#FE00FE' : ruches[i].essaim.reineCouleurMarquage,
+				fillColor: (ruches[i].essaim === null) ? '#FE00FE' : ruches[i].essaim.reineCouleurMarquage,
 				fillOpacity: 0.5,
 				anchor: new google.maps.Point(0, 0),
 				strokeWeight: 0,
 				scale: 0.70
 			},
 			label: {
-				text: (((ruches[i].essaim != null) && ruches[i].essaim.reineMarquee) ? '*' : '') + ruches[i].nom,
+				text: (((ruches[i].essaim !== null) && ruches[i].essaim.reineMarquee) ? '*' : '') + ruches[i].nom,
 				fontSize: '15px',
-				fontWeight: ((ruches[i].essaim != null) && ruches[i].essaim.reineMarquee) ? 'bold' : 'normal'
+				fontWeight: ((ruches[i].essaim !== null) && ruches[i].essaim.reineMarquee) ? 'bold' : 'normal'
 			},
 			rucheid: ruches[i].id,
-			essaimnom: (ruches[i].essaim == null) ? '' : ruches[i].essaim.nom,
-			essaimid: (ruches[i].essaim == null) ? '' : ruches[i].essaim.id,
+			essaimnom: (ruches[i].essaim === null) ? '' : ruches[i].essaim.nom,
+			essaimid: (ruches[i].essaim === null) ? '' : ruches[i].essaim.id,
 			haussesnom: nomHausses[i]
 		});
 		google.maps.event.addListener(markerRuche, 'dragend', function(event) {
@@ -126,11 +125,11 @@ function sauveRucherPosition(e) {
 	req.onload = function() {
 		if (req.readyState === 4) {
 			if (req.status === 200) {
-				if (req.responseText !== 'OK') {
-					alert(req.responseText);
-				} else {
+				if (req.responseText === 'OK') {
 					parcours.setMap(null);
 					parcoursRedraw();
+				} else {
+					alert(req.responseText);
 				}
 			}
 		}
@@ -153,7 +152,7 @@ function parcoursRedraw(redraw = false) {
 	req2.onload = function() {
 		if (req2.readyState === 4) {
 			if (req2.status === 200) {
-				let response = JSON.parse(req2.responseText);
+				const response = JSON.parse(req2.responseText);
 				// distParcours et rucheParcours var globales             
 				if (redraw && (response.distParcours + 0.1 > distParcours)) {
 					infowindowp.close();
@@ -194,11 +193,11 @@ function sauveRuchePosition(e, markerRuche) {
 	req.onload = function() {
 		if (req.readyState === 4) {
 			if (req.status === 200) {
-				if (req.responseText !== 'OK') {
-					alert(req.responseText);
-				} else {
+				if (req.responseText === 'OK') {
 					parcours.setMap(null);
 					parcoursRedraw();
+				} else {
+					alert(req.responseText);
 				}
 			}
 		}
@@ -232,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	$('.liste').click(function(e) {
 		window.location = urlruches + 'ruche/liste/' + rucher.id +
 			'?parcours=' + encodeURIComponent(JSON.stringify(rucheParcours)) +
-			'&plus=' + (e.target.id != 'liste');
+			'&plus=' + (e.target.id !== 'liste');
 	});
 	$('#export-gpx').click(function() {
 		exportGpx();
@@ -245,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 	$('#searchtext').keyup(function(event) {
 		if (event.keyCode === 13) {
-			let searchtext = $('#searchtext').val().toUpperCase();
+			const searchtext = $('#searchtext').val().toUpperCase();
 			for (const marker of markersRuche) {
 				if ((marker.label.text.toUpperCase() === searchtext) ||
 					(marker.label.text.toUpperCase() === '*' + searchtext) ||

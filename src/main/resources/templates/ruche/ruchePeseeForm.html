@@ -7,8 +7,8 @@
 <script th:replace="include ::  localejsdatetimepicker"></script>
 <script th:inline="javascript">
 	document.addEventListener('DOMContentLoaded', () => {
-		$("#valeur").focus();
-		$("#evenementForm").validate({
+		document.getElementById('valeur').focus();
+		$('#evenementForm').validate({
 			errorClass : 'erreur-form',
 			errorPlacement : function(error, element) {
 				error.insertBefore(element.closest('div'));

@@ -1,4 +1,3 @@
-/* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals d3,
 	data, essaimnom, essaimtxt,	ruchetxt, ruchertxt,
 	MielKgtxt, MielDescKgtxt, Actif, Inactif, urlessaim	*/
@@ -65,11 +64,11 @@ function essaimGraphe() {
 			return d.children ? -87 : 10;
 		})
 		.attr('transform', function(d) {
-			return 'rotate(' + ((d.data.parent == 'null') ? 0 : -50) + ')';
+			return 'rotate(' + ((d.data.parent === 'null') ? 0 : -50) + ')';
 		})
 		.style('text-anchor', 'middle')
 		.html(function(d) {
-			return '<tspan x="0" y="0.1em">' + ((d.data.parent == 'null') ? essaimtxt + ' ' : '') + d.data.name + '</tspan>';
+			return '<tspan x="0" y="0.1em">' + ((d.data.parent === 'null') ? essaimtxt + ' ' : '') + d.data.name + '</tspan>';
 		});
 	node.append('a')
 		.attr('xlink:href', function(d) {
@@ -83,10 +82,13 @@ function essaimGraphe() {
 			return essaimtxt + ' ' + d.data.name + '<br/>' +
 				'&nbsp;&nbsp;&nbsp;' + (d.data.actif ? Actif : Inactif) + '<br/>' +
 				'&nbsp;&nbsp;&nbsp;' + d.data.dateAcquisition + '<br/>' +
-				ruchetxt + ' ' + ((d.data.nomRuche != 'null') ? d.data.nomRuche : '-') + '<br/>' +
-				ruchertxt + ' ' + ((d.data.nomRucher != 'null') ? d.data.nomRucher : '-') + '<br/>' +
-				MielKgtxt + ' ' + ((d.data.poidsMiel != 0) ? (d.data.poidsMiel / 1000.0).toLocaleString(lang, digits2) : '') + '<br/>' +
-				MielDescKgtxt + ' ' + ((d.data.poidsMielDescendance != 0) ? (d.data.poidsMielDescendance / 1000.0).toLocaleString(lang, digits2) : '') + '<br/>';
+				ruchetxt + ' ' + ((d.data.nomRuche === 'null') ? '-' : d.data.nomRuche) + '<br/>' +
+				ruchertxt + ' ' + ((d.data.nomRucher === 'null') ? '-' : d.data.nomRucher) + '<br/>' +
+				MielKgtxt + ' ' +
+				((d.data.poidsMiel === 0) ? '' : (d.data.poidsMiel / 1000.0).toLocaleString(lang, digits2))
+				+ '<br/>' + MielDescKgtxt + ' ' +
+				((d.data.poidsMielDescendance === 0) ? '' : (d.data.poidsMielDescendance / 1000.0).toLocaleString(lang, digits2))
+				+ '<br/>';
 		})
 		.append('circle')
 		.attr('r', 10)
@@ -95,7 +97,7 @@ function essaimGraphe() {
 		})
 		.style('opacity', 0.6)
 		.style('stroke', function(d) {
-			if (d.data.name == essaimnom) {
+			if (d.data.name === essaimnom) {
 				return 'black';
 			}
 		});

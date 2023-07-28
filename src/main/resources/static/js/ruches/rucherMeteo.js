@@ -1,4 +1,3 @@
-/* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals longitude,latitude,openweathermapKey,urlPrefix,Chart */
 /* exported rucherMeteo */
 
@@ -32,11 +31,11 @@ function rucherMeteo() {
 		$('#ventVitesse').html((data.current.wind_speed * 3.6).toLocaleString(lang, digits1) + 'km/h');
 		$('#ventDirection').html(data.current.wind_deg + '° ' + degToCard(data.current.wind_deg) +
 			'&nbsp<i class="wi wi-wind from-' + data.current.wind_deg + '-deg"></i>');
-		$('#ventRafales').html((data.current.hasOwnProperty('wind_gust') ? (data.current.wind_gust * 3.6).toLocaleString(lang, digits1) : '0') + 'km/h');
+		$('#ventRafales').html((Object.prototype.hasOwnProperty.call(data.current, 'wind_gust') ? (data.current.wind_gust * 3.6).toLocaleString(lang, digits1) : '0') + 'km/h');
 		$('#nuages').html(data.current.clouds + '%');
 		$('#visibilite').html(data.current.visibility + 'm');
-		$('#pluieVol1h').html((data.current.hasOwnProperty('rain') ? (data.current.rain['1h']) : '0') + 'mm');
-		$('#neigeVol1h').html((data.current.hasOwnProperty('snow') ? (data.current.snow['1h']) : '0') + 'mm');
+		$('#pluieVol1h').html((Object.prototype.hasOwnProperty.call(data.current, 'rain') ? (data.current.rain['1h']) : '0') + 'mm');
+		$('#neigeVol1h').html((Object.prototype.hasOwnProperty.call(data.current, 'snow') ? (data.current.snow['1h']) : '0') + 'mm');
 		$('#leverSoleil').html(fdt(data.current.sunrise));
 		$('#coucherSoleil').html(fdt(data.current.sunset));
 		$('#leverLune').html(fdt(data.daily[0].moonrise));
@@ -131,7 +130,7 @@ function rucherMeteo() {
 	}
 
 	function histo(pref, time, n, htmlHisto) {
-		if (n == 0) {
+		if (n === 0) {
 			$('#historique').append(htmlHisto);
 			return;
 		}

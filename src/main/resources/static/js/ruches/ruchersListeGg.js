@@ -1,4 +1,3 @@
-/* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals google, pasderuchetxt,
 	ruchers, nomRuches,	urlruches, ruchertxt, lesRuchestxt,	ruchersmapzoom, _csrf_token
  */
@@ -65,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 	$('#searchtext').keyup(function(event) {
 		if (event.keyCode === 13) {
-			let searchtext = $('#searchtext').val().toUpperCase();
+			const searchtext = $('#searchtext').val().toUpperCase();
 			for (const marker of markersRucher) {
 				if (marker.label.toUpperCase().includes(searchtext)) {
 					google.maps.event.trigger(marker, 'click');

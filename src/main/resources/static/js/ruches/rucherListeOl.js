@@ -1,4 +1,3 @@
-/* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals ol,
 	ruchers, nomRuches,	recentertxt, lesRucherstxt,	lesRuchestxt, pasderuchetxt, 
 	ruchertxt, couchemarqueursrucherstxt, ignCarteLiscense,
@@ -90,12 +89,16 @@ function rucherListeIgn(ign) {
 	select.setActive(!$('#dragMarker')[0].checked);
 	select.on('select', function(e) {
 		e.selected.forEach(function(feature) {
-			let style = feature.getStyle(); let txt = style.getText().getText();
-			style.getText().setText('[' + txt + ']'); feature.setStyle(style);
+			const style = feature.getStyle();
+			const txt = style.getText().getText();
+			style.getText().setText('[' + txt + ']');
+			feature.setStyle(style);
 		});
 		e.deselected.forEach(function(feature) {
-			let style = feature.getStyle(); let txt = style.getText().getText();
-			style.getText().setText(txt.substring(1, txt.length - 1)); feature.setStyle(style);
+			const style = feature.getStyle();
+			const txt = style.getText().getText();
+			style.getText().setText(txt.substring(1, txt.length - 1));
+			feature.setStyle(style);
 		});
 	});
 	const translate = new ol.interaction.Translate({
@@ -117,7 +120,7 @@ function rucherListeIgn(ign) {
 			zoom: 11
 		})
 	});
-	let layerSwitcher = new ol.control.LayerSwitcher({
+	const layerSwitcher = new ol.control.LayerSwitcher({
 		layers: [
 			{
 				layer: vectorLayer,
@@ -136,7 +139,7 @@ function rucherListeIgn(ign) {
 			}
 		]
 	});
-	let layersMap = map.getLayers();
+	const layersMap = map.getLayers();
 	if (ign) {
 		const olAgriLayer = new ol.layer.GeoportalWMTS({
 			layer: agriLayer,
@@ -242,7 +245,7 @@ function rucherListeIgn(ign) {
 	});
 	$('#searchtext').keyup(function(event) {
 		if (event.keyCode === 13) {
-			let searchtext = $('#searchtext').val().toUpperCase();
+			const searchtext = $('#searchtext').val().toUpperCase();
 			for (const marker of markerRuchers) {
 				if (marker.getStyle().getText().getText().toUpperCase().includes(searchtext)) {
 					selectDoubleClick.getFeatures().clear();

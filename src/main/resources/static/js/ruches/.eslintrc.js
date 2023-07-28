@@ -1,31 +1,29 @@
 module.exports = {
     "env": {
         "browser": true,
-        "es2021": true,
+        "es2023": true,
         "jquery": true
     },
     "extends": "eslint:recommended",
-    "overrides": [
-        {
-            "env": {
-                "node": true
-            },
-            "files": [
-                ".eslintrc.{js,cjs}"
-            ],
-            "parserOptions": {
-                "sourceType": "script"
-            }
-        }
-    ],
     "parserOptions": {
         "ecmaVersion": "latest",
         "impliedStrict": true
     },
     "rules": {
-    	"quotes": ["error", "single"],
-    	"no-self-compare": "error",
+    	"array-callback-return": "error",
+    	"eqeqeq": "error",
+    	"func-style": ["error", "declaration"],
     	"no-constant-binary-expression": "error",
-    	"array-callback-return": "error"
+    	"no-eval": "error",
+    	"no-self-compare": "error",
+    	"no-negated-condition": "error",
+    	"no-unmodified-loop-condition": "error",
+    	"no-unused-expressions": "error",
+    	"no-unneeded-ternary": "error",
+    	"no-useless-return": "error",
+    	"no-var": "error",
+    	"prefer-const": "error",
+    	"quotes": ["error", "single", {"avoidEscape": true }],
+    	"quote-props": ["error", "as-needed"],
     }
 }

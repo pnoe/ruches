@@ -1,4 +1,3 @@
-/* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals ol, domtoimage, jsPDF, exportGpx, exportKml,
    rucheParcours:writable, distParcours:writable, longitudeCentre, latitudeCentre, rayonsButinage, cercles, distButinage, ruches, 
    rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
@@ -95,11 +94,11 @@ function rucherDetail(ign) {
 				image: new ol.style.Circle({
 					radius: 12,
 					fill: new ol.style.Fill({
-						color: (ruches[i].essaim == null) ? '#FE00FE' : ruches[i].essaim.reineCouleurMarquage
+						color: (ruches[i].essaim === null) ? '#FE00FE' : ruches[i].essaim.reineCouleurMarquage
 					})
 				}),
 				text: new ol.style.Text({
-					text: (((ruches[i].essaim != null) && ruches[i].essaim.reineMarquee) ? '*' : '') + ruches[i].nom,
+					text: (((ruches[i].essaim !== null) && ruches[i].essaim.reineMarquee) ? '*' : '') + ruches[i].nom,
 					font: '14px sans-serif'
 				})
 			})
@@ -161,7 +160,7 @@ function rucherDetail(ign) {
 		style: styleCercles
 	});
 	cerclesLayer.on('change:visible', function() {
-		let view = map.getView();
+		const view = map.getView();
 		if (this.get('visible') && view.getZoom() > 16) {
 			view.setZoom(14);
 		}
@@ -174,11 +173,13 @@ function rucherDetail(ign) {
 	select.setActive(!$('#dragMarker')[0].checked);
 	select.on('select', function(e) {
 		e.selected.forEach(function(feature) {
-			let style = feature.getStyle(); let txt = style.getText().getText();
+			const style = feature.getStyle();
+			const txt = style.getText().getText();
 			style.getText().setText('[' + txt + ']'); feature.setStyle(style);
 		});
 		e.deselected.forEach(function(feature) {
-			let style = feature.getStyle(); let txt = style.getText().getText();
+			const style = feature.getStyle();
+			const txt = style.getText().getText();
 			style.getText().setText(txt.substring(1, txt.length - 1)); feature.setStyle(style);
 		});
 	});
@@ -237,10 +238,10 @@ function rucherDetail(ign) {
 		req.onload = function() {
 			if (req.readyState === 4) {
 				if (req.status === 200) {
-					if (req.responseText !== 'OK') {
-						alert(req.responseText);
-					} else {
+					if (req.responseText === 'OK') {
 						alert(dessinEnregistretxt);
+					} else {
+						alert(req.responseText);
 					}
 				}
 			}
@@ -288,7 +289,7 @@ function rucherDetail(ign) {
 			}
 		}]
 	});
-	let layersMap = map.getLayers();
+	const layersMap = map.getLayers();
 	if (ign) {
 		const olAgriLayer = new ol.layer.GeoportalWMTS({
 			layer: agriLayer,
@@ -403,8 +404,8 @@ function rucherDetail(ign) {
 				ruches.length + ' ' + ruchestxt + '<br/>' + distancedeparcourstxt +
 				' ' + distParcours.toLocaleString(lang, digits2) + ' m';
 		} else {
-			const essnom = (ruches[idx].essaim == null) ? '' : ruches[idx].essaim.nom;
-			const essid = (ruches[idx].essaim == null) ? '' : ruches[idx].essaim.id;
+			const essnom = (ruches[idx].essaim === null) ? '' : ruches[idx].essaim.nom;
+			const essid = (ruches[idx].essaim === null) ? '' : ruches[idx].essaim.id;
 			document.getElementById('popup-content').innerHTML =
 				'<a href="' + ruchesurl + 'ruche/' + ruches[idx].id + '">' +
 				ruchetxt + ' ' + ruches[idx].nom +
@@ -440,10 +441,10 @@ function rucherDetail(ign) {
 		req.onload = function() {
 			if (req.readyState === 4) {
 				if (req.status === 200) {
-					if (req.responseText !== 'OK') {
-						alert(req.responseText);
-					} else {
+					if (req.responseText === 'OK') {
 						parcoursRedraw();
+					} else {
+						alert(req.responseText);
 					}
 				}
 			}
@@ -455,7 +456,7 @@ function rucherDetail(ign) {
 	});
 	$('#searchtext').keyup(function(event) {
 		if (event.keyCode === 13) {
-			let searchtext = $('#searchtext').val().toUpperCase();
+			const searchtext = $('#searchtext').val().toUpperCase();
 			for (const marker of markerRuches) {
 				if ((marker.getStyle().getText().getText().toUpperCase() === searchtext) ||
 					(marker.getStyle().getText().getText().toUpperCase() === '*' + searchtext) ||
@@ -475,7 +476,7 @@ function rucherDetail(ign) {
 	$('.liste').click(function(e) {
 		window.location = ruchesurl + 'ruche/liste/' + rucher.id +
 			'?parcours=' + encodeURIComponent(JSON.stringify(rucheParcours)) +
-			'&plus=' + (e.target.id != 'liste');
+			'&plus=' + (e.target.id !== 'liste');
 	});
 	$('#export-gpx').click(function() {
 		exportGpx();
@@ -500,7 +501,7 @@ function rucherDetail(ign) {
 			map.once('rendercomplete', function() {
 				domtoimage.toPng(map.getViewport().querySelectorAll('.ol-layer canvas, canvas.ol-layer')[0])
 					.then(function(dataURL) {
-						let link = document.getElementById('image-download');
+						const link = document.getElementById('image-download');
 						link.href = dataURL;
 						link.click();
 					});
@@ -524,12 +525,12 @@ function rucherDetail(ign) {
 			const size = map.getSize();
 			const viewResolution = map.getView().getResolution();
 			map.once('rendercomplete', function() {
-				let exportOptions = {};
+				const exportOptions = {};
 				exportOptions.width = width;
 				exportOptions.height = height;
 				domtoimage.toJpeg(map.getTargetElement().getElementsByClassName('ol-layers')[0], exportOptions)
 					.then(function(dataURL) {
-						let pdf = new jsPDF('landscape', undefined, format);
+						const pdf = new jsPDF('landscape', undefined, format);
 						pdf.addImage(dataURL, 'JPEG', 0, 0, dim[0], dim[1]);
 						pdf.save(rucher.nom + '.pdf');
 						// Reset original map size

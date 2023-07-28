@@ -11,7 +11,7 @@
 			$('#reineDateNaissance, #dateAcquisition').datetimepicker(
 				{timepicker: false, format: 'Y-m-d'});
 			$.datetimepicker.setLocale(window.navigator.language.substring(0, 2));
-			$('#nom').focus();
+			document.getElementById('nom').focus();
 			jQuery.validator.addMethod('nomExiste', function (value) {
 				return $.inArray(value, essaimNoms) == -1;
 			}, nomexiste);

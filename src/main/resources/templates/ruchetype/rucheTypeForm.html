@@ -6,7 +6,7 @@
 	const rucheTypeNoms = /*[[${rucheTypeNoms}]]*/null;
 	const nomexiste = /*[[#{nomexiste}]]*/null;
 	document.addEventListener('DOMContentLoaded', () => {
-		$("#nom").focus();
+		document.getElementById('nom').focus();
 		jQuery.validator.addMethod("nomExiste", function(value) {
 			return $.inArray(value, rucheTypeNoms) == -1;
 		}, nomexiste);

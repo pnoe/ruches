@@ -1,4 +1,3 @@
-/* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals
    ol, overlay, drawControl, drawLayer, iconFeatureEntree,
    rucheParcours, distParcours, ruches, rucher, nomHausses,
@@ -70,11 +69,11 @@ function exportGpx() {
 		if (rucheP.id === 0) {
 			gpxcontent += 'Entrée';
 		} else {
-			let rucheidx = ruches.findIndex(x => x.id === rucheP.id);
-			let ruche = ruches[rucheidx];
+			const rucheidx = ruches.findIndex(x => x.id === rucheP.id);
+			const ruche = ruches[rucheidx];
 			gpxcontent += 'Ruche ' + ruche.nom + '. ' +
-				((ruche.essaim == null) ? "Pas d'essaim" : ('Essaim ' + ruche.essaim.nom)) + '. ' +
-				((nomHausses[rucheidx] == '') ? 'Pas de hausse' : ('Hausse(s) ' + nomHausses[rucheidx]));
+				((ruche.essaim === null) ? "Pas d'essaim" : ('Essaim ' + ruche.essaim.nom)) + '. ' +
+				((nomHausses[rucheidx] === '') ? 'Pas de hausse' : ('Hausse(s) ' + nomHausses[rucheidx]));
 		}
 		gpxcontent += ']]></desc></wpt>';
 	}
@@ -87,7 +86,7 @@ function exportGpx() {
 			'" lon="' + rucheP.longitude + '"></trkpt>';
 	}
 	gpxcontent += '</trkseg></trk></gpx>';
-	let link = document.getElementById('gpx-download');
+	const link = document.getElementById('gpx-download');
 	const file = new Blob([gpxcontent], { type: 'application/gpx+xml;charset=utf-8' });
 	link.href = URL.createObjectURL(file);
 	link.download = rucher.nom + '.gpx';
@@ -132,17 +131,17 @@ function exportKml() {
 				distParcours.toLocaleString(lang, digits2) + ' m';
 			couleur = '#iconwhite';
 		} else {
-			let rucheidx = ruches.findIndex(x => x.id === rucheParcours[i].id);
-			let ruche = ruches[rucheidx];
+			const rucheidx = ruches.findIndex(x => x.id === rucheParcours[i].id);
+			const ruche = ruches[rucheidx];
 			nom = '<![CDATA[' + ruche.nom;
 			description = '<![CDATA[Ruche ' + ruche.nom;
-			if (ruche.essaim == null) {
+			if (ruche.essaim === null) {
 				description += "<br/>Pas d'essaim" +
-					((nomHausses[rucheidx] == '') ? '<br/>Pas de hausse' : ('<br/>Hausse(s) ' + nomHausses[rucheidx]));
+					((nomHausses[rucheidx] === '') ? '<br/>Pas de hausse' : ('<br/>Hausse(s) ' + nomHausses[rucheidx]));
 				couleur = '#iconnull';
 			} else {
 				description += '<br/>Essaim ' + ruche.essaim.nom +
-					((nomHausses[rucheidx] == '') ? '<br/>Pas de hausse' : ('<br/>Hausse(s) ' + nomHausses[rucheidx]));
+					((nomHausses[rucheidx] === '') ? '<br/>Pas de hausse' : ('<br/>Hausse(s) ' + nomHausses[rucheidx]));
 				couleur = coulicon[ruche.essaim.reineCouleurMarquage];
 			}
 		}
@@ -163,7 +162,7 @@ function exportKml() {
 			rucheP.latitude + ',0 ';
 	}
 	kmlcontent += '</coordinates></LineString></Placemark></Document></kml>';
-	let link = document.getElementById('kml-download');
+	const link = document.getElementById('kml-download');
 	const file = new Blob([kmlcontent], { type: 'vnd.google-earth.kml+xml;charset=utf-8' });
 	link.href = URL.createObjectURL(file);
 	link.download = rucher.nom + '.kml';

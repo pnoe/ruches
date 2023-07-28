@@ -10,10 +10,10 @@
 		const dateFirst = /*[[${dateFirst}]]*/null;
 		const timeFirst = /*[[${timeFirst}]]*/null;
 		document.addEventListener('DOMContentLoaded', () => {
-			$.validator.addMethod("greaterThan", function (value, element, param) {
+			$.validator.addMethod('greaterThan', function (value, element, param) {
 				return Date.parse(value) > Date.parse(param);
 			}, doitEtreSupA + ' {0}');
-			$("#evenementForm").validate({
+			$('#evenementForm').validate({
 				errorClass: 'erreur-form',
 				errorPlacement: function (error, element) {
 					error.insertBefore(element.closest('div'));

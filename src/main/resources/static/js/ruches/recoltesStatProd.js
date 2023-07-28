@@ -1,4 +1,3 @@
-/* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals Chart, Hausses, Pots, HaussesEssaim,
 	  poidsMielHausses, poidsMielPots, debutAnnee, nbIEssaims
 */

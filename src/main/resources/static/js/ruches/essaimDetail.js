@@ -1,9 +1,7 @@
-/* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals _csrf_token,_csrf_param_name, essaimnoms, ruchesvidesnoms, recolteHausses, rucheEssaim,
 	essaimsupprecolttxt, suppessaimevetxt, suppessaimtxt,  evenements, nomessaimsvirgule,
 	nexistPasOuPasVidtxt, nomexistdejatxt, Ruchestxt, Essaimstxt, creertxt, urlessaimclone,
-	essaimid, pasderuchetxt
-*/
+	essaimid, pasderuchetxt */
 /* exported essaimDetail */
 'use strict';
 function essaimDetail() {
@@ -48,7 +46,7 @@ function essaimDetail() {
 		}
 		// Saisie des couples nomEssaim;nomRuche séparés par une ","
 		const noms = prompt(nomessaimsvirgule);
-		if (noms == null || noms == '') {
+		if (noms === null || noms === '') {
 			return;
 		}
 		const tabNomExiste = [];
@@ -70,23 +68,16 @@ function essaimDetail() {
 			if (arr.length > 1) {
 				nr = arr[1].trim();
 			}
-			if ($.inArray(ne, essaimnoms) != -1) {
-				// l'essaim ne existe déjà
-				tabNomExiste.push(ne);
-				if ((nr != '') && ($.inArray(nr, ruchesvidesnoms) == -1)) {
-					// ruche nr incorrecte
-					tabNomRucheIncorrect.push(nr);
-				}
-			} else {
+			if ($.inArray(ne, essaimnoms) === -1) {
 				// on crée l'essaim ne
 				tabNomOk.push(ne);
 				// ce nom ne doit pas être réutilisé
 				essaimnoms.push(ne);
 				iajout++;
-				if (nr == '') {
+				if (nr === '') {
 					// pas de ruche
 					tabNomRucheOk.push('');
-				} else if ($.inArray(nr, ruchesvidesnoms) == -1) {
+				} else if ($.inArray(nr, ruchesvidesnoms) === -1) {
 					// ruche nr incorrecte
 					tabNomRucheOk.push('');
 					tabNomRucheIncorrect.push(nr);
@@ -104,6 +95,13 @@ function essaimDetail() {
 
 					}
 				}
+			} else {
+				// l'essaim ne existe déjà
+				tabNomExiste.push(ne);
+				if ((nr !== '') && ($.inArray(nr, ruchesvidesnoms) === -1)) {
+					// ruche nr incorrecte
+					tabNomRucheIncorrect.push(nr);
+				}
 			}
 		}
 		let prompterreur = '';
@@ -111,7 +109,7 @@ function essaimDetail() {
 			prompterreur = Ruchestxt + ' : ' + tabNomRucheIncorrect.join(',') + ' ' + nexistPasOuPasVidtxt;
 		}
 		if (tabNomExiste.length > 0) {
-			if (prompterreur != '') { prompterreur += '\n'; }
+			if (prompterreur !== '') { prompterreur += '\n'; }
 			prompterreur += Essaimstxt + ' : ' + tabNomExiste.join(',') + ' ' + nomexistdejatxt;
 			if (tabNomOk.length === 0) {
 				alert(prompterreur);

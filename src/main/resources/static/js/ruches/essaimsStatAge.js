@@ -1,4 +1,3 @@
-/* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
 /* globals d3, Chart, agesHisto, pas, ageMinJours, ageMaxJours, Max, Min, ageMoyenJours, 
     EcartType, ageVarianceJours, Moyenne
 */

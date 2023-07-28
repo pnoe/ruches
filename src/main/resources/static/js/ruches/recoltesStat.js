@@ -1,6 +1,5 @@
-/* jshint  esversion: 6, browser: true, jquery: true, unused: true, undef: true, varstmt: true */
-/* globals d3, Chart,
-   poidsmiel, nomsessaims, poidsTotal
+/* globals 
+	d3, Chart, poidsmiel, nomsessaims, poidsTotal
 */
 /* exported graphe */
 'use strict';
