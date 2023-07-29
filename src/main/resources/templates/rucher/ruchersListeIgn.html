@@ -1,36 +1,39 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:replace="include :: jsol"></script>
-<script th:replace="include :: jsGpPluginOpenLayers"></script>
-<script th:src="@{/js/ruches/rucherListeOl.js}"></script>
-<script th:inline="javascript">
-	const ruchers = /*[[${ruchers}]]*/ null;	
-	const nomRuches = /*[[${rucheNoms}]]*/ null;
-	const recentertxt = /*[[#{recentrer?}]]*/ null;
-	const lesRucherstxt = /*[[#{Ruchers}]]*/ null;
-	const lesRuchestxt = /*[[#{Ruches}]]*/ null;
-	const pasderuchetxt = /*[[#{PasDeRuche}]]*/ null;
-	const ruchertxt = /*[[#{rucher}]]*/ null;
-	const couchemarqueursrucherstxt = /*[[#{couchemarqueursruchers}]]*/ null;
-	const pleinecrantxt = /*[[#{pleinecran}]]*/ null;
-	const urlruches = /*[[@{/}]]*/ null;
-	const _csrf_token = /*[[${_csrf.token}]]*/ null;
-	const ignCarteLiscense = /*[[${ignCarteLiscense}]]*/ null;
-	window.addEventListener('load', () => rucherListeIgn(true));
-</script>
-<script th:replace="include :: cssol"></script>
-<script th:replace="include :: cssGpPluginOpenLayers"></script>
-<style>
-	.ol-rotate {
-	    top: 4em;
-	}
-	[id^=GPsearchEngine-] {
+	<script th:replace="include :: jsol"></script>
+	<script th:replace="include :: jsGpPluginOpenLayers"></script>
+	<script th:replace="include :: jsruchesnom('rucherListeOl')"></script>
+	<script th:inline="javascript">
+		const ruchers = /*[[${ruchers}]]*/ null;
+		const nomRuches = /*[[${rucheNoms}]]*/ null;
+		const recentertxt = /*[[#{recentrer?}]]*/ null;
+		const lesRucherstxt = /*[[#{Ruchers}]]*/ null;
+		const lesRuchestxt = /*[[#{Ruches}]]*/ null;
+		const pasderuchetxt = /*[[#{PasDeRuche}]]*/ null;
+		const ruchertxt = /*[[#{rucher}]]*/ null;
+		const couchemarqueursrucherstxt = /*[[#{couchemarqueursruchers}]]*/ null;
+		const pleinecrantxt = /*[[#{pleinecran}]]*/ null;
+		const urlruches = /*[[@{/}]]*/ null;
+		const _csrf_token = /*[[${_csrf.token}]]*/ null;
+		const ignCarteLiscense = /*[[${ignCarteLiscense}]]*/ null;
+		window.addEventListener('load', () => rucherListeIgn(true));
+	</script>
+	<script th:replace="include :: cssol"></script>
+	<script th:replace="include :: cssGpPluginOpenLayers"></script>
+	<style>
+		.ol-rotate {
+			top: 4em;
+		}
+
+		[id^=GPsearchEngine-] {
 			top: 37px;
 			left: 42px
-	}	
-</style>
+		}
+	</style>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar"></nav>
 	<br />
@@ -45,20 +48,21 @@
 				</h1>
 			</div>
 			<div class="col">
-				<a href="#" class="bi-question-lg" data-bs-toggle="popover" data-bs-trigger="focus" tabindex="0" role="button"
-					th:attr="data-bs-content=#{aiderucherlisteignmarkers}"></a>
+				<a href="#" class="bi-question-lg" data-bs-toggle="popover" data-bs-trigger="focus" tabindex="0"
+					role="button" th:attr="data-bs-content=#{aiderucherlisteignmarkers}"></a>
 				<input type="text" th:placeholder="#{recherche}" id="searchtext" />
 				<span class="padicons">
-       				<input type="checkbox" id="dragMarker" th:title="#{markerFixes}" checked/>
+					<input type="checkbox" id="dragMarker" th:title="#{markerFixes}" checked />
 				</span>
-			</div>		
+			</div>
 		</div>
 	</div>
 	<div id="map"></div>
 	<div id="popup" class="ol-popup">
-      <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-      <div id="popup-content"></div>
-    </div>
+		<a href="#" id="popup-closer" class="ol-popup-closer"></a>
+		<div id="popup-content"></div>
+	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

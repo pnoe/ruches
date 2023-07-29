@@ -2,9 +2,8 @@
 	recolteHausses, evenements, suppreven, suppruche, nruchvirg,
 	nexisted, Ruches, creer, urlclone, rucheid
  */
-/* exported rucheDetail */
 'use strict';
-function rucheDetail() {
+document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('supprime').addEventListener('click', (event) => {
 		if (recolteHausses) {
 			alert(rnpsupprec);
@@ -12,10 +11,8 @@ function rucheDetail() {
 			if (confirm(suppreven)) {
 				return true;
 			}
-		} else {
-			if (confirm(suppruche)) {
-				return true;
-			}
+		} else if (confirm(suppruche)) {
+			return true;
 		}
 		event.preventDefault();
 		return false;
@@ -58,11 +55,9 @@ function rucheDetail() {
 			}
 		} else if (tabNomOk.length === 0) {
 			return;
-		} else {
-			if (!confirm(creer + ' ' + tabNomOk.join(',') + ' ?')) {
-				annule();
-				return;
-			}
+		} else if (!confirm(creer + ' ' + tabNomOk.join(',') + ' ?')) {
+			annule();
+			return;
 		}
 		const requestData = { nomclones: tabNomOk.join(',') };
 		requestData[_csrf_param_name] = _csrf_token;
@@ -72,4 +67,4 @@ function rucheDetail() {
 				document.location.reload(true);
 			});
 	});
-}
+});

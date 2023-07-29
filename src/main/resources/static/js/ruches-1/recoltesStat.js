@@ -1,7 +1,6 @@
 /* globals 
 	d3, Chart, poidsmiel, nomsessaims, poidsTotal
 */
-/* exported graphe */
 'use strict';
 // https://github.com/code-nebula/chart-color-generator
 function calculatePoint(i, intervalSize, colorRangeInfo) {
@@ -22,7 +21,7 @@ function interpolateColors(dataLength, colorScale, colorRangeInfo) {
 	return colorArray;
 }
 
-function graphe() {
+document.addEventListener('DOMContentLoaded', () => {
 	const lang = navigator.language;
 	const digits2 = {maximumFractionDigits:2};
 	const colorScale = d3.interpolateRainbow;
@@ -59,4 +58,4 @@ function graphe() {
 			}
 		}
 	});
-}
+});

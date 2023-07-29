@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head
 	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<script th:replace="include :: jsruches"></script>
 <script th:inline="javascript">
 	const _csrf_token = /*[[${_csrf.token}]]*/null;
 	const _csrf_param_name = /*[[${_csrf.parameterName}]]*/null;
@@ -23,9 +24,8 @@
 	const creertxt = /*[[#{creer}]]*/null;
 	const urlessaimclone = /*[[@{/essaim/clone/}]]*/null;
 	const essaimid = /*[[${essaim.id}]]*/null;
-	// document.addEventListener('DOMContentLoaded', essaimDetail);
 </script>
-<script th:src="@{/js/ruches/essaimDetail.js}"></script>
+
 </head>
 <body>
 	<nav th:replace="navbar::navbar"></nav>

@@ -1,7 +1,6 @@
 /* globals urlRetrait, urlAjout, recolteId, selHausRet, selHausAjout, DataTable */
-/* exported recolteChoixHausses */
 'use strict';
-function recolteChoixHausses() {
+document.addEventListener('DOMContentLoaded', () => {
 	function updateLinks(e, dt, type) {
 		let id;
 		let href;
@@ -56,4 +55,4 @@ function recolteChoixHausses() {
 			alert(selHausAjout);
 		}
 	});
-}
+});

@@ -25,9 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			event.preventDefault();
 		} else if (evenements) {
 			if (!confirm(suppessaimevetxt)) { event.preventDefault(); }
-		} else {
-			if (!confirm(suppessaimtxt)) { event.preventDefault(); }
-		}
+		} else if (!confirm(suppessaimtxt)) { event.preventDefault(); }
 	});
 
 	// Attention utiliser  event.preventDefault()
@@ -129,11 +127,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		} else if (tabNomOk.length === 0) {
 			return;
-		} else {
-			if (!confirm(creertxt + ' ' + tabNomOk.join(',') + ' ?')) {
-				annule();
-				return;
-			}
+		} else if (!confirm(creertxt + ' ' + tabNomOk.join(',') + ' ?')) {
+			annule();
+			return;
 		}
 		if (tabNomOk.length === 0) { return; }
 		const requestData = { nomclones: tabNomOk.join(','), nomruches: tabNomRucheOk.join(',') };

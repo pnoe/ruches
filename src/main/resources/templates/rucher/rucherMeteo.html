@@ -3,7 +3,7 @@
 
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 	<script th:replace="include :: jsChart"></script>
-	<script th:src="@{/js/ruches/rucherMeteo.js}"></script>
+	<script th:replace="include :: jsruches"></script>
 	<script th:inline="javascript">
 		const longitude = /*[[${rucher.longitude}]]*/ null;
 		const latitude = /*[[${rucher.latitude}]]*/ null;
@@ -17,6 +17,7 @@
 		th {
 			background-color: aliceblue;
 		}
+
 		.wi {
 			font-size: 20px;
 		}
@@ -26,6 +27,7 @@
 	<link th:replace="include :: weather-icons-wind">
 	</link>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar"></nav>
 	<br />

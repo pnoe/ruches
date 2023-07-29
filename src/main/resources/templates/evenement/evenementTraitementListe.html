@@ -1,24 +1,25 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head
-	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:replace="include :: moment"></script>
-<script th:replace="include :: jquerydaterangepicker"></script>
-<link th:replace="include :: cssjquerydaterangepicker" />
-<script th:src="@{/js/ruches/evenementListe.js}"></script>
-<script th:inline="javascript">
-	const Evenements = /*[[#{evenementstraitement}]]*/ null;
-	const buttontextprint = /*[[#{buttontextprint}]]*/null;
-	const buttontextcol = /*[[#{buttontextcol}]]*/null;
-	const url = /*[[@{'/evenement/essaim/listeTraitement/'}]]*/null;
-	document.addEventListener('DOMContentLoaded', () => {
-		$('#groupe').on('change', function() {
-			location = url + ($(this).is(':checked'));
+
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+	<script th:replace="include :: moment"></script>
+	<script th:replace="include :: jquerydaterangepicker"></script>
+	<link th:replace="include :: cssjquerydaterangepicker" />
+	<script th:replace="include :: jsruchesnom('evenementListe')"></script>
+	<script th:inline="javascript">
+		const Evenements = /*[[#{evenementstraitement}]]*/ null;
+		const buttontextprint = /*[[#{buttontextprint}]]*/null;
+		const buttontextcol = /*[[#{buttontextcol}]]*/null;
+		const url = /*[[@{'/evenement/essaim/listeTraitement/'}]]*/null;
+		document.addEventListener('DOMContentLoaded', () => {
+			$('#groupe').on('change', function () {
+				location = url + ($(this).is(':checked'));
+			});
+			evenementListe(true);
 		});
-		evenementListe(true);
-	});
-</script>
+	</script>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar">Menu</nav>
 	<br />
@@ -30,19 +31,16 @@
 				<h1 class="item" th:text="${tous} ? #{traitement} : #{eveDebutTraitement}"></h1>
 			</div>
 			<div class="col">
-				<span class="padicons"> <input type="checkbox" id="groupe"
-					th:title="#{tous}" th:checked="${tous}" /> <label for="tous"
-					th:text="#{tous}"></label>
+				<span class="padicons"> <input type="checkbox" id="groupe" th:title="#{tous}" th:checked="${tous}" />
+					<label for="tous" th:text="#{tous}"></label>
 				</span>
 			</div>
-			<div
-				th:insert="includeForm :: evenementListeDates(retController='/evenement/essaim/listeTraitement/' + ${tous})"
+			<div th:insert="includeForm :: evenementListeDates(retController='/evenement/essaim/listeTraitement/' + ${tous})"
 				class="col"></div>
 		</div>
 	</div>
 	<div class="container-fluid">
-		<table class="table table-bordered table-striped table-sm"
-			id="evenements">
+		<table class="table table-bordered table-striped table-sm" id="evenements">
 			<thead>
 				<tr>
 					<th th:text="#{date}"></th>
@@ -65,9 +63,8 @@
 			</thead>
 			<tbody>
 				<tr th:each="evenement : ${evenements}">
-					<td><a
-						th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
-						th:href="@{'/evenement/'+${evenement.id}+'?type=traitement'}"></a>
+					<td><a th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
+							th:href="@{'/evenement/'+${evenement.id}+'?type=traitement'}"></a>
 					</td>
 					<td th:if="${tous}"
 						th:text="${T(ooioo.ruches.evenement.TypeEvenement).ESSAIMTRAITEMENT.equals(evenement.type)}?#{Debut}:#{Fin}">
@@ -75,8 +72,7 @@
 					<td th:text="${evenement.ruche?.nom}"></td>
 					<td th:text="${evenement.essaim?.nom}"></td>
 					<td th:text="${evenement.rucher?.nom}"></td>
-					<td class="num"
-						th:text="${#numbers.formatDecimal(evenement.valeur,1,2,'COMMA')}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(evenement.valeur,1,2,'COMMA')}"></td>
 					<td th:text="${evenement.commentaire}"></td>
 				</tr>
 			</tbody>
@@ -84,4 +80,5 @@
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

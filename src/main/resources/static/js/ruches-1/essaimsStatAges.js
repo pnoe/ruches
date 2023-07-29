@@ -1,7 +1,6 @@
 /* globals d3, Chart, agesHisto, pas, ageMinJours, ageMaxJours, Max, Min, ageMoyenJours, 
-    EcartType, ageVarianceJours, Moyenne
+	EcartType, ageVarianceJours, Moyenne
 */
-/* exported graphe */
 'use strict';
 // https://github.com/code-nebula/chart-color-generator
 function calculatePoint(i, intervalSize, colorRangeInfo) {
@@ -22,7 +21,7 @@ function interpolateColors(dataLength, colorScale, colorRangeInfo) {
 	return colorArray;
 }
 
-function graphe() {
+document.addEventListener('DOMContentLoaded', () => {
 	const colorScale = d3.interpolateRainbow;
 	const colorRangeInfo = {
 		colorStart: 0,
@@ -56,7 +55,7 @@ function graphe() {
 					display: true,
 					title: {
 						display: true,
-						text: 'Âge des reines - ' + 
+						text: 'Âge des reines - ' +
 							Min + ' ' + ageMinJours + ' ' +
 							Max + ' ' + ageMaxJours + ' ' +
 							Moyenne + ' ' + ageMoyenJours + ' ' +
@@ -81,4 +80,4 @@ function graphe() {
 	});
 
 
-}
+});

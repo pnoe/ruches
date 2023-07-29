@@ -5,7 +5,7 @@
 <script th:replace="include :: d3-color"></script>
 <script th:replace="include :: d3-interpolate"></script>
 <script th:replace="include :: d3-scale-chromatic"></script>
-<script th:src="@{/js/ruches/essaimsStatAge.js}"></script>
+<script th:replace="include :: jsruches"></script>
 <script th:inline="javascript">
 	const pas = /*[[${pas}]]*/ null;
 	const agesHisto = /*[[${agesHisto}]]*/ null;
@@ -17,7 +17,6 @@
 	const EcartType = /*[[#{EcartType}]]*/ null;
 	const Min = /*[[#{Min}]]*/ null;
 	const Max = /*[[#{Max}]]*/ null;
-	document.addEventListener('DOMContentLoaded', graphe);
 </script>
 </head>
 <body>

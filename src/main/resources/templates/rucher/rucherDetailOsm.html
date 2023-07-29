@@ -1,49 +1,50 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head
-	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:replace="include :: jsol"></script>
-<script th:replace="include :: jsGpOsmPluginOpenLayers"></script>
-<script th:src="@{/js/ruches/rucherDetailOl.js}"></script>
-<script th:src="@{/js/ruches/rucherDetailCarto.js}"></script>
-<script th:replace="include :: dom-to-image"></script>
-<script th:replace="include :: jspdf"></script>
-<script th:inline="javascript">
-	let rucheParcours = /*[[${rucheParcours}]]*/ null;
-	let distParcours = /*[[${distParcours}]]*/ null;
-	const rucherMapZoom = /*[[${@environment.getProperty('rucher.map.zoom')}]]*/ null;
-	const longitudeCentre = /*[[${longitudeCentre}]]*/ null;
-	const latitudeCentre = /*[[${latitudeCentre}]]*/ null;
-	const rayonsButinage = /*[[${rayonsButinage}]]*/ null;
-	const cercles = /*[[#{cercles}]]*/ null;
-	const distButinage = /*[[#{distButinage}]]*/ null;
-	const ruches = /*[[${ruches}]]*/ null;
-	const rucher = /*[[${rucher}]]*/ null;
-	const nomHausses = /*[[${hausseNoms}]]*/ null;
-	const rapprochertxt = /*[[#{rapprocher}]]*/ null;
-	const pleinecran = /*[[#{pleinecran}]]*/ null;
-	const lesRuches = /*[[#{Ruches}]]*/ null;
-	const couchemarqueursruches = /*[[#{couchemarqueursruches}]]*/ null;
-	const essaimtxt = /*[[#{essaim}]]*/ null;
-	const pasdessaimtxt = /*[[#{Pasdessaim}]]*/ null;
-	const ruchetxt = /*[[#{ruche}]]*/ null;
-	const lesHausses = /*[[#{Hausses}]]*/ null;
-	const pasdehaussetxt = /*[[#{Pasdehausse}]]*/ null;
-	const parcourstxt = /*[[#{parcours}]]*/ null;
-	const parcoursoptimumtxt = /*[[#{parcoursoptimum}]]*/ null;
-	const ruchestxt= /*[[#{ruches}]]*/ null;
-	const distancedeparcourstxt = /*[[#{distancedeparcours}]]*/ null;
-	const entreetxt = /*[[#{Entree}]]*/ null;
-	const ruchesurl = /*[[@{/}]]*/ null;
-	const _csrf_token = /*[[${_csrf.token}]]*/ null;
-	const dessinEnregistretxt = /*[[#{dessinEnregistre}]]*/ null;
-	const distRuchesOk = /*[[#{distRuchesOk}]]*/ null;
-	const distMaxRuche = /*[[${distMaxRuche}]]*/ null;
-	document.addEventListener('DOMContentLoaded', () => rucherDetail(false));
-</script>
-<script th:replace="include :: cssol"></script>
-<script th:replace="include :: cssGpPluginOpenLayers"></script>
+
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+	<script th:replace="include :: jsol"></script>
+	<script th:replace="include :: jsGpOsmPluginOpenLayers"></script>
+	<script th:replace="include :: jsruchesnom('rucherDetailOl')"></script>
+	<script th:replace="include :: jsruchesnom('rucherDetailCarto')"></script>
+	<script th:replace="include :: dom-to-image"></script>
+	<script th:replace="include :: jspdf"></script>
+	<script th:inline="javascript">
+		let rucheParcours = /*[[${rucheParcours}]]*/ null;
+		let distParcours = /*[[${distParcours}]]*/ null;
+		const rucherMapZoom = /*[[${@environment.getProperty('rucher.map.zoom')}]]*/ null;
+		const longitudeCentre = /*[[${longitudeCentre}]]*/ null;
+		const latitudeCentre = /*[[${latitudeCentre}]]*/ null;
+		const rayonsButinage = /*[[${rayonsButinage}]]*/ null;
+		const cercles = /*[[#{cercles}]]*/ null;
+		const distButinage = /*[[#{distButinage}]]*/ null;
+		const ruches = /*[[${ruches}]]*/ null;
+		const rucher = /*[[${rucher}]]*/ null;
+		const nomHausses = /*[[${hausseNoms}]]*/ null;
+		const rapprochertxt = /*[[#{rapprocher}]]*/ null;
+		const pleinecran = /*[[#{pleinecran}]]*/ null;
+		const lesRuches = /*[[#{Ruches}]]*/ null;
+		const couchemarqueursruches = /*[[#{couchemarqueursruches}]]*/ null;
+		const essaimtxt = /*[[#{essaim}]]*/ null;
+		const pasdessaimtxt = /*[[#{Pasdessaim}]]*/ null;
+		const ruchetxt = /*[[#{ruche}]]*/ null;
+		const lesHausses = /*[[#{Hausses}]]*/ null;
+		const pasdehaussetxt = /*[[#{Pasdehausse}]]*/ null;
+		const parcourstxt = /*[[#{parcours}]]*/ null;
+		const parcoursoptimumtxt = /*[[#{parcoursoptimum}]]*/ null;
+		const ruchestxt = /*[[#{ruches}]]*/ null;
+		const distancedeparcourstxt = /*[[#{distancedeparcours}]]*/ null;
+		const entreetxt = /*[[#{Entree}]]*/ null;
+		const ruchesurl = /*[[@{/}]]*/ null;
+		const _csrf_token = /*[[${_csrf.token}]]*/ null;
+		const dessinEnregistretxt = /*[[#{dessinEnregistre}]]*/ null;
+		const distRuchesOk = /*[[#{distRuchesOk}]]*/ null;
+		const distMaxRuche = /*[[${distMaxRuche}]]*/ null;
+		document.addEventListener('DOMContentLoaded', () => rucherDetail(false));
+	</script>
+	<script th:replace="include :: cssol"></script>
+	<script th:replace="include :: cssGpPluginOpenLayers"></script>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar"></nav>
 	<br />
@@ -54,40 +55,36 @@
 			<div class="col">
 				<h1 class="item">
 					<th:block th:text="#{carteOsm}+' '"></th:block>
-					<a th:href="@{'/rucher/'+${rucher.id}}"
-						th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+					<a th:href="@{'/rucher/'+${rucher.id}}" th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
 				</h1>
 			</div>
 			<div class="col">
-				<a href="#" class="bi-question-lg" data-bs-toggle="popover"
-					data-bs-trigger="focus" tabindex="0" role="button"
-					th:attr="data-bs-content=#{aiderucherdetailignmarkers}"></a>
+				<a href="#" class="bi-question-lg" data-bs-toggle="popover" data-bs-trigger="focus" tabindex="0"
+					role="button" th:attr="data-bs-content=#{aiderucherdetailignmarkers}"></a>
 				&nbsp;
 				<input type="text" th:placeholder="#{recherche}" id="searchtext" />
 				<span class="padicons">
-       				<input type="checkbox" id="dragMarker" th:title="#{markerFixes}" checked/>
+					<input type="checkbox" id="dragMarker" th:title="#{markerFixes}" checked />
 				</span>
-				<a th:href="@{'/rucher/rapproche/Osm/'+${rucher.id}}"
-				  class="rapproche bi-arrows-angle-contract" th:title="#{rapprocher}"
-					aria-hidden="true"></a>
-				<span id="liste" class="liste bi-list-ul cursorpointer"
-					th:title="#{listeRuchesOrdonnees}" aria-hidden="true"></span>
-				<span id="listeplus" class="liste bi-list-stars cursorpointer"
-					th:title="#{listePlusRuchesOrdonnees}" aria-hidden="true"></span>
+				<a th:href="@{'/rucher/rapproche/Osm/'+${rucher.id}}" class="rapproche bi-arrows-angle-contract"
+					th:title="#{rapprocher}" aria-hidden="true"></a>
+				<span id="liste" class="liste bi-list-ul cursorpointer" th:title="#{listeRuchesOrdonnees}"
+					aria-hidden="true"></span>
+				<span id="listeplus" class="liste bi-list-stars cursorpointer" th:title="#{listePlusRuchesOrdonnees}"
+					aria-hidden="true"></span>
 				<span id="export-png" class="bi-filetype-png cursorpointer" th:title="#{exportPng}"
 					aria-hidden="true"></span>
 				<a id="image-download" th:download="${rucher.nom}+'.png'"></a>
 				<span id="export-gpx" class="bi-arrow-up-right-circle cursorpointer" th:title="#{exportGPX}"
 					aria-hidden="true"></span>
-				<a id="gpx-download"></a>	
+				<a id="gpx-download"></a>
 				<span id="export-kml" class="bi-arrow-up-right-square cursorpointer" th:title="#{exportKML}"
 					aria-hidden="true"></span>
-				<a id="kml-download"></a>				
-				<span id="parcours-redraw"
-					class="bi-arrow-clockwise cursorpointer" th:title="#{parcoursRecalcul}"
-					aria-hidden="true"></span>				
-				<span id="export-pdf" class="bi-file-pdf cursorpointer"
-					th:title="#{exportPdf}" aria-hidden="true"></span>
+				<a id="kml-download"></a>
+				<span id="parcours-redraw" class="bi-arrow-clockwise cursorpointer" th:title="#{parcoursRecalcul}"
+					aria-hidden="true"></span>
+				<span id="export-pdf" class="bi-file-pdf cursorpointer" th:title="#{exportPdf}"
+					aria-hidden="true"></span>
 				<form style="display:inline;" class="form">
 					<select id="format">
 						<option value="a3">A3</option>
@@ -97,8 +94,8 @@
 						<option value="150" selected>150 dpi</option>
 						<option value="300">300 dpi</option>
 					</select>
-				</form>		
-				&nbsp;	
+				</form>
+				&nbsp;
 				<span id="geoloc" class="bi-geo-alt cursorpointer" th:title="'Géolocalisation'"
 					aria-hidden="true"></span>
 			</div>
@@ -111,4 +108,5 @@
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

@@ -2,10 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+	<script th:replace="include :: jsruches"></script>
 	<script th:replace="include :: jsdatetimepicker"></script>
 	<link th:replace="include :: cssdatetimepicker" />
 	<script th:replace="include ::  localejsdatetimepicker"></script>
-	<script th:src="@{/js/ruches/recolteDetail.js}"></script>
 	<script th:inline="javascript">
 		const _csrf_token = /*[[${_csrf.token}]]*/null;
 		const _csrf_param_name = /*[[${_csrf.parameterName}]]*/null;
@@ -16,7 +16,6 @@
 		const urlRecHDepot = /*[[@{/recolte/haussesDepot/}]]*/null;
 		const recId = /*[[${recolte.id}]]*/null;
 		const totalPourLaRuche = /*[[#{totalPourLaRuche}]]*/null;
-		document.addEventListener('DOMContentLoaded', recolteDetail);
 	</script>
 </head>
 

@@ -2,8 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-	<script th:src="@{/js/ruches/rucherDetailGg.js}"></script>
-	<script th:src="@{/js/ruches/rucherDetailCarto.js}"></script>
+	<script th:replace="include :: jsruches"></script>
 	<script th:inline="javascript">
 		let rucheParcours = /*[[${rucheParcours}]]*/ null;
 		let distParcours = /*[[${distParcours}]]*/ null;
@@ -26,6 +25,7 @@
 		const entreetxt = /*[[#{Entree}]]*/ null;
 		const _csrf_token = /*[[${_csrf.token}]]*/ null;
 	</script>
+	<script th:replace="include :: jsruchesnom('rucherDetailCarto')"></script>
 	<script async defer th:src="${@environment.getProperty('gg.map.url')}"></script>
 </head>
 

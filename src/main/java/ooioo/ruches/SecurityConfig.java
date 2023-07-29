@@ -39,6 +39,7 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		// https://docs.spring.io/spring-security/reference/migration-7/configuration.html
+		// https://github.com/spring-projects/spring-security/issues/13568
 		http.authorizeHttpRequests((autz) -> autz.requestMatchers("/forgotPassword", "/resetPassword",
 				"/resetPasswordFin", "/", "/css/**", "/js/**", "/images/**", "/doc/**", "/font/**").permitAll()
 				.anyRequest().authenticated())
@@ -66,7 +67,7 @@ public class SecurityConfig {
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService);
 	}
-
+	
 	/*
 	 * Password encoder nécessaire sinon erreur : There is no PasswordEncoder mapped
 	 * for the id "null"

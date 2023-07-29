@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-	<script th:src="@{/js/ruches/rucheDetail.js}"></script>
+	<script th:replace="include :: jsruches"></script>
 	<script th:inline="javascript">
 		const _csrf_token = /*[[${_csrf.token}]]*/ null;
 		const _csrf_param_name = /*[[${_csrf.parameterName}]]*/ null;
@@ -18,7 +18,6 @@
 		const creer = /*[[#{creer}]]*/ null;
 		const urlclone = /*[[@{/ruche/clone/}]]*/ null;
 		const rucheid = /*[[${ruche.id}]]*/ null;
-		document.addEventListener('DOMContentLoaded', rucheDetail);
 	</script>
 </head>
 

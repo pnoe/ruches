@@ -1,9 +1,8 @@
 /* globals Chart, Hausses, Pots, HaussesEssaim,
 	  poidsMielHausses, poidsMielPots, debutAnnee, nbIEssaims
 */
-/* exported grapheRecolte */
 'use strict';
-function grapheRecolte() {
+document.addEventListener('DOMContentLoaded', () => {
 	const labels = [];
 	for (let i = 0; i < poidsMielHausses.length; i++) {
 		labels[i] = i + debutAnnee;
@@ -57,4 +56,4 @@ function grapheRecolte() {
 			}
 		},
 	});
-}
+});

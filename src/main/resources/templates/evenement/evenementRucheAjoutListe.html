@@ -1,17 +1,19 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:replace="include :: moment"></script>
-<script th:replace="include :: jquerydaterangepicker"></script>
-<link th:replace="include :: cssjquerydaterangepicker"/>
-<script th:src="@{/js/ruches/evenementListe.js}"></script>
-<script th:inline="javascript">
-	const Evenements = /*[[#{evenementsrucheajout}]]*/ null;
-	const buttontextprint = /*[[#{buttontextprint}]]*/null;
-	const buttontextcol = /*[[#{buttontextcol}]]*/null;
-	document.addEventListener('DOMContentLoaded', () => evenementListe(true));
-</script>
+	<script th:replace="include :: moment"></script>
+	<script th:replace="include :: jquerydaterangepicker"></script>
+	<link th:replace="include :: cssjquerydaterangepicker" />
+	<script th:replace="include :: jsruchesnom('evenementListe')"></script>
+	<script th:inline="javascript">
+		const Evenements = /*[[#{evenementsrucheajout}]]*/ null;
+		const buttontextprint = /*[[#{buttontextprint}]]*/null;
+		const buttontextcol = /*[[#{buttontextcol}]]*/null;
+		document.addEventListener('DOMContentLoaded', () => evenementListe(true));
+	</script>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar">Menu</nav>
 	<br />
@@ -22,7 +24,8 @@
 			<div class="col">
 				<h1 class="item" th:text="#{evenementsrucheajout}"></h1>
 			</div>
-			<div th:insert="includeForm :: evenementListeDates(retController='/evenement/rucher/listeRucheAjout')" class="col">
+			<div th:insert="includeForm :: evenementListeDates(retController='/evenement/rucher/listeRucheAjout')"
+				class="col">
 			</div>
 		</div>
 	</div>
@@ -56,10 +59,11 @@
 					<td th:text="${evenement.essaim?.nom}"></td>
 					<td th:text="${evenement.valeur}"></td>
 					<td th:text="${evenement.commentaire}"></td>
-				</tr>				
+				</tr>
 			</tbody>
 		</table>
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

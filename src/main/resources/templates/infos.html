@@ -26,15 +26,13 @@
 			<ul>
 				<li th:text="|${nbRuchers} #{ruchersdepot}|"></li>
 				<li th:text="|${nbRuches} #{ruches} (${nbRuchesProd} #{production} + ${nbRuchesElev} #{elevage})|"></li>
-				<li th:text="|${nbHausses} #{hausses}|"></li>
 				<li
 					th:text="|${nbRuchesAuDepot} #{ruchesaudepot} (${nbRuchesAuDepotProd} #{production} + ${nbRuchesAuDepotElev} #{elevage})|">
 				</li>
-				<li th:text="|${nbHaussesHorsRuche} #{haussesnonposees}|"></li>
 				<li
 					th:text="|${nbRuchesAvecEssaim} #{ruchesavecessaim} (${nbRuchesAvecEssaimProd} #{production} + ${nbRuchesAvecEssaimElev} #{elevage})|">
 				</li>
-				<li th:text="|${nbHaussesSurRuchesAvecEssaim} #{haussesposees}|"></li>
+				<li th:text="|${nbHausses} #{hausses} (${nbHaussesSurRuchesAvecEssaim} #{posees} + ${nbHaussesHorsRuche} #{nonposees})|"></li>
 			</ul>
 		</div>
 	</div>

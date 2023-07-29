@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 <script th:replace="include :: d3"></script>
+<script th:replace="include :: jsruches"></script>
 <script th:inline="javascript">
 	const data = /*[(${essaimTree})]*/ null;
 	const essaimnom = /*[[${essaim.nom}]]*/ null;
@@ -14,7 +15,6 @@
 	const Inactif = /*[[#{Inactif}]]*/ null;
 	const urlessaim = /*[[@{/essaim/}]]*/ null;
 </script>
-<script th:src="@{/js/ruches/essaimGraphe.js}"></script>
 <style>
 .node circle {
   fill: #fff;

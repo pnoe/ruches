@@ -1,19 +1,21 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:src="@{/js/ruches/ruchersListeGg.js}"></script>
-<script th:inline="javascript">
-	const ruchers = /*[[${ruchers}]]*/ null;
-	const nomRuches = /*[[${rucheNoms}]]*/ null;
-	const urlruches = /*[[@{/}]]*/ null;
-	const ruchertxt = /*[[#{rucher}]]*/ null;
-	const lesRuchestxt = /*[[#{Ruches}]]*/ null;
-	const pasderuchetxt = /*[[#{PasDeRuche}]]*/ null;
-	const ruchersmapzoom = /*[[${@environment.getProperty('ruchers.map.zoom')}]]*/ null	
-    const _csrf_token = /*[[${_csrf.token}]]*/ null;
-</script>
-<script async defer	th:src="${@environment.getProperty('gg.map.url')}"></script>
+	<script th:replace="include :: jsruches"></script>
+	<script th:inline="javascript">
+		const ruchers = /*[[${ruchers}]]*/ null;
+		const nomRuches = /*[[${rucheNoms}]]*/ null;
+		const urlruches = /*[[@{/}]]*/ null;
+		const ruchertxt = /*[[#{rucher}]]*/ null;
+		const lesRuchestxt = /*[[#{Ruches}]]*/ null;
+		const pasderuchetxt = /*[[#{PasDeRuche}]]*/ null;
+		const ruchersmapzoom = /*[[${@environment.getProperty('ruchers.map.zoom')}]]*/ null
+		const _csrf_token = /*[[${_csrf.token}]]*/ null;
+	</script>
+	<script async defer th:src="${@environment.getProperty('gg.map.url')}"></script>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar"></nav>
 	<br />
@@ -28,14 +30,15 @@
 				</h1>
 			</div>
 			<div class="col">
-				<input type="text" th:placeholder="#{recherche}" id="searchtext"/>
-       			<span class="padicons">
-       				<input type="checkbox" id="dragMarker" th:title="#{markerFixes}" checked/>
-				</span>							
-        	</div>
-        </div>
-    </div>
+				<input type="text" th:placeholder="#{recherche}" id="searchtext" />
+				<span class="padicons">
+					<input type="checkbox" id="dragMarker" th:title="#{markerFixes}" checked />
+				</span>
+			</div>
+		</div>
+	</div>
 	<div id="map"></div>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

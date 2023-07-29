@@ -2,14 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-	<script th:src="@{/js/ruches/recolteChoixHausses.js}"></script>
+	<script th:replace="include :: jsruches"></script>
 	<script th:inline="javascript">
 		const urlRetrait = /*[[@{/recolte/retraitHausses/}]]*/null;
 		const urlAjout = /*[[@{/recolte/ajoutHausses/}]]*/null;
 		const recolteId = /*[[${recolte.id}]]*/null;
 		const selHausRet = /*[[#{selecthaussesretirer}]]*/null;
 		const selHausAjout = /*[[#{selecthaussesajouter}]]*/null;
-		document.addEventListener('DOMContentLoaded', recolteChoixHausses);
 	</script>
 </head>
 

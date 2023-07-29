@@ -6,8 +6,8 @@
 	<script th:replace="include :: jsGpPluginOpenLayers"></script>
 	<link th:replace="include :: cssol" />
 	<link th:replace="include :: cssGpPluginOpenLayers" />
-	<script th:src="@{/js/ruches/rucherDetailOl.js}"></script>
-	<script th:src="@{/js/ruches/rucherDetailCarto.js}"></script>
+	<script th:replace="include :: jsruchesnom('rucherDetailOl')"></script>
+	<script th:replace="include :: jsruchesnom('rucherDetailCarto')"></script>
 	<script th:replace="include :: dom-to-image"></script>
 	<script th:inline="javascript">
 		let rucheParcours = /*[[${rucheParcours}]]*/ null;
@@ -39,7 +39,7 @@
 		const dessinEnregistretxt = /*[[#{dessinEnregistre}]]*/ null;
 		const ignCarteLiscense = /*[[${ignCarteLiscense}]]*/ null;
 		const distRuchesOk = /*[[#{distRuchesOk}]]*/ null;
-		const distMaxRuche = /*[[${distMaxRuche}]]*/ null;	
+		const distMaxRuche = /*[[${distMaxRuche}]]*/ null;
 		window.addEventListener('load', () => rucherDetail(true));
 	</script>
 	<script th:replace="include :: cssol"></script>

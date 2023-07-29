@@ -2,9 +2,8 @@
 	_csrf_token, _csrf_param_name, suppRecHauss, dateRecEpoch, enlevTtHauRec,
 	enlevHRecDe30, urlRecHDepot, recId, totalPourLaRuche, DataTable
 */
-/* exported recolteDetail */
 'use strict';
-function recolteDetail() {
+document.addEventListener('DOMContentLoaded', () => {
 	const itDate = document.getElementById('date');
 	const itDateOk = document.getElementById('dateOK');
 	itDate.style.display = 'none';
@@ -61,4 +60,4 @@ function recolteDetail() {
 			}
 		}
 	});
-}
+});
