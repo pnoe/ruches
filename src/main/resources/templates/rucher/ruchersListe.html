@@ -18,7 +18,7 @@
 					},
 					action: function (e, dt, node, config) {
 						config.title = Ruchers + ' ' + (new Date()).toLocaleDateString();
-						const inputSearch = table.search();
+						const inputSearch = this.search();
 						if (inputSearch.length !== 0) {
 							config.title += ' <' + inputSearch + '>';
 						}

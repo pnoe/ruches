@@ -1,36 +1,40 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:inline="javascript">
-const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
-const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
-const Ruches = /*[[#{Ruches}]]*/ null;
-const rucher = /*[[#{rucher}]]*/ null;
-const nomrucher = /*[[${rucher.nom}]]*/ null;
-document.addEventListener('DOMContentLoaded', () => {
-	const idTbl = '#ruches';
-    new DataTable(idTbl, {
-        dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
-        scrollX: true,
-	    buttons: [
-	    	'csv',
-	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-	    		action: function (e, dt, node, config) {
+	<script th:inline="javascript">
+		const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
+		const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
+		const Ruches = /*[[#{Ruches}]]*/ null;
+		const rucher = /*[[#{rucher}]]*/ null;
+		const nomrucher = /*[[${rucher.nom}]]*/ null;
+		document.addEventListener('DOMContentLoaded', () => {
+			const idTbl = '#ruches';
+			new DataTable(idTbl, {
+				dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
+				scrollX: true,
+				buttons: [
+					'csv',
+					{
+						extend: 'pdf', exportOptions: {columns: ':visible'},
+						action: function (e, dt, node, config) {
 							config.title = `${Ruches} ${rucher} ${nomrucher} ${(new Date()).toLocaleDateString()}`;
-							const inputSearch = table.search();
+							const inputSearch = this.search();
 							if (inputSearch.length !== 0) {
-								config.title += " <" + inputSearch + ">";
+								config.title += ' <' + inputSearch + '>';
 							}
 							$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, node, config);
 						},
-				orientation : 'landscape'},
-            {extend: 'print', text: buttTxtPrint},
-            {extend: 'colvis', text: buttTxtCol}
-        ]
-    });
-});
-</script>
+						orientation: 'landscape'
+					},
+					{extend: 'print', text: buttTxtPrint},
+					{extend: 'colvis', text: buttTxtCol}
+				]
+			});
+		});
+	</script>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar">Menu</nav>
 	<br />
@@ -40,9 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<th:block th:text="#{listeRuches}+' '"></th:block>	
-					<a th:href="@{'/rucher/'+${rucher.id}}"
-						th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+					<th:block th:text="#{listeRuches}+' '"></th:block>
+					<a th:href="@{'/rucher/'+${rucher.id}}" th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
 				</h1>
 			</div>
 		</div>
@@ -73,14 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
 			<tbody>
 				<tr th:each="ruche : ${ruches}">
 					<td th:text="${ordreRuche[rucheStat.index]}"></td>
-					<td><a th:href="@{'/ruche/'+${ruche.id}}"
-						th:text="${ruche.nom}"></a></td>
-					<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}"
-						th:text="${ruche.essaim?.nom}"></a></td>
+					<td><a th:href="@{'/ruche/'+${ruche.id}}" th:text="${ruche.nom}"></a></td>
+					<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}" th:text="${ruche.essaim?.nom}"></a></td>
 					<td th:text="${dateAjoutRucher[rucheStat.index]}"></td>
 					<td th:text="${ruche.production}? #{oui} : #{non}"></td>
-					<td th:if="${session.voirInactif}"
-						th:text="${ruche.active}? #{oui} : #{non}"></td>						
+					<td th:if="${session.voirInactif}" th:text="${ruche.active}? #{oui} : #{non}"></td>
 					<td th:text="${ruche.dateAcquisition}"></td>
 					<td class="num" th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
 					<td class="num" th:text="${listeEvenCadre[rucheStat.index]?.valeur}"></td>
@@ -98,4 +98,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

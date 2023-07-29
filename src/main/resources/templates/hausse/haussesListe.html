@@ -19,10 +19,10 @@
 					{
 						extend: 'pdf', exportOptions: {columns: ':visible'},
 						action: function (e, dt, node, config) {
-							config.title = Hausses + " " + (new Date()).toLocaleDateString();
+							config.title = Hausses + ' ' + (new Date()).toLocaleDateString();
 							const inputSearch = table.search();
 							if (inputSearch.length !== 0) {
-								config.title += " <" + inputSearch + ">";
+								config.title += ' <' + inputSearch + '>';
 							}
 							$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, node, config);
 						}
@@ -33,25 +33,25 @@
 			});
 			function updateLinks(e, dt, type, indexes) {
 				if (type === 'row') {
-					let noms = "";
+					let noms = '';
 					table.rows({selected: true}).data().pluck(0).each(function (value, index) {
 						const a = document.createElement('template');
 						a.innerHTML = value;
-						noms += a.content.children[0].getAttribute("href").
-							substring(a.content.children[0].getAttribute("href").lastIndexOf("/") + 1) + ",";
+						noms += a.content.children[0].getAttribute('href').
+							substring(a.content.children[0].getAttribute('href').lastIndexOf('/') + 1) + ',';
 					});
 					if (noms) {
 						noms = noms.substring(0, noms.length - 1);
 						document.getElementById('commentaire').setAttribute('href', 
 							urlCommLot + noms);
 					} else {
-						document.getElementById('commentaire').setAttribute('href', "#");
+						document.getElementById('commentaire').setAttribute('href', '#');
 					}
 				}
 			}
 			table.on('select deselect', updateLinks);
-			document.getElementById('commentaire').addEventListener("click", (event) => {
-				if (event.target.getAttribute("href") === "#") {
+			document.getElementById('commentaire').addEventListener('click', (event) => {
+				if (event.target.getAttribute('href') === '#') {
 					alert(selectHaTrait);
 				}
 			});

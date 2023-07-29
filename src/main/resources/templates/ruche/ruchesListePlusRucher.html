@@ -20,9 +20,9 @@
 						exportOptions: {columns: ':visible'},
 						action: function (e, dt, node, config) {
 							config.title = `${Ruches} ${rucher} ${nomrucher} ${(new Date()).toLocaleDateString()}`;
-							const inputSearch = table.search();
+							const inputSearch = this.search();
 							if (inputSearch.length !== 0) {
-								config.title += " <" + inputSearch + ">";
+								config.title += ' <' + inputSearch + '>';
 							}
 							$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, node, config);
 						},
