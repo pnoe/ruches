@@ -1,26 +1,29 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head
-	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:inline="javascript">
-const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
-const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
-const rucheTypes = /*[[#{rucheTypes}]]*/ null;
-document.addEventListener('DOMContentLoaded', () => {
-    new DataTable('#ruchetypes', {
-        dom: 'Blftip',
-        scrollX: true,
-	    buttons: [
-	    	'csv',
-	    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-	    		title: rucheTypes + " " + (new Date()).toLocaleDateString()},
-	            {extend: 'print', text: buttTxtPrint},
-	            {extend: 'colvis', text: buttTxtCol}
-         ]
-       });    
-});
-</script>
+
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+	<script th:inline="javascript">
+		const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
+		const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
+		const rucheTypes = /*[[#{rucheTypes}]]*/ null;
+		document.addEventListener('DOMContentLoaded', () => {
+			new DataTable('#ruchetypes', {
+				dom: 'Blftip',
+				scrollX: true,
+				buttons: [
+					'csv',
+					{
+						extend: 'pdf', exportOptions: {columns: ':visible'},
+						title: rucheTypes + ' ' + (new Date()).toLocaleDateString()
+					},
+					{extend: 'print', text: buttTxtPrint},
+					{extend: 'colvis', text: buttTxtCol}
+				]
+			});
+		});
+	</script>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar">Menu</nav>
 	<br />
@@ -32,8 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				<h1 class="item" th:text="#{rucheTypes}"></h1>
 			</div>
 			<div class="col">
-				<a th:href="@{/rucheType/cree}" class="bi-plus-lg"
-					th:title="#{ajouterRucheType}" aria-hidden="true">
+				<a th:href="@{/rucheType/cree}" class="bi-plus-lg" th:title="#{ajouterRucheType}" aria-hidden="true">
 				</a>
 			</div>
 		</div>
@@ -50,9 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="rucheType : ${rucheTypes}">				
-					<td><a th:href="@{'/rucheType/'+${rucheType.id}}"
-						th:text="*{rucheType.nom}"></a></td>
+				<tr th:each="rucheType : ${rucheTypes}">
+					<td><a th:href="@{'/rucheType/'+${rucheType.id}}" th:text="*{rucheType.nom}"></a></td>
 					<td class="num" th:text="*{rucheType.nbCadresMax}"></td>
 					<td class="num" th:text="${nbRuchesEssaim[rucheTypeStat.index]}"></td>
 					<td class="num" th:text="${nbRuchesSansEssaim[rucheTypeStat.index]}"></td>
@@ -63,4 +64,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

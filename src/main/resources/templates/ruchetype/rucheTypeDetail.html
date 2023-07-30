@@ -12,14 +12,13 @@
 		const suppTypeRuche = /*[[#{suppTypeRuche}]]*/null;
 		const typeRucheSuppNon = /*[[#{typeRucheSuppNon}]]*/null;
 		document.addEventListener('DOMContentLoaded', () => {
-			document.getElementById('supprime').addEventListener("click", (event) => {
-				if (nbRuchesTotal != "0") {
+			document.getElementById('supprime').addEventListener('click', (event) => {
+				if (nbRuchesTotal !== 0) {
 					alert(typeRucheSuppNon);
 				} else if (confirm(suppTypeRuche)) {
-					return true;
+					return;
 				}
 				event.preventDefault();
-				return false;
 			});
 			new DataTable('#ruches', {
 				dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
@@ -31,7 +30,7 @@
 						exportOptions: {
 							columns: ':visible'
 						},
-						title: rucheTypetxt + ' : ' + rucheTypeNom + ' - ' + listeRuches + " "
+						title: rucheTypetxt + ' : ' + rucheTypeNom + ' - ' + listeRuches + ' '
 							+ (new Date()).toLocaleDateString()
 					}, {
 						extend: 'print',
