@@ -41,7 +41,8 @@
 			<tbody>
 				<tr th:each="rr : ${rrs}">
 					<td><a th:text="${rr.nom}" th:href="@{'/rucher/'+${rr.id}}"></td>
-					<td th:text="${dist[rrStat.index] == 0} ? '' : ${#numbers.formatDecimal(dist[rrStat.index],1,3)}"></td>
+					<td th:text="${dist[rrStat.index] == 0} ? '' : ${#numbers.formatDecimal(dist[rrStat.index],1,3)}">
+					</td>
 					<td th:text="${#temporals.format(temps[rrStat.index], 'HH:mm')}"></td>
 					<td th:text="${#numbers.formatDecimal(distOiseau[rrStat.index],1,3)}"></td>
 				</tr>

@@ -1,44 +1,45 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head
-	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:inline="javascript">
-	const urlAjout = /*[[@{/rucher/ruches/ajouter/}]]*/null;
-	const rucherId = /*[[${rucher.id}]]*/null;
-	const selRuchesAjout = /*[[#{selectruchesajout}]]*/null;
-	document.addEventListener('DOMContentLoaded', () => {
-		let tableajout = new DataTable('#ajoutRuches', {
-			select : {
-				style : 'multi+shift'
-			}
-		});
-		new DataTable('#retraitRuches', {});
-		function updateLinkAjout(e, dt, type, indexes) {
-			if (type === 'row') {
-				let rucheIds = "";
-				tableajout.rows({
-					selected : true
-				}).data().pluck(1).each(function(value, index) {
-					rucheIds += value + ",";
-				});
-				if (rucheIds) {
-					/*[- On enlève la dernière virgule et met à jour l'url de traitement -]*/
-					rucheIds = rucheIds.substring(0, rucheIds.length - 1);
-					$('#actionAjoutRuches').attr('href', urlAjout + rucherId + '/' + rucheIds);
-				} else {
-					$('#actionAjoutRuches').attr('href', "#actionAjoutRuches");
+
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+	<script th:inline="javascript">
+		const urlAjout = /*[[@{/rucher/ruches/ajouter/}]]*/null;
+		const rucherId = /*[[${rucher.id}]]*/null;
+		const selRuchesAjout = /*[[#{selectruchesajout}]]*/null;
+		document.addEventListener('DOMContentLoaded', () => {
+			const tableajout = new DataTable('#ajoutRuches', {
+				select: {
+					style: 'multi+shift'
+				}
+			});
+			new DataTable('#retraitRuches', {});
+			function updateLinkAjout(e, dt, type) {
+				if (type === 'row') {
+					let rucheIds = '';
+					tableajout.rows({
+						selected: true
+					}).data().pluck(1).each(function (value) {
+						rucheIds += value + ',';
+					});
+					if (rucheIds) {
+						/*[- On enlève la dernière virgule et met à jour l'url de traitement -]*/
+						rucheIds = rucheIds.substring(0, rucheIds.length - 1);
+						$('#actionAjoutRuches').attr('href', urlAjout + rucherId + '/' + rucheIds);
+					} else {
+						$('#actionAjoutRuches').attr('href', '#actionAjoutRuches');
+					}
 				}
 			}
-		}
-		tableajout.on('select deselect', updateLinkAjout);
-		$('#actionAjoutRuches').on('click', function() {
-			if ($(this).attr("href") == "#actionAjoutRuches") {
-				alert(selRuchesAjout);
-			}
+			tableajout.on('select deselect', updateLinkAjout);
+			$('#actionAjoutRuches').on('click', function () {
+				if ($(this).attr('href') === '#actionAjoutRuches') {
+					alert(selRuchesAjout);
+				}
+			});
 		});
-	});
-</script>
+	</script>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar"></nav>
 	<br />
@@ -49,14 +50,11 @@
 			<div class="col">
 				<h1 class="item">
 					<th:block th:text="#{ajoutderuches}+' '"></th:block>
-					<a th:href="@{'/rucher/'+${rucher.id}}"
-						th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+					<a th:href="@{'/rucher/'+${rucher.id}}" th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
 				</h1>
 			</div>
 			<div class="col">
-				<a
-					th:href="@{#{urldoc}+'3543_3352760186'}"
-					class="bi-book" th:title="#{Doc}" target="_blank"
+				<a th:href="@{#{urldoc}+'3543_3352760186'}" class="bi-book" th:title="#{Doc}" target="_blank"
 					aria-hidden="true"></a>
 			</div>
 		</div>
@@ -76,8 +74,7 @@
 		</table>
 		<br />
 		<h6>
-			<a id="actionAjoutRuches" href="#actionAjoutRuches"
-				th:text="#{ajoutRuches}"></a>
+			<a id="actionAjoutRuches" href="#actionAjoutRuches" th:text="#{ajoutRuches}"></a>
 		</h6>
 		<table class="table table-bordered table-striped" id="ajoutRuches">
 			<thead>
@@ -99,4 +96,5 @@
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

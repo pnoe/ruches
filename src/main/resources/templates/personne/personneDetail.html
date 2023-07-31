@@ -7,16 +7,15 @@ const notListEmpty = /*[[${not #lists.isEmpty(ruchers)}]]*/ null;
 const pnnonsupp = /*[[#{personnenonsupprimeerefrrucher}]]*/ null;
 const supppers = /*[[#{supprimercettepersonne}]]*/ null;
 document.addEventListener('DOMContentLoaded', () => {
-	document.getElementById('supprime').addEventListener("click", (event) => {
+	document.getElementById('supprime').addEventListener('click', (event) => {
 		if(notListEmpty) {
 			alert(pnnonsupp);
 		} else {
 			if (confirm(supppers)) {
-				return true;
+				return;
 			}
 		}
 		event.preventDefault();
-		return false;
 	});
 });
 </script>

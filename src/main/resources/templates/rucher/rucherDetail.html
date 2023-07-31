@@ -19,23 +19,17 @@
 			document.getElementById('supprime').addEventListener('click', (event) => {
 				if (rucherDepot) {
 					alert(depotNPES);
+				} else if (recolteHausses) {
+					alert(rucherNSRR);
 
-				} else {
-					if (recolteHausses) {
-						alert(rucherNSRR);
-
-					} else if (evenements) {
-						if (confirm(suppRucherEtEve)) {
-							return true;
-						}
-					} else {
-						if (confirm(suppCeRucher)) {
-							return true;
-						}
+				} else if (evenements) {
+					if (confirm(suppRucherEtEve)) {
+						return;
 					}
+				} else if (confirm(suppCeRucher)) {
+					return;
 				}
 				event.preventDefault();
-				return false;
 			});
 			new DataTable('#ruches', {
 				dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
@@ -43,7 +37,7 @@
 					'csv',
 					{
 						extend: 'pdf', exportOptions: {columns: ':visible'},
-						title: ruchertxt + ' : ' + rucherNom + ' - ' + listeRuches + " " + (new Date()).toLocaleDateString()
+						title: ruchertxt + ' : ' + rucherNom + ' - ' + listeRuches + ' ' + (new Date()).toLocaleDateString()
 					},
 					{extend: 'print', text: buttontextprint},
 					{extend: 'colvis', text: buttontextcol}
@@ -73,7 +67,7 @@
 				<a th:href="@{'/rucher/Gg/'+${rucher.id}}" class="bi-google" th:title="#{carteGg}"
 					aria-hidden="true"></a>
 				<a th:href="@{'/rucher/Ign/'+${rucher.id}}" th:title="#{carteIgn}" aria-hidden="true"><img
-					th:src="@{'/images/france.svg'}" style="margin-bottom: 3px;" /></a>
+						th:src="@{'/images/france.svg'}" style="margin-bottom: 3px;" /></a>
 				<a th:href="@{'/rucher/Osm/'+${rucher.id}}" class="bi-globe" th:title="#{carteOsm}"
 					aria-hidden="true"></a>
 				&nbsp;
@@ -123,10 +117,10 @@
 					<td class="num" th:text="${rucher.altitude}"></td>
 					<th:block th:if="${rucher.depot or dist != null}">
 						<td><a th:href="@{'/rucher/dists/'+${rucher.id}}"
-						  th:text="${rucher.depot}?'0.000':${#numbers.formatDecimal(dist,1,3)}"></a>
+								th:text="${rucher.depot}?'0.000':${#numbers.formatDecimal(dist,1,3)}"></a>
 						</td>
 						<td th:text="${#temporals.format(temps, 'HH:mm')}"></td>
-					</th:block>	
+					</th:block>
 					<td th:text="${rucher.ressource}"></td>
 					<td th:text="${rucher.commentaire}"></td>
 				</tr>

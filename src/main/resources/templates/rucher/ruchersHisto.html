@@ -1,30 +1,33 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head
-	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:inline="javascript">
-	const url = /*[[@{'/rucher/historiques/'}]]*/null;
-	const buttontextprint = /*[[#{buttontextprint}]]*/null;
-	const buttontextcol = /*[[#{buttontextcol}]]*/null;
-	const transhumances = /*[[#{transhumances}]]*/null;
-	document.addEventListener('DOMContentLoaded', () => {
-		$('#groupe').on('change', function() {
-			location = url + ($(this).is(':checked'));
+
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+	<script th:inline="javascript">
+		const url = /*[[@{'/rucher/historiques/'}]]*/null;
+		const buttontextprint = /*[[#{buttontextprint}]]*/null;
+		const buttontextcol = /*[[#{buttontextcol}]]*/null;
+		const transhumances = /*[[#{transhumances}]]*/null;
+		document.addEventListener('DOMContentLoaded', () => {
+			$('#groupe').on('change', function () {
+				location = url + ($(this).is(':checked'));
+			});
+			new DataTable('#transhumances', {
+				dom: 'Blftip',
+				scrollX: true,
+				buttons: [
+					'csv',
+					{
+						extend: 'pdf', exportOptions: {columns: ':visible'},
+						title: transhumances + ' ' + (new Date()).toLocaleDateString()
+					},
+					{extend: 'print', text: buttontextprint},
+					{extend: 'colvis', text: buttontextcol}
+				]
+			});
 		});
-	    new DataTable('#transhumances', {
-	    	dom: 'Blftip',
-	    	scrollX: true,
-		    buttons: [
-		    	'csv',
-		    	{extend: 'pdf', exportOptions: {columns: ':visible'}, 
-		    		title: transhumances + " " + (new Date()).toLocaleDateString()},
-		        {extend: 'print', text: buttontextprint},
-		        {extend: 'colvis', text: buttontextcol}
-	        ]
-	    });
-	});
-</script>
+	</script>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar"></nav>
 	<br />
@@ -38,12 +41,9 @@
 				</h1>
 			</div>
 			<div class="col">
-				<a
-					th:href="@{#{urldoc}+'6867_3218336070'}"
-					class="bi-book" th:title="#{Doc}" target="_blank"
-					aria-hidden="true"></a> <span class="padicons"> <input
-					type="checkbox" id="groupe" th:title="#{grouper}"
-					th:checked="${group}" /> <label for="groupe" th:text="#{grouper}"></label>
+				<a th:href="@{#{urldoc}+'6867_3218336070'}" class="bi-book" th:title="#{Doc}" target="_blank"
+					aria-hidden="true"></a> <span class="padicons"> <input type="checkbox" id="groupe"
+						th:title="#{grouper}" th:checked="${group}" /> <label for="groupe" th:text="#{grouper}"></label>
 				</span>
 			</div>
 		</div>
@@ -56,8 +56,7 @@
 					<th th:text="#{rucher}"></th>
 					<th th:text="#{type}"></th>
 					<th th:text="#{destProv}"></th>
-					<th th:if="${group}"
-						th:text="#{nb}"></th>
+					<th th:if="${group}" th:text="#{nb}"></th>
 					<th th:text="#{ruche}"></th>
 					<th th:text="#{nb}"></th>
 					<th th:text="#{etat}"></th>
@@ -65,11 +64,9 @@
 			</thead>
 			<tbody>
 				<tr th:each="hist : ${histo}" th:class="${hist.type} ? 'coloredrow'">
-					<td><a
-						th:text="${#temporals.format(hist.date, 'yyyy/MM/dd HH:mm')}"
-						th:href="@{'/evenement/'+${hist.eveid}+'?type=ajoutruche'}"></a></td>
-					<td><a th:text="${hist.rucher.nom}"
-						th:href="@{'/rucher/'+${hist.rucher.id}}"></a></td>
+					<td><a th:text="${#temporals.format(hist.date, 'yyyy/MM/dd HH:mm')}"
+							th:href="@{'/evenement/'+${hist.eveid}+'?type=ajoutruche'}"></a></td>
+					<td><a th:text="${hist.rucher.nom}" th:href="@{'/rucher/'+${hist.rucher.id}}"></a></td>
 					<td th:text="${hist.type} ? #{Ajout} : #{Retrait}"></td>
 					<td th:text="${#strings.listJoin(hist.destProv,' ')}"></td>
 					<td th:if="${group}" th:text="${#lists.size(hist.ruche)}"></td>
@@ -81,4 +78,5 @@
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

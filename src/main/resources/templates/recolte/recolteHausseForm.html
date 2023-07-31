@@ -1,41 +1,42 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head
-	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:inline="javascript">
-	const pdsAvSupPdsAp = /*[[#{poidsAvantSupPoidsApres}]]*/ null;
-	document.addEventListener('DOMContentLoaded', () => {
-		$.validator.addMethod( "greaterThanEqual", function( value, element, param ) {
-		    var target = $( param );
-		    if (target.val() === '') {
-		     	return true;
-		    }
-		    if ( this.settings.onfocusout && target.not( '.validate-greaterThanEqual-blur' ).length ) {
-		        target.addClass( 'validate-greaterThanEqual-blur' ).on( 'blur.validate-greaterThanEqual', function() {
-		            $( element ).valid();
-		        } );
-		    }
-		    return parseFloat(value) >= parseFloat(target.val());
-		}, pdsAvSupPdsAp);		
-		$("#recolteHausseForm").validate({
-			rules : {
-				poidsAvant : {
-					required: true,
-					greaterThanEqual : '#poidsApres'
-				},
-				poidsApres : {
-					required: true
+
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+	<script th:inline="javascript">
+		const pdsAvSupPdsAp = /*[[#{poidsAvantSupPoidsApres}]]*/ null;
+		document.addEventListener('DOMContentLoaded', () => {
+			$.validator.addMethod('greaterThanEqual', function (value, element, param) {
+				const target = $(param);
+				if (target.val() === '') {
+					return true;
 				}
-			}
+				if (this.settings.onfocusout && target.not('.validate-greaterThanEqual-blur').length) {
+					target.addClass('validate-greaterThanEqual-blur').on('blur.validate-greaterThanEqual', function () {
+						$(element).valid();
+					});
+				}
+				return parseFloat(value) >= parseFloat(target.val());
+			}, pdsAvSupPdsAp);
+			$('#recolteHausseForm').validate({
+				rules: {
+					poidsAvant: {
+						required: true,
+						greaterThanEqual: '#poidsApres'
+					},
+					poidsApres: {
+						required: true
+					}
+				}
+			});
+			document.getElementById('poidsAvant').focus();
+			$('.toggleplus').hide();
+			$('#toggleplus').click(function () {
+				$('.toggleplus').toggle();
+			});
 		});
-		document.getElementById('poidsAvant').focus();
-		$('.toggleplus').hide();
-		$('#toggleplus').click(function() {
-			$('.toggleplus').toggle();
-		});
-	});
-</script>
+	</script>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar"></nav>
 	<br />
@@ -57,48 +58,40 @@
 			</div>
 		</div>
 	</div>
-	<form action="#" th:action="@{/recolte/detail/sauve}"
-		th:object="${detailRecolte}" method="post" id="recolteHausseForm">
-		<input type="hidden" th:field="*{id}" /> <input type="hidden"
-			th:field="*{recolte}" /> <input type="hidden" th:field="*{hausse}" />
+	<form action="#" th:action="@{/recolte/detail/sauve}" th:object="${detailRecolte}" method="post"
+		id="recolteHausseForm">
+		<input type="hidden" th:field="*{id}" /> <input type="hidden" th:field="*{recolte}" /> <input type="hidden"
+			th:field="*{hausse}" />
 		<div class="form-floating mb-3">
-			<input class="form-control" placeholder=""
-				type="number" th:min="${detailRecolte.hausse.poidsVide}" max="80" step="0.001"
-				th:field="*{poidsAvant}" th:errorclass="fieldError" />
+			<input class="form-control" placeholder="" type="number" th:min="${detailRecolte.hausse.poidsVide}" max="80"
+				step="0.001" th:field="*{poidsAvant}" th:errorclass="fieldError" />
 			<label class="form-label" th:text="#{poidsAvant}" for="poidsAvant"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<input class="form-control" placeholder=""
-				type="number" th:min="${detailRecolte.hausse.poidsVide}" max="80" step="0.001"
-				th:field="*{poidsApres}" th:errorclass="fieldError" />
+			<input class="form-control" placeholder="" type="number" th:min="${detailRecolte.hausse.poidsVide}" max="80"
+				step="0.001" th:field="*{poidsApres}" th:errorclass="fieldError" />
 			<label class="form-label" th:text="#{poidsApres}" for="poidsApres"></label>
 		</div>
-		<button type="button" id="toggleplus" th:text="#{plus}" ></button>
-		<br/><br/>
+		<button type="button" id="toggleplus" th:text="#{plus}"></button>
+		<br /><br />
 		<div class="form-floating mb-3 toggleplus">
-			<select
-				class="form-control" th:field="*{essaim}">
+			<select class="form-control" th:field="*{essaim}">
 				<option value="" th:text="#{aucun}">;</option>
-				<option th:each="essaimopt : ${essaims}" th:value="${essaimopt.id}"
-					th:text="${essaimopt.nom}"></option>
+				<option th:each="essaimopt : ${essaims}" th:value="${essaimopt.id}" th:text="${essaimopt.nom}"></option>
 			</select>
 			<label class="form-label" for="essaim" th:text="#{essaim}"></label>
 		</div>
 		<div class="form-floating mb-3 toggleplus">
-			<select
-				class="form-control" th:field="*{ruche}">
+			<select class="form-control" th:field="*{ruche}">
 				<option value="" th:text="#{aucune}"></option>
-				<option th:each="rucheopt : ${ruches}" th:value="${rucheopt.id}"
-					th:text="${rucheopt.nom}"></option>
+				<option th:each="rucheopt : ${ruches}" th:value="${rucheopt.id}" th:text="${rucheopt.nom}"></option>
 			</select>
 			<label class="form-label" for="ruche" th:text="#{ruche}"></label>
 		</div>
 		<div class="form-floating mb-3 toggleplus">
-			<select
-				class="form-control" th:field="*{rucher}">
+			<select class="form-control" th:field="*{rucher}">
 				<option value="" th:text="#{aucun}"></option>
-				<option th:each="rucheropt : ${ruchers}" th:value="${rucheropt.id}"
-					th:text="${rucheropt.nom}"></option>
+				<option th:each="rucheropt : ${ruchers}" th:value="${rucheropt.id}" th:text="${rucheropt.nom}"></option>
 			</select>
 			<label class="form-label" for="rucher" th:text="#{rucher}"></label>
 		</div>
@@ -106,4 +99,5 @@
 	</form>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

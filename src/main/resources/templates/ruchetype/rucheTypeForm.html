@@ -1,37 +1,38 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head
-	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:inline="javascript">
-	const rucheTypeNoms = /*[[${rucheTypeNoms}]]*/null;
-	const nomexiste = /*[[#{nomexiste}]]*/null;
-	document.addEventListener('DOMContentLoaded', () => {
-		document.getElementById('nom').focus();
-		jQuery.validator.addMethod("nomExiste", function(value) {
-			return $.inArray(value, rucheTypeNoms) == -1;
-		}, nomexiste);
-		$("#rucheTypeForm").validate({
-			errorClass : 'erreur-form',
-			errorPlacement : function(error, element) {
-				error.insertBefore(element.closest('div'));
-			},
-			rules : {
-				nom : {
-					required : true,
-					nomExiste : true,
-					normalizer : function(value) {
-						return $.trim(value);
-					}
+
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+	<script th:inline="javascript">
+		const rucheTypeNoms = /*[[${rucheTypeNoms}]]*/null;
+		const nomexiste = /*[[#{nomexiste}]]*/null;
+		document.addEventListener('DOMContentLoaded', () => {
+			document.getElementById('nom').focus();
+			jQuery.validator.addMethod('nomExiste', function (value) {
+				return $.inArray(value, rucheTypeNoms) === -1;
+			}, nomexiste);
+			$('#rucheTypeForm').validate({
+				errorClass: 'erreur-form',
+				errorPlacement: function (error, element) {
+					error.insertBefore(element.closest('div'));
 				},
-				nbCadresMax : {
-					required : true,
-					digits : true,
+				rules: {
+					nom: {
+						required: true,
+						nomExiste: true,
+						normalizer: function (value) {
+							return $.trim(value);
+						}
+					},
+					nbCadresMax: {
+						required: true,
+						digits: true,
+					}
 				}
-			}
+			});
 		});
-	});
-</script>
+	</script>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar"></nav>
 	<br />
@@ -52,14 +53,12 @@
 			</div>
 		</div>
 	</div>
-	<form action="#" th:action="@{/rucheType/sauve}"
-		th:object="${rucheType}" method="post" id="rucheTypeForm">
+	<form action="#" th:action="@{/rucheType/sauve}" th:object="${rucheType}" method="post" id="rucheTypeForm">
 		<input type="hidden" th:field="*{id}" />
 		<div th:replace="includeForm :: nomField"></div>
 		<div class="form-floating mb-3">
-			<input placeholder="" class="form-control" type="number"
-				th:field="*{nbCadresMax}" th:errorclass="fieldError"
-				id="nbCadresMax" name="nbCadresMax" /> <label class="form-label"
+			<input placeholder="" class="form-control" type="number" th:field="*{nbCadresMax}"
+				th:errorclass="fieldError" id="nbCadresMax" name="nbCadresMax" /> <label class="form-label"
 				for="nbCadresMax" th:text="#{nbCadresMax}"></label>
 		</div>
 		<div th:replace="includeForm :: commentaireField"></div>
@@ -67,4 +66,5 @@
 	</form>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

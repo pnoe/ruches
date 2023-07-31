@@ -1,56 +1,60 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:inline="javascript">
-const btnTxtPrint = /*[[#{buttontextprint}]]*/ null;
-const recoltes = /*[[${recoltes}]]*/ null;
-const url = /*[[@{'/recolte/stat/essaim/'}]]*/null;
-document.addEventListener('DOMContentLoaded', () => {
-	$('#tous').on('change', function() {
-			location = url + ($(this).is(':checked'));
+	<script th:inline="javascript">
+		const btnTxtPrint = /*[[#{buttontextprint}]]*/ null;
+		const recoltes = /*[[${recoltes}]]*/ null;
+		const url = /*[[@{'/recolte/stat/essaim/'}]]*/null;
+		document.addEventListener('DOMContentLoaded', () => {
+			$('#tous').on('change', function () {
+				location = url + ($(this).is(':checked'));
+			});
+			new DataTable('#recoltes', {
+				dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
+				buttons: [
+					'csv',
+					{extend: 'print', text: btnTxtPrint},
+				],
+				footerCallback: function () {
+					const api = this.api();
+					/*[- Remove the formatting to get integer data for summation -]*/
+					function valPoids (p) {
+						return typeof p === 'string' ?
+							p.replace(/[,]/, '.') * 1 :
+							typeof p === 'number' ?
+								p : 0;
+					}
+					for (let i = 1; i < recoltes.length + 2; i++) {
+						const total = api
+							.column(i, {search: 'applied'})
+							.data()
+							.reduce(function (a, b) {
+								return valPoids(a) + valPoids(b);
+							}, 0);
+						const pageTotal = api
+							.column(i, {page: 'current'})
+							.data()
+							.reduce(function (a, b) {
+								return valPoids(a) + valPoids(b);
+							}, 0);
+						const j = i - 1;
+						$('tr:eq(0) td:eq(' + j + ')', api.table().footer()).html(
+							Number.parseFloat(total).toFixed(2));
+						$('tr:eq(1) td:eq(' + j + ')', api.table().footer()).html(
+							Number.parseFloat(pageTotal).toFixed(2));
+					}
+				}
+			});
 		});
-    new DataTable('#recoltes', {
-    	dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
-	    buttons: [
-	    	'csv',
-            {extend: 'print', text: btnTxtPrint},
-        ],
-    	"footerCallback": function ( row, data, start, end, display ) {
-             let api = this.api();
-             /*[- Remove the formatting to get integer data for summation -]*/
-             let valPoids = function ( p ) {
-                 return typeof p === 'string' ?
-                     p.replace(/[,]/, '.')*1 :
-                     typeof p === 'number' ?
-                         p : 0;
-             };
-             for (let i = 1; i < recoltes.length + 2 ; i++) {
-	             total = api
-	                 .column(i, {search:'applied'})
-	                 .data()
-	                 .reduce( function (a, b) {
-	                     return valPoids(a) + valPoids(b);
-	                 }, 0 );  
-	             pageTotal = api
-	                 .column(i, {page: 'current'})
-	                 .data()
-	                 .reduce( function (a, b) {
-	                     return valPoids(a) + valPoids(b);
-	                 }, 0 );
-	             let j = i - 1;
-	             $('tr:eq(0) td:eq(' + j + ')',api.table().footer()).html(
-	              		Number.parseFloat(total).toFixed(2));
-	    		 $('tr:eq(1) td:eq(' + j + ')',api.table().footer()).html(
-	      				Number.parseFloat(pageTotal).toFixed(2));
-	          }
-    	 }
-    });
-} );
-</script>
-<style>
-	.v {writing-mode: sideways-lr;}	
-</style>
+	</script>
+	<style>
+		.v {
+			writing-mode: sideways-lr;
+		}
+	</style>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar"></nav>
 	<br />
@@ -64,25 +68,23 @@ document.addEventListener('DOMContentLoaded', () => {
 					<a th:href="@{'/recolte/liste'}" th:text="#{Recoltes}"></a>
 				</h1>
 			</div>
-			
+
 			<div class="col">
-				<span class="padicons"> <input type="checkbox" id="tous"
-					th:title="#{tousEssaims}" th:checked="${tous}" /> <label for="tous"
-					th:text="#{tous}"></label>
+				<span class="padicons"> <input type="checkbox" id="tous" th:title="#{tousEssaims}"
+						th:checked="${tous}" /> <label for="tous" th:text="#{tous}"></label>
 				</span>
 			</div>
-			
-			
-        </div>
-    </div>
+
+
+		</div>
+	</div>
 	<div class="container-fluid table-responsive">
 		<table class="table table-bordered table-striped table-sm" id="recoltes">
 			<thead>
 				<tr>
 					<th th:text="#{essaim}"></th>
 					<th:block th:each="recolte : ${recoltes}">
-						<td class="v"
-						  th:text="${#temporals.format(recolte.date, 'yy/MM/dd')}"></td>
+						<td class="v" th:text="${#temporals.format(recolte.date, 'yy/MM/dd')}"></td>
 					</th:block>
 					<th th:text="#{Total}"></th>
 				</tr>
@@ -94,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					</th:block>
 				</tr>
 			</tbody>
-			
+
 			<tfoot>
 				<tr>
 					<th th:text="#{Total}"></th>
@@ -115,4 +117,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	</div>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

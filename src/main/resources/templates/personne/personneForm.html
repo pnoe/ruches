@@ -1,44 +1,46 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:inline="javascript">
-	const personneLogins = /*[[${personneLogins}]]*/null;
-	const loginexiste = /*[[#{loginexiste}]]*/null;
-	const personneEmails = /*[[${personneEmails}]]*/null;
-	const emailexiste = /*[[#{emailexiste}]]*/null;
-	document.addEventListener('DOMContentLoaded', () => {
-		document.getElementById('nom').focus();
-		jQuery.validator.addMethod("loginExiste", function(value) {   
-    		return $.inArray(value, personneLogins) == -1;
+	<script th:inline="javascript">
+		const personneLogins = /*[[${personneLogins}]]*/null;
+		const loginexiste = /*[[#{loginexiste}]]*/null;
+		const personneEmails = /*[[${personneEmails}]]*/null;
+		const emailexiste = /*[[#{emailexiste}]]*/null;
+		document.addEventListener('DOMContentLoaded', () => {
+			document.getElementById('nom').focus();
+			jQuery.validator.addMethod('loginExiste', function (value) {
+				return $.inArray(value, personneLogins) === -1;
 			}, loginexiste);
-		jQuery.validator.addMethod("emailExiste", function(value) {   
-    		return $.inArray(value, personneEmails) == -1;
+			jQuery.validator.addMethod('emailExiste', function (value) {
+				return $.inArray(value, personneEmails) === -1;
 			}, emailexiste);
-		$("#personneForm").validate({
-			errorClass: 'erreur-form',
-			errorPlacement: function(error, element) {
-			    error.insertBefore(element.closest('div'));
-			},
-			rules : {
-				nom : {
-					required : true,
-					normalizer : function(value) {
-						return $.trim(value);
-					}
+			$('#personneForm').validate({
+				errorClass: 'erreur-form',
+				errorPlacement: function (error, element) {
+					error.insertBefore(element.closest('div'));
 				},
-				prenom : {
-					required : true,
-					normalizer : function(value) {
-						return $.trim(value);
-					}
-				},
-				email : { email : true, emailExiste : true },
-				login : "loginExiste"
-			}
+				rules: {
+					nom: {
+						required: true,
+						normalizer: function (value) {
+							return $.trim(value);
+						}
+					},
+					prenom: {
+						required: true,
+						normalizer: function (value) {
+							return $.trim(value);
+						}
+					},
+					email: {email: true, emailExiste: true},
+					login: 'loginExiste'
+				}
+			});
 		});
-	});
-</script>
+	</script>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar"></nav>
 	<br />
@@ -53,47 +55,42 @@
 				</h1>
 				<h1 class="item" th:if="${personne.id}">
 					<th:block th:text="#{modification}"></th:block>
-					<a th:href="@{'/personne/'+${personne.id}}"
-						th:text="#{personne} + ' ' + ${personne.nom}"></a>
+					<a th:href="@{'/personne/'+${personne.id}}" th:text="#{personne} + ' ' + ${personne.nom}"></a>
 				</h1>
 			</div>
 		</div>
 	</div>
-	<form action="#" th:action="@{/personne/sauve}"
-		th:object="${personne}" method="post" id="personneForm">
-		<input type="hidden" th:field="*{id}" /> 
-		<input type="hidden" sec:authorize="!hasRole('ROLE_admin')" th:field="*{roles}" /> 
+	<form action="#" th:action="@{/personne/sauve}" th:object="${personne}" method="post" id="personneForm">
+		<input type="hidden" th:field="*{id}" />
+		<input type="hidden" sec:authorize="!hasRole('ROLE_admin')" th:field="*{roles}" />
 		<div th:replace="includeForm :: nomField"></div>
 		<div class="form-floating mb-3">
-			<input class="form-control" type="text" th:field="*{prenom}" placeholder=""
-				th:errorclass="fieldError" maxlength="35" />
+			<input class="form-control" type="text" th:field="*{prenom}" placeholder="" th:errorclass="fieldError"
+				maxlength="35" />
 			<label class="form-label" th:text="#{prenom}" for="prenom"></label>
 		</div>
-		<div class="form-floating mb-3">		
-			<input class="form-control" placeholder=""
-				type="text" th:field="*{email}" th:errorclass="fieldError" maxlength="255" />
+		<div class="form-floating mb-3">
+			<input class="form-control" placeholder="" type="text" th:field="*{email}" th:errorclass="fieldError"
+				maxlength="255" />
 			<label class="form-label" th:text="#{email}" for="email"></label>
 		</div>
-		<div class="form-floating mb-3">					
-			<input placeholder=""
-				class="form-control" type="text" th:field="*{adresse}"
-				th:errorclass="fieldError" maxlength="255" />
+		<div class="form-floating mb-3">
+			<input placeholder="" class="form-control" type="text" th:field="*{adresse}" th:errorclass="fieldError"
+				maxlength="255" />
 			<label class="form-label" th:text="#{adresse}" for="adresse"></label>
 		</div>
-		<div class="form-floating mb-3">					
-			<input placeholder=""
-				class="form-control" type="text" th:field="*{login}"
-				th:errorclass="fieldError" maxlength="35" />
+		<div class="form-floating mb-3">
+			<input placeholder="" class="form-control" type="text" th:field="*{login}" th:errorclass="fieldError"
+				maxlength="35" />
 			<label class="form-label" th:text="#{login}" for="login"></label>
 		</div>
-		<div class="form-floating mb-3">					
-			<input placeholder=""
-				class="form-control" type="password" th:field="*{password}"
-				th:errorclass="fieldError" maxlength="35" />
+		<div class="form-floating mb-3">
+			<input placeholder="" class="form-control" type="password" th:field="*{password}" th:errorclass="fieldError"
+				maxlength="35" />
 			<label class="form-label" th:text="#{motDePasse}" for="password"></label>
 		</div>
-		<div class="form-floating mb-3" sec:authorize="hasRole('ROLE_admin')">	
-			<select	class="form-control" th:field="*{roles}">
+		<div class="form-floating mb-3" sec:authorize="hasRole('ROLE_admin')">
+			<select class="form-control" th:field="*{roles}">
 				<option th:text="#{aucun}" value=""></option>
 				<option th:text="admin" value="admin"></option>
 			</select>
@@ -104,4 +101,5 @@
 	</form>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

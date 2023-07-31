@@ -27,9 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 		const noms = prompt(nomhaussesv);
 		let iajout = 0;
-		if (noms === null || noms === '') {
-			return;
-		} else {
+		if (noms !== null && noms !== '') {
 			const tabNomExiste = [];
 			const tabNomOk = [];
 			noms.split(',').filter(s => s.trim()).map(item => item.trim()).forEach(function(item) {
@@ -55,8 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			} else if (tabNomOk.length === 0) {
 				return;
 			} else if (!confirm(creer + ' ' + tabNomOk.join(',') + ' ?')) {
-					annule();
-					return;
+				annule();
+				return;
 			}
 			const requestData = { nomclones: tabNomOk.join(',') };
 			requestData[_csrf_param_name] = _csrf_token;
