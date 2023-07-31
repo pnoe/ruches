@@ -233,13 +233,13 @@ document.addEventListener('DOMContentLoaded', () => {
 			'?parcours=' + encodeURIComponent(JSON.stringify(rucheParcours)) +
 			'&plus=' + (e.target.id !== 'liste');
 	});
-	$('#export-gpx').click(function() {
+	document.getElementById('export-gpx').addEventListener('click', () => {
 		exportGpx();
 	});
-	$('#export-kml').click(function() {
+	document.getElementById('export-kml').addEventListener('click', () => {
 		exportKml();
 	});
-	$('#parcours-redraw').click(function() {
+	document.getElementById('parcours-redraw').addEventListener('click', () => {
 		parcoursRedraw(true);
 	});
 	$('#searchtext').keyup(function(event) {
@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	});
 	$('#cercles').attr('title', distButinage + ' ' + rayonsButinage.join(', ') + ' m');
-	$('#cercles').click(function() {
+	document.getElementById('cercles').addEventListener('click', () => {
 		const visi = !circlesButinage[0].getVisible();
 		for (const c of circlesButinage) {
 			c.setVisible(visi);

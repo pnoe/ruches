@@ -478,16 +478,16 @@ function rucherDetail(ign) {
 			'?parcours=' + encodeURIComponent(JSON.stringify(rucheParcours)) +
 			'&plus=' + (e.target.id !== 'liste');
 	});
-	$('#export-gpx').click(function() {
+	document.getElementById('export-gpx').addEventListener('click', () => {
 		exportGpx();
 	});
-	$('#export-kml').click(function() {
+	document.getElementById('export-kml').addEventListener('click', () => {
 		exportKml();
 	});
-	$('#geoloc').click(function() {
+	document.getElementById('geoloc').addEventListener('click', () => {
 		geoloc();
 	});
-	$('#parcours-redraw').click(function() {
+	document.getElementById('parcours-redraw').addEventListener('click', () => {
 		document.getElementById('popup-content').innerHTML = 'Calcul en cours...';
 		overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());
 		parcoursRedraw(true);
