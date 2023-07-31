@@ -11,6 +11,11 @@ module.exports = {
     },
     "rules": {
     	"array-callback-return": "error",
+    	
+    	"block-scoped-var": "error",
+    	"curly": "error",
+    	"dot-notation": "error",
+    	
     	"eqeqeq": "error",
     	"func-style": ["error", "declaration"],
     	"no-constant-binary-expression": "error",

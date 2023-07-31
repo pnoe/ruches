@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		itDateOk.style.display = 'none';
 		const requestData = {};
 		requestData[_csrf_param_name] = _csrf_token;
-		requestData['date'] = date;
+		requestData.date = date;
 		$.post(urlRecHDepot + recId, requestData).done(function(data) {
 			alert(data);
 		});

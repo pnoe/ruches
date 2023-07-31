@@ -43,8 +43,7 @@
 					th:title="#{statistiquesessaims}" aria-hidden="true"></a> <a id="supprime"
 					th:href="@{'/recolte/supprime/'+${recolte.id}}" class="bi-trash" style="color: red"
 					th:title="#{supprimer}" aria-hidden="true"></a> <input type="text" id="date" name="date">
-				<button id="dateOK">Date retrait hausses</button>
-
+				<button id="dateOK" th:text="#{Retirerhausses}"></button>
 			</div>
 		</div>
 	</div>
