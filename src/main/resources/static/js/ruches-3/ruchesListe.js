@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		select: {
 			style: 'multi+shift'
 		},
-		dom: 'Blftip',
+		dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
 		scrollX: true,
 		buttons: ['csv', {
 			extend: 'pdf', exportOptions: { columns: ':visible' },
@@ -31,11 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
 			orientation: 'landscape'
 		}, {
 				extend: 'print',
-				text: buttTxtPrint
+				text: buttTxtPrint,
+				exportOptions: { columns: ':visible' },
+				orientation: 'landscape'
 			}, {
-				extend: 'colvis',
-				text: buttTxtCol
-			}]
+				extend: 'colvis', text: buttTxtCol
+			}
+		]
 	});
 	function updateLinks(e, dt, type) {
 		if (type === 'row') {
