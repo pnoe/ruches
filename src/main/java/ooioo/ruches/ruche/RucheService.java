@@ -185,7 +185,8 @@ public class RucheService {
 	/*
 	 * Liste des ruches d'un rucher avec ordre de parcours.
 	 */
-	void listePlusRucher(HttpSession session, Model model, Rucher rucher, List<RucheParcours> chemin, boolean plus) {
+// 	void listePlusRucher(HttpSession session, Model model, Rucher rucher, List<RucheParcours> chemin, boolean plus) {
+	void listePlusRucher(HttpSession session, Model model, Rucher rucher, List<Long> parcours, boolean plus) {
 		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
 		Iterable<Ruche> ruches;
 		List<Integer> nbHausses = new ArrayList<>();
@@ -205,8 +206,8 @@ public class RucheService {
 		for (Ruche ruche : ruches) {
 			// ajoute l'index de la ruche dans chemin dans ordreRuche
 			int ordre = 0;
-			for (RucheParcours rucheParcours : chemin) {
-				if (rucheParcours.id().equals(ruche.getId())) {
+			for (Long o : parcours) {
+				if (o.equals(ruche.getId())) {
 					break;
 				}
 				ordre += 1;

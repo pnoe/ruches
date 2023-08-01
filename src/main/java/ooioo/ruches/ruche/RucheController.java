@@ -170,16 +170,18 @@ public class RucheController {
 	}
 
 	/**
-	 * Liste des ruches d'un rucher paramètres parcours : pour l'ordre des ruches.
-	 * plus : liste détaillée si true
+	 * Liste des ruches d'un rucher. 
+	 * 
+	 * @parcours : pour l'ordre des ruches.
+	 * @plus : liste détaillée si true
 	 */
 	@GetMapping("/liste/{rucherId}")
 	public String listeRucher(HttpSession session, Model model, @PathVariable long rucherId, @RequestParam boolean plus,
 			@RequestParam String parcours) {
 		ObjectMapper objectMapper = new ObjectMapper();
-		List<RucheParcours> chemin;
+		List<Long> chemin;
 		try {
-			chemin = objectMapper.readValue(parcours, new TypeReference<List<RucheParcours>>() {
+			chemin = objectMapper.readValue(parcours, new TypeReference<List<Long>>() {
 			});
 		} catch (IOException e) {
 			logger.error("Paramètre parcours incorrect");
@@ -200,7 +202,6 @@ public class RucheController {
 			return "ruche/ruchesListePlusRucher";
 		}
 		return "ruche/ruchesListeRucher";
-
 	}
 
 	/**

@@ -475,7 +475,7 @@ function rucherDetail(ign) {
 	});
 	$('.liste').click(function(e) {
 		window.location = ruchesurl + 'ruche/liste/' + rucher.id +
-			'?parcours=' + encodeURIComponent(JSON.stringify(rucheParcours)) +
+			'?parcours=' + encodeURIComponent(JSON.stringify(rucheParcours.map(rp => rp.id))) +
 			'&plus=' + (e.target.id !== 'liste');
 	});
 	document.getElementById('export-gpx').addEventListener('click', () => {
