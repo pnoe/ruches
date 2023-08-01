@@ -28,6 +28,7 @@ module.exports = {
     	"no-unmodified-loop-condition": "error",
     	"no-unreachable-loop": "error",
     	"no-unused-expressions": "error",
+    	"no-unused-vars": ["error", { "args": "after-used" }],
     	"no-unneeded-ternary": "error",
     	"no-useless-return": "error",
     	"no-var": "error",
