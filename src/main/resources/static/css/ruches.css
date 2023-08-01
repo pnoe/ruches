@@ -5,6 +5,10 @@ footer {
 	line-height: 0.5em;
 }
 
+.accordion-button {
+	padding: 7px 7px !important;
+}
+
 .menurac {
 	text-decoration: underline red;
 }
