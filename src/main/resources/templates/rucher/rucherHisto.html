@@ -3,15 +3,15 @@
 
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 	<script th:inline="javascript">
-		const url = /*[[@{'/rucher/historique/'}+${rucher.id}+'/']]*/null;
 		const nomrucher = /*[[${rucher.nom}]]*/null;
 		const buttontextprint = /*[[#{buttontextprint}]]*/null;
 		const buttontextcol = /*[[#{buttontextcol}]]*/null;
 		const transhumances = /*[[#{transhumances}]]*/null;
 		const rucher = /*[[#{rucher}]]*/null;
 		document.addEventListener('DOMContentLoaded', () => {
-			$('#groupe').on('change', function () {
-				location = url + ($(this).is(':checked'));
+			document.getElementById('groupe').addEventListener('click', (event) => {
+				location = location.href.slice(0, location.href.lastIndexOf('/'))
+					+ '/' + event.target.checked;
 			});
 			new DataTable('#transhumances', {
 				dom: 'Blftip',

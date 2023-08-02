@@ -7,7 +7,7 @@
 			const table = new DataTable('#associerRucheEssaim', {
 				"dom": '<"toolbar">lftip',
 				scrollX: true,
-				fnInitComplete: function () {
+				initComplete: function () {
 					$('div.toolbar').html(
 						'<label class="form-label" for="avecEssaim">Avec Essaim</label> <input type="checkbox" id="avecEssaim"/> ');
 					$('#avecEssaim').click(function () {
@@ -18,12 +18,10 @@
 			$.fn.dataTable.ext.search.push(
 				function (settings, searchData, index, rowData, counter) {
 					const checked = $('#avecEssaim').is(':checked');
-					if (checked && searchData[1] !== '') {
-						return true;
-					} else if (!checked && searchData[1] === '') {
-						return true;
-					}
-					return false;
+					// const checked =  document.getElementById('avecEssaim').checked;
+					//   document.getElementById('avecEssaim') 	null d'après la console firefox pourquoi ?
+					//   pourquoi ok avec jquery ?
+					return (checked && searchData[1] !== '') || (!checked && searchData[1] === '');
 				});
 		});
 	</script>

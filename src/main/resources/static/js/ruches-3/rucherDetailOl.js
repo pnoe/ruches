@@ -38,9 +38,10 @@ function rucherDetail(ign) {
 		// ou utiliser ol.sphere.distance
 		const sinDiffLat = Math.sin(Math.PI * (lat2 - lat1) / 360.0);
 		const sinDiffLon = Math.sin(Math.PI * (lon2 - lon1) / 360.0);
-		const a = sinDiffLat * sinDiffLat +
-			Math.cos(Math.PI * lat1 / 180.0) * Math.cos(Math.PI * lat2 / 180.0) * sinDiffLon * sinDiffLon;
-		return diamTerre * Math.asin(Math.sqrt(a));
+		return diamTerre * Math.asin(Math.sqrt(sinDiffLat * sinDiffLat +
+			Math.cos(Math.PI * lat1 / 180.0) *
+			Math.cos(Math.PI * lat2 / 180.0) * sinDiffLon * sinDiffLon
+		));
 	}
 	$('.rapproche').on('click', function() {
 		const longRucher = rucher.longitude;
