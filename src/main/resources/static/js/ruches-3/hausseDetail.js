@@ -16,10 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 		event.preventDefault();
 	});
-	function nomexiste(value) {
-		return $.inArray(value, haussenoms) !== -1;
-	}
-	$('#clone').click(function() {
+
+	document.getElementById('clone').addEventListener('click', () => {
 		function annule() {
 			while (iajout--) {
 				haussenoms.pop();
@@ -27,42 +25,49 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 		const noms = prompt(nomhaussesv);
 		let iajout = 0;
-		if (noms !== null && noms !== '') {
-			const tabNomExiste = [];
-			const tabNomOk = [];
-			noms.split(',').filter(s => s.trim()).map(item => item.trim()).forEach(function(item) {
-				if (nomexiste(item)) {
-					tabNomExiste.push(item);
-				} else {
-					tabNomOk.push(item);
-					/*[- ce nom ne doit pas être réutilisé -]*/
-					haussenoms.push(item);
-					iajout++;
-				}
-			});
-			if (tabNomExiste.length > 0) {
-				const promptexistedeja = hausses + ' : ' + tabNomExiste.join(',') + ' ' + nomexistentdeja;
-				if (tabNomOk.length === 0) {
-					alert(promptexistedeja);
-					return;
-				}
-				if (!confirm(promptexistedeja + '. ' + creer + ' ' + tabNomOk.join(',') + ' ?')) {
-					annule();
-					return;
-				}
-			} else if (tabNomOk.length === 0) {
+		if (noms === null || noms === '') {
+			return;
+		}
+		const tabNomExiste = [];
+		const tabNomOk = [];
+		noms.split(',').filter(s => s.trim()).map(item => item.trim()).forEach(function(item) {
+			if (haussenoms.includes(item)) {
+				tabNomExiste.push(item);  
+			} else {
+				tabNomOk.push(item);
+				/*[- ce nom ne doit pas être réutilisé -]*/
+				haussenoms.push(item);
+				iajout++;				
+			}
+		});
+		if (tabNomExiste.length > 0) {
+			const promptexistedeja = hausses + ' : ' + tabNomExiste.join(',') + ' ' + nomexistentdeja;
+			if (tabNomOk.length === 0) {
+				alert(promptexistedeja);
 				return;
-			} else if (!confirm(creer + ' ' + tabNomOk.join(',') + ' ?')) {
+			}
+			if (!confirm(promptexistedeja + '. ' + creer + ' ' + tabNomOk.join(',') + ' ?')) {
 				annule();
 				return;
 			}
-			const requestData = { nomclones: tabNomOk.join(',') };
-			requestData[_csrf_param_name] = _csrf_token;
-			$.post(urlclone + hausseid,
-				requestData).done(function(data) {
-					alert(data);
-					document.location.reload(true);
-				});
+		} else if (tabNomOk.length === 0) {
+			return;
+		} else if (!confirm(creer + ' ' + tabNomOk.join(',') + ' ?')) {
+			annule();
+			return;
 		}
+		const req = new XMLHttpRequest();
+		req.open('POST', urlclone + hausseid, true);
+		// req.setRequestHeader('x-csrf-token', _csrf_token);
+		req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		req.onload = function() {
+			if (req.readyState === 4) {
+				if (req.status === 200) {
+					alert(req.responseText);
+				}
+			}
+		};
+		req.send(_csrf_param_name + '=' + _csrf_token +
+			'&nomclones=' + tabNomOk.join(','));
 	});
 });

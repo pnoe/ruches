@@ -33,14 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
 		/*[- filter supprime les noms vides ou blancs -]*/
 		/*[- map trim supprime les blancs aux extrémités des noms -]*/
 		noms.split(',').filter(s => s.trim()).map(item => item.trim()).forEach(function(item) {
-			if ($.inArray(item, ruchenoms) === -1) {
+			if (ruchenoms.includes(item)) {
+				tabNomExiste.push(item);
+			} else {				
 				/*[- on crée la ruche item -]*/
 				tabNomOk.push(item);
 				/*[- ce nom ne doit pas être réutilisé -]*/
 				ruchenoms.push(item);
 				iajout++;
-			} else {
-				tabNomExiste.push(item);
 			}
 		});
 		if (tabNomExiste.length > 0) {
@@ -59,12 +59,17 @@ document.addEventListener('DOMContentLoaded', () => {
 			annule();
 			return;
 		}
-		const requestData = { nomclones: tabNomOk.join(',') };
-		requestData[_csrf_param_name] = _csrf_token;
-		$.post(urlclone + rucheid,
-			requestData).done(function(data) {
-				alert(data);
-				document.location.reload(true);
-			});
+		const req = new XMLHttpRequest();
+		req.open('POST', urlclone + rucheid, true);
+		req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		req.onload = function() {
+			if (req.readyState === 4) {
+				if (req.status === 200) {
+					alert(req.responseText);
+				}
+			}
+		};
+		req.send(_csrf_param_name + '=' + _csrf_token +
+			'&nomclones=' + tabNomOk.join(','));
 	});
 });

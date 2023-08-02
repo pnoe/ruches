@@ -1,4 +1,4 @@
-module.exports = {
+	module.exports = {
     "env": {
         "browser": true,
         "es2023": true,
@@ -22,6 +22,7 @@ module.exports = {
     	"no-eval": "error",
     	// "no-extra-parens": "error",
     	"no-extra-semi": "error",
+    	"no-floating-decimal": "error",
     	"no-self-compare": "error",
     	"no-lonely-if": "error",
     	"no-negated-condition": "error",

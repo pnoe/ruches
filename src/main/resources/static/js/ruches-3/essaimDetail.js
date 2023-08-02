@@ -28,14 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		} else if (!confirm(suppessaimtxt)) { event.preventDefault(); }
 	});
 
-	// Attention utiliser  event.preventDefault()
-	//   pour supprimer $('#clone').on('click'
-	$('#clone').on('click', function() {
+	document.getElementById('clone').addEventListener('click', function() {
 		// pour mémo ajout essaim dans essaimnoms
 		let iajout = 0;
 		// pour retrait ruche vide
 		const ruchesvidesmem = [];
-
 		function annule() {
 			while (iajout--) {
 				essaimnoms.pop();
@@ -51,8 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		const tabNomOk = [];
 		const tabNomRucheOk = [];
 		const tabNomRucheIncorrect = [];
-
-
 		//  filter : on ignore ",," ou ",  ,"
 		const nomsarr = noms.split(',').filter(s => s.trim());
 		for (const item of nomsarr) {
@@ -66,7 +61,14 @@ document.addEventListener('DOMContentLoaded', () => {
 			if (arr.length > 1) {
 				nr = arr[1].trim();
 			}
-			if ($.inArray(ne, essaimnoms) === -1) {
+			if (essaimnoms.includes(ne)) {
+				// l'essaim ne existe déjà
+				tabNomExiste.push(ne);
+				if ((nr !== '') && !ruchesvidesnoms.includes(nr)) {
+					// ruche nr incorrecte
+					tabNomRucheIncorrect.push(nr);
+				}
+			} else {
 				// on crée l'essaim ne
 				tabNomOk.push(ne);
 				// ce nom ne doit pas être réutilisé
@@ -75,11 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				if (nr === '') {
 					// pas de ruche
 					tabNomRucheOk.push('');
-				} else if ($.inArray(nr, ruchesvidesnoms) === -1) {
-					// ruche nr incorrecte
-					tabNomRucheOk.push('');
-					tabNomRucheIncorrect.push(nr);
-				} else {
+				} else if (ruchesvidesnoms.includes(nr)) {
 					// on met l'essaim ne dans la ruche nr
 					tabNomRucheOk.push(nr);
 					// ce nom ne doit pas être réutilisé, on l'enlève de la
@@ -87,17 +85,12 @@ document.addEventListener('DOMContentLoaded', () => {
 					const index = ruchesvidesnoms.indexOf(nr);
 					if (index > -1) {
 						ruchesvidesnoms.splice(index, 1);
-
-						// IL faudra la remettre si annulation du clone...
+						// Il faudra la remettre si annulation du clone...
 						ruchesvidesmem.push(nr);
-
 					}
-				}
-			} else {
-				// l'essaim ne existe déjà
-				tabNomExiste.push(ne);
-				if ((nr !== '') && ($.inArray(nr, ruchesvidesnoms) === -1)) {
+				} else {
 					// ruche nr incorrecte
+					tabNomRucheOk.push('');
 					tabNomRucheIncorrect.push(nr);
 				}
 			}
@@ -132,12 +125,26 @@ document.addEventListener('DOMContentLoaded', () => {
 			return;
 		}
 		if (tabNomOk.length === 0) { return; }
-		const requestData = { nomclones: tabNomOk.join(','), nomruches: tabNomRucheOk.join(',') };
-		requestData[_csrf_param_name] = _csrf_token;
-		$.post(urlessaimclone + essaimid,
-			requestData).done(function(data) {
-				alert(data);
-				document.location.reload(true);
-			});
+		const req = new XMLHttpRequest();
+		req.open('POST', urlessaimclone + essaimid, true);
+		req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		req.onload = function() {
+			if (req.readyState === 4) {
+				if (req.status === 200) {
+					alert(req.responseText);
+				}
+			}
+		};
+		req.send(_csrf_param_name + '=' + _csrf_token +
+			'&nomclones=' + tabNomOk.join(',') + '&nomruches=' + tabNomRucheOk.join(','));
 	});
 });
+
+
+
+
+
+
+
+
+
