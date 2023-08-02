@@ -5,10 +5,10 @@
 	<script th:inline="javascript">
 		const btnTxtPrint = /*[[#{buttontextprint}]]*/ null;
 		const recoltes = /*[[${recoltes}]]*/ null;
-		const url = /*[[@{'/recolte/stat/essaim/'}]]*/null;
 		document.addEventListener('DOMContentLoaded', () => {
-			$('#tous').on('change', function () {
-				location = url + ($(this).is(':checked'));
+			document.getElementById('tous').addEventListener('click', (event) => {
+				location = location.href.slice(0, location.href.lastIndexOf('/'))
+					+ '/' + event.target.checked;
 			});
 			new DataTable('#recoltes', {
 				dom: '<"buttonsData" Blf>t<"buttonsData" ip>',

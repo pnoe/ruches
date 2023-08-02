@@ -12,8 +12,9 @@
 		const buttontextcol = /*[[#{buttontextcol}]]*/null;
 		const url = /*[[@{'/evenement/essaim/listeTraitement/'}]]*/null;
 		document.addEventListener('DOMContentLoaded', () => {
-			$('#groupe').on('change', function () {
-				location = url + ($(this).is(':checked'));
+			document.getElementById('groupe').addEventListener('click', (event) => {
+				location = location.href.slice(0, location.href.lastIndexOf('/'))
+					+ '/' + event.target.checked;
 			});
 			evenementListe(true);
 		});
