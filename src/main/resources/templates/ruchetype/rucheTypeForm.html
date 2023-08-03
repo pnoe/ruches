@@ -8,7 +8,7 @@
 		document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById('nom').focus();
 			jQuery.validator.addMethod('nomExiste', function (value) {
-				return $.inArray(value, rucheTypeNoms) === -1;
+				return !rucheTypeNoms.includes(value);
 			}, nomexiste);
 			$('#rucheTypeForm').validate({
 				errorClass: 'erreur-form',

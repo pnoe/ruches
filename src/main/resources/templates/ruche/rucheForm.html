@@ -13,7 +13,7 @@
 			$.datetimepicker.setLocale(window.navigator.language.substring(0, 2));
 			document.getElementById('nom').focus();
 			jQuery.validator.addMethod('nomExiste', function (value) {
-				return $.inArray(value, rucheNoms) === -1;
+				return !rucheNoms.includes(value);
 			}, nomexiste);
 			$('#rucheForm').validate({
 				errorClass: 'erreur-form',

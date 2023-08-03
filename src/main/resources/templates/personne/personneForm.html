@@ -10,10 +10,10 @@
 		document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById('nom').focus();
 			jQuery.validator.addMethod('loginExiste', function (value) {
-				return $.inArray(value, personneLogins) === -1;
+				return !personneLogins.includes(value);
 			}, loginexiste);
 			jQuery.validator.addMethod('emailExiste', function (value) {
-				return $.inArray(value, personneEmails) === -1;
+				return !personneEmails.includes(value);
 			}, emailexiste);
 			$('#personneForm').validate({
 				errorClass: 'erreur-form',
