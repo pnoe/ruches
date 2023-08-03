@@ -5,31 +5,19 @@
 	<script th:inline="javascript">
 		document.addEventListener('DOMContentLoaded', () => {
 			const table = new DataTable('#associerRucheEssaim', {
-				"dom": '<"toolbar">lftip',
+				dom: 'lftip',
 				scrollX: true,
-				initComplete: function () {
-					$('div.toolbar').html(
-						'<label class="form-label" for="avecEssaim">Avec Essaim</label> <input type="checkbox" id="avecEssaim"/> ');
-					$('#avecEssaim').click(function () {
-						table.draw();
-					});
-				}
+			});
+			$('#avecEssaim').click(function () {
+				table.draw();
 			});
 			$.fn.dataTable.ext.search.push(
-				function (settings, searchData, index, rowData, counter) {
-					const checked = $('#avecEssaim').is(':checked');
-					// const checked =  document.getElementById('avecEssaim').checked;
-					//   document.getElementById('avecEssaim') 	null d'après la console firefox pourquoi ?
-					//   pourquoi ok avec jquery ?
+				function (settings, searchData) {
+					const checked = document.getElementById('avecEssaim').checked;
 					return (checked && searchData[1] !== '') || (!checked && searchData[1] === '');
 				});
 		});
 	</script>
-	<style>
-		.toolbar {
-			float: left;
-		}
-	</style>
 </head>
 
 <body>
@@ -46,10 +34,17 @@
 				</h1>
 			</div>
 		</div>
+		<div class="row">
+			<div class="col-md-auto">
+				<h6 th:if="${rucheEssaim}" th:text="#{essaimdanslaruche}+' '+${rucheEssaim.nom}"></h6>
+			</div>
+			<div class="col">
+				<input class="form-check-input" type="checkbox" id="avecEssaim" />
+				<label class="form-check-label" for="avecEssaim" th:text="#{avecEssaims}"></label>
+			</div>
+		</div>
 	</div>
-	<br />
 	<div class="container-fluid">
-		<h6 th:if="${rucheEssaim}" th:text="#{essaimdanslaruche}+' '+${rucheEssaim.nom}"></h6>
 		<h6 th:text="#{mettreessaimdanslaruche}"></h6>
 		<table class="table table-bordered table-striped table-sm" id="associerRucheEssaim">
 			<thead>
