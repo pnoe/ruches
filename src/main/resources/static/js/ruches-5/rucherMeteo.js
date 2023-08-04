@@ -1,9 +1,5 @@
 /* globals longitude,latitude,openweathermapKey,urlPrefix,Chart */
 /* exported rucherMeteo */
-
-// TODO https://eslint.org/docs/latest/rules/no-prototype-builtins#rule-details
-
-
 'use strict';
 function rucherMeteo() {
 	//	https://erikflowers.github.io/weather-icons/
@@ -60,7 +56,7 @@ function rucherMeteo() {
 						day.moon_phase.toLocaleString(lang, digits2) + '&nbsp<i class="wi wi-moon-alt-' +
 						moonIcon(day.moon_phase) + '"></i></td></tr>';
 				});
-				document.getElementById('previsions').insertAdjacentHTML("afterend", htmlPrev);
+				document.getElementById('previsions').insertAdjacentHTML('beforeend', htmlPrev);
 				tempChart(data.hourly);
 				const urlHistoPref = urlPrefix + '/timemachine?lat=' +
 					latitude + '&lon=' + longitude +
@@ -137,7 +133,7 @@ function rucherMeteo() {
 
 	function histo(pref, time, n, htmlHisto) {
 		if (n === 0) {
-			document.getElementById('historique').insertAdjacentHTML("afterend", htmlHisto);
+			document.getElementById('historique').insertAdjacentHTML('beforeend', htmlHisto);
 			return;
 		}
 		const urlHisto = pref + time;
