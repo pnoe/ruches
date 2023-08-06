@@ -30,8 +30,18 @@
 	const urlDatatMessFr = /*[[@{/js/datatables_fr.json}]]*/null;
 	const datatPageLength = /*[[${@environment.getProperty('datatables.pageLength')}]]*/null;
 	const tout = /*[[#{Tout}]]*/null;
-	if ((window.navigator.language == 'fr') || (window.navigator.language.indexOf('fr') != -1)) {
-		jQuery.getScript(urlValMessFr);
+	if ((window.navigator.language.indexOf('fr') !== -1)) {
+		const script = document.createElement('script');
+		script.src = urlValMessFr;
+		script.async = true;
+		document.head.appendChild(script);
+		// Chargement messages datatables fr : jquery ajax
+		//  on peut créer un fichier datatable_fr.js à partir du json
+		//  en ajoutant : const dtLangFr =   en tête du fichier
+		//  puis language = dtLangFr ci dessous
+		//  voir https://datatables.net/examples/basic_init/language
+		//  mais daterangepicker à besoin des effets jsquery ce qui 
+		//  empêche d'utiliser jquery slim'
 		$.extend(true, $.fn.dataTable.defaults, {
 			language : {
 				url : urlDatatMessFr
@@ -50,9 +60,9 @@
 </head>
 
 <script th:fragment="jsruches" th:src=
-	"@{'/js/ruches-5/' + ${#strings.substringAfter(#execInfo.processedTemplateName,'/')} + '.js'}">
+	"@{'/js/ruches-6/' + ${#strings.substringAfter(#execInfo.processedTemplateName,'/')} + '.js'}">
 </script>
-<script th:fragment="jsruchesnom(nom)" th:src="@{'/js/ruches-5/' + ${nom} + '.js'}"></script>
+<script th:fragment="jsruchesnom(nom)" th:src="@{'/js/ruches-6/' + ${nom} + '.js'}"></script>
 
 <script th:fragment="d3" th:src="@{/js/d3.min-7.8.4.js}"></script>
 <script th:fragment="d3-color" th:src="@{/js/d3-color.min-3.1.0.js}"></script>

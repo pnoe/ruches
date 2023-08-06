@@ -1,6 +1,6 @@
 /* globals
 	_csrf_token, _csrf_param_name, suppRecHauss, dateRecEpoch, enlevTtHauRec,
-	enlevHRecDe30, urlRecHDepot, recId, totalPourLaRuche, DataTable
+	enlevHRecDe30, urlRecHDepot, recId, total, DataTable
 */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		return false;
 	});
 	new DataTable('#hausses', {
-		order: [[1, 'asc'], [0, 'asc']],
+		orderFixed: [[1, 'asc'], [0, 'asc']],
 		rowGroup: {
 			dataSrc: 1, // on groupe sur les ruches
 			startRender: null,
@@ -53,7 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
 				const mielTotal = rows.data().pluck(4).reduce(function(a, b) {
 					return a + parseFloat(b.replace(/,/g, '.'));
 				}, 0.00);
-				return $('<tr/>').append('<td colspan="4">' + totalPourLaRuche + ' ' + group + '</td>')
+				return $('<tr/>').append('<td>' + total + '</td>' +
+				'<td>' + group + '</td>' +
+				'<td colspan="2"></td>')				
+//				<td colspan="4">' + totalPourLaRuche + ' ' + group + '</td>')
 					.append('<td class="num">' + new Intl.NumberFormat(navigator.language, {
 						minimumFractionDigits: 2
 					}).format(mielTotal) + '</td>').append('<td colspan="2"></td>');
