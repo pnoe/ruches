@@ -39,10 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 	document.getElementById('supprime').addEventListener('click', (event) => {
 		if (confirm(suppRecHauss)) {
-			return true;
+			return;
 		}
 		event.preventDefault();
-		return false;
 	});
 	new DataTable('#hausses', {
 		orderFixed: [[1, 'asc'], [0, 'asc']],

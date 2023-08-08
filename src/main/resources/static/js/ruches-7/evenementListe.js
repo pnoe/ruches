@@ -25,17 +25,13 @@ function evenementListe(initDatatable) {
 			event.target.form.submit();
 		}
 	});
-	$('#cal').on('click', function() {
-		if ($(this).parent().val() === '6') {
-			$(this).parent().dateRangePicker({
+	document.getElementById('cal').addEventListener('click', (event) => {
+		if (event.target.value === '6') {
+			$(event.target.parentNode).dateRangePicker({
 				autoClose: true,
 				language: (window.navigator.language.substring(0, 2)),
 				startOfWeek: 'monday',
 				separator: ' - '
-				/*,
-				setValue: function(s) {
-					$(this).parent().find("option:selected").text(s);
-				}*/
 			}).bind('datepicker-change', function(evt, obj) {
 				evt.stopPropagation();
 				const d1 = obj.date1.toISOString();
@@ -44,9 +40,9 @@ function evenementListe(initDatatable) {
 				window.document.cookie = 'd1=' + d1 + cookieOpt;
 				window.document.cookie = 'd2=' + d2 + cookieOpt;
 				window.document.cookie = 'dx=' + encodeURIComponent(obj.value) + cookieOpt;
-				$('#date1').val(d1);
-				$('#date2').val(d2);
-				$('#datestext').val(obj.value);
+				document.getElementById('date1').value = d1;
+				document.getElementById('date2').value = d2;
+				document.getElementById('datestext').value = obj.value;
 				this.form.submit();
 			});
 		}

@@ -6,11 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		let href;
 		let table;
 		if (this.id === 'ajoutHausseRecolte') {
-			id = $('#ajouterHausses');
+			id = document.getElementById('ajouterHausses');
 			href = urlAjout;
 			table = tableAjout;
 		} else {
-			id = $('#retirerHausses');
+			id = document.getElementById('retirerHausses');
 			href = urlRetrait;
 			table = tableRetrait;
 		}
@@ -25,11 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
 				/*[- on enlève la dernière virgule et met à jour l'url de traitement -]*/
 				hausseNoms = hausseNoms.substring(0,
 					hausseNoms.length - 1);
-				id
-					.attr('href', href + recolteId + '/'
-						+ hausseNoms);
+				id.setAttribute('href', href + recolteId + '/'
+					+ hausseNoms);
 			} else {
-				id.attr('href', '#');
+				id.setAttribute('href', '#');
 			}
 		}
 	}
@@ -39,9 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	});
 	tableRetrait.on('select deselect', updateLinks);
-	$('#retirerHausses').on('click', function() {
-		if ($(this).attr('href') === '#') {
+	document.getElementById('retirerHausses').addEventListener('click', (event) => {
+		if (event.target.getAttribute('href') === '#') {
 			alert(selHausRet);
+			event.preventDefault(); // pas indispensable link #
 		}
 	});
 	const tableAjout = new DataTable('#ajoutHausseRecolte', {
@@ -50,9 +50,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	});
 	tableAjout.on('select deselect', updateLinks);
-	$('#ajouterHausses').on('click', function() {
-		if ($(this).attr('href') === '#') {
+	document.getElementById('ajouterHausses').addEventListener('click', (event) => {
+		if (event.target.getAttribute('href') === '#') {
 			alert(selHausAjout);
+			event.preventDefault();
 		}
 	});
+
 });
