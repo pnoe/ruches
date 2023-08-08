@@ -1,6 +1,6 @@
 /* globals d3,
 	data, essaimnom, essaimtxt,	ruchetxt, ruchertxt,
-	MielKgtxt, MielDescKgtxt, Actif, Inactif, urlessaim	*/
+	MielKgtxt, MielDescKgtxt, Actif, Inactif, urlessaim, bootstrap	*/
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
 	const lang = navigator.language;
@@ -73,7 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		.attr('xlink:href', function(d) {
 			return urlessaim + d.data.id;
 		})
-		.attr('class', 'nodepopup')
 		.attr('data-bs-toggle', 'popover')
 		.attr('data-bs-trigger', 'hover')
 		.attr('data-html', true)
@@ -100,12 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				return 'black';
 			}
 		});
-
-	$('.nodepopup').popover({
+	document.querySelectorAll('[data-bs-toggle="popover"]').forEach((item) => new bootstrap.Popover(item, {
 		html: true
-	});
-	$('.popover-dismiss').popover({
-		trigger: 'focus'
-	});
-
+	}));
 });
