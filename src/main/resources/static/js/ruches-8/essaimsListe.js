@@ -1,5 +1,5 @@
 /* globals Essaims, buttontextprint, buttontextcol, urlTraitLot, urlSucreLot,
-	urlCommLot, selectEssTrt DataTable */
+	urlCommLot, selectEssTrt, DataTable */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
 	const idTbl = '#essaims';
@@ -11,13 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			'csv',
 			{
 				extend: 'pdf', exportOptions: { columns: ':visible' },
-				action: function(e, dt, node, config) {
-					config.title = Essaims + ' ' + (new Date()).toLocaleDateString();
-					const inputSearch = table.search();
-					if (inputSearch.length !== 0) {
-						config.title += ' <' + inputSearch + '>';
-					}
-					$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, node, config);
+				title: function() {
+					return Essaims + ' ' + new Date().toLocaleDateString() +
+						(table.search().length === 0 ? '' : ' <' + table.search() + '>');
 				},
 				orientation: 'landscape'
 			},

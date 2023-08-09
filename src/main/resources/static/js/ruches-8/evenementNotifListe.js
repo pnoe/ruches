@@ -1,16 +1,13 @@
 /* globals
-url Evenements Notifications btp btc DataTable
+url, Evenements, Notifications, btp, btc, DataTable, bootstrap
 */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
-	$('.bi-question-lg').popover({
+	new bootstrap.Popover(document.getElementsByClassName('bi-question-lg')[0], {
 		html: true
 	});
-	$('.popover-dismiss').popover({
-		trigger: 'focus'
-	});
-	$('#tous').on('change', function() {
-		location = url + ($(this).is(':checked'));
+	document.getElementById('tous').addEventListener('change', function(event) {
+		location = url + event.target.checked;
 	});
 	new DataTable('#evenementsnotif', {
 		order: [[0, 'desc']],

@@ -1,4 +1,4 @@
-/* globals _csrf_token,_csrf_param_name, essaimnoms, ruchesvidesnoms, recolteHausses, rucheEssaim,
+/* globals _csrf_token, _csrf_param_name, essaimnoms, ruchesvidesnoms, recolteHausses, rucheEssaim,
 	essaimsupprecolttxt, suppessaimevetxt, suppessaimtxt,  evenements, nomessaimsvirgule,
 	nexistPasOuPasVidtxt, nomexistdejatxt, Ruchestxt, Essaimstxt, creertxt, urlessaimclone,
 	essaimid, pasderuchetxt */

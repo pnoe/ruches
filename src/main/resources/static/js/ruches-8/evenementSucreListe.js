@@ -5,7 +5,7 @@
 'use strict';
 function evenementSucreListe() {
 	const idTbl = '#evenementssucre';
-	new DataTable(idTbl, {
+	const table = new DataTable(idTbl, {
 		order: [[0, 'desc']],
 		dom: 'Blftip',
 		scrollX: true,
@@ -14,14 +14,9 @@ function evenementSucreListe() {
 			exportOptions: {
 				columns: ':visible'
 			},
-			title: '',
-			action: function(e, dt, node, config) {
-				config.title = Evenements + ' ' + (new Date()).toLocaleDateString();
-				const inputSearch = this.search();
-				if (inputSearch.length !== 0) {
-					config.title += ' <' + inputSearch + '>';
-				}
-				$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, node, config);
+			title: function() {
+				return Evenements + ' ' + new Date().toLocaleDateString() +
+					(table.search().length === 0 ? '' : ' <' + table.search() + '>');
 			}
 		}, {
 				extend: 'print',

@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			return 'rotate(' + ((d.data.parent === 'null') ? 0 : -50) + ')';
 		})
 		.style('text-anchor', 'middle')
+		.style('fill', '#DF6C00')
 		.html(function(d) {
 			return '<tspan x="0" y="0.1em">' + ((d.data.parent === 'null') ? essaimtxt + ' ' : '') + d.data.name + '</tspan>';
 		});
