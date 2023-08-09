@@ -4,7 +4,7 @@
 function evenementListe(initDatatable) {
 	const cookieOpt = ';SameSite=Strict;path=' + window.location.pathname;
 	if (initDatatable) {
-		new DataTable('#evenements', {
+		const table = new DataTable('#evenements', {
 			order: [[0, 'desc']],
 			dom: 'Blftip',
 			scrollX: true,
@@ -12,7 +12,11 @@ function evenementListe(initDatatable) {
 				'csv',
 				{
 					extend: 'pdf', exportOptions: { columns: ':visible' },
-					title: Evenements + ' ' + (new Date()).toLocaleDateString()
+					title: function() {
+						return Evenements + ' ' + new Date().toLocaleDateString() +
+							(table.search().length === 0 ? '' : ' <' + table.search() + '>');
+					},
+
 				},
 				{ extend: 'print', text: buttontextprint },
 				{ extend: 'colvis', text: buttontextcol }
