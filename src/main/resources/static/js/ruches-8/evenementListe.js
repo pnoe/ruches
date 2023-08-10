@@ -16,7 +16,6 @@ function evenementListe(initDatatable) {
 						return Evenements + ' ' + new Date().toLocaleDateString() +
 							(table.search().length === 0 ? '' : ' <' + table.search() + '>');
 					},
-
 				},
 				{ extend: 'print', text: buttontextprint },
 				{ extend: 'colvis', text: buttontextcol }

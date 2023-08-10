@@ -15,18 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		scrollX: true,
 		buttons: ['csv', {
 			extend: 'pdf', exportOptions: { columns: ':visible' },
-			action: function(e, dt, node, config) {
-				config.title = Ruches + ' ' + (new Date()).toLocaleDateString();
-				const inputSearch = table.search();
-				if (inputSearch.length !== 0) {
-					config.title += ' <' + inputSearch + '>';
-				}
+			title: function() {
 				const sru = document.getElementById('rucher');
 				const valr = sru.options[sru.selectedIndex].value;
-				if (valr !== '') {
-					config.title += ' [' + valr + ']';
-				}
-				$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, node, config);
+				return Ruches + ' ' + new Date().toLocaleDateString() +
+					(table.search().length === 0 ? '' : ' <' + table.search() + '>') +
+					(valr === '' ? '' : ' [' + valr + ']')
 			},
 			orientation: 'landscape'
 		}, {

@@ -43,6 +43,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 		event.preventDefault();
 	});
+	function addCell(tr, content, colSpan = 1, classN = '') {
+		const td = document.createElement('td');
+		td.colSpan = colSpan;
+		td.textContent = content;
+		if (classN !== '') { td.className = classN }
+		tr.appendChild(td);
+	}
 	new DataTable('#hausses', {
 		orderFixed: [[1, 'asc'], [0, 'asc']],
 		rowGroup: {
@@ -52,13 +59,17 @@ document.addEventListener('DOMContentLoaded', () => {
 				const mielTotal = rows.data().pluck(4).reduce(function(a, b) {
 					return a + parseFloat(b.replace(/,/g, '.'));
 				}, 0.00);
-				return $('<tr/>').append('<td>' + total + '</td>' +
-				'<td>' + group + '</td>' +
-				'<td colspan="2"></td>')				
-//				<td colspan="4">' + totalPourLaRuche + ' ' + group + '</td>')
-					.append('<td class="num">' + new Intl.NumberFormat(navigator.language, {
-						minimumFractionDigits: 2
-					}).format(mielTotal) + '</td>').append('<td colspan="2"></td>');
+				const tr = document.createElement('tr');
+				addCell(tr, total);
+				const ruche = document.createElement('td');
+				ruche.insertAdjacentHTML('afterbegin', group);
+				tr.appendChild(ruche);
+				addCell(tr, '', 2);
+				addCell(tr, new Intl.NumberFormat(navigator.language, {
+					minimumFractionDigits: 2
+				}).format(mielTotal), 1, 'num');
+				addCell(tr, '', 2);
+				return tr;
 			}
 		}
 	});
