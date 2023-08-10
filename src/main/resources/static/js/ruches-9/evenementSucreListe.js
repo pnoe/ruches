@@ -42,9 +42,9 @@ function evenementSucreListe() {
 			}).data().reduce(function(a, b) {
 				return valPoids(a) + valPoids(b);
 			}, 0);
-			$(api.column(coltotal).footer()).html(
+			api.column(coltotal).footer().innerHTML =
 				Number.parseFloat(total).toFixed(2) + '<br/>page '
-				+ Number.parseFloat(pageTotal).toFixed(2));
+				+ Number.parseFloat(pageTotal).toFixed(2);
 		}
 	});
 }
