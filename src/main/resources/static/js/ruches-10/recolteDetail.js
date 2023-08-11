@@ -30,12 +30,18 @@ document.addEventListener('DOMContentLoaded', () => {
 		const date = itDate.value;
 		itDate.style.display = 'none';
 		itDateOk.style.display = 'none';
-		const requestData = {};
-		requestData[_csrf_param_name] = _csrf_token;
-		requestData.date = date;
-		$.post(urlRecHDepot + recId, requestData).done(function(data) {
-			alert(data);
-		});
+		const req = new XMLHttpRequest();
+		req.open('POST', urlRecHDepot + recId, true);
+		req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		req.onload = function() {
+			if (req.readyState === 4) {
+				if (req.status === 200) {
+					alert(req.responseText);
+				}
+			}
+		};
+		req.send(_csrf_param_name + '=' + _csrf_token +
+			'&date=' + date);
 	});
 	document.getElementById('supprime').addEventListener('click', (event) => {
 		if (confirm(suppRecHauss)) {

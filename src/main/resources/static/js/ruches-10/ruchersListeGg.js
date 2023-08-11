@@ -57,14 +57,15 @@ function initMap() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-	$('#dragMarker').change(function() {
+	document.getElementById('dragMarker').addEventListener('change', (event) => {
 		for (const marker of markersRucher) {
-			marker.setDraggable(!this.checked);
+			marker.setDraggable(!event.target.checked);
 		}
 	});
-	$('#searchtext').keyup(function(event) {
-		if (event.keyCode === 13) {
-			const searchtext = $('#searchtext').val().toUpperCase();
+	document.getElementById('searchtext').addEventListener('keyup', (event) => {
+		if (event.code === 'Enter') {
+			const searchtext = document.getElementById('searchtext').value.
+				trim().toUpperCase();
 			for (const marker of markersRucher) {
 				if (marker.label.toUpperCase().includes(searchtext)) {
 					google.maps.event.trigger(marker, 'click');

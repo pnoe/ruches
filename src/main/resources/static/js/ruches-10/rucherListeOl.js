@@ -1,7 +1,7 @@
 /* globals ol,
-	ruchers, nomRuches,	recentertxt, lesRucherstxt,	lesRuchestxt, pasderuchetxt, 
+	ruchers, nomRuches, lesRucherstxt,	lesRuchestxt, pasderuchetxt, 
 	ruchertxt, couchemarqueursrucherstxt, ignCarteLiscense,
-	pleinecrantxt, urlruches, _csrf_token
+	pleinecrantxt, urlruches, _csrf_token, bootstrap
 */
 /* exported rucherListeIgn */
 'use strict';
@@ -16,13 +16,8 @@ function rucherListeIgn(ign) {
 		'Registre parcellaire graphique : zones de culture déclarées par les exploitants en '
 		+ agriAnnee;
 	const agriTitle = 'Registre parcellaire graphique';
-
-	$('.recentre').on('click', function() {
-		return confirm(recentertxt);
-	});
-	$('.bi-question-lg').popover({ html: true });
-	$('.popover-dismiss').popover({
-		trigger: 'focus'
+	new bootstrap.Popover(document.getElementsByClassName('bi-question-lg')[0], {
+		html: true
 	});
 	const markerRuchers = [];
 	const closer = document.getElementById('popup-closer');
@@ -86,7 +81,9 @@ function rucherListeIgn(ign) {
 		toggleCondition: ol.events.condition.never,
 		style: false
 	});
-	select.setActive(!$('#dragMarker')[0].checked);
+	select.setActive(
+		!document.getElementById('dragMarker').checked
+	);
 	select.on('select', function(e) {
 		e.selected.forEach(function(feature) {
 			const style = feature.getStyle();
@@ -105,7 +102,9 @@ function rucherListeIgn(ign) {
 		features: select.getFeatures(),
 		layers: [vectorLayer]
 	});
-	translate.setActive(!$('#dragMarker')[0].checked);
+	translate.setActive(
+		!document.getElementById('dragMarker').checked
+	);
 	const map = new ol.Map({
 		// ajout {doubleClickZoom: false}
 		interactions: ol.interaction.defaults({ doubleClickZoom: false }).extend([select, translate]),
@@ -243,9 +242,10 @@ function rucherListeIgn(ign) {
 		req.setRequestHeader('x-csrf-token', _csrf_token);
 		req.send(null);
 	});
-	$('#searchtext').keyup(function(event) {
-		if (event.keyCode === 13) {
-			const searchtext = $('#searchtext').val().toUpperCase();
+	document.getElementById('searchtext').addEventListener('keyup', (event) => {
+		if (event.code === 'Enter') {
+			const searchtext = document.getElementById('searchtext').value.
+				trim().toUpperCase();
 			for (const marker of markerRuchers) {
 				if (marker.getStyle().getText().getText().toUpperCase().includes(searchtext)) {
 					selectDoubleClick.getFeatures().clear();
@@ -260,8 +260,8 @@ function rucherListeIgn(ign) {
 			}
 		}
 	});
-	$('#dragMarker').change(function() {
-		select.setActive(!this.checked);
-		translate.setActive(!this.checked);
+	document.getElementById('dragMarker').addEventListener('change', (event) => {
+		select.setActive(!event.target.checked);
+		translate.setActive(!event.target.checked);
 	});
 }
