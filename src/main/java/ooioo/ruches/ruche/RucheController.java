@@ -185,7 +185,7 @@ public class RucheController {
 			});
 		} catch (IOException e) {
 			logger.error("Paramètre parcours incorrect");
-			model.addAttribute(Const.MESSAGE, "Paramètre incorect");
+			model.addAttribute(Const.MESSAGE, "Paramètre incorrect");
 			return Const.INDEX;
 		}
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);

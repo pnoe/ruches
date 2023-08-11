@@ -223,16 +223,16 @@ function newParcours() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-	$('#dragMarker').change(function() {
+	document.getElementById('dragMarker').addEventListener('change', (event) => {
 		for (const markersR of markersRuche) {
-			markersR.setDraggable(!this.checked);
+			markersR.setDraggable(!event.target.checked);
 		}
 	});
-	$('.liste').click(function(e) {
-		window.location = urlruches + 'ruche/liste/' + rucher.id +
-			'?parcours=' + encodeURIComponent(JSON.stringify(rucheParcours)) +
-			'&plus=' + (e.target.id !== 'liste');
-	});
+	document.querySelectorAll('.liste').forEach(item =>
+		item.addEventListener('click', (event) =>
+			window.location = urlruches + 'ruche/liste/' + rucher.id +
+			'?parcours=' + encodeURIComponent(JSON.stringify(rucheParcours.map(rp => rp.id))) +
+			'&plus=' + (event.target.id !== 'liste')));
 	document.getElementById('export-gpx').addEventListener('click', () => {
 		exportGpx();
 	});
@@ -242,26 +242,29 @@ document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('parcours-redraw').addEventListener('click', () => {
 		parcoursRedraw(true);
 	});
-	$('#searchtext').keyup(function(event) {
-		if (event.keyCode === 13) {
-			const searchtext = $('#searchtext').val().toUpperCase();
+	document.getElementById('searchtext').addEventListener('keyup', (event) => {
+		if (event.code === 'Enter') {
+			const searchtext = document.getElementById('searchtext').value.
+				trim().toUpperCase();
 			for (const marker of markersRuche) {
 				if ((marker.label.text.toUpperCase() === searchtext) ||
 					(marker.label.text.toUpperCase() === '*' + searchtext) ||
-					(marker.essaimnom.toUpperCase() === searchtext)) {
+					(Object.prototype.hasOwnProperty.call(marker, 'essaimnom') &&
+						(marker.essaimnom.toUpperCase() === searchtext))
+				) {
 					google.maps.event.trigger(marker, 'click');
 				}
 			}
 		}
 	});
-	$('#cercles').attr('title', distButinage + ' ' + rayonsButinage.join(', ') + ' m');
-	document.getElementById('cercles').addEventListener('click', () => {
+	document.getElementById('cercles').setAttribute('title', distButinage + ' ' + rayonsButinage.join(', ') + ' m');
+	document.getElementById('cercles').addEventListener('click', (event) => {
 		const visi = !circlesButinage[0].getVisible();
 		for (const c of circlesButinage) {
 			c.setVisible(visi);
 		}
-		const bgCol = visi ? 'rgba(0, 0, 255, 0.2)' : '';
-		$('#cercles').css({ 'background-color': bgCol });
+		const bgCol = visi ? 'rgba(0, 0, 255, 0.6)' : '';
+		event.target.style.backgroundColor = bgCol;
 	});
 
 });

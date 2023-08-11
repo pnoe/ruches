@@ -3,7 +3,7 @@
    rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
    ruchetxt, lesHausses, pasdehaussetxt, parcourstxt, ignCarteLiscense,
    parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token, dessinEnregistretxt,
-   distRuchesOk, distMaxRuche, geoloc
+   distRuchesOk, distMaxRuche, geoloc, bootstrap
    */
 /* exported rucherDetail jsPDF */
 'use strict';
@@ -43,7 +43,7 @@ function rucherDetail(ign) {
 			Math.cos(Math.PI * lat2 / 180.0) * sinDiffLon * sinDiffLon
 		));
 	}
-	$('.rapproche').on('click', function() {
+	document.getElementsByClassName('rapproche')[0].addEventListener('click', (event) => {
 		const longRucher = rucher.longitude;
 		const latRucher = rucher.latitude;
 		const diametreTerre = (isNaN(rucher.altitude) ? 0 : rucher.altitude) +
@@ -56,17 +56,16 @@ function rucherDetail(ign) {
 			}
 		}
 		if (rucheRapp.length > 0) {
-			return confirm(rapprochertxt + ' (' + rucheRapp.join() + ') ?');
+			if (confirm(rapprochertxt + ' (' + rucheRapp.join() + ') ?')) {
+				return;
+			}
 		} else {
 			alert(distRuchesOk);
-			return false;
 		}
+		event.preventDefault();
 	});
-	$('.bi-question-lg').popover({
+	new bootstrap.Popover(document.getElementsByClassName('bi-question-lg')[0], {
 		html: true
-	});
-	$('.popover-dismiss').popover({
-		trigger: 'focus'
 	});
 	const markerRuches = [];
 	const closer = document.getElementById('popup-closer');
@@ -171,7 +170,9 @@ function rucherDetail(ign) {
 		toggleCondition: ol.events.condition.never,
 		style: false
 	});
-	select.setActive(!$('#dragMarker')[0].checked);
+	select.setActive(
+		!document.getElementById('dragMarker').checked
+	);
 	select.on('select', function(e) {
 		e.selected.forEach(function(feature) {
 			const style = feature.getStyle();
@@ -188,7 +189,9 @@ function rucherDetail(ign) {
 		features: select.getFeatures(),
 		layers: [vectorLayer]
 	});
-	translate.setActive(!$('#dragMarker')[0].checked);
+	translate.setActive(
+		!document.getElementById('dragMarker').checked
+	);
 	// Utiliser KMLExtended pour sauver et lire les textes	
 	/// const formatKML = new ol.format.KMLExtended({});
 	// Ne fonctionne pas
@@ -455,13 +458,15 @@ function rucherDetail(ign) {
 		};
 		req.send(null);
 	});
-	$('#searchtext').keyup(function(event) {
-		if (event.keyCode === 13) {
-			const searchtext = $('#searchtext').val().toUpperCase();
+	document.getElementById('searchtext').addEventListener('keyup', (event) => {
+		if (event.code === 'Enter') {
+			const searchtext = document.getElementById('searchtext').value.
+				trim().toUpperCase();
 			for (const marker of markerRuches) {
 				if ((marker.getStyle().getText().getText().toUpperCase() === searchtext) ||
 					(marker.getStyle().getText().getText().toUpperCase() === '*' + searchtext) ||
-					(marker.get('essaimnom').toUpperCase() === searchtext)) {
+					(Object.prototype.hasOwnProperty.call(marker, 'essaimnom') &&
+						(marker.get('essaimnom').toUpperCase() === searchtext))) {
 					selectDoubleClick.getFeatures().clear();
 					selectDoubleClick.getFeatures().push(marker);
 					selectDoubleClick.dispatchEvent({
@@ -474,11 +479,11 @@ function rucherDetail(ign) {
 			}
 		}
 	});
-	$('.liste').click(function(e) {
-		window.location = ruchesurl + 'ruche/liste/' + rucher.id +
+	document.querySelectorAll('.liste').forEach(item =>
+		item.addEventListener('click', (event) =>
+			window.location = ruchesurl + 'ruche/liste/' + rucher.id +
 			'?parcours=' + encodeURIComponent(JSON.stringify(rucheParcours.map(rp => rp.id))) +
-			'&plus=' + (e.target.id !== 'liste');
-	});
+			'&plus=' + (event.target.id !== 'liste')));
 	document.getElementById('export-gpx').addEventListener('click', () => {
 		exportGpx();
 	});
@@ -493,9 +498,9 @@ function rucherDetail(ign) {
 		overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());
 		parcoursRedraw(true);
 	});
-	$('#dragMarker').change(function() {
-		select.setActive(!this.checked);
-		translate.setActive(!this.checked);
+	document.getElementById('dragMarker').addEventListener('change', (event) => {
+		select.setActive(!event.target.checked);
+		translate.setActive(!event.target.checked);
 	});
 	if (!ign) {
 		document.getElementById('export-png').addEventListener('click', function() {
@@ -510,9 +515,10 @@ function rucherDetail(ign) {
 			map.renderSync();
 		});
 		const { jsPDF } = window.jspdf;
-		const exportPdf = $('#export-pdf');
-		exportPdf.click(function() {
-			exportPdf.disabled = true;
+		let traitePdf = false;
+		document.getElementById('export-pdf').addEventListener('click', function() {
+			if (traitePdf) { return; }
+			traitePdf = true;
 			document.body.style.cursor = 'progress';
 			const format = document.getElementById('format').value;
 			const resolution = document.getElementById('resolution').value;
@@ -537,7 +543,7 @@ function rucherDetail(ign) {
 						// Reset original map size
 						map.setSize(size);
 						map.getView().setResolution(viewResolution);
-						exportPdf.disabled = false;
+						traitePdf = false;
 						document.body.style.cursor = 'auto';
 					});
 			});
