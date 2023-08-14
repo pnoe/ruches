@@ -7,11 +7,8 @@
 		const buttontextcol = /*[[#{buttontextcol}]]*/null;
 		const ruchersProdRecolte = /*[[#{ruchersProdRecolte}]]*/null;
 		document.addEventListener('DOMContentLoaded', () => {
-			$('.bi-question-lg').popover({
+			new bootstrap.Popover(document.getElementsByClassName('bi-question-lg')[0], {
 				html: true
-			});
-			$('.popover-dismiss').popover({
-				trigger: 'focus'
 			});
 			new DataTable('#statistiques', {
 				dom: 'Blftip',

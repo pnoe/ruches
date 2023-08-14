@@ -4,16 +4,17 @@
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
 	<script th:inline="javascript">
 		document.addEventListener('DOMContentLoaded', () => {
+			const avecE = document.getElementById('avecEssaim');
 			const table = new DataTable('#associerRucheEssaim', {
 				dom: 'lftip',
 				scrollX: true,
 			});
-			$('#avecEssaim').click(function () {
+			avecE.addEventListener('click', (event) => {
 				table.draw();
 			});
 			$.fn.dataTable.ext.search.push(
 				function (settings, searchData) {
-					const checked = document.getElementById('avecEssaim').checked;
+					const checked = avecE.checked;
 					return (checked && searchData[1] !== '') || (!checked && searchData[1] === '');
 				});
 		});
