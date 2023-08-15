@@ -72,7 +72,7 @@
 		id="evenementForm">
 		<div th:replace="includeForm :: date"></div>
 		<div th:replace="includeForm :: commentaire"></div>
-		<div class="form-check" th:if="${(rucheSource != null) and (!ruche.rucher.id.equals(rucheSource.rucher.id))}">
+		<div class="form-check" th:if="${rucheSource}">
 			<p th:utext="#{positionRuches(${ruche.nom},${ruche.rucher.nom})} + '<br/>'
 				 + #{positionRuches(${rucheSource.nom},${rucheSource.rucher.nom})}">
 			</p>

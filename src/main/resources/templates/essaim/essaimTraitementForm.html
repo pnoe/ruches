@@ -8,13 +8,6 @@
 <script>
 	document.addEventListener('DOMContentLoaded', () => {
 		document.getElementById('commentaire').focus();
-		$('#finTraitement').on('click', function() {
-			if ($(this).is(':checked')) {
-				$('#typeEvenement').attr('value', 'ESSAIMTRAITEMENTFIN');
-			} else {
-				$('#typeEvenement').attr('value', 'ESSAIMTRAITEMENT');
-			}
-		});
 		$("#evenementForm").validate({
 			errorClass : 'erreur-form',
 			errorPlacement : function(error, element) {
