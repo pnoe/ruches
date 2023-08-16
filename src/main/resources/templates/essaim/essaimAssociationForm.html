@@ -36,15 +36,16 @@
 				minDate: false,
 				minTime: false
 			});
+			const swapCheck = document.getElementById('swapPositions');
 			function swapChange() {
-				const isChk = $('#swapPositions').is(':checked') &&
+				const isChk = swapCheck.checked &&
 					(rucherucherid !== ruchesourcerucherid);
 				$('#date').datetimepicker({
 					minDate: isChk ? dateFirst : false,
 					minTime: isChk ? timeFirst : false
 				});
 			}
-			$('#swapPositions').on('change', swapChange);
+			swapCheck.addEventListener('change', swapChange);
 		});
 	</script>
 </head>

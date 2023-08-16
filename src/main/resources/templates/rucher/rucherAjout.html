@@ -13,6 +13,7 @@
 				}
 			});
 			new DataTable('#retraitRuches', {});
+			const actionAjoutRuches = document.getElementById('actionAjoutRuches');
 			function updateLinkAjout(e, dt, type) {
 				if (type === 'row') {
 					let rucheIds = '';
@@ -24,15 +25,15 @@
 					if (rucheIds) {
 						/*[- On enlève la dernière virgule et met à jour l'url de traitement -]*/
 						rucheIds = rucheIds.substring(0, rucheIds.length - 1);
-						$('#actionAjoutRuches').attr('href', urlAjout + rucherId + '/' + rucheIds);
+						actionAjoutRuches.setAttribute('href', urlAjout + rucherId + '/' + rucheIds);
 					} else {
-						$('#actionAjoutRuches').attr('href', '#actionAjoutRuches');
+						actionAjoutRuches.setAttribute('href', '#actionAjoutRuches');
 					}
 				}
 			}
 			tableajout.on('select deselect', updateLinkAjout);
-			$('#actionAjoutRuches').on('click', function () {
-				if ($(this).attr('href') === '#actionAjoutRuches') {
+			actionAjoutRuches.addEventListener('click', () => {
+				if (actionAjoutRuches.getAttribute('href') === '#actionAjoutRuches') {
 					alert(selRuchesAjout);
 				}
 			});
