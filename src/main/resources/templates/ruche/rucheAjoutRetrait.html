@@ -22,7 +22,7 @@
 				]
 			});
 			tableRetrait.on('row-reordered', function (e, diff) {
-				if (diff.length === 0) return;
+				if (diff.length === 0) {return;}
 				const hausses = [];
 				$('#retraitHausses tbody tr a').each(function () {
 					const href = $(this).attr('href');

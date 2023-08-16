@@ -21,8 +21,8 @@
 <script th:src="@{/js/datatables-1.13.6/datatables.min.js}"></script>
 <script th:inline="javascript">
 	function updateTheme() {
-		document.querySelector("html").setAttribute("data-bs-theme",
-		window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+		document.querySelector('html').setAttribute('data-bs-theme',
+		window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
 	}
 	window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateTheme);
 	updateTheme();
@@ -101,7 +101,7 @@
 	media="all" th:href="@{/js/jquery.datetimepicker.min-2.5.21.css}" />
 <script th:fragment="localejsdatetimepicker">
 	document.addEventListener('DOMContentLoaded', () => {
-		$("#date").datetimepicker();
+		$('#date').datetimepicker();
 		$.datetimepicker.setLocale(window.navigator.language.substring(0, 2));
 	});
 </script>

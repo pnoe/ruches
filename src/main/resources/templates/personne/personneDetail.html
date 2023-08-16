@@ -1,25 +1,24 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head
-	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:inline="javascript">
-const notListEmpty = /*[[${not #lists.isEmpty(ruchers)}]]*/ null;
-const pnnonsupp = /*[[#{personnenonsupprimeerefrrucher}]]*/ null;
-const supppers = /*[[#{supprimercettepersonne}]]*/ null;
-document.addEventListener('DOMContentLoaded', () => {
-	document.getElementById('supprime').addEventListener('click', (event) => {
-		if(notListEmpty) {
-			alert(pnnonsupp);
-		} else {
-			if (confirm(supppers)) {
-				return;
-			}
-		}
-		event.preventDefault();
-	});
-});
-</script>
+
+<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+	<script th:inline="javascript">
+		const notListEmpty = /*[[${not #lists.isEmpty(ruchers)}]]*/ null;
+		const pnnonsupp = /*[[#{personnenonsupprimeerefrrucher}]]*/ null;
+		const supppers = /*[[#{supprimercettepersonne}]]*/ null;
+		document.addEventListener('DOMContentLoaded', () => {
+			document.getElementById('supprime').addEventListener('click', (event) => {
+				if (notListEmpty) {
+					alert(pnnonsupp);
+				} else if (confirm(supppers)) {
+					return;
+				}
+				event.preventDefault();
+			});
+		});
+	</script>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar"></nav>
 	<br />
@@ -34,11 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
 				</h1>
 			</div>
 			<div class="col">
-				<a th:href="@{'/personne/modifie/'+${personne.id}}"
-				 class="bi-pencil" th:title="#{modifier}" aria-hidden="true"></a>
-			    <a id="supprime" th:href="@{'/personne/supprime/'+${personne.id}}"
-			      class="bi-trash" th:title="#{supprimer}" 
-			      style="color:red" aria-hidden="true"></a>
+				<a th:href="@{'/personne/modifie/'+${personne.id}}" class="bi-pencil" th:title="#{modifier}"
+					aria-hidden="true"></a>
+				<a id="supprime" th:href="@{'/personne/supprime/'+${personne.id}}" class="bi-trash"
+					th:title="#{supprimer}" style="color:red" aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
@@ -55,18 +53,17 @@ document.addEventListener('DOMContentLoaded', () => {
 			</thead>
 			<tbody>
 				<tr>
-					<td><a th:href=
-			"@{'mailto:'+${personne.email}(subject=Ruches,body=${personne.prenom})}" th:text="${personne.email}"></a></td>
+					<td><a th:href="@{'mailto:'+${personne.email}(subject=Ruches,body=${personne.prenom})}"
+							th:text="${personne.email}"></a></td>
 					<td th:text="${personne.adresse}"></td>
 					<td th:text="${personne.login}"></td>
 					<td th:text="${personne.roles}"></td>
-					<td th:if="${session.voirInactif}"
-						th:text="${personne.active}? #{oui} : #{non}"></td>
+					<td th:if="${session.voirInactif}" th:text="${personne.active}? #{oui} : #{non}"></td>
 				</tr>
 			</tbody>
-		</table>	
-		<h6	th:unless="${#arrays.length(ruchers)}" th:text="#{Pasderucher}"></h6>
-		<th:block th:if="${#arrays.length(ruchers)}">	
+		</table>
+		<h6 th:unless="${#arrays.length(ruchers)}" th:text="#{Pasderucher}"></h6>
+		<th:block th:if="${#arrays.length(ruchers)}">
 			<h6 th:text="#{contactRuchers}"></h6>
 			<table class="table table-sm table-bordered table-striped" id="ruchers">
 				<thead>
@@ -78,17 +75,16 @@ document.addEventListener('DOMContentLoaded', () => {
 				</thead>
 				<tbody>
 					<tr th:each="rucher : ${ruchers}">
-						<td><a th:href="@{'/rucher/'+${rucher.id}}"
-							th:text="${rucher.nom}"></a></td>
-						<td th:if="${session.voirInactif}"
-							th:text="${rucher.actif}? #{oui} : #{non}"></td>
+						<td><a th:href="@{'/rucher/'+${rucher.id}}" th:text="${rucher.nom}"></a></td>
+						<td th:if="${session.voirInactif}" th:text="${rucher.actif}? #{oui} : #{non}"></td>
 						<td th:text="${rucher.adresse}"></td>
 					</tr>
 				</tbody>
-			</table>	
+			</table>
 		</th:block>
 	</div>
-	<br/>
+	<br />
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

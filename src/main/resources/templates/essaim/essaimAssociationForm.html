@@ -14,7 +14,7 @@
 		document.addEventListener('DOMContentLoaded', () => {
 			$.validator.addMethod('greaterThanEqual', function (value, element, param) {
 				return ($('#swapPositions').is(':checked') &&
-					(rucherucherid != ruchesourcerucherid))
+					(rucherucherid !== ruchesourcerucherid))
 					? (Date.parse(value) > Date.parse(param)) : true;
 			}, doitEtreSupA + ' {0}');
 			$('#evenementForm').validate({
@@ -38,7 +38,7 @@
 			});
 			function swapChange() {
 				const isChk = $('#swapPositions').is(':checked') &&
-					(rucherucherid != ruchesourcerucherid);
+					(rucherucherid !== ruchesourcerucherid);
 				$('#date').datetimepicker({
 					minDate: isChk ? dateFirst : false,
 					minTime: isChk ? timeFirst : false

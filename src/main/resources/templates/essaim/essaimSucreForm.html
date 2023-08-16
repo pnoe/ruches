@@ -1,33 +1,35 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:replace="include :: jsdatetimepicker"></script>
-<link th:replace="include :: cssdatetimepicker"/>
-<script th:replace="include ::  localejsdatetimepicker"></script>
-<script>
-	document.addEventListener('DOMContentLoaded', () => {
-		document.getElementById('valeur').focus();
-		$('#evenementForm').validate({
-			errorClass: 'erreur-form',
-			errorPlacement: function(error, element) {
-			    error.insertBefore(element.closest('div'));
-			},
-			rules : {
-				date : {
-					required : true
+	<script th:replace="include :: jsdatetimepicker"></script>
+	<link th:replace="include :: cssdatetimepicker" />
+	<script th:replace="include ::  localejsdatetimepicker"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			document.getElementById('valeur').focus();
+			$('#evenementForm').validate({
+				errorClass: 'erreur-form',
+				errorPlacement: function (error, element) {
+					error.insertBefore(element.closest('div'));
 				},
-				valeur : {
-					required : true,
-					number : true
-				},
-				commentaire : {
-					maxlength : 255
+				rules: {
+					date: {
+						required: true
+					},
+					valeur: {
+						required: true,
+						number: true
+					},
+					commentaire: {
+						maxlength: 255
+					}
 				}
-			}
+			});
 		});
-	});
-</script>
+	</script>
 </head>
+
 <body>
 	<nav th:replace="navbar::navbar"></nav>
 	<br />
@@ -37,19 +39,18 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-				<th:block th:text="#{ajoutSucre} + ' '"></th:block>
-				  <a th:href="@{'/essaim/'+${evenement.essaim?.id}}"
-					th:text="#{essaim} + ' ' + ${evenement.essaim?.nom}"></a>
+					<th:block th:text="#{ajoutSucre} + ' '"></th:block>
+					<a th:href="@{'/essaim/'+${evenement.essaim?.id}}"
+						th:text="#{essaim} + ' ' + ${evenement.essaim?.nom}"></a>
 				</h1>
 				<th:block th:if="${EveESSAIMSUCRE}">
 					<a th:href="@{'/evenement/'+${EveESSAIMSUCRE.id}}"
 						th:text="${#numbers.formatDecimal(EveESSAIMSUCRE.valeur,1,2)}+'kg le '+${#temporals.format(EveESSAIMSUCRE.date, 'dd/MM/yyyy')}"></a>
 				</th:block>
-        	</div>
-        </div>
-    </div>
-	<form action="#" th:action="@{'/evenement/essaim/sauve'}"
-		th:object="${evenement}" method="post" id="evenementForm">
+			</div>
+		</div>
+	</div>
+	<form action="#" th:action="@{'/evenement/essaim/sauve'}" th:object="${evenement}" method="post" id="evenementForm">
 		<input type="hidden" th:field="*{id}" />
 		<input type="hidden" th:field="*{type}" />
 		<input type="hidden" th:field="*{ruche}" />
@@ -63,4 +64,5 @@
 	</form>
 	<footer th:replace="include::footer"></footer>
 </body>
+
 </html>

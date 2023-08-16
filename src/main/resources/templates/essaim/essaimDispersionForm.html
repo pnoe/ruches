@@ -37,7 +37,7 @@
 				minTime: timeFirst
 			});
 			function depotOnChange() {
-				const isChk = $('#depot').is(":checked");
+				const isChk = $('#depot').is(':checked');
 				$('#date').datetimepicker({
 					minDate: isChk ? dateFirst : false,
 					minTime: isChk ? timeFirst : false
