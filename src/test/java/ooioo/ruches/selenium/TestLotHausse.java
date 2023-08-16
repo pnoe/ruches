@@ -1,5 +1,6 @@
 package ooioo.ruches.selenium;
 
+import static ooioo.ruches.selenium.TestUtils.jsExceptionsList;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebDriver;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -43,11 +45,16 @@ public class TestLotHausse {
 	@BeforeAll
 	static void initChrome() {
 		driver = TestUtils.initChrome();
-		baseUrl= TestUtils.baseUrl;
+		baseUrl = TestUtils.baseUrl;
 	}
 
 	@AfterAll
 	static void quitChrome() {
+		for (JavascriptException jsException : jsExceptionsList) {
+			System.out.println("JS exception message: " + jsException.getMessage());
+			System.out.println("JS exception system information: " + jsException.getSystemInformation());
+			jsException.printStackTrace();
+		}
 		driver.quit();
 	}
 
@@ -104,8 +111,8 @@ public class TestLotHausse {
 	}
 
 	/*
-	 * Renvoie true si le type eve typeVal de hausse id est trouvé. Appel API
-	 * REST. false sinon
+	 * Renvoie true si le type eve typeVal de hausse id est trouvé. Appel API REST.
+	 * false sinon
 	 */
 	boolean typeEveHausseId(String id, String typeVal) {
 		// recherche des événements essaim avec l'api rest

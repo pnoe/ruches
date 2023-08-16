@@ -56,15 +56,15 @@ public class PersonneController {
 		}
 		List<String> logins = new ArrayList<>();
 		for (PersonneLogin personneLogin : personneRepository.findAllProjectedBy()) {
-			if (!"".equals(personneLogin.getLogin())) {
-				logins.add(personneLogin.getLogin());
+			if (!"".equals(personneLogin.login())) {
+				logins.add(personneLogin.login());
 			}
 		}
 		model.addAttribute("personneLogins", logins);
 		List<String> emails = new ArrayList<>();
 		for (PersonneEmail personneEmail : personneRepository.findAllProjectedEmailBy()) {
-			if (!"".equals(personneEmail.getEmail())) {
-				emails.add(personneEmail.getEmail());
+			if (!"".equals(personneEmail.email())) {
+				emails.add(personneEmail.email());
 			}
 		}
 		model.addAttribute("personneEmails", emails);
@@ -85,6 +85,20 @@ public class PersonneController {
 			if (pService.droitsInsuffisants(personne, authentication, model)) {
 				return Const.INDEX;
 			}
+			List<String> logins = new ArrayList<>();
+			for (PersonneLogin personneLogin : personneRepository.findAllProjectedBy()) {
+				if (!"".equals(personneLogin.login()) && !personne.getLogin().equals(personneLogin.login())) {
+					logins.add(personneLogin.login());
+				}
+			}
+			model.addAttribute("personneLogins", logins);
+			List<String> emails = new ArrayList<>();
+			for (PersonneEmail personneEmail : personneRepository.findAllProjectedEmailBy()) {
+				if (!"".equals(personneEmail.email()) && !personne.getEmail().equals(personneEmail.email())) {
+					emails.add(personneEmail.email());
+				}
+			}
+			model.addAttribute("personneEmails", emails);
 			model.addAttribute(Const.PERSONNE, personne);
 		} else {
 			logger.error(Const.IDPERSONNEXXINCONNU, personneId);

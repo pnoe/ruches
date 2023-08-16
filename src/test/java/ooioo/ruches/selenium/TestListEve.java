@@ -2,6 +2,7 @@ package ooioo.ruches.selenium;
 
 import static ooioo.ruches.selenium.TestUtils.baseUrl;
 import static ooioo.ruches.selenium.TestUtils.driver;
+import static ooioo.ruches.selenium.TestUtils.jsExceptionsList;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -19,6 +20,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
@@ -39,6 +41,11 @@ public class TestListEve {
 
 	@AfterAll
 	static void quitChrome() {
+		for (JavascriptException jsException : jsExceptionsList) {
+			System.out.println("JS exception message: " + jsException.getMessage());
+			System.out.println("JS exception system information: " + jsException.getSystemInformation());
+			jsException.printStackTrace();
+		}
 		driver.quit();
 	}
 

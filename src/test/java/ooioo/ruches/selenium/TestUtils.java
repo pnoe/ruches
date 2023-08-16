@@ -6,14 +6,19 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.devtools.DevTools;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -21,7 +26,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public final class TestUtils {
 
-	static WebDriver driver;
+	static ChromeDriver driver;
+	static List<JavascriptException> jsExceptionsList = new ArrayList<>();
 
 	// Attention certains tests écrivent en base de donnée.
 	// Ne pas utiliser sur application en production !!!!!!!!!
@@ -56,46 +62,44 @@ public final class TestUtils {
 		options.addArguments("--remote-allow-origins=*");
 		// Pour tests sans interface graphique de Chrome
 		// options.addArguments("headless");
-		//   Pas d'effet sur les logs :
-		//		options.setLogLevel(ChromeDriverLogLevel.OFF);
+		// Pas d'effet sur les logs :
+		// options.setLogLevel(ChromeDriverLogLevel.OFF);
 
 		/*
-		driver = new ChromeDriver((new ChromeDriverService.Builder() {
-			@Override
-			protected File findDefaultExecutable() {
-				if (new File(pathChromeDriver).exists()) {
-					@SuppressWarnings("serial")
-					File f = new File(pathChromeDriver) {
-						@Override
-						public String getCanonicalPath() throws IOException {
-							return this.getAbsolutePath();
-						}
-					};
-					return f;
-				} else {
-					return super.findDefaultExecutable();
-				}
-			}
-		}).build(), options);
-		*/
+		 * driver = new ChromeDriver((new ChromeDriverService.Builder() {
+		 * 
+		 * @Override protected File findDefaultExecutable() { if (new
+		 * File(pathChromeDriver).exists()) {
+		 * 
+		 * @SuppressWarnings("serial") File f = new File(pathChromeDriver) {
+		 * 
+		 * @Override public String getCanonicalPath() throws IOException { return
+		 * this.getAbsolutePath(); } }; return f; } else { return
+		 * super.findDefaultExecutable(); } } }).build(), options);
+		 */
 		// driver = new ChromeDriver();
 
 		// https://www.selenium.dev/documentation/webdriver/drivers/service/
 		@SuppressWarnings("serial")
 		ChromeDriverService service = new ChromeDriverService.Builder()
-		        .usingDriverExecutable(new File(pathChromeDriver) {
+				.usingDriverExecutable(new File(pathChromeDriver) {
 					@Override
 					public String getCanonicalPath() throws IOException {
 						return this.getAbsolutePath();
 					}
-				})
-		        .build();
+				}).build();
 		driver = new ChromeDriver(service);
+
+		// listen to js exceptions
+		DevTools devTools = driver.getDevTools();
+		devTools.createSession();
+		// List<JavascriptException> jsExceptionsList = new ArrayList<>();
+		Consumer<JavascriptException> addEntry = jsExceptionsList::add;
+		devTools.getDomains().events().addJavascriptExceptionListener(addEntry);
 
 		driver.get(baseUrl + "login");
 		// Le titre de la page de connexion est "Connexion"
-		assertEquals("Ruches", driver.getTitle(),
-				() -> "Avez-vous démarré l'application Ruches ?");
+		assertEquals("Ruches", driver.getTitle(), () -> "Avez-vous démarré l'application Ruches ?");
 		driver.findElement(By.name("username")).sendKeys(user);
 		driver.findElement(By.name("password")).sendKeys(pwd);
 		driver.findElement(By.xpath("//input[@type='submit']")).click();

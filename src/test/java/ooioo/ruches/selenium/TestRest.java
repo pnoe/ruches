@@ -2,6 +2,7 @@ package ooioo.ruches.selenium;
 
 import static ooioo.ruches.selenium.TestUtils.baseUrl;
 import static ooioo.ruches.selenium.TestUtils.driver;
+import static ooioo.ruches.selenium.TestUtils.jsExceptionsList;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -36,6 +38,11 @@ public class TestRest {
 
 	@AfterAll
 	static void quitChrome() {
+		for (JavascriptException jsException : jsExceptionsList) {
+			System.out.println("JS exception message: " + jsException.getMessage());
+			System.out.println("JS exception system information: " + jsException.getSystemInformation());
+			jsException.printStackTrace();
+		}
 		driver.quit();
 	}
 
@@ -45,7 +52,8 @@ public class TestRest {
 		driver.get(baseUrl + "rest");
 		// api rest, json test sur lien vers repository recolteHausses
 		// https://itecnote.com/tecnote/how-to-get-json-response-by-selenium-webdriver-using-java/
-		// on ne voit pas cette balise "pre" avec un curl, est-elle ajoutée par selenium, chrome ?
+		// on ne voit pas cette balise "pre" avec un curl, est-elle ajoutée par
+		// selenium, chrome ?
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode actualObj = mapper.readTree(driver.findElement(By.tagName("pre")).getText());
@@ -58,8 +66,8 @@ public class TestRest {
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = { "distRuchers", "essaims", "recolteHausses", "personnes", "ruchers",
-			"recoltes", "evenements", "hausses", "ruches", "rucheTypes", "profile"})
+	@ValueSource(strings = { "distRuchers", "essaims", "recolteHausses", "personnes", "ruchers", "recoltes",
+			"evenements", "hausses", "ruches", "rucheTypes", "profile" })
 	@DisplayName("Admin API REST essaims")
 	void adminRestRuche(String entites) {
 		driver.get(baseUrl + "rest/" + entites);
