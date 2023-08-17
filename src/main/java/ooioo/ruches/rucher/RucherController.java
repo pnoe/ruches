@@ -102,7 +102,6 @@ public class RucherController {
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
 			List<Float> dist = new ArrayList<>();
-			// List<String> temps = new ArrayList<>();
 			List<LocalTime> temps = new ArrayList<>();
 			List<Double> distOiseau = new ArrayList<>();
 			List<Rucher> rrs = new ArrayList<>();
