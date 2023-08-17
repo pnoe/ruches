@@ -1,11 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-	<script th:replace="include :: moment"></script>
-	<script th:replace="include :: jquerydaterangepicker"></script>
-	<link th:replace="include :: cssjquerydaterangepicker" />
-	<script th:replace="include :: jsruchesnom('evenementListe')"></script>
+<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+	<script th:replace="~{include :: moment}"></script>
+	<script th:replace="~{include :: jquerydaterangepicker}"></script>
+	<link th:replace="~{include :: cssjquerydaterangepicker}" />
+	<script th:replace="~{include :: jsruchesnom('evenementListe')}"></script>
 	<script th:inline="javascript">
 		const Evenements = /*[[#{evenementcadreruche}]]*/ null;
 		const buttontextprint = /*[[#{buttontextprint}]]*/null;
@@ -15,7 +15,7 @@
 </head>
 
 <body>
-	<nav th:replace="navbar::navbar">Menu</nav>
+	<nav th:replace="~{navbar::navbar}"></nav>
 	<br />
 	<br />
 	<br />
@@ -24,7 +24,7 @@
 			<div class="col">
 				<h1 class="item" th:text="#{evenementcadreruche}"></h1>
 			</div>
-			<div th:insert="includeForm :: evenementListeDates(retController='/evenement/ruche/listeCadreRuche')"
+			<div th:insert="~{includeForm :: evenementListeDates(retController='/evenement/ruche/listeCadreRuche')}"
 				class="col">
 			</div>
 		</div>
@@ -56,7 +56,7 @@
 			</tbody>
 		</table>
 	</div>
-	<footer th:replace="include::footer"></footer>
+	<footer th:replace="~{include::footer}"></footer>
 </body>
 
 </html>

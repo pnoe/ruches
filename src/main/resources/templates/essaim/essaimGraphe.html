@@ -1,39 +1,46 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:replace="include :: d3"></script>
-<script th:replace="include :: jsruches"></script>
-<script th:inline="javascript">
-	const data = /*[(${essaimTree})]*/ null;
-	const essaimnom = /*[[${essaim.nom}]]*/ null;
-	const essaimtxt = /*[[#{essaim}]]*/ null;
-	const ruchetxt = /*[[#{ruche}]]*/ null;
-	const ruchertxt = /*[[#{rucher}]]*/ null;
-	const MielKgtxt = /*[[#{MielKg}]]*/ null;
-	const MielDescKgtxt = /*[[#{MielDescKg}]]*/ null;
-	const Actif = /*[[#{actif}]]*/ null;
-	const Inactif = /*[[#{Inactif}]]*/ null;
-	const urlessaim = /*[[@{/essaim/}]]*/ null;
-</script>
-<style>
-.node circle {
-  fill: #fff;
-  stroke: steelblue;
-  stroke-width: 3px;
-}
-.node text { font: 12px sans-serif; }
-.node--internal text {
-  text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
-}
-.link {
-  fill: none;
-  stroke: #ccc;
-  stroke-width: 2px;
-}
-</style>
+
+<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+	<script th:replace="~{include :: d3}"></script>
+	<script th:replace="~{include :: jsruches}"></script>
+	<script th:inline="javascript">
+		const data = /*[(${essaimTree})]*/ null;
+		const essaimnom = /*[[${essaim.nom}]]*/ null;
+		const essaimtxt = /*[[#{essaim}]]*/ null;
+		const ruchetxt = /*[[#{ruche}]]*/ null;
+		const ruchertxt = /*[[#{rucher}]]*/ null;
+		const MielKgtxt = /*[[#{MielKg}]]*/ null;
+		const MielDescKgtxt = /*[[#{MielDescKg}]]*/ null;
+		const Actif = /*[[#{actif}]]*/ null;
+		const Inactif = /*[[#{Inactif}]]*/ null;
+		const urlessaim = /*[[@{/essaim/}]]*/ null;
+	</script>
+	<style>
+		.node circle {
+			fill: #fff;
+			stroke: steelblue;
+			stroke-width: 3px;
+		}
+
+		.node text {
+			font: 12px sans-serif;
+		}
+
+		.node--internal text {
+			text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
+		}
+
+		.link {
+			fill: none;
+			stroke: #ccc;
+			stroke-width: 2px;
+		}
+	</style>
 </head>
+
 <body>
-	<nav th:replace="navbar::navbar"></nav>
+	<nav th:replace="~{navbar::navbar}"></nav>
 	<br />
 	<br />
 	<br />
@@ -41,14 +48,14 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-				<th:block th:text="#{graphedescendance} + ' '"></th:block>
-				  <a th:href="@{'/essaim/'+${essaimId}}"
-					th:text="#{essaim} + ' ' + ${essaim.nom}"></a>
+					<th:block th:text="#{graphedescendance} + ' '"></th:block>
+					<a th:href="@{'/essaim/'+${essaimId}}" th:text="#{essaim} + ' ' + ${essaim.nom}"></a>
 				</h1>
 			</div>
 		</div>
 	</div>
 	<div id="graph"></div>
-	<footer th:replace="include::footer"></footer>
+	<footer th:replace="~{include::footer}"></footer>
 </body>
+
 </html>

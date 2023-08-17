@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-	<script th:replace="include :: jsruches"></script>
+<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+	<script th:replace="~{include :: jsruches}"></script>
 	<script th:inline="javascript">
 		const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
 		const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
@@ -13,7 +13,7 @@
 </head>
 
 <body>
-	<nav th:replace="navbar::navbar">Menu</nav>
+	<nav th:replace="~{navbar::navbar}">Menu</nav>
 	<br />
 	<br />
 	<br />
@@ -73,7 +73,7 @@
 			</tbody>
 		</table>
 	</div>
-	<footer th:replace="include::footer"></footer>
+	<footer th:replace="~{include::footer}"></footer>
 </body>
 
 </html>

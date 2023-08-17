@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-	<script th:replace="include :: jsChart"></script>
-	<script th:replace="include :: jsruches"></script>
+<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+	<script th:replace="~{include :: jsChart}"></script>
+	<script th:replace="~{include :: jsruches}"></script>
 	<script th:inline="javascript">
 		const longitude = /*[[${rucher.longitude}]]*/ null;
 		const latitude = /*[[${rucher.latitude}]]*/ null;
@@ -26,14 +26,14 @@
 			overflow-x: auto;
 		}
 	</style>
-	<link th:replace="include :: weather-icons">
+	<link th:replace="~{include :: weather-icons}">
 	</link>
-	<link th:replace="include :: weather-icons-wind">
+	<link th:replace="~{include :: weather-icons-wind}">
 	</link>
 </head>
 
 <body>
-	<nav th:replace="navbar::navbar"></nav>
+	<nav th:replace="~{navbar::navbar}"></nav>
 	<br />
 	<br />
 	<br />
@@ -208,7 +208,7 @@
 		</div>
 
 	</div>
-	<footer th:replace="include::footer"></footer>
+	<footer th:replace="~{include::footer}"></footer>
 </body>
 
 </html>

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="https://www.thymeleaf.org">
 
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 	<script>
 		document.addEventListener('DOMContentLoaded', () => {
 			new DataTable('.datatable-tri', {
@@ -15,7 +15,7 @@
 </head>
 
 <body>
-	<nav th:replace="navbar::navbar"></nav>
+	<nav th:replace="~{navbar::navbar}"></nav>
 	<br />
 	<br />
 	<br />
@@ -354,7 +354,7 @@
 		</div>
 	</div>
 	<br />
-	<footer th:replace="include::footer"></footer>
+	<footer th:replace="~{include::footer}"></footer>
 </body>
 
 </html>

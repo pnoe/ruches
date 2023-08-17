@@ -2,10 +2,10 @@
 <html xmlns:th="https://www.thymeleaf.org"
 	xmlns:sec="https://www.thymeleaf.org/extras/spring-security"j>
 <head
-	th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 </head>
 <body>
-	<nav th:replace="navbar::navbar"></nav>
+	<nav th:replace="~{navbar::navbar}"></nav>
 	<br />
 	<br />
 	<br />
@@ -31,6 +31,6 @@
 			</div>
 		</header>
 	</div>
-	<footer th:replace="include::footer"></footer>
+	<footer th:replace="~{include::footer}"></footer>
 </body>
 </html>

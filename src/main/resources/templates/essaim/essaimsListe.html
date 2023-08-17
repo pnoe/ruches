@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-<script th:replace="include :: jsruches"></script>	
+<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+	<script th:replace="~{include :: jsruches}"></script>
 	<script th:inline="javascript">
 		const Essaims = /*[[#{Essaims}]]*/ null;
 		const buttontextprint = /*[[#{buttontextprint}]]*/ null;
@@ -15,7 +15,7 @@
 </head>
 
 <body>
-	<nav th:replace="navbar::navbar"></nav>
+	<nav th:replace="~{navbar::navbar}"></nav>
 	<br />
 	<br />
 	<br />
@@ -34,8 +34,8 @@
 				<a id="traitement" href="#" class="selection bi-bug" th:title="#{evenementsTraitement}"
 					aria-hidden="true"></a>
 				&nbsp;
-				<a th:href="@{/essaim/statistiques?masquerInactif=on}" class="bi-table" th:title="#{statistiquesproduction}"
-					aria-hidden="true"></a>
+				<a th:href="@{/essaim/statistiques?masquerInactif=on}" class="bi-table"
+					th:title="#{statistiquesproduction}" aria-hidden="true"></a>
 				<a th:href="@{/essaim/statistiquesage}" class="bi-bar-chart" th:title="#{statistiquesage}"
 					aria-hidden="true"></a>
 			</div>
@@ -78,7 +78,7 @@
 			</tbody>
 		</table>
 	</div>
-	<footer th:replace="include::footer"></footer>
+	<footer th:replace="~{include::footer}"></footer>
 </body>
 
 </html>

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 	<script th:inline="javascript">
 		const Hausses = /*[[#{Hausses}]]*/ null;
 		const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
@@ -42,7 +42,7 @@
 					});
 					if (noms) {
 						noms = noms.substring(0, noms.length - 1);
-						document.getElementById('commentaire').setAttribute('href', 
+						document.getElementById('commentaire').setAttribute('href',
 							urlCommLot + noms);
 					} else {
 						document.getElementById('commentaire').setAttribute('href', '#');
@@ -60,7 +60,7 @@
 </head>
 
 <body>
-	<nav th:replace="navbar::navbar"></nav>
+	<nav th:replace="~{navbar::navbar}"></nav>
 	<br />
 	<br />
 	<br />
@@ -112,7 +112,7 @@
 			</tbody>
 		</table>
 	</div>
-	<footer th:replace="include::footer"></footer>
+	<footer th:replace="~{include::footer}"></footer>
 </body>
 
 </html>

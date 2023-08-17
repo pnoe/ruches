@@ -1,11 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-	<script th:replace="include :: jsruches"></script>
-	<script th:replace="include :: jsdatetimepicker"></script>
-	<link th:replace="include :: cssdatetimepicker" />
-	<script th:replace="include ::  localejsdatetimepicker"></script>
+<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+	<script th:replace="~{include :: jsruches}"></script>
+	<script th:replace="~{include :: jsdatetimepicker}"></script>
+	<link th:replace="~{include :: cssdatetimepicker}" />
+	<script th:replace="~{include :: localejsdatetimepicker}"></script>
 	<script th:inline="javascript">
 		const _csrf_token = /*[[${_csrf.token}]]*/null;
 		const _csrf_param_name = /*[[${_csrf.parameterName}]]*/null;
@@ -20,7 +20,7 @@
 </head>
 
 <body>
-	<nav th:replace="navbar::navbar"></nav>
+	<nav th:replace="~{navbar::navbar}"></nav>
 	<br />
 	<br />
 	<br />
@@ -119,7 +119,7 @@
 		</table>
 	</div>
 	<br />
-	<footer th:replace="include::footer"></footer>
+	<footer th:replace="~{include::footer}"></footer>
 </body>
 
 </html>

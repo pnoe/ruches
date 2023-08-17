@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 	<script th:inline="javascript">
 		const suppeve = /*[[#{supprimerevenement}]]*/null;
 		document.addEventListener('DOMContentLoaded', () => {
@@ -16,7 +16,7 @@
 </head>
 
 <body>
-	<nav th:replace="navbar::navbar">Menu</nav>
+	<nav th:replace="~{navbar::navbar}"></nav>
 	<br />
 	<br />
 	<br />
@@ -36,9 +36,8 @@
 					<span class="bi-pencil" th:title="#{modifier}" aria-hidden="true"></span>
 				</a>&nbsp; <a th:href="@{'/evenement/modifie/'+${evenement.id}+'?complet=true'}"> <span
 						class="bi-pencil" style="color: red" th:title="#{modifierTout}" aria-hidden="true"></span>
-				</a><a id="supprime" th:href="@{'/evenement/supprime/'+${evenement.id}}"><span
-						class="bi-trash" style="color: red" th:title="#{supprimer}"
-						aria-hidden="true"></span>
+				</a><a id="supprime" th:href="@{'/evenement/supprime/'+${evenement.id}}"><span class="bi-trash"
+						style="color: red" th:title="#{supprimer}" aria-hidden="true"></span>
 				</a>
 			</div>
 		</div>
@@ -67,7 +66,7 @@
 			</tbody>
 		</table>
 	</div>
-	<footer th:replace="include::footer"></footer>
+	<footer th:replace="~{include::footer}"></footer>
 </body>
 
 </html>

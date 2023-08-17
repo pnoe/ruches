@@ -1,9 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+
+<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 </head>
+
 <body>
-	<nav th:replace="navbar::navbar">Menu</nav>
+	<nav th:replace="~{navbar::navbar}">Menu</nav>
 	<br />
 	<br />
 	<br />
@@ -12,9 +14,8 @@
 			<div class="col">
 				<h1 class="item">
 					<th:block th:text="#{histoHausses} + ' '"></th:block>
-					<a th:href="@{'/ruche/'+${ruche.id}}"
-						th:text="#{ruche} + ' ' + ${ruche.nom}"></a>
-				</h1>		
+					<a th:href="@{'/ruche/'+${ruche.id}}" th:text="#{ruche} + ' ' + ${ruche.nom}"></a>
+				</h1>
 			</div>
 		</div>
 	</div>
@@ -35,18 +36,19 @@
 				<tr th:each="eve : ${evenements}">
 					<td>
 						<a th:text="${#temporals.format(eve.date, 'yyyy/MM/dd HH:mm')}"
-							th:href="@{'/evenement/'+${eve.id}+'?type=ruche&itemId='+${ruche.id}}"></a>		
+							th:href="@{'/evenement/'+${eve.id}+'?type=ruche&itemId='+${ruche.id}}"></a>
 					</td>
 					<td th:text="#{${eve.type}}"></td>
 					<td th:text="${eve.essaim?.nom}"></td>
 					<td th:text="${eve.rucher?.nom}"></td>
 					<td th:text="${eve.hausse?.nom}"></td>
 					<td th:text="${eve.commentaire}"></td>
-					<td th:text="${haussesList[eveStat.index]}"></td>						
+					<td th:text="${haussesList[eveStat.index]}"></td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
-	<footer th:replace="include::footer"></footer>
+	<footer th:replace="~{include::footer}"></footer>
 </body>
+
 </html>

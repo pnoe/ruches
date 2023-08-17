@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 	<script th:inline="javascript">
 		const depotNPES = /*[[#{depotNePeutEtreSupprime}]]*/ null;
 		const rucherNSRR = /*[[#{ruchernonsupprimerefrecolte}]]*/ null;
@@ -48,7 +48,7 @@
 </head>
 
 <body>
-	<nav th:replace="navbar::navbar"></nav>
+	<nav th:replace="~{navbar::navbar}"></nav>
 	<br />
 	<br />
 	<br />
@@ -198,7 +198,7 @@
 		</table>
 	</div>
 	<br />
-	<footer th:replace="include::footer"></footer>
+	<footer th:replace="~{include::footer}"></footer>
 </body>
 
 </html>

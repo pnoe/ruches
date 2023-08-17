@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 	<script th:inline="javascript">
 		const btnTxtPrint = /*[[#{buttontextprint}]]*/ null;
 		const recoltes = /*[[${recoltes}]]*/ null;
@@ -19,7 +19,7 @@
 				footerCallback: function () {
 					const api = this.api();
 					/*[- Remove the formatting to get integer data for summation -]*/
-					function valPoids (p) {
+					function valPoids(p) {
 						return typeof p === 'string' ?
 							p.replace(/[,]/, '.') * 1 :
 							typeof p === 'number' ?
@@ -56,7 +56,7 @@
 </head>
 
 <body>
-	<nav th:replace="navbar::navbar"></nav>
+	<nav th:replace="~{navbar::navbar}"></nav>
 	<br />
 	<br />
 	<br />
@@ -115,7 +115,7 @@
 			</tfoot>
 		</table>
 	</div>
-	<footer th:replace="include::footer"></footer>
+	<footer th:replace="~{include::footer}"></footer>
 </body>
 
 </html>

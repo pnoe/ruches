@@ -1,10 +1,10 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-	<script th:replace="include :: jsol"></script>
-	<script th:replace="include :: jsGpPluginOpenLayers"></script>
-	<script th:replace="include :: jsruchesnom('rucherListeOl')"></script>
+<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+	<script th:replace="~{include :: jsol}"></script>
+	<script th:replace="~{include :: jsGpPluginOpenLayers}"></script>
+	<script th:replace="~{include :: jsruchesnom('rucherListeOl')}"></script>
 	<script th:inline="javascript">
 		const ruchers = /*[[${ruchers}]]*/ null;
 		const nomRuches = /*[[${rucheNoms}]]*/ null;
@@ -19,8 +19,8 @@
 		const ignCarteLiscense = /*[[${ignCarteLiscense}]]*/ null;
 		window.addEventListener('load', () => rucherListeIgn(true));
 	</script>
-	<script th:replace="include :: cssol"></script>
-	<script th:replace="include :: cssGpPluginOpenLayers"></script>
+	<script th:replace="~{include :: cssol}"></script>
+	<script th:replace="~{include :: cssGpPluginOpenLayers}"></script>
 	<style>
 		.ol-rotate {
 			top: 4em;
@@ -34,7 +34,7 @@
 </head>
 
 <body>
-	<nav th:replace="navbar::navbar"></nav>
+	<nav th:replace="~{navbar::navbar}"></nav>
 	<br />
 	<br />
 	<br />
@@ -61,7 +61,7 @@
 		<a href="#" id="popup-closer" class="ol-popup-closer"></a>
 		<div id="popup-content"></div>
 	</div>
-	<footer th:replace="include::footer"></footer>
+	<footer th:replace="~{include::footer}"></footer>
 </body>
 
 </html>

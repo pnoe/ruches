@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 	<script th:inline="javascript">
 		const rucheTypeNoms = /*[[${rucheTypeNoms}]]*/null;
 		const nomexiste = /*[[#{nomexiste}]]*/null;
@@ -34,7 +34,7 @@
 </head>
 
 <body>
-	<nav th:replace="navbar::navbar"></nav>
+	<nav th:replace="~{navbar::navbar}"></nav>
 	<br />
 	<br />
 	<br />
@@ -55,16 +55,16 @@
 	</div>
 	<form action="#" th:action="@{/rucheType/sauve}" th:object="${rucheType}" method="post" id="rucheTypeForm">
 		<input type="hidden" th:field="*{id}" />
-		<div th:replace="includeForm :: nomField"></div>
+		<div th:replace="~{includeForm :: nomField}"></div>
 		<div class="form-floating mb-3">
 			<input placeholder="" class="form-control" type="number" th:field="*{nbCadresMax}"
 				th:errorclass="fieldError" id="nbCadresMax" name="nbCadresMax" /> <label class="form-label"
 				for="nbCadresMax" th:text="#{nbCadresMax}"></label>
 		</div>
-		<div th:replace="includeForm :: commentaireField"></div>
-		<div th:replace="includeForm :: BtnForm"></div>
+		<div th:replace="~{includeForm :: commentaireField}"></div>
+		<div th:replace="~{includeForm :: BtnForm}"></div>
 	</form>
-	<footer th:replace="include::footer"></footer>
+	<footer th:replace="~{include::footer}"></footer>
 </body>
 
 </html>

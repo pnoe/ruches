@@ -1,10 +1,10 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-	<script th:replace="include :: jsdatetimepicker"></script>
-	<link th:replace="include :: cssdatetimepicker" />
-	<script th:replace="include ::  localejsdatetimepicker"></script>
+<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+	<script th:replace="~{include :: jsdatetimepicker}"></script>
+	<link th:replace="~{include :: cssdatetimepicker}" />
+	<script th:replace="~{include :: localejsdatetimepicker}"></script>
 	<script>
 		document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById('commentaire').focus();
@@ -27,7 +27,7 @@
 </head>
 
 <body>
-	<nav th:replace="navbar::navbar"></nav>
+	<nav th:replace="~{navbar::navbar}"></nav>
 	<br />
 	<br />
 	<br />
@@ -50,7 +50,7 @@
 		<input type="hidden" th:field="*{id}" /> <input type="hidden" th:field="*{ruche}" /> <input type="hidden"
 			th:field="*{rucher}" />
 		<input type="hidden" th:field="*{essaim}" /> <input type="hidden" th:field="*{hausse}" />
-		<div th:replace="includeForm :: dateField"></div>
+		<div th:replace="~{includeForm :: dateField}"></div>
 		<div class="form-floating mb-3 ruches">
 			<select id="type" name="type" class="form-control">
 				<option
@@ -64,10 +64,10 @@
 				th:errorclass="fieldError" /> <label class="form-label" th:text="#{quantite}" for="valeur"></label>
 		</div>
 
-		<div th:replace="includeForm :: commentaireField"></div>
-		<div th:replace="includeForm :: BtnForm"></div>
+		<div th:replace="~{includeForm :: commentaireField}"></div>
+		<div th:replace="~{includeForm :: BtnForm}"></div>
 	</form>
-	<footer th:replace="include::footer"></footer>
+	<footer th:replace="~{include::footer}"></footer>
 </body>
 
 </html>

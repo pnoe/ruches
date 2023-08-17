@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-	<script th:replace="include :: jsdatetimepicker"></script>
-	<link th:replace="include :: cssdatetimepicker" />
+<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+	<script th:replace="~{include :: jsdatetimepicker}"></script>
+	<link th:replace="~{include :: cssdatetimepicker}" />
 	<script th:inline="javascript">
 		const hausseNoms = /*[[${hausseNoms}]]*/null;
 		const nomexiste = /*[[#{nomexiste}]]*/null;
@@ -57,7 +57,7 @@
 </head>
 
 <body>
-	<nav th:replace="navbar::navbar"></nav>
+	<nav th:replace="~{navbar::navbar}"></nav>
 	<br />
 	<br />
 	<br />
@@ -78,9 +78,9 @@
 	<form action="#" th:action="@{/hausse/sauve}" th:object="${hausse}" method="post" id="hausseForm">
 		<input type="hidden" th:field="*{id}" /> <input type="hidden" th:field="*{ruche}" /> <input type="hidden"
 			th:field="*{ordreSurRuche}" />
-		<div th:replace="includeForm :: nomField"></div>
-		<div th:replace="includeForm :: activeField"></div>
-		<div th:replace="includeForm :: dateAcquisitionField"></div>
+		<div th:replace="~{includeForm :: nomField}"></div>
+		<div th:replace="~{includeForm :: activeField}"></div>
+		<div th:replace="~{includeForm :: dateAcquisitionField}"></div>
 		<div class="form-floating mb-3">
 			<input placeholder="5.000" class="form-control" type="number" step="0.001" min="0" max="20"
 				th:field="*{poidsVide}" th:errorclass="fieldError" /> <label class="form-label" for="poidsVide"
@@ -96,10 +96,10 @@
 				th:errorclass="fieldError" /> <label class="form-label" for="nbCadresMax"
 				th:text="#{nombredecadresmax}"></label>
 		</div>
-		<div th:replace="includeForm :: commentaireField"></div>
-		<div th:replace="includeForm :: BtnForm"></div>
+		<div th:replace="~{includeForm :: commentaireField}"></div>
+		<div th:replace="~{includeForm :: BtnForm}"></div>
 	</form>
-	<footer th:replace="include::footer"></footer>
+	<footer th:replace="~{include::footer}"></footer>
 </body>
 
 </html>

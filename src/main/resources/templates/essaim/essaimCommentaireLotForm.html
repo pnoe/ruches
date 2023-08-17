@@ -1,10 +1,10 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
-	<script th:replace="include :: jsdatetimepicker"></script>
-	<link th:replace="include :: cssdatetimepicker" />
-	<script th:replace="include ::  localejsdatetimepicker"></script>
+<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+	<script th:replace="~{include :: jsdatetimepicker}"></script>
+	<link th:replace="~{include :: cssdatetimepicker}" />
+	<script th:replace="~{include :: localejsdatetimepicker}"></script>
 	<script>
 		document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById('commentaire').focus();
@@ -28,7 +28,7 @@
 </head>
 
 <body>
-	<nav th:replace="navbar::navbar"></nav>
+	<nav th:replace="~{navbar::navbar}"></nav>
 	<br />
 	<br />
 	<br />
@@ -45,11 +45,11 @@
 	<form action="#" th:action="@{'/evenement/essaim/sauve/lot/' + ${eIds}}" method="post" id="evenementForm">
 		<input type="hidden" id="valeur" name="valeur" />
 		<input type="hidden" id="typeEvenement" name="typeEvenement" value="COMMENTAIREESSAIM" />
-		<div th:replace="includeForm :: date"></div>
-		<div th:replace="includeForm :: commentaire"></div>
-		<div th:replace="includeForm :: BtnForm"></div>
+		<div th:replace="~{includeForm :: date}"></div>
+		<div th:replace="~{includeForm :: commentaire}"></div>
+		<div th:replace="~{includeForm :: BtnForm}"></div>
 	</form>
-	<footer th:replace="include::footer"></footer>
+	<footer th:replace="~{include::footer}"></footer>
 </body>
 
 </html>

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="include :: common_header(~{::script},~{::style},~{::link})">
+<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 	<script th:inline="javascript">
 		const Recoltes = /*[[#{Recoltes}]]*/null;
 		const buttontextprint = /*[[#{buttontextprint}]]*/null;
@@ -38,7 +38,7 @@
 </head>
 
 <body>
-	<nav th:replace="navbar::navbar"></nav>
+	<nav th:replace="~{navbar::navbar}"></nav>
 	<br />
 	<br />
 	<br />
@@ -65,7 +65,7 @@
 					<th th:text="#{RucherS}"></th>
 					<th th:text="#{typeMiel}"></th>
 					<th th:text="#{poidsMielPot}"></th>
-					<th th:text="#{commentaire}"></th>					
+					<th th:text="#{commentaire}"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -85,7 +85,7 @@
 			</tbody>
 		</table>
 	</div>
-	<footer th:replace="include::footer"></footer>
+	<footer th:replace="~{include::footer}"></footer>
 </body>
 
 </html>
