@@ -3,6 +3,7 @@
 
 <head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 	<script>
+		// https://stackoverflow.com/questions/17237812/datatable-jquery-table-header-width-not-aligned-with-body-width
 		document.addEventListener('DOMContentLoaded', () => {
 			new DataTable('.datatable-tri', {
 				paging: false,
@@ -10,6 +11,14 @@
 				info: false,
 				scrollX: true
 			});
+			for (const coll of document.getElementsByClassName('collapse')) {
+				coll.addEventListener('shown.bs.collapse', event => {
+					// boucle for pour passer les tableaux non datatables
+					for (const tbl of event.target.getElementsByClassName('datatable-tri')) {
+						$(tbl).DataTable().columns.adjust();
+					}
+				}, {once: true});
+			}
 		});
 	</script>
 </head>
@@ -49,7 +58,7 @@
 			</h1>
 			<div id="collapse0" class="accordion-collapse collapse" data-bs-parent="#accordion">
 				<div class="accordion-body">
-					<table class="table table-bordered table-striped datatable-tri table-sm">
+					<table class="table table-bordered table-striped table-sm">
 						<thead>
 							<tr>
 								<th scope="col" th:text="#{rayonkm}"></th>
@@ -76,8 +85,8 @@
 				</button>
 			</h1>
 			<div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#accordion">
-				<div class="accordion-body">
-					<table class="table table-bordered table-striped datatable-tri table-sm">
+				<div class="accordion-body table-responsive">
+					<table class="table table-bordered table-striped table-sm">
 						<thead>
 							<tr>
 								<th scope="col" th:text="#{date}"></th>
@@ -333,9 +342,9 @@
 						<thead>
 							<tr>
 								<th scope="col" th:text="#{nom}"></th>
-								<th th:text="#{reineDateNaissance}"></th>
-								<th th:text="#{dateAcquisition}"></th>
-								<th th:text="#{diff}"></th>
+								<th scope="col" th:text="#{reineDateNaissance}"></th>
+								<th scope="col" th:text="#{dateAcquisition}"></th>
+								<th scope="col" th:text="#{diff}"></th>
 							</tr>
 						</thead>
 						<tbody>
