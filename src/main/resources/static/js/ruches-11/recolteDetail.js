@@ -77,33 +77,36 @@ document.addEventListener('DOMContentLoaded', () => {
 		addCell(tr, '', 2);
 		return tr;
 	}
-	
-	const ordre = [[1, 'asc'], [0, 'asc']];
-	new DataTable('#hausses', {
-		orderFixed: ordre,
-		rowGroup: {
-			dataSrc: 1, // on groupe sur les ruches
-			startRender: null,
-			endRender: tblStartRender
-		}
-	});
-	document.getElementById('raw').addEventListener('change', function(event) {
-		if (event.target.checked) {
-			new DataTable('#hausses', {
-				destroy: true,
-				order: ordre,
-			});
-		} else {
-			new DataTable('#hausses', {
-				destroy: true,
-				orderFixed: ordre,
-				rowGroup: {
-					dataSrc: 1,
-					startRender: null,
-					endRender: tblStartRender
-				}
-			});
-		}
-	});
+
+	const raw = document.getElementById('raw');
+	if (raw) {
+		const ordre = [[1, 'asc'], [0, 'asc']];
+		new DataTable('#hausses', {
+			orderFixed: ordre,
+			rowGroup: {
+				dataSrc: 1, // on groupe sur les ruches
+				startRender: null,
+				endRender: tblStartRender
+			}
+		});
+		raw.addEventListener('change', function(event) {
+			if (event.target.checked) {
+				new DataTable('#hausses', {
+					destroy: true,
+					order: ordre,
+				});
+			} else {
+				new DataTable('#hausses', {
+					destroy: true,
+					orderFixed: ordre,
+					rowGroup: {
+						dataSrc: 1,
+						startRender: null,
+						endRender: tblStartRender
+					}
+				});
+			}
+		});
+	}
 
 });
