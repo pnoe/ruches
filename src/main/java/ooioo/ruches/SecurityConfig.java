@@ -36,13 +36,14 @@ public class SecurityConfig {
 	@Resource(name = "userDetailService")
 	private UserDetailsService userDetailsService;
 
+	// attention dans tomcat/conf/web.xml mettre la servlet jsp et son mapping en commentaire
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		// https://docs.spring.io/spring-security/reference/migration-7/configuration.html
 		// https://github.com/spring-projects/spring-security/issues/13568
-		http.authorizeHttpRequests((autz) -> autz.requestMatchers("/forgotPassword", "/resetPassword",
-				"/resetPasswordFin", "/", "/css/**", "/js/**", "/images/**", "/doc/**", "/font/**").permitAll()
-				.anyRequest().authenticated())
+		http.authorizeHttpRequests(
+				(autz) -> autz.requestMatchers("/forgotPassword", "/resetPassword", "/resetPasswordFin", "/", "/css/**",
+						"/js/**", "/images/**", "/doc/**", "/font/**").permitAll().anyRequest().authenticated())
 				.formLogin(formLogin -> formLogin.loginPage("/login").permitAll()
 						.successHandler(new SavedRequestAwareAuthenticationSuccessHandler() {
 							@Override
@@ -56,8 +57,7 @@ public class SecurityConfig {
 								super.onAuthenticationSuccess(request, response, authentication);
 							}
 						}))
-				.logout(logout -> logout.permitAll())
-				.csrf(csrf -> csrf.ignoringRequestMatchers("/rest/**"));
+				.logout(logout -> logout.permitAll()).csrf(csrf -> csrf.ignoringRequestMatchers("/rest/**"));
 		// sans logout on n'a pas immédiatement le message "Vous avez été déconnecté" et
 		// pour se reconnecter il faut le faire deux fois !
 		return http.build();
@@ -67,7 +67,7 @@ public class SecurityConfig {
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService);
 	}
-	
+
 	/*
 	 * Password encoder nécessaire sinon erreur : There is no PasswordEncoder mapped
 	 * for the id "null"
