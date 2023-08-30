@@ -29,9 +29,11 @@
 				}
 			});
 			document.getElementById('poidsAvant').focus();
-			$('.toggleplus').hide();
-			$('#toggleplus').click(function () {
-				$('.toggleplus').toggle();
+			const toogleplus = document.querySelectorAll('.toggleplus');
+			document.getElementById('toggleplus').addEventListener('click', () => {
+				toogleplus.forEach(sel => {
+					sel.style.display = sel.style.display === 'none' ? 'block' : 'none';
+				});
 			});
 		});
 	</script>
@@ -74,21 +76,21 @@
 		</div>
 		<button type="button" id="toggleplus" th:text="#{plus}"></button>
 		<br /><br />
-		<div class="form-floating mb-3 toggleplus">
+		<div class="form-floating mb-3 toggleplus" style="display: none">
 			<select class="form-control" th:field="*{essaim}">
 				<option value="" th:text="#{aucun}">;</option>
 				<option th:each="essaimopt : ${essaims}" th:value="${essaimopt.id}" th:text="${essaimopt.nom}"></option>
 			</select>
 			<label class="form-label" for="essaim" th:text="#{essaim}"></label>
 		</div>
-		<div class="form-floating mb-3 toggleplus">
+		<div class="form-floating mb-3 toggleplus" style="display: none">
 			<select class="form-control" th:field="*{ruche}">
 				<option value="" th:text="#{aucune}"></option>
 				<option th:each="rucheopt : ${ruches}" th:value="${rucheopt.id}" th:text="${rucheopt.nom}"></option>
 			</select>
 			<label class="form-label" for="ruche" th:text="#{ruche}"></label>
 		</div>
-		<div class="form-floating mb-3 toggleplus">
+		<div class="form-floating mb-3 toggleplus" style="display: none">
 			<select class="form-control" th:field="*{rucher}">
 				<option value="" th:text="#{aucun}"></option>
 				<option th:each="rucheropt : ${ruchers}" th:value="${rucheropt.id}" th:text="${rucheropt.nom}"></option>
