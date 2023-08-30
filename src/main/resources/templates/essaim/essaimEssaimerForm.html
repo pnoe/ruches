@@ -8,13 +8,11 @@
 	<script th:inline="javascript">
 		const Essaimage = /*[[#{Essaimage}]]*/null;
 		const essaimNom = /*[[${essaim.nom}]]*/null;
-		const suffix = /*[[${@environment.getProperty('essaime.suffix')}]]*/null;
 		const essaimNoms = /*[[${essaimNoms}]]*/null;
 		const nomexiste = /*[[#{nomexiste}]]*/null;
 		document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById('nom').focus();
-			$('#commentaire').val(Essaimage + ' ' + essaimNom);
-			$('#nom').val(essaimNom + suffix);
+			document.getElementById('commentaire').value = Essaimage + ' ' + essaimNom;
 			jQuery.validator.addMethod('nomExiste', function (value) {
 				return !essaimNoms.includes(value);
 			}, nomexiste);
@@ -57,7 +55,8 @@
 	<form action="#" th:action="@{'/essaim/essaime/sauve/' + ${essaim.id}}" method="post" id="essaimeForm">
 		<div th:replace="~{includeForm :: date}"></div>
 		<div class="form-floating mb-3">
-			<input class="form-control" type="text" placeholder="" id="nom" name="nom" maxlength="92" />
+			<input class="form-control" type="text" placeholder="" id="nom" name="nom" maxlength="92" 
+			  th:value="${essaim.nom} + ${@environment.getProperty('essaime.suffix')}" />
 			<label class="form-label" for="nom" th:text="#{NomNouvelEssaim}"></label>
 		</div>
 		<div th:replace="~{includeForm :: commentaire}"></div>

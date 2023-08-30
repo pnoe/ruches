@@ -12,8 +12,9 @@
 		const rucherucherid = /*[[${ruche.rucher?.id}]]*/ null;
 		const ruchesourcerucherid = /*[[${rucheSource?.rucher?.id}]]*/ null;
 		document.addEventListener('DOMContentLoaded', () => {
+			const swapCheck = document.getElementById('swapPositions');
 			$.validator.addMethod('greaterThanEqual', function (value, element, param) {
-				return ($('#swapPositions').is(':checked') &&
+				return (swapCheck.checked &&
 					(rucherucherid !== ruchesourcerucherid))
 					? (Date.parse(value) > Date.parse(param)) : true;
 			}, doitEtreSupA + ' {0}');
@@ -36,7 +37,6 @@
 				minDate: false,
 				minTime: false
 			});
-			const swapCheck = document.getElementById('swapPositions');
 			function swapChange() {
 				const isChk = swapCheck.checked &&
 					(rucherucherid !== ruchesourcerucherid);
@@ -45,7 +45,7 @@
 					minTime: isChk ? timeFirst : false
 				});
 			}
-			if (swapCheck) { swapCheck.addEventListener('change', swapChange); }
+			if (swapCheck) {swapCheck.addEventListener('change', swapChange);}
 		});
 	</script>
 </head>

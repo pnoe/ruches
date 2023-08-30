@@ -10,8 +10,9 @@
 		const dateFirst = /*[[${dateFirst}]]*/null;
 		const timeFirst = /*[[${timeFirst}]]*/null;
 		document.addEventListener('DOMContentLoaded', () => {
+			const depot = document.getElementById('depot');
 			$.validator.addMethod('greaterThanEqual', function (value, element, param) {
-				return $('#depot').is(':checked') ? (Date.parse(value) > Date.parse(param)) : true;
+				return depot.checked ? (Date.parse(value) > Date.parse(param)) : true;
 			}, doitEtreSupA + ' {0}');
 			new bootstrap.Popover(document.getElementsByClassName('bi-question-lg')[0], {
 				html: true
@@ -37,27 +38,30 @@
 				minTime: timeFirst
 			});
 			function depotOnChange() {
-				const isChk = $('#depot').is(':checked');
 				$('#date').datetimepicker({
-					minDate: isChk ? dateFirst : false,
-					minTime: isChk ? timeFirst : false
+					minDate: depot.checked ? dateFirst : false,
+					minTime: depot.checked ? timeFirst : false
 				});
 			}
-			$('#depot').on('change', depotOnChange);
-			$('#remerageId').on('change', function (e) {
-				if (e.target.value === '') {
-					$('#depot').prop('disabled', false);
-					$('#evencadre').prop('disabled', false);
-					$('#depot').prop('checked', true);
-					$('#evencadre').prop('checked', true);
-				} else {
-					$('#depot').prop('disabled', true);
-					$('#evencadre').prop('disabled', true);
-					$('#depot').prop('checked', false);
-					$('#evencadre').prop('checked', false);
-				}
-				depotOnChange();
-			});
+			depot.addEventListener('change', depotOnChange);
+			const remerage = document.getElementById('remerageId');
+			const evencadre = document.getElementById('evencadre');
+			if (remerage) {
+				remerage.addEventListener('change', function (e) {
+					if (e.target.value === '') {
+						depot.disabled = false;
+						evencadre.disabled = false;
+						depot.checked = true;
+						evencadre.checked = true;
+					} else {
+						depot.disabled = true;
+						evencadre.disabled = true;
+						depot.checked = false;
+						evencadre.checked = false;
+					}
+					depotOnChange();
+				});
+			}
 		});
 	</script>
 </head>
