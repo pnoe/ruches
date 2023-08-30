@@ -45,7 +45,7 @@
 					minTime: isChk ? timeFirst : false
 				});
 			}
-			swapCheck.addEventListener('change', swapChange);
+			if (swapCheck) { swapCheck.addEventListener('change', swapChange); }
 		});
 	</script>
 </head>
