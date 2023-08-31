@@ -2,40 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+	<script th:replace="~{include :: jsruches}"></script>
 	<script th:inline="javascript">
 		const pdsAvSupPdsAp = /*[[#{poidsAvantSupPoidsApres}]]*/ null;
-		document.addEventListener('DOMContentLoaded', () => {
-			$.validator.addMethod('greaterThanEqual', function (value, element, param) {
-				const target = $(param);
-				if (target.val() === '') {
-					return true;
-				}
-				if (this.settings.onfocusout && target.not('.validate-greaterThanEqual-blur').length) {
-					target.addClass('validate-greaterThanEqual-blur').on('blur.validate-greaterThanEqual', function () {
-						$(element).valid();
-					});
-				}
-				return parseFloat(value) >= parseFloat(target.val());
-			}, pdsAvSupPdsAp);
-			$('#recolteHausseForm').validate({
-				rules: {
-					poidsAvant: {
-						required: true,
-						greaterThanEqual: '#poidsApres'
-					},
-					poidsApres: {
-						required: true
-					}
-				}
-			});
-			document.getElementById('poidsAvant').focus();
-			const toogleplus = document.querySelectorAll('.toggleplus');
-			document.getElementById('toggleplus').addEventListener('click', () => {
-				toogleplus.forEach(sel => {
-					sel.style.display = sel.style.display === 'none' ? 'block' : 'none';
-				});
-			});
-		});
+		const ruchesurl = /*[[@{/}]]*/ null;
+		const essaimId = /*[[${detailRecolte.essaim?.id}]]*/ null;
+		const rucheId = /*[[${detailRecolte.ruche?.id}]]*/ null;
+		const rucherId = /*[[${detailRecolte.rucher?.id}]]*/ null;
 	</script>
 </head>
 
@@ -78,22 +51,40 @@
 		<br /><br />
 		<div class="form-floating mb-3 toggleplus" style="display: none">
 			<select class="form-control" th:field="*{essaim}">
+
+				<option th:value="*{essaim.id}" th:text="*{essaim.nom}"></option>
+
+				<!--/*
 				<option value="" th:text="#{aucun}"></option>
 				<option th:each="essaimopt : ${essaims}" th:value="${essaimopt.id}" th:text="${essaimopt.nom}"></option>
+				*/-->
+
 			</select>
 			<label class="form-label" for="essaim" th:text="#{essaim}"></label>
 		</div>
 		<div class="form-floating mb-3 toggleplus" style="display: none">
 			<select class="form-control" th:field="*{ruche}">
+
+				<option th:value="*{ruche.id}" th:text="*{ruche.nom}"></option>
+
+				<!--/*
 				<option value="" th:text="#{aucune}"></option>
 				<option th:each="rucheopt : ${ruches}" th:value="${rucheopt.id}" th:text="${rucheopt.nom}"></option>
+				*/-->
+
 			</select>
 			<label class="form-label" for="ruche" th:text="#{ruche}"></label>
 		</div>
 		<div class="form-floating mb-3 toggleplus" style="display: none">
 			<select class="form-control" th:field="*{rucher}">
+
+				<option th:value="*{rucher.id}" th:text="*{rucher.nom}"></option>
+
+				<!--/*
 				<option value="" th:text="#{aucun}"></option>
 				<option th:each="rucheropt : ${ruchers}" th:value="${rucheropt.id}" th:text="${rucheropt.nom}"></option>
+				*/-->
+
 			</select>
 			<label class="form-label" for="rucher" th:text="#{rucher}"></label>
 		</div>

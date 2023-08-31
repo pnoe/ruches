@@ -7,7 +7,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -41,6 +43,7 @@ import ooioo.ruches.evenement.TypeEvenement;
 import ooioo.ruches.hausse.Hausse;
 import ooioo.ruches.hausse.HausseRepository;
 import ooioo.ruches.ruche.Ruche;
+import ooioo.ruches.ruche.RucheParcours;
 import ooioo.ruches.ruche.RucheRepository;
 import ooioo.ruches.rucher.Rucher;
 import ooioo.ruches.rucher.RucherRepository;
@@ -189,9 +192,11 @@ public class RecolteHausseController {
 	public String modifie(Model model, @PathVariable long recolteHausseId, @PathVariable long recolteId) {
 		Optional<RecolteHausse> recolteHausseOpt = recolteHausseRepository.findById(recolteHausseId);
 		if (recolteHausseOpt.isPresent()) {
+			/*
 			model.addAttribute(Const.RUCHES, rucheRepository.findAllProjectedIdNomByOrderByNom());
 			model.addAttribute(Const.RUCHERS, rucherRepository.findAllProjectedIdNomByOrderByNom());
 			model.addAttribute(Const.ESSAIMS, essaimRepository.findAllProjectedIdNomByOrderByNom());
+			*/
 			model.addAttribute("detailRecolte", recolteHausseOpt.get());
 		} else {
 			logger.error("Id récolte hausse {} inconnu.", recolteHausseId);
@@ -199,6 +204,16 @@ public class RecolteHausseController {
 			return Const.INDEX;
 		}
 		return "recolte/recolteHausseForm";
+	}
+	
+	@GetMapping("/listesPlus")
+	@ResponseStatus(value = HttpStatus.OK)
+	public @ResponseBody Map<String, Object> listePlus() {
+		Map<String, Object> map = new HashMap<>();
+		map.put(Const.RUCHES, rucheRepository.findAllProjectedIdNomByOrderByNom());
+		map.put(Const.RUCHERS, rucherRepository.findAllProjectedIdNomByOrderByNom());
+		map.put(Const.ESSAIMS, essaimRepository.findAllProjectedIdNomByOrderByNom());
+		return map;
 	}
 
 	/**
