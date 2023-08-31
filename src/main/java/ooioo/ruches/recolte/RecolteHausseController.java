@@ -79,6 +79,8 @@ public class RecolteHausseController {
 	@Autowired
 	private RecolteHausseService recolteHausseService;
 
+	private static final String modifiee = "{} modifiée";
+
 	/**
 	 * Appel du formulaire pour la saisie tabulaire des poids de miel des hausses de
 	 * la récolte.
@@ -134,13 +136,13 @@ public class RecolteHausseController {
 					RecolteHausse recolteHausse = recolteHausseOpt.get();
 					if (recolteHausse.getRecolte().getId().equals(recolteId)) {
 						// si la hausse est bien une hausse de la récolte
-						recolteHausse.setPoidsApres(rHM.getPoidsApres());
-						recolteHausse.setPoidsAvant(rHM.getPoidsAvant());
-						// Optimisation : ajouter recolteHausse dans une liste et faire saveAll
-						//   Avant la boucle : List<RecolteHausse> RHlist = new ArrayList<>();
-						//   RHlist.add(recolteHausse);
-						//   et après la boucle : recolteHausseRepository.saveAll(RHlist);
-						recolteHausseRepository.save(recolteHausse);
+						if (!(recolteHausse.getPoidsApres().equals(rHM.getPoidsApres())
+								&& recolteHausse.getPoidsAvant().equals(rHM.getPoidsAvant()))) {
+							recolteHausse.setPoidsApres(rHM.getPoidsApres());
+							recolteHausse.setPoidsAvant(rHM.getPoidsAvant());
+							recolteHausseRepository.save(recolteHausse);
+							logger.info(modifiee, recolteHausse);
+						}
 					} else {
 						logger.error("{} n'est pas de la récolte {}", recolteHausse, recolteId);
 					}
@@ -208,6 +210,7 @@ public class RecolteHausseController {
 			return "recolte/recolteHausseForm";
 		}
 		recolteHausseRepository.save(recolteHausse);
+		logger.info(modifiee, recolteHausse);
 		return "redirect:/recolte/" + recolteHausse.getRecolte().getId();
 	}
 

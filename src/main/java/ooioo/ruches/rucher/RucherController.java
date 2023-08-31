@@ -761,6 +761,11 @@ public class RucherController {
 	 * Calcul du parcours des ruches d'un rucher (appel XMLHttpRequest). redraw = 0
 	 * recalcul si l'utilisateur déplace une ruche sur la carte redraw = 1 recalcul
 	 * si l'utilisateur le demande pour améliore de parcours
+	 * 
+	 * @param redraw si true recherche du parcours optimisée avec limite 10 secondes.
+	 * @return Map<String, Object> : "distParcours" : distance du parcours,
+	 *         "rucheParcours" : idruche, ordre, long, lat. Si erreur, "erreur" : "Id
+	 *         rucher inconnu"
 	 */
 	@GetMapping("/parcours/{rucherId}/{redraw}")
 	@ResponseStatus(value = HttpStatus.OK)

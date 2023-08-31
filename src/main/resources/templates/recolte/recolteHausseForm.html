@@ -78,7 +78,7 @@
 		<br /><br />
 		<div class="form-floating mb-3 toggleplus" style="display: none">
 			<select class="form-control" th:field="*{essaim}">
-				<option value="" th:text="#{aucun}">;</option>
+				<option value="" th:text="#{aucun}"></option>
 				<option th:each="essaimopt : ${essaims}" th:value="${essaimopt.id}" th:text="${essaimopt.nom}"></option>
 			</select>
 			<label class="form-label" for="essaim" th:text="#{essaim}"></label>
