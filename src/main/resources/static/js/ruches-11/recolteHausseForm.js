@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	function addOpt(selId, idNoms, entId) {
 		const elemSel = document.getElementById(selId);
 		elemSel.remove(0);
+		idNoms.unshift({id: '', nom: 'Aucun(e)'});
 		idNoms.forEach((el) => {
 			const opt = document.createElement('option');
 			opt.value = el.id;

@@ -19,8 +19,9 @@ public class RecolteHausseService {
 	List<IdNom> idNomRuchers(List<RecolteHausse> recolteHausses) {
 		List<IdNom> idNoms = new ArrayList<>();
 		for (RecolteHausse rH : recolteHausses) {
+			if (rH.getRucher() == null) { continue; }
 			IdNom idn = new IdNom(rH.getRucher().getId(), rH.getRucher().getNom());
-			if ((rH.getRucher() != null) && (!idNoms.contains(idn))) {
+			if (!idNoms.contains(idn)) {
 				idNoms.add(idn);
 			}
 		}

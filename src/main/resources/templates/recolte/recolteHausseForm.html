@@ -51,40 +51,19 @@
 		<br /><br />
 		<div class="form-floating mb-3 toggleplus" style="display: none">
 			<select class="form-control" th:field="*{essaim}">
-
-				<option th:value="*{essaim.id}" th:text="*{essaim.nom}"></option>
-
-				<!--/*
-				<option value="" th:text="#{aucun}"></option>
-				<option th:each="essaimopt : ${essaims}" th:value="${essaimopt.id}" th:text="${essaimopt.nom}"></option>
-				*/-->
-
+				<option th:value="*{essaim?.id}" th:text="*{essaim?.nom}"></option>
 			</select>
 			<label class="form-label" for="essaim" th:text="#{essaim}"></label>
 		</div>
 		<div class="form-floating mb-3 toggleplus" style="display: none">
 			<select class="form-control" th:field="*{ruche}">
-
-				<option th:value="*{ruche.id}" th:text="*{ruche.nom}"></option>
-
-				<!--/*
-				<option value="" th:text="#{aucune}"></option>
-				<option th:each="rucheopt : ${ruches}" th:value="${rucheopt.id}" th:text="${rucheopt.nom}"></option>
-				*/-->
-
+				<option th:value="*{ruche?.id}" th:text="*{ruche?.nom}"></option>
 			</select>
 			<label class="form-label" for="ruche" th:text="#{ruche}"></label>
 		</div>
 		<div class="form-floating mb-3 toggleplus" style="display: none">
 			<select class="form-control" th:field="*{rucher}">
-
-				<option th:value="*{rucher.id}" th:text="*{rucher.nom}"></option>
-
-				<!--/*
-				<option value="" th:text="#{aucun}"></option>
-				<option th:each="rucheropt : ${ruchers}" th:value="${rucheropt.id}" th:text="${rucheropt.nom}"></option>
-				*/-->
-
+				<option th:value="*{rucher?.id}" th:text="*{rucher?.nom}"></option>
 			</select>
 			<label class="form-label" for="rucher" th:text="#{rucher}"></label>
 		</div>

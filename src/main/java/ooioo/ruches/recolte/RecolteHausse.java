@@ -34,14 +34,12 @@ public class RecolteHausse {
 	private Recolte recolte;
 
 	/**
-	 * Poids de la hausse avant récolte, en g.
-	 * Attention get et set en kg.
+	 * Poids de la hausse avant récolte, en g. Attention get et set en kg.
 	 */
 	private Integer poidsAvant = 0;
 
 	/**
-	 * Poids de la hausse après récolte, en g.
-	 * Attention get et set en kg.
+	 * Poids de la hausse après récolte, en g. Attention get et set en kg.
 	 */
 	private Integer poidsApres = 0;
 
@@ -136,9 +134,11 @@ public class RecolteHausse {
 
 	@Override
 	public String toString() {
-		return "RecolteHausse [id=" + id + ", recolte=" + recolte.getDate() + ", poidsAvant=" + poidsAvant + ", poidsApres="
-				+ poidsApres + ", hausse=" + hausse.getNom() + ", ruche=" + ruche.getNom() + ", essaim=" + essaim.getNom()
-				+ ", rucher=" + rucher.getNom() + "]";
+		return "RecolteHausse [id=" + id + ", recolte=" + recolte.getDate() + ", poidsAvant=" + poidsAvant
+				+ ", poidsApres=" + poidsApres + ", hausse=" + hausse.getNom() + ", ruche="
+				+ ((ruche == null) ? "null" : ruche.getNom()) + ", essaim="
+				+ ((essaim == null) ? "null" : essaim.getNom()) + ", rucher="
+				+ ((rucher == null) ? "null" : rucher.getNom()) + "]";
 	}
 
 }
