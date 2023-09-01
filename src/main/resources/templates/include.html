@@ -10,7 +10,7 @@
 <link rel="stylesheet" type="text/css" media="all"
 	th:href="@{/css/ruches-1.css}" />
 <link rel="stylesheet" type="text/css" media="all"
-	th:href="@{/js/datatables-1.13.6/datatables.min.css}" />
+	th:href="@{/js/datatables-1.13.6-2/datatables.min.css}" />
 <link rel="stylesheet" type="text/css" media="all"
 	th:href="@{/images/bootstrap-icons-1.10.2/bootstrap-icons.css}" />
 <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
@@ -18,7 +18,7 @@
 <script th:src="@{/js/bootstrap-5.3.1/bootstrap.bundle.min.js}"></script>
 <link rel="stylesheet" type="text/css" media="all"
 	th:href="@{/js/bootstrap-5.3.1/bootstrap.min.css}" />
-<script th:src="@{/js/datatables-1.13.6/datatables.min.js}"></script>
+<script th:src="@{/js/datatables-1.13.6-2/datatables.min.js}"></script>
 <script th:inline="javascript">
 	function updateTheme() {
 		document.querySelector('html').setAttribute('data-bs-theme',
@@ -53,9 +53,9 @@
 </head>
 
 <script th:fragment="jsruches" th:src=
-	"@{'/js/ruches-11/' + ${#strings.substringAfter(#execInfo.processedTemplateName,'/')} + '.js'}">
+	"@{'/js/ruches-12/' + ${#strings.substringAfter(#execInfo.processedTemplateName,'/')} + '.js'}">
 </script>
-<script th:fragment="jsruchesnom(nom)" th:src="@{'/js/ruches-11/' + ${nom} + '.js'}"></script>
+<script th:fragment="jsruchesnom(nom)" th:src="@{'/js/ruches-12/' + ${nom} + '.js'}"></script>
 
 <script th:fragment="d3" th:src="@{/js/d3.min-7.8.4.js}"></script>
 <script th:fragment="d3-color" th:src="@{/js/d3-color.min-3.1.0.js}"></script>
