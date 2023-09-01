@@ -346,16 +346,18 @@ public class RecolteHausseController {
 			for (Hausse hausse : hausses) {
 				Ruche ruche = hausse.getRuche();
 				RecolteHausse recolteHausse = recolteHausseRepository.findByRecolteAndHausse(recolte, hausse);
-				if ((ruche != null) && (ruche.getId().equals(recolteHausse.getRuche().getId()))) {
-					// null exception si recolteHausse.getRuche() == null
-					//  comment recolteHausse.getRuche() peut-il être null ?
+				if ((ruche != null) &&
+						(recolteHausse.getRuche() != null) &&
+						(ruche.getId().equals(recolteHausse.getRuche().getId()))) {
+					// La ruche de la hausse est non null (la hausse est sur une ruche)
+					// La hausse de récolte référence bien une ruche
+					// La ruche sur laquelle est la hausse est la même que la ruche
+					// de la hausseRécolte correspondante.
+					// Sinon on ignore la hausse
 					retHausses.append(hausse.getNom());
 					retHausses.append(" ");
 					retRuches.append(ruche.getNom());
 					retRuches.append(" ");
-					// Teste que la ruche sur laquelle est la hausse est la même que la ruche
-					// de la hausseRécolte correspondante.
-					// Si différente ne rien faire, la hausse a été replacée sur une autre ruche
 					// Pour renumérotation de l'ordre des hausses
 					Long rucheId = null;
 					Integer hausseOrdre;
