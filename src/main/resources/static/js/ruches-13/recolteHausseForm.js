@@ -45,6 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	document.getElementById('toggleplus').addEventListener('click', () => {
+		// ne pas utiliser disabled les select car cela renverrait null
+		//  pour les champs ruche, essaim et rucher
 			const req = new XMLHttpRequest();
 			req.open('GET', ruchesurl + 'recolte/listesPlus', true);
 			req.onload = function() {
@@ -58,8 +60,5 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 			};
 			req.send();
-		essaimSel.disabled = false;
-		rucheSel.disabled = false;
-		rucherSel.disabled = false;
 	}, { once: true });
 });

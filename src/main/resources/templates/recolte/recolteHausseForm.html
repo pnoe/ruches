@@ -50,19 +50,19 @@
 		<button type="button" id="toggleplus" th:text="#{plus}"></button>
 		<br /><br />
 		<div class="form-floating mb-3 toggleplus">
-			<select class="form-control" th:field="*{essaim}" disabled>
+			<select class="form-control" th:field="*{essaim}">
 				<option th:value="*{essaim?.id}" th:text="*{essaim?.nom}"></option>
 			</select>
 			<label class="form-label" for="essaim" th:text="#{essaim}"></label>
 		</div>
 		<div class="form-floating mb-3 toggleplus">
-			<select class="form-control" th:field="*{ruche}" disabled>
+			<select class="form-control" th:field="*{ruche}">
 				<option th:value="*{ruche?.id}" th:text="*{ruche?.nom}"></option>
 			</select>
 			<label class="form-label" for="ruche" th:text="#{ruche}"></label>
 		</div>
 		<div class="form-floating mb-3 toggleplus">
-			<select class="form-control" th:field="*{rucher}" disabled>
+			<select class="form-control" th:field="*{rucher}">
 				<option th:value="*{rucher?.id}" th:text="*{rucher?.nom}"></option>
 			</select>
 			<label class="form-label" for="rucher" th:text="#{rucher}"></label>

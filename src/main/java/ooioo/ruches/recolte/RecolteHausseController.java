@@ -347,6 +347,8 @@ public class RecolteHausseController {
 				Ruche ruche = hausse.getRuche();
 				RecolteHausse recolteHausse = recolteHausseRepository.findByRecolteAndHausse(recolte, hausse);
 				if ((ruche != null) && (ruche.getId().equals(recolteHausse.getRuche().getId()))) {
+					// null exception si recolteHausse.getRuche() == null
+					//  comment recolteHausse.getRuche() peut-il être null ?
 					retHausses.append(hausse.getNom());
 					retHausses.append(" ");
 					retRuches.append(ruche.getNom());
