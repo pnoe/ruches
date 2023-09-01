@@ -26,11 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	});
 	document.getElementById('poidsAvant').focus();
-	const toogleplus = document.querySelectorAll('.toggleplus');
-	let init = true;
+	const essaimSel = document.getElementById('essaim');
+	const rucheSel = document.getElementById('ruche');
+	const rucherSel = document.getElementById('rucher');
 
-	function addOpt(selId, idNoms, entId) {
-		const elemSel = document.getElementById(selId);
+	function addOpt(elemSel, idNoms, entId) {
 		elemSel.remove(0);
 		idNoms.unshift({id: '', nom: 'Aucun(e)'});
 		idNoms.forEach((el) => {
@@ -45,25 +45,21 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	document.getElementById('toggleplus').addEventListener('click', () => {
-		if (init) {
 			const req = new XMLHttpRequest();
 			req.open('GET', ruchesurl + 'recolte/listesPlus', true);
 			req.onload = function() {
 				if (req.readyState === 4) {
 					if (req.status === 200) {
 						const resp = JSON.parse(req.responseText);
-						addOpt('essaim', resp.essaims, essaimId);
-						addOpt('ruche', resp.ruches, rucheId);
-						addOpt('rucher', resp.ruchers, rucherId);
+						addOpt(essaimSel, resp.essaims, essaimId);
+						addOpt(rucheSel, resp.ruches, rucheId);
+						addOpt(rucherSel, resp.ruchers, rucherId);
 					}
 				}
 			};
 			req.send();
-			init = false;
-		}
-
-		toogleplus.forEach(sel => {
-			sel.style.display = sel.style.display === 'none' ? 'block' : 'none';
-		});
-	});
+		essaimSel.disabled = false;
+		rucheSel.disabled = false;
+		rucherSel.disabled = false;
+	}, { once: true });
 });
