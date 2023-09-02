@@ -8,16 +8,17 @@
 	<script th:inline="javascript">
 		const complet = /*[[${complet}]]*/ null;
 		document.addEventListener('DOMContentLoaded', () => {
+			const ruchesClass = document.querySelectorAll('.ruches');
 			if (complet === 'true') {
-				$('#showruches').prop('checked', true);
-				$('.ruches').show();
+				document.getElementById('showruches').checked = true;
+				ruchesClass.forEach(item => {
+					item.style.display = 'block';
+				});
 			}
-			$('#showruches').on('click', function () {
-				if ($(this).is(':checked')) {
-					$('.ruches').show();
-				} else {
-					$('.ruches').hide();
-				}
+			document.getElementById('showruches').addEventListener('click', event => {
+				ruchesClass.forEach(item => {
+					item.style.display = event.target.checked ? 'block' : 'none';
+				});
 			});
 			const form = $('#evenementForm');
 			const typ = $('#type');

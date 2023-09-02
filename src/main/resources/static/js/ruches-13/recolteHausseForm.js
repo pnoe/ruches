@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	function addOpt(elemSel, idNoms, entId) {
 		elemSel.remove(0);
-		idNoms.unshift({id: '', nom: 'Aucun(e)'});
+		idNoms.unshift({ id: '', nom: 'Aucun(e)' });
 		idNoms.forEach((el) => {
 			const opt = document.createElement('option');
 			opt.value = el.id;
@@ -45,20 +45,21 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	document.getElementById('toggleplus').addEventListener('click', () => {
-		// ne pas utiliser disabled les select car cela renverrait null
+		// ne pas utiliser disabled les select car cela renvoie null
 		//  pour les champs ruche, essaim et rucher
-			const req = new XMLHttpRequest();
-			req.open('GET', ruchesurl + 'recolte/listesPlus', true);
-			req.onload = function() {
-				if (req.readyState === 4) {
-					if (req.status === 200) {
-						const resp = JSON.parse(req.responseText);
-						addOpt(essaimSel, resp.essaims, essaimId);
-						addOpt(rucheSel, resp.ruches, rucheId);
-						addOpt(rucherSel, resp.ruchers, rucherId);
-					}
+		const req = new XMLHttpRequest();
+		req.open('GET', ruchesurl + 'recolte/listesPlus', true);
+		req.onload = function() {
+			if (req.readyState === 4) {
+				if (req.status === 200) {
+					const resp = JSON.parse(req.responseText);
+					addOpt(essaimSel, resp.essaims, essaimId);
+					addOpt(rucheSel, resp.ruches, rucheId);
+					addOpt(rucherSel, resp.ruchers, rucherId);
+					essaimSel.focus();
 				}
-			};
-			req.send();
+			}
+		};
+		req.send();
 	}, { once: true });
 });
