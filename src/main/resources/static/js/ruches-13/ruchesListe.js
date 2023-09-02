@@ -3,7 +3,7 @@
 */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
-	document.getElementById('rucher').addEventListener('change', (event) => {
+	document.getElementById('rucher').addEventListener('change', event => {
 		table.columns(2).search(event.target.value).draw();
 	});
 	const idTbl = '#ruches';
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	}
 	table.on('select deselect', updateLinks);
-	document.getElementById('commentaire').addEventListener('click', (event) => {
+	document.getElementById('commentaire').addEventListener('click', event => {
 		if (event.target.getAttribute('href') === '#') {
 			alert(selectRuTrait);
 		}

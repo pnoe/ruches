@@ -14,6 +14,7 @@
     ],
     "rules": {
     	"array-callback-return": "error",
+    	"arrow-parens": ["error", "as-needed"],
     	"block-scoped-var": "error",
     	"curly": "error",
     	"dot-notation": "error",

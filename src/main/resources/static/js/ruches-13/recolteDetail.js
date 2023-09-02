@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			'&date=' + date);
 	});
 
-	document.getElementById('supprime').addEventListener('click', (event) => {
+	document.getElementById('supprime').addEventListener('click', event => {
 		if (confirm(suppRecHauss)) {
 			return;
 		}

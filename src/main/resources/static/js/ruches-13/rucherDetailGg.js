@@ -223,26 +223,20 @@ function newParcours() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-	document.getElementById('dragMarker').addEventListener('change', (event) => {
+	document.getElementById('dragMarker').addEventListener('change', event => {
 		for (const markersR of markersRuche) {
 			markersR.setDraggable(!event.target.checked);
 		}
 	});
-	document.querySelectorAll('.liste').forEach(item =>
-		item.addEventListener('click', (event) =>
+	document.querySelectorAll('.liste').forEach(item => {
+		item.addEventListener('click', event =>
 			window.location = urlruches + 'ruche/liste/' + rucher.id +
 			'?parcours=' + encodeURIComponent(JSON.stringify(rucheParcours.map(rp => rp.id))) +
-			'&plus=' + (event.target.id !== 'liste')));
-	document.getElementById('export-gpx').addEventListener('click', () => {
-		exportGpx();
-	});
-	document.getElementById('export-kml').addEventListener('click', () => {
-		exportKml();
-	});
-	document.getElementById('parcours-redraw').addEventListener('click', () => {
-		parcoursRedraw(true);
-	});
-	document.getElementById('searchtext').addEventListener('keyup', (event) => {
+			'&plus=' + (event.target.id !== 'liste'))});
+	document.getElementById('export-gpx').addEventListener('click', exportGpx());
+	document.getElementById('export-kml').addEventListener('click', exportKml());
+	document.getElementById('parcours-redraw').addEventListener('click', parcoursRedraw(true));
+	document.getElementById('searchtext').addEventListener('keyup', event => {
 		if (event.code === 'Enter') {
 			const searchtext = document.getElementById('searchtext').value.
 				trim().toUpperCase();
@@ -258,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	});
 	document.getElementById('cercles').setAttribute('title', distButinage + ' ' + rayonsButinage.join(', ') + ' m');
-	document.getElementById('cercles').addEventListener('click', (event) => {
+	document.getElementById('cercles').addEventListener('click', event => {
 		const visi = !circlesButinage[0].getVisible();
 		for (const c of circlesButinage) {
 			c.setVisible(visi);

@@ -57,12 +57,12 @@ function initMap() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-	document.getElementById('dragMarker').addEventListener('change', (event) => {
+	document.getElementById('dragMarker').addEventListener('change', event => {
 		for (const marker of markersRucher) {
 			marker.setDraggable(!event.target.checked);
 		}
 	});
-	document.getElementById('searchtext').addEventListener('keyup', (event) => {
+	document.getElementById('searchtext').addEventListener('keyup', event => {
 		if (event.code === 'Enter') {
 			const searchtext = document.getElementById('searchtext').value.
 				trim().toUpperCase();

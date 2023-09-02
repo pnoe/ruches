@@ -4,7 +4,7 @@ supphausse nomhaussesv nomexistentdeja  evenements  urlclone  hausseid  hausses 
  */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
-	document.getElementById('supprime').addEventListener('click', (event) => {
+	document.getElementById('supprime').addEventListener('click', event => {
 		if (recolteHausses) {
 			alert(haussesupp);
 		} else if (evenements) {

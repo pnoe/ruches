@@ -24,7 +24,7 @@ function evenementListe(initDatatable) {
 	}
 	const periode = document.getElementById('periode');
 	if (periode) {
-		periode.addEventListener('change', (event) => {
+		periode.addEventListener('change', event => {
 			if (event.target.value !== '6') {
 				document.cookie = 'p=' + event.target.value + cookieOpt;
 				event.target.form.submit();
@@ -33,7 +33,7 @@ function evenementListe(initDatatable) {
 	}
 	const cal = document.getElementById('cal');
 	if (cal) {
-		cal.addEventListener('click', (event) => {
+		cal.addEventListener('click', event => {
 			if (event.target.value === '6') {
 				$(event.target.parentNode).dateRangePicker({
 					autoClose: true,

@@ -43,7 +43,7 @@ function rucherDetail(ign) {
 			Math.cos(Math.PI * lat2 / 180.0) * sinDiffLon * sinDiffLon
 		));
 	}
-	document.getElementsByClassName('rapproche')[0].addEventListener('click', (event) => {
+	document.getElementsByClassName('rapproche')[0].addEventListener('click', event => {
 		const longRucher = rucher.longitude;
 		const latRucher = rucher.latitude;
 		const diametreTerre = (isNaN(rucher.altitude) ? 0 : rucher.altitude) +
@@ -458,7 +458,7 @@ function rucherDetail(ign) {
 		};
 		req.send(null);
 	});
-	document.getElementById('searchtext').addEventListener('keyup', (event) => {
+	document.getElementById('searchtext').addEventListener('keyup', event => {
 		if (event.code === 'Enter') {
 			const searchtext = document.getElementById('searchtext').value.
 				trim().toUpperCase();
@@ -480,25 +480,19 @@ function rucherDetail(ign) {
 		}
 	});
 	document.querySelectorAll('.liste').forEach(item =>
-		item.addEventListener('click', (event) =>
+		item.addEventListener('click', event =>
 			window.location = ruchesurl + 'ruche/liste/' + rucher.id +
 			'?parcours=' + encodeURIComponent(JSON.stringify(rucheParcours.map(rp => rp.id))) +
 			'&plus=' + (event.target.id !== 'liste')));
-	document.getElementById('export-gpx').addEventListener('click', () => {
-		exportGpx();
-	});
-	document.getElementById('export-kml').addEventListener('click', () => {
-		exportKml();
-	});
-	document.getElementById('geoloc').addEventListener('click', () => {
-		geoloc();
-	});
+	document.getElementById('export-gpx').addEventListener('click', exportGpx()); 
+	document.getElementById('export-kml').addEventListener('click', exportKml());
+	document.getElementById('geoloc').addEventListener('click', geoloc());
 	document.getElementById('parcours-redraw').addEventListener('click', () => {
 		document.getElementById('popup-content').innerHTML = 'Calcul en cours...';
 		overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());
 		parcoursRedraw(true);
 	});
-	document.getElementById('dragMarker').addEventListener('change', (event) => {
+	document.getElementById('dragMarker').addEventListener('change', event => {
 		select.setActive(!event.target.checked);
 		translate.setActive(!event.target.checked);
 	});

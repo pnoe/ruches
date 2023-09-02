@@ -3,7 +3,7 @@
 */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
-	document.getElementById('rucher').addEventListener('change', (event) => {
+	document.getElementById('rucher').addEventListener('change', event => {
 		table.columns(4).search(event.target.value).draw();
 	});
 	const idTbl = '#ruchesplus';

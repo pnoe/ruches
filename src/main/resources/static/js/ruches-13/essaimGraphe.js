@@ -100,7 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
 				return 'black';
 			}
 		});
-	document.querySelectorAll('[data-bs-toggle="popover"]').forEach((item) => new bootstrap.Popover(item, {
+	document.querySelectorAll('[data-bs-toggle="popover"]').forEach(item => {
+	new bootstrap.Popover(item, {
 		html: true
-	}));
+	})});
 });

@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	function addOpt(elemSel, idNoms, entId) {
 		elemSel.remove(0);
 		idNoms.unshift({ id: '', nom: 'Aucun(e)' });
-		idNoms.forEach((el) => {
+		idNoms.forEach(el => {
 			const opt = document.createElement('option');
 			opt.value = el.id;
 			opt.text = el.nom;

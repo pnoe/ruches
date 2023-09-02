@@ -242,7 +242,7 @@ function rucherListeIgn(ign) {
 		req.setRequestHeader('x-csrf-token', _csrf_token);
 		req.send(null);
 	});
-	document.getElementById('searchtext').addEventListener('keyup', (event) => {
+	document.getElementById('searchtext').addEventListener('keyup', event => {
 		if (event.code === 'Enter') {
 			const searchtext = document.getElementById('searchtext').value.
 				trim().toUpperCase();
@@ -260,7 +260,7 @@ function rucherListeIgn(ign) {
 			}
 		}
 	});
-	document.getElementById('dragMarker').addEventListener('change', (event) => {
+	document.getElementById('dragMarker').addEventListener('change', event => {
 		select.setActive(!event.target.checked);
 		translate.setActive(!event.target.checked);
 	});
