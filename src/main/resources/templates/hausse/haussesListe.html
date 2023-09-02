@@ -50,7 +50,7 @@
 				}
 			}
 			table.on('select deselect', updateLinks);
-			document.getElementById('commentaire').addEventListener('click', (event) => {
+			document.getElementById('commentaire').addEventListener('click', event => {
 				if (event.target.getAttribute('href') === '#') {
 					alert(selectHaTrait);
 				}
