@@ -8,7 +8,7 @@
 	<script>
 		document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById('commentaire').focus();
-			document.getElementById('finTraitement').addEventListener('click', function (e) {
+			document.getElementById('finTraitement').addEventListener('click', () => {
 				document.getElementById('typeEvenement').value =
 					event.target.checked ? 'ESSAIMTRAITEMENTFIN' : 'ESSAIMTRAITEMENT';
 			});

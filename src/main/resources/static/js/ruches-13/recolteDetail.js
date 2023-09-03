@@ -62,10 +62,13 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	function tblStartRender(rows, group) {
-		const mielTotal = rows.data().pluck(4).reduce(function(a, b) {
+		// On somme les poids de miel d'une ruche
+		// const mielTotal = rows.data().pluck(4).reduce(function(a, b) {
+		const mielTotal = rows.data().pluck(5).reduce(function(a, b) {
 			return a + parseFloat(b.replace(/,/g, '.'));
 		}, 0.00);
 		const tr = document.createElement('tr');
+		addCell(tr, '');
 		addCell(tr, total);
 		const ruche = document.createElement('td');
 		ruche.insertAdjacentHTML('afterbegin', group);
@@ -80,11 +83,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const raw = document.getElementById('raw');
 	if (raw) {
-		const ordre = [[1, 'asc'], [0, 'asc']];
+		// Trié par ruche, puis par hausse
+		const ordre = [[2, 'asc'], [1, 'asc']];
 		new DataTable('#hausses', {
 			orderFixed: ordre,
 			rowGroup: {
-				dataSrc: 1, // on groupe sur les ruches
+				dataSrc: 2, // On groupe sur les ruches
 				startRender: null,
 				endRender: tblStartRender
 			}
@@ -100,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					destroy: true,
 					orderFixed: ordre,
 					rowGroup: {
-						dataSrc: 1,
+						dataSrc: 2,
 						startRender: null,
 						endRender: tblStartRender
 					}

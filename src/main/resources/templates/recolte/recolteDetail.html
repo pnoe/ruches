@@ -103,6 +103,7 @@
 			<table class="table table-sm table-bordered" id="hausses">
 				<thead>
 					<tr>
+						<th></th>
 						<th th:text="#{hausse}"></th>
 						<th th:text="#{ruche}"></th>
 						<th th:text="#{essaim}"></th>
@@ -116,6 +117,8 @@
 					<tr th:each="detailRecolte : ${detailsRecolte}">
 						<td><a data-bs-toggle="tooltip" th:title="#{saisirpoids}"
 								th:href="@{'/recolte/modifie/hausse/'+${recolte.id}+'/'+${detailRecolte.id}}"
+								class="bi-pencil"></a></td>
+						<td><a th:href="@{'/hausse/'+${detailRecolte.hausse?.id}}"
 								th:text="${detailRecolte.hausse.nom}"></a></td>
 						<td><a th:href="@{'/ruche/'+${detailRecolte.ruche?.id}}"
 								th:text="${detailRecolte.ruche?.nom}"></a>

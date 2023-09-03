@@ -43,7 +43,6 @@ import ooioo.ruches.evenement.TypeEvenement;
 import ooioo.ruches.hausse.Hausse;
 import ooioo.ruches.hausse.HausseRepository;
 import ooioo.ruches.ruche.Ruche;
-import ooioo.ruches.ruche.RucheParcours;
 import ooioo.ruches.ruche.RucheRepository;
 import ooioo.ruches.rucher.Rucher;
 import ooioo.ruches.rucher.RucherRepository;
