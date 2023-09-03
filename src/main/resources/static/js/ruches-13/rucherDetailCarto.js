@@ -16,10 +16,12 @@ function geoloc() {
 		maximumAge: 0,
 	};
 	function success(position) {
+		const alti = position.coords.altitude === null ? '---' : position.coords.altitude.toFixed(2);
+		const altiAcc = position.coords.altitudeAccuracy === null ? '---' : position.coords.altitudeAccuracy.toFixed(2) + 'm';
 		document.getElementById('popup-content').innerHTML = 
 		`Latitude ${position.coords.latitude.toFixed(4)}<br/>Longitude ${position.coords.longitude.toFixed(4)}<br/>
-		Précision ${position.coords.accuracy.toFixed(2)}m<br/>Altitude ${position.coords.altitude.toFixed(2)}<br/>
-		PrécisionAlt ${position.coords.altitudeAccuracy.toFixed(2)}m<br/>`;
+		Précision ${position.coords.accuracy.toFixed(2)}m<br/>Altitude ${alti}<br/>
+		PrécisionAlt ${altiAcc}<br/>`;
 		const coords = [];
 		coords.push(position.coords.longitude);
 		coords.push(position.coords.latitude);

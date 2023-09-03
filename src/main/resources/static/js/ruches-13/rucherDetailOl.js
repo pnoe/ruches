@@ -484,9 +484,9 @@ function rucherDetail(ign) {
 			window.location = ruchesurl + 'ruche/liste/' + rucher.id +
 			'?parcours=' + encodeURIComponent(JSON.stringify(rucheParcours.map(rp => rp.id))) +
 			'&plus=' + (event.target.id !== 'liste')));
-	document.getElementById('export-gpx').addEventListener('click', exportGpx()); 
-	document.getElementById('export-kml').addEventListener('click', exportKml());
-	document.getElementById('geoloc').addEventListener('click', geoloc());
+	document.getElementById('export-gpx').addEventListener('click', exportGpx); 
+	document.getElementById('export-kml').addEventListener('click', exportKml);
+	document.getElementById('geoloc').addEventListener('click', geoloc);
 	document.getElementById('parcours-redraw').addEventListener('click', () => {
 		document.getElementById('popup-content').innerHTML = 'Calcul en cours...';
 		overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());

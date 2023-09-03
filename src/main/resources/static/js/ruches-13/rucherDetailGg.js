@@ -233,8 +233,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			window.location = urlruches + 'ruche/liste/' + rucher.id +
 			'?parcours=' + encodeURIComponent(JSON.stringify(rucheParcours.map(rp => rp.id))) +
 			'&plus=' + (event.target.id !== 'liste'))});
-	document.getElementById('export-gpx').addEventListener('click', exportGpx());
-	document.getElementById('export-kml').addEventListener('click', exportKml());
+	document.getElementById('export-gpx').addEventListener('click', exportGpx);
+	document.getElementById('export-kml').addEventListener('click', exportKml);
 	document.getElementById('parcours-redraw').addEventListener('click', parcoursRedraw(true));
 	document.getElementById('searchtext').addEventListener('keyup', event => {
 		if (event.code === 'Enter') {
