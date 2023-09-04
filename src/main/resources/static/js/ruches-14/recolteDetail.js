@@ -80,21 +80,42 @@ document.addEventListener('DOMContentLoaded', () => {
 		addCell(tr, '', 2);
 		return tr;
 	}
-
-	const raw = document.getElementById('raw');
-	if (raw) {
-		// Trié par ruche, puis par hausse
+	const rawChk = document.getElementById('raw');
+	if (rawChk) {
+		let raw;
+		// lecture du cookie de nom 'rawRD'
+		const cookieVal = document.cookie
+			.split('; ')
+			.find(row => row.startsWith('rawRD='))
+			?.split('=')[1];
+		if (cookieVal === undefined) {
+			document.cookie = 'rawRD=false';
+			raw = false;
+		} else {
+			raw = cookieVal === 'true';
+		}
+		rawChk.checked = raw;
+		// Tri par ruche, puis par hausse
 		const ordre = [[2, 'asc'], [1, 'asc']];
-		new DataTable('#hausses', {
-			orderFixed: ordre,
-			rowGroup: {
-				dataSrc: 2, // On groupe sur les ruches
-				startRender: null,
-				endRender: tblStartRender
-			}
-		});
-		raw.addEventListener('change', function(event) {
-			if (event.target.checked) {
+		const rowGOpt = {
+			dataSrc: 2,
+			startRender: null,
+			endRender: tblStartRender
+		};
+		if (raw) {
+			new DataTable('#hausses', {
+				order: ordre,
+			});
+		} else {
+			new DataTable('#hausses', {
+				orderFixed: ordre,
+				rowGroup: rowGOpt
+			});
+		}
+		rawChk.addEventListener('change', event => {
+			raw = event.target.checked;
+			document.cookie = 'rawRD=' + raw;
+			if (raw) {
 				new DataTable('#hausses', {
 					destroy: true,
 					order: ordre,
@@ -103,11 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				new DataTable('#hausses', {
 					destroy: true,
 					orderFixed: ordre,
-					rowGroup: {
-						dataSrc: 2,
-						startRender: null,
-						endRender: tblStartRender
-					}
+					rowGroup: rowGOpt
 				});
 			}
 		});

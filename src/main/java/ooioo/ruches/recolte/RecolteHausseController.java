@@ -166,7 +166,8 @@ public class RecolteHausseController {
 	 * Afficher une récolte avec ses hausses.
 	 */
 	@GetMapping("/{recolteId}")
-	public String recolte(Model model, @PathVariable long recolteId) {
+	public String recolte(Model model, @PathVariable long recolteId
+			) {
 		Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
 		if (recolteOpt.isPresent()) {
 			Recolte recolte = recolteOpt.get();
@@ -188,7 +189,8 @@ public class RecolteHausseController {
 	 * Affiche le formulaire d'une hausse d'une récolte.
 	 */
 	@GetMapping("/modifie/hausse/{recolteId}/{recolteHausseId}")
-	public String modifie(Model model, @PathVariable long recolteHausseId, @PathVariable long recolteId) {
+	public String modifie(Model model, @PathVariable long recolteHausseId, @PathVariable long recolteId
+			) {
 		Optional<RecolteHausse> recolteHausseOpt = recolteHausseRepository.findById(recolteHausseId);
 		if (recolteHausseOpt.isPresent()) {
 			/*
