@@ -23,10 +23,17 @@
 				}
 			});
 			/*[- Pour trier les noms de types de miel -]*/
-			const selOpt = $('#typeMiel').val();
-			$('#typeMiel').html($('#typeMiel option').sort(function (a, b) {
-				return a.text === b.text ? 0 : a.text < b.text ? -1 : 1;
-			})).val(selOpt);
+			const selectElement = document.getElementById('typeMiel');
+			const selOpt = selectElement.value;
+			const optionElements = Array.from(selectElement.querySelectorAll('option'));
+			optionElements.sort(function (a, b) {
+				return a.textContent === b.textContent ? 0 : a.textContent < b.textContent ? -1 : 1;
+			});
+			selectElement.innerHTML = '';
+			for (const option of optionElements) {
+				selectElement.appendChild(option);
+			}
+			selectElement.value = selOpt;
 		});
 	</script>
 </head>
