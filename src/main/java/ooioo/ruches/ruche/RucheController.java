@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -170,7 +171,7 @@ public class RucheController {
 	}
 
 	/**
-	 * Liste des ruches d'un rucher. 
+	 * Liste des ruches d'un rucher.
 	 * 
 	 * @parcours : pour l'ordre des ruches.
 	 * @plus : liste détaillée si true
@@ -455,8 +456,7 @@ public class RucheController {
 	 */
 	@PostMapping("/ordreHausses/{rucheId}")
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody String ordreHausses(@PathVariable long rucheId,
-			@RequestParam(value = "hausses[]") Long[] hausses) {
+	public @ResponseBody String ordreHausses(@PathVariable long rucheId, @RequestBody Long[] hausses) {
 		for (int i = 0; i < hausses.length; i++) {
 			Optional<Hausse> hausseOpt = hausseRepository.findById(hausses[i]);
 			if (hausseOpt.isPresent()) {

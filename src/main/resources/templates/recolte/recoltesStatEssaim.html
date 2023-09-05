@@ -39,10 +39,10 @@
 								return valPoids(a) + valPoids(b);
 							}, 0);
 						const j = i - 1;
-						$('tr:eq(0) td:eq(' + j + ')', api.table().footer()).html(
-							Number.parseFloat(total).toFixed(2));
-						$('tr:eq(1) td:eq(' + j + ')', api.table().footer()).html(
-							Number.parseFloat(pageTotal).toFixed(2));
+						api.table().footer().querySelectorAll('tr')[0]
+							.querySelectorAll('td')[j].innerHTML = Number.parseFloat(total).toFixed(2);
+						api.table().footer().querySelectorAll('tr')[1]
+							.querySelectorAll('td')[j].innerHTML = Number.parseFloat(pageTotal).toFixed(2);
 					}
 				}
 			});
