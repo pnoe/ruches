@@ -20,6 +20,7 @@
     	"dot-notation": "error",
     	"eqeqeq": "error",
     	"func-style": ["error", "declaration"],
+    	"no-console": "error",
     	"no-constant-binary-expression": "error",
     	"no-eval": "error",
     	// "no-extra-parens": "error",
