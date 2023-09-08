@@ -166,8 +166,7 @@ public class RecolteHausseController {
 	 * Afficher une récolte avec ses hausses.
 	 */
 	@GetMapping("/{recolteId}")
-	public String recolte(Model model, @PathVariable long recolteId
-			) {
+	public String recolte(Model model, @PathVariable long recolteId) {
 		Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
 		if (recolteOpt.isPresent()) {
 			Recolte recolte = recolteOpt.get();
@@ -189,15 +188,17 @@ public class RecolteHausseController {
 	 * Affiche le formulaire d'une hausse d'une récolte.
 	 */
 	@GetMapping("/modifie/hausse/{recolteId}/{recolteHausseId}")
-	public String modifie(Model model, @PathVariable long recolteHausseId, @PathVariable long recolteId
-			) {
+	public String modifie(Model model, @PathVariable long recolteHausseId, @PathVariable long recolteId) {
 		Optional<RecolteHausse> recolteHausseOpt = recolteHausseRepository.findById(recolteHausseId);
 		if (recolteHausseOpt.isPresent()) {
 			/*
-			model.addAttribute(Const.RUCHES, rucheRepository.findAllProjectedIdNomByOrderByNom());
-			model.addAttribute(Const.RUCHERS, rucherRepository.findAllProjectedIdNomByOrderByNom());
-			model.addAttribute(Const.ESSAIMS, essaimRepository.findAllProjectedIdNomByOrderByNom());
-			*/
+			 * model.addAttribute(Const.RUCHES,
+			 * rucheRepository.findAllProjectedIdNomByOrderByNom());
+			 * model.addAttribute(Const.RUCHERS,
+			 * rucherRepository.findAllProjectedIdNomByOrderByNom());
+			 * model.addAttribute(Const.ESSAIMS,
+			 * essaimRepository.findAllProjectedIdNomByOrderByNom());
+			 */
 			model.addAttribute("detailRecolte", recolteHausseOpt.get());
 		} else {
 			logger.error("Id récolte hausse {} inconnu.", recolteHausseId);
@@ -206,7 +207,7 @@ public class RecolteHausseController {
 		}
 		return "recolte/recolteHausseForm";
 	}
-	
+
 	@GetMapping("/listesPlus")
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody Map<String, Object> listePlus() {
@@ -349,21 +350,20 @@ public class RecolteHausseController {
 				RecolteHausse recolteHausse = (RecolteHausse) rhh[0];
 				Hausse hausse = (Hausse) rhh[1];
 				Ruche ruche = hausse.getRuche();
-				if ((ruche != null) &&
-						(recolteHausse.getRuche() != null) &&
-						(ruche.getId().equals(recolteHausse.getRuche().getId()))) {
+				if ((ruche != null) && (recolteHausse.getRuche() != null)
+						&& (ruche.getId().equals(recolteHausse.getRuche().getId()))) {
 					// La ruche de la hausse est non null (la hausse est sur une ruche)
 					// La hausse de récolte référence bien une ruche
 					// La ruche sur laquelle est la hausse est la même que la ruche
 					// de la hausseRécolte correspondante.
 					// Sinon on ignore la hausse.
-					
+
 					// Pour affichage des hausses enlevées des ruches
 					retHausses.append(hausse.getNom());
 					retHausses.append(" ");
 					retRuches.append(ruche.getNom());
 					retRuches.append(" ");
-					
+
 					// Pour renumérotation de l'ordre des hausses
 					Long rucheId = null;
 					Integer hausseOrdre;
@@ -397,8 +397,7 @@ public class RecolteHausseController {
 					hausse.setOrdreSurRuche(null);
 					hausseRepository.save(hausse);
 					logger.info("{} modifiée", hausse);
-					
-					
+
 					// renuméroter l'ordre des hausses de la ruche
 					Iterable<Hausse> haussesRuche = hausseRepository.findByRucheIdOrderByOrdreSurRuche(rucheId);
 					for (Hausse hausseRuche : haussesRuche) {
