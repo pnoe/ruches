@@ -24,6 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
 			date: {
 				required: true
 			},
+			valeur: {
+				required: function() {
+					return ['RUCHEPESEE']
+						.includes(selectElement.value);
+				}
+			},
 			commentaire: {
 				required: function() {
 					return ['COMMENTAIRERUCHE', 'COMMENTAIRERUCHER', 'COMMENTAIREESSAIM', 'COMMENTAIREHAUSSE']
@@ -33,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			ruche: {
 				required: function() {
 					return ['RUCHEAJOUTRUCHER', 'AJOUTESSAIMRUCHE', 'HAUSSEPOSERUCHE', 'HAUSSERETRAITRUCHE',
-						'COMMENTAIRERUCHE']
+						'COMMENTAIRERUCHE', 'RUCHEPESEE', 'RUCHECADRE']
 						.includes(selectElement.value);
 				}
 			},

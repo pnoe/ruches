@@ -343,10 +343,12 @@ public class RecolteHausseController {
 					new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
 			Recolte recolte = recolteOpt.get();
 			model.addAttribute(Const.RECOLTE, recolte);
-			Iterable<Hausse> hausses = hausseRepository.findHaussesInRecolteId(recolteId);
-			for (Hausse hausse : hausses) {
+			// Liste des couples RecoltHausse, Hausse de la récolte
+			List<Object[]> reHH = hausseRepository.findHaussesRecHausses(recolteId);
+			for (Object[] rhh : reHH) {
+				RecolteHausse recolteHausse = (RecolteHausse) rhh[0];
+				Hausse hausse = (Hausse) rhh[1];
 				Ruche ruche = hausse.getRuche();
-				RecolteHausse recolteHausse = recolteHausseRepository.findByRecolteAndHausse(recolte, hausse);
 				if ((ruche != null) &&
 						(recolteHausse.getRuche() != null) &&
 						(ruche.getId().equals(recolteHausse.getRuche().getId()))) {
@@ -354,11 +356,14 @@ public class RecolteHausseController {
 					// La hausse de récolte référence bien une ruche
 					// La ruche sur laquelle est la hausse est la même que la ruche
 					// de la hausseRécolte correspondante.
-					// Sinon on ignore la hausse
+					// Sinon on ignore la hausse.
+					
+					// Pour affichage des hausses enlevées des ruches
 					retHausses.append(hausse.getNom());
 					retHausses.append(" ");
 					retRuches.append(ruche.getNom());
 					retRuches.append(" ");
+					
 					// Pour renumérotation de l'ordre des hausses
 					Long rucheId = null;
 					Integer hausseOrdre;
@@ -369,12 +374,12 @@ public class RecolteHausseController {
 						hausseOrdre = 100;
 					}
 					// création événement avant mise à null de la ruche
-					Essaim essaim = null;
-					Rucher rucher = null;
-					if (ruche != null) {
-						essaim = ruche.getEssaim();
-						rucher = ruche.getRucher();
-					}
+					// Essaim essaim = null;
+					// Rucher rucher = null;
+					// if (ruche != null) {
+					Essaim essaim = ruche.getEssaim();
+					Rucher rucher = ruche.getRucher();
+					// }
 					String commentaireEve = "Récolte "
 							+ recolte.getDate().format(DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM)) + " "
 							+ decimalFormat.format(
@@ -391,6 +396,9 @@ public class RecolteHausseController {
 					hausse.setRuche(null);
 					hausse.setOrdreSurRuche(null);
 					hausseRepository.save(hausse);
+					logger.info("{} modifiée", hausse);
+					
+					
 					// renuméroter l'ordre des hausses de la ruche
 					Iterable<Hausse> haussesRuche = hausseRepository.findByRucheIdOrderByOrdreSurRuche(rucheId);
 					for (Hausse hausseRuche : haussesRuche) {

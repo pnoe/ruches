@@ -10,6 +10,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import ooioo.ruches.IdNom;
 import ooioo.ruches.Nom;
+import ooioo.ruches.recolte.RecolteHausseHausse;
 
 @RepositoryRestResource(collectionResourceRel = "hausseRepository")
 public interface HausseRepository extends CrudRepository<Hausse, Long> {
@@ -30,7 +31,6 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 
 	Iterable<Hausse> findByActiveOrderByNom(boolean actif);
 
-
 	Integer countByActiveAndRucheIsNull(boolean active);
 
 	// Liste des hausses qui ne sont pas dans la récolte recolteId :
@@ -46,7 +46,7 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 						where rh.recolte.id = ?1)
 			""")
 	Iterable<Hausse> findHaussesNotInRecolteId(Long recolteId);
-
+	
 	@Query(value =	"""
 			select h
 			  from Hausse h
@@ -56,6 +56,14 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 			      where rh.recolte.id = ?1)
 			""")
 	Iterable<Hausse> findHaussesInRecolteId(Long recolteId);
+	
+	@Query(value =	"""
+			select rh, h
+			  from RecolteHausse rh, Hausse h
+			  where rh.recolte.id = :recolteId
+			    and rh.hausse.id = h.id
+			""")
+	List<Object[]> findHaussesRecHausses(Long recolteId);
 
 	@Query(value =	"""
 			select count(h)
