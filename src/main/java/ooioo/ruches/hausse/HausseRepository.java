@@ -61,6 +61,7 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 			  from RecolteHausse rh, Hausse h
 			  where rh.recolte.id = :recolteId
 			    and rh.hausse.id = h.id
+			  order by h.nom
 			""")
 	List<Object[]> findHaussesRecHausses(Long recolteId);
 
