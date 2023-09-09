@@ -1,5 +1,5 @@
 /* globals
-	_csrf_token, _csrf_param_name, suppRecHauss, dateRecEpoch, enlevTtHauRec,
+	_csrf_token, _csrf_param_name, suppRecHauss, dateRecEpoch
 	enlevHRecDe30, urlRecHDepot, recId, total, DataTable
 */
 'use strict';
@@ -18,14 +18,31 @@ document.addEventListener('DOMContentLoaded', () => {
 			alert(enlevHRecDe30);
 			return;
 		}
-		if (!confirm(enlevTtHauRec)) {
-			return;
-		}
-		itDate.style.display = 'block';
-		itDateOk.style.display = 'block';
-		const d = new Date().toISOString().replace('T', ' ');
-		itDate.setAttribute('value', d.slice(0, d.lastIndexOf(':')));
-		itDate.focus();
+		const req = new XMLHttpRequest();
+		req.open('POST', urlRecHDepot + recId, true);
+		req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		req.onload = function() {
+			if (req.readyState === 4) {
+				if (req.status === 200) {
+					if (req.responseText.slice(-1) === '?') {
+						if (!confirm(req.responseText)) {
+							return;
+						}
+					} else {
+						alert(req.responseText);
+						return;
+					}
+					itDate.style.display = 'block';
+					itDateOk.style.display = 'block';
+					const d = new Date();
+					itDate.setAttribute('value',
+						`${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()} ${d.getHours()}:${d.getMinutes()}`
+					);
+					itDate.focus();
+				}
+			}
+		};
+		req.send(_csrf_param_name + '=' + _csrf_token);
 	});
 
 	itDateOk.addEventListener('click', function() {
@@ -42,8 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 			}
 		};
-		req.send(_csrf_param_name + '=' + _csrf_token +
-			'&date=' + date);
+		req.send(_csrf_param_name + '=' + _csrf_token + '&date=' + date);
 	});
 
 	document.getElementById('supprime').addEventListener('click', event => {

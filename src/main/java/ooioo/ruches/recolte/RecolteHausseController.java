@@ -331,11 +331,15 @@ public class RecolteHausseController {
 	/**
 	 * Enlève toutes les hausses de la récolte des ruches. Crée les événements
 	 * retraits des hausses et remplissage à 0. (appel XMLHttpRequest)
+	 * 
+	 * @param date le date pour les événements à créer, pas de paramètre si test uniquement (required = false)
+	 * @return String si test la chaîne doit se terminer par un "?" si des ruches peuvent être retirées. Le
+	 *    code javascript utilise ce "?" pour distinguer les deux retours possibles.
 	 */
 	@PostMapping("/haussesDepot/{recolteId}")
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody String haussesDepot(HttpSession session, Model model, @PathVariable long recolteId,
-			@RequestParam @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm") LocalDateTime date) {
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm") LocalDateTime date) {
 		Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
 		StringBuilder retHausses = new StringBuilder();
 		StringBuilder retRuches = new StringBuilder();
@@ -364,6 +368,8 @@ public class RecolteHausseController {
 					retRuches.append(ruche.getNom());
 					retRuches.append(" ");
 
+					if (date == null) { continue; }
+					
 					// Pour renumérotation de l'ordre des hausses
 					Long rucheId = null;
 					Integer hausseOrdre;
@@ -374,12 +380,8 @@ public class RecolteHausseController {
 						hausseOrdre = 100;
 					}
 					// création événement avant mise à null de la ruche
-					// Essaim essaim = null;
-					// Rucher rucher = null;
-					// if (ruche != null) {
 					Essaim essaim = ruche.getEssaim();
 					Rucher rucher = ruche.getRucher();
-					// }
 					String commentaireEve = "Récolte "
 							+ recolte.getDate().format(DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM)) + " "
 							+ decimalFormat.format(
@@ -424,7 +426,7 @@ public class RecolteHausseController {
 		if (retHausses.length() == 0) {
 			return messageSource.getMessage("pasDeHausseAenlever", null, LocaleContextHolder.getLocale());
 		} else {
-			return messageSource.getMessage("haussesEnlevees", new Object[] { retHausses, retRuches },
+			return messageSource.getMessage((date == null) ? "enleverHausses" : "haussesEnlevees", new Object[] { retHausses, retRuches },
 					LocaleContextHolder.getLocale());
 		}
 	}
