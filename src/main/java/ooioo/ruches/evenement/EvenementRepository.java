@@ -15,7 +15,7 @@ import ooioo.ruches.rucher.Rucher;
 
 @RepositoryRestResource(collectionResourceRel = "evenementRepository")
 public interface EvenementRepository extends CrudRepository<Evenement, Long> {
-	
+
 	// Evénement dispersion concernant des essaims actifs
 	@Query(value = """
 			select e
@@ -78,7 +78,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			    and e.date > ?1
 			""")
 	Iterable<Evenement> findTypePeriode(LocalDateTime date);
-	
+
 	@RestResource(path = "findPeriodeType1Type2Date1Date2")
 	@Query(value = """
 			select e
@@ -88,7 +88,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			    and e.date > ?1 and e.date < ?2
 			""")
 	Iterable<Evenement> findTypePeriode(LocalDateTime date1, LocalDateTime date2);
-	
+
 	List<Evenement> findByRucheId(Long rucheId);
 	Iterable<Evenement> findByEssaimId(Long essaimId);
 	@Query(value = """
@@ -153,19 +153,19 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	@Query(value = """
 			select e
 			  from Evenement e
-			  where e.ruche = :ruche and 
+			  where e.ruche = :ruche and
 			    e.type <> ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE and
 			    e.type <> ooioo.ruches.evenement.TypeEvenement.RUCHEPESEE and
 			    e.type <> ooioo.ruches.evenement.TypeEvenement.RUCHECADRE
 			  order by date desc limit 3
-			""")	
+			""")
 	List<Evenement> find3EveListePlus(Ruche ruche);
 
 	@Query(value = """
 			select e
 			  from Evenement e
-			  where e.essaim = ?1 and 
-			    (e.type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENT or 
+			  where e.essaim = ?1 and
+			    (e.type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENT or
 			      e.type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENTFIN)
 			  order by date desc limit 1
 			""")
@@ -174,7 +174,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	Evenement findFirstByRucheAndHausseAndTypeOrderByDateDesc(Ruche ruche, Hausse hausse, TypeEvenement typeEvenement);
 
 	Evenement findFirstByRucheAndRucherAndTypeOrderByDateDesc(Ruche ruche, Rucher rucher, TypeEvenement typeEvenement);
-	
+
     // https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definitions
 	//   pour éviter de passer ruche en param.
 	@Query(value = """

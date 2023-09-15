@@ -138,7 +138,7 @@ public class RecolteController {
 
 	/**
 	 * Statistiques tableau poids de miel par essaim et par récolte.
-	 * 
+	 *
 	 * @param tous si false n'affiche pas les essaims n'ayant jamais produit de miel.
 	 */
 	@GetMapping("/stat/essaim/{tous}")

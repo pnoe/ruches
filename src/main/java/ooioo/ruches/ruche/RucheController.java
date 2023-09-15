@@ -172,7 +172,7 @@ public class RucheController {
 
 	/**
 	 * Liste des ruches d'un rucher.
-	 * 
+	 *
 	 * @parcours : pour l'ordre des ruches.
 	 * @plus : liste détaillée si true
 	 */

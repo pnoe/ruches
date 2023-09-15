@@ -53,7 +53,7 @@ public class EvenementController {
 	private EssaimRepository essaimRepository;
 	@Autowired
 	private RucherRepository rucherRepository;
-	
+
 	@Autowired
 	private MessageSource messageSource;
 
@@ -149,7 +149,7 @@ public class EvenementController {
 		}
 		model.addAttribute(Const.EVENEMENTS, evens);
 		model.addAttribute("jAvants", jAvants);
-		model.addAttribute("dests", 
+		model.addAttribute("dests",
 				messageSource.getMessage("Destinataires", null, LocaleContextHolder.getLocale()) +
 				" :<br/>" + String.join("<br/>", notifDest));
 		return "evenement/evenementNotifListe";

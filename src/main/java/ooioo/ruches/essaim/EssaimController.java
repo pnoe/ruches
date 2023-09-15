@@ -503,10 +503,10 @@ public class EssaimController {
 
 	/**
 	 * Appel du formulaire pour saisie date/commentaire association essaim ruche.
-	 * 
+	 *
 	 * @rucheId l'id de la ruche dans laquelle on veut mettre l'essaim
 	 * @essaimId l'id de l'essaim à mettre dans la ruche
-	 */ 
+	 */
 	@GetMapping("/ruche/associe/{rucheId}/{essaimId}")
 	public String associeRuche(HttpSession session, Model model, @PathVariable long rucheId,
 			@PathVariable long essaimId) {
@@ -523,7 +523,7 @@ public class EssaimController {
 				Ruche rucheSource = rucheRepository.findByEssaimId(essaimOpt.get().getId());
 				model.addAttribute("rucheSource", rucheSource);
 				if (rucheSource != null) {
-					// Envoyer la date max événements ajout ruchers pour imposer une date de 
+					// Envoyer la date max événements ajout ruchers pour imposer une date de
 					//  l'événement essaim mis dans rucher postérieure à cette date.
 					Evenement evenRuche = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
 							ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER);

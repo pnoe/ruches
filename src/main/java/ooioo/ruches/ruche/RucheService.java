@@ -118,7 +118,7 @@ public class RucheService {
 
 	/*
 	 * Liste des ruches.
-	 * 
+	 *
 	 * @param plus true pour liste détaillée
 	 */
 	void liste(HttpSession session, Model model, boolean plus) {
@@ -137,7 +137,7 @@ public class RucheService {
 		} else {
 			ruches = rucheRepository.findByActiveTrueOrderByNom();
 		}
-		List<String> ruchersNoms = new ArrayList<>(); 
+		List<String> ruchersNoms = new ArrayList<>();
 		for (Ruche ruche : ruches) {
 			nbHausses.add(hausseRepository.countByRucheId(ruche.getId()));
 			if (plus) {
@@ -155,7 +155,7 @@ public class RucheService {
 				evensHaussesRuches.add(eveHaussesRuche);
 				// Dernier événement pesée de la ruche.
 				evensPoidsRuches.add(
-						evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.RUCHEPESEE));	
+						evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.RUCHEPESEE));
 			}
 			Rucher rr = ruche.getRucher();
 			if ((rr != null) && (!ruchersNoms.contains(rr.getNom()))) {
@@ -178,7 +178,7 @@ public class RucheService {
 			model.addAttribute("listeEvensCommentaireEsaim", listeEvensCommentaireEssaim);
 			model.addAttribute(Const.HAUSSES, haussesRuches);
 			model.addAttribute("evensHaussesRuches", evensHaussesRuches);
-			model.addAttribute("evensPoidsRuches", evensPoidsRuches);			
+			model.addAttribute("evensPoidsRuches", evensPoidsRuches);
 		}
 	}
 

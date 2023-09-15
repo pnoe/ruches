@@ -25,9 +25,9 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 			select essaim
 			  from Essaim essaim
 			  where essaim.actif = false
-			   and essaim.id not in 
-			     (select e.essaim.id 
-			       from Evenement e 
+			   and essaim.id not in
+			     (select e.essaim.id
+			       from Evenement e
 			       where type = ooioo.ruches.evenement.TypeEvenement.ESSAIMDISPERSION)
 			""")
 	List<Essaim> findEssaimInactifPasDipserse();

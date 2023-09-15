@@ -316,10 +316,10 @@ public class AdminService {
 		}
 		model.addAttribute("eveRucheHausseErr", eveRucheHausseErr);
 		model.addAttribute("rucheNonVide", rucheNonVide);
-		
+
 		// Essaims actifs et dispersés ou inactifs et non dispersés
 		model.addAttribute("eveDisperseActifs", evenementRepository.findEssaimActifDisperse());
 		model.addAttribute("essaimInactifsNonDisp",  essaimRepository.findEssaimInactifPasDipserse());
-		
+
 	}
 }

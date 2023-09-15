@@ -331,7 +331,7 @@ public class RecolteHausseController {
 	/**
 	 * Enlève toutes les hausses de la récolte des ruches. Crée les événements
 	 * retraits des hausses et remplissage à 0. (appel XMLHttpRequest)
-	 * 
+	 *
 	 * @param date le date pour les événements à créer, pas de paramètre si test uniquement (required = false)
 	 * @return String si test la chaîne doit se terminer par un "?" si des ruches peuvent être retirées. Le
 	 *    code javascript utilise ce "?" pour distinguer les deux retours possibles.
@@ -369,7 +369,7 @@ public class RecolteHausseController {
 					retRuches.append(" ");
 
 					if (date == null) { continue; }
-					
+
 					// Pour renumérotation de l'ordre des hausses
 					Long rucheId = null;
 					Integer hausseOrdre;
