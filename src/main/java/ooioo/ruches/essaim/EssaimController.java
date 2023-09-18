@@ -366,6 +366,8 @@ public class EssaimController {
 		if (bindingResult.hasErrors()) {
 			return ESSAIM_ESSAIMFORM;
 		}
+		// On enlève les blancs aux extémités du commentaire.
+		essaim.setCommentaire(essaim.getCommentaire().trim());
 		// On enlève les blancs aux extémités du nom.
 		essaim.setNom(essaim.getNom().trim());
 		if ("".equals(essaim.getNom())) {

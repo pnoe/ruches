@@ -335,6 +335,8 @@ public class RucheController {
 		if (bindingResult.hasErrors()) {
 			return RUCHE_RUCHEFORM;
 		}
+		// On enlève les blancs aux extémités du commentaire.
+		ruche.setCommentaire(ruche.getCommentaire().trim());
 		// On enlève les blancs aux extémités du nom.
 		ruche.setNom(ruche.getNom().trim());
 		if ("".equals(ruche.getNom())) {

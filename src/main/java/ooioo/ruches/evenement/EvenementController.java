@@ -69,7 +69,7 @@ public class EvenementController {
 	 * @param periode   1 tous, moins d'un : 2 an, 3 mois, 4 semaine, 5 jour,
 	 *                  default période entre date1 et date2
 	 * @param date1     début de période (si periode != 1, 2, 3, 4 ou 5)
-	 * @param date2       fin de période
+	 * @param date2     fin de période
 	 * @param datestext le texte des dates de début et fin de période à afficher
 	 * @param pCookie   période
 	 * @param dxCookie  le texte des dates
@@ -136,29 +136,31 @@ public class EvenementController {
 				max = evenement.getDate();
 			} else {
 				// si joursAvant est négatif la plage de notification
-				//  est la date de l'évenement - (la date eve plus le nb de jours)
-				// fonctionnalité  : notif apès date de l'événement
+				// est la date de l'évenement - (la date eve plus le nb de jours)
+				// fonctionnalité : notif apès date de l'événement
 				max = evenement.getDate().minusDays(joursAvant);
 				min = evenement.getDate();
 			}
 			// Si on est dans la plage de notification
 			if (tous || (dateNow.isAfter(min) && (dateNow.isBefore(max)))) {
-					evens.add(evenement);
-					jAvants.add(joursAvant);
-				}
+				evens.add(evenement);
+				jAvants.add(joursAvant);
+			}
 		}
 		model.addAttribute(Const.EVENEMENTS, evens);
 		model.addAttribute("jAvants", jAvants);
-		model.addAttribute("dests",
-				messageSource.getMessage("Destinataires", null, LocaleContextHolder.getLocale()) +
-				" :<br/>" + String.join("<br/>", notifDest));
+		model.addAttribute("dests", messageSource.getMessage("Destinataires", null, LocaleContextHolder.getLocale())
+				+ " :<br/>" + String.join("<br/>", notifDest));
 		return "evenement/evenementNotifListe";
 	}
 
 	/*
 	 * Détail d'un événement d'id evenementId
-	 * @param type : "" pour retour liste tous even, essaim/ruche/rucher/hausse pour retour liste
-	 *    spécifique à l'objet dont l'id est dans itemId, sucre/traitement/... pour retour liste even/sucre...
+	 * 
+	 * @param type : "" pour retour liste tous even, essaim/ruche/rucher/hausse pour
+	 * retour liste spécifique à l'objet dont l'id est dans itemId,
+	 * sucre/traitement/... pour retour liste even/sucre...
+	 * 
 	 * @param itemId l'id de l'objet de retour
 	 */
 	@GetMapping("/{evenementId}")
@@ -194,7 +196,7 @@ public class EvenementController {
 			case RUCHECADRE:
 				return "evenement/evenementCadreDetail";
 			default:
-				//  pour faciliter l'ajout d'un type non traité spécifiquement
+				// pour faciliter l'ajout d'un type non traité spécifiquement
 				return "evenement/evenementDetail";
 			}
 		}
@@ -267,7 +269,10 @@ public class EvenementController {
 		if (bindingResult.hasErrors()) {
 			return EVEN_EVENFORM;
 		}
-		String action = (evenement.getId() == null)?"créé":"modifié";
+		// On enlève les blancs aux extémités du commentaire.
+		evenement.setCommentaire(evenement.getCommentaire().trim());
+
+		String action = (evenement.getId() == null) ? "créé" : "modifié";
 		evenementRepository.save(evenement);
 		logger.info("{} {}", evenement, action);
 		return REDIRECT_EVEN + evenement.getId();

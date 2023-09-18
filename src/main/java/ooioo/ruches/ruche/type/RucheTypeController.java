@@ -49,7 +49,7 @@ public class RucheTypeController {
 		model.addAttribute(Const.RUCHETYPES, lRT);
 		List<Integer> nbRuchesEssaim = new ArrayList<>();
 		List<Integer> nbRuchesSansEssaim = new ArrayList<>();
-		for(RucheType rt : lRT) {
+		for (RucheType rt : lRT) {
 			nbRuchesEssaim.add(rucheRepo.countByTypeAndActiveTrueAndEssaimNotNull(rt));
 			nbRuchesSansEssaim.add(rucheRepo.countByTypeAndActiveTrueAndEssaimNull(rt));
 		}
@@ -127,9 +127,26 @@ public class RucheTypeController {
 	 * Enregistrement du type de ruche.
 	 */
 	@PostMapping("/sauve")
-	public String sauve(@ModelAttribute RucheType rucheType, BindingResult bindingResult) {
+	public String sauve(Model model, @ModelAttribute RucheType rucheType, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return RUCHE_RUCHETYPEFORM;
+		}
+		// On enlève les blancs aux extémités du commentaire.
+		rucheType.setCommentaire(rucheType.getCommentaire().trim());
+
+		// On enlève les blancs aux extémités du nom.
+		rucheType.setNom(rucheType.getNom().trim());
+		if ("".equals(rucheType.getNom())) {
+			logger.error("{} nom incorrect.", rucheType);
+			model.addAttribute(Const.MESSAGE, "Nom de type de ruche incorrect.");
+			return Const.INDEX;
+		}
+		// Vérification de l'unicité du nom
+		RucheType rNom = rucheTypeRepo.findByNom(rucheType.getNom());
+		if (rNom != null && !rNom.getId().equals(rucheType.getId())) {
+			logger.error("{} nom existant.", rucheType);
+			model.addAttribute(Const.MESSAGE, "Nom de type de ruche existant.");
+			return Const.INDEX;
 		}
 		String action = (rucheType.getId() == null) ? "créé" : "modifié";
 		rucheTypeRepo.save(rucheType);

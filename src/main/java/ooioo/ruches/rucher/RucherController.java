@@ -351,7 +351,8 @@ public class RucherController {
 		if (bindingResult.hasErrors()) {
 			return RUCHER_RUCHERFORM;
 		}
-
+		// On enlève les blancs aux extémités du commentaire.
+		rucher.setCommentaire(rucher.getCommentaire().trim());
 		// On enlève les blancs aux extémités du nom.
 		rucher.setNom(rucher.getNom().trim());
 		if ("".equals(rucher.getNom())) {
@@ -762,10 +763,11 @@ public class RucherController {
 	 * recalcul si l'utilisateur déplace une ruche sur la carte redraw = 1 recalcul
 	 * si l'utilisateur le demande pour améliore de parcours
 	 *
-	 * @param redraw si true recherche du parcours optimisée avec limite 10 secondes.
+	 * @param redraw si true recherche du parcours optimisée avec limite 10
+	 *               secondes.
 	 * @return Map<String, Object> : "distParcours" : distance du parcours,
-	 *         "rucheParcours" : idruche, ordre, long, lat. Si erreur, "erreur" : "Id
-	 *         rucher inconnu"
+	 *         "rucheParcours" : idruche, ordre, long, lat. Si erreur, "erreur" :
+	 *         "Id rucher inconnu"
 	 */
 	@GetMapping("/parcours/{rucherId}/{redraw}")
 	@ResponseStatus(value = HttpStatus.OK)

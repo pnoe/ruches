@@ -55,7 +55,8 @@ public class HausseController {
 	private RucheService rucheService;
 
 	/**
-	 * Clonage multiple d'une hausse (appel XMLHttpRequest de la page détail d'une hausse).
+	 * Clonage multiple d'une hausse (appel XMLHttpRequest de la page détail d'une
+	 * hausse).
 	 *
 	 * @param hausseId  l'id de la hausse à cloner
 	 * @param nomclones les noms des clones séparés par des virgules
@@ -173,7 +174,7 @@ public class HausseController {
 				if (ruche != null) {
 					hausse.setRuche(null);
 					// On sauve la hausse après avoir mis hausse.ruche à null
-					//  pour que ordonneHaussesRuche ne trouve plus cette hausse
+					// pour que ordonneHaussesRuche ne trouve plus cette hausse
 					hausseRepository.save(hausse);
 					rucheService.ordonneHaussesRuche(ruche.getId());
 				}
@@ -201,6 +202,9 @@ public class HausseController {
 			return HAUSSE_HAUSSEFORM;
 		}
 
+		// On enlève les blancs aux extémités du commentaire.
+		hausse.setCommentaire(hausse.getCommentaire().trim());
+
 		// On enlève les blancs aux extémités du nom.
 		hausse.setNom(hausse.getNom().trim());
 		if ("".equals(hausse.getNom())) {
@@ -210,7 +214,7 @@ public class HausseController {
 		}
 
 		// Vérification de l'unicité du nom
-		Optional <Hausse> optH = hausseRepository.findByNom(hausse.getNom());
+		Optional<Hausse> optH = hausseRepository.findByNom(hausse.getNom());
 		if (optH.isPresent()) {
 			Hausse hNom = optH.get();
 			if (!hNom.getId().equals(hausse.getId())) {
