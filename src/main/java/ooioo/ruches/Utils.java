@@ -81,7 +81,7 @@ public final class Utils {
 	/*
 	 * Renvoie true si str est numérique
 	 */
-	static boolean isNum(String str) {
+	public static boolean isNum(String str) {
 		if (str == null) {
 			return false;
 		}

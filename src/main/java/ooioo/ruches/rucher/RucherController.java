@@ -93,6 +93,69 @@ public class RucherController {
 	private float distMaxRuche;
 
 	/**
+	 * Appel du formulaire de saisie tabulaire du poids des ruches d'un rucher.
+	 */
+	@GetMapping("/poidsruches/{rucherId}")
+	public String poidsruches(Model model, @PathVariable long rucherId) {
+		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
+		if (rucherOpt.isPresent()) {
+			Rucher rucher = rucherOpt.get();
+			model.addAttribute(Const.RUCHER, rucher);
+			// liste des ruches de ce rucher
+			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
+			model.addAttribute(Const.RUCHES, ruches);
+		} else {
+			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
+			model.addAttribute(Const.MESSAGE,
+					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
+			return Const.INDEX;
+		}
+		return "rucher/rucherPoidsForm";
+	}
+
+	/**
+	 * Sauve la saisie tabulaire des poids des ruches d'un rucher. Récupère la liste
+	 * id ruche, poids ruche, commentaire pour créer des événements Poids Ruche.
+	 */
+	@PostMapping("/poidsruches/sauve/{rucherId}")
+	public String poidsruchesSauve(Model model, @ModelAttribute IdValeurList eve, BindingResult bindingResult,
+			@PathVariable long rucherId) {
+		if (bindingResult.hasErrors()) {
+			logger.error("Erreur formulaire poids ruches, rucher {}", rucherId);
+			model.addAttribute(Const.MESSAGE, "Erreur formulaire poids ruches");
+			return Const.INDEX;
+		}
+		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
+		if (rucherOpt.isPresent()) {
+			Rucher rucher = rucherOpt.get();
+			// On enlève les blancs aux extémités du commentaire.
+			eve.setCommentaire(eve.getCommentaire().trim());
+			for (IdValeur idVal : eve.getIdValLst()) {
+				if (!Utils.isNum(idVal.getValeur()) || (idVal.getId() == null)
+						|| (!rucher.getId().equals(rucherId))
+						) {
+					// si le champ valeur n'est pas un numérique ou si l'id est null
+					// ou si la ruche n'appartient pas au rucher, on ignore la ligne
+					continue;
+				}
+				Optional<Ruche> rucheOpt = rucheRepository.findById(idVal.getId());
+				if (rucheOpt.isPresent()) {
+					Ruche ruche = rucheOpt.get();
+					Evenement evenement = new Evenement(eve.getDate(), TypeEvenement.RUCHEPESEE, ruche, ruche.getEssaim(),
+							ruche.getRucher(), null, idVal.getValeur(), eve.getCommentaire());
+					evenementRepository.save(evenement);
+					logger.info("{} créé", evenement);
+				}
+			}
+		} else {
+			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
+			model.addAttribute(Const.MESSAGE, Const.IDRUCHERINCONNU);
+			return Const.INDEX;
+		}
+		return "redirect:/rucher/" + rucherId;
+	}
+
+	/**
 	 * Affiche les distances et temps de déplacement en voiture du rucher rucherId
 	 * aux autres ruchers actifs. Affiche aussi les distances à vol d'oiseau.
 	 */
