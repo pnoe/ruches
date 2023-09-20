@@ -96,7 +96,7 @@ public class RucherController {
 	 * Appel du formulaire de saisie tabulaire du poids des ruches d'un rucher.
 	 */
 	@GetMapping("/poidsruches/{rucherId}")
-	public String poidsruches(Model model, @PathVariable long rucherId) {
+	public String poidsruches(HttpSession session, Model model, @PathVariable long rucherId) {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
@@ -104,6 +104,7 @@ public class RucherController {
 			// liste des ruches de ce rucher
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
 			model.addAttribute(Const.RUCHES, ruches);
+			model.addAttribute("date", Utils.dateTimeDecal(session));
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
@@ -125,26 +126,28 @@ public class RucherController {
 			model.addAttribute(Const.MESSAGE, "Erreur formulaire poids ruches");
 			return Const.INDEX;
 		}
+		List<String> ruches = new ArrayList<>();
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
 			// On enlève les blancs aux extémités du commentaire.
 			eve.setCommentaire(eve.getCommentaire().trim());
 			for (IdValeur idVal : eve.getIdValLst()) {
-				if (!Utils.isNum(idVal.getValeur()) || (idVal.getId() == null)
-						|| (!rucher.getId().equals(rucherId))
-						) {
-					// si le champ valeur n'est pas un numérique ou si l'id est null
-					// ou si la ruche n'appartient pas au rucher, on ignore la ligne
+				if (!Utils.isNum(idVal.getValeur()) || (idVal.getId() == null) || (!rucher.getId().equals(rucherId))
+						|| (eve.getDate() == null)) {
+					// si le champ valeur n'est pas un numérique, ou l'id de la rucher est null,
+					// ou la ruche n'appartient pas au rucher, ou la date est null on ignore la
+					// ligne
 					continue;
 				}
 				Optional<Ruche> rucheOpt = rucheRepository.findById(idVal.getId());
 				if (rucheOpt.isPresent()) {
 					Ruche ruche = rucheOpt.get();
-					Evenement evenement = new Evenement(eve.getDate(), TypeEvenement.RUCHEPESEE, ruche, ruche.getEssaim(),
-							ruche.getRucher(), null, idVal.getValeur(), eve.getCommentaire());
+					Evenement evenement = new Evenement(eve.getDate(), TypeEvenement.RUCHEPESEE, ruche,
+							ruche.getEssaim(), ruche.getRucher(), null, idVal.getValeur(), eve.getCommentaire());
 					evenementRepository.save(evenement);
 					logger.info("{} créé", evenement);
+					ruches.add(ruche.getId().toString());
 				}
 			}
 		} else {
@@ -152,7 +155,7 @@ public class RucherController {
 			model.addAttribute(Const.MESSAGE, Const.IDRUCHERINCONNU);
 			return Const.INDEX;
 		}
-		return "redirect:/rucher/" + rucherId;
+		return "redirect:/rucher/" + rucherId + "?ruchespesee=" + String.join("-", ruches);
 	}
 
 	/**
@@ -441,7 +444,8 @@ public class RucherController {
 	 * Afficher un rucher et ses ruches.
 	 */
 	@GetMapping("/{rucherId}")
-	public String affiche(Model model, @PathVariable long rucherId) {
+	public String affiche(Model model, @PathVariable long rucherId,
+			@RequestParam(required = false) String ruchespesee) {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
@@ -514,6 +518,20 @@ public class RucherController {
 			model.addAttribute("recoltesNbRuches", recoltesNbRuches);
 			model.addAttribute("poidsListe", poidsListe);
 			model.addAttribute("poidsTotal", poidsTotal);
+			if (ruchespesee != null) {
+				if ("".equals(ruchespesee)) {
+					model.addAttribute("ruchespesee", "");
+				} else {
+					List<String> rs = new ArrayList<>();
+					for (String r : ruchespesee.split("-")) {
+						Optional<Ruche> rucheopt = rucheRepository.findById(Long.valueOf(r));
+						if (rucheopt.isPresent()) {
+							rs.add(rucheopt.get().getNom());
+						}
+					}
+					model.addAttribute("ruchespesee", String.join(", ", rs));
+				}
+			}
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,

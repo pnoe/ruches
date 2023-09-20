@@ -8,6 +8,7 @@
 	<script th:inline="javascript">
 		const pdsAvSupPdsAp = /*[[#{poidsAvantSupPoidsApres}]]*/ null;
 		document.addEventListener('DOMContentLoaded', () => {
+			document.getElementById('commentaire').focus();
 			$('#ruchesPoidsForm').validate({
 				errorClass: 'erreur-form',
 				errorPlacement: function (error, element) {
@@ -16,9 +17,13 @@
 				rules: {
 					date: {
 						required: true
+					},
+					commentaire: {
+						maxlength: 255
 					}
 				}
 			});
+		});
 	</script>
 	<style>
 		.changed {
@@ -54,41 +59,21 @@
 			<div class="col">
 				<h1 class="item">
 					<a th:href="@{'/rucher/'+${rucher.id}}" th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+					<th:block th:text="#{pesee} + ' '"></th:block>
 				</h1>
 			</div>
 		</div>
 	</div>
 	<form action="#" th:action="@{'/rucher/poidsruches/sauve/'+${rucher.id}}" method="post" id="ruchesPoidsForm">
-
-		<!--
-		<div class="form-floating mb-3">
-			<input placeholder="" class="form-control datepicker" type="text" id="date" th:name="idValLst[0].date"
-				th:value="${#temporals.format(date, 'yyyy/MM/dd HH:mm')}" /> <label class="form-label" for="date"
-				th:text="#{date}"></label>
-		</div>
-
-		<div class="form-floating mb-3">
-			<textarea class="form-control" th:name="idValLst[0].commentaire" cols="35" placeholder=""></textarea>
-			<label class="form-label" for="commentaire" th:text="#{commentaire}"></label>
-		</div>
-
-		<div class="form-floating mb-3">
-			<input placeholder="" class="form-control" id="date" th:name="idValLst[0].date"
-				type="datetime-local" /> 
-				<label class="form-label" for="date" th:text="#{date}"></label>
-		</div>
--->
-
 		<div th:replace="~{includeForm :: date}"></div>
 		<div th:replace="~{includeForm :: commentaire}"></div>
-
 		<table class="table table-bordered table-striped table-responsive" id="ruchesPoidsTbl">
 			<thead>
 				<tr>
 					<th hidden></th>
 					<th th:text="#{ruche}"></th>
 					<th th:text="#{poidskg}"></th>
-					<th th:text="#{poidskg}"></th>
+					<th th:text="#{PoidsVide}"></th>
 				</tr>
 			</thead>
 			<tbody>

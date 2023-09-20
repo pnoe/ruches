@@ -15,7 +15,13 @@
 		const listeRuches = /*[[#{listeRuches}]]*/ null;
 		const buttontextprint = /*[[#{buttontextprint}]]*/ null;
 		const buttontextcol = /*[[#{buttontextcol}]]*/ null;
+		const ruchespesee = /*[[${ruchespesee}]]*/ null;
 		document.addEventListener('DOMContentLoaded', () => {
+			if (ruchespesee) {
+				alert("Événement(s) Pesée créé(s) ruche(s)\n" + ruchespesee);
+			} else if (ruchespesee === "") {
+				alert("Pas d'événement Pesée créé");
+			}
 			document.getElementById('supprime').addEventListener('click', event => {
 				if (rucherDepot) {
 					alert(depotNPES);
@@ -140,8 +146,8 @@
 						</h6>
 					</div>
 					<div class="col">
-						<a th:href="@{'/rucher/poidsruches/'+${rucher.id}}" class="bi-table"
-							th:title="#{creerPesee}" aria-hidden="true"></a>
+						<a th:href="@{'/rucher/poidsruches/'+${rucher.id}}" class="bi-table" th:title="#{creerPesee}"
+							aria-hidden="true"></a>
 					</div>
 				</div>
 			</div>
