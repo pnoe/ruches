@@ -168,8 +168,12 @@ public class PersonneController {
 			return Const.INDEX;
 		}
 
+		// On enlève les blancs aux extémités de l'adresse.
+		personne.setAdresse(personne.getAdresse().trim());
+				
 		// Vérification de l'unicité du login si différent de ""
 		// et si la personne retrouvée en base n'est pas la personne elle même
+		personne.setLogin(personne.getLogin().trim());
 		if (!"".equals(personne.getLogin())) {
 			Personne pL = personneRepository.findByLogin(personne.getLogin());
 			if (pL != null && !pL.getId().equals(personne.getId())) {

@@ -34,7 +34,12 @@
 						}
 					},
 					email: {email: true, emailExiste: true},
-					login: 'loginExiste'
+					login: {
+						loginExiste: true,
+						normalizer: function (value) {
+							return $.trim(value);
+						}
+					}
 				}
 			});
 		});
