@@ -75,7 +75,7 @@ public class RecolteController {
 	}
 
 	/**
-	 * Appel du formulaire pour création d'une récolte
+	 * Appel du formulaire pour création d'une récolte.
 	 */
 	@GetMapping("/cree")
 	public String cree(HttpSession session, Model model) {
@@ -86,7 +86,7 @@ public class RecolteController {
 	}
 
 	/**
-	 * Appel du formulaire pour modifier une récolte
+	 * Appel du formulaire pour modifier une récolte.
 	 */
 	@GetMapping("/modifie/{recolteId}")
 	public String modifie(Model model, @PathVariable long recolteId) {
@@ -102,13 +102,15 @@ public class RecolteController {
 	}
 
 	/**
-	 * Enregistrement de la récolte
+	 * Enregistrement de la récolte.
 	 */
 	@PostMapping("/sauve")
 	public String sauve(@ModelAttribute  Recolte recolte, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return RECOLTERECOLTEFORM;
 		}
+		// On enlève les blancs aux extémités du commentaire.
+		recolte.setCommentaire(recolte.getCommentaire().trim());
 		String action = (recolte.getId() == null) ? "créée" : "modifiée";
 		recolteRepository.save(recolte);
 		logger.info("{} {}", recolte, action);

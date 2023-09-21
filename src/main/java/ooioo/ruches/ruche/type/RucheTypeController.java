@@ -133,7 +133,6 @@ public class RucheTypeController {
 		}
 		// On enlève les blancs aux extémités du commentaire.
 		rucheType.setCommentaire(rucheType.getCommentaire().trim());
-
 		// On enlève les blancs aux extémités du nom.
 		rucheType.setNom(rucheType.getNom().trim());
 		if ("".equals(rucheType.getNom())) {
