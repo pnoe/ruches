@@ -4,11 +4,6 @@ public class IdValeur {
 	private Long id;
 	private String valeur;
 
-	// @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-	// private String date;
-
-	// private String commentaire;
-
 	public Long getId() {
 		return id;
 	}
