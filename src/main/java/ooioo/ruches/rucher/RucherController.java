@@ -104,6 +104,14 @@ public class RucherController {
 			// liste des ruches de ce rucher
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
 			model.addAttribute(Const.RUCHES, ruches);
+
+			List<Evenement> evesPesee = new ArrayList<>();
+			for (Ruche r : ruches) {
+				evesPesee.add((r.getEssaim() == null) ? null :
+					evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(r.getEssaim(),
+							TypeEvenement.RUCHEPESEE));
+			}
+			model.addAttribute("evesPesee", evesPesee);
 			model.addAttribute("date", Utils.dateTimeDecal(session));
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
