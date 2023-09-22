@@ -6,7 +6,10 @@
 	<script th:replace="~{include :: jsGpPluginOpenLayers}"></script>
 	<script th:replace="~{include :: jsruchesnom('rucherListeOl')}"></script>
 	<script th:inline="javascript">
-		const ruchers = /*[[${ruchers}]]*/ null;
+		/* exported ol, ruchers, nomRuches, lesRucherstxt,	lesRuchestxt, pasderuchetxt, 
+		ruchertxt, couchemarqueursrucherstxt, ignCarteLiscense,
+		pleinecrantxt, urlruches, _csrf_token, bootstrap */
+		/* globals rucherListeIgn */		const ruchers = /*[[${ruchers}]]*/ null;
 		const nomRuches = /*[[${rucheNoms}]]*/ null;
 		const lesRucherstxt = /*[[#{Ruchers}]]*/ null;
 		const lesRuchestxt = /*[[#{Ruches}]]*/ null;

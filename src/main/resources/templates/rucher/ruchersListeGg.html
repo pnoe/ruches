@@ -4,6 +4,9 @@
 <head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 	<script th:replace="~{include :: jsruches}"></script>
 	<script th:inline="javascript">
+		/* exported google, pasderuchetxt,
+		ruchers, nomRuches,	urlruches, ruchertxt, lesRuchestxt,	ruchersmapzoom, _csrf_token
+ 		*/
 		const ruchers = /*[[${ruchers}]]*/ null;
 		const nomRuches = /*[[${rucheNoms}]]*/ null;
 		const urlruches = /*[[@{/}]]*/ null;

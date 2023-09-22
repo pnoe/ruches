@@ -8,9 +8,11 @@
 	<script th:replace="~{include :: jsruches}"></script>
 	<script th:replace="~{include :: jsruchesnom('evenementListe')}"></script>
 	<script th:inline="javascript">
+		/* exported Evenements, buttTxtPrint, buttTxtCol */
+		/* globals evenementListe, evenementSucreListe */
+		const Evenements = /*[[#{evenementssucre}]]*/null;
 		const buttTxtPrint = /*[[#{buttontextprint}]]*/null;
 		const buttTxtCol = /*[[#{buttontextcol}]]*/null;
-		const Evenements = /*[[#{evenementssucre}]]*/null;
 		document.addEventListener('DOMContentLoaded', () => {
 			evenementSucreListe();
 			evenementListe(false);

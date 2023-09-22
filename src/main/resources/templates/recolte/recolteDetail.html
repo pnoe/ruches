@@ -7,6 +7,10 @@
 	<link th:replace="~{include :: cssdatetimepicker}" />
 	<script th:replace="~{include :: localejsdatetimepicker}"></script>
 	<script th:inline="javascript">
+		/* exported
+		_csrf_token, _csrf_param_name, suppRecHauss, dateRecEpoch
+		enlevHRecDe30, urlRecHDepot, recId, total, DataTable
+		*/
 		const _csrf_token = /*[[${_csrf.token}]]*/null;
 		const _csrf_param_name = /*[[${_csrf.parameterName}]]*/null;
 		const suppRecHauss = /*[[#{supprimerrecolteethausses}]]*/null;

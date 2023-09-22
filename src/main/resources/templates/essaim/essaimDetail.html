@@ -4,13 +4,16 @@
 <head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 	<script th:replace="~{include :: jsruches}"></script>
 	<script th:inline="javascript">
+		/* exported _csrf_token, _csrf_param_name, essaimnoms, ruchesvidesnoms, recolteHausses, rucheEssaim,
+		essaimsupprecolttxt, suppessaimevetxt, suppessaimtxt,  evenements, nomessaimsvirgule,
+		nexistPasOuPasVidtxt, nomexistdejatxt, Ruchestxt, Essaimstxt, creertxt, urlessaimclone,
+		essaimid, pasderuchetxt */
 		const _csrf_token = /*[[${_csrf.token}]]*/null;
 		const _csrf_param_name = /*[[${_csrf.parameterName}]]*/null;
 		const essaimnoms = /*[[${essaimnoms}]]*/null;
 		const ruchesvidesnoms = /*[[${ruchesvidesnoms}]]*/null;
 		const recolteHausses = /*[[${recolteHausses}]]*/null;
 		const rucheEssaim = /*[[${rucheEssaim}]]*/null;
-		const PasDeRuche = /*[[${PasDeRuche}]]*/null;
 		const pasderuchetxt = /*[[#{essaimPasRuche}]]*/null;
 		const essaimsupprecolttxt = /*[[#{essaimsupprimerecolte}]]*/null;
 		const suppessaimevetxt = /*[[#{supprimeressaimevenements}]]*/null;

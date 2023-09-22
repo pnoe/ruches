@@ -7,10 +7,11 @@
 	<link th:replace="~{include :: cssjquerydaterangepicker}" />
 	<script th:replace="~{include :: jsruchesnom('evenementListe')}"></script>
 	<script th:inline="javascript">
+		/* exported Evenements, buttontextprint, buttontextcol */
+		/* globals evenementListe */
 		const Evenements = /*[[#{evenementstraitement}]]*/ null;
 		const buttontextprint = /*[[#{buttontextprint}]]*/null;
 		const buttontextcol = /*[[#{buttontextcol}]]*/null;
-		const url = /*[[@{'/evenement/essaim/listeTraitement/'}]]*/null;
 		document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById('groupe').addEventListener('click', event => {
 				location = location.href.slice(0, location.href.lastIndexOf('/'))

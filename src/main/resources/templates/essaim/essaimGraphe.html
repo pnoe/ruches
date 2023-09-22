@@ -5,6 +5,9 @@
 	<script th:replace="~{include :: d3}"></script>
 	<script th:replace="~{include :: jsruches}"></script>
 	<script th:inline="javascript">
+		/* exported
+		data, essaimnom, essaimtxt,	ruchetxt, ruchertxt,
+		MielKgtxt, MielDescKgtxt, Actif, Inactif, urlessaim	*/
 		const data = /*[(${essaimTree})]*/ null;
 		const essaimnom = /*[[${essaim.nom}]]*/ null;
 		const essaimtxt = /*[[#{essaim}]]*/ null;

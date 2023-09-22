@@ -6,7 +6,6 @@
 	<link th:replace="~{include :: cssdatetimepicker}" />
 	<script th:replace="~{include :: localejsdatetimepicker}"></script>
 	<script th:inline="javascript">
-		const pdsAvSupPdsAp = /*[[#{poidsAvantSupPoidsApres}]]*/ null;
 		document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById('commentaire').focus();
 			$('#ruchesPoidsForm').validate({

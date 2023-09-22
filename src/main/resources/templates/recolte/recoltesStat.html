@@ -8,6 +8,7 @@
 	<script th:replace="~{include :: d3-interpolate}"></script>
 	<script th:replace="~{include :: d3-scale-chromatic}"></script>
 	<script th:inline="javascript">
+		/* exported	d3, Chart, poidsmiel, nomsessaims, poidsTotal */
 		const poidsmiel = /*[[${poids}]]*/ null;
 		const nomsessaims = /*[[${noms}]]*/ null;
 		const poidsTotal = /*[[${poidsTotal}]]*/ null;

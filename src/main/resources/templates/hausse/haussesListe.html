@@ -32,10 +32,10 @@
 					{extend: 'colvis', text: buttTxtCol}
 				]
 			});
-			function updateLinks(e, dt, type, indexes) {
+			function updateLinks(e, dt, type) {
 				if (type === 'row') {
 					let noms = '';
-					table.rows({selected: true}).data().pluck(0).each(function (value, index) {
+					table.rows({selected: true}).data().pluck(0).each(function (value) {
 						const a = document.createElement('template');
 						a.innerHTML = value;
 						noms += a.content.children[0].getAttribute('href').

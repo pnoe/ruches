@@ -4,6 +4,7 @@
 <head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 	<script th:replace="~{include :: jsruches}"></script>
 	<script th:inline="javascript">
+		/* exported urlRetrait, urlAjout, recolteId, selHausRet, selHausAjout, DataTable */
 		const urlRetrait = /*[[@{/recolte/retraitHausses/}]]*/null;
 		const urlAjout = /*[[@{/recolte/ajoutHausses/}]]*/null;
 		const recolteId = /*[[${recolte.id}]]*/null;
