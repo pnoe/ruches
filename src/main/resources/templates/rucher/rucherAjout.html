@@ -3,6 +3,7 @@
 
 <head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 	<script th:inline="javascript">
+		/* globals DataTable */
 		const urlAjout = /*[[@{/rucher/ruches/ajouter/}]]*/null;
 		const rucherId = /*[[${rucher.id}]]*/null;
 		const selRuchesAjout = /*[[#{selectruchesajout}]]*/null;

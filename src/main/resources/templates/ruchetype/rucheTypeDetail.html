@@ -3,6 +3,7 @@
 
 <head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 	<script th:inline="javascript">
+		/* globals DataTable */
 		const rucheTypeNom = /*[[${rucheType.nom}]]*/null;
 		const rucheTypetxt = /*[[#{rucheType}]]*/null;
 		const listeRuches = /*[[#{listeRuches}]]*/null;

@@ -3,6 +3,7 @@
 
 <head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 	<script th:inline="javascript">
+		/* globals DataTable */
 		const depotNPES = /*[[#{depotNePeutEtreSupprime}]]*/ null;
 		const rucherNSRR = /*[[#{ruchernonsupprimerefrecolte}]]*/ null;
 		const suppRucherEtEve = /*[[#{supprimerruchereteven}]]*/ null;
