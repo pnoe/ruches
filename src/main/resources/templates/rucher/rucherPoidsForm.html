@@ -25,6 +25,10 @@
 		});
 	</script>
 	<style>
+		.inputpds {
+			width: 5em;
+		}
+
 		.changed {
 			background-color: #a67c00;
 		}
@@ -75,19 +79,21 @@
 					<th th:text="#{PoidsVide}"></th>
 					<th th:text="#{poidskg}"></th>
 					<th th:text="#{Precedent}"></th>
+					<th th:text="#{essaim}"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="ruche, itemStat : ${ruches}" th:with="p=${evesPesee[itemStat.index]}">
 					<td hidden><input type="number" th:name="|idValLst[${itemStat.index}].id|" th:value="${ruche.id}" />
 					</td>
-					<td><a th:href="@{'/ruche/'+${ruche.id}}" th:text="${ruche.nom}"></a></td>
+					<td th:text="${ruche.nom}"></td>
 					<td th:text="${ruche.poidsVide}"></td>
-					<td><input type="number" th:min="${ruche.poidsVide}" max="80" step="0.001"
+					<td><input class="inputpds" type="number" th:min="${ruche.poidsVide}" max="80" step="0.001"
 							th:name="|idValLst[${itemStat.index}].valeur|" /></td>
-					<td><a th:href="@{'/evenement/'+${p.id}}" th:text="(p == null) ? '' :
+					<td th:text="(${p} == null) ? '' :
 						${#numbers.formatDecimal(p.valeur,1,2)}+' '+${#temporals.format(p.date,'dd/MM/yyyy')}">
 					</td>
+					<td th:text="${ruche.essaim?.nom}"></td>
 				</tr>
 			</tbody>
 		</table>

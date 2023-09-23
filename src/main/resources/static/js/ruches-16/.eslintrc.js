@@ -19,6 +19,7 @@
     	"curly": "error",
     	"dot-notation": "error",
     	"eqeqeq": "error",
+    	"for-direction": "error",
     	"func-style": ["error", "declaration"],
     	"no-console": "error",
     	"no-constant-binary-expression": "error",
