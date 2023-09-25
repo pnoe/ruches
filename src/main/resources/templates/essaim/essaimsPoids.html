@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+	<script th:replace="~{include :: jsChart}"></script>
+	<script th:replace="~{include :: luxon}"></script>
+	<script th:replace="~{include :: chartjs-adapter}"></script>
+	<script th:replace="~{include :: d3-color}"></script>
+	<script th:replace="~{include :: d3-interpolate}"></script>
+	<script th:replace="~{include :: d3-scale-chromatic}"></script>
+	<script th:replace="~{include :: jsruches}"></script>
+	<script th:inline="javascript">
+		/* exported essaim, poids, dates */
+		const essaim = /*[[${essaim}]]*/ null;
+		const poids = /*[[${poids}]]*/ null;
+		const dates = /*[[${dates}]]*/ null;
+	</script>
+</head>
+
+<body>
+	<nav th:replace="~{navbar::navbar}"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<canvas id="ctx"></canvas>
+	</div>
+	<footer th:replace="~{include::footer}"></footer>
+</body>
+
+</html>

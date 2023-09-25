@@ -1,6 +1,7 @@
 package ooioo.ruches.essaim;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +74,33 @@ public class EssaimController {
 
 	private static final String cree = "{} créé";
 
+	/**
+	 * Graphe affichant les poids d'une ruche.
+	 */
+	@GetMapping("/poids/{essaimId}")
+	public String poids(Model model, @PathVariable long essaimId) {
+		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
+		if (essaimOpt.isPresent()) {
+			List<Evenement> evesPesee = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
+					TypeEvenement.RUCHEPESEE);
+			List<Long> dates = new ArrayList<>();
+			List<Float> poids = new ArrayList<>();
+			for (Evenement e : evesPesee) {
+				dates.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
+				poids.add(Float.parseFloat(e.getValeur()));
+			}
+			model.addAttribute("dates", dates);
+			model.addAttribute("poids", poids);
+			model.addAttribute("essaim", essaimOpt.get());
+			return "essaim/essaimsPoids";
+		} else {
+			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
+			model.addAttribute(Const.MESSAGE,
+					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
+			return Const.INDEX;
+		}
+	}
+
 	/*
 	 * Historique de la mise en ruchers d'un essaim. Les événements affichés dans
 	 * l'historique : - les mise en rucher de ruches ou l'essaim apparait - la
@@ -106,6 +134,7 @@ public class EssaimController {
 	 *
 	 * @param rucherId optionnel pour ne prendre en compte que les hausses de
 	 * récolte dans ce rucher.
+	 * 
 	 * @param masquerInactif pour masquer les essaims inactifs.
 	 */
 	@GetMapping("/statistiques")
@@ -147,10 +176,14 @@ public class EssaimController {
 
 	/*
 	 * Enregistrement de l'essaimage.
+	 * 
 	 * @param essaimId l'id de l'essaim qui essaime.
+	 * 
 	 * @param date la date saisie dans le formulaire d'essaimage.
+	 * 
 	 * @param nom le nom du nouvel essaim restant dans la ruche saisi dans le
 	 * formulaire d'essaimage.
+	 * 
 	 * @param commentaire le commentaire saisi dans le formulaire d'essaimage.
 	 */
 	@PostMapping("/essaime/sauve/{essaimId}")
@@ -242,9 +275,9 @@ public class EssaimController {
 	public String liste(HttpSession session, Model model) {
 		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
 		if (voirInactif != null && (boolean) voirInactif) {
-			 model.addAttribute(ESSAIMSRRR, essaimRepository.findEssaimRucheRucherOrderByNom());
+			model.addAttribute(ESSAIMSRRR, essaimRepository.findEssaimRucheRucherOrderByNom());
 		} else {
-			 model.addAttribute(ESSAIMSRRR, essaimRepository.findEssaimActifRucheRucherOrderByNom());
+			model.addAttribute(ESSAIMSRRR, essaimRepository.findEssaimActifRucheRucherOrderByNom());
 		}
 		return "essaim/essaimsListe";
 	}
@@ -395,7 +428,7 @@ public class EssaimController {
 			}
 			essaimParent = essaimParent.getSouche();
 		}
-		String action = (essaim.getId() == null)?"créé":"modifié";
+		String action = (essaim.getId() == null) ? "créé" : "modifié";
 		essaimRepository.save(essaim);
 		logger.info("{} {}", essaim, action);
 		return "redirect:/essaim/" + essaim.getId();
@@ -526,7 +559,7 @@ public class EssaimController {
 				model.addAttribute("rucheSource", rucheSource);
 				if (rucheSource != null) {
 					// Envoyer la date max événements ajout ruchers pour imposer une date de
-					//  l'événement essaim mis dans rucher postérieure à cette date.
+					// l'événement essaim mis dans rucher postérieure à cette date.
 					Evenement evenRuche = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
 							ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER);
 					Evenement evenRucheSource = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(rucheSource,

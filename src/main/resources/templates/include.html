@@ -1,104 +1,96 @@
 <!DOCTYPE HTML>
 <html xmlns:th="https://www.thymeleaf.org">
-	
+
 <head th:fragment="common_header(scripts,styles,links)">
-<title th:text="#{Ruches}"></title>
-<meta charset="UTF-8" />
-<link rel="manifest" th:href="@{/js/manifest.webmanifest}" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" type="image/png" th:href="@{/images/ruchesicon.png}" />
-<link rel="stylesheet" type="text/css" media="all"
-	th:href="@{/css/ruches-1.css}" />
-<link rel="stylesheet" type="text/css" media="all"
-	th:href="@{/js/datatables-1.13.6-2/datatables.min.css}" />
-<link rel="stylesheet" type="text/css" media="all"
-	th:href="@{/images/bootstrap-icons-1.10.2/bootstrap-icons.css}" />
-<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-<script th:src="@{/js/jquery.validate.min-1.19.5.js}"></script>
-<script th:src="@{/js/bootstrap-5.3.2/bootstrap.bundle.min.js}"></script>
-<link rel="stylesheet" type="text/css" media="all"
-	th:href="@{/js/bootstrap-5.3.2/bootstrap.min.css}" />
-<script th:src="@{/js/datatables-1.13.6-2/datatables.min.js}"></script>
-<script th:inline="javascript">
-	function updateTheme() {
-		document.querySelector('html').setAttribute('data-bs-theme',
-		window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-	}
-	window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateTheme);
-	updateTheme();
-	const urlValMessFr = /*[[@{/js/jquery.validate-1.19.5-messages_fr.min.js}]]*/null;
-	const urlDatatMessFr = /*[[@{/js/datatables_fr.json}]]*/null;
-	const datatPageLength = /*[[${@environment.getProperty('datatables.pageLength')}]]*/null;
-	const tout = /*[[#{Tout}]]*/null;
-	if ((window.navigator.language.indexOf('fr') !== -1)) {
-		const script = document.createElement('script');
-		script.src = urlValMessFr;
-		script.async = true;
-		document.head.appendChild(script);
+	<title th:text="#{Ruches}"></title>
+	<meta charset="UTF-8" />
+	<link rel="manifest" th:href="@{/js/manifest.webmanifest}" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/png" th:href="@{/images/ruchesicon.png}" />
+	<link rel="stylesheet" type="text/css" media="all" th:href="@{/css/ruches-1.css}" />
+	<link rel="stylesheet" type="text/css" media="all" th:href="@{/js/datatables-1.13.6-2/datatables.min.css}" />
+	<link rel="stylesheet" type="text/css" media="all"
+		th:href="@{/images/bootstrap-icons-1.10.2/bootstrap-icons.css}" />
+	<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+	<script th:src="@{/js/jquery.validate.min-1.19.5.js}"></script>
+	<script th:src="@{/js/bootstrap-5.3.2/bootstrap.bundle.min.js}"></script>
+	<link rel="stylesheet" type="text/css" media="all" th:href="@{/js/bootstrap-5.3.2/bootstrap.min.css}" />
+	<script th:src="@{/js/datatables-1.13.6-2/datatables.min.js}"></script>
+	<script th:inline="javascript">
+		function updateTheme() {
+			document.querySelector('html').setAttribute('data-bs-theme',
+				window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+		}
+		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateTheme);
+		updateTheme();
+		const urlValMessFr = /*[[@{/js/jquery.validate-1.19.5-messages_fr.min.js}]]*/null;
+		const urlDatatMessFr = /*[[@{/js/datatables_fr.json}]]*/null;
+		const datatPageLength = /*[[${@environment.getProperty('datatables.pageLength')}]]*/null;
+		const tout = /*[[#{Tout}]]*/null;
+		if ((window.navigator.language.indexOf('fr') !== -1)) {
+			const script = document.createElement('script');
+			script.src = urlValMessFr;
+			script.async = true;
+			document.head.appendChild(script);
+			$.extend(true, $.fn.dataTable.defaults, {
+				language: {
+					url: urlDatatMessFr
+				},
+			});
+		}
 		$.extend(true, $.fn.dataTable.defaults, {
-			language : {
-				url : urlDatatMessFr
-			},
+			stateSave: true,
+			// Attention au formattage, respecter l'espace entre les crochets pour qu'il ne soit pas
+			//  traités par Thymeleaf
+			lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, tout] ],
+			pageLength: parseInt(datatPageLength),
 		});
-	}
-	$.extend(true, $.fn.dataTable.defaults, {
-		stateSave : true,
-		lengthMenu : [ [ 10, 25, 50, 100, -1 ], [ 10, 25, 50, 100, tout ] ],
-		pageLength : parseInt(datatPageLength),
-	});
-</script>
-<th:block th:replace="${scripts} ?: ~{}" />
-<th:block th:replace="${styles} ?: ~{}" />
-<th:block th:replace="${links} ?: ~{}" />
+	</script>
+	<th:block th:replace="${scripts} ?: ~{}" />
+	<th:block th:replace="${styles} ?: ~{}" />
+	<th:block th:replace="${links} ?: ~{}" />
 </head>
 
-<script th:fragment="jsruches" th:src=
-	"@{'/js/ruches-16/' + ${#strings.substringAfter(#execInfo.processedTemplateName,'/')} + '.js'}">
-</script>
+<script th:fragment="jsruches"
+	th:src="@{'/js/ruches-16/' + ${#strings.substringAfter(#execInfo.processedTemplateName,'/')} + '.js'}">
+	</script>
 <script th:fragment="jsruchesnom(nom)" th:src="@{'/js/ruches-16/' + ${nom} + '.js'}"></script>
 
 <script th:fragment="d3" th:src="@{/js/d3.min-7.8.4.js}"></script>
 <script th:fragment="d3-color" th:src="@{/js/d3-color.min-3.1.0.js}"></script>
-<script th:fragment="d3-interpolate"
-	th:src="@{/js/d3-interpolate.min-3.0.1.js}"></script>
-<script th:fragment="d3-scale-chromatic"
-	th:src="@{/js/d3-scale-chromatic.min-3.0.1.js}"></script>
+<script th:fragment="d3-interpolate" th:src="@{/js/d3-interpolate.min-3.0.1.js}"></script>
+<script th:fragment="d3-scale-chromatic" th:src="@{/js/d3-scale-chromatic.min-3.0.1.js}"></script>
 
 <script th:fragment="jsol" th:src="@{/js/ol-6.15.1/ol.js}"></script>
-<link th:fragment="cssol" rel="stylesheet" type="text/css" media="all"
-	th:href="@{/js/ol-6.15.1/ol.css}" />
+<link th:fragment="cssol" rel="stylesheet" type="text/css" media="all" th:href="@{/js/ol-6.15.1/ol.css}" />
 
 <!--/* th:data-key="${@environment.getProperty('ign.data.key')}" */-->
 <!--/* th:attr="data-url=@{/js/autoconf.js}" */-->
 
-<script th:fragment="jsGpPluginOpenLayers"
-	th:attr="data-url=@{/js/autoconf.js}"
+<script th:fragment="jsGpPluginOpenLayers" th:attr="data-url=@{/js/autoconf.js}"
 	th:src="@{/js/GpPluginOpenLayers-3.2.22/GpPluginOpenLayers.js}"></script>
 
-<script th:fragment="jsGpOsmPluginOpenLayers"
-	th:src="@{/js/GpPluginOpenLayers-3.2.22/GpPluginOpenLayers.js}"></script>
-<link th:fragment="cssGpPluginOpenLayers" rel="stylesheet"
-	type="text/css" media="all"
+<script th:fragment="jsGpOsmPluginOpenLayers" th:src="@{/js/GpPluginOpenLayers-3.2.22/GpPluginOpenLayers.js}"></script>
+<link th:fragment="cssGpPluginOpenLayers" rel="stylesheet" type="text/css" media="all"
 	th:href="@{/js/GpPluginOpenLayers-3.2.22/GpPluginOpenLayers.css}" />
 
-<script defer th:fragment="dom-to-image"
-	th:src="@{/js/dom-to-image-more.min-2.15.0.js}"></script>
-	
+<script defer th:fragment="dom-to-image" th:src="@{/js/dom-to-image-more.min-2.15.0.js}"></script>
+
 <script defer th:fragment="jspdf" th:src="@{/js/jspdf-2.5.1.umd.min.js}"></script>
 
 <script th:fragment="jsChart" th:src="@{/js/chart.umd.min-4.4.0.js}"></script>
 
-<link th:fragment="weather-icons" rel="stylesheet" type="text/css"
-	media="all"
+<script th:fragment="luxon" th:src="@{/js/luxon-3.4.3.js}"></script>
+<script th:fragment="chartjs-adapter" th:src="@{/js/chartjs-adapter-luxon-1.3.1.js}"></script>
+
+<link th:fragment="weather-icons" rel="stylesheet" type="text/css" media="all"
 	th:href="@{/css/weather-icons-2.0.12/css/weather-icons.min.css}" />
-<link th:fragment="weather-icons-wind" rel="stylesheet" type="text/css"
-	media="all"
+<link th:fragment="weather-icons-wind" rel="stylesheet" type="text/css" media="all"
 	th:href="@{/css/weather-icons-2.0.12/css/weather-icons-wind.min.css}" />
 
-<script th:fragment="jsdatetimepicker" defer
-	th:src="@{/js/jquery.datetimepicker.full.min-2.5.21.js}"></script>
-<link th:fragment="cssdatetimepicker" rel="stylesheet" type="text/css"
-	media="all" th:href="@{/js/jquery.datetimepicker.min-2.5.21.css}" />
+<script th:fragment="jsdatetimepicker" defer th:src="@{/js/jquery.datetimepicker.full.min-2.5.21.js}"></script>
+<link th:fragment="cssdatetimepicker" rel="stylesheet" type="text/css" media="all"
+	th:href="@{/js/jquery.datetimepicker.min-2.5.21.css}" />
 <script th:fragment="localejsdatetimepicker">
 	document.addEventListener('DOMContentLoaded', () => {
 		$('#date').datetimepicker();
@@ -108,11 +100,9 @@
 
 <script th:fragment="jquerydaterangepicker" defer
 	th:src="@{/js/jquery-date-range-picker-0.21.1/jquery.daterangepicker.min.js}"></script>
-<link th:fragment="cssjquerydaterangepicker" rel="stylesheet"
-	type="text/css" media="all"
+<link th:fragment="cssjquerydaterangepicker" rel="stylesheet" type="text/css" media="all"
 	th:href="@{/js/jquery-date-range-picker-0.21.1/daterangepicker.min.css}" />
-<script th:fragment="moment" defer
-	th:src="@{/js/moment-min-2.29.4.js}"></script>
+<script th:fragment="moment" defer th:src="@{/js/moment-min-2.29.4.js}"></script>
 
 <body>
 	<footer th:fragment="footer">
@@ -120,4 +110,5 @@
 		<a target="_blank" href="https://gitlab.com/ruches/ruches" th:text="'Ruches ' + ${buildTime}"></a>
 	</footer>
 </body>
+
 </html>

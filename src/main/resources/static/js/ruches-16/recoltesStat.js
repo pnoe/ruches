@@ -23,24 +23,20 @@ function interpolateColors(dataLength, colorScale, colorRangeInfo) {
 
 document.addEventListener('DOMContentLoaded', () => {
 	const lang = navigator.language;
-	const digits2 = {maximumFractionDigits:2};
-	const colorScale = d3.interpolateRainbow;
-	const colorRangeInfo = {
-		colorStart: 0,
-		colorEnd: 1,
-		useEndAsStart: false
-	};
-	const colors = interpolateColors(poidsmiel.length, colorScale, colorRangeInfo);
-	const data = {
-		datasets: [{
-			data: poidsmiel,
-			backgroundColor: colors
-		}],
-		labels: nomsessaims
-	};
+	const digits2 = { maximumFractionDigits: 2 };
 	new Chart('ctx', {
 		type: 'doughnut',
-		data: data,
+		data: {
+			datasets: [{
+				data: poidsmiel,
+				backgroundColor: interpolateColors(poidsmiel.length, d3.interpolateRainbow, {
+					colorStart: 0,
+					colorEnd: 1,
+					useEndAsStart: false
+				})
+			}],
+			labels: nomsessaims
+		},
 		options: {
 			plugins: {
 				legend: {
