@@ -44,6 +44,7 @@
 		<table class="table table-sm table-bordered">
 			<thead>
 				<tr>
+					<th th:text="#{tel}"></th>
 					<th th:text="#{email}"></th>
 					<th th:text="#{adresse}"></th>
 					<th th:text="#{login}"></th>
@@ -53,6 +54,7 @@
 			</thead>
 			<tbody>
 				<tr>
+					<td th:text="${personne.tel}"></td>
 					<td><a th:href="@{'mailto:'+${personne.email}(subject=Ruches,body=${personne.prenom})}"
 							th:text="${personne.email}"></a></td>
 					<td th:text="${personne.adresse}"></td>

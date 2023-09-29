@@ -55,6 +55,7 @@
 				<tr>
 					<th th:text="#{nom}"></th>
 					<th th:text="#{prenom}"></th>
+					<th th:text="#{tel}"></th>
 					<th th:text="#{email}"></th>
 					<th th:text="#{adresse}"></th>
 					<th th:text="#{login}"></th>
@@ -66,6 +67,7 @@
 				<tr th:each="personne : ${personnes}">
 					<td><a th:href="@{'/personne/'+${personne.id}}" th:text="${personne.nom}"></a></td>
 					<td th:text="${personne.prenom}"></td>
+					<td th:utext="${personne.tel}"></td>
 					<td th:text="${personne.email}"></td>
 					<td th:text="${personne.adresse}"></td>
 					<td th:text="${personne.login}"></td>
