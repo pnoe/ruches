@@ -54,7 +54,7 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td th:text="${personne.tel}"></td>
+					<td th:utext="${#strings.replace(#strings.escapeXml(personne.tel),'&#10;','<br/>')}"></td>
 					<td><a th:href="@{'mailto:'+${personne.email}(subject=Ruches,body=${personne.prenom})}"
 							th:text="${personne.email}"></a></td>
 					<td th:text="${personne.adresse}"></td>
