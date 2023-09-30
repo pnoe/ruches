@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -100,7 +103,55 @@ public class EssaimController {
 			return Const.INDEX;
 		}
 	}
+	
+	
+	/**
+	 * Graphe affichant les poids des ruches.
+	 */
+	/*
+	@GetMapping("/poids/{essaimIds}")
+	public String poids(HttpSession session, Model model, @PathVariable Long[] essaimIds) {
+		model.addAttribute("essaimIds", essaimIds);
+		return "essaim/essaimsPoids";
+	}
+	*/
 
+	/**
+	 * Date et poids d'une ruche (appel XMLHttpRequest).
+	 */
+/*
+	@GetMapping("/poidsxmlhr/{essaimId}")
+	public ResponseEntity<Object> poidsxmlhr(Model model, @PathVariable long essaimId) {
+		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
+		if (essaimOpt.isPresent()) {
+			List<Evenement> evesPesee = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
+					TypeEvenement.RUCHEPESEE);
+			List<Long> dates = new ArrayList<>();
+			List<Float> poids = new ArrayList<>();
+			for (Evenement e : evesPesee) {
+				dates.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
+				poids.add(Float.parseFloat(e.getValeur()));
+			}
+			ObjectMapper objectMapper = new ObjectMapper();
+			Map<String, String> data = new HashMap<>();
+			try {
+				data.put("dates", objectMapper.writeValueAsString(dates));
+				data.put("poids", objectMapper.writeValueAsString(poids));
+				data.put("essaim", objectMapper.writeValueAsString(essaimOpt.get()));
+				return ResponseEntity.ok(data);
+			} catch (JsonProcessingException e) {
+				logger.error(e.getMessage());
+				return ResponseEntity.internalServerError().build();
+			}
+		} else {
+			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
+			model.addAttribute(Const.MESSAGE,
+					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
+			return ResponseEntity.notFound().build();
+		}
+	}
+*/ 
+	
 	/*
 	 * Historique de la mise en ruchers d'un essaim. Les événements affichés dans
 	 * l'historique : - les mise en rucher de ruches ou l'essaim apparait - la
@@ -174,17 +225,14 @@ public class EssaimController {
 		return "essaim/essaimEssaimerForm";
 	}
 
-	/*
+	/**
 	 * Enregistrement de l'essaimage.
 	 * 
-	 * @param essaimId l'id de l'essaim qui essaime.
-	 * 
-	 * @param date la date saisie dans le formulaire d'essaimage.
-	 * 
-	 * @param nom le nom du nouvel essaim restant dans la ruche saisi dans le
-	 * formulaire d'essaimage.
-	 * 
-	 * @param commentaire le commentaire saisi dans le formulaire d'essaimage.
+	 * @param essaimId    l'id de l'essaim qui essaime
+	 * @param date        la date saisie dans le formulaire d'essaimage
+	 * @param nom         le nom du nouvel essaim restant dans la ruche saisi dans
+	 *                    le formulaire d'essaimage
+	 * @param commentaire le commentaire saisi dans le formulaire d'essaimage
 	 */
 	@PostMapping("/essaime/sauve/{essaimId}")
 	public String essaimeSauve(Model model, @PathVariable long essaimId, @RequestParam String date,

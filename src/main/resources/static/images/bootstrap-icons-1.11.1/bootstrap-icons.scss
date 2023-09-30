@@ -1,0 +1,80 @@
+/*!
+ * Bootstrap Icons v1.11.1 (https://icons.getbootstrap.com/)
+ * Copyright 2019-2023 The Bootstrap Authors
+ * Licensed under MIT (https://github.com/twbs/icons/blob/main/LICENSE)
+ */
+
+$bootstrap-icons-font: "bootstrap-icons" !default;
+$bootstrap-icons-font-dir: "./fonts" !default;
+$bootstrap-icons-font-file: "#{$bootstrap-icons-font-dir}/#{$bootstrap-icons-font}" !default;
+$bootstrap-icons-font-hash: "24e3eb84d0bcaf83d77f904c78ac1f47" !default;
+$bootstrap-icons-font-src: url("#{$bootstrap-icons-font-file}.woff2?#{$bootstrap-icons-font-hash}") format("woff2"),
+                           url("#{$bootstrap-icons-font-file}.woff?#{$bootstrap-icons-font-hash}") format("woff") !default;
+
+@font-face {
+  font-display: block;
+  font-family: $bootstrap-icons-font;
+  src: $bootstrap-icons-font-src;
+}
+
+.bi::before,
+[class^="bi-"]::before,
+[class*=" bi-"]::before {
+  display: inline-block;
+  font-family: $bootstrap-icons-font !important;
+  font-style: normal;
+  font-weight: normal !important;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  vertical-align: -.125em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+$bootstrap-icons-map: (
+  "arrow-clockwise": "\f116",
+  "arrow-up-right-circle": "\f141",
+  "arrow-up-right-square": "\f143",
+  "arrows-angle-contract": "\f149",
+  "bar-chart": "\f17e",
+  "book": "\f194",
+  "box-arrow-in-down-right": "\f1bb",
+  "box-arrow-left": "\f1c2",
+  "box-arrow-up-left": "\f1c4",
+  "bucket": "\f1da",
+  "bug": "\f1dc",
+  "calendar-check": "\f1e2",
+  "chat-text": "\f267",
+  "chevron-bar-down": "\f274",
+  "collection": "\f2cc",
+  "diagram-3": "\f2ee",
+  "dice-1": "\f2f3",
+  "geo-alt": "\f3e8",
+  "globe": "\f3ee",
+  "google": "\f3f0",
+  "graph-up": "\f3f2",
+  "grid-3x2-gap": "\f3f6",
+  "house": "\f425",
+  "justify": "\f44b",
+  "layout-three-columns": "\f465",
+  "list-stars": "\f476",
+  "list-ul": "\f478",
+  "pencil": "\f4cb",
+  "pie-chart": "\f4e9",
+  "reply-all": "\f51e",
+  "square-half": "\f583",
+  "sun": "\f5a2",
+  "table": "\f5aa",
+  "trash": "\f5de",
+  "wifi": "\f61c",
+  "file-pdf": "\f640",
+  "plus-lg": "\f64d",
+  "question-lg": "\f64e",
+  "filetype-png": "\f758",
+  "truck-front": "\f821",
+);
+
+@each $icon, $codepoint in $bootstrap-icons-map {
+  .bi-#{$icon}::before { content: $codepoint; }
+}
