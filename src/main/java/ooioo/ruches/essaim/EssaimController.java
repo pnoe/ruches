@@ -95,6 +95,8 @@ public class EssaimController {
 			model.addAttribute("dates", dates);
 			model.addAttribute("poids", poids);
 			model.addAttribute("essaim", essaimOpt.get());
+			Ruche ruche = rucheRepository.findByEssaimId(essaimId);
+			model.addAttribute("ruche", ruche);
 			return "essaim/essaimsPoids";
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
@@ -103,55 +105,7 @@ public class EssaimController {
 			return Const.INDEX;
 		}
 	}
-	
-	
-	/**
-	 * Graphe affichant les poids des ruches.
-	 */
-	/*
-	@GetMapping("/poids/{essaimIds}")
-	public String poids(HttpSession session, Model model, @PathVariable Long[] essaimIds) {
-		model.addAttribute("essaimIds", essaimIds);
-		return "essaim/essaimsPoids";
-	}
-	*/
 
-	/**
-	 * Date et poids d'une ruche (appel XMLHttpRequest).
-	 */
-/*
-	@GetMapping("/poidsxmlhr/{essaimId}")
-	public ResponseEntity<Object> poidsxmlhr(Model model, @PathVariable long essaimId) {
-		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
-		if (essaimOpt.isPresent()) {
-			List<Evenement> evesPesee = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
-					TypeEvenement.RUCHEPESEE);
-			List<Long> dates = new ArrayList<>();
-			List<Float> poids = new ArrayList<>();
-			for (Evenement e : evesPesee) {
-				dates.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
-				poids.add(Float.parseFloat(e.getValeur()));
-			}
-			ObjectMapper objectMapper = new ObjectMapper();
-			Map<String, String> data = new HashMap<>();
-			try {
-				data.put("dates", objectMapper.writeValueAsString(dates));
-				data.put("poids", objectMapper.writeValueAsString(poids));
-				data.put("essaim", objectMapper.writeValueAsString(essaimOpt.get()));
-				return ResponseEntity.ok(data);
-			} catch (JsonProcessingException e) {
-				logger.error(e.getMessage());
-				return ResponseEntity.internalServerError().build();
-			}
-		} else {
-			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
-			model.addAttribute(Const.MESSAGE,
-					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
-			return ResponseEntity.notFound().build();
-		}
-	}
-*/ 
-	
 	/*
 	 * Historique de la mise en ruchers d'un essaim. Les événements affichés dans
 	 * l'historique : - les mise en rucher de ruches ou l'essaim apparait - la

@@ -24,6 +24,19 @@
 	<br />
 	<div class="container-fluid">
 		<canvas id="ctx"></canvas>
+		<div class="row">
+			<div class="col text-center">
+				<h1 class="item">
+					<a th:href="@{'/essaim/'+${essaim.id}}" th:text="#{essaim}+' '+${essaim.nom}"></a>
+					<th:block th:text="' '+#{RUCHEPESEE}"></th:block>
+
+					<th:block th:if="${ruche}" th:text="' ('+#{vide}+' '
+					+${#numbers.formatDecimal(ruche.poidsVide,1,2,'COMMA')}+' )'
+					"></th:block>
+
+				</h1>
+			</div>
+		</div>
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
