@@ -19,7 +19,15 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 	Iterable<Essaim> findByActif(boolean actif);
 
 	Collection<Nom> findAllProjectedBy();
-
+	
+	@Query(value = """
+			select essaim
+			  from Essaim es, Ruche r
+			  where r.essaim = es
+			   and r.rucher.id = :rucherId
+			""")
+	List<Essaim> findByRucherId(Long rucherId);
+	
 	// Essaims inactifs sans événement dispersion
 	@Query(value = """
 			select essaim

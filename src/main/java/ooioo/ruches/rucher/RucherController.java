@@ -5,6 +5,7 @@ import java.text.DecimalFormatSymbols;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,6 +41,8 @@ import ooioo.ruches.Const;
 import ooioo.ruches.LatLon;
 import ooioo.ruches.Nom;
 import ooioo.ruches.Utils;
+import ooioo.ruches.essaim.Essaim;
+import ooioo.ruches.essaim.EssaimRepository;
 import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
@@ -65,6 +68,8 @@ public class RucherController {
 
 	@Autowired
 	private RucherRepository rucherRepository;
+	@Autowired
+	private EssaimRepository essaimRepo;
 	@Autowired
 	private RucheRepository rucheRepository;
 	@Autowired
@@ -93,6 +98,47 @@ public class RucherController {
 	private float distMaxRuche;
 
 	/**
+	 * Graphe affichant les poids des ruches d'un rucher.
+	 */
+	@GetMapping("/poids/{rucherId}")
+	public String poids(Model model, @PathVariable long rucherId) {
+		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
+		if (rucherOpt.isPresent()) {
+			Rucher rucher = rucherOpt.get();
+			model.addAttribute(Const.RUCHER, rucher);
+			Iterable<Essaim> essaims = essaimRepo.findByRucherId(rucherId);
+			List<List<Long>> dates = new ArrayList<>();
+			List<List<Float>> poids = new ArrayList<>();
+			List<Ruche> ruches = new ArrayList<>();
+			for (Essaim ess : essaims) {
+				List<Evenement> evesPesee = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(ess.getId(),
+						TypeEvenement.RUCHEPESEE);
+				List<Long> d = new ArrayList<>();
+				List<Float> p = new ArrayList<>();
+				for (Evenement e : evesPesee) {
+					d.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
+					p.add(Float.parseFloat(e.getValeur()));
+				}
+				dates.add(d);
+				poids.add(p);
+				Ruche ruche = rucheRepository.findByEssaimId(ess.getId());
+				ruches.add(ruche);
+			}
+			model.addAttribute("dates", dates);
+			model.addAttribute("poids", poids);
+			model.addAttribute("essaims", essaims);
+			model.addAttribute("ruches", ruches);
+			model.addAttribute("rucher", rucher);
+			return "rucher/rucherPoids";
+		} else {
+			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
+			model.addAttribute(Const.MESSAGE,
+					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
+			return Const.INDEX;
+		}
+	}
+
+	/**
 	 * Appel du formulaire de saisie tabulaire du poids des ruches d'un rucher.
 	 */
 	@GetMapping("/poidsruches/{rucherId}")
@@ -107,9 +153,9 @@ public class RucherController {
 
 			List<Evenement> evesPesee = new ArrayList<>();
 			for (Ruche r : ruches) {
-				evesPesee.add((r.getEssaim() == null) ? null :
-					evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(r.getEssaim(),
-							TypeEvenement.RUCHEPESEE));
+				evesPesee.add((r.getEssaim() == null) ? null
+						: evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(r.getEssaim(),
+								TypeEvenement.RUCHEPESEE));
 			}
 			model.addAttribute("evesPesee", evesPesee);
 			model.addAttribute("date", Utils.dateTimeDecal(session));
