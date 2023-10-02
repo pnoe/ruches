@@ -1,6 +1,7 @@
 package ooioo.ruches.essaim;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -10,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import ooioo.ruches.Const;
 
 @Entity
 public class Essaim {
@@ -17,9 +19,9 @@ public class Essaim {
 	@Override
 	public String toString() {
 		return "Essaim [id=" + id + ", nom=" + nom + ", Acquisition=" + dateAcquisition + ", actif=" + actif
-				+ ", commentaire=" + commentaire + ", Naissance=" + reineDateNaissance + ", Marquee="
-				+ reineMarquee + ", souche=" + ((souche == null)?"null":souche.getNom()) +
-				", agressivite=" + agressivite + ", proprete=" + proprete + "]";
+				+ ", commentaire=" + commentaire + ", Naissance=" + reineDateNaissance + ", Marquee=" + reineMarquee
+				+ ", souche=" + ((souche == null) ? "null" : souche.getNom()) + ", agressivite=" + agressivite
+				+ ", proprete=" + proprete + ", Dispersion=" + dateDispersion + "]";
 	}
 
 	public Essaim() {
@@ -41,11 +43,15 @@ public class Essaim {
 		this.souche = essaim.getSouche();
 		this.agressivite = essaim.getAgressivite();
 		this.proprete = essaim.getProprete();
+		this.dateDispersion = essaim.getDateDispersion();
 	}
 
-	public Essaim(String nom, boolean actif, LocalDate dateAcquisition,
-			String commentaire, LocalDate reineDateNaissance, boolean reineMarquee,
-			Essaim souche, Integer agressivite, Integer proprete) {
+	/**
+	 * Constructeur : tous les champs sauf l'id.
+	 */
+	public Essaim(String nom, boolean actif, LocalDate dateAcquisition, String commentaire,
+			LocalDate reineDateNaissance, boolean reineMarquee, Essaim souche, Integer agressivite, Integer proprete,
+			LocalDateTime dateDispersion) {
 		this.nom = nom;
 		this.actif = actif;
 		this.dateAcquisition = dateAcquisition;
@@ -55,6 +61,7 @@ public class Essaim {
 		this.souche = souche;
 		this.agressivite = agressivite;
 		this.proprete = proprete;
+		this.dateDispersion = dateDispersion;
 	}
 
 	@Id
@@ -101,17 +108,20 @@ public class Essaim {
 	private Essaim souche;
 
 	/**
-	 * Agressivité de l'essaim
-	 *   de 1 à 5
+	 * Agressivité de l'essaim de 1 à 5
 	 */
 	private Integer agressivite;
 
 	/**
-	 * Propreté de l'essaim
-	 *   de 1 à 5
+	 * Propreté de l'essaim de 1 à 5
 	 */
 	private Integer proprete;
 
+	/**
+	 * Date de la dispersion
+	 */
+	@DateTimeFormat(pattern = Const.YYYYMMDDHHMM)
+	private LocalDateTime dateDispersion;
 
 	/**
 	 * Calcule la couleur de marquage de la reine d'après sa date de naissance
@@ -201,6 +211,14 @@ public class Essaim {
 
 	public void setProprete(Integer proprete) {
 		this.proprete = proprete;
+	}
+
+	public LocalDateTime getDateDispersion() {
+		return dateDispersion;
+	}
+
+	public void setDateDispersion(LocalDateTime dateDispersion) {
+		this.dateDispersion = dateDispersion;
 	}
 
 }
