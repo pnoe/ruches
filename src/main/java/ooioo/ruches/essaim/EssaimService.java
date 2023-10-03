@@ -130,15 +130,8 @@ public class EssaimService {
 			// triés par ordre de date ascendante
 			List<Evenement> evensEssaimAjout = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
 					TypeEvenement.RUCHEAJOUTRUCHER);
-			
 			// Si l'essaim est dispersé cela termine le séjour dans le dernier rucher
-			
-//			Evenement dispersion = evenementRepository.findFirstByEssaimAndType(essaim, TypeEvenement.ESSAIMDISPERSION);
-//			if (dispersion != null) {
-//				evensEssaimAjout.add(dispersion);
-//			}
-			
-			
+			//  plus d'événement dispersion, indiquer la dispersion autrement.
 			// Ajouter les mises en ruche
 			List<Evenement> miseEnRuche = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
 					TypeEvenement.AJOUTESSAIMRUCHE);
@@ -287,25 +280,11 @@ public class EssaimService {
 				essaimPoids.put("nom", essaim.getNom());
 				essaimPoids.put("id", essaim.getId().toString());
 				essaimPoids.put("dateAcquisition", essaim.getDateAcquisition().toString());
-				
-//				Evenement dispersion = evenementRepository.findFirstByEssaimAndType(essaim,
-//						TypeEvenement.ESSAIMDISPERSION);
-//				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//				essaimPoids.put("dateDispersion", (dispersion == null) ? "" : dispersion.getDate().format(formatter));
-				
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 				essaimPoids.put("dateDispersion", (essaim.getActif()) ? "" : essaim.getDateDispersion().format(formatter));
-				
-				
-				
 				// calcul moyenne production miel par jour d'existence de l'essaim
 				if (rucherId == null) {
-					
-//					LocalDateTime dateFin = (dispersion == null) ? LocalDateTime.now() : dispersion.getDate();
-					
 					LocalDateTime dateFin = (essaim.getActif()) ? LocalDateTime.now() : essaim.getDateDispersion();
-					
-					
 					long duree = ChronoUnit.DAYS.between(essaim.getDateAcquisition().atStartOfDay(), dateFin);
 					if (duree <= 0) {
 						essaimPoids.put("pMoyen", "");
@@ -365,24 +344,13 @@ public class EssaimService {
 		rucheRepository.save(ruche);
 		// On inactive l'essaim dispersé
 		essaim.setActif(false);
-		
 		// eve dispersion supprimé, on met les infos dans l'entité essaim
 		LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 		essaim.setDateDispersion(dateEve);
 		essaim.setCommDisp(commentaire);
-		
 		essaimRepository.save(essaim);
 		// dispersion ajouté log essaim modifié
 		logger.info(modif, essaim);
-		
-		
-		// On crée l'événement dispersion
-//		LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
-//		Evenement evenement = new Evenement(dateEve, TypeEvenement.ESSAIMDISPERSION, ruche, essaim, ruche.getRucher(),
-//				null, null, commentaire);
-//		evenementRepository.save(evenement);
-//		logger.info(cree, evenement);
-		
 		return nouvelEssaim;
 	}
 

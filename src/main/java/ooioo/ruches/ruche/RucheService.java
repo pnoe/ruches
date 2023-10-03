@@ -185,7 +185,6 @@ public class RucheService {
 	/*
 	 * Liste des ruches d'un rucher avec ordre de parcours.
 	 */
-// 	void listePlusRucher(HttpSession session, Model model, Rucher rucher, List<RucheParcours> chemin, boolean plus) {
 	void listePlusRucher(HttpSession session, Model model, Rucher rucher, List<Long> parcours, boolean plus) {
 		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
 		Iterable<Ruche> ruches;

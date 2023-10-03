@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import ooioo.ruches.essaim.EssaimRepository;
 import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
@@ -32,8 +31,6 @@ public class AdminService {
 	private RucheRepository rucheRepository;
 	@Autowired
 	private HausseRepository hausseRepository;
-	@Autowired
-	private EssaimRepository essaimRepository;
 
 	/**
 	 * Tests2 recherche les erreurs de l'ajout et du retrait des ruches dans les
@@ -263,16 +260,6 @@ public class AdminService {
 				eveInc.add(eve);
 			}
 		}
-		
-		
-//		evensListe = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.ESSAIMDISPERSION);
-//		for (Evenement eve : evensListe) {
-//			if (eve.getEssaim() == null) {
-//				eveInc.add(eve);
-//			}
-//		}
-		
-		
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEPESEE);
 		for (Evenement eve : evensListe) {
 			if (eve.getRuche() == null || eve.getEssaim() == null || !Utils.isNum(eve.getValeur())) {
@@ -320,10 +307,6 @@ public class AdminService {
 		}
 		model.addAttribute("eveRucheHausseErr", eveRucheHausseErr);
 		model.addAttribute("rucheNonVide", rucheNonVide);
-
-		// Essaims actifs et dispersés ou inactifs et non dispersés
-//		model.addAttribute("eveDisperseActifs", evenementRepository.findEssaimActifDisperse());
-//		model.addAttribute("essaimInactifsNonDisp",  essaimRepository.findEssaimInactifPasDipserse());
-
 	}
+
 }

@@ -63,8 +63,6 @@ public class Essaim {
 		this.souche = souche;
 		this.agressivite = agressivite;
 		this.proprete = proprete;
-//		this.dateDispersion = dateDispersion;
-//		this.commDisp = commDisp;
 	}
 
 	@Id

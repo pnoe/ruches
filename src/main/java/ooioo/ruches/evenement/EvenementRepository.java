@@ -16,14 +16,6 @@ import ooioo.ruches.rucher.Rucher;
 @RepositoryRestResource(collectionResourceRel = "evenementRepository")
 public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
-	// Evénement dispersion concernant des essaims actifs
-	/*
-	 * @Query(value = """ select e from Evenement e, Essaim s where e.type =
-	 * ooioo.ruches.evenement.TypeEvenement.ESSAIMDISPERSION and e.essaim.id = s.id
-	 * and e.essaim.actif = true order by e.date desc """) List<Evenement>
-	 * findEssaimActifDisperse();
-	 */
-
 	@Query(value = """
 			select e
 			  from Evenement e
@@ -139,8 +131,6 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	List<Evenement> findAjoutRucheOK();
 
 	Iterable<Evenement> findByTypeOrderByDateAsc(TypeEvenement typeEvenement);
-
-	Evenement findFirstByEssaimAndType(Essaim essaim, TypeEvenement typeEvenement);
 
 	Evenement findFirstByRucheAndTypeOrderByDateDesc(Ruche ruche, TypeEvenement typeEvenement);
 

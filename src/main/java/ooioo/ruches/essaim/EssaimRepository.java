@@ -28,23 +28,6 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 			""")
 	List<Essaim> findByRucherId(Long rucherId);
 	
-	// Essaims inactifs sans événement dispersion
-//	@Query(value = """
-//			select essaim
-//			  from Essaim essaim
-//			  where essaim.actif = false
-//			   and essaim.id not in
-//			     (select e.essaim.id
-//			       from Evenement e
-//			       where type = ooioo.ruches.evenement.TypeEvenement.ESSAIMDISPERSION)
-//			""")
-//	List<Essaim> findEssaimInactifPasDipserse();
-
-	/*
-	 * and essaim.id not in (select e.essaim.id from evenement e where type =
-	 * ooioo.ruches.evenement.TypeEvenement.ESSAIMDISPERSION)
-	 */
-
 	// Liste ordonnée par nom d'essaims, des essaims, id et nom de la ruche associée
 	// et
 	// id et nom de son rucher.

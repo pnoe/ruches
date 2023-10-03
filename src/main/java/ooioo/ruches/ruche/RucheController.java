@@ -549,8 +549,6 @@ public class RucheController {
 				if (hausse.getRuche() == null || !hausse.getRuche().getId().equals(ruche.getId())) {
 					logger.error("La hausse {} n'est pas sur la ruche {}", hausse.getNom(), ruche.getNom());
 					model.addAttribute(Const.MESSAGE, "Cette hausse n'est pas sur la ruche");
-					// messageSource.getMessage(Const.IDHAUSSEINCONNU, null,
-					// LocaleContextHolder.getLocale()));
 					return Const.INDEX;
 				}
 				LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));

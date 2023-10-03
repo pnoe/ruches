@@ -42,7 +42,7 @@ public class SecurityConfig {
 		// https://docs.spring.io/spring-security/reference/migration-7/configuration.html
 		// https://github.com/spring-projects/spring-security/issues/13568
 		http.authorizeHttpRequests(
-				(autz) -> autz.requestMatchers("/forgotPassword", "/resetPassword", "/resetPasswordFin", "/", "/css/**",
+				autz -> autz.requestMatchers("/forgotPassword", "/resetPassword", "/resetPasswordFin", "/", "/css/**",
 						"/js/**", "/images/**", "/doc/**", "/font/**").permitAll().anyRequest().authenticated())
 				.formLogin(formLogin -> formLogin.loginPage("/login").permitAll()
 						.successHandler(new SavedRequestAwareAuthenticationSuccessHandler() {

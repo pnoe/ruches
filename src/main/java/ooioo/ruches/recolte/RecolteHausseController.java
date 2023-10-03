@@ -191,14 +191,6 @@ public class RecolteHausseController {
 	public String modifie(Model model, @PathVariable long recolteHausseId, @PathVariable long recolteId) {
 		Optional<RecolteHausse> recolteHausseOpt = recolteHausseRepository.findById(recolteHausseId);
 		if (recolteHausseOpt.isPresent()) {
-			/*
-			 * model.addAttribute(Const.RUCHES,
-			 * rucheRepository.findAllProjectedIdNomByOrderByNom());
-			 * model.addAttribute(Const.RUCHERS,
-			 * rucherRepository.findAllProjectedIdNomByOrderByNom());
-			 * model.addAttribute(Const.ESSAIMS,
-			 * essaimRepository.findAllProjectedIdNomByOrderByNom());
-			 */
 			model.addAttribute("detailRecolte", recolteHausseOpt.get());
 		} else {
 			logger.error("Id récolte hausse {} inconnu.", recolteHausseId);
@@ -398,7 +390,7 @@ public class RecolteHausseController {
 					hausse.setRuche(null);
 					hausse.setOrdreSurRuche(null);
 					hausseRepository.save(hausse);
-					logger.info("{} modifiée", hausse);
+					logger.info(modifiee, hausse);
 
 					// renuméroter l'ordre des hausses de la ruche
 					Iterable<Hausse> haussesRuche = hausseRepository.findByRucheIdOrderByOrdreSurRuche(rucheId);

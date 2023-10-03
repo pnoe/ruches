@@ -177,24 +177,6 @@ public class TestChrome {
 	}
 
 	@Test
-	@Order(1000)
-	@DisplayName("Ruchers carte Gg")
-	void mapGgRuchers() {
-		driver.get(baseUrl + "rucher/Gg");
-		// La div d'id "map" est affichée
-		assertEquals("div", driver.findElement(By.id("map")).getTagName());
-	}
-
-	@Test
-	@Order(1100)
-	@DisplayName("Ruchers carte IGN")
-	void mapIgnRuchers() {
-		driver.get(baseUrl + "rucher/Ign");
-		// La div d'id "map" est affichée
-		assertEquals("div", driver.findElement(By.id("map")).getTagName());
-	}
-
-	@Test
 	@Order(1200)
 	@DisplayName("Ruchers carte OSM")
 	void mapOsmRuchers() {
@@ -243,22 +225,6 @@ public class TestChrome {
 		TestUtils.submit(driver);
 		// Page détail du rucher modifiée
 		assertEquals("div", driver.findElement(By.id("detailRucher")).getTagName());
-	}
-
-	@Test
-	@Order(160)
-	@DisplayName("Rucher dépot carte Gg")
-	void mapGgDepot() {
-		if (depotId == null) {
-			depotId = TestUtils.getDepotId(driver, baseUrl);
-		}
-		if ("".equals(depotId)) {
-			fail("Api rest recherche de l'id du dépôt");
-		} else {
-			driver.get(baseUrl + "rucher/Gg/" + depotId);
-			// La div d'id "map" est affichée
-			assertEquals("div", driver.findElement(By.id("map")).getTagName());
-		}
 	}
 
 	@Test

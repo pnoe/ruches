@@ -629,15 +629,6 @@ public class EssaimController {
 			
 			// ajouté log essaim modifié
 			logger.info(modif, essaimDisperse);
-			
-			// On crée l'événement dispersion
-			// quel commentaire ?
-			/*
-			Evenement eveDisperse = new Evenement(dateEve, TypeEvenement.ESSAIMDISPERSION, ruche, essaimDisperse,
-					ruche.getRucher(), null, null, commentaire);
-			evenementRepository.save(eveDisperse);
-			logger.info(cree, eveDisperse);
-			*/
 		}
 		Rucher rucher = ruche.getRucher();
 		// La ruche dans laquelle est l'essaim
