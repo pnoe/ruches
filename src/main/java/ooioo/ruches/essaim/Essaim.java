@@ -21,7 +21,8 @@ public class Essaim {
 		return "Essaim [id=" + id + ", nom=" + nom + ", Acquisition=" + dateAcquisition + ", actif=" + actif
 				+ ", commentaire=" + commentaire + ", Naissance=" + reineDateNaissance + ", Marquee=" + reineMarquee
 				+ ", souche=" + ((souche == null) ? "null" : souche.getNom()) + ", agressivite=" + agressivite
-				+ ", proprete=" + proprete + ", Dispersion=" + dateDispersion + "]";
+				+ ", proprete=" + proprete 
+				+ ", Dispersion=" + dateDispersion + ", Comm. dispersion=" + commDisp + "]";
 	}
 
 	public Essaim() {
@@ -44,6 +45,7 @@ public class Essaim {
 		this.agressivite = essaim.getAgressivite();
 		this.proprete = essaim.getProprete();
 		this.dateDispersion = essaim.getDateDispersion();
+		this.commDisp = essaim.getCommDisp();
 	}
 
 	/**
@@ -51,7 +53,7 @@ public class Essaim {
 	 */
 	public Essaim(String nom, boolean actif, LocalDate dateAcquisition, String commentaire,
 			LocalDate reineDateNaissance, boolean reineMarquee, Essaim souche, Integer agressivite, Integer proprete,
-			LocalDateTime dateDispersion) {
+			LocalDateTime dateDispersion, String commDisp) {
 		this.nom = nom;
 		this.actif = actif;
 		this.dateAcquisition = dateAcquisition;
@@ -62,6 +64,7 @@ public class Essaim {
 		this.agressivite = agressivite;
 		this.proprete = proprete;
 		this.dateDispersion = dateDispersion;
+		this.commDisp = commDisp;
 	}
 
 	@Id
@@ -122,6 +125,11 @@ public class Essaim {
 	 */
 	@DateTimeFormat(pattern = Const.YYYYMMDDHHMM)
 	private LocalDateTime dateDispersion;
+	
+	/**
+	 * Commentaire disperson
+	 */
+	private String commDisp;
 
 	/**
 	 * Calcule la couleur de marquage de la reine d'après sa date de naissance
@@ -219,6 +227,14 @@ public class Essaim {
 
 	public void setDateDispersion(LocalDateTime dateDispersion) {
 		this.dateDispersion = dateDispersion;
+	}
+
+	public String getCommDisp() {
+		return commDisp;
+	}
+
+	public void setCommDisp(String commDisp) {
+		this.commDisp = commDisp;
 	}
 
 }
