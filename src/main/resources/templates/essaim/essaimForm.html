@@ -19,10 +19,7 @@
 			jQuery.validator.addMethod('nomExiste', function (value) {
 				return !essaimNoms.includes(value);
 			}, nomexiste);
-
 			const chkActif = document.getElementById('actif1');
-
-
 			$('#essaimForm').validate({
 				errorClass: 'erreur-form',
 				errorPlacement: function (error, element) {
@@ -38,15 +35,12 @@
 					},
 					dateAcquisition: {
 						required: true
-					}
-
-					,
+					},
 					dateDispersion: {
 						required: function () {
 							return !chkActif.checked;
 						}
 					}
-
 				}
 			});
 			const disp = document.getElementById('disp');
@@ -94,23 +88,27 @@
 				th:errorclass="fieldError" />
 			<label class="form-label" th:text="#{reineDateNaissance}" for="reineDateNaissance"></label>
 		</div>
-		<div th:replace="~{includeForm :: actifField}"></div>
-		<!--/* on force l'id pour datetimepicker sur #date 
-		https://stackoverflow.com/questions/75988981/does-thymeleafs-thfield-generate-an-id-attribute-too
-		en gardant le fragment localejsdatetimepicker
-		*/-->
-		<fieldset id="disp">
-			<div class="form-floating mb-3">
-				<input id="date" placeholder="" class="form-control datepicker" type="text" th:field="*{dateDispersion}"
-					th:errorclass="fieldError" /> <label class="form-label" th:text="#{dateDispersion}"
-					for="dateDispersion"></label>
-			</div>
-			<div class="form-floating mb-3">
-			<textarea class="form-control" th:field="*{commDisp}"
-				placeholder="Commentaire" th:errorclass="fieldError" maxlength="255"></textarea>
-			<label class="form-label" th:text="#{commDisp}" for="commDisp"></label>
+		<div class="form-floating mb-3">
+			<fieldset class="border rounded-3 p-3">
+				<div th:replace="~{includeForm :: actifField}"></div>
+				<!--/* on force l'id pour datetimepicker sur #date 
+				https://stackoverflow.com/questions/75988981/does-thymeleafs-thfield-generate-an-id-attribute-too
+				en gardant le fragment localejsdatetimepicker
+			*/-->
+				<div id="disp">
+					<div class="form-floating mb-3">
+						<input id="date" placeholder="" class="form-control datepicker" type="text"
+							th:field="*{dateDispersion}" th:errorclass="fieldError" /> <label class="form-label"
+							th:text="#{dateDispersion}" for="dateDispersion"></label>
+					</div>
+					<div class="form-floating mb-3">
+						<textarea class="form-control" th:field="*{commDisp}" placeholder="Commentaire"
+							th:errorclass="fieldError" maxlength="255"></textarea>
+						<label class="form-label" th:text="#{commDisp}" for="commDisp"></label>
+					</div>
+				</div>
+			</fieldset>
 		</div>
-		</fieldset>
 		<div th:replace="~{includeForm :: dateAcquisitionField}"></div>
 		<div th:replace="~{includeForm :: commentaireField}"></div>
 		<div class="form-floating mb-3">

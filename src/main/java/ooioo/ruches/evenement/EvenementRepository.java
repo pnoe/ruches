@@ -17,16 +17,12 @@ import ooioo.ruches.rucher.Rucher;
 public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 	// Evénement dispersion concernant des essaims actifs
-	@Query(value = """
-			select e
-			  from Evenement e, Essaim s
-			  where
-			    e.type =  ooioo.ruches.evenement.TypeEvenement.ESSAIMDISPERSION
-			    and e.essaim.id = s.id
-			    and e.essaim.actif = true
-			  order by e.date desc
-			""")
-	List<Evenement> findEssaimActifDisperse();
+	/*
+	 * @Query(value = """ select e from Evenement e, Essaim s where e.type =
+	 * ooioo.ruches.evenement.TypeEvenement.ESSAIMDISPERSION and e.essaim.id = s.id
+	 * and e.essaim.actif = true order by e.date desc """) List<Evenement>
+	 * findEssaimActifDisperse();
+	 */
 
 	@Query(value = """
 			select e
@@ -90,7 +86,9 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	Iterable<Evenement> findTypePeriode(LocalDateTime date1, LocalDateTime date2);
 
 	List<Evenement> findByRucheId(Long rucheId);
+
 	Iterable<Evenement> findByEssaimId(Long essaimId);
+
 	@Query(value = """
 			select e
 			  from Evenement e
@@ -111,7 +109,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 	// Recherche événement pose hausse suivant un événement dont la ruche,
 	// l'essaim et la date sont donnés en paramètre.
-	//  ruche et essaim identiques.
+	// ruche et essaim identiques.
 	@Query(value = """
 			select new ooioo.ruches.evenement.IdDate(e.id, e.date) from Evenement e
 			  where e.type = ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE
@@ -175,8 +173,8 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 	Evenement findFirstByRucheAndRucherAndTypeOrderByDateDesc(Ruche ruche, Rucher rucher, TypeEvenement typeEvenement);
 
-    // https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definitions
-	//   pour éviter de passer ruche en param.
+	// https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definitions
+	// pour éviter de passer ruche en param.
 	@Query(value = """
 			select e
 			 from Evenement e
@@ -189,11 +187,18 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	Evenement findEvePoseHausse(Hausse hausse);
 
 	// Nombre d'essaims dispersés dans l'année passée en paramètre.
+//	@Query(value = """
+//			select count(*) as nbeven
+//			from Evenement
+//			where type=ooioo.ruches.evenement.TypeEvenement.ESSAIMDISPERSION
+//				and date_part('year', date)=?1
+//			""")
+
 	@Query(value = """
 			select count(*) as nbeven
-			from Evenement
-			where type=ooioo.ruches.evenement.TypeEvenement.ESSAIMDISPERSION
-				and date_part('year', date)=?1
+			from Essaim
+			where actif = false
+				and date_part('year', dateDispersion)=:date
 			""")
 	Integer countDispersionEssaimParAnnee(int date);
 

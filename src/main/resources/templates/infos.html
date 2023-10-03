@@ -42,6 +42,14 @@
 				<li
 					th:text="|${nbRuchesAvecEssaim} #{ruchesavecessaim} (${nbRuchesAvecEssaimProd} #{production} + ${nbRuchesAvecEssaimElev} #{elevage})|">
 				</li>
+				
+				
+				<li
+					th:text="|${nbRuchesAvecEssaim + #arrays.length(essaimsActifSansRuche)} #{essaim_s} (${#arrays.length(essaimsActifSansRuche)} #{essaimsHorsRuche})|">
+				</li>
+				
+				
+				
 				<li
 					th:text="|${nbHausses} #{hausses} (${nbHaussesSurRuchesAvecEssaim} #{posees} + ${nbHaussesHorsRuche} #{nonposees})|">
 				</li>

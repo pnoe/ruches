@@ -81,7 +81,11 @@
 		<table class="table table-sm table-bordered">
 			<thead>
 				<tr>
-					<th th:if="${session.voirInactif}" th:text="#{actif}"></th>
+					<th:block th:if="${session.voirInactif}">
+						<th th:text="#{actif}"></th>
+						<th th:text="#{dateDispersion}"></th>
+						<th th:text="#{commDisp}"></th>
+					</th:block>
 					<th th:text="#{dateAcquisition}"></th>
 					<th th:text="#{reineMarquee}"></th>
 					<th th:text="#{reineCouleurMarquage}"></th>
@@ -94,7 +98,11 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td th:if="${session.voirInactif}" th:text="${essaim.actif}? #{oui} : #{non}"></td>
+					<th:block th:if="${session.voirInactif}">
+						<td th:text="${essaim.actif}? #{oui} : #{non}"></td>
+						<td th:text="${#temporals.format(essaim.dateDispersion, 'yyyy/MM/dd')}"></td>
+						<td th:text="${essaim.commDisp}"></td>
+					</th:block>
 					<td th:text="${essaim.dateAcquisition}"></td>
 					<td th:text="${essaim.reineMarquee}? #{oui} : #{non}"></td>
 					<td th:text="#{${essaim.reineCouleurMarquage}}"></td>

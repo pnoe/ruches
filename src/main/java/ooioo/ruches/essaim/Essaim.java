@@ -21,8 +21,7 @@ public class Essaim {
 		return "Essaim [id=" + id + ", nom=" + nom + ", Acquisition=" + dateAcquisition + ", actif=" + actif
 				+ ", commentaire=" + commentaire + ", Naissance=" + reineDateNaissance + ", Marquee=" + reineMarquee
 				+ ", souche=" + ((souche == null) ? "null" : souche.getNom()) + ", agressivite=" + agressivite
-				+ ", proprete=" + proprete 
-				+ ", Dispersion=" + dateDispersion + ", Comm. dispersion=" + commDisp + "]";
+				+ ", proprete=" + proprete + ", Dispersion=" + dateDispersion + ", Comm. dispersion=" + commDisp + "]";
 	}
 
 	public Essaim() {
@@ -52,8 +51,9 @@ public class Essaim {
 	 * Constructeur : tous les champs sauf l'id.
 	 */
 	public Essaim(String nom, boolean actif, LocalDate dateAcquisition, String commentaire,
-			LocalDate reineDateNaissance, boolean reineMarquee, Essaim souche, Integer agressivite, Integer proprete,
-			LocalDateTime dateDispersion, String commDisp) {
+			LocalDate reineDateNaissance, boolean reineMarquee, Essaim souche, Integer agressivite, Integer proprete
+	// , LocalDateTime dateDispersion, String commDisp
+	) {
 		this.nom = nom;
 		this.actif = actif;
 		this.dateAcquisition = dateAcquisition;
@@ -63,8 +63,8 @@ public class Essaim {
 		this.souche = souche;
 		this.agressivite = agressivite;
 		this.proprete = proprete;
-		this.dateDispersion = dateDispersion;
-		this.commDisp = commDisp;
+//		this.dateDispersion = dateDispersion;
+//		this.commDisp = commDisp;
 	}
 
 	@Id
@@ -125,7 +125,7 @@ public class Essaim {
 	 */
 	@DateTimeFormat(pattern = Const.YYYYMMDDHHMM)
 	private LocalDateTime dateDispersion;
-	
+
 	/**
 	 * Commentaire disperson
 	 */

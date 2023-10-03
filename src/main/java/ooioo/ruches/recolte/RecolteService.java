@@ -10,9 +10,6 @@ import org.springframework.ui.Model;
 
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.essaim.EssaimRepository;
-import ooioo.ruches.evenement.Evenement;
-import ooioo.ruches.evenement.EvenementRepository;
-import ooioo.ruches.evenement.TypeEvenement;
 
 @Service
 public class RecolteService {
@@ -21,8 +18,6 @@ public class RecolteService {
 	private RecolteRepository recolteRepository;
 	@Autowired
 	private EssaimRepository essaimRepository;
-	@Autowired
-	private EvenementRepository evenementRepository;
 
 	/*
 	 * Statistiques de production de miel par année. Miel pesé dans les hausses de
@@ -56,8 +51,13 @@ public class RecolteService {
 		LocalDate dateFirstEssaim = essaimRepository.findFirstByOrderByDateAcquisition().getDateAcquisition();
 		for (Essaim essaim : essaims) {
 			LocalDate dateProduction = essaim.getDateAcquisition();
-			Evenement dispersion = evenementRepository.findFirstByEssaimAndType(essaim, TypeEvenement.ESSAIMDISPERSION);
-			LocalDate dateFin = (dispersion == null) ? maintenant : dispersion.getDate().toLocalDate();
+
+//			Evenement dispersion = evenementRepository.findFirstByEssaimAndType(essaim, TypeEvenement.ESSAIMDISPERSION);
+//			LocalDate dateFin = (dispersion == null) ? maintenant : dispersion.getDate().toLocalDate();
+
+			// dispersion mis dans entité essaim
+			LocalDate dateFin = (essaim.getActif()) ? maintenant : essaim.getDateDispersion().toLocalDate();
+
 			// l'essaim est actif de dateProduction à dateFin
 			boolean premier = true;
 			for (int annee = dateProduction.getYear(); annee <= dateFin.getYear(); annee++) {

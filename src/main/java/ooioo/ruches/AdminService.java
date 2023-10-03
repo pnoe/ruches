@@ -263,12 +263,16 @@ public class AdminService {
 				eveInc.add(eve);
 			}
 		}
-		evensListe = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.ESSAIMDISPERSION);
-		for (Evenement eve : evensListe) {
-			if (eve.getEssaim() == null) {
-				eveInc.add(eve);
-			}
-		}
+		
+		
+//		evensListe = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.ESSAIMDISPERSION);
+//		for (Evenement eve : evensListe) {
+//			if (eve.getEssaim() == null) {
+//				eveInc.add(eve);
+//			}
+//		}
+		
+		
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEPESEE);
 		for (Evenement eve : evensListe) {
 			if (eve.getRuche() == null || eve.getEssaim() == null || !Utils.isNum(eve.getValeur())) {
@@ -318,8 +322,8 @@ public class AdminService {
 		model.addAttribute("rucheNonVide", rucheNonVide);
 
 		// Essaims actifs et dispersés ou inactifs et non dispersés
-		model.addAttribute("eveDisperseActifs", evenementRepository.findEssaimActifDisperse());
-		model.addAttribute("essaimInactifsNonDisp",  essaimRepository.findEssaimInactifPasDipserse());
+//		model.addAttribute("eveDisperseActifs", evenementRepository.findEssaimActifDisperse());
+//		model.addAttribute("essaimInactifsNonDisp",  essaimRepository.findEssaimInactifPasDipserse());
 
 	}
 }

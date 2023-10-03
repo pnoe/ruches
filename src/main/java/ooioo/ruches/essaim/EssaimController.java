@@ -73,6 +73,7 @@ public class EssaimController {
 	private EssaimService essaimService;
 
 	private static final String cree = "{} créé";
+	private static final String modif = "{} modifié";
 
 	/**
 	 * Graphe affichant les poids d'une ruche.
@@ -619,13 +620,24 @@ public class EssaimController {
 		if (essaimDisperse != null) {
 			// On inactive l'essaim dispersé
 			essaimDisperse.setActif(false);
+			
+			// suppression eve dispersion
+			essaimDisperse.setDateDispersion(dateEve);
+			essaimDisperse.setCommDisp(commentaire);
+			
 			essaimRepository.save(essaimDisperse);
+			
+			// ajouté log essaim modifié
+			logger.info(modif, essaimDisperse);
+			
 			// On crée l'événement dispersion
 			// quel commentaire ?
+			/*
 			Evenement eveDisperse = new Evenement(dateEve, TypeEvenement.ESSAIMDISPERSION, ruche, essaimDisperse,
 					ruche.getRucher(), null, null, commentaire);
 			evenementRepository.save(eveDisperse);
 			logger.info(cree, eveDisperse);
+			*/
 		}
 		Rucher rucher = ruche.getRucher();
 		// La ruche dans laquelle est l'essaim
