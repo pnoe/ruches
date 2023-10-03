@@ -72,8 +72,8 @@
 					<td><a th:href="@{'/rucher/'+ ${eRRr.idRucher}}" th:text="${eRRr.nomRucher}"></a></td>
 					<th:block th:if="${session.voirInactif}">
 						<td th:text="${eRRr.essaim.actif}?#{oui}:#{non}"></td>
-						<td th:text="${#temporals.format(eRRr.essaim.dateDispersion, 'yyyy/MM/dd')}"></td>
-						<td th:text="${eRRr.essaim.commDisp}"></td>
+						<td th:text="${eRRr.essaim.actif ? '' : #temporals.format(eRRr.essaim.dateDispersion, 'yyyy/MM/dd')}"></td>
+						<td th:text="${eRRr.essaim.actif ? '' : eRRr.essaim.commDisp}"></td>
 					</th:block>
 					<td th:text="${eRRr.essaim.dateAcquisition}"></td>
 					<td th:text="${eRRr.essaim.reineMarquee}? #{oui} : #{non}"></td>
