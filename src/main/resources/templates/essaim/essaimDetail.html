@@ -28,7 +28,6 @@
 		const urlessaimclone = /*[[@{/essaim/clone/}]]*/null;
 		const essaimid = /*[[${essaim.id}]]*/null;
 	</script>
-
 </head>
 
 <body>
@@ -81,8 +80,8 @@
 		<table class="table table-sm table-bordered">
 			<thead>
 				<tr>
+					<th th:text="#{actif}"></th>
 					<th:block th:unless="${essaim.actif}">
-						<th th:text="#{actif}"></th>
 						<th th:text="#{dateDispersion}"></th>
 						<th th:text="#{commDisp}"></th>
 					</th:block>
@@ -98,8 +97,8 @@
 			</thead>
 			<tbody>
 				<tr>
+					<td th:text="${essaim.actif}?#{oui}:#{non}"></td>
 					<th:block th:unless="${essaim.actif}">
-						<td th:text="#{non}"></td>
 						<td th:text="${#temporals.format(essaim.dateDispersion, 'yyyy/MM/dd')}"></td>
 						<td th:text="${essaim.commDisp}"></td>
 					</th:block>

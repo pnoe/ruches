@@ -59,7 +59,7 @@
 		<table class="table table-sm table-bordered">
 			<thead>
 				<tr>
-					<th th:if="${session.voirInactif}" th:text="#{active}"></th>
+					<th th:text="#{active}"></th>
 					<th th:text="#{dateAcquisition}"></th>
 					<th th:text="#{poidsVide}"></th>
 					<th th:text="#{nbCadresMax}"></th>
@@ -72,7 +72,7 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td th:if="${session.voirInactif}" th:text="${ruche.active}? #{oui} : #{non}"></td>
+					<td th:text="${ruche.active}? #{oui} : #{non}"></td>
 					<td th:text="${ruche.dateAcquisition}"></td>
 					<td class="num" th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
 					<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
