@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -148,7 +149,13 @@ public class RucheTypeController {
 			return Const.INDEX;
 		}
 		String action = (rucheType.getId() == null) ? "créé" : "modifié";
-		rucheTypeRepo.save(rucheType);
+		try {
+			rucheTypeRepo.save(rucheType);
+		} catch (ObjectOptimisticLockingFailureException e) {
+			logger.error("{} modification annulée, accès concurrent.", rucheType);
+			model.addAttribute(Const.MESSAGE, "Modification annulée, un autre utilisateur a fait une modification en même temps.");
+			return Const.INDEX;
+		}
 		logger.info("{} {}", rucheType, action);
 		return "redirect:/rucheType/" + rucheType.getId();
 	}
