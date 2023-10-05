@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Version;
 
 @Entity // This tells Hibernate to make a table out of this class
 public class Personne {
@@ -21,6 +22,9 @@ public class Personne {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
+	@Version
+	private Integer version;
 
 	// login pas unique (personnes sans login)
 	@Column(nullable = false)
@@ -172,6 +176,14 @@ public class Personne {
 
 	public void setTokenExpiration(LocalDateTime tokenexpiration) {
 		this.tokenexpiration = tokenexpiration;
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 
 }

@@ -56,8 +56,8 @@ public class AccueilController {
 	}
 
 	/**
-	 * Affiche la page des informations détaillées sur l'état général.
-	 * Appel par menu Admin/Infos.
+	 * Affiche la page des informations détaillées sur l'état général. Appel par
+	 * menu Admin/Infos.
 	 */
 	@GetMapping(path = "/infos")
 	public String infos(Model model) {
@@ -77,8 +77,8 @@ public class AccueilController {
 	}
 
 	/**
-	 * Appel du formulaire de saisie des préférences. Affichages inactifs et décalage
-	 * de date.
+	 * Appel du formulaire de saisie des préférences. Affichages inactifs et
+	 * décalage de date.
 	 */
 	@GetMapping("/parametres")
 	public String parametres() {
@@ -109,6 +109,13 @@ public class AccueilController {
 		return "passwordResetForm";
 	}
 
+	/**
+	 * Demande d'un nouveau password. Initialise un token et une date d'expiration
+	 * dans l'entité personne. Envoie un email à l'utilisateur avec un lien sur la
+	 * même url mais en GET intégrant ce token.
+	 * 
+	 * @param email l'email de l'utilisateur demandant un nouveau password
+	 */
 	@PostMapping("/resetPassword")
 	public String resetPassword(@RequestParam String email, HttpServletRequest request, Model model) {
 		final long tokenValidite = 60;
@@ -130,10 +137,11 @@ public class AccueilController {
 			String token = UUID.randomUUID().toString();
 			personne.setToken(token);
 			personne.setTokenExpiration(LocalDateTime.now().plusMinutes(tokenValidite));
+			// Lecture personne ci-dessus, accès concurrent improbable.
 			personneRepository.save(personne);
 			emailService.sendSimpleMessage(email, "Réinitialisation du mot de passe",
-					"Pour réinitialiser votre mot de passe, cliquez sur le lien ci-dessous:\n" + request.getRequestURL() + "?token="
-							+ token);
+					"Pour réinitialiser votre mot de passe, cliquez sur le lien ci-dessous:\n" + request.getRequestURL()
+							+ "?token=" + token);
 		}
 		model.addAttribute(Const.MESSAGE, "Un email a été envoyé à cette adresse");
 		return Const.INDEX;
@@ -165,6 +173,7 @@ public class AccueilController {
 		personne.setPassword(new BCryptPasswordEncoder().encode(password));
 		personne.setToken(null);
 		personne.setTokenExpiration(null);
+		// Lecture personne ci-dessus, accès concurrent improbable.
 		personneRepository.save(personne);
 		return "redirect:login";
 	}

@@ -41,9 +41,7 @@ public final class Const {
 	public static final String EVENEMENTS = "evenements";
 	public static final String IDEVENEMENTINCONNU = "Id événement inconnu";
 	public static final String IDEVENEMENTXXINCONNU = "Id événement {} inconnu";
-
 	public static final String EVEN_EVENLISTE = "evenement/evenementListe";
-
 	public static final String IDRUCHETYPEINCONNU = "Id type de ruche inconnu";
 	public static final String RUCHETYPES = "rucheTypes";
 	public static final String IDRUCHETYPEXXINCONNU = "Id type de ruche {} inconnu";
@@ -54,6 +52,7 @@ public final class Const {
 	public static final String VOIRINACTIF = "voirInactif";
 	static final String VOIRLATLON = "voirLatLon";
 	static final String DECALAGETEMPS = "decalagetemps";
+	public static final String CONCURACCESS = "Modification annulée, un autre utilisateur a fait une modification en même temps.";
 
 
 	public static final String COMMENTAIRE = "commentaire";

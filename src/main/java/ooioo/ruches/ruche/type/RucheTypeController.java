@@ -153,7 +153,7 @@ public class RucheTypeController {
 			rucheTypeRepo.save(rucheType);
 		} catch (ObjectOptimisticLockingFailureException e) {
 			logger.error("{} modification annulée, accès concurrent.", rucheType);
-			model.addAttribute(Const.MESSAGE, "Modification annulée, un autre utilisateur a fait une modification en même temps.");
+			model.addAttribute(Const.MESSAGE, Const.CONCURACCESS);
 			return Const.INDEX;
 		}
 		logger.info("{} {}", rucheType, action);

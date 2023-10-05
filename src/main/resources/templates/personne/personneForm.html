@@ -67,6 +67,7 @@
 	</div>
 	<form action="#" th:action="@{/personne/sauve}" th:object="${personne}" method="post" id="personneForm">
 		<input type="hidden" th:field="*{id}" />
+		<input type="hidden" th:field="*{version}" />
 		<input type="hidden" sec:authorize="!hasRole('ROLE_admin')" th:field="*{roles}" />
 		<div th:replace="~{includeForm :: nomField}"></div>
 		<div class="form-floating mb-3">

@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -214,7 +215,17 @@ public class PersonneController {
 			personne.setPassword(new BCryptPasswordEncoder().encode(password));
 		}
 		String action = (personne.getId() == null) ? "créée" : "modifiée";
-		personneRepository.save(personne);
+		
+		try {
+			personneRepository.save(personne);
+		} catch (ObjectOptimisticLockingFailureException e) {
+			logger.error("{} modification annulée, accès concurrent.", personne);
+			model.addAttribute(Const.MESSAGE, Const.CONCURACCESS);
+			return Const.INDEX;
+		}
+		
+		// personneRepository.save(personne);
+		
 		logger.info("{} {}", personne, action);
 		return "redirect:/personne/" + personne.getId();
 	}
