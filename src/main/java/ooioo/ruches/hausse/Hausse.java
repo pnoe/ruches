@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Version;
 import ooioo.ruches.ruche.Ruche;
 
 @Entity
@@ -46,6 +47,9 @@ public class Hausse {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+
+	@Version
+	private Integer version;
 
 	/**
 	 * La ruche sur laquelle est posée la hausse
@@ -170,6 +174,14 @@ public class Hausse {
 
 	public void setCommentaire(String commentaire) {
 		this.commentaire = commentaire;
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -171,14 +172,12 @@ public class HausseController {
 				}
 				Hausse hausse = hausseOpt.get();
 				Ruche ruche = hausse.getRuche();
+				hausseRepository.delete(hausse);
 				if (ruche != null) {
-					hausse.setRuche(null);
-					// On sauve la hausse après avoir mis hausse.ruche à null
-					// pour que ordonneHaussesRuche ne trouve plus cette hausse
-					hausseRepository.save(hausse);
+					// On réordonne les hausses de la ruche après
+					// avoir supprimé la hausse.
 					rucheService.ordonneHaussesRuche(ruche.getId());
 				}
-				hausseRepository.delete(hausse);
 				logger.info("{} supprimée", hausse);
 			} else {
 				model.addAttribute(Const.MESSAGE, "Cette hausse ne peut être supprimée");
@@ -201,10 +200,8 @@ public class HausseController {
 		if (bindingResult.hasErrors()) {
 			return HAUSSE_HAUSSEFORM;
 		}
-
 		// On enlève les blancs aux extémités du commentaire.
 		hausse.setCommentaire(hausse.getCommentaire().trim());
-
 		// On enlève les blancs aux extémités du nom.
 		hausse.setNom(hausse.getNom().trim());
 		if ("".equals(hausse.getNom())) {
@@ -212,7 +209,6 @@ public class HausseController {
 			model.addAttribute(Const.MESSAGE, "Nom de hausse incorrect.");
 			return Const.INDEX;
 		}
-
 		// Vérification de l'unicité du nom
 		Optional<Hausse> optH = hausseRepository.findByNom(hausse.getNom());
 		if (optH.isPresent()) {
@@ -224,7 +220,13 @@ public class HausseController {
 			}
 		}
 		String action = (hausse.getId() == null) ? "créée" : "modifiée";
-		hausseRepository.save(hausse);
+		try {
+			hausseRepository.save(hausse);
+		} catch (ObjectOptimisticLockingFailureException e) {
+			logger.error("{} modification annulée, accès concurrent.", hausse);
+			model.addAttribute(Const.MESSAGE, Const.CONCURACCESS);
+			return Const.INDEX;
+		}
 		logger.info("{} {}", hausse, action);
 		return "redirect:/hausse/" + hausse.getId();
 	}
