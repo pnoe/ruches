@@ -44,6 +44,7 @@ import ooioo.ruches.hausse.Hausse;
 import ooioo.ruches.hausse.HausseRepository;
 import ooioo.ruches.ruche.Ruche;
 import ooioo.ruches.ruche.RucheRepository;
+import ooioo.ruches.ruche.RucheService;
 import ooioo.ruches.rucher.Rucher;
 import ooioo.ruches.rucher.RucherRepository;
 
@@ -80,6 +81,8 @@ public class RecolteHausseController {
 
 	@Autowired
 	private RecolteHausseService recolteHausseService;
+	@Autowired
+	private RucheService rucheService;
 
 	private static final String modifiee = "{} modifiée";
 
@@ -321,12 +324,15 @@ public class RecolteHausseController {
 	}
 
 	/**
-	 * Enlève toutes les hausses de la récolte des ruches. Crée les événements
-	 * retraits des hausses et remplissage à 0. (appel XMLHttpRequest)
+	 * Enlève toutes les hausses de la récolte des ruches. Réordonne les hausses
+	 * restantes sur les ruches. Crée les événements retraits des hausses et
+	 * remplissage à 0. (appel XMLHttpRequest)
 	 *
-	 * @param date le date pour les événements à créer, pas de paramètre si test uniquement (required = false)
-	 * @return String si test la chaîne doit se terminer par un "?" si des ruches peuvent être retirées. Le
-	 *    code javascript utilise ce "?" pour distinguer les deux retours possibles.
+	 * @param date le date pour les événements à créer, pas de paramètre si test
+	 *             uniquement (required = false)
+	 * @return String si test la chaîne doit se terminer par un "?" si des ruches
+	 *         peuvent être retirées. Le code javascript utilise ce "?" pour
+	 *         distinguer les deux retours possibles.
 	 */
 	@PostMapping("/haussesDepot/{recolteId}")
 	@ResponseStatus(value = HttpStatus.OK)
@@ -342,6 +348,7 @@ public class RecolteHausseController {
 			model.addAttribute(Const.RECOLTE, recolte);
 			// Liste des couples RecoltHausse, Hausse de la récolte
 			List<Object[]> reHH = hausseRepository.findHaussesRecHausses(recolteId);
+			List<Long> rucheIds = new ArrayList<>();
 			for (Object[] rhh : reHH) {
 				RecolteHausse recolteHausse = (RecolteHausse) rhh[0];
 				Hausse hausse = (Hausse) rhh[1];
@@ -353,62 +360,37 @@ public class RecolteHausseController {
 					// La ruche sur laquelle est la hausse est la même que la ruche
 					// de la hausseRécolte correspondante.
 					// Sinon on ignore la hausse.
-
 					// Pour affichage des hausses enlevées des ruches
-					retHausses.append(hausse.getNom());
-					retHausses.append(" ");
-					retRuches.append(ruche.getNom());
-					retRuches.append(" ");
-
-					if (date == null) { continue; }
-
-					// Pour renumérotation de l'ordre des hausses
-					Long rucheId = null;
-					Integer hausseOrdre;
-					rucheId = ruche.getId();
-					hausseOrdre = hausse.getOrdreSurRuche();
-					if (hausseOrdre == null) {
-						logger.error("Récolte {} Ordre hausse {} null.", recolteId, hausse.getNom());
-						hausseOrdre = 100;
+					retHausses.append(hausse.getNom()).append(" ");
+					retRuches.append(ruche.getNom()).append(" ");
+					if (date == null) {
+						// date est null si test uniquement
+						continue;
 					}
-					// création événement avant mise à null de la ruche
-					Essaim essaim = ruche.getEssaim();
-					Rucher rucher = ruche.getRucher();
 					String commentaireEve = "Récolte "
 							+ recolte.getDate().format(DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM)) + " "
 							+ decimalFormat.format(
 									recolteHausse.getPoidsAvant().subtract(recolteHausse.getPoidsApres()))
 							+ "kg";
-					Evenement evenementRetrait = new Evenement(date, TypeEvenement.HAUSSERETRAITRUCHE, ruche, essaim,
-							rucher, hausse, hausse.getOrdreSurRuche().toString(), commentaireEve);
+					Evenement evenementRetrait = new Evenement(date, TypeEvenement.HAUSSERETRAITRUCHE, ruche,
+							ruche.getEssaim(), ruche.getRucher(), hausse, hausse.getOrdreSurRuche().toString(),
+							commentaireEve);
 					evenementRepository.save(evenementRetrait);
 					logger.info("{} créé", evenementRetrait);
 					Evenement evenementRemplissage = new Evenement(Utils.dateTimeDecal(session),
-							TypeEvenement.HAUSSEREMPLISSAGE, ruche, essaim, rucher, hausse, "0", commentaireEve);
+							TypeEvenement.HAUSSEREMPLISSAGE, ruche, ruche.getEssaim(), ruche.getRucher(), hausse, "0",
+							commentaireEve);
 					evenementRepository.save(evenementRemplissage);
+					rucheIds.add(ruche.getId());
 					logger.info("{} créé", evenementRemplissage);
 					hausse.setRuche(null);
 					hausse.setOrdreSurRuche(null);
 					hausseRepository.save(hausse);
 					logger.info(modifiee, hausse);
-
-					// renuméroter l'ordre des hausses de la ruche
-					Iterable<Hausse> haussesRuche = hausseRepository.findByRucheIdOrderByOrdreSurRuche(rucheId);
-					for (Hausse hausseRuche : haussesRuche) {
-						Integer ordre = hausseRuche.getOrdreSurRuche();
-						// si ordre est null plantage, cela est arrivé quand le champ
-						// ordreSurRuche n'était pas présent en hidden dans le formulaire de la hausse
-						if (ordre == null) {
-							logger.error("Récolte {} Ordre hausse {} null.", recolteId, hausseRuche.getNom());
-							hausseRuche.setOrdreSurRuche(10);
-							hausseRepository.save(hausseRuche);
-						} else if (ordre > hausseOrdre) {
-							hausseRuche.setOrdreSurRuche(ordre - 1);
-							hausseRepository.save(hausseRuche);
-						}
-						// else si ordre <= hausseOrdre on ne fait rien
-					}
 				}
+			}
+			for (Long rId : rucheIds) {
+				rucheService.ordonneHaussesRuche(rId);
 			}
 		} else {
 			logger.error(Const.IDRECOLTEXXINCONNU, recolteId);
@@ -418,8 +400,8 @@ public class RecolteHausseController {
 		if (retHausses.length() == 0) {
 			return messageSource.getMessage("pasDeHausseAenlever", null, LocaleContextHolder.getLocale());
 		} else {
-			return messageSource.getMessage((date == null) ? "enleverHausses" : "haussesEnlevees", new Object[] { retHausses, retRuches },
-					LocaleContextHolder.getLocale());
+			return messageSource.getMessage((date == null) ? "enleverHausses" : "haussesEnlevees",
+					new Object[] { retHausses, retRuches }, LocaleContextHolder.getLocale());
 		}
 	}
 
