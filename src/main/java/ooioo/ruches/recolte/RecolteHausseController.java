@@ -8,9 +8,11 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -324,9 +326,9 @@ public class RecolteHausseController {
 	}
 
 	/**
-	 * Enlève toutes les hausses de la récolte des ruches. Réordonne les hausses
-	 * restantes sur les ruches. Crée les événements retraits des hausses et
-	 * remplissage à 0. (appel XMLHttpRequest)
+	 * Enlève toutes les hausses de la récolte des ruches. Crée les événements
+	 * retraits des hausses et remplissage à 0. Réordonne les hausses restantes sur
+	 * les ruches. Appel XMLHttpRequest.
 	 *
 	 * @param date le date pour les événements à créer, pas de paramètre si test
 	 *             uniquement (required = false)
@@ -348,7 +350,7 @@ public class RecolteHausseController {
 			model.addAttribute(Const.RECOLTE, recolte);
 			// Liste des couples RecoltHausse, Hausse de la récolte
 			List<Object[]> reHH = hausseRepository.findHaussesRecHausses(recolteId);
-			List<Long> rucheIds = new ArrayList<>();
+			Set<Long> rucheIds = new HashSet<>();
 			for (Object[] rhh : reHH) {
 				RecolteHausse recolteHausse = (RecolteHausse) rhh[0];
 				Hausse hausse = (Hausse) rhh[1];
