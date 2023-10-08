@@ -23,6 +23,21 @@ document.addEventListener('DOMContentLoaded', () => {
 					type: 'time',
 				}
 			},
+			plugins: {
+				tooltip: {
+					callbacks: {
+						footer: (items => {
+							let txt = '';
+							items.forEach(function(item) {
+								// Boucle si plusieurs points superposés
+								txt += 'Ruche: ' + ruches[item.datasetIndex].nom + ' ' + 
+								(item.parsed.y +  ruches[item.datasetIndex].poidsVide) + 'kg\n';
+							});
+							return txt.slice(0, -1);
+						}),
+					}
+				}
+			}
 		},
 	});
 });
