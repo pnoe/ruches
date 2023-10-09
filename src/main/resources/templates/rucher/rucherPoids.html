@@ -24,12 +24,13 @@
 	<br />
 	<br />
 	<div class="container-fluid">
-		<canvas id="ctx"></canvas>
+		<canvas th:unless="${#arrays.isEmpty(essaims)}" id="ctx"></canvas>
 		<div class="row">
 			<div class="col text-center">
 				<h1 class="item">
 					<a th:href="@{'/rucher/'+${rucher.id}}" th:text="#{rucher}+' '+${rucher.nom}"></a>
-					<th:block th:text="' '+#{poidsessaims}"></th:block>
+					<th:block th:unless="${#arrays.isEmpty(essaims)}" th:text="' '+#{poidsessaims}"></th:block>
+					<th:block th:if="${#arrays.isEmpty(essaims)}" th:text="#{aucunePesee}"></th:block>
 				</h1>
 			</div>
 		</div>

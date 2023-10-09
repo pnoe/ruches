@@ -3,6 +3,7 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
+	if (essaims.length === 0) { return; }
 	const datasets = [];
 	dates.forEach((d, i) => {
 		datasets.push(

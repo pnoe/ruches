@@ -106,19 +106,23 @@ public class RucherController {
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
 			model.addAttribute(Const.RUCHER, rucher);
+			// Traite les essaims du rucher
 			Iterable<Essaim> essaims = essaimRepo.findByRucherId(rucherId);
+			List<Essaim> essaimsPeses = new ArrayList<>();
 			List<List<Long>> dates = new ArrayList<>();
 			List<List<Float>> poids = new ArrayList<>();
 			List<Ruche> ruches = new ArrayList<>();
 			for (Essaim ess : essaims) {
 				List<Evenement> evesPesee = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(ess.getId(),
 						TypeEvenement.RUCHEPESEE);
+				if (evesPesee.size() == 0) { continue; }
 				List<Long> d = new ArrayList<>();
 				List<Float> p = new ArrayList<>();
 				for (Evenement e : evesPesee) {
 					d.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
 					p.add(Float.parseFloat(e.getValeur()));
 				}
+				essaimsPeses.add(ess);
 				dates.add(d);
 				poids.add(p);
 				Ruche ruche = rucheRepository.findByEssaimId(ess.getId());
@@ -126,7 +130,7 @@ public class RucherController {
 			}
 			model.addAttribute("dates", dates);
 			model.addAttribute("poids", poids);
-			model.addAttribute("essaims", essaims);
+			model.addAttribute("essaims", essaimsPeses);
 			model.addAttribute("ruches", ruches);
 			model.addAttribute("rucher", rucher);
 			return "rucher/rucherPoids";
