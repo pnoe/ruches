@@ -3,7 +3,7 @@
    rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
    ruchetxt, lesHausses, pasdehaussetxt, parcourstxt, ignCarteLiscense,
    parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token, dessinEnregistretxt,
-   distRuchesOk, distMaxRuche, geoloc, bootstrap
+   distRuchesOk, distMaxRuche, geoloc, bootstrap, distDiminuee, calculEnCours
    */
 /* exported rucherDetail jsPDF */
 'use strict';
@@ -484,11 +484,11 @@ function rucherDetail(ign) {
 			window.location = ruchesurl + 'ruche/liste/' + rucher.id +
 			'?parcours=' + encodeURIComponent(JSON.stringify(rucheParcours.map(rp => rp.id))) +
 			'&plus=' + (event.target.id !== 'liste')));
-	document.getElementById('export-gpx').addEventListener('click', exportGpx); 
+	document.getElementById('export-gpx').addEventListener('click', exportGpx);
 	document.getElementById('export-kml').addEventListener('click', exportKml);
 	document.getElementById('geoloc').addEventListener('click', geoloc);
 	document.getElementById('parcours-redraw').addEventListener('click', () => {
-		document.getElementById('popup-content').innerHTML = 'Calcul en cours...';
+		document.getElementById('popup-content').innerHTML = calculEnCours;
 		overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());
 		parcoursRedraw(true);
 	});
@@ -597,7 +597,7 @@ function rucherDetail(ign) {
 
 					if (redraw) {
 						document.getElementById('popup-content').innerHTML =
-							'La distance est diminuée de ' + (dist - distParcours).toLocaleString(lang, digits2) +
+							distDiminuee + (dist - distParcours).toLocaleString(lang, digits2) +
 							'm<br/>' + distancedeparcourstxt +
 							' ' + distParcours.toLocaleString(lang, digits2) + ' m';
 						overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());

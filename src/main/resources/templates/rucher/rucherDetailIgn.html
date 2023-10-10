@@ -11,12 +11,13 @@
 	<script th:replace="~{include :: dom-to-image}"></script>
 	<script th:inline="javascript">
 		/* exported ol, domtoimage, jsPDF, exportGpx, exportKml,
-   		rucheParcours:writable, distParcours:writable, longitudeCentre, latitudeCentre, rayonsButinage, cercles, distButinage, ruches, 
-   		rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
-   		ruchetxt, lesHausses, pasdehaussetxt, parcourstxt, ignCarteLiscense,
-   		parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token, dessinEnregistretxt,
-   		distRuchesOk, distMaxRuche, geoloc, bootstrap
-   		*/
+				rucheParcours:writable, distParcours:writable, longitudeCentre, latitudeCentre, rayonsButinage, cercles, distButinage, ruches, 
+				rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
+				ruchetxt, lesHausses, pasdehaussetxt, parcourstxt, ignCarteLiscense,
+				parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token, dessinEnregistretxt,
+				distRuchesOk, distMaxRuche, geoloc, bootstrap, pasDeGeoLoc, recherchePos, locImpossible, distDiminuee,
+				calculEnCours
+				*/
 		/* globals rucherDetail jsPDF */
 		let rucheParcours = /*[[${rucheParcours}]]*/ null;
 		let distParcours = /*[[${distParcours}]]*/ null;
@@ -48,6 +49,11 @@
 		const ignCarteLiscense = /*[[${ignCarteLiscense}]]*/ null;
 		const distRuchesOk = /*[[#{distRuchesOk}]]*/ null;
 		const distMaxRuche = /*[[${distMaxRuche}]]*/ null;
+		const pasDeGeoLoc = /*[[#{pasDeGeoLoc}]]*/ null;
+		const recherchePos = /*[[#{recherchePos}]]*/ null;
+		const locImpossible = /*[[#{locImpossible}]]*/ null;
+		const distDiminuee = /*[[#{distDiminuee}]]*/ null;
+		const calculEnCours = /*[[#{calculEnCours}]]*/ null;
 		window.addEventListener('load', () => rucherDetail(true));
 	</script>
 	<script th:replace="~{include :: cssol}"></script>

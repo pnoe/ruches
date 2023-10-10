@@ -6,9 +6,9 @@
 	<script th:inline="javascript">
 		/* exported google, exportGpx, exportKml,
 		rucheParcours:writable, distParcours:writable, rucher, rucherMapZoom, longitudeCentre, latitudeCentre,
-	 	rayonsButinage, distButinage, urlruches, nomHausses, essaimtxt, pasdessaimtxt,
-	 	ruchetxt, haussestxt, pasdehaussetxt, ruches, ruchestxt, distancedeparcourstxt,
-	 	entreetxt, _csrf_token */
+		  rayonsButinage, distButinage, urlruches, nomHausses, essaimtxt, pasdessaimtxt,
+		  ruchetxt, haussestxt, pasdehaussetxt, ruches, ruchestxt, distancedeparcourstxt,
+		  entreetxt, _csrf_token, distDiminuee, calculEnCours*/
 		let rucheParcours = /*[[${rucheParcours}]]*/ null;
 		let distParcours = /*[[${distParcours}]]*/ null;
 		const rucher = /*[[${rucher}]]*/ null;
@@ -29,6 +29,8 @@
 		const distancedeparcourstxt = /*[[#{distancedeparcours}]]*/ null;
 		const entreetxt = /*[[#{Entree}]]*/ null;
 		const _csrf_token = /*[[${_csrf.token}]]*/ null;
+		const distDiminuee = /*[[#{distDiminuee}]]*/ null;
+		const calculEnCours = /*[[#{calculEnCours}]]*/ null;
 	</script>
 	<script th:replace="~{include :: jsruchesnom('rucherDetailCarto')}"></script>
 </head>

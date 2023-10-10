@@ -2,7 +2,7 @@
 	rucheParcours:writable, distParcours:writable, rucher, rucherMapZoom, longitudeCentre, latitudeCentre,
 	 rayonsButinage, distButinage, urlruches, nomHausses, essaimtxt, pasdessaimtxt,
 	 ruchetxt, haussestxt, pasdehaussetxt, ruches, ruchestxt, distancedeparcourstxt,
-	 entreetxt, _csrf_token */
+	 entreetxt, _csrf_token, distDiminuee, calculEnCours */
 /* exported initMap */
 'use strict';
 let parcours;
@@ -145,7 +145,7 @@ function parcoursRedraw(redraw = false) {
 			infowindowp = new google.maps.InfoWindow();
 		}
 		infowindowp.close();
-		infowindowp.setContent('Calcul en cours...');
+		infowindowp.setContent(calculEnCours);
 		infowindowp.open(map, markerRucher);
 	}
 	req2.open('GET', urlruches + 'rucher/parcours/' + rucher.id + '/' + redraw, true);
@@ -172,7 +172,7 @@ function parcoursRedraw(redraw = false) {
 				if (redraw) {
 					infowindowp.close();
 					infowindowp.setContent(
-						'La distance est diminuée de ' + (dist - distParcours).toLocaleString(lang, digits2) +
+						distDiminuee + (dist - distParcours).toLocaleString(lang, digits2) +
 						'm<br/>' + distancedeparcourstxt +
 						' ' + distParcours.toLocaleString(lang, digits2) + ' m'
 					);
@@ -232,7 +232,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		item.addEventListener('click', event =>
 			window.location = urlruches + 'ruche/liste/' + rucher.id +
 			'?parcours=' + encodeURIComponent(JSON.stringify(rucheParcours.map(rp => rp.id))) +
-			'&plus=' + (event.target.id !== 'liste'))});
+			'&plus=' + (event.target.id !== 'liste'))
+	});
 	document.getElementById('export-gpx').addEventListener('click', exportGpx);
 	document.getElementById('export-kml').addEventListener('click', exportKml);
 	document.getElementById('parcours-redraw').addEventListener('click', parcoursRedraw(true));

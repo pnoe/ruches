@@ -1,7 +1,7 @@
 /* globals
    ol, overlay, drawControl, drawLayer, iconFeatureEntree,
    rucheParcours, distParcours, ruches, rucher, nomHausses,
-   ruchestxt, distancedeparcourstxt  */
+   ruchestxt, distancedeparcourstxt, pasDeGeoLoc, recherchePos, locImpossible  */
 /* exported geoloc exportGpx exportKml */
 'use strict';
 
@@ -40,19 +40,17 @@ function geoloc() {
 	}
 
 	function error() {
-		document.getElementById('popup-content').innerHTML = 'Désolé, pas de localisation possible.';
+		document.getElementById('popup-content').innerHTML = pasDeGeoLoc;
 	}
 
 	if ('geolocation' in navigator) {
-		document.getElementById('popup-content').innerHTML = 'Recherche position en cours...';
+		document.getElementById('popup-content').innerHTML = recherchePos;
 		overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());
 		navigator.geolocation.getCurrentPosition(success, error, options);
 	} else {
-		alert("La localisation n'est pas possible avec votre navigateur");
+		alert(locImpossible);
 	}
 }
-
-
 
 function exportGpx() {
 	const lang = navigator.language;

@@ -1,6 +1,6 @@
 ## Web application to manage apiaries
 
-Spring Boot web application running in Tomcat 9 with Postgresql.
+Spring Boot web application running in Tomcat with Postgresql.
 
 In french or english.
 
