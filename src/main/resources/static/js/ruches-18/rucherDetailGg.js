@@ -2,7 +2,7 @@
 	rucheParcours:writable, distParcours:writable, rucher, rucherMapZoom, longitudeCentre, latitudeCentre,
 	 rayonsButinage, distButinage, urlruches, nomHausses, essaimtxt, pasdessaimtxt,
 	 ruchetxt, haussestxt, pasdehaussetxt, ruches, ruchestxt, distancedeparcourstxt,
-	 entreetxt, _csrf_token, distDiminuee, calculEnCours */
+	 entreetxt, _csrf_token, distDiminuee, calculEnCours, pasDAmelioration */
 /* exported initMap */
 'use strict';
 let parcours;
@@ -156,8 +156,7 @@ function parcoursRedraw(redraw = false) {
 				// distParcours et rucheParcours var globales             
 				if (redraw && (response.distParcours + 0.1 > distParcours)) {
 					infowindowp.close();
-					infowindowp.setContent(
-						"Pas d'amélioration<br/>" +
+					infowindowp.setContent(pasDAmelioration +
 						distancedeparcourstxt + ' ' + distParcours.toLocaleString(lang, digits2) + ' m'
 					);
 					infowindowp.open(map, markerRucher);
@@ -236,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 	document.getElementById('export-gpx').addEventListener('click', exportGpx);
 	document.getElementById('export-kml').addEventListener('click', exportKml);
-	document.getElementById('parcours-redraw').addEventListener('click', parcoursRedraw(true));
+	document.getElementById('parcours-redraw').addEventListener('click', () => { parcoursRedraw(true) });
 	document.getElementById('searchtext').addEventListener('keyup', event => {
 		if (event.code === 'Enter') {
 			const searchtext = document.getElementById('searchtext').value.
@@ -263,3 +262,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 });
+
+

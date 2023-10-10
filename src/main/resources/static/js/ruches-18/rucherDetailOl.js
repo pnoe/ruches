@@ -3,7 +3,7 @@
    rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
    ruchetxt, lesHausses, pasdehaussetxt, parcourstxt, ignCarteLiscense,
    parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token, dessinEnregistretxt,
-   distRuchesOk, distMaxRuche, geoloc, bootstrap, distDiminuee, calculEnCours
+   distRuchesOk, distMaxRuche, geoloc, bootstrap, distDiminuee, calculEnCours, pasDAmelioration
    */
 /* exported rucherDetail jsPDF */
 'use strict';
@@ -575,8 +575,7 @@ function rucherDetail(ign) {
 					const response = JSON.parse(req2.responseText);
 					// distParcours et rucheParcours var globales
 					if (redraw && (response.distParcours + 0.1 > distParcours)) {
-						document.getElementById('popup-content').innerHTML =
-							"Pas d'amélioration<br/>" +
+						document.getElementById('popup-content').innerHTML = pasDAmelioration +
 							distancedeparcourstxt + ' ' + distParcours.toLocaleString(lang, digits2) + ' m';
 						overlay.setPosition(iconFeatureEntree.getGeometry().getCoordinates());
 						return;

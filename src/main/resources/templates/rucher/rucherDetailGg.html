@@ -8,7 +8,7 @@
 		rucheParcours:writable, distParcours:writable, rucher, rucherMapZoom, longitudeCentre, latitudeCentre,
 		  rayonsButinage, distButinage, urlruches, nomHausses, essaimtxt, pasdessaimtxt,
 		  ruchetxt, haussestxt, pasdehaussetxt, ruches, ruchestxt, distancedeparcourstxt,
-		  entreetxt, _csrf_token, distDiminuee, calculEnCours*/
+		  entreetxt, _csrf_token, distDiminuee, calculEnCours, pasDAmelioration */
 		let rucheParcours = /*[[${rucheParcours}]]*/ null;
 		let distParcours = /*[[${distParcours}]]*/ null;
 		const rucher = /*[[${rucher}]]*/ null;
@@ -31,8 +31,17 @@
 		const _csrf_token = /*[[${_csrf.token}]]*/ null;
 		const distDiminuee = /*[[#{distDiminuee}]]*/ null;
 		const calculEnCours = /*[[#{calculEnCours}]]*/ null;
+		const pasDAmelioration = /*[[#{pasDAmelioration}]]*/ null;
 	</script>
 	<script th:replace="~{include :: jsruchesnom('rucherDetailCarto')}"></script>
+	<style>
+		.gm-style .gm-style-iw-d::-webkit-scrollbar-track,
+		.gm-style .gm-style-iw-d::-webkit-scrollbar-track-piece,
+		.gm-style .gm-style-iw-c,
+		.gm-style .gm-style-iw-t::after {
+			background: #888888;
+		}
+	</style>
 </head>
 
 <body>
