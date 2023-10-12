@@ -94,9 +94,8 @@ public class RucheService {
 	}
 
 	/*
-	 * Ré-ordonne les hausses d'une ruche.
-	 * Permet de remettre un ordre 1, 2, 3... après suppression d'une hausse
-	 *  par exemple.
+	 * Ré-ordonne les hausses d'une ruche. Permet de remettre un ordre 1, 2, 3...
+	 * après suppression d'une hausse par exemple.
 	 */
 	public void ordonneHaussesRuche(long rucheId) {
 		Iterable<Hausse> haussesRuche = hausseRepository.findByRucheIdOrderByOrdreSurRuche(rucheId);

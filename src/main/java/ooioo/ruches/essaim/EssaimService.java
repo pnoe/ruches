@@ -35,6 +35,7 @@ import ooioo.ruches.recolte.RecolteHausseRepository;
 import ooioo.ruches.recolte.RecolteRepository;
 import ooioo.ruches.ruche.Ruche;
 import ooioo.ruches.ruche.RucheRepository;
+import ooioo.ruches.rucher.Rucher;
 import ooioo.ruches.rucher.RucherRepository;
 
 @Service
@@ -61,7 +62,71 @@ public class EssaimService {
 	private static final String cree = "{} créé";
 	private static final String modif = "{} modifié";
 
-	
+	/**
+	 * Change un essaim de ruche. Si la ruche contient un essaim, le disperser.
+	 * 
+	 * @param essaim,        l'essaim à changer du ruche
+	 * @param rucheDest,     la ruche dans laquelle on met l'essaim
+	 * @param date,          la date saisie dans le formulaire
+	 * @param commentaire,   le commentaire saisi dans le formulaire
+	 * @param swapPositions, true si échange de position des ruches demandé
+	 */
+	public void associeRucheSauve(Essaim essaim, Ruche rucheDest, String date, String commentaire,
+			boolean swapPositions) {
+		LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
+		// Si la rucheDest contient un essaim, le disperser
+		Essaim essaimDisperse = rucheDest.getEssaim();
+		if (essaimDisperse != null) {
+			// On disperse cet essaim : inactif et date, commentaire de dispersion
+			essaimDisperse.setActif(false);
+			essaimDisperse.setDateDispersion(dateEve);
+			essaimDisperse.setCommDisp(commentaire);
+			essaimRepository.save(essaimDisperse);
+			logger.info(modif, essaimDisperse);
+		}
+		// La ruche dans laquelle est l'essaim
+		Ruche rucheActuelle = rucheRepository.findByEssaimId(essaim.getId());
+		if (rucheActuelle != null) {
+			if (swapPositions) {
+				Float lat = rucheDest.getLatitude();
+				Float lon = rucheDest.getLongitude();
+				Rucher rucher = rucheDest.getRucher();
+				rucheDest.setRucher(rucheActuelle.getRucher());
+				rucheDest.setLatitude(rucheActuelle.getLatitude());
+				rucheDest.setLongitude(rucheActuelle.getLongitude());
+				rucheActuelle.setRucher(rucher);
+				rucheActuelle.setLatitude(lat);
+				rucheActuelle.setLongitude(lon);
+				// création de deux événements rucherajouterucher si les ruchers sont
+				// différents.
+				// On peut avoir demandé d'échanger les positions des ruches alors qu'elles sont
+				// dans les mêmes ruchers !
+				if (!rucheActuelle.getRucher().getId().equals(rucheDest.getRucher().getId())) {
+					Evenement eveRucheDest = new Evenement(dateEve.minusSeconds(1), TypeEvenement.RUCHEAJOUTRUCHER,
+							rucheDest, rucheDest.getEssaim(), rucheDest.getRucher(), null, null, commentaire);
+					evenementRepository.save(eveRucheDest);
+					logger.info(cree, eveRucheDest);
+					Evenement eveRucheActuelle = new Evenement(dateEve.minusSeconds(1), TypeEvenement.RUCHEAJOUTRUCHER,
+							rucheActuelle, rucheActuelle.getEssaim(), rucheActuelle.getRucher(), null, null,
+							commentaire);
+					evenementRepository.save(eveRucheActuelle);
+					logger.info(cree, eveRucheActuelle);
+				}
+			}
+			rucheActuelle.setEssaim(null);
+			rucheRepository.save(rucheActuelle);
+		}
+		rucheDest.setEssaim(essaim);
+		rucheRepository.save(rucheDest);
+		// on met dans l'événement le rucher rucheDest.getRucher car la position des
+		// ruches
+		// a pu être échangée
+		Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, rucheDest, essaim,
+				rucheDest.getRucher(), null, null, commentaire); // valeur commentaire
+		evenementRepository.save(evenementAjout);
+		logger.info(cree, evenementAjout);
+	}
+
 	/*
 	 * Clone d'un essaim.
 	 */
@@ -117,8 +182,8 @@ public class EssaimService {
 	/*
 	 * Historique de la mise en ruchers d'un essaim. Les événements affichés dans
 	 * l'historique : - les mise en rucher de ruches ou l'essaim apparait - la
-	 * dispersion de l'essaim qui termine l'historique n'est plus affichée
-	 * depuis le transfert vers l'entité essaim de la dispersion - la ou les mises en ruches
+	 * dispersion de l'essaim qui termine l'historique n'est plus affichée depuis le
+	 * transfert vers l'entité essaim de la dispersion - la ou les mises en ruches
 	 * de l'essaim qui peuvent impliquer des déplacements
 	 */
 	boolean historique(Model model, Long essaimId) {
@@ -131,7 +196,7 @@ public class EssaimService {
 			List<Evenement> evensEssaimAjout = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
 					TypeEvenement.RUCHEAJOUTRUCHER);
 			// Si l'essaim est dispersé cela termine le séjour dans le dernier rucher
-			//  plus d'événement dispersion, indiquer la dispersion autrement.
+			// plus d'événement dispersion, indiquer la dispersion autrement.
 			// Ajouter les mises en ruche
 			List<Evenement> miseEnRuche = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
 					TypeEvenement.AJOUTESSAIMRUCHE);
@@ -274,14 +339,16 @@ public class EssaimService {
 			if (pMin == 1000000) {
 				pMin = 0;
 			}
-			// Si l'essaim n'a participé à aucune récolte, on ne l'affiche pas dans le tableau.
+			// Si l'essaim n'a participé à aucune récolte, on ne l'affiche pas dans le
+			// tableau.
 			if (essaimOK) {
 				Map<String, String> essaimPoids = new HashMap<>();
 				essaimPoids.put("nom", essaim.getNom());
 				essaimPoids.put("id", essaim.getId().toString());
 				essaimPoids.put("dateAcquisition", essaim.getDateAcquisition().toString());
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-				essaimPoids.put("dateDispersion", (essaim.getActif()) ? "" : essaim.getDateDispersion().format(formatter));
+				essaimPoids.put("dateDispersion",
+						(essaim.getActif()) ? "" : essaim.getDateDispersion().format(formatter));
 				// calcul moyenne production miel par jour d'existence de l'essaim
 				if (rucherId == null) {
 					LocalDateTime dateFin = (essaim.getActif()) ? LocalDateTime.now() : essaim.getDateDispersion();
@@ -310,12 +377,12 @@ public class EssaimService {
 	/**
 	 * Enregistrement de l'essaimage.
 	 *
-	 * @param essaimId l'id de l'essaim qui essaime.
-	 * @param date la date saisie dans le formulaire d'essaimage.
-	 * @param nom le nom du nouvel essaim restant dans la ruche saisi dans le
-	 * formulaire d'essaimage.
+	 * @param essaimId    l'id de l'essaim qui essaime.
+	 * @param date        la date saisie dans le formulaire d'essaimage.
+	 * @param nom         le nom du nouvel essaim restant dans la ruche saisi dans
+	 *                    le formulaire d'essaimage.
 	 * @param commentaire le commentaire saisi dans le formulaire d'essaimage.
-	 * @param essaimOpt l'essaim essaimId.
+	 * @param essaimOpt   l'essaim essaimId.
 	 */
 	Essaim essaimSauve(long essaimId, String date, String nom, String commentaire, Optional<Essaim> essaimOpt) {
 		// L'essaim à disperser

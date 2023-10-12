@@ -72,9 +72,6 @@ public class EssaimController {
 	@Autowired
 	private EssaimService essaimService;
 
-	private static final String cree = "{} créé";
-	private static final String modif = "{} modifié";
-
 	/**
 	 * Graphe affichant les poids d'une ruche.
 	 */
@@ -592,6 +589,10 @@ public class EssaimController {
 	/**
 	 * Change un essaim de ruche. Il faut mettre l'essaim essaimId dans le ruche
 	 * rucheId. Si la ruche contient un essaim, le disperser.
+	 * 
+	 * @param date,          la date saisie dans le formulaire
+	 * @param commentaire,   le commentaire saisi dans le formulaire
+	 * @param swapPositions, true si échange de position des ruches demandé
 	 */
 	@PostMapping("/ruche/associe/sauve/{rucheId}/{essaimId}")
 	public String associeRucheSauve(Model model, @PathVariable long rucheId, @PathVariable long essaimId,
@@ -611,66 +612,7 @@ public class EssaimController {
 					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
 			return Const.INDEX;
 		}
-		Essaim essaim = essaimOpt.get();
-		// La ruche dans laquelle on va mettre l'essaim
-		Ruche ruche = rucheOpt.get();
-		LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
-		// Si la ruche contient un essaim, le disperser
-		Essaim essaimDisperse = ruche.getEssaim();
-		if (essaimDisperse != null) {
-			// On inactive l'essaim dispersé
-			essaimDisperse.setActif(false);
-			
-			// suppression eve dispersion
-			essaimDisperse.setDateDispersion(dateEve);
-			essaimDisperse.setCommDisp(commentaire);
-			
-			essaimRepository.save(essaimDisperse);
-			
-			// ajouté log essaim modifié
-			logger.info(modif, essaimDisperse);
-		}
-		Rucher rucher = ruche.getRucher();
-		// La ruche dans laquelle est l'essaim
-		Ruche rucheActuelle = rucheRepository.findByEssaimId(essaimId);
-		if (rucheActuelle != null) {
-			if (swapPositions) {
-				Float lat = ruche.getLatitude();
-				Float lon = ruche.getLongitude();
-				ruche.setRucher(rucheActuelle.getRucher());
-				ruche.setLatitude(rucheActuelle.getLatitude());
-				ruche.setLongitude(rucheActuelle.getLongitude());
-				rucheRepository.save(ruche);
-				rucheActuelle.setRucher(rucher);
-				rucheActuelle.setLatitude(lat);
-				rucheActuelle.setLongitude(lon);
-				// création de deux événements rucherajouterucher si les ruchers sont différents
-				// on peut avoir demandé d'échanger les positions des ruches alors qu'elles sont
-				// dans
-				// les mêmes ruchers !
-				if (!rucheActuelle.getRucher().getId().equals(ruche.getRucher().getId())) {
-					Evenement eveRuche = new Evenement(dateEve.minusSeconds(1), TypeEvenement.RUCHEAJOUTRUCHER, ruche,
-							ruche.getEssaim(), ruche.getRucher(), null, null, commentaire);
-					evenementRepository.save(eveRuche);
-					logger.info(cree, eveRuche);
-					Evenement eveRucheActuelle = new Evenement(dateEve.minusSeconds(1), TypeEvenement.RUCHEAJOUTRUCHER,
-							rucheActuelle, rucheActuelle.getEssaim(), rucheActuelle.getRucher(), null, null,
-							commentaire);
-					evenementRepository.save(eveRucheActuelle);
-					logger.info(cree, eveRucheActuelle);
-				}
-			}
-			rucheActuelle.setEssaim(null);
-			rucheRepository.save(rucheActuelle);
-		}
-		ruche.setEssaim(essaimOpt.get());
-		rucheRepository.save(ruche);
-		// on met dans l'événement le rucher ruche.getRucher car la position des ruches
-		// a pu être échangée
-		Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, ruche, essaim,
-				ruche.getRucher(), null, null, commentaire); // valeur commentaire
-		evenementRepository.save(evenementAjout);
-		logger.info(cree, evenementAjout);
+		essaimService.associeRucheSauve(essaimOpt.get(), rucheOpt.get(), date, commentaire, swapPositions);
 		return Const.REDIRECT_ESSAIM_ESSAIMID;
 	}
 }
