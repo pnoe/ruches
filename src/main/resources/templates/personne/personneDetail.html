@@ -14,17 +14,19 @@
 					return;
 				}
 				event.preventDefault();
-			});		
+			});
 			const tel = document.getElementById('tel');
 			const tels = tel.textContent.split('/');
 			tel.textContent = '';
-			tels.forEach(el => {
+			tels.forEach((el, i) => {
 				el = el.trim();
 				const link = document.createElement('a');
 				link.href = 'tel://' + el;
 				link.innerText = el;
 				tel.appendChild(link);
-				tel.appendChild(document.createElement('br'));
+				if (i < tels.length - 1) {
+					tel.appendChild(document.createElement('br'));
+				}
 			})
 		});
 	</script>
