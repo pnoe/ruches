@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import ooioo.ruches.Const;
 import ooioo.ruches.IdNom;
 import ooioo.ruches.Nom;
@@ -71,6 +72,7 @@ public class EssaimService {
 	 * @param commentaire,   le commentaire saisi dans le formulaire
 	 * @param swapPositions, true si échange de position des ruches demandé
 	 */
+	@Transactional
 	public void associeRucheSauve(Essaim essaim, Ruche rucheDest, String date, String commentaire,
 			boolean swapPositions) {
 		LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
