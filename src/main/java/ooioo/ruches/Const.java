@@ -54,6 +54,8 @@ public final class Const {
 	static final String DECALAGETEMPS = "decalagetemps";
 	public static final String CONCURACCESS = "Modification annulée, un autre utilisateur a fait une modification en même temps.";
 
+	public static final String CREE = "{} créé(e)";
+	public static final String MODIFIE = "{} modifié(e)";
 
 	public static final String COMMENTAIRE = "commentaire";
 	public static final String DATE = "date";

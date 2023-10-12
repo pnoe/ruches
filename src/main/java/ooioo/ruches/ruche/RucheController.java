@@ -78,8 +78,6 @@ public class RucheController {
 	@Autowired
 	private MessageSource messageSource;
 
-	public static final String eveCree = "{} créé";
-
 	/**
 	 * Historique de l'ajout des hausses sur une ruche
 	 */
@@ -133,7 +131,7 @@ public class RucheController {
 					Evenement eveAjout = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.RUCHEAJOUTRUCHER,
 							clone, null, ruche.getRucher(), null, null, commentaire);
 					evenementRepository.save(eveAjout);
-					logger.info(eveCree, eveAjout);
+					logger.info(Const.CREE, eveAjout);
 					nomsCrees.add(nom);
 					// pour éviter clone "a,a" : 2 fois le même nom dans la liste
 					noms.add(nom);
@@ -369,7 +367,7 @@ public class RucheController {
 							: ruche.getDateAcquisition().atStartOfDay(),
 					TypeEvenement.RUCHEAJOUTRUCHER, ruche, null, rucher, null, null, "Création de la ruche");
 			evenementRepository.save(eveAjout);
-			logger.info(eveCree, eveAjout);
+			logger.info(Const.CREE, eveAjout);
 		} else {
 			rucheRepository.save(ruche);
 		}
@@ -502,7 +500,7 @@ public class RucheController {
 							TypeEvenement.HAUSSERETRAITRUCHE, rucheHausse, rucheHausse.getEssaim(),
 							rucheHausse.getRucher(), hausse, hausse.getOrdreSurRuche().toString(), commentaire);
 					evenementRepository.save(evenementRetrait);
-					logger.info(eveCree, evenementRetrait);
+					logger.info(Const.CREE, evenementRetrait);
 					rucheService.ordonneHaussesRuche(rucheHausse.getId());
 					logger.info("Hausse {} retirée de la ruche {}", hausse.getNom(), rucheHausse.getNom());
 				}
@@ -515,7 +513,7 @@ public class RucheController {
 						ruche.getEssaim(), ruche.getRucher(), hausse, hausse.getOrdreSurRuche().toString(),
 						commentaire);
 				evenementRepository.save(evenementPose);
-				logger.info(eveCree, evenementPose);
+				logger.info(Const.CREE, evenementPose);
 				logger.info("Hausse {} posée sur la ruche {}", hausse.getNom(), ruche.getNom());
 			} else {
 				logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
@@ -561,7 +559,7 @@ public class RucheController {
 				Evenement evenementRetrait = new Evenement(dateEve, TypeEvenement.HAUSSERETRAITRUCHE, ruche, essaim,
 						rucher, hausse, hausse.getOrdreSurRuche().toString(), commentaire);
 				evenementRepository.save(evenementRetrait);
-				logger.info(eveCree, evenementRetrait);
+				logger.info(Const.CREE, evenementRetrait);
 				hausse.setRuche(null);
 				hausse.setOrdreSurRuche(null);
 				hausseRepository.save(hausse);

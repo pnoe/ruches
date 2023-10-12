@@ -61,8 +61,6 @@ public class EvenementEssaimController {
 	private EssaimService essaimService;
 
 	private static final String commForm = "essaim/essaimCommentaireForm";
-	private static final String cree = "{} créé";
-	private static final String modif = "{} modifié";
 
 	/*
 	 * Liste événements essaim sucre. Période moins d'un an par défaut (value = "p",
@@ -248,7 +246,7 @@ public class EvenementEssaimController {
 				Evenement evenement = new Evenement(dateEve, typeEvenement, ruche, essaim, rucher, null, valeur,
 						commentaire); // valeur commentaire
 				evenementRepository.save(evenement);
-				logger.info(cree, evenement);
+				logger.info(Const.CREE, evenement);
 			} else {
 				// on continue le traitement des autres essaims
 				logger.error(Const.IDESSAIMXXINCONNU, essaimId);
@@ -511,7 +509,7 @@ public class EvenementEssaimController {
 						Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, ruche,
 								essaimRemerage, ruche.getRucher(), null, null, commentaire);
 						evenementRepository.save(evenementAjout);
-						logger.info(cree, evenementAjout);
+						logger.info(Const.CREE, evenementAjout);
 						ruche.setEssaim(essaimRemerage);
 					} else {
 						logger.error(Const.IDESSAIMXXINCONNU, remerageId);
@@ -534,14 +532,14 @@ public class EvenementEssaimController {
 					Evenement eveCadre = new Evenement(dateEve, TypeEvenement.RUCHECADRE, ruche, null,
 							(depot) ? rucherDepot : rucher, null, "0", "Dispersion essaim " + essaim.getNom());
 					evenementRepository.save(eveCadre);
-					logger.info(cree, eveCadre);
+					logger.info(Const.CREE, eveCadre);
 				}
 				// On inactive l'essaim
 				essaim.setActif(false);
 				essaim.setDateDispersion(dateEve);
 				essaim.setCommDisp(commentaire);
 				essaimRepository.save(essaim);
-				logger.info(modif, essaim);
+				logger.info(Const.MODIFIE, essaim);
 				// essaim inactivé on affiche la liste des essaims
 				return "redirect:/essaim/liste";
 			} else {
