@@ -67,7 +67,7 @@
 				<tr th:each="personne : ${personnes}">
 					<td><a th:href="@{'/personne/'+${personne.id}}" th:text="${personne.nom}"></a></td>
 					<td th:text="${personne.prenom}"></td>
-					<td th:utext="${#strings.replace(#strings.escapeXml(personne.tel),'&#10;','<br/>')}"></td>
+					<td th:text="${personne.tel}"></td>
 					<td th:text="${personne.email}"></td>
 					<td th:text="${personne.adresse}"></td>
 					<td th:text="${personne.login}"></td>

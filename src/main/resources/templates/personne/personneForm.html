@@ -75,13 +75,11 @@
 				maxlength="35" />
 			<label class="form-label" th:text="#{prenom}" for="prenom"></label>
 		</div>
-		
 		<div class="form-floating mb-3">
 			<textarea class="form-control" placeholder="" type="text" th:field="*{tel}" th:errorclass="fieldError"
 				maxlength="255" />
-			<label class="form-label" th:text="#{tel}" for="tel"></label>
+			<label class="form-label" th:text="#{telSep}" for="tel"></label>
 		</div>
-		
 		<div class="form-floating mb-3">
 			<input class="form-control" placeholder="" type="text" th:field="*{email}" th:errorclass="fieldError"
 				maxlength="255" />
