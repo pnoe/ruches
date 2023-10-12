@@ -117,9 +117,11 @@ public class EssaimService {
 			}
 			rucheActuelle.setEssaim(null);
 			rucheRepository.save(rucheActuelle);
+			logger.info(modif, rucheActuelle);
 		}
 		rucheDest.setEssaim(essaim);
 		rucheRepository.save(rucheDest);
+		logger.info(modif, rucheDest);
 		// on met dans l'événement le rucher rucheDest.getRucher car la position des
 		// ruches
 		// a pu être échangée
