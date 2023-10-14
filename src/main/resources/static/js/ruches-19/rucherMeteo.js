@@ -1,6 +1,7 @@
-/* globals longitude,latitude,openweathermapKey,urlPrefix,Chart */
+/* globals longitude, latitude, openweathermapKey, urlPrefix, Chart */
 /* exported rucherMeteo */
 'use strict';
+
 function rucherMeteo() {
 	//	https://erikflowers.github.io/weather-icons/
 	//	https://openweathermap.org/api/one-call-api

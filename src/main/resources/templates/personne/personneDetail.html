@@ -15,19 +15,22 @@
 				}
 				event.preventDefault();
 			});
-			const tel = document.getElementById('tel');
-			const tels = tel.textContent.split('/');
-			tel.textContent = '';
-			tels.forEach((el, i) => {
-				el = el.trim();
-				const link = document.createElement('a');
-				link.href = 'tel://' + el;
-				link.innerText = el;
-				tel.appendChild(link);
-				if (i < tels.length - 1) {
-					tel.appendChild(document.createElement('br'));
-				}
-			})
+			function lnks(proto) {
+				const td = document.getElementById(proto);
+				const items = td.textContent.split('/');
+				td.textContent = '';
+				items.forEach((el, i) => {
+					el = el.trim();
+					const link = document.createElement('a');
+					link.href = proto + ':' + el;
+					link.innerText = el;
+					td.appendChild(link);
+					if (i < items.length - 1) {
+						td.appendChild(document.createElement('br'));
+					}
+				})
+			}
+			lnks('tel');
 		});
 	</script>
 </head>
@@ -68,8 +71,9 @@
 			<tbody>
 				<tr>
 					<td id="tel" th:text="${personne.tel}"></td>
-					<td><a th:href="@{'mailto:'+${personne.email}(subject=Ruches,body=${personne.prenom})}"
-							th:text="${personne.email}"></a></td>
+					<td><a id="mailto"
+						th:href="@{'mailto:'+${personne.email}(subject=Ruches,body=${personne.prenom})}"
+						th:text="${personne.email}"></a></td>
 					<td th:text="${personne.adresse}"></td>
 					<td th:text="${personne.login}"></td>
 					<td th:text="${personne.roles}"></td>

@@ -1,5 +1,5 @@
 /* globals
-	Ruches rucher nomrucher buttTxtPrint buttTxtCol DataTable
+	Ruches, rucher, nomrucher, buttTxtPrint, buttTxtCol, DataTable
 */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {

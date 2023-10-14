@@ -1,5 +1,5 @@
 /* globals
-	Ruches  buttTxtPrint  buttTxtCol  urlCommLot  selectRuTrait DataTable
+	Ruches, buttTxtPrint, buttTxtCol, urlCommLot, selectRuTrait, DataTable
 */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {

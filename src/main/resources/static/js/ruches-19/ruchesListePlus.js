@@ -1,5 +1,5 @@
 /* globals
-	Ruches buttTxtPrint buttTxtCol DataTable
+	Ruches, buttTxtPrint, buttTxtCol, DataTable
 */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {

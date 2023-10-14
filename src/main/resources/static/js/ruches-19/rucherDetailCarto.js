@@ -2,7 +2,7 @@
    ol, overlay, drawControl, drawLayer, iconFeatureEntree,
    rucheParcours, distParcours, ruches, rucher, nomHausses,
    ruchestxt, distancedeparcourstxt, pasDeGeoLoc, recherchePos, locImpossible  */
-/* exported geoloc exportGpx exportKml */
+/* exported geoloc, exportGpx, exportKml */
 'use strict';
 
 function geoloc() {

@@ -1,5 +1,5 @@
 /* globals
-	  buttTxtPrint buttTxtCol Evenements  DataTable
+	  buttTxtPrint, buttTxtCol, Evenements, DataTable
 */
 /* exported evenementSucreListe */
 'use strict';

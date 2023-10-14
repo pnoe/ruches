@@ -16,8 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			scales: {
 				x: {
 					type: 'time',
-					// min: min,
-					// max: max,
 				},
 				y: {
 				}

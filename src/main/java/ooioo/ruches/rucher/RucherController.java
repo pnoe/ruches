@@ -115,7 +115,7 @@ public class RucherController {
 			for (Essaim ess : essaims) {
 				List<Evenement> evesPesee = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(ess.getId(),
 						TypeEvenement.RUCHEPESEE);
-				if (evesPesee.size() == 0) { continue; }
+				if (evesPesee.isEmpty()) { continue; }
 				List<Long> d = new ArrayList<>();
 				List<Float> p = new ArrayList<>();
 				for (Evenement e : evesPesee) {

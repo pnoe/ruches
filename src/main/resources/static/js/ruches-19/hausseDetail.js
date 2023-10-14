@@ -1,6 +1,6 @@
 /* globals
-_csrf_token	_csrf_param_name haussenoms recolteHausses haussesupp supphausseeve
-supphausse nomhaussesv nomexistentdeja  evenements  urlclone  hausseid  hausses  creer
+_csrf_token, _csrf_param_name, haussenoms, recolteHausses, haussesupp, supphausseeve,
+supphausse, nomhaussesv, nomexistentdeja,  evenements, urlclone, hausseid, hausses, creer
  */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {

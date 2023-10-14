@@ -81,10 +81,11 @@ public class EssaimService {
 			essaimRepository.save(essaimDisperse);
 			logger.info(Const.MODIFIE, essaimDisperse);
 		}
-		// La ruche dans laquelle est l'essaim
+		// La ruche dans laquelle est l'essaim.
 		Ruche rucheActuelle = rucheRepository.findByEssaimId(essaim.getId());
 		if (rucheActuelle != null) {
 			if (swapPositions) {
+				// Echange des positions rucheDest et rucheActuelle.
 				Float lat = rucheDest.getLatitude();
 				Float lon = rucheDest.getLongitude();
 				Rucher rucher = rucheDest.getRucher();
@@ -94,7 +95,7 @@ public class EssaimService {
 				rucheActuelle.setRucher(rucher);
 				rucheActuelle.setLatitude(lat);
 				rucheActuelle.setLongitude(lon);
-				// création de deux événements rucherajouterucher si les ruchers sont
+				// Création de deux événements rucherajouterucher si les ruchers sont
 				// différents.
 				// On peut avoir demandé d'échanger les positions des ruches alors qu'elles sont
 				// dans les mêmes ruchers !
@@ -117,9 +118,8 @@ public class EssaimService {
 		rucheDest.setEssaim(essaim);
 		rucheRepository.save(rucheDest);
 		logger.info(Const.MODIFIE, rucheDest);
-		// on met dans l'événement le rucher rucheDest.getRucher car la position des
-		// ruches
-		// a pu être échangée
+		// On met dans l'événement le rucher rucheDest.getRucher car la position des
+		// ruches a pu être échangée.
 		Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, rucheDest, essaim,
 				rucheDest.getRucher(), null, null, commentaire); // valeur commentaire
 		evenementRepository.save(evenementAjout);
