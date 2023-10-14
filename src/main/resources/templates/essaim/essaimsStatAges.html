@@ -9,7 +9,7 @@
 	<script th:replace="~{include :: jsruches}"></script>
 	<script th:inline="javascript">
 		/* exported agesHisto, pas, ageMinJours, ageMaxJours, Max, Min, ageMoyenJours, 
-		EcartType, ageVarianceJours, Moyenne
+		EcartType, ageVarianceJours, Moyenne, ageDesReines, nbReinesTotal, jours, Reines
 		*/
 		const pas = /*[[${pas}]]*/ null;
 		const agesHisto = /*[[${agesHisto}]]*/ null;
@@ -21,6 +21,10 @@
 		const EcartType = /*[[#{EcartType}]]*/ null;
 		const Min = /*[[#{Min}]]*/ null;
 		const Max = /*[[#{Max}]]*/ null;
+		const ageDesReines = /*[[#{ageDesReines}]]*/ null;
+		const nbReinesTotal = /*[[#{nbReinesTotal}]]*/ null;
+		const jours = /*[[#{jours}]]*/ null;
+		const Reines = /*[[#{Reines}]]*/ null;
 	</script>
 </head>
 

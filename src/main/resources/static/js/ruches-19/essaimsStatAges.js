@@ -1,5 +1,5 @@
 /* globals d3, Chart, agesHisto, pas, ageMinJours, ageMaxJours, Max, Min, ageMoyenJours, 
-	EcartType, ageVarianceJours, Moyenne
+	EcartType, ageVarianceJours, Moyenne, ageDesReines, nbReinesTotal, jours, Reines
 */
 'use strict';
 // https://github.com/code-nebula/chart-color-generator
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		datasets: [{
 			data: agesHisto,
 			backgroundColor: colors,
-			label: 'Reines',
+			label: Reines,
 		}],
 		labels: labels
 	};
@@ -55,11 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
 					display: true,
 					title: {
 						display: true,
-						text: 'Âge des reines - ' +
+						text: ageDesReines + ' - ' +
 							Min + ' ' + ageMinJours + ' ' +
 							Max + ' ' + ageMaxJours + ' ' +
 							Moyenne + ' ' + ageMoyenJours + ' ' +
-							EcartType + ' ' + ageVarianceJours + ' jours',
+							EcartType + ' ' + ageVarianceJours + jours + ' ',
 						font: {
 							size: 14,
 						},
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					display: true,
 					title: {
 						display: true,
-						text: 'Nombre de reines Total ' + agesHisto.reduce((a, c) => a + c, 0),
+						text: nbReinesTotal + ' ' + agesHisto.reduce((a, c) => a + c, 0),
 						font: {
 							size: 12,
 						},
