@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		html: true
 	});
 	document.getElementById('tous').addEventListener('change', function(event) {
-		location = url + event.target.checked;
+		// location = url + event.target.checked;
+		window.location.assign(url + event.target.checked);
 	});
 	new DataTable('#evenementsnotif', {
 		order: [[0, 'desc']],

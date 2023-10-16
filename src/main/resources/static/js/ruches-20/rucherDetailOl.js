@@ -3,7 +3,7 @@
    rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
    ruchetxt, lesHausses, pasdehaussetxt, parcourstxt, ignCarteLiscense,
    parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token, dessinEnregistretxt,
-   distRuchesOk, distMaxRuche, geoloc, bootstrap, distDiminuee, calculEnCours, pasDAmelioration
+   distRuchesOk, distMaxRuche, geoloc, bootstrap, distDiminuee, calculEnCours, pasDAmelioration, dessintxt
    */
 /* exported rucherDetail jsPDF */
 'use strict';
@@ -274,7 +274,7 @@ function rucherDetail(ign) {
 		{
 			layer: drawLayer,
 			config: {
-				title: 'Dessin',
+				title: dessintxt,
 				description: 'Dessin manuels'
 			}
 		},

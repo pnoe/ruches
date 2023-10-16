@@ -7,6 +7,13 @@
 	<artifactId>ruches</artifactId>
 	<version>6.0.0</version>
 	<packaging>war</packaging>
+	<properties>
+		<closure-compiler.version>2.27.0</closure-compiler.version>
+		<ortools.version>9.7.2996</ortools.version>
+		<java.version>17</java.version>
+		<selenium-java.version>4.14.1</selenium-java.version>
+		<ruches.js.version>20</ruches.js.version>
+	</properties>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -74,7 +81,7 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>4.14.1</version><!--$NO-MVN-MAN-VER$-->
+			<version>${selenium-java.version}</version><!--$NO-MVN-MAN-VER$-->
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -88,19 +95,59 @@
 		<dependency>
 			<groupId>com.google.ortools</groupId>
 			<artifactId>ortools-java</artifactId>
-			<version>9.7.2996</version>
+			<version>${ortools.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
 	</dependencies>
-	<properties>
-		<java.version>17</java.version>
-	</properties>
 	<build>
 		<finalName>ruches</finalName>
 		<plugins>
+			
+			<!-- 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<warSourceExcludes>
+						${basedir}/src/main/resources/static/js/ruches-${ruches.js.version}/*.js</warSourceExcludes>
+				</configuration>
+			</plugin>
+			-->
+			<plugin>
+				<groupId>com.github.blutorange</groupId>
+				<artifactId>closure-compiler-maven-plugin</artifactId>
+				<version>${closure-compiler.version}</version>
+				<executions>
+					<execution>
+						<id>default-minify</id>
+						<configuration>
+							<closureLanguageOut>NO_TRANSPILE</closureLanguageOut>
+							<!-- https://blutorange.github.io/closure-compiler-maven-plugin/examples/m2e.html -->
+							<skipRunOnIncremental>true</skipRunOnIncremental>
+							<baseSourceDir>
+								${basedir}/src/main/resources/static/js</baseSourceDir>
+							<sourceDir>ruches-${ruches.js.version}</sourceDir>
+							<baseTargetDir>
+								${project.build.directory}/${project.build.finalName}/WEB-INF/classes/static/js
+							</baseTargetDir>
+							<targetDir>ruches-${ruches.js.version}</targetDir>
+							<skipMerge>true</skipMerge>
+							<outputFilename>#{filename}</outputFilename>
+							<includes>
+								<include>*.js</include>
+							</includes>
+						</configuration>
+						<goals>
+							<goal>minify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- -->
+			
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
