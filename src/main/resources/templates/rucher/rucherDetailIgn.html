@@ -16,7 +16,7 @@
 				ruchetxt, lesHausses, pasdehaussetxt, parcourstxt, ignCarteLiscense,
 				parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token, dessinEnregistretxt,
 				distRuchesOk, distMaxRuche, geoloc, bootstrap, pasDeGeoLoc, recherchePos, locImpossible, distDiminuee,
-				calculEnCours, pasDAmelioration, dessintxt
+				calculEnCours, pasDAmelioration, dessintxtenregistrer, enregistrer, ZoomRuches
 				*/
 		/* globals rucherDetail jsPDF */
 		let rucheParcours = /*[[${rucheParcours}]]*/ null;
@@ -56,6 +56,8 @@
 		const calculEnCours = /*[[#{calculEnCours}]]*/ null;
 		const pasDAmelioration = /*[[#{pasDAmelioration}]]*/ null;
 		const dessintxt = /*[[#{dessintxt}]]*/ null;
+		const enregistrer = /*[[#{enregistrer}]]*/ null;
+		const ZoomRuches = /*[[#{ZoomRuches}]]*/ null;
 		window.addEventListener('load', () => rucherDetail(true));
 	</script>
 	<script th:replace="~{include :: cssol}"></script>

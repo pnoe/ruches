@@ -3,7 +3,7 @@
    rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
    ruchetxt, lesHausses, pasdehaussetxt, parcourstxt, ignCarteLiscense,
    parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token, dessinEnregistretxt,
-   distRuchesOk, distMaxRuche, geoloc, bootstrap, distDiminuee, calculEnCours, pasDAmelioration, dessintxt
+   distRuchesOk, distMaxRuche, geoloc, bootstrap, distDiminuee, calculEnCours, pasDAmelioration, dessintxt, enregistrer
    */
 /* exported rucherDetail jsPDF */
 'use strict';
@@ -226,14 +226,14 @@ function rucherDetail(ign) {
 			text: false
 		},
 		labels: {
-			export: 'Enregistrer'
+			export: enregistrer
 		},
 	});
 	map.addControl(drawControl);
 	map.addControl(new ol.control.ZoomToExtent({
 		extent: vectorLayer.getSource().getExtent().map((item, index) => item - [1, 1, -1, -1][index]),
 		label: 'Z',
-		tipLabel: 'Zoom Ruches',
+		tipLabel: ZoomRuches,
 	}));
 	ol.control.Drawing.prototype.onExportFeatureClick = function() {
 		const req = new XMLHttpRequest();
