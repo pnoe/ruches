@@ -1,4 +1,4 @@
-/* globals Chart, essaims, dates, poids, ruches
+/* globals Chart, essaims, dates, poids, ruches, ruche
 */
 'use strict';
 
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 							let txt = '';
 							items.forEach(function(item) {
 								// Boucle si plusieurs points superposés
-								txt += 'Ruche: ' + ruches[item.datasetIndex].nom + ' ' + 
+								txt += ruche + ': ' + ruches[item.datasetIndex].nom + ' ' + 
 								(item.parsed.y +  ruches[item.datasetIndex].poidsVide) + 'kg\n';
 							});
 							return txt.slice(0, -1);
