@@ -18,13 +18,13 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	document.getElementById('clone').addEventListener('click', () => {
+		let iajout = 0;
 		function annule() {
 			while (iajout--) {
 				haussenoms.pop();
 			}
 		}
 		const noms = prompt(nomhaussesv);
-		let iajout = 0;
 		if (noms === null || noms === '') {
 			return;
 		}

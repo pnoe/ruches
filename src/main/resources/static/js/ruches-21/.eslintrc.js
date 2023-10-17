@@ -30,6 +30,8 @@
     	"no-self-compare": "error",
     	"no-lonely-if": "error",
     	"no-negated-condition": "error",
+    	"no-self-compare": "error",
+    	"no-template-curly-in-string": "error",
     	"no-unmodified-loop-condition": "error",
     	"no-unreachable-loop": "error",
     	"no-unused-expressions": "error",

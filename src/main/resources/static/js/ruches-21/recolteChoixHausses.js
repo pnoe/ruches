@@ -38,18 +38,18 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	});
 	tableRetrait.on('select deselect', updateLinks);
-	document.getElementById('retirerHausses').addEventListener('click', event => {
-		if (event.target.getAttribute('href') === '#') {
-			alert(selHausRet);
-			event.preventDefault(); // pas indispensable link #
-		}
-	});
 	const tableAjout = new DataTable('#ajoutHausseRecolte', {
 		select: {
 			style: 'multi+shift'
 		}
 	});
 	tableAjout.on('select deselect', updateLinks);
+	document.getElementById('retirerHausses').addEventListener('click', event => {
+		if (event.target.getAttribute('href') === '#') {
+			alert(selHausRet);
+			event.preventDefault(); // pas indispensable link #
+		}
+	});
 	document.getElementById('ajouterHausses').addEventListener('click', event => {
 		if (event.target.getAttribute('href') === '#') {
 			alert(selHausAjout);
