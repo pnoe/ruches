@@ -27,7 +27,6 @@
     	// "no-extra-parens": "error",
     	"no-extra-semi": "error",
     	"no-floating-decimal": "error",
-    	"no-self-compare": "error",
     	"no-lonely-if": "error",
     	"no-negated-condition": "error",
     	"no-self-compare": "error",
