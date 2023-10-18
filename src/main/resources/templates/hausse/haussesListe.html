@@ -10,8 +10,7 @@
 		const urlCommLot = /*[[@{/evenement/hausse/commentaireLot/}]]*/ null;
 		const selectHaTrait = /*[[#{selecthaussestraiter}]]*/ null;
 		document.addEventListener('DOMContentLoaded', () => {
-			const idTbl = '#hausses';
-			const table = new DataTable(idTbl, {
+			const table = new DataTable('#hausses', {
 				select: {style: 'multi+shift'},
 				dom: 'Blftip',
 				scrollX: true,

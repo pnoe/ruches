@@ -96,6 +96,28 @@
 			<groupId>com.google.ortools</groupId>
 			<artifactId>ortools-java</artifactId>
 			<version>${ortools.version}</version>
+			<!-- Exclusions des plateformes non linux x64 pour diminuer la
+			taille du war -->
+			<!--
+			https://mvnrepository.com/artifact/com.google.ortools/ortools-java/9.7.2996 -->
+			<exclusions>
+				<exclusion>
+					<groupId>com.google.ortools</groupId>
+					<artifactId>ortools-win32-x86-64</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.google.ortools</groupId>
+					<artifactId>ortools-darwin-x86-64</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.google.ortools</groupId>
+					<artifactId>ortools-darwin-aarch64</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.google.ortools</groupId>
+					<artifactId>ortools-linux-aarch64</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -105,14 +127,14 @@
 	<build>
 		<finalName>ruches</finalName>
 		<plugins>
-			
+
 			<!-- 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
 					<warSourceExcludes>
-						${basedir}/src/main/resources/static/js/ruches-${ruches.js.version}/*.js</warSourceExcludes>
+			${basedir}/src/main/resources/static/js/ruches-${ruches.js.version}/*.js</warSourceExcludes>
 				</configuration>
 			</plugin>
 			-->
@@ -125,7 +147,8 @@
 						<id>default-minify</id>
 						<configuration>
 							<closureLanguageOut>NO_TRANSPILE</closureLanguageOut>
-							<!-- https://blutorange.github.io/closure-compiler-maven-plugin/examples/m2e.html -->
+							<!--
+							https://blutorange.github.io/closure-compiler-maven-plugin/examples/m2e.html -->
 							<skipRunOnIncremental>true</skipRunOnIncremental>
 							<baseSourceDir>
 								${basedir}/src/main/resources/static/js</baseSourceDir>
@@ -147,7 +170,7 @@
 				</executions>
 			</plugin>
 			<!-- -->
-			
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
