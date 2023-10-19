@@ -93,33 +93,6 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.google.ortools</groupId>
-			<artifactId>ortools-java</artifactId>
-			<version>${ortools.version}</version>
-			<!-- Exclusions des plateformes non linux x64 pour diminuer la
-			taille du war -->
-			<!--
-			https://mvnrepository.com/artifact/com.google.ortools/ortools-java/9.7.2996 -->
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.ortools</groupId>
-					<artifactId>ortools-win32-x86-64</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.google.ortools</groupId>
-					<artifactId>ortools-darwin-x86-64</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.google.ortools</groupId>
-					<artifactId>ortools-darwin-aarch64</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.google.ortools</groupId>
-					<artifactId>ortools-linux-aarch64</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>

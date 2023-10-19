@@ -18,25 +18,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.google.ortools.Loader;
-import com.google.ortools.constraintsolver.Assignment;
-import com.google.ortools.constraintsolver.FirstSolutionStrategy;
-import com.google.ortools.constraintsolver.LocalSearchMetaheuristic;
-import com.google.ortools.constraintsolver.RoutingIndexManager;
-import com.google.ortools.constraintsolver.RoutingModel;
-import com.google.ortools.constraintsolver.RoutingSearchParameters;
-import com.google.ortools.constraintsolver.main;
-import com.google.protobuf.Duration;
-
 import ooioo.ruches.Const;
 import ooioo.ruches.LatLon;
 import ooioo.ruches.Nom;
-import ooioo.ruches.Utils;
 import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
 import ooioo.ruches.ruche.Ruche;
-import ooioo.ruches.ruche.RucheParcours;
 import ooioo.ruches.ruche.RucheRepository;
 
 @Service
@@ -55,11 +43,12 @@ public class RucherService {
 	/**
 	 * Calcul des transhumances d'un rucher.
 	 *
-	 * @param rucher Le rucher dont on liste les transhumances
-	 * @param evensRucheAjout Tous les événements Ruche Ajout dans Rucher triés par ordre de date
-	 * @param group Si true les transhumances sont regroupées par date
-	 * @param histo En retour les transhumances si pas de regroupement
-	 * @param histoGroup En retour les transhumances si regroupement
+	 * @param rucher          Le rucher dont on liste les transhumances
+	 * @param evensRucheAjout Tous les événements Ruche Ajout dans Rucher triés par
+	 *                        ordre de date
+	 * @param group           Si true les transhumances sont regroupées par date
+	 * @param histo           En retour les transhumances si pas de regroupement
+	 * @param histoGroup      En retour les transhumances si regroupement
 	 */
 	void transhum(Rucher rucher, List<Evenement> evensRucheAjout, boolean group, List<Transhumance> histo,
 			List<Transhumance> histoGroup) {
@@ -71,7 +60,7 @@ public class RucherService {
 		}
 		for (int i = 0, levens = evensRucheAjout.size(); i < levens; i++) {
 			// Pour chaque événement eve ruche ajout dans rucher, du plus récent
-			//  au plus ancien
+			// au plus ancien
 			Evenement eve = evensRucheAjout.get(i);
 			if (eve.getRucher().getId().equals(rucher.getId())) {
 				// si l'événement est un ajout dans le rucher,
@@ -82,8 +71,8 @@ public class RucherService {
 					if ((evensRucheAjout.get(j).getRuche().getId().equals(eve.getRuche().getId()))
 							// même ruche
 							&& !(evensRucheAjout.get(j).getRucher().getId().equals(rucher.getId()))
-							// et rucher différent
-							) {
+					// et rucher différent
+					) {
 						// si (evensRucheAjout.get(j).getRucher().getId().equals(rucherId))
 						// c'est une erreur, deux ajouts successifs dans le même rucher
 						evePrec = evensRucheAjout.get(j);
@@ -186,101 +175,6 @@ public class RucherService {
 		}
 	}
 
-	/*
-	 * Inner class static pour les distances entre ruches
-	 */
-	private static class DataModel {
-		// distanceMatrix est initialisée dans cheminRuchesRucher
-		public static long[][] distanceMatrix;
-		// le nombre de personnes à parcourir les ruches
-		public static final int vehicleNumber = 1;
-		// l'indice du point de départ
-		public static final int depot = 0;
-	}
-
-	/*
-	 * Calcul du chemin le plus court de visite des ruches du rucher.
-	 * https://developers.google.com/optimization/routing/tsp Le chemin est calculé
-	 * dans List<RucheParcours> cheminRet, et la distance en retour de la fonction.
-	 */
-	double cheminRuchesRucher(List<RucheParcours> cheminRet, Rucher rucher, Iterable<Ruche> ruches,
-			boolean redraw) {
-		RucheParcours entree = new RucheParcours(0l, 0, rucher.getLongitude(), rucher.getLatitude());
-		List<RucheParcours> chemin = new ArrayList<>();
-		chemin.add(entree);
-		int ordre = 0;
-		for (Ruche ruche : ruches) {
-			ordre += 1;
-			chemin.add(new RucheParcours(ruche.getId(), ordre, ruche.getLongitude(), ruche.getLatitude()));
-		}
-		int cheminSize = chemin.size();
-		if (cheminSize == 1) {
-			return 0d;
-		}
-		// Initialisation d'un tableau contenant les distances entre ruches
-		DataModel.distanceMatrix = new long[cheminSize][cheminSize];
-		// Initialisation de la matrice d'int des distances entre les ruches
-		// les distances sont en mm
-		double dist;
-		double diametreTerre = ((rucher.getAltitude() == null) ? 0 : rucher.getAltitude()) +
-				2 * Utils.rTerreLat(rucher.getLatitude());
-		for (int i = 1; i < cheminSize; i++) {
-			for (int j = 0; j < i; j++) {
-				RucheParcours ii = chemin.get(i);
-				RucheParcours jj = chemin.get(j);
-				dist = Utils.distance(diametreTerre, ii.latitude(), jj.latitude(), ii.longitude(), jj.longitude());
-				DataModel.distanceMatrix[i][j] = (long) (dist * 1000.0);
-				DataModel.distanceMatrix[j][i] = DataModel.distanceMatrix[i][j];
-			}
-		}
-		// Initialistion de la diagonale à 0
-		for (int i = 0; i < cheminSize; i++) {
-			DataModel.distanceMatrix[i][i] = 0l;
-		}
-		Loader.loadNativeLibraries();
-		// Création du modèle de routage
-		RoutingIndexManager manager = new RoutingIndexManager(DataModel.distanceMatrix.length, DataModel.vehicleNumber,
-				DataModel.depot);
-		RoutingModel routing = new RoutingModel(manager);
-		// création de la callback de calcul de distance utilisant
-		// la matrice des distances
-		final int transitCallbackIndex = routing.registerTransitCallback((long fromIndex, long toIndex) -> {
-			// Convert from routing variable Index to user NodeIndex.
-			int fromNode = manager.indexToNode(fromIndex);
-			int toNode = manager.indexToNode(toIndex);
-			return DataModel.distanceMatrix[fromNode][toNode];
-		});
-		// Coût du déplacement. Ici le coût est la distance entre deux ruches.
-		routing.setArcCostEvaluatorOfAllVehicles(transitCallbackIndex);
-		// Méthode pour calculer le premier parcours
-		// PATH_CHEAPEST_ARC recherche la ruche la plus proche
-		// https://developers.google.com/optimization/routing/routing_options#first_sol_options
-		RoutingSearchParameters searchParameters = redraw
-				? main.defaultRoutingSearchParameters().toBuilder()
-						.setFirstSolutionStrategy(FirstSolutionStrategy.Value.PATH_CHEAPEST_ARC)
-						// advanced search strategy : guided local search
-						// pour sortir d'un minimum local
-						// https://developers.google.com/optimization/routing/routing_options#local_search_options
-						.setLocalSearchMetaheuristic(LocalSearchMetaheuristic.Value.GUIDED_LOCAL_SEARCH)
-						// timeLimit obligatoire sinon recherche infinie
-						// la recherche durera 10s dans tous les cas
-						.setTimeLimit(Duration.newBuilder().setSeconds(10).build()).build()
-				: main.defaultRoutingSearchParameters().toBuilder()
-						.setFirstSolutionStrategy(FirstSolutionStrategy.Value.PATH_CHEAPEST_ARC).build();
-		// Appelle le solver
-		Assignment solution = routing.solveWithParameters(searchParameters);
-		long routeDistance = 0;
-		long index = routing.start(0);
-		while (!routing.isEnd(index)) {
-			cheminRet.add(chemin.get(manager.indexToNode(index)));
-			long previousIndex = index;
-			index = solution.value(routing.nextVar(index));
-			routeDistance += routing.getArcCostForVehicle(previousIndex, index, 0l);
-		}
-		cheminRet.add(chemin.get(manager.indexToNode(routing.end(0))));
-		return routeDistance / 1000.0;
-	}
-
 	/**
 	 * Ajoute une liste de ruches dans un rucher. Création de l'événement
 	 * RUCHEAJOUTRUCHER. Le nom du rucher de provenance est mis dans le champ
@@ -292,25 +186,25 @@ public class RucherService {
 			Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 			if (rucheOpt.isPresent()) {
 				Ruche ruche = rucheOpt.get();
-			// Si la ruche est déjà dans le rucher, log de l'erreur puis on continue.
-			// L'utilisateur ne voit donc pas l'erreur (sauf s'il consulte les logs).
-			if ((ruche.getRucher() != null) && (ruche.getRucher().getId().equals(rucher.getId()))) {
-				logger.info("Ruche {} déjà présente dans le rucher {}", ruche.getNom(), rucher.getNom());
-				continue;
-			}
-			String provenance = (ruche.getRucher() == null) ? "" : ruche.getRucher().getNom();
-			ruche.setRucher(rucher);
-			// Mettre les coord. de la ruche à celles du rucher
-			// dans un rayon égal à dispersion
-			LatLon latLon = dispersion(rucher.getLatitude(), rucher.getLongitude());
-			ruche.setLatitude(latLon.lat());
-			ruche.setLongitude(latLon.lon());
-			rucheRepository.save(ruche);
-			// Créer un événement ajout dans le rucher rucherId
-			Evenement eveAjout = new Evenement(dateEveAjout, TypeEvenement.RUCHEAJOUTRUCHER, ruche, ruche.getEssaim(),
-					rucher, null, provenance, commentaire); // valeur commentaire
-			evenementRepository.save(eveAjout);
-			logger.info("{} créé", eveAjout);
+				// Si la ruche est déjà dans le rucher, log de l'erreur puis on continue.
+				// L'utilisateur ne voit donc pas l'erreur (sauf s'il consulte les logs).
+				if ((ruche.getRucher() != null) && (ruche.getRucher().getId().equals(rucher.getId()))) {
+					logger.info("Ruche {} déjà présente dans le rucher {}", ruche.getNom(), rucher.getNom());
+					continue;
+				}
+				String provenance = (ruche.getRucher() == null) ? "" : ruche.getRucher().getNom();
+				ruche.setRucher(rucher);
+				// Mettre les coord. de la ruche à celles du rucher
+				// dans un rayon égal à dispersion
+				LatLon latLon = dispersion(rucher.getLatitude(), rucher.getLongitude());
+				ruche.setLatitude(latLon.lat());
+				ruche.setLongitude(latLon.lon());
+				rucheRepository.save(ruche);
+				// Créer un événement ajout dans le rucher rucherId
+				Evenement eveAjout = new Evenement(dateEveAjout, TypeEvenement.RUCHEAJOUTRUCHER, ruche,
+						ruche.getEssaim(), rucher, null, provenance, commentaire); // valeur commentaire
+				evenementRepository.save(eveAjout);
+				logger.info("{} créé", eveAjout);
 			} else {
 				// Si l'id de la ruche est inconnu, log de l'erreur puis on continue.
 				// L'utilisateur ne voit donc pas l'erreur (sauf s'il consulte les logs).
@@ -324,7 +218,8 @@ public class RucherService {
 	 * (voir application.properties).
 	 */
 	public LatLon dispersion(Float lat, Float lon) {
-		// Math.random : double value in a range from 0.0 (inclusive) to 1.0 (exclusive).
+		// Math.random : double value in a range from 0.0 (inclusive) to 1.0
+		// (exclusive).
 		// w random distance, /111300d transformation en degrés au centre de la terre
 		// sqrt() pour une distribution plus régulère dans le cercle
 		double w = dispersionRuche * Math.sqrt(Math.random()) / 111300d;

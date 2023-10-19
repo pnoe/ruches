@@ -26,6 +26,15 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	List<Ruche> findByRucherIdAndActiveTrueOrderByNom(Long id);
 
 	Iterable<Ruche> findByRucherIdNotOrderByNom(Long id);
+	
+	@Query(value = """
+			select r
+			  from Ruche r
+			  where r.rucher.id = :id
+			""")
+	List<Ruche> listRuchesRucher(Long id);
+	
+
 
 	Ruche findByEssaimId(Long id);
 

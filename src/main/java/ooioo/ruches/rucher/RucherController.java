@@ -88,6 +88,9 @@ public class RucherController {
 	private DistRucherRepository drRepo;
 
 	@Autowired
+	private TSPService tspService;
+
+	@Autowired
 	private MessageSource messageSource;
 
 	@Value("${rucher.butinage.rayons}")
@@ -115,7 +118,9 @@ public class RucherController {
 			for (Essaim ess : essaims) {
 				List<Evenement> evesPesee = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(ess.getId(),
 						TypeEvenement.RUCHEPESEE);
-				if (evesPesee.isEmpty()) { continue; }
+				if (evesPesee.isEmpty()) {
+					continue;
+				}
 				List<Long> d = new ArrayList<>();
 				List<Float> p = new ArrayList<>();
 				for (Evenement e : evesPesee) {
@@ -154,7 +159,6 @@ public class RucherController {
 			// liste des ruches de ce rucher
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
 			model.addAttribute(Const.RUCHES, ruches);
-
 			List<Evenement> evesPesee = new ArrayList<>();
 			for (Ruche r : ruches) {
 				evesPesee.add((r.getEssaim() == null) ? null
@@ -711,9 +715,16 @@ public class RucherController {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
-			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
-			List<RucheParcours> cheminRet = new ArrayList<>();
-			double retParcours = rucherService.cheminRuchesRucher(cheminRet, rucher, ruches, false);
+
+			List<Ruche> ruches = rucheRepository.listRuchesRucher(rucherId);
+
+			// L'entrée est ajoutée deux fois dans cheminRet : début et fin du parcours
+			List<RucheParcours> cheminRet = new ArrayList<>(ruches.size() + 2);
+
+			// double retParcours = rucherService.cheminRuchesRucher(cheminRet, rucher,
+			// ruches, false);
+			double retParcours = tspService.cheminRuchesRucher(cheminRet, rucher, ruches, false);
+
 			model.addAttribute("distParcours", retParcours);
 			model.addAttribute("rucheParcours", cheminRet);
 			List<String> nomHausses = new ArrayList<>();
@@ -915,9 +926,16 @@ public class RucherController {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
-			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
-			List<RucheParcours> cheminRet = new ArrayList<>();
-			double retParcours = rucherService.cheminRuchesRucher(cheminRet, rucher, ruches, redraw);
+
+			List<Ruche> ruches = rucheRepository.listRuchesRucher(rucherId);
+
+			// L'entrée est ajoutée deux fois dans cheminRet : début et fin du parcours
+			List<RucheParcours> cheminRet = new ArrayList<>(ruches.size() + 2);
+
+			// double retParcours = rucherService.cheminRuchesRucher(cheminRet, rucher,
+			// ruches, redraw);
+			double retParcours = tspService.cheminRuchesRucher(cheminRet, rucher, ruches, redraw);
+
 			map.put("distParcours", retParcours);
 			map.put("rucheParcours", cheminRet);
 			return map;
