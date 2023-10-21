@@ -7,7 +7,7 @@
 		/* exported _csrf_token, _csrf_param_name, ruchenoms, rnpsupprec,
 		recolteHausses, evenements, suppreven, suppruche, nruchvirg,
 		nexisted, Ruches, creer, urlclone, rucheid
- 		*/
+			*/
 		const _csrf_token = /*[[${_csrf.token}]]*/ null;
 		const _csrf_param_name = /*[[${_csrf.parameterName}]]*/ null;
 		const ruchenoms = /*[[${ruchenoms}]]*/ null;
@@ -131,7 +131,7 @@
 		</th:block>
 		<h6 th:if="${#lists.isEmpty(haussesRuche)}" th:text="#{Pasdehausse}"></h6>
 		<th:block th:if="${not #lists.isEmpty(haussesRuche)}">
-			<h6 th:text="#{listeHausses}"></h6>
+			<h6 th:text="#{nbXHausses(${#arrays.length(haussesRuche)})}"></h6>
 			<table class="table table-sm table-bordered">
 				<thead>
 					<tr>
