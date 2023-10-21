@@ -133,8 +133,8 @@
 				</tr>
 			</tbody>
 		</table>
-		<h6 th:unless="${#arrays.length(ruches)}" th:text="#{Pasderuche}"></h6>
-		<th:block th:if="${#arrays.length(ruches)}">
+		<h6 th:if="${#lists.isEmpty(ruches)}" th:text="#{Pasderuche}"></h6>
+		<th:block th:unless="${#lists.isEmpty(ruches)}">
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col">
@@ -183,40 +183,51 @@
 				</tbody>
 			</table>
 		</th:block>
-		<br />
-		<h6 th:text="#{PasDeRecolte}" th:if="${#lists.isEmpty(poidsListe)}"></h6>
-		<table th:unless="${#lists.isEmpty(poidsListe)}" class="table table-sm table-bordered">
-			<thead>
-				<tr>
-					<th th:text="#{recolte}"></th>
-					<td th:each="recolte : ${recoltesListe}">
-						<a th:href="@{'/recolte/'+${recolte.id}}"
-							th:text="${#temporals.format(recolte.date, 'yyyy/MM/dd')}"></a>
-					</td>
-					<th th:text="#{Total}"></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<th th:text="#{poidskg}"></th>
-					<td th:each="poids : ${poidsListe}" th:text="${#numbers.formatDecimal(poids/1000.0,1,2,'DEFAULT')}">
-					</td>
-					<td th:text="${#numbers.formatDecimal(poidsTotal/1000.0,1,2,'DEFAULT')}"></td>
-				</tr>
-				<tr>
-					<th th:text="#{Ruches}"></th>
-					<td th:each="nb : ${recoltesNbRuches}" th:text="${nb}"></td>
-					<td></td>
-				</tr>
-				<tr>
-					<th th:text="#{poidsParRuches}"></th>
-					<td th:each="poids, iterStat : ${poidsListe}"
-						th:text="${#numbers.formatDecimal(poids/recoltesNbRuches[iterStat.index]/1000.0,1,2,'DEFAULT')}">
-					</td>
-					<td></td>
-				</tr>
-			</tbody>
-		</table>
+		<h6 th:text="#{PasDeRecolte}" th:if="${#lists.isEmpty(recoltesListe)}"></h6>
+		<th:block th:unless="${#lists.isEmpty(poidsListe)}">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col">
+						<h6 class="item" th:text="#{nbXRecoltes(${#arrays.length(recoltesListe)})}">
+						</h6>
+
+					</div>
+				</div>
+			</div>
+			<table class="table table-sm table-bordered">
+				<thead>
+					<tr>
+						<th th:text="#{recolte}"></th>
+						<td th:each="recolte : ${recoltesListe}">
+							<a th:href="@{'/recolte/'+${recolte.id}}"
+								th:text="${#temporals.format(recolte.date, 'yyyy/MM/dd')}"></a>
+						</td>
+						<th th:text="#{Total}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th th:text="#{poidskg}"></th>
+						<td th:each="poids : ${poidsListe}"
+							th:text="${#numbers.formatDecimal(poids/1000.0,1,2,'DEFAULT')}">
+						</td>
+						<td th:text="${#numbers.formatDecimal(poidsTotal/1000.0,1,2,'DEFAULT')}"></td>
+					</tr>
+					<tr>
+						<th th:text="#{Ruches}"></th>
+						<td th:each="nb : ${recoltesNbRuches}" th:text="${nb}"></td>
+						<td></td>
+					</tr>
+					<tr>
+						<th th:text="#{poidsParRuches}"></th>
+						<td th:each="poids, iterStat : ${poidsListe}"
+							th:text="${#numbers.formatDecimal(poids/recoltesNbRuches[iterStat.index]/1000.0,1,2,'DEFAULT')}">
+						</td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+		</th:block>
 	</div>
 	<br />
 	<footer th:replace="~{include::footer}"></footer>

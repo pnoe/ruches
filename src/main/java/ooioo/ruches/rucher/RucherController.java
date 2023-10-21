@@ -115,7 +115,9 @@ public class RucherController {
 			for (Essaim ess : essaims) {
 				List<Evenement> evesPesee = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(ess.getId(),
 						TypeEvenement.RUCHEPESEE);
-				if (evesPesee.isEmpty()) { continue; }
+				if (evesPesee.isEmpty()) {
+					continue;
+				}
 				List<Long> d = new ArrayList<>();
 				List<Float> p = new ArrayList<>();
 				for (Evenement e : evesPesee) {
@@ -291,11 +293,7 @@ public class RucherController {
 			List<Transhumance> histoAll = new ArrayList<>(); // si non groupées
 			List<Transhumance> histoGroup = new ArrayList<>(); // si groupées
 			rucherService.transhum(rucher, evenementRepository.findAjoutRucheOK(), group, histoAll, histoGroup);
-			if (group) {
-				model.addAttribute(HISTO, histoGroup);
-			} else {
-				model.addAttribute(HISTO, histoAll);
-			}
+			model.addAttribute(HISTO, group ? histoGroup : histoAll);
 			model.addAttribute("group", group);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
@@ -358,7 +356,7 @@ public class RucherController {
 		for (Rucher rucher : ruchers) {
 			pTotal = 0;
 			pMax = 0;
-			pMin = 1000000;
+			pMin = Integer.MAX_VALUE;
 			nbRecoltes = 0;
 			for (Recolte recolte : recoltes) {
 				Integer poids = recolteHausseRepository.findPoidsMielByRucherByRecolte(rucher.getId(), recolte.getId());
@@ -369,7 +367,7 @@ public class RucherController {
 					pMin = Math.min(pMin, poids);
 				}
 			}
-			if (pMin == 1000000) {
+			if (pMin == Integer.MAX_VALUE) {
 				pMin = 0;
 			}
 			Map<String, String> rucherPoids = new HashMap<>();
@@ -540,11 +538,7 @@ public class RucherController {
 				listNbHausses.add(hausseRepository.countByRucheId(ruche.getId()));
 				Evenement evenCadres = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
 						TypeEvenement.RUCHECADRE);
-				if (evenCadres == null) {
-					nbCadres.add("");
-				} else {
-					nbCadres.add(evenCadres.getValeur());
-				}
+				nbCadres.add((evenCadres == null) ? "" : evenCadres.getValeur());
 			}
 			model.addAttribute("nbCadres", nbCadres);
 			model.addAttribute("listNbHausses", listNbHausses);
