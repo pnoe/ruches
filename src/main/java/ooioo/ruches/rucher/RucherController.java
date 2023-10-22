@@ -705,8 +705,8 @@ public class RucherController {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
-			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
-			List<RucheParcours> cheminRet = new ArrayList<>();
+			List<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
+			List<RucheParcours> cheminRet = new ArrayList<>(ruches.size() + 2);
 			double retParcours = rucherService.cheminRuchesRucher(cheminRet, rucher, ruches, false);
 			model.addAttribute("distParcours", retParcours);
 			model.addAttribute("rucheParcours", cheminRet);
@@ -909,8 +909,8 @@ public class RucherController {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
-			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
-			List<RucheParcours> cheminRet = new ArrayList<>();
+			List<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
+			List<RucheParcours> cheminRet = new ArrayList<>(ruches.size() + 2);
 			double retParcours = rucherService.cheminRuchesRucher(cheminRet, rucher, ruches, redraw);
 			map.put("distParcours", retParcours);
 			map.put("rucheParcours", cheminRet);

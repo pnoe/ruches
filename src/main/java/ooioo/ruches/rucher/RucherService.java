@@ -203,10 +203,10 @@ public class RucherService {
 	 * https://developers.google.com/optimization/routing/tsp Le chemin est calculé
 	 * dans List<RucheParcours> cheminRet, et la distance en retour de la fonction.
 	 */
-	double cheminRuchesRucher(List<RucheParcours> cheminRet, Rucher rucher, Iterable<Ruche> ruches,
+	double cheminRuchesRucher(List<RucheParcours> cheminRet, Rucher rucher, List<Ruche> ruches,
 			boolean redraw) {
 		RucheParcours entree = new RucheParcours(0l, 0, rucher.getLongitude(), rucher.getLatitude());
-		List<RucheParcours> chemin = new ArrayList<>();
+		List<RucheParcours> chemin = new ArrayList<>(ruches.size() + 1);
 		chemin.add(entree);
 		int ordre = 0;
 		for (Ruche ruche : ruches) {

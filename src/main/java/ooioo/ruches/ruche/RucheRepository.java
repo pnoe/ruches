@@ -20,9 +20,9 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	Iterable<Ruche> findAllByOrderByNom();
 
 	Iterable<Ruche> findByActiveTrueOrderByNom();
-
-	Iterable<Ruche> findByRucherIdOrderByNom(Long id);
-
+	
+	List<Ruche> findByRucherIdOrderByNom(Long id);
+	
 	List<Ruche> findByRucherIdAndActiveTrueOrderByNom(Long id);
 
 	Iterable<Ruche> findByRucherIdNotOrderByNom(Long id);
