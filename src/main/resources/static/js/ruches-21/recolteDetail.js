@@ -10,10 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	itDateOk.style.display = 'none';
 
 	document.getElementById('enlevehausses').addEventListener('click', function() {
-		/*[- */
 		// La fonction est désactivée après 30 jours 
 		// 30 * 24 * 3600 * 1000 =  2592000000 
-		/* -]*/
 		if (Date.now() > dateRecEpoch * 1000 + 2592000000) {
 			alert(enlevHRecDe30);
 			return;
@@ -96,21 +94,22 @@ document.addEventListener('DOMContentLoaded', () => {
 		addCell(tr, '', 2);
 		return tr;
 	}
-	const rawChk = document.getElementById('raw');
-	if (rawChk) {
-		let raw;
-		// lecture du cookie de nom 'rawRD'
+	const groupChk = document.getElementById('group');
+	if (groupChk) {
+		// si pas de hausses de récolte, la case n'est pas affichée
+		let group;
+		// lecture du cookie de nom 'groupRH'
 		const cookieVal = document.cookie
 			.split('; ')
-			.find(row => row.startsWith('rawRD='))
+			.find(row => row.startsWith('groupRH='))
 			?.split('=')[1];
 		if (cookieVal === undefined) {
-			document.cookie = 'rawRD=false';
-			raw = false;
+			document.cookie = 'groupRH=true';
+			group = true;
 		} else {
-			raw = cookieVal === 'true';
+			group = cookieVal === 'true';
 		}
-		rawChk.checked = raw;
+		groupChk.checked = group;
 		// Tri par ruche, puis par hausse
 		const ordre = [[2, 'asc'], [1, 'asc']];
 		const rowGOpt = {
@@ -118,29 +117,29 @@ document.addEventListener('DOMContentLoaded', () => {
 			startRender: null,
 			endRender: tblStartRender
 		};
-		if (raw) {
-			new DataTable('#hausses', {
-				order: ordre,
-			});
-		} else {
+		if (group) {
 			new DataTable('#hausses', {
 				orderFixed: ordre,
 				rowGroup: rowGOpt
 			});
+		} else {
+			new DataTable('#hausses', {
+				order: ordre,
+			});
 		}
-		rawChk.addEventListener('change', event => {
-			raw = event.target.checked;
-			document.cookie = 'rawRD=' + raw;
-			if (raw) {
-				new DataTable('#hausses', {
-					destroy: true,
-					order: ordre,
-				});
-			} else {
+		groupChk.addEventListener('change', event => {
+			group = event.target.checked;
+			document.cookie = 'groupRH=' + group;
+			if (group) {
 				new DataTable('#hausses', {
 					destroy: true,
 					orderFixed: ordre,
 					rowGroup: rowGOpt
+				});
+			} else {
+				new DataTable('#hausses', {
+					destroy: true,
+					order: ordre,
 				});
 			}
 		});

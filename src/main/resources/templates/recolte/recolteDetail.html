@@ -92,13 +92,11 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col">
-						<h6 class="item">
-							<th:block th:text="#{haussesRecolte}"></th:block>
-						</h6>
+						<h6 class="item" th:text="#{XhaussesRec(${#arrays.length(detailsRecolte)})}"></h6>
 					</div>
 					<div class="col">
-						<span class="padicons"> <input type="checkbox" id="raw" />
-							<label for="raw" th:text="#{Brut}"></label>
+						<span class="padicons"> <input type="checkbox" id="group" />
+							<label for="group" th:text="#{HaussesGroup}"></label>
 						</span>
 					</div>
 				</div>
