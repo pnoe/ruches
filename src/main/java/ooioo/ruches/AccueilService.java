@@ -174,13 +174,15 @@ public class AccueilService {
 			dateFin = java.lang.Math.max(dernierEssaim.getDateAcquisition().getYear(),
 					derniereRecolte.getDate().getYear());
 		}
-		List<Integer> annees = new ArrayList<>();
-		List<Double> pdsMiel = new ArrayList<>();
-		List<Integer> nbEssaims = new ArrayList<>();
-		List<Integer> nbCreationEssaims = new ArrayList<>();
-		List<Integer> nbDispersionEssaims = new ArrayList<>();
-		List<Double> sucreEssaims = new ArrayList<>();
-		List<Integer> nbTraitementsEssaims = new ArrayList<>();
+		// nban pour dimensionner les ArrayList, avec une colonne de plus pour le total.
+		int nban = dateFin - dateDebut + 2;
+		List<Integer> annees = new ArrayList<>(nban);
+		List<Double> pdsMiel = new ArrayList<>(nban);
+		List<Integer> nbEssaims = new ArrayList<>(nban);
+		List<Integer> nbCreationEssaims = new ArrayList<>(nban);
+		List<Integer> nbDispersionEssaims = new ArrayList<>(nban);
+		List<Double> sucreEssaims = new ArrayList<>(nban);
+		List<Integer> nbTraitementsEssaims = new ArrayList<>(nban);
 		Double pdsMielTotal = 0d;
 		Integer nbCreationEssaimsTotal = 0;
 		Integer nbDispersionEssaimsTotal = 0;

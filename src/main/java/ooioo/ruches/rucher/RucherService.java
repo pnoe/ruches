@@ -221,16 +221,16 @@ public class RucherService {
 		DataModel.distanceMatrix = new long[cheminSize][cheminSize];
 		// Initialisation de la matrice d'int des distances entre les ruches
 		// les distances sont en mm
-		double dist;
 		double diametreTerre = ((rucher.getAltitude() == null) ? 0 : rucher.getAltitude()) +
 				2 * Utils.rTerreLat(rucher.getLatitude());
 		for (int i = 1; i < cheminSize; i++) {
 			for (int j = 0; j < i; j++) {
 				RucheParcours ii = chemin.get(i);
 				RucheParcours jj = chemin.get(j);
-				dist = Utils.distance(diametreTerre, ii.latitude(), jj.latitude(), ii.longitude(), jj.longitude());
-				DataModel.distanceMatrix[i][j] = (long) (dist * 1000.0);
-				DataModel.distanceMatrix[j][i] = DataModel.distanceMatrix[i][j];
+				long dist = (long) 
+						(Utils.distance(diametreTerre, ii.latitude(), jj.latitude(), ii.longitude(), jj.longitude()) * 1000.0);
+				DataModel.distanceMatrix[i][j] = dist;
+				DataModel.distanceMatrix[j][i] = dist;
 			}
 		}
 		// Initialistion de la diagonale à 0
