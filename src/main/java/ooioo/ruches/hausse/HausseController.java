@@ -68,10 +68,7 @@ public class HausseController {
 		Optional<Hausse> hausseOpt = hausseRepository.findById(hausseId);
 		if (hausseOpt.isPresent()) {
 			Hausse hausse = hausseOpt.get();
-			List<String> noms = new ArrayList<>();
-			for (Nom hausseNom : hausseRepository.findAllProjectedBy()) {
-				noms.add(hausseNom.nom());
-			}
+			List<Nom> nomsRecords = hausseRepository.findAllProjectedBy();
 			// split avec le séparateur "," et trim des chaines
 			String[] nomarray = nomclones.trim().split("\\s*,\\s*");
 			List<String> nomsCrees = new ArrayList<>();
@@ -80,14 +77,14 @@ public class HausseController {
 					// Si le nom de hausse est vide on l'ignore et on passe à la suivante
 					continue;
 				}
-				if (noms.contains(nom)) {
+				if (nomsRecords.contains(new Nom(nom))) {
 					logger.error("Clone d'une hausse : {} nom existant", nom);
 				} else {
 					Hausse hausseclone = new Hausse(hausse, nom);
 					hausseRepository.save(hausseclone);
 					nomsCrees.add(nom);
 					// pour éviter clone "a,a" : 2 fois le même nom dans la liste
-					noms.add(nom);
+					nomsRecords.add(new Nom(nom));
 				}
 			}
 			String nomsJoin = String.join(",", nomsCrees);

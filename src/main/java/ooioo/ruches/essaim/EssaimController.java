@@ -81,8 +81,8 @@ public class EssaimController {
 		if (essaimOpt.isPresent()) {
 			List<Evenement> evesPesee = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
 					TypeEvenement.RUCHEPESEE);
-			List<Long> dates = new ArrayList<>();
-			List<Float> poids = new ArrayList<>();
+			List<Long> dates = new ArrayList<>(evesPesee.size());
+			List<Float> poids = new ArrayList<>(evesPesee.size());
 			for (Evenement e : evesPesee) {
 				dates.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
 				poids.add(Float.parseFloat(e.getValeur()));
@@ -157,8 +157,11 @@ public class EssaimController {
 				model.addAttribute(Const.MESSAGE, "L'essaim n'est pas dans une ruche");
 				return Const.INDEX;
 			}
-			List<String> noms = new ArrayList<>();
-			for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
+			// Liste des noms d'essaims déjà utilisés.
+			//  records -> strings pour liste plus compacte.
+			List<Nom> nomsRecords = essaimRepository.findAllProjectedBy();
+			List<String> noms = new ArrayList<>(nomsRecords.size());
+			for (Nom essaimNom : nomsRecords) {
 				noms.add(essaimNom.nom());
 			}
 			model.addAttribute(Const.ESSAIMNOMS, noms);
@@ -193,12 +196,8 @@ public class EssaimController {
 					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
 			return Const.INDEX;
 		}
-		// On vérifie aussi côté serveur que le nom est libre
-		List<String> noms = new ArrayList<>();
-		for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
-			noms.add(essaimNom.nom());
-		}
-		if (noms.contains(nom)) {
+		// On vérifie aussi côté serveur que le nom est libre.
+		if (essaimRepository.findAllProjectedBy().contains(new Nom(nom))) {
 			model.addAttribute(Const.MESSAGE,
 					messageSource.getMessage("LeNomXXExiste", new Object[] { nom }, LocaleContextHolder.getLocale()));
 			return Const.INDEX;

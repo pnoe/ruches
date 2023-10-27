@@ -31,7 +31,7 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 
 	Collection<Ruche> findCollByRucherId(Long rucherId);
 
-	Collection<Nom> findAllProjectedBy();
+	List<Nom> findAllProjectedBy();
 
 	Long countByRucher(Rucher rucher);
 

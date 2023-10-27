@@ -74,7 +74,7 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 
 	Integer countByRucheId(Long id);
 
-	Collection<Nom> findAllProjectedBy();
+	List<Nom> findAllProjectedBy();
 
 	Collection<Nom> findByRucheId(Long rucherId);
 

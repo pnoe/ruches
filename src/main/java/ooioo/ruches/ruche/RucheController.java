@@ -107,10 +107,7 @@ public class RucheController {
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 		if (rucheOpt.isPresent()) {
 			Ruche ruche = rucheOpt.get();
-			List<String> noms = new ArrayList<>();
-			for (Nom rucheNom : rucheRepository.findAllProjectedBy()) {
-				noms.add(rucheNom.nom());
-			}
+			List<Nom> nomsRecords = rucheRepository.findAllProjectedBy();
 			Float longitude = ruche.getLongitude();
 			// split avec le séparateur "," et trim des chaines
 			String[] nomarray = nomclones.trim().split("\\s*,\\s*");
@@ -122,7 +119,7 @@ public class RucheController {
 					// si le nom de la ruche est vide on l'ignore et on passe à la suivante
 					continue;
 				}
-				if (noms.contains(nom)) {
+				if (nomsRecords.contains(new Nom(nom))) {
 					logger.error("Clone d'une ruche : {} nom existant", nom);
 				} else {
 					longitude += 0.00004f;
@@ -134,7 +131,7 @@ public class RucheController {
 					logger.info(Const.CREE, eveAjout);
 					nomsCrees.add(nom);
 					// pour éviter clone "a,a" : 2 fois le même nom dans la liste
-					noms.add(nom);
+					nomsRecords.add(new Nom(nom));
 				}
 			}
 			String nomsJoin = String.join(",", nomsCrees);

@@ -131,10 +131,7 @@ public class EssaimService {
 	 */
 	String clone(HttpSession session, Optional<Essaim> essaimOpt, String nomclones, String nomruches) {
 		Essaim essaim = essaimOpt.get();
-		List<String> noms = new ArrayList<>();
-		for (Nom essaimNom : essaimRepository.findAllProjectedBy()) {
-			noms.add(essaimNom.nom());
-		}
+		List<Nom> nomsRecords =  essaimRepository.findAllProjectedBy();
 		// Les noms des essaims à créer
 		String[] nomarray = nomclones.split(",");
 		// Les noms des ruches à créer
@@ -146,14 +143,14 @@ public class EssaimService {
 				// si le nom d'essaim est vide on l'ignore et on passe au suivant
 				continue;
 			}
-			if (noms.contains(nomarray[i])) {
+			if (nomsRecords.contains(new Nom(nomarray[i]))) {
 				logger.error("Clone d'un essaim : {} nom existant", nomarray[i]);
 			} else {
 				Essaim clone = new Essaim(essaim, nomarray[i]);
 				essaimRepository.save(clone);
 				nomsCrees.add(nomarray[i]);
 				// pour éviter clone "a,a" : 2 fois le même nom dans la liste
-				noms.add(nomarray[i]);
+				nomsRecords.add(new Nom(nomarray[i]));
 				if (i < nomruchesarray.length && !"".contentEquals(nomruchesarray[i])) {
 					// S'il n'y a pas de dépassement de la taille du tableau
 					// (liste des ruches incorrecte en paramètre) et si le nom de la

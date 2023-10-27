@@ -1,6 +1,5 @@
 package ooioo.ruches.essaim;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -18,7 +17,8 @@ public interface EssaimRepository extends CrudRepository<Essaim, Long> {
 
 	Iterable<Essaim> findByActif(boolean actif);
 
-	Collection<Nom> findAllProjectedBy();
+	// Collection -> List
+	List<Nom> findAllProjectedBy();
 	
 	@Query(value = """
 			select essaim

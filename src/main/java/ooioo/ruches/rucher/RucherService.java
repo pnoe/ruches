@@ -246,9 +246,7 @@ public class RucherService {
 		// la matrice des distances
 		final int transitCallbackIndex = routing.registerTransitCallback((long fromIndex, long toIndex) -> {
 			// Convert from routing variable Index to user NodeIndex.
-			int fromNode = manager.indexToNode(fromIndex);
-			int toNode = manager.indexToNode(toIndex);
-			return DataModel.distanceMatrix[fromNode][toNode];
+			return DataModel.distanceMatrix[manager.indexToNode(fromIndex)][manager.indexToNode(toIndex)];
 		});
 		// Coût du déplacement. Ici le coût est la distance entre deux ruches.
 		routing.setArcCostEvaluatorOfAllVehicles(transitCallbackIndex);
