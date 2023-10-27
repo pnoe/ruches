@@ -427,8 +427,9 @@ public class RucherController {
 	 */
 	@GetMapping("/cree")
 	public String cree(Model model) {
-		List<String> noms = new ArrayList<>();
-		for (Nom rucherNom : rucherRepository.findAllProjectedBy()) {
+		List<Nom> nomsRecords = rucherRepository.findAllProjectedBy();
+		List<String> noms = new ArrayList<>(nomsRecords.size());
+		for (Nom rucherNom : nomsRecords) {
 			noms.add(rucherNom.nom());
 		}
 		model.addAttribute(Const.RUCHERNOMS, noms);

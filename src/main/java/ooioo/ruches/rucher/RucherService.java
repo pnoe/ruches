@@ -64,9 +64,10 @@ public class RucherService {
 	void transhum(Rucher rucher, List<Evenement> evensRucheAjout, boolean group, List<Transhumance> histo,
 			List<Transhumance> histoGroup) {
 		// Les nom des ruches présentes dans le rucher
-		Collection<Nom> nomRuchesX = rucheRepository.findNomsByRucherId(rucher.getId());
+		Collection<Nom> nomRecords = rucheRepository.findNomsByRucherId(rucher.getId());
 		List<String> ruches = new ArrayList<>();
-		for (Nom nomR : nomRuchesX) {
+		// La liste ruches va varier dans la boucle de traitement des événements.
+		for (Nom nomR : nomRecords) {
 			ruches.add(nomR.nom());
 		}
 		for (int i = 0, levens = evensRucheAjout.size(); i < levens; i++) {

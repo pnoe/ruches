@@ -251,8 +251,9 @@ public class RucheService {
 	 * Appel du formulaire pour la création d'une ruche.
 	 */
 	void cree(HttpSession session, Model model) {
-		List<String> noms = new ArrayList<>();
-		for (Nom rucheNom : rucheRepository.findAllProjectedBy()) {
+		List<Nom> nomsRecords = rucheRepository.findAllProjectedBy();
+		List<String> noms = new ArrayList<>(nomsRecords.size());
+		for (Nom rucheNom : nomsRecords) {
 			noms.add(rucheNom.nom());
 		}
 		model.addAttribute(Const.RUCHENOMS, noms);

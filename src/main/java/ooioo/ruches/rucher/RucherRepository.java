@@ -24,7 +24,7 @@ public interface RucherRepository extends CrudRepository<Rucher, Long> {
 
 	List<Rucher> findByActifTrue();
 
-	Collection<Nom> findAllProjectedBy();
+	List<Nom> findAllProjectedBy();
 
 	Collection<IdNom> findAllProjectedIdNomByOrderByNom();
 

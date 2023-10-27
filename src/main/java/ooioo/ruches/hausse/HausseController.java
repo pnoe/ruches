@@ -227,7 +227,7 @@ public class HausseController {
 	}
 
 	/**
-	 * Afficher le détail d'une hausse
+	 * Afficher le détail d'une hausse.
 	 */
 	@GetMapping("/{hausseId}")
 	public String hausse(Model model, @PathVariable long hausseId) {
@@ -235,8 +235,10 @@ public class HausseController {
 		if (hausseOpt.isPresent()) {
 			Hausse hausse = hausseOpt.get();
 			model.addAttribute(Const.HAUSSE, hausse);
-			List<String> noms = new ArrayList<>();
-			for (Nom hausseNom : hausseRepository.findAllProjectedBy()) {
+			// Liste des noms pour unicité avec la commande clone.
+			List<Nom> nomsRecords = hausseRepository.findAllProjectedBy();
+			List<String> noms = new ArrayList<>(nomsRecords.size());
+			for (Nom hausseNom : nomsRecords) {
 				noms.add(hausseNom.nom());
 			}
 			model.addAttribute("haussenoms", noms);
