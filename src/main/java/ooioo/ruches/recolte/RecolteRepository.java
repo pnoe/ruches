@@ -1,5 +1,6 @@
 package ooioo.ruches.recolte;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
@@ -8,7 +9,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource(collectionResourceRel = "recolteRepository")
 public interface RecolteRepository extends CrudRepository<Recolte, Long> {
-	Iterable<Recolte> findAllByOrderByDateAsc();
+	List<Recolte> findAllByOrderByDateAsc();
 
 	Iterable<Recolte> findAllByOrderByDateDesc();
 

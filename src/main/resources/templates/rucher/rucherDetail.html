@@ -17,6 +17,9 @@
 		const buttontextprint = /*[[#{buttontextprint}]]*/ null;
 		const buttontextcol = /*[[#{buttontextcol}]]*/ null;
 		const ruchespesee = /*[[${ruchespesee}]]*/ null;
+		const ruches = /*[[${ruches}]]*/ null;
+		const rucherNSRuches = /*[[#{ruchernonsuppruches}]]*/ null;
+
 		document.addEventListener('DOMContentLoaded', () => {
 			if (ruchespesee) {
 				alert('Événement(s) Pesée créé(s) ruche(s)\n' + ruchespesee);
@@ -28,7 +31,8 @@
 					alert(depotNPES);
 				} else if (recolteHausses) {
 					alert(rucherNSRR);
-
+				} else if (ruches.length) {
+					alert(rucherNSRuches);
 				} else if (evenements) {
 					if (confirm(suppRucherEtEve)) {
 						return;

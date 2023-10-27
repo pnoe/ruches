@@ -507,18 +507,18 @@ public class RucherController {
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
 			model.addAttribute(Const.RUCHER, rucher);
-			// liste des ruches de ce rucher
+			// Liste des ruches de ce rucher.
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
 			model.addAttribute(Const.RUCHES, ruches);
 			// si rucher.depot == true alors ajouter les hausses ou hausse.ruche == null
 			Integer nbHausses = hausseRepository.countHausseInRucher(rucherId);
 			if (rucher.getDepot()) {
-				// on ajoute les hausses qui ne sont pas sur des ruches
-				// à la somme pour le dépôt
+				// On ajoute les hausses qui ne sont pas sur des ruches
+				// à la somme pour le dépôt.
 				nbHausses += hausseRepository.countByActiveAndRucheIsNull(true);
 			} else {
-				// lecture en base de la distance et du temps pour aller du dépôt
-				// à ce rucher
+				// Lecture en base de la distance et du temps pour aller du dépôt
+				// à ce rucher.
 				Rucher depot = rucherRepository.findByDepotTrue();
 				DistRucher dr = (depot.getId().intValue() > rucher.getId().intValue())
 						? drRepo.findByRucherStartAndRucherEnd(rucher, depot)
@@ -550,8 +550,9 @@ public class RucherController {
 			// supprime
 			Iterable<Evenement> evenements = evenementRepository.findByRucherId(rucherId);
 			model.addAttribute(Const.EVENEMENTS, evenements.iterator().hasNext());
-			// Calcul du poids de miel par récoltes pour ce rucher
-			Iterable<Recolte> recoltes = recolteRepository.findAllByOrderByDateAsc();
+			// Calcul du poids de miel par récoltes pour ce rucher.
+			List<Recolte> recoltes = recolteRepository.findAllByOrderByDateAsc();
+			// Seules les récoltes du rucher sont ajoutées aux ArrayList.
 			List<Integer> poidsListe = new ArrayList<>();
 			List<Recolte> recoltesListe = new ArrayList<>();
 			List<Integer> recoltesNbRuches = new ArrayList<>();
@@ -559,12 +560,12 @@ public class RucherController {
 			for (Recolte recolte : recoltes) {
 				Integer poids = recolteHausseRepository.findPoidsMielByRucherByRecolte(rucher.getId(), recolte.getId());
 				if (poids != null) {
-					poidsListe.add(poids);
 					recoltesListe.add(recolte);
-					poidsTotal += poids;
+					poidsListe.add(poids);
 					// nombre de ruche du rucher rucherId dans cette récolte
 					recoltesNbRuches
 							.add(recolteHausseRepository.countRucheByRecolteByRucher(recolte.getId(), rucherId));
+					poidsTotal += poids;
 				}
 			}
 			model.addAttribute("recoltesListe", recoltesListe);
@@ -663,22 +664,23 @@ public class RucherController {
 	public String supprime(Model model, @PathVariable long rucherId) {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
-			Rucher rucherDepot = rucherRepository.findByDepotTrue();
+			// Rucher rucherDepot = rucherRepository.findByDepotTrue();
 			Rucher rucher = rucherOpt.get();
 			if (rucher.getDepot()) {
-				model.addAttribute(Const.MESSAGE, "On ne peut pas supprimer le rucher dépôt");
+				model.addAttribute(Const.MESSAGE, "Le rucher dépôt ne peut être supprimé");
+				return Const.INDEX;
+			}
+			// On interdit la suppression du rucher s'il contient des ruches.
+			// Il faut mettre au préalable ces ruches dans un autre rucher.
+			List<Ruche> ruches = rucheRepository.findCompletByRucherId(rucherId);
+			if (!ruches.isEmpty()) {
+				model.addAttribute(Const.MESSAGE, "Ce rucher ne peut être supprimé");
 				return Const.INDEX;
 			}
 			Iterable<Evenement> evenements = evenementRepository.findByRucherId(rucherId);
 			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByRucherId(rucherId);
-			Iterable<Ruche> ruches = rucheRepository.findCompletByRucherId(rucherId);
 			if (recolteHausses.isEmpty()) {
-				// on enlève les ruches du rucher à supprimer
-				for (Ruche ruche : ruches) {
-					// mettre la ruche au dépôt
-					ruche.setRucher(rucherDepot);
-				}
-				// on supprime les événements associées à cette ruche
+				// On supprime tous les événements associés à ce rucher.
 				for (Evenement evenement : evenements) {
 					evenementRepository.delete(evenement);
 				}
