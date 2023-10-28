@@ -3,6 +3,7 @@ package ooioo.ruches.evenement;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -16,6 +17,14 @@ import ooioo.ruches.rucher.Rucher;
 @RepositoryRestResource(collectionResourceRel = "evenementRepository")
 public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
+	@Modifying
+	@Query(value = """
+			delete
+				from Evenement e
+				where e.rucher = :rucher
+				""")
+	void deleteEveRucher(Rucher rucher);
+	
 	@Query(value = """
 			select e
 			  from Evenement e

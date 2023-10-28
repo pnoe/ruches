@@ -23,6 +23,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -660,6 +661,8 @@ public class RucherController {
 	/**
 	 * Suppression d'un rucher. On ne peut pas supprimer le dépôt.
 	 */
+	@Transactional
+	// Transactionnal nécessair
 	@GetMapping("/supprime/{rucherId}")
 	public String supprime(Model model, @PathVariable long rucherId) {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
@@ -672,24 +675,21 @@ public class RucherController {
 			}
 			// On interdit la suppression du rucher s'il contient des ruches.
 			// Il faut mettre au préalable ces ruches dans un autre rucher.
-			List<Ruche> ruches = rucheRepository.findCompletByRucherId(rucherId);
-			if (!ruches.isEmpty()) {
-				model.addAttribute(Const.MESSAGE, "Ce rucher ne peut être supprimé");
+			if (rucheRepository.countByRucher(rucher) != 0) {
+				model.addAttribute(Const.MESSAGE, "Ce rucher ne peut être supprimé, il contient des ruches");
 				return Const.INDEX;
 			}
-			Iterable<Evenement> evenements = evenementRepository.findByRucherId(rucherId);
-			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByRucherId(rucherId);
-			if (recolteHausses.isEmpty()) {
-				// On supprime tous les événements associés à ce rucher.
-				for (Evenement evenement : evenements) {
-					evenementRepository.delete(evenement);
-				}
-				rucherRepository.delete(rucher);
-				logger.info("{} supprimé", rucher);
-			} else {
-				model.addAttribute(Const.MESSAGE, "Ce rucher ne peut être supprimé");
+			// On interdit la suppression d'un rucher référencé dans une récolte
+			if (recolteHausseRepository.countByRucher(rucher) != 0) {
+				model.addAttribute(Const.MESSAGE, "Ce rucher ne peut être supprimé, il est référencé dans une récolte");
 				return Const.INDEX;
 			}
+			// On supprime tous les événements associés à ce rucher.
+			evenementRepository.deleteEveRucher(rucher);
+			// On supprime les distances vers ce rucher.
+			drRepo.deleteDists(rucher);
+			rucherRepository.delete(rucher);
+			logger.info("{} supprimé", rucher);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
