@@ -662,7 +662,7 @@ public class RucherController {
 	 * Suppression d'un rucher. On ne peut pas supprimer le dépôt.
 	 */
 	@Transactional
-	// Transactionnal nécessair
+	// Transactionnal nécessaire pour deleteDists
 	@GetMapping("/supprime/{rucherId}")
 	public String supprime(Model model, @PathVariable long rucherId) {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
@@ -673,19 +673,22 @@ public class RucherController {
 				model.addAttribute(Const.MESSAGE, "Le rucher dépôt ne peut être supprimé");
 				return Const.INDEX;
 			}
+			// On interdit la suppression d'un rucher référencé dans une récolte
+			if (recolteHausseRepository.countByRucher(rucher) != 0) {
+				model.addAttribute(Const.MESSAGE, "Ce rucher ne peut être supprimé, il est référencé dans une récolte");
+				return Const.INDEX;
+			}
+			// On interdit la suppression d'un rucher référencé dans des événements
+			if (evenementRepository.countByRucher(rucher) != 0) {
+				model.addAttribute(Const.MESSAGE, "Ce rucher ne peut être supprimé, il est référencé dans des événements ");
+				return Const.INDEX;
+			}
 			// On interdit la suppression du rucher s'il contient des ruches.
 			// Il faut mettre au préalable ces ruches dans un autre rucher.
 			if (rucheRepository.countByRucher(rucher) != 0) {
 				model.addAttribute(Const.MESSAGE, "Ce rucher ne peut être supprimé, il contient des ruches");
 				return Const.INDEX;
 			}
-			// On interdit la suppression d'un rucher référencé dans une récolte
-			if (recolteHausseRepository.countByRucher(rucher) != 0) {
-				model.addAttribute(Const.MESSAGE, "Ce rucher ne peut être supprimé, il est référencé dans une récolte");
-				return Const.INDEX;
-			}
-			// On supprime tous les événements associés à ce rucher.
-			evenementRepository.deleteEveRucher(rucher);
 			// On supprime les distances vers ce rucher.
 			drRepo.deleteDists(rucher);
 			rucherRepository.delete(rucher);

@@ -16,14 +16,8 @@ import ooioo.ruches.rucher.Rucher;
 
 @RepositoryRestResource(collectionResourceRel = "evenementRepository")
 public interface EvenementRepository extends CrudRepository<Evenement, Long> {
-
-	@Modifying
-	@Query(value = """
-			delete
-				from Evenement e
-				where e.rucher = :rucher
-				""")
-	void deleteEveRucher(Rucher rucher);
+	
+	Long countByRucher(Rucher rucher);
 	
 	@Query(value = """
 			select e

@@ -240,7 +240,7 @@ public class RucheController {
 	}
 
 	/**
-	 * Changement de rucher d'une ruche Création de l'événement RUCHEAJOUTRUCHER.
+	 * Changement de rucher d'une ruche et création de l'événement RUCHEAJOUTRUCHER.
 	 */
 	@PostMapping("/sauverucher/{rucheId}")
 	public String sauveRucher(Model model, @RequestParam String date, @PathVariable long rucheId,
@@ -300,10 +300,12 @@ public class RucheController {
 				for (Hausse hausse : hausses) {
 					hausse.setRuche(null);
 					hausse.setOrdreSurRuche(null);
+					// manque le save ! et pourtant les hausses sont sauvegardées
 				}
 				// on supprime les événements associés à cette ruche
 				for (Evenement evenement : evenements) {
 					evenementRepository.delete(evenement);
+					// log ?
 				}
 				Ruche ruche = rucheOpt.get();
 				rucheRepository.delete(ruche);

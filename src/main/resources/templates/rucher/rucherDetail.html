@@ -6,7 +6,7 @@
 		/* globals DataTable */
 		const depotNPES = /*[[#{depotNePeutEtreSupprime}]]*/ null;
 		const rucherNSRR = /*[[#{ruchernonsupprimerefrecolte}]]*/ null;
-		const suppRucherEtEve = /*[[#{supprimerruchereteven}]]*/ null;
+		const rucherEves = /*[[#{rucherEves}]]*/ null;
 		const suppCeRucher = /*[[#{supprimercerucher?}]]*/ null;
 		const rucherDepot = /*[[${rucher.depot}]]*/ null;
 		const recolteHausses = /*[[${recolteHausses}]]*/ null;
@@ -19,7 +19,6 @@
 		const ruchespesee = /*[[${ruchespesee}]]*/ null;
 		const ruches = /*[[${ruches}]]*/ null;
 		const rucherNSRuches = /*[[#{ruchernonsuppruches}]]*/ null;
-
 		document.addEventListener('DOMContentLoaded', () => {
 			if (ruchespesee) {
 				alert('Événement(s) Pesée créé(s) ruche(s)\n' + ruchespesee);
@@ -31,12 +30,10 @@
 					alert(depotNPES);
 				} else if (recolteHausses) {
 					alert(rucherNSRR);
+				} else if (evenements) {
+					alert(rucherEves);
 				} else if (ruches.length) {
 					alert(rucherNSRuches);
-				} else if (evenements) {
-					if (confirm(suppRucherEtEve) && confirm(suppRucherEtEve + ' ! ! ! !')) {
-						return;
-					}
 				} else if (confirm(suppCeRucher)) {
 					return;
 				}
