@@ -159,28 +159,33 @@ public class HausseController {
 	public String supprime(Model model, @PathVariable long hausseId) {
 		Optional<Hausse> hausseOpt = hausseRepository.findById(hausseId);
 		if (hausseOpt.isPresent()) {
-			Iterable<Evenement> evenements = evenementRepository.findByHausseId(hausseId);
-			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByHausseId(hausseId);
-			if (recolteHausses.isEmpty()) {
-				// on supprime les événements associées à cette hausse
-				for (Evenement evenement : evenements) {
-					evenementRepository.delete(evenement);
-				}
-				Hausse hausse = hausseOpt.get();
-				Ruche ruche = hausse.getRuche();
-				if (ruche != null) {
-					hausse.setRuche(null);
-					// On sauve la hausse après avoir mis hausse.ruche à null
-					// pour que ordonneHaussesRuche ne trouve plus cette hausse
-					hausseRepository.save(hausse);
-					rucheService.ordonneHaussesRuche(ruche.getId());
-				}
-				hausseRepository.delete(hausse);
-				logger.info("{} supprimée", hausse);
-			} else {
-				model.addAttribute(Const.MESSAGE, "Cette hausse ne peut être supprimée");
+			Hausse hausse = hausseOpt.get();
+
+			Long nbHR = recolteHausseRepository.countByHausse(hausse);
+			if (nbHR > 0) {
+				model.addAttribute(Const.MESSAGE,
+						"Cette hausse ne peut être supprimée, elle est référencée dans une récolte");
 				return Const.INDEX;
 			}
+
+			Long nbEve = evenementRepository.countByHausse(hausse);
+			if (nbEve > 0) {
+				model.addAttribute(Const.MESSAGE,
+						"Cette hausse ne peut être supprimée, elle est référencée dans des événements");
+				return Const.INDEX;
+			}
+
+			Ruche ruche = hausse.getRuche();
+			if (ruche != null) {
+				hausse.setRuche(null);
+				// On sauve la hausse après avoir mis hausse.ruche à null
+				// pour que ordonneHaussesRuche ne trouve plus cette hausse
+				hausseRepository.save(hausse);
+				rucheService.ordonneHaussesRuche(ruche.getId());
+			}
+			hausseRepository.delete(hausse);
+			logger.info("{} supprimée", hausse);
+
 		} else {
 			logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
 			model.addAttribute(Const.MESSAGE,
@@ -198,10 +203,8 @@ public class HausseController {
 		if (bindingResult.hasErrors()) {
 			return HAUSSE_HAUSSEFORM;
 		}
-
 		// On enlève les blancs aux extémités du commentaire.
 		hausse.setCommentaire(hausse.getCommentaire().trim());
-
 		// On enlève les blancs aux extémités du nom.
 		hausse.setNom(hausse.getNom().trim());
 		if ("".equals(hausse.getNom())) {
@@ -209,7 +212,6 @@ public class HausseController {
 			model.addAttribute(Const.MESSAGE, "Nom de hausse incorrect.");
 			return Const.INDEX;
 		}
-
 		// Vérification de l'unicité du nom
 		Optional<Hausse> optH = hausseRepository.findByNom(hausse.getNom());
 		if (optH.isPresent()) {
@@ -242,6 +244,15 @@ public class HausseController {
 				noms.add(hausseNom.nom());
 			}
 			model.addAttribute("haussenoms", noms);
+
+			// Si des hausses de récolte référencent cette hausse, on ne pourra la supprimer
+			Long nbHR = recolteHausseRepository.countByHausse(hausse);
+			model.addAttribute("recolteHausses", nbHR > 0);
+
+			// Si des événements référencent cette hausse, on ne peut la supprimer
+			Long nbEve = evenementRepository.countByHausse(hausse);
+			model.addAttribute(Const.EVENEMENTS, nbEve > 0);
+
 			// Si des hausses de récolte référencent cette hausse, on ne pourra la supprimer
 			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByHausseId(hausseId);
 			model.addAttribute("recolteHausses", recolteHausses.iterator().hasNext());
@@ -249,6 +260,7 @@ public class HausseController {
 			// supprime la hausse
 			Iterable<Evenement> evenements = evenementRepository.findByHausseId(hausseId);
 			model.addAttribute(Const.EVENEMENTS, evenements.iterator().hasNext());
+
 			Ruche ruche = hausse.getRuche();
 			if (ruche != null) {
 				model.addAttribute("eveHausse", evenementRepository

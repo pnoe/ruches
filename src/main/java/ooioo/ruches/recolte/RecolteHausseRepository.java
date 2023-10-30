@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.hausse.Hausse;
+import ooioo.ruches.ruche.Ruche;
 import ooioo.ruches.rucher.Rucher;
 
 @Repository("recolteHausseRepository")
@@ -29,6 +30,12 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 	Integer countRucheByRecolteByRucher(Long recolteId, Long rucherId);
 	
 	Long countByRucher(Rucher rucher);
+	
+	Long countByRuche(Ruche ruche);
+	
+	Long countByEssaim(Essaim essaim);
+	
+	Long countByHausse(Hausse hausse);
 
 	List<RecolteHausse> findByRucheId(Long rucheId);
 

@@ -5,16 +5,16 @@
 	<script th:replace="~{include :: jsruches}"></script>
 	<script th:inline="javascript">
 		/* exported _csrf_token, _csrf_param_name, ruchenoms, rnpsupprec,
-		recolteHausses, evenements, suppreven, suppruche, nruchvirg,
-		nexisted, Ruches, creer, urlclone, rucheid
+		recolteHausses, evenements, suppruche, nruchvirg,
+		nexisted, Ruches, creer, urlclone, rucheid, rnpeves
 			*/
 		const _csrf_token = /*[[${_csrf.token}]]*/ null;
 		const _csrf_param_name = /*[[${_csrf.parameterName}]]*/ null;
 		const ruchenoms = /*[[${ruchenoms}]]*/ null;
 		const rnpsupprec = /*[[#{ruchenepeutetresupprimeerecolte}]]*/ null;
+		const rnpeves = /*[[#{rnpeves}]]*/ null;
 		const recolteHausses = /*[[${recolteHausses}]]*/ null;
 		const evenements = /*[[${evenements}]]*/ null;
-		const suppreven = /*[[#{supprimerrucheeteven?}]]*/ null;
 		const suppruche = /*[[#{supprimercetteruche?}]]*/ null;
 		const nruchvirg = /*[[#{nomruchesvirgule}]]*/ null;
 		const nexisted = /*[[#{nomexistentdeja}]]*/ null;

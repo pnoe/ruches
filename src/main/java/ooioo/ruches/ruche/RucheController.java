@@ -40,7 +40,6 @@ import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
 import ooioo.ruches.hausse.Hausse;
 import ooioo.ruches.hausse.HausseRepository;
-import ooioo.ruches.recolte.RecolteHausse;
 import ooioo.ruches.recolte.RecolteHausseRepository;
 import ooioo.ruches.ruche.type.RucheType;
 import ooioo.ruches.ruche.type.RucheTypeRepository;
@@ -292,28 +291,34 @@ public class RucheController {
 	public String supprime(Model model, @PathVariable long rucheId) {
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 		if (rucheOpt.isPresent()) {
-			Iterable<Evenement> evenements = evenementRepository.findByRucheId(rucheId);
-			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByRucheId(rucheId);
+			Ruche ruche = rucheOpt.get();
 			Iterable<Hausse> hausses = hausseRepository.findCompletByRucheId(rucheId);
-			if (recolteHausses.isEmpty()) {
-				// on enlève les hausses de la ruche à supprimer
-				for (Hausse hausse : hausses) {
-					hausse.setRuche(null);
-					hausse.setOrdreSurRuche(null);
-					// manque le save ! et pourtant les hausses sont sauvegardées
-				}
-				// on supprime les événements associés à cette ruche
-				for (Evenement evenement : evenements) {
-					evenementRepository.delete(evenement);
-					// log ?
-				}
-				Ruche ruche = rucheOpt.get();
-				rucheRepository.delete(ruche);
-				logger.info("{} supprimée", ruche);
-			} else {
-				model.addAttribute(Const.MESSAGE, "Cette ruche ne peut être supprimée");
+			Long nbHR = recolteHausseRepository.countByRuche(ruche);
+			if (nbHR > 0) {
+				model.addAttribute(Const.MESSAGE,
+						"Cette ruche ne peut être supprimée, elle est référencée dans une récolte");
 				return Const.INDEX;
 			}
+			List<Evenement> evenements = evenementRepository.findByRucheId(rucheId);
+			if (evenements.size() > 1) {
+				// Une ruche qui vient d'être créée à 1 événement, sa mise au dépôt
+				model.addAttribute(Const.MESSAGE,
+						"Cette ruche ne peut être supprimée, elle est référencée dans des événements");
+				return Const.INDEX;
+			}
+			// On enlève les hausses de la ruche à supprimer
+			for (Hausse hausse : hausses) {
+				hausse.setRuche(null);
+				hausse.setOrdreSurRuche(null);
+				// manque le save ! et pourtant les hausses sont sauvegardées
+			}
+			// On supprime l'événement mise au dépôt associé à cette ruche.
+			for (Evenement eve : evenements) {
+				evenementRepository.delete(eve);
+				logger.info("{} supprimé", eve);
+			}
+			rucheRepository.delete(ruche);
+			logger.info("{} supprimée", ruche);
 		} else {
 			logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 			model.addAttribute(Const.MESSAGE,
@@ -400,13 +405,15 @@ public class RucheController {
 				datesPoseHausse.add((evenPoseHausse == null) ? null : evenPoseHausse.getDate());
 			}
 			model.addAttribute("datesPoseHausse", datesPoseHausse);
+
 			// Si des hausses de récolte référencent cette ruche, on ne pourra la supprimer
-			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByRucheId(rucheId);
-			model.addAttribute("recolteHausses", recolteHausses.iterator().hasNext());
-			// Si des événements référencent cette ruche, il faudra les supprimer si on la
-			// supprime
-			List<Evenement> evenements = evenementRepository.findByRucheId(rucheId);
-			model.addAttribute(Const.EVENEMENTS, evenements.size());
+			Long nbHR = recolteHausseRepository.countByRuche(ruche);
+			model.addAttribute("recolteHausses", nbHR > 0);
+
+			// Si des événements référencent cette ruche, on ne peut la supprimer
+			Long nbEve = evenementRepository.countByRuche(ruche);
+			model.addAttribute(Const.EVENEMENTS, nbEve > 0);
+			
 			// Trouver l'événement association essaim ruche
 			if (ruche.getEssaim() != null) {
 				model.addAttribute("eveEssaim", evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,

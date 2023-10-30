@@ -8,9 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		if (recolteHausses) {
 			alert(haussesupp);
 		} else if (evenements) {
-			if (confirm(supphausseeve)) {
-				return;
-			}
+			alert(supphausseeve);
 		} else if (confirm(supphausse)) {
 			return;
 		}

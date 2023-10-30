@@ -3,7 +3,6 @@ package ooioo.ruches.evenement;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -18,6 +17,12 @@ import ooioo.ruches.rucher.Rucher;
 public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	
 	Long countByRucher(Rucher rucher);
+	
+	Long countByRuche(Ruche ruche);
+	
+	Long countByEssaim(Essaim essaim);
+	
+	Long countByHausse(Hausse hausse);
 	
 	@Query(value = """
 			select e

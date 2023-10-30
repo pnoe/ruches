@@ -680,7 +680,7 @@ public class RucherController {
 			}
 			// On interdit la suppression d'un rucher référencé dans des événements
 			if (evenementRepository.countByRucher(rucher) != 0) {
-				model.addAttribute(Const.MESSAGE, "Ce rucher ne peut être supprimé, il est référencé dans des événements ");
+				model.addAttribute(Const.MESSAGE, "Ce rucher ne peut être supprimé, il est référencé dans des événements");
 				return Const.INDEX;
 			}
 			// On interdit la suppression du rucher s'il contient des ruches.

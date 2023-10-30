@@ -1,21 +1,18 @@
 /* globals _csrf_token, _csrf_param_name, ruchenoms, rnpsupprec,
-	recolteHausses, evenements, suppreven, suppruche, nruchvirg,
-	nexisted, Ruches, creer, urlclone, rucheid
+	recolteHausses, evenements, suppruche, nruchvirg,
+	nexisted, Ruches, creer, urlclone, rucheid, rnpeves
  */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('supprime').addEventListener('click', event => {
 		if (recolteHausses) {
 			alert(rnpsupprec);
-		} else if (evenements > 0) {
-			if (confirm(suppreven)) {
-				return true;
-			}
+		} else if (evenements) {
+			alert(rnpeves);
 		} else if (confirm(suppruche)) {
-			return true;
+			return;
 		}
 		event.preventDefault();
-		return false;
 	});
 	document.getElementById('clone').addEventListener('click', () => {
 		function annule() {

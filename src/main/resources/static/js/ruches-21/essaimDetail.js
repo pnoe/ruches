@@ -22,10 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('supprime').addEventListener('click', function(event) {
 		if (recolteHausses) {
 			alert(essaimsupprecolttxt);
-			event.preventDefault();
 		} else if (evenements) {
-			if (!confirm(suppessaimevetxt)) { event.preventDefault(); }
-		} else if (!confirm(suppessaimtxt)) { event.preventDefault(); }
+			alert(suppessaimevetxt);
+		} else if (confirm(suppessaimtxt)) {
+			return;
+		}
+		event.preventDefault();
 	});
 
 	document.getElementById('clone').addEventListener('click', function() {
