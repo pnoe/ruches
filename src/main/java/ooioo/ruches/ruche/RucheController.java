@@ -405,16 +405,15 @@ public class RucheController {
 				datesPoseHausse.add((evenPoseHausse == null) ? null : evenPoseHausse.getDate());
 			}
 			model.addAttribute("datesPoseHausse", datesPoseHausse);
-
 			// Si des hausses de récolte référencent cette ruche, on ne pourra la supprimer
 			Long nbHR = recolteHausseRepository.countByRuche(ruche);
 			model.addAttribute("recolteHausses", nbHR > 0);
-
-			// Si des événements référencent cette ruche, on ne peut la supprimer
+			// Si des événements référencent cette ruche, on ne peut la supprimer.
+			// On accepte 1 événement pour suppression événement mise au rucher
+			// dépôt.
 			Long nbEve = evenementRepository.countByRuche(ruche);
-			model.addAttribute(Const.EVENEMENTS, nbEve > 0);
-			
-			// Trouver l'événement association essaim ruche
+			model.addAttribute(Const.EVENEMENTS, nbEve > 1);
+			// Trouver l'événement association essaim ruche.
 			if (ruche.getEssaim() != null) {
 				model.addAttribute("eveEssaim", evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
 						TypeEvenement.AJOUTESSAIMRUCHE));
@@ -433,7 +432,7 @@ public class RucheController {
 	}
 
 	/**
-	 * Afficher une ruche pour le choix des hausses à ajouter/retirer
+	 * Afficher une ruche pour le choix des hausses à ajouter/retirer.
 	 */
 	@GetMapping("/hausses/{rucheId}")
 	public String ajoutRetraitHausses(Model model, @PathVariable long rucheId) {
