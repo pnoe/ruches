@@ -215,7 +215,6 @@ public class PersonneController {
 			personne.setPassword(new BCryptPasswordEncoder().encode(password));
 		}
 		String action = (personne.getId() == null) ? "créée" : "modifiée";
-		
 		try {
 			personneRepository.save(personne);
 		} catch (ObjectOptimisticLockingFailureException e) {
@@ -223,9 +222,6 @@ public class PersonneController {
 			model.addAttribute(Const.MESSAGE, Const.CONCURACCESS);
 			return Const.INDEX;
 		}
-		
-		// personneRepository.save(personne);
-		
 		logger.info("{} {}", personne, action);
 		return "redirect:/personne/" + personne.getId();
 	}

@@ -15,19 +15,15 @@ import ooioo.ruches.rucher.Rucher;
 
 @RepositoryRestResource(collectionResourceRel = "evenementRepository")
 public interface EvenementRepository extends CrudRepository<Evenement, Long> {
-	
+
 	boolean existsByRucher(Rucher rucher);
-	
+
 	Long countByRuche(Ruche ruche);
-	
+
 	boolean existsByEssaim(Essaim essaim);
-	
+
 	boolean existsByHausse(Hausse hausse);
-	
-	// Long countByEssaim(Essaim essaim);
-	
-	// Long countByHausse(Hausse hausse);
-	
+
 	@Query(value = """
 			select e
 			  from Evenement e

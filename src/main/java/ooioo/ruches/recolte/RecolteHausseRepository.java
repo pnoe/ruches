@@ -37,11 +37,7 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 
 	boolean existsByHausse(Hausse hausse);
 
-	// List<RecolteHausse> findByRucheId(Long rucheId);
-
 	List<RecolteHausse> findByHausseId(Long hausseId);
-
-	// List<RecolteHausse> findByEssaimId(Long essaimId);
 
 	List<RecolteHausse> findByRucherId(Long rucherId);
 

@@ -14,7 +14,8 @@
 		document.addEventListener('DOMContentLoaded', () => {
 			const swapCheck = document.getElementById('swapPositions');
 			$.validator.addMethod('greaterThanEqual', function (value, element, param) {
-				return (swapCheck && swapCheck.checked &&
+//				return (swapCheck && swapCheck.checked &&
+				return (swapCheck?.checked &&
 					(rucherucherid !== ruchesourcerucherid))
 					? (Date.parse(value) > Date.parse(param)) : true;
 			}, doitEtreSupA + ' {0}');

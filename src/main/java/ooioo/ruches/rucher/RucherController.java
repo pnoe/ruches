@@ -663,7 +663,6 @@ public class RucherController {
 	public String supprime(Model model, @PathVariable long rucherId) {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
-			// Rucher rucherDepot = rucherRepository.findByDepotTrue();
 			Rucher rucher = rucherOpt.get();
 			if (rucher.getDepot()) {
 				model.addAttribute(Const.MESSAGE, "Le rucher dépôt ne peut être supprimé");
