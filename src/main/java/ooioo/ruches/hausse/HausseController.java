@@ -26,10 +26,8 @@ import jakarta.servlet.http.HttpSession;
 import ooioo.ruches.Const;
 import ooioo.ruches.Nom;
 import ooioo.ruches.Utils;
-import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
-import ooioo.ruches.recolte.RecolteHausse;
 import ooioo.ruches.recolte.RecolteHausseRepository;
 import ooioo.ruches.ruche.Ruche;
 import ooioo.ruches.ruche.RucheService;
@@ -160,21 +158,16 @@ public class HausseController {
 		Optional<Hausse> hausseOpt = hausseRepository.findById(hausseId);
 		if (hausseOpt.isPresent()) {
 			Hausse hausse = hausseOpt.get();
-
-			Long nbHR = recolteHausseRepository.countByHausse(hausse);
-			if (nbHR > 0) {
+			if (recolteHausseRepository.existsByHausse(hausse)) {
 				model.addAttribute(Const.MESSAGE,
 						"Cette hausse ne peut être supprimée, elle est référencée dans une récolte");
 				return Const.INDEX;
 			}
-
-			Long nbEve = evenementRepository.countByHausse(hausse);
-			if (nbEve > 0) {
+			if (evenementRepository.existsByHausse(hausse)) {
 				model.addAttribute(Const.MESSAGE,
 						"Cette hausse ne peut être supprimée, elle est référencée dans des événements");
 				return Const.INDEX;
 			}
-
 			Ruche ruche = hausse.getRuche();
 			if (ruche != null) {
 				hausse.setRuche(null);
@@ -244,23 +237,10 @@ public class HausseController {
 				noms.add(hausseNom.nom());
 			}
 			model.addAttribute("haussenoms", noms);
-
 			// Si des hausses de récolte référencent cette hausse, on ne pourra la supprimer
-			Long nbHR = recolteHausseRepository.countByHausse(hausse);
-			model.addAttribute("recolteHausses", nbHR > 0);
-
+			model.addAttribute("recolteHausses", recolteHausseRepository.existsByHausse(hausse));
 			// Si des événements référencent cette hausse, on ne peut la supprimer
-			Long nbEve = evenementRepository.countByHausse(hausse);
-			model.addAttribute(Const.EVENEMENTS, nbEve > 0);
-
-			// Si des hausses de récolte référencent cette hausse, on ne pourra la supprimer
-			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByHausseId(hausseId);
-			model.addAttribute("recolteHausses", recolteHausses.iterator().hasNext());
-			// Si des événements référencent cette hausse, il faudra les supprimer si on
-			// supprime la hausse
-			Iterable<Evenement> evenements = evenementRepository.findByHausseId(hausseId);
-			model.addAttribute(Const.EVENEMENTS, evenements.iterator().hasNext());
-
+			model.addAttribute(Const.EVENEMENTS, evenementRepository.existsByHausse(hausse));
 			Ruche ruche = hausse.getRuche();
 			if (ruche != null) {
 				model.addAttribute("eveHausse", evenementRepository

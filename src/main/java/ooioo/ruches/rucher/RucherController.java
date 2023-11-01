@@ -50,7 +50,6 @@ import ooioo.ruches.evenement.TypeEvenement;
 import ooioo.ruches.hausse.HausseRepository;
 import ooioo.ruches.personne.PersonneRepository;
 import ooioo.ruches.recolte.Recolte;
-import ooioo.ruches.recolte.RecolteHausse;
 import ooioo.ruches.recolte.RecolteHausseRepository;
 import ooioo.ruches.recolte.RecolteRepository;
 import ooioo.ruches.ruche.Ruche;
@@ -544,13 +543,10 @@ public class RucherController {
 			}
 			model.addAttribute("nbCadres", nbCadres);
 			model.addAttribute("listNbHausses", listNbHausses);
-			// Si des hausses de récolte référencent ce rucher, on ne pourra la supprimer
-			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByRucherId(rucherId);
-			model.addAttribute("recolteHausses", recolteHausses.iterator().hasNext());
-			// Si des événements référencent cet rucher, il faudra les supprimer si on la
-			// supprime
-			Iterable<Evenement> evenements = evenementRepository.findByRucherId(rucherId);
-			model.addAttribute(Const.EVENEMENTS, evenements.iterator().hasNext());
+			// Si des hausses de récolte référencent ce rucher, on ne pourra le supprimer
+			model.addAttribute("recolteHausses", recolteHausseRepository.existsByRucher(rucher));
+			// Si des événements référencent ce rucher, on ne peut le supprimer
+			model.addAttribute(Const.EVENEMENTS, evenementRepository.existsByRucher(rucher));
 			// Calcul du poids de miel par récoltes pour ce rucher.
 			List<Recolte> recoltes = recolteRepository.findAllByOrderByDateAsc();
 			// Seules les récoltes du rucher sont ajoutées aux ArrayList.
@@ -674,13 +670,15 @@ public class RucherController {
 				return Const.INDEX;
 			}
 			// On interdit la suppression d'un rucher référencé dans une récolte
-			if (recolteHausseRepository.countByRucher(rucher) != 0) {
+			if (recolteHausseRepository.existsByRucher(rucher)) {
 				model.addAttribute(Const.MESSAGE, "Ce rucher ne peut être supprimé, il est référencé dans une récolte");
 				return Const.INDEX;
 			}
 			// On interdit la suppression d'un rucher référencé dans des événements
-			if (evenementRepository.countByRucher(rucher) != 0) {
-				model.addAttribute(Const.MESSAGE, "Ce rucher ne peut être supprimé, il est référencé dans des événements");
+			// if (evenementRepository.countByRucher(rucher) != 0) {
+			if (evenementRepository.existsByRucher(rucher)) {
+				model.addAttribute(Const.MESSAGE,
+						"Ce rucher ne peut être supprimé, il est référencé dans des événements");
 				return Const.INDEX;
 			}
 			// On interdit la suppression du rucher s'il contient des ruches.

@@ -293,8 +293,7 @@ public class RucheController {
 		if (rucheOpt.isPresent()) {
 			Ruche ruche = rucheOpt.get();
 			Iterable<Hausse> hausses = hausseRepository.findCompletByRucheId(rucheId);
-			Long nbHR = recolteHausseRepository.countByRuche(ruche);
-			if (nbHR > 0) {
+			if (recolteHausseRepository.existsByRuche(ruche)) {
 				model.addAttribute(Const.MESSAGE,
 						"Cette ruche ne peut être supprimée, elle est référencée dans une récolte");
 				return Const.INDEX;
@@ -406,8 +405,7 @@ public class RucheController {
 			}
 			model.addAttribute("datesPoseHausse", datesPoseHausse);
 			// Si des hausses de récolte référencent cette ruche, on ne pourra la supprimer
-			Long nbHR = recolteHausseRepository.countByRuche(ruche);
-			model.addAttribute("recolteHausses", nbHR > 0);
+			model.addAttribute("recolteHausses", recolteHausseRepository.existsByRuche(ruche));
 			// Si des événements référencent cette ruche, on ne peut la supprimer.
 			// On accepte 1 événement pour suppression événement mise au rucher
 			// dépôt.

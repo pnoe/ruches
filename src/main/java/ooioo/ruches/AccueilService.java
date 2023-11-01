@@ -154,8 +154,7 @@ public class AccueilService {
 		// les cartes des ruchers.
 		model.addAttribute("rayonsButinage", rayonsButinage);
 		// Valeurs par année : poids de miel mis en pots, nb d'essaims, nb d'essaims
-		// créés, nb essaims dispersés,
-		// sucre, nb traitements.
+		// créés, nb essaims dispersés, sucre, nb traitements.
 		Essaim premierEssaim = essaimRepository.findFirstByOrderByDateAcquisition();
 		// Calcul de l'année initiale du tableau à afficher.
 		int dateDebut;
@@ -176,6 +175,7 @@ public class AccueilService {
 		}
 		// nban pour dimensionner les ArrayList, avec une colonne de plus pour le total.
 		int nban = dateFin - dateDebut + 2;
+		if (nban < 1) { nban = 1; } // nécessaire dans certains cas, plantage si < 0
 		List<Integer> annees = new ArrayList<>(nban);
 		List<Double> pdsMiel = new ArrayList<>(nban);
 		List<Integer> nbEssaims = new ArrayList<>(nban);

@@ -360,21 +360,16 @@ public class EssaimController {
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isPresent()) {
 			Essaim essaim = essaimOpt.get();
-			
-			Long nbHR = recolteHausseRepository.countByEssaim(essaim);
-			if (nbHR > 0) {
+			if (recolteHausseRepository.existsByEssaim(essaim)) {
 				model.addAttribute(Const.MESSAGE,
 						"Cet essaim ne peut être supprimé, il est référencé dans une récolte");
 				return Const.INDEX;
 			}
-			
-			Long nbEve = evenementRepository.countByEssaim(essaim);
-			if (nbEve > 0) {
+			if (evenementRepository.existsByEssaim(essaim)) {
 				model.addAttribute(Const.MESSAGE,
 						"Cet essaim ne peut être supprimé, il est référencé dans des événements");
 				return Const.INDEX;
 			}
-			
 			Iterable<Evenement> evenements = evenementRepository.findByEssaimId(essaimId);
 			// on supprime les événements associées à cette essaim
 			for (Evenement evenement : evenements) {
@@ -472,11 +467,9 @@ public class EssaimController {
 			model.addAttribute("eveRucher", evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim,
 					TypeEvenement.RUCHEAJOUTRUCHER));
 			// Si des hausses de récolte référencent cet essaim, on ne pourra le supprimer
-			Long nbHR = recolteHausseRepository.countByEssaim(essaim);
-			model.addAttribute("recolteHausses", nbHR > 0);
+			model.addAttribute("recolteHausses", recolteHausseRepository.existsByEssaim(essaim));
 			// Si des événements référencent cet essaim, on ne peut le supprimer
-			Long nbEve = evenementRepository.countByEssaim(essaim);
-			model.addAttribute(Const.EVENEMENTS, nbEve > 0);
+			model.addAttribute(Const.EVENEMENTS, evenementRepository.existsByEssaim(essaim));
 			model.addAttribute("eveTraite", evenementRepository.findFirstTraitemenetByEssaim(essaim));
 			model.addAttribute("eveSucre",
 					evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(essaim, TypeEvenement.ESSAIMSUCRE));

@@ -445,9 +445,8 @@ public class EvenementEssaimController {
 	 */
 	@GetMapping("/dispersion/{essaimId}")
 	public String dispersion(HttpSession session, Model model, @PathVariable long essaimId) {
-		// ajouter liste des essaims qui ne sont pas dans des ruches triés par date
-		// création décroissante
-		// pour remérage
+		// Ajouter liste des essaims qui ne sont pas dans des ruches triés par date
+		// création décroissante pour remérage.
 		Ruche ruche = rucheRepository.findByEssaimId(essaimId);
 		if (ruche != null) {
 			Iterable<Object[]> essaimsRemerage = essaimRepository

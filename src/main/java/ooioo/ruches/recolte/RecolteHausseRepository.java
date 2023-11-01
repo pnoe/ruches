@@ -28,20 +28,20 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 			  where recolte.id=?1 and rucher.id=?2
 			""")
 	Integer countRucheByRecolteByRucher(Long recolteId, Long rucherId);
-	
-	Long countByRucher(Rucher rucher);
-	
-	Long countByRuche(Ruche ruche);
-	
-	Long countByEssaim(Essaim essaim);
-	
-	Long countByHausse(Hausse hausse);
 
-	List<RecolteHausse> findByRucheId(Long rucheId);
+	boolean existsByRucher(Rucher rucher);
+
+	boolean existsByRuche(Ruche ruche);
+
+	boolean existsByEssaim(Essaim essaim);
+
+	boolean existsByHausse(Hausse hausse);
+
+	// List<RecolteHausse> findByRucheId(Long rucheId);
 
 	List<RecolteHausse> findByHausseId(Long hausseId);
 
-	List<RecolteHausse> findByEssaimId(Long essaimId);
+	// List<RecolteHausse> findByEssaimId(Long essaimId);
 
 	List<RecolteHausse> findByRucherId(Long rucherId);
 
@@ -66,7 +66,7 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 			  group by r.essaim_id, e.nom
 			  order by p desc
 			""", nativeQuery = true)
-	Iterable <Object[]> findPoidsMielNomEssaimByRecolte(Long recolteId);
+	Iterable<Object[]> findPoidsMielNomEssaimByRecolte(Long recolteId);
 
 	@Query(value = """
 			select sum(poidsAvant) - sum(poidsApres) as poids
