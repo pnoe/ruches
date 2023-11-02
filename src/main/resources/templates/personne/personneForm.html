@@ -9,6 +9,10 @@
 		const emailexiste = /*[[#{emailexiste}]]*/null;
 		document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById('nom').focus();
+			document.getElementById('showhide').addEventListener('click', () => {
+				const x = document.getElementById('password');
+				x.type = x.type === 'password' ? 'text' : 'password';
+			});
 			jQuery.validator.addMethod('loginExiste', function (value) {
 				return !personneLogins.includes(value);
 			}, loginexiste);
@@ -99,6 +103,10 @@
 			<input placeholder="" class="form-control" type="password" th:field="*{password}" th:errorclass="fieldError"
 				maxlength="35" />
 			<label class="form-label" th:text="#{motDePasse}" for="password"></label>
+			<div class="form-check mb-3">
+				<input class="form-check-input" type="checkbox" id="showhide" name="showhide" />
+				<label class="form-check-label" for="showhide" th:text="#{affichermotdepasse}"></label>
+			</div>
 		</div>
 		<div class="form-floating mb-3" sec:authorize="hasRole('ROLE_admin')">
 			<select class="form-control" th:field="*{roles}">

@@ -3,15 +3,13 @@
 
 <head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 	<script th:inline="javascript">
-		function showhidepass() {
-			const x = document.getElementById('password');
-			if (x.type === 'password') {
-				x.type = 'text';
-			} else {
-				x.type = 'password';
-			}
-		}
-		document.addEventListener('DOMContentLoaded', () => document.getElementById('username').focus());
+		document.addEventListener('DOMContentLoaded', () => {
+			document.getElementById('username').focus();
+			document.getElementById('showhide').addEventListener('click', () => {
+				const x = document.getElementById('password');
+				x.type = x.type === 'password' ? 'text' : 'password';
+			});
+		});
 	</script>
 </head>
 
@@ -28,7 +26,7 @@
 		<label for="password" th:text="#{motDePasse}"></label><br />
 		<input type="password" id="password" name="password" />
 		<br /><br />
-		<input type="checkbox" id="showhide" name="showhide" onclick="showhidepass()" />
+		<input type="checkbox" id="showhide" name="showhide" />
 		<label for="showhide" th:text="#{affichermotdepasse}"></label>
 		<br /><br />
 		<input type="submit" th:value="#{connexion}" />
