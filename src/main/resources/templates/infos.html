@@ -35,22 +35,28 @@
 		<div class="row">
 			<ul>
 				<li th:text="|${nbRuchers} #{ruchersdepot}|"></li>
-				<li th:text="|${nbRuches} #{ruches} (${nbRuchesProd} #{production} + ${nbRuchesElev} #{elevage})|"></li>
-				<li
+				<li th:if="${nbRuches} eq 0" th:text="|${nbRuches} #{ruches}|"></li>
+				<li th:unless="${nbRuches} eq 0"
+					th:text="|${nbRuches} #{ruches} (${nbRuchesProd} #{production} + ${nbRuchesElev} #{elevage})|"></li>
+				<li th:if="${nbRuchesAuDepot} eq 0" th:text="|${nbRuchesAuDepot} #{ruchesaudepot}|"></li>
+				<li th:unless="${nbRuchesAuDepot} eq 0"
 					th:text="|${nbRuchesAuDepot} #{ruchesaudepot} (${nbRuchesAuDepotProd} #{production} + ${nbRuchesAuDepotElev} #{elevage})|">
 				</li>
-				<li
+				<li th:if="${nbRuchesAvecEssaim} eq 0" th:text="|${nbRuchesAvecEssaim} #{ruchesavecessaim}|">
+				</li>
+				<li th:unless="${nbRuchesAvecEssaim} eq 0"
 					th:text="|${nbRuchesAvecEssaim} #{ruchesavecessaim} (${nbRuchesAvecEssaimProd} #{production} + ${nbRuchesAvecEssaimElev} #{elevage})|">
 				</li>
-				
-				
-				<li
-					th:text="|${nbRuchesAvecEssaim + #arrays.length(essaimsActifSansRuche)} #{essaim_s} (${#arrays.length(essaimsActifSansRuche)} #{essaimsHorsRuche})|">
+				<th:block th:with="essaimsloc=${nbRuchesAvecEssaim + #arrays.length(essaimsActifSansRuche)}">
+					<li th:if="${essaimsloc} eq 0" th:text="|${essaimsloc} #{essaim_s}|">
+					</li>
+					<li th:unless="${essaimsloc} eq 0"
+						th:text="|${essaimsloc} #{essaim_s} (${#arrays.length(essaimsActifSansRuche)} #{essaimsHorsRuche})|">
+					</li>
+				</th:block>
+				<li th:if="${nbHausses} eq 0" th:text="|${nbHausses} #{hausses}|">
 				</li>
-				
-				
-				
-				<li
+				<li th:unless="${nbHausses} eq 0"
 					th:text="|${nbHausses} #{hausses} (${nbHaussesSurRuchesAvecEssaim} #{posees} + ${nbHaussesHorsRuche} #{nonposees})|">
 				</li>
 			</ul>
