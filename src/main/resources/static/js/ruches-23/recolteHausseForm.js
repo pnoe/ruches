@@ -44,7 +44,15 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
-	document.getElementById('toggleplus').addEventListener('click', () => {
+	addEventListener('submit', () => {
+		// Enable les listes déroulantes essaim, ruche, rucher
+		// pour qu'elles soit envoyées lors du submit.
+		essaimSel.disabled = false;
+		rucheSel.disabled = false;
+		rucherSel.disabled = false;
+	});
+
+	document.getElementById('toggleplus').addEventListener('click', event => {
 		// ne pas utiliser disabled les select car cela renvoie null
 		//  pour les champs ruche, essaim et rucher
 		const req = new XMLHttpRequest();
@@ -56,10 +64,16 @@ document.addEventListener('DOMContentLoaded', () => {
 					addOpt(essaimSel, resp.essaims, essaimId);
 					addOpt(rucheSel, resp.ruches, rucheId);
 					addOpt(rucherSel, resp.ruchers, rucherId);
+					essaimSel.disabled = false;
+					rucheSel.disabled = false;
+					rucherSel.disabled = false;
 					essaimSel.focus();
 				}
 			}
 		};
 		req.send();
+		event.currentTarget.disabled = true;
+		// once true : l'écouteur d'événement est supprimé pour éviter
+		//  plusieurs chargement des listes.
 	}, { once: true });
 });
