@@ -1,6 +1,6 @@
 /* globals
 	_csrf_token, _csrf_param_name, suppRecHauss, dateRecEpoch
-	enlevHRecDe30, urlRecHDepot, recId, total, DataTable
+	enlevHRecDe30, urlRecHDepot, recId, total, pasDeHausses, pasDeHaussesTxt, DataTable
 */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
@@ -8,7 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
 	const itDateOk = document.getElementById('dateOK');
 	itDate.style.display = 'none';
 	itDateOk.style.display = 'none';
-
+	document.getElementById('haussesMiel').addEventListener('click', event => {
+		if (pasDeHausses) {
+			alert(pasDeHaussesTxt);
+			event.preventDefault();
+		}
+	});
 	document.getElementById('enlevehausses').addEventListener('click', function() {
 		// La fonction est désactivée après 30 jours 
 		// 30 * 24 * 3600 * 1000 =  2592000000 

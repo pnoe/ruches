@@ -100,7 +100,6 @@ public class RecolteHausseController {
 			model.addAttribute(Const.RECOLTE, recolte);
 			model.addAttribute("dateRecolteEpoch", recolte.getDate().toEpochSecond(ZoneOffset.UTC));
 			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByRecolteOrderByHausseNom(recolte);
-			// si pas de hausse afficher et log erreur
 			List<Hausse> hausses = new ArrayList<>();
 			// Initialiser RecolteMiel.java à partir des hausses.
 			List<RecolteHausseMiel> recolteHaussesMiel = new ArrayList<>();
@@ -205,6 +204,10 @@ public class RecolteHausseController {
 		return "recolte/recolteHausseForm";
 	}
 
+	/**
+	 * Pour bouton Plus du formulaire de modification de hausses de récolte.
+	 * 	  XMLHttpRequest appelé de recolteHausseForm.js
+	 */
 	@GetMapping("/listesPlus")
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody Map<String, Object> listePlus() {
