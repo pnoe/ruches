@@ -206,7 +206,8 @@ public class RecolteHausseController {
 
 	/**
 	 * Pour bouton Plus du formulaire de modification de hausses de récolte.
-	 * 	  XMLHttpRequest appelé de recolteHausseForm.js
+	 * XMLHttpRequest appelé de recolteHausseForm.js. Charge les listes déroulantes
+	 * essaim, ruche et rucher.
 	 */
 	@GetMapping("/listesPlus")
 	@ResponseStatus(value = HttpStatus.OK)
@@ -240,7 +241,11 @@ public class RecolteHausseController {
 		if (recolteOpt.isPresent()) {
 			Recolte recolte = recolteOpt.get();
 			model.addAttribute(Const.RECOLTE, recolte);
+			// Les hausses déjà ajoutées dans la récolte, pour le tableau Retirer des
+			// hausses.
 			model.addAttribute(HAUSSESRECOLTE, hausseRepository.findHaussesInRecolteId(recolteId));
+			// Les hausses posées sur des ruches, qui ne sont pas dans la récolte, pour le
+			// tableau Ajouter des hausses.
 			model.addAttribute(HAUSSESNOTINRECOLTE, hausseRepository.findHaussesNotInRecolteId(recolteId));
 		} else {
 			logger.error(Const.IDRECOLTEXXINCONNU, recolteId);

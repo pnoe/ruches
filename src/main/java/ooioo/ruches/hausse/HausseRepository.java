@@ -33,8 +33,7 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 	Integer countByActiveAndRucheIsNull(boolean active);
 
 	// Liste des hausses qui ne sont pas dans la récolte recolteId :
-	// hausses non référencées dans les détails de la récolte recolteId
-	// et hausse.ruche not null pour ne pas afficher des hausses qui n'aurait
+	// hausse.ruche not null pour ne pas afficher des hausses qui n'aurait
 	// pas de ruche/essaim/rucher associé
 	@Query(value = """
 			select h
