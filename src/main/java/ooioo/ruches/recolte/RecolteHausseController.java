@@ -242,7 +242,7 @@ public class RecolteHausseController {
 			Recolte recolte = recolteOpt.get();
 			model.addAttribute(Const.RECOLTE, recolte);
 			// Les hausses récolte déjà ajoutées dans la récolte, pour le tableau "Retirer des
-			// hausses". Attention hausses récolte et non hausses.
+			// hausses". Attention "hausses récolte" et non hausses.
 			model.addAttribute(HAUSSESRECOLTE, recolteHausseRepository.findByRecolte(recolte));
 			// Les hausses posées sur des ruches, qui ne sont pas dans la récolte, pour le
 			// tableau "Ajouter des hausses".
