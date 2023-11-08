@@ -15,18 +15,20 @@ document.addEventListener('DOMContentLoaded', () => {
 			table = tableRetrait;
 		}
 		if (type === 'row') {
-			let hausseNoms = '';
+			let hausseIds = '';
 			table.rows({
 				selected: true
 			}).data().pluck(1).each(function(value) {
-				hausseNoms += value + ',';
+				// pluck(1) 2ième td dans le tableau, soit
+				// l'id de la hausse. Attention à l'ordre !
+				hausseIds += value + ',';
 			});
-			if (hausseNoms) {
-				/*[- on enlève la dernière virgule et met à jour l'url de traitement -]*/
-				hausseNoms = hausseNoms.substring(0,
-					hausseNoms.length - 1);
+			if (hausseIds) {
+				// On enlève la dernière virgule et met à jour l'url de traitement.
+				hausseIds = hausseIds.substring(0,
+					hausseIds.length - 1);
 				id.setAttribute('href', href + recolteId + '/'
-					+ hausseNoms);
+					+ hausseIds);
 			} else {
 				id.setAttribute('href', '#');
 			}
