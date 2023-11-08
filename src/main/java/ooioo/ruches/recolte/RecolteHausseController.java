@@ -233,7 +233,7 @@ public class RecolteHausseController {
 	}
 
 	/**
-	 * Choix des hausses d'une récolte.
+	 * Appel de la page de choix des hausses d'une récolte.
 	 */
 	@GetMapping("/choixHausses/{recolteId}")
 	public String choixHausses(Model model, @PathVariable long recolteId) {
@@ -241,11 +241,11 @@ public class RecolteHausseController {
 		if (recolteOpt.isPresent()) {
 			Recolte recolte = recolteOpt.get();
 			model.addAttribute(Const.RECOLTE, recolte);
-			// Les hausses déjà ajoutées dans la récolte, pour le tableau Retirer des
-			// hausses.
-			model.addAttribute(HAUSSESRECOLTE, hausseRepository.findHaussesInRecolteId(recolteId));
+			// Les hausses récolte déjà ajoutées dans la récolte, pour le tableau "Retirer des
+			// hausses". Attention hausses récolte et non hausses.
+			model.addAttribute(HAUSSESRECOLTE, recolteHausseRepository.findByRecolte(recolte));
 			// Les hausses posées sur des ruches, qui ne sont pas dans la récolte, pour le
-			// tableau Ajouter des hausses.
+			// tableau "Ajouter des hausses".
 			model.addAttribute(HAUSSESNOTINRECOLTE, hausseRepository.findHaussesNotInRecolteId(recolteId));
 		} else {
 			logger.error(Const.IDRECOLTEXXINCONNU, recolteId);

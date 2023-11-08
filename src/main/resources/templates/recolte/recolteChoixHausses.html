@@ -48,11 +48,11 @@
 			</thead>
 			<tbody>
 				<tr th:each="hausseRecolte : ${haussesRecolte}">
-					<td th:text="${hausseRecolte.nom}"></td>
-					<td hidden th:text="${hausseRecolte.id}"></td>
-					<td th:text="${hausseRecolte.ruche?.rucher?.nom}"></td>
+					<td th:text="${hausseRecolte.hausse.nom}"></td>
+					<td hidden th:text="${hausseRecolte.hausse.id}"></td>
+					<td th:text="${hausseRecolte.rucher?.nom}"></td>
 					<td th:text="${hausseRecolte.ruche?.nom}"></td>
-					<td th:text="${hausseRecolte.ruche?.essaim?.nom}"></td>
+					<td th:text="${hausseRecolte.essaim?.nom}"></td>
 				</tr>
 			</tbody>
 		</table>
