@@ -6,15 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
 
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.essaim.EssaimRepository;
@@ -24,26 +19,20 @@ import ooioo.ruches.recolte.Recolte;
 import ooioo.ruches.recolte.RecolteRepository;
 import ooioo.ruches.ruche.Ruche;
 import ooioo.ruches.ruche.RucheRepository;
-import ooioo.ruches.rucher.DistRucher;
-import ooioo.ruches.rucher.DistRucherRepository;
 import ooioo.ruches.rucher.Rucher;
 import ooioo.ruches.rucher.RucherRepository;
 
 @Service
 public class AccueilService {
 
-	private final Logger logger = LoggerFactory.getLogger(AccueilService.class);
-
-	@Autowired
-	private DistRucherRepository drRepo;
-	@Autowired
-	private RucheRepository rucheRepository;
 	@Autowired
 	private EssaimRepository essaimRepository;
 	@Autowired
 	private EvenementRepository evenementRepository;
 	@Autowired
 	private RucherRepository rucherRepository;
+	@Autowired
+	private RucheRepository rucheRepository;
 	@Autowired
 	private HausseRepository hausseRepository;
 	@Autowired
@@ -57,63 +46,6 @@ public class AccueilService {
 	private int retardRucheEvenement;
 	@Value("${rucher.butinage.rayons}")
 	private int[] rayonsButinage;
-	@Value("${ign.url.itineraire}")
-	private String urlIgnItineraire;
-
-	/**
-	 * Calcul des distances entre les ruchers par appel de l'api ign de calcul
-	 * d'itinéraire. Ne calcule qu'un sens et non une valeur pour l'aller et une
-	 * autre pour le retour. Le sens calculé est : départ du rucher de plus petit
-	 * Id. Ne stocke pas la distance d'un rucher à lui même. En cas d'erreur
-	 * renvoyée par l'api ign met 0 comme distance et temps de parcours. Pour
-	 * éventuel intégration dans un calcul de distances parcourues pour les
-	 * transhumances ou affichage brut du tableau. Si appel /dist?reset=true toutes
-	 * les distances sont effacées puis recalculées, si /dist seules les distances
-	 * non enregistées sont recalculées.
-	 */
-	void dist(boolean reset) {
-		// https://geoservices.ign.fr/documentation/services/api-et-services-ogc/itineraires/documentation-du-service-du-calcul
-		// https://wxs.ign.fr/geoportail/itineraire/rest/1.0.0/getCapabilities
-		// avec resource = OSRM erreur
-		// https://wxs.ign.fr/calcul/geoportail/itineraire/rest/1.0.0/route?resource=bdtopo-pgr&getSteps=false&start=
-		Iterable<Rucher> ruchers = rucherRepository.findAll();
-		RestTemplate restTemplate = new RestTemplate();
-		if (reset) {
-			// Effacer la table dist_rucher sinon les distances déjà calculées apparaîtront
-			// deux fois
-			drRepo.deleteAll();
-		}
-		for (Rucher r1 : ruchers) {
-			for (Rucher r2 : ruchers) {
-				if (r1.getId().equals(r2.getId())) {
-					// même ruchers
-					continue;
-				}
-				if (r1.getId().intValue() < r2.getId().intValue()) {
-					if (!reset && (drRepo.findByRucherStartAndRucherEnd(r1, r2) != null)) {
-						// pas de reset demandé et la distance a déjà été calculée
-						continue;
-					}
-					DistRucher dr = new DistRucher(r1, r2, 0, 0);
-					StringBuilder uri = new StringBuilder(urlIgnItineraire);
-					uri.append(r1.getLongitude()).append(",").append(r1.getLatitude()).append("&end=")
-							.append(r2.getLongitude()).append(",").append(r2.getLatitude());
-					try {
-						Itineraire result = restTemplate.getForObject(uri.toString(), Itineraire.class);
-						dr.setDist(Math.round(result.distance()));
-						dr.setTemps(Math.round(result.duration()));
-					} catch (HttpClientErrorException | HttpServerErrorException e) {
-						// erreur 4xx ou 5xx, on n'enregistre pas la distance et le temps
-						logger.error("{} => {} - {}", r1.getNom(), r2.getNom(), e.getMessage());
-						continue;
-					}
-					drRepo.save(dr);
-					logger.info("{} => {}, distance {}m et temps {}min, enregistrés", r1.getNom(), r2.getNom(),
-							dr.getDist(), dr.getTemps());
-				}
-			}
-		}
-	}
 
 	/**
 	 * Infos
@@ -175,7 +107,9 @@ public class AccueilService {
 		}
 		// nban pour dimensionner les ArrayList, avec une colonne de plus pour le total.
 		int nban = dateFin - dateDebut + 2;
-		if (nban < 1) { nban = 1; } // nécessaire dans certains cas, plantage si < 0
+		if (nban < 1) {
+			nban = 1;
+		} // nécessaire dans certains cas, plantage si < 0
 		List<Integer> annees = new ArrayList<>(nban);
 		List<Double> pdsMiel = new ArrayList<>(nban);
 		List<Integer> nbEssaims = new ArrayList<>(nban);

@@ -17,6 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestTemplate;
 
 import com.google.ortools.Loader;
 import com.google.ortools.constraintsolver.Assignment;
@@ -29,6 +32,7 @@ import com.google.ortools.constraintsolver.main;
 import com.google.protobuf.Duration;
 
 import ooioo.ruches.Const;
+import ooioo.ruches.Itineraire;
 import ooioo.ruches.LatLon;
 import ooioo.ruches.Nom;
 import ooioo.ruches.Utils;
@@ -48,18 +52,81 @@ public class RucherService {
 	private RucheRepository rucheRepository;
 	@Autowired
 	private EvenementRepository evenementRepository;
+	@Autowired
+	private DistRucherRepository drRepo;
+	@Autowired
+	private RucherRepository rucherRepository;
 
 	@Value("${rucher.ruche.dispersion}")
 	private double dispersionRuche;
+	@Value("${ign.url.itineraire}")
+	private String urlIgnItineraire;
+
+	/**
+	 * Calcul des distances entre les ruchers par appel de l'api ign de calcul
+	 * d'itinéraire. Ne calcule qu'un sens et non une valeur pour l'aller et une
+	 * autre pour le retour. Le sens calculé est : départ du rucher de plus petit
+	 * Id. Ne stocke pas la distance d'un rucher à lui même. En cas d'erreur
+	 * renvoyée par l'api ign met 0 comme distance et temps de parcours. Pour
+	 * éventuel intégration dans un calcul de distances parcourues pour les
+	 * transhumances ou affichage brut du tableau.
+	 * 
+	 * @param reset si true toutes les distances sont effacées puis recalculées,
+	 *              sinon seules les distances non enregistées sont recalculées.
+	 */
+	void dist(boolean reset) {
+		// https://geoservices.ign.fr/documentation/services/api-et-services-ogc/itineraires/documentation-du-service-du-calcul
+		// https://wxs.ign.fr/geoportail/itineraire/rest/1.0.0/getCapabilities
+		// avec resource = OSRM erreur
+		// https://wxs.ign.fr/calcul/geoportail/itineraire/rest/1.0.0/route?resource=bdtopo-pgr&getSteps=false&start=
+		Iterable<Rucher> ruchers = rucherRepository.findAll();
+		RestTemplate restTemplate = new RestTemplate();
+		if (reset) {
+			// Effacer la table dist_rucher sinon les distances déjà calculées apparaîtront
+			// deux fois
+			drRepo.deleteAll();
+		}
+		for (Rucher r1 : ruchers) {
+			for (Rucher r2 : ruchers) {
+				if (r1.getId().equals(r2.getId())) {
+					// même ruchers
+					continue;
+				}
+				if (r1.getId().intValue() < r2.getId().intValue()) {
+					if (!reset && (drRepo.findByRucherStartAndRucherEnd(r1, r2) != null)) {
+						// pas de reset demandé et la distance a déjà été calculée
+						continue;
+					}
+					DistRucher dr = new DistRucher(r1, r2, 0, 0);
+					StringBuilder uri = new StringBuilder(urlIgnItineraire);
+					uri.append(r1.getLongitude()).append(",").append(r1.getLatitude()).append("&end=")
+							.append(r2.getLongitude()).append(",").append(r2.getLatitude());
+					try {
+						Itineraire result = restTemplate.getForObject(uri.toString(), Itineraire.class);
+						dr.setDist(Math.round(result.distance()));
+						dr.setTemps(Math.round(result.duration()));
+					} catch (HttpClientErrorException | HttpServerErrorException e) {
+						// erreur 4xx ou 5xx, on n'enregistre pas la distance et le temps
+						logger.error("{} => {} - {}", r1.getNom(), r2.getNom(), e.getMessage());
+						continue;
+					}
+					drRepo.save(dr);
+					logger.info("{} => {}, distance {}m et temps {}min, enregistrés", r1.getNom(), r2.getNom(),
+							dr.getDist(), dr.getTemps());
+				}
+			}
+		}
+	}
 
 	/**
 	 * Calcul des transhumances d'un rucher.
 	 *
-	 * @param rucher Le rucher dont on liste les transhumances
-	 * @param evensRucheAjout Tous les événements Ruche Ajout dans Rucher triés par ordre de date
-	 * @param group Si true les transhumances sont regroupées par date
-	 * @param histo En retour les transhumances si pas de regroupement
-	 * @param histoGroup En retour les transhumances si regroupement
+	 * @param rucher          Le rucher dont on liste les transhumances
+	 * @param evensRucheAjout Tous les événements Ruche Ajout dans Rucher triés par
+	 *                        ordre de date
+	 * @param group           Si true les transhumances sont regroupées par date
+	 * @param histo           En retour les transhumances si pas de regroupement
+	 * @param histoGroup      En retour les transhumances si regroupement
 	 */
 	void transhum(Rucher rucher, List<Evenement> evensRucheAjout, boolean group, List<Transhumance> histo,
 			List<Transhumance> histoGroup) {
@@ -72,7 +139,7 @@ public class RucherService {
 		}
 		for (int i = 0, levens = evensRucheAjout.size(); i < levens; i++) {
 			// Pour chaque événement eve ruche ajout dans rucher, du plus récent
-			//  au plus ancien
+			// au plus ancien
 			Evenement eve = evensRucheAjout.get(i);
 			if (eve.getRucher().getId().equals(rucher.getId())) {
 				// si l'événement est un ajout dans le rucher,
@@ -83,8 +150,8 @@ public class RucherService {
 					if ((evensRucheAjout.get(j).getRuche().getId().equals(eve.getRuche().getId()))
 							// même ruche
 							&& !(evensRucheAjout.get(j).getRucher().getId().equals(rucher.getId()))
-							// et rucher différent
-							) {
+					// et rucher différent
+					) {
 						// si (evensRucheAjout.get(j).getRucher().getId().equals(rucherId))
 						// c'est une erreur, deux ajouts successifs dans le même rucher
 						evePrec = evensRucheAjout.get(j);
@@ -204,8 +271,7 @@ public class RucherService {
 	 * https://developers.google.com/optimization/routing/tsp Le chemin est calculé
 	 * dans List<RucheParcours> cheminRet, et la distance en retour de la fonction.
 	 */
-	double cheminRuchesRucher(List<RucheParcours> cheminRet, Rucher rucher, List<Ruche> ruches,
-			boolean redraw) {
+	double cheminRuchesRucher(List<RucheParcours> cheminRet, Rucher rucher, List<Ruche> ruches, boolean redraw) {
 		RucheParcours entree = new RucheParcours(0l, 0, rucher.getLongitude(), rucher.getLatitude());
 		List<RucheParcours> chemin = new ArrayList<>(ruches.size() + 1);
 		chemin.add(entree);
@@ -222,14 +288,14 @@ public class RucherService {
 		DataModel.distanceMatrix = new long[cheminSize][cheminSize];
 		// Initialisation de la matrice d'int des distances entre les ruches
 		// les distances sont en mm
-		double diametreTerre = ((rucher.getAltitude() == null) ? 0 : rucher.getAltitude()) +
-				2 * Utils.rTerreLat(rucher.getLatitude());
+		double diametreTerre = ((rucher.getAltitude() == null) ? 0 : rucher.getAltitude())
+				+ 2 * Utils.rTerreLat(rucher.getLatitude());
 		for (int i = 1; i < cheminSize; i++) {
 			for (int j = 0; j < i; j++) {
 				RucheParcours ii = chemin.get(i);
 				RucheParcours jj = chemin.get(j);
-				long dist = (long) 
-						(Utils.distance(diametreTerre, ii.latitude(), jj.latitude(), ii.longitude(), jj.longitude()) * 1000.0);
+				long dist = (long) (Utils.distance(diametreTerre, ii.latitude(), jj.latitude(), ii.longitude(),
+						jj.longitude()) * 1000.0);
 				DataModel.distanceMatrix[i][j] = dist;
 				DataModel.distanceMatrix[j][i] = dist;
 			}
@@ -291,25 +357,25 @@ public class RucherService {
 			Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 			if (rucheOpt.isPresent()) {
 				Ruche ruche = rucheOpt.get();
-			// Si la ruche est déjà dans le rucher, log de l'erreur puis on continue.
-			// L'utilisateur ne voit donc pas l'erreur (sauf s'il consulte les logs).
-			if ((ruche.getRucher() != null) && (ruche.getRucher().getId().equals(rucher.getId()))) {
-				logger.info("Ruche {} déjà présente dans le rucher {}", ruche.getNom(), rucher.getNom());
-				continue;
-			}
-			String provenance = (ruche.getRucher() == null) ? "" : ruche.getRucher().getNom();
-			ruche.setRucher(rucher);
-			// Mettre les coord. de la ruche à celles du rucher
-			// dans un rayon égal à dispersion
-			LatLon latLon = dispersion(rucher.getLatitude(), rucher.getLongitude());
-			ruche.setLatitude(latLon.lat());
-			ruche.setLongitude(latLon.lon());
-			rucheRepository.save(ruche);
-			// Créer un événement ajout dans le rucher rucherId
-			Evenement eveAjout = new Evenement(dateEveAjout, TypeEvenement.RUCHEAJOUTRUCHER, ruche, ruche.getEssaim(),
-					rucher, null, provenance, commentaire); // valeur commentaire
-			evenementRepository.save(eveAjout);
-			logger.info("{} créé", eveAjout);
+				// Si la ruche est déjà dans le rucher, log de l'erreur puis on continue.
+				// L'utilisateur ne voit donc pas l'erreur (sauf s'il consulte les logs).
+				if ((ruche.getRucher() != null) && (ruche.getRucher().getId().equals(rucher.getId()))) {
+					logger.info("Ruche {} déjà présente dans le rucher {}", ruche.getNom(), rucher.getNom());
+					continue;
+				}
+				String provenance = (ruche.getRucher() == null) ? "" : ruche.getRucher().getNom();
+				ruche.setRucher(rucher);
+				// Mettre les coord. de la ruche à celles du rucher
+				// dans un rayon égal à dispersion
+				LatLon latLon = dispersion(rucher.getLatitude(), rucher.getLongitude());
+				ruche.setLatitude(latLon.lat());
+				ruche.setLongitude(latLon.lon());
+				rucheRepository.save(ruche);
+				// Créer un événement ajout dans le rucher rucherId
+				Evenement eveAjout = new Evenement(dateEveAjout, TypeEvenement.RUCHEAJOUTRUCHER, ruche,
+						ruche.getEssaim(), rucher, null, provenance, commentaire); // valeur commentaire
+				evenementRepository.save(eveAjout);
+				logger.info("{} créé", eveAjout);
 			} else {
 				// Si l'id de la ruche est inconnu, log de l'erreur puis on continue.
 				// L'utilisateur ne voit donc pas l'erreur (sauf s'il consulte les logs).
@@ -323,7 +389,8 @@ public class RucherService {
 	 * (voir application.properties).
 	 */
 	public LatLon dispersion(Float lat, Float lon) {
-		// Math.random : double value in a range from 0.0 (inclusive) to 1.0 (exclusive).
+		// Math.random : double value in a range from 0.0 (inclusive) to 1.0
+		// (exclusive).
 		// w random distance, /111300d transformation en degrés au centre de la terre
 		// sqrt() pour une distribution plus régulère dans le cercle
 		double w = dispersionRuche * Math.sqrt(Math.random()) / 111300d;

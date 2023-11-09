@@ -96,6 +96,17 @@ public class RucherController {
 	private boolean ignCarteLiscense;
 	@Value("${ruche.dist.max}")
 	private float distMaxRuche;
+	
+	/**
+	 * Calcul des distances entre les ruchers par appel de l'api ign de calcul
+	 * d'itinéraire.
+	 */
+	@GetMapping(path = "/dist")
+	public String dist(Model model, @RequestParam(required = false) boolean reset) {
+		rucherService.dist(reset);
+		model.addAttribute(Const.MESSAGE, "Calcul des distances terminé.");
+		return Const.INDEX;
+	}
 
 	/**
 	 * Graphe affichant les poids des ruches d'un rucher.

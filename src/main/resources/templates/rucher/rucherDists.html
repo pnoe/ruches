@@ -5,10 +5,24 @@
 	<script th:inline="javascript">
 		/* globals DataTable */
 		document.addEventListener('DOMContentLoaded', () => {
+			const distCalc = /*[[#{distCalc}]]*/ null;
+			const distCalcReset = /*[[#{distCalcReset}]]*/ null;
 			new DataTable('#distsRuchers', {
 				paging: false,
 				searching: false,
 				scrollX: true
+			});
+			document.getElementById('dist').addEventListener('click', event => {
+				if (confirm(distCalc)) {
+					return;
+				}
+				event.preventDefault();
+			});
+			document.getElementById('distreset').addEventListener('click', event => {
+				if (confirm(distCalcReset)) {
+					return;
+				}
+				event.preventDefault();
 			});
 		});
 	</script>
@@ -27,30 +41,36 @@
 					<a th:href="@{'/rucher/'+${rucher.id}}" th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
 				</h1>
 			</div>
+			<div class="col">
+				<a id="dist" th:href="@{'/rucher/dist'}" class="bi-truck-front" th:title="#{distances}" aria-hidden="true"></a>
+				&nbsp;
+				<a id="distreset" th:href="@{'/rucher/dist?reset=true'}" class="bi-truck-front" th:title="#{distancesReset}"
+					aria-hidden="true" style="color:red"></a>
+			</div>
 		</div>
-	</div>
-	<div class="container-fluid">
-		<table class="table table-bordered table-striped table-sm" id="distsRuchers">
-			<thead>
-				<tr>
-					<th th:text="#{rucher}"></th>
-					<th th:text="#{DistanceV}"></th>
-					<th th:text="#{TempsV}"></th>
-					<th th:text="#{DistanceO}"></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="rr : ${rrs}">
-					<td><a th:text="${rr.nom}" th:href="@{'/rucher/'+${rr.id}}"></td>
-					<td th:text="${dist[rrStat.index] == 0} ? '' : ${#numbers.formatDecimal(dist[rrStat.index],1,3)}">
-					</td>
-					<td th:text="${#temporals.format(temps[rrStat.index], 'HH:mm')}"></td>
-					<td th:text="${#numbers.formatDecimal(distOiseau[rrStat.index],1,3)}"></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-	<footer th:replace="~{include::footer}"></footer>
+		<div class="container-fluid">
+			<table class="table table-bordered table-striped table-sm" id="distsRuchers">
+				<thead>
+					<tr>
+						<th th:text="#{rucher}"></th>
+						<th th:text="#{DistanceV}"></th>
+						<th th:text="#{TempsV}"></th>
+						<th th:text="#{DistanceO}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="rr : ${rrs}">
+						<td><a th:text="${rr.nom}" th:href="@{'/rucher/'+${rr.id}}"></td>
+						<td
+							th:text="${dist[rrStat.index] == 0} ? '' : ${#numbers.formatDecimal(dist[rrStat.index],1,3)}">
+						</td>
+						<td th:text="${#temporals.format(temps[rrStat.index], 'HH:mm')}"></td>
+						<td th:text="${#numbers.formatDecimal(distOiseau[rrStat.index],1,3)}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<footer th:replace="~{include::footer}"></footer>
 </body>
 
 </html>

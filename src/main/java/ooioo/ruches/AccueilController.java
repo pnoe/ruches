@@ -45,17 +45,6 @@ public class AccueilController {
 	}
 
 	/**
-	 * Calcul des distances entre les ruchers par appel de l'api ign de calcul
-	 * d'itinéraire.
-	 */
-	@GetMapping(path = "/dist")
-	public String dist(Model model, @RequestParam(required = false) boolean reset) {
-		accueilService.dist(reset);
-		model.addAttribute(Const.MESSAGE, "Calcul des distances terminé.");
-		return Const.INDEX;
-	}
-
-	/**
 	 * Affiche la page des informations détaillées sur l'état général. Appel par
 	 * menu Admin/Infos.
 	 */
