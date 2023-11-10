@@ -24,7 +24,7 @@
 				<h1 class="item">
 					<a th:href="@{'/recolte/'+${detailRecolte.recolte.id}}"
 						th:text="#{recolte} + ' ' + ${#temporals.format(detailRecolte.recolte.date, 'yyyy/MM/dd HH:mm')}"></a>
-					<th:block th:text="' : '+#{hausse}+' '+${detailRecolte.hausse.nom}"></th:block>
+					<th:block th:text="' : '+#{HausseRec}+' '+${detailRecolte.hausse.nom}"></th:block>
 				</h1>
 			</div>
 		</div>
