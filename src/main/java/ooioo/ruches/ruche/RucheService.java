@@ -121,22 +121,30 @@ public class RucheService {
 	 * @param plus true pour liste détaillée
 	 */
 	void liste(HttpSession session, Model model, boolean plus) {
+		List<Ruche> ruches;
 		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
-		Iterable<Ruche> ruches;
-		List<Integer> nbHausses = new ArrayList<>();
-		List<String> dateAjoutRucher = new ArrayList<>();
-		List<Iterable<Evenement>> listeEvensCommentaireEssaim = new ArrayList<>();
-		List<Evenement> listeEvenCadre = new ArrayList<>();
-		List<List<Hausse>> haussesRuches = new ArrayList<>();
-		List<List<Evenement>> evensHaussesRuches = new ArrayList<>();
-		List<Evenement> evensPoidsRuches = new ArrayList<>();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		if (voirInactif != null && (boolean) voirInactif) {
 			ruches = rucheRepository.findAllByOrderByNom();
 		} else {
 			ruches = rucheRepository.findByActiveTrueOrderByNom();
 		}
+		int nbr = ruches.size();
+		List<Integer> nbHausses = new ArrayList<>(nbr);
+		List<String> dateAjoutRucher = new ArrayList<>(nbr);
+		List<Evenement> listeEvenCadre = new ArrayList<>(nbr);
+		List<Iterable<Evenement>> listeEvensCommentaireEssaim = null;
+		List<List<Hausse>> haussesRuches = null;
+		List<List<Evenement>> evensHaussesRuches = null;
+		List<Evenement> evensPoidsRuches = null;
+		if (plus) {
+			listeEvensCommentaireEssaim = new ArrayList<>(nbr);
+			haussesRuches = new ArrayList<>(nbr);
+			evensHaussesRuches = new ArrayList<>(nbr);
+			evensPoidsRuches = new ArrayList<>(nbr);
+		}
+		// Liste des noms de ruchers pour filtre sur colonne rucher
 		List<String> ruchersNoms = new ArrayList<>();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		for (Ruche ruche : ruches) {
 			nbHausses.add(hausseRepository.countByRucheId(ruche.getId()));
 			if (plus) {

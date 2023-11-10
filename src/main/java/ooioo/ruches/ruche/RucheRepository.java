@@ -17,9 +17,9 @@ import ooioo.ruches.rucher.Rucher;
 public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	Ruche findByNom(String nom);
 
-	Iterable<Ruche> findAllByOrderByNom();
+	List<Ruche> findAllByOrderByNom();
 
-	Iterable<Ruche> findByActiveTrueOrderByNom();
+	List<Ruche> findByActiveTrueOrderByNom();
 	
 	List<Ruche> findByRucherIdOrderByNom(Long id);
 	
