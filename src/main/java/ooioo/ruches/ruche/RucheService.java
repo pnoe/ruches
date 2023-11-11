@@ -132,38 +132,12 @@ public class RucheService {
 		List<Integer> nbHausses = new ArrayList<>(nbr);
 		List<String> dateAjoutRucher = new ArrayList<>(nbr);
 		List<Evenement> listeEvenCadre = new ArrayList<>(nbr);
-		List<Iterable<Evenement>> listeEvensCommentaireEssaim = null;
-		List<List<Hausse>> haussesRuches = null;
-		List<List<Evenement>> evensHaussesRuches = null;
-		List<Evenement> evensPoidsRuches = null;
-		if (plus) {
-			listeEvensCommentaireEssaim = new ArrayList<>(nbr);
-			haussesRuches = new ArrayList<>(nbr);
-			evensHaussesRuches = new ArrayList<>(nbr);
-			evensPoidsRuches = new ArrayList<>(nbr);
-		}
 		// Liste des noms de ruchers pour filtre sur colonne rucher
 		List<String> ruchersNoms = new ArrayList<>();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		for (Ruche ruche : ruches) {
 			nbHausses.add(hausseRepository.countByRucheId(ruche.getId()));
-			if (plus) {
-				// Les 3 derniers événements de la ruche (hors HAUSSEPOSERUCHE, RUCHEPESEE et
-				// RUCHECADRE).
-				listeEvensCommentaireEssaim.add(evenementRepository.find3EveListePlus(ruche));
-				// hausses et eve pose hausses en deux listes séparées pour
-				// afficher les hausses même si les eves ont été effacés.
-				List<Hausse> hausses = hausseRepository.findByRucheIdOrderByOrdreSurRuche(ruche.getId());
-				haussesRuches.add(hausses);
-				List<Evenement> eveHaussesRuche = new ArrayList<>();
-				for (Hausse h : hausses) {
-					eveHaussesRuche.add(evenementRepository.findEvePoseHausse(h));
-				}
-				evensHaussesRuches.add(eveHaussesRuche);
-				// Dernier événement pesée de la ruche.
-				evensPoidsRuches.add(
-						evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.RUCHEPESEE));
-			}
+			// On ajoute le nom du rucher pour la liste déroulante du filtre nom de rucher
 			Rucher rr = ruche.getRucher();
 			if ((rr != null) && (!ruchersNoms.contains(rr.getNom()))) {
 				ruchersNoms.add(rr.getNom());
@@ -182,6 +156,27 @@ public class RucheService {
 		Collections.sort(ruchersNoms);
 		model.addAttribute("ruchersNoms", ruchersNoms);
 		if (plus) {
+			List<Iterable<Evenement>> listeEvensCommentaireEssaim = new ArrayList<>(nbr);
+			List<List<Hausse>> haussesRuches = new ArrayList<>(nbr);
+			List<List<Evenement>> evensHaussesRuches = new ArrayList<>(nbr);
+			List<Evenement> evensPoidsRuches = new ArrayList<>(nbr);
+			for (Ruche ruche : ruches) {
+				// Les 3 derniers événements de la ruche (hors HAUSSEPOSERUCHE, RUCHEPESEE et
+				// RUCHECADRE).
+				listeEvensCommentaireEssaim.add(evenementRepository.find3EveListePlus(ruche));
+				// hausses et eve pose hausses en deux listes séparées pour
+				// afficher les hausses même si les eves ont été effacés.
+				List<Hausse> hausses = hausseRepository.findByRucheIdOrderByOrdreSurRuche(ruche.getId());
+				haussesRuches.add(hausses);
+				List<Evenement> eveHaussesRuche = new ArrayList<>();
+				for (Hausse h : hausses) {
+					eveHaussesRuche.add(evenementRepository.findEvePoseHausse(h));
+				}
+				evensHaussesRuches.add(eveHaussesRuche);
+				// Dernier événement pesée de la ruche.
+				evensPoidsRuches.add(
+						evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.RUCHEPESEE));
+			}
 			model.addAttribute("listeEvensCommentaireEsaim", listeEvensCommentaireEssaim);
 			model.addAttribute(Const.HAUSSES, haussesRuches);
 			model.addAttribute("evensHaussesRuches", evensHaussesRuches);
