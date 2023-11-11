@@ -16,11 +16,11 @@ public interface RucherRepository extends CrudRepository<Rucher, Long> {
 
 	Rucher findByNom(String nom);
 
-	Iterable<Rucher> findAllByOrderByNom();
+	List<Rucher> findAllByOrderByNom();
 
 	Collection<Rucher> findByContactId(Long id);
 
-	Iterable<Rucher> findByActifOrderByNom(boolean actif);
+	List<Rucher> findByActifOrderByNom(boolean actif);
 
 	List<Rucher> findByActifTrue();
 

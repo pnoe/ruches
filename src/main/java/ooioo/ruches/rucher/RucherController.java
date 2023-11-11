@@ -406,14 +406,15 @@ public class RucherController {
 	@GetMapping("/liste")
 	public String liste(HttpSession session, Model model) {
 		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
-		Iterable<Rucher> ruchers;
+		List<Rucher> ruchers;
 		if (voirInactif != null && (boolean) voirInactif) {
 			ruchers = rucherRepository.findAllByOrderByNom();
 		} else {
 			ruchers = rucherRepository.findByActifOrderByNom(true);
 		}
-		Collection<Long> nbRuches = new ArrayList<>();
-		Collection<Integer> nbHausses = new ArrayList<>();
+		int nbr = ruchers.size();
+		Collection<Long> nbRuches = new ArrayList<>(nbr);
+		Collection<Integer> nbHausses = new ArrayList<>(nbr);
 		for (Rucher rucher : ruchers) {
 			nbRuches.add(rucheRepository.countByRucher(rucher));
 			// si rucher.depot == true alors ajouter les hausses ou hausse.ruche == null
