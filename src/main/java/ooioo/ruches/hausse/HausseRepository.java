@@ -45,6 +45,7 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 			""")
 	Iterable<Hausse> findHaussesNotInRecolteId(Long recolteId);
 
+	/*
 	@Query(value = """
 			select h
 			  from Hausse h
@@ -54,7 +55,8 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 			      where rh.recolte.id = ?1)
 			""")
 	Iterable<Hausse> findHaussesInRecolteId(Long recolteId);
-
+	*/
+	
 	@Query(value = """
 			select rh, h
 			  from RecolteHausse rh, Hausse h

@@ -37,9 +37,9 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 
 	boolean existsByHausse(Hausse hausse);
 
-	List<RecolteHausse> findByHausseId(Long hausseId);
+	// List<RecolteHausse> findByHausseId(Long hausseId);
 
-	List<RecolteHausse> findByRucherId(Long rucherId);
+	// List<RecolteHausse> findByRucherId(Long rucherId);
 
 	@Query(value = """
 			select sum(poidsAvant) - sum(poidsApres) as poids

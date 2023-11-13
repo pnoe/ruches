@@ -74,33 +74,24 @@ public class EvenementRucheController {
 				datestext = dxCookie;
 			}
 		}
-		Iterable<Evenement> evenements;
-		switch (periode) {
-		case 1: // toute période
-			evenements = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEPESEE);
-			break;
-		case 2: // moins d'un an
-			evenements = evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE,
-					LocalDateTime.now().minusYears(1));
-			break;
-		case 3: // moins d'un mois
-			evenements = evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE,
-					LocalDateTime.now().minusMonths(1));
-			break;
-		case 4: // moins d'une semaine
-			evenements = evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE,
-					LocalDateTime.now().minusWeeks(1));
-			break;
-		case 5: // moins d'un jour
-			evenements = evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE,
-					LocalDateTime.now().minusDays(1));
-			break;
-		default:
+		List<Evenement> evenements = switch (periode) {
+		case 1 -> // toute période
+			evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEPESEE);
+		case 2 -> // moins d'un an
+			evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE, LocalDateTime.now().minusYears(1));
+		case 3 -> // moins d'un mois
+			evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE, LocalDateTime.now().minusMonths(1));
+		case 4 -> // moins d'une semaine
+			evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE, LocalDateTime.now().minusWeeks(1));
+		case 5 -> // moins d'un jour
+			evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE, LocalDateTime.now().minusDays(1));
+		default -> {
 			// ajouter tests date1 et date2 non null
-			evenements = evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE, date1, date2);
 			model.addAttribute("datestext", datestext);
+			yield evenementRepository.findTypePeriode(TypeEvenement.RUCHEPESEE, date1, date2);
 		}
-		List<BigDecimal> diff = new ArrayList<>();
+		};
+		List<BigDecimal> diff = new ArrayList<>(evenements.size());
 		for (Evenement evenement : evenements) {
 			try {
 				BigDecimal d = new BigDecimal(evenement.getValeur()).subtract(evenement.getRuche().getPoidsVide());
@@ -135,33 +126,23 @@ public class EvenementRucheController {
 				datestext = dxCookie;
 			}
 		}
-		Iterable<Evenement> evenements;
-		switch (periode) {
-		case 1: // toute période
-			evenements = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHECADRE);
-			break;
-		case 2: // moins d'un an
-			evenements = evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE,
-					LocalDateTime.now().minusYears(1));
-			break;
-		case 3: // moins d'un mois
-			evenements = evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE,
-					LocalDateTime.now().minusMonths(1));
-			break;
-		case 4: // moins d'une semaine
-			evenements = evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE,
-					LocalDateTime.now().minusWeeks(1));
-			break;
-		case 5: // moins d'un jour
-			evenements = evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE,
-					LocalDateTime.now().minusDays(1));
-			break;
-		default:
+		model.addAttribute(Const.EVENEMENTS, switch (periode) {
+		case 1 -> // toute période
+			evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHECADRE);
+		case 2 -> // moins d'un an
+			evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE, LocalDateTime.now().minusYears(1));
+		case 3 -> // moins d'un mois
+			evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE, LocalDateTime.now().minusMonths(1));
+		case 4 -> // moins d'une semaine
+			evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE, LocalDateTime.now().minusWeeks(1));
+		case 5 -> // moins d'un jour
+			evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE, LocalDateTime.now().minusDays(1));
+		default -> {
 			// ajouter tests date1 et date2 non null
-			evenements = evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE, date1, date2);
 			model.addAttribute("datestext", datestext);
+			yield evenementRepository.findTypePeriode(TypeEvenement.RUCHECADRE, date1, date2);
 		}
-		model.addAttribute(Const.EVENEMENTS, evenements);
+		});
 		model.addAttribute("periode", periode);
 		return "evenement/evenementCadreRucheListe";
 	}

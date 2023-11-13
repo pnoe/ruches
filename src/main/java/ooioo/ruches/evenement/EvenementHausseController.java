@@ -54,14 +54,13 @@ public class EvenementHausseController {
 	 */
 	@GetMapping("/listeRemplissageHausse")
 	public String listeRemplissageHausse(Model model, @RequestParam(required = false) Integer periode,
-			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
-			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext,
 			@CookieValue(value = "p", defaultValue = "1") Integer pCookie,
 			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
-			@CookieValue(value = "d1", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
-			@CookieValue(value = "d2", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie
-			) {
+			@CookieValue(value = "d1", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
+			@CookieValue(value = "d2", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie) {
 		if (periode == null) {
 			periode = pCookie;
 			if (pCookie == 6) {
@@ -70,34 +69,22 @@ public class EvenementHausseController {
 				datestext = dxCookie;
 			}
 		}
-		Iterable<Evenement> evenements;
-		switch (periode) {
-		case 1: // toute période
-			evenements = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.HAUSSEREMPLISSAGE);
-			break;
-		case 2: // moins d'un an
-			evenements =
-					evenementRepository.findTypePeriode(TypeEvenement.HAUSSEREMPLISSAGE, LocalDateTime.now().minusYears(1));
-			break;
-		case 3: // moins d'un mois
-			evenements =
-					evenementRepository.findTypePeriode(TypeEvenement.HAUSSEREMPLISSAGE, LocalDateTime.now().minusMonths(1));
-			break;
-		case 4: // moins d'une semaine
-			evenements =
-					evenementRepository.findTypePeriode(TypeEvenement.HAUSSEREMPLISSAGE, LocalDateTime.now().minusWeeks(1));
-			break;
-		case 5: // moins d'un jour
-			evenements =
-					evenementRepository.findTypePeriode(TypeEvenement.HAUSSEREMPLISSAGE, LocalDateTime.now().minusDays(1));
-			break;
-		default:
-			// ajouter tests date1 et date2 non null
-			evenements =
-					evenementRepository.findTypePeriode(TypeEvenement.HAUSSEREMPLISSAGE, date1, date2);
+		model.addAttribute(Const.EVENEMENTS, switch (periode) {
+		case 1 -> // toute période
+			evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.HAUSSEREMPLISSAGE);
+		case 2 -> // moins d'un an
+			evenementRepository.findTypePeriode(TypeEvenement.HAUSSEREMPLISSAGE, LocalDateTime.now().minusYears(1));
+		case 3 -> // moins d'un mois
+			evenementRepository.findTypePeriode(TypeEvenement.HAUSSEREMPLISSAGE, LocalDateTime.now().minusMonths(1));
+		case 4 -> // moins d'une semaine
+			evenementRepository.findTypePeriode(TypeEvenement.HAUSSEREMPLISSAGE, LocalDateTime.now().minusWeeks(1));
+		case 5 -> // moins d'un jour
+			evenementRepository.findTypePeriode(TypeEvenement.HAUSSEREMPLISSAGE, LocalDateTime.now().minusDays(1));
+		default -> { // ajouter tests date1 et date2 non null
 			model.addAttribute("datestext", datestext);
+			yield evenementRepository.findTypePeriode(TypeEvenement.HAUSSEREMPLISSAGE, date1, date2);
 		}
-		model.addAttribute(Const.EVENEMENTS, evenements);
+		});
 		model.addAttribute("periode", periode);
 		return "evenement/evenementRemplissageHausseListe";
 	}
@@ -192,8 +179,8 @@ public class EvenementHausseController {
 					rucher = ruche.getRucher();
 				}
 				LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
-				Evenement evenement = new Evenement(dateEve, typeEvenement, ruche, essaim, rucher,
-						hausse, valeur, commentaire);
+				Evenement evenement = new Evenement(dateEve, typeEvenement, ruche, essaim, rucher, hausse, valeur,
+						commentaire);
 				evenementRepository.save(evenement);
 				logger.info("{} créé", evenement);
 			} else {
@@ -286,8 +273,8 @@ public class EvenementHausseController {
 	}
 
 	/**
-	 * Sauvegarde d'un événement hausse.
-	 * Récupère tous les champs de l'événement du formulaire
+	 * Sauvegarde d'un événement hausse. Récupère tous les champs de l'événement du
+	 * formulaire
 	 */
 	@PostMapping("/sauve")
 	public String sauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {

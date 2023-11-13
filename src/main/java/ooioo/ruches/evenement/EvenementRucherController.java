@@ -40,19 +40,19 @@ public class EvenementRucherController {
 	private MessageSource messageSource;
 
 	private static final String commForm = "rucher/rucherCommentaireForm";
+
 	/*
 	 * Liste événements ajout ruche rucher
 	 */
 	@GetMapping("/listeRucheAjout")
 	public String listeRucheAjout(Model model, @RequestParam(required = false) Integer periode,
-			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
-			@RequestParam(required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext,
 			@CookieValue(value = "p", defaultValue = "1") Integer pCookie,
 			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
-			@CookieValue(value = "d1", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
-			@CookieValue(value = "d2", defaultValue = "")  @DateTimeFormat(iso=DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie
-			) {
+			@CookieValue(value = "d1", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
+			@CookieValue(value = "d2", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie) {
 		if (periode == null) {
 			periode = pCookie;
 			if (pCookie == 6) {
@@ -61,34 +61,24 @@ public class EvenementRucherController {
 				datestext = dxCookie;
 			}
 		}
-		Iterable<Evenement> evenements;
-		switch (periode) {
-		case 1: // toute période
-			evenements = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEAJOUTRUCHER);
-			break;
-		case 2: // moins d'un an
-			evenements =
-					evenementRepository.findTypePeriode(TypeEvenement.RUCHEAJOUTRUCHER, LocalDateTime.now().minusYears(1));
-			break;
-		case 3: // moins d'un mois
-			evenements =
-					evenementRepository.findTypePeriode(TypeEvenement.RUCHEAJOUTRUCHER, LocalDateTime.now().minusMonths(1));
-			break;
-		case 4: // moins d'une semaine
-			evenements =
-					evenementRepository.findTypePeriode(TypeEvenement.RUCHEAJOUTRUCHER, LocalDateTime.now().minusWeeks(1));
-			break;
-		case 5: // moins d'un jour
-			evenements =
-					evenementRepository.findTypePeriode(TypeEvenement.RUCHEAJOUTRUCHER, LocalDateTime.now().minusDays(1));
-			break;
-		default:
+		model.addAttribute(Const.EVENEMENTS, switch (periode) {
+		case 1 -> // toute période
+			evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEAJOUTRUCHER);
+		case 2 -> // moins d'un an
+			evenementRepository.findTypePeriode(TypeEvenement.RUCHEAJOUTRUCHER, LocalDateTime.now().minusYears(1));
+		case 3 -> // moins d'un mois
+			evenementRepository.findTypePeriode(TypeEvenement.RUCHEAJOUTRUCHER, LocalDateTime.now().minusMonths(1));
+		case 4 -> // moins d'une semaine
+
+			evenementRepository.findTypePeriode(TypeEvenement.RUCHEAJOUTRUCHER, LocalDateTime.now().minusWeeks(1));
+		case 5 -> // moins d'un jour
+			evenementRepository.findTypePeriode(TypeEvenement.RUCHEAJOUTRUCHER, LocalDateTime.now().minusDays(1));
+		default -> {
 			// ajouter tests date1 et date2 non null
-			evenements =
-					evenementRepository.findTypePeriode(TypeEvenement.RUCHEAJOUTRUCHER, date1, date2);
 			model.addAttribute("datestext", datestext);
+			yield evenementRepository.findTypePeriode(TypeEvenement.RUCHEAJOUTRUCHER, date1, date2);
 		}
-		model.addAttribute(Const.EVENEMENTS, evenements);
+		});
 		model.addAttribute("periode", periode);
 		return "evenement/evenementRucheAjoutListe";
 	}
@@ -147,8 +137,8 @@ public class EvenementRucherController {
 	}
 
 	/**
-	 * Sauvegarde d'un événement ruche.
-	 * Récupère tous les champs de l'événement du formulaire
+	 * Sauvegarde d'un événement ruche. Récupère tous les champs de l'événement du
+	 * formulaire
 	 */
 	@PostMapping("/sauve")
 	public String sauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
