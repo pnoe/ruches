@@ -94,26 +94,24 @@ public class EvenementController {
 				datestext = dxCookie;
 			}
 		}
-		switch (periode) {
-		case 1: // toute période
-			model.addAttribute(Const.EVENEMENTS, evenementRepository.findAll());
-			break;
-		case 2: // moins d'un an
-			model.addAttribute(Const.EVENEMENTS, evenementRepository.findPeriode(LocalDateTime.now().minusYears(1)));
-			break;
-		case 3: // moins d'un mois
-			model.addAttribute(Const.EVENEMENTS, evenementRepository.findPeriode(LocalDateTime.now().minusMonths(1)));
-			break;
-		case 4: // moins d'une semaine
-			model.addAttribute(Const.EVENEMENTS, evenementRepository.findPeriode(LocalDateTime.now().minusWeeks(1)));
-			break;
-		case 5: // moins d'un jour
-			model.addAttribute(Const.EVENEMENTS, evenementRepository.findPeriode(LocalDateTime.now().minusDays(1)));
-			break;
-		default:
-			model.addAttribute(Const.EVENEMENTS, evenementRepository.findPeriode(date1, date2));
+		// https://docs.oracle.com/en/java/javase/17/language/switch-expressions.html#GUID-BA4F63E3-4823-43C6-A5F3-BAA4A2EF3ADC
+		// https://openjdk.org/jeps/361
+		model.addAttribute(Const.EVENEMENTS, switch (periode) {
+		case 1 -> // toute période
+			evenementRepository.findAll();
+		case 2 -> // moins d'un an
+			evenementRepository.findPeriode(LocalDateTime.now().minusYears(1));
+		case 3 -> // moins d'un mois
+			evenementRepository.findPeriode(LocalDateTime.now().minusMonths(1));
+		case 4 -> // moins d'une semaine
+			evenementRepository.findPeriode(LocalDateTime.now().minusWeeks(1));
+		case 5 -> // moins d'un jour
+			evenementRepository.findPeriode(LocalDateTime.now().minusDays(1));
+		default -> {
 			model.addAttribute("datestext", datestext);
+			yield (evenementRepository.findPeriode(date1, date2));
 		}
+		});
 		model.addAttribute("periode", periode);
 		return Const.EVEN_EVENLISTE;
 	}
