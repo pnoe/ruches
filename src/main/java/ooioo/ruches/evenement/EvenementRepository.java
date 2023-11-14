@@ -24,6 +24,10 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 	boolean existsByHausse(Hausse hausse);
 
+	/**
+	 * Les événements notifications : événements Commentaire avec le champ valeur
+	 * renseigné.
+	 */
 	@Query(value = """
 			select e
 			  from Evenement e

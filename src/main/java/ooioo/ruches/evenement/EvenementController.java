@@ -117,7 +117,11 @@ public class EvenementController {
 	}
 
 	/**
-	 * Liste événements notifications
+	 * Liste événements notifications : événements commentaire avec un nombre x de
+	 * jours dans le champ valeur. Des emails sont envoyés x jours avant la date de
+	 * l'événement aux destinataires spécifiées dans la configuration.
+	 * 
+	 * @param tous : si false, seul les événements notif. non échus sont affichés.
 	 */
 	@GetMapping("/listeNotif/{tous}")
 	public String listenotif(Model model, @PathVariable boolean tous) {
@@ -126,23 +130,27 @@ public class EvenementController {
 		List<Integer> jAvants = new ArrayList<>();
 		List<Evenement> evens = new ArrayList<>();
 		for (Evenement evenement : evenements) {
-			int joursAvant = Integer.parseInt(evenement.getValeur());
-			LocalDateTime min;
-			LocalDateTime max;
-			if (joursAvant >= 0) {
-				min = evenement.getDate().minusDays(joursAvant);
-				max = evenement.getDate();
-			} else {
-				// si joursAvant est négatif la plage de notification
-				// est la date de l'évenement - (la date eve plus le nb de jours)
-				// fonctionnalité : notif apès date de l'événement
-				max = evenement.getDate().minusDays(joursAvant);
-				min = evenement.getDate();
-			}
-			// Si on est dans la plage de notification
-			if (tous || (dateNow.isAfter(min) && (dateNow.isBefore(max)))) {
-				evens.add(evenement);
-				jAvants.add(joursAvant);
+			try {
+				int joursAvant = Integer.parseInt(evenement.getValeur());
+				LocalDateTime min;
+				LocalDateTime max;
+				if (joursAvant >= 0) {
+					min = evenement.getDate().minusDays(joursAvant);
+					max = evenement.getDate();
+				} else {
+					// si joursAvant est négatif la plage de notification
+					// est la date de l'évenement - (la date eve plus le nb de jours)
+					// fonctionnalité : notif apès date de l'événement
+					max = evenement.getDate().minusDays(joursAvant);
+					min = evenement.getDate();
+				}
+				// Si on est dans la plage de notification
+				if (tous || (dateNow.isAfter(min) && (dateNow.isBefore(max)))) {
+					evens.add(evenement);
+					jAvants.add(joursAvant);
+				}
+			} catch (NumberFormatException e) {
+				// Si le champ Valeur ne contient pas un Int on ignore cet événement.
 			}
 		}
 		model.addAttribute(Const.EVENEMENTS, evens);
@@ -174,29 +182,20 @@ public class EvenementController {
 			// pour return vers template spécifique sucre, commentaire...
 			// les modelAttribute servent au retour vers les listes par type
 			// du menu Evenement
-			switch (evenement.getType()) {
-			case HAUSSEREMPLISSAGE:
-				return "evenement/evenementRemplissageDetail";
-			case ESSAIMTRAITEMENT, ESSAIMTRAITEMENTFIN:
-				return "evenement/evenementTraitementDetail";
-			case ESSAIMSUCRE:
-				return "evenement/evenementSucreDetail";
-			case COMMENTAIRERUCHE:
-				return "evenement/evenementCommRucheDetail";
-			case COMMENTAIREHAUSSE:
-				return "evenement/evenementCommHausseDetail";
-			case COMMENTAIREESSAIM:
-				return "evenement/evenementCommEssaimDetail";
-			case COMMENTAIRERUCHER:
-				return "evenement/evenementCommRucherDetail";
-			case RUCHEPESEE:
-				return "evenement/evenementPeseeDetail";
-			case RUCHECADRE:
-				return "evenement/evenementCadreDetail";
-			default:
+			return switch (evenement.getType()) {
+			case HAUSSEREMPLISSAGE -> "evenement/evenementRemplissageDetail";
+			case ESSAIMTRAITEMENT, ESSAIMTRAITEMENTFIN -> "evenement/evenementTraitementDetail";
+			case ESSAIMSUCRE -> "evenement/evenementSucreDetail";
+			case COMMENTAIRERUCHE -> "evenement/evenementCommRucheDetail";
+			case COMMENTAIREHAUSSE -> "evenement/evenementCommHausseDetail";
+			case COMMENTAIREESSAIM -> "evenement/evenementCommEssaimDetail";
+			case COMMENTAIRERUCHER -> "evenement/evenementCommRucherDetail";
+			case RUCHEPESEE -> "evenement/evenementPeseeDetail";
+			case RUCHECADRE -> "evenement/evenementCadreDetail";
+			default ->
 				// pour faciliter l'ajout d'un type non traité spécifiquement
-				return "evenement/evenementDetail";
-			}
+				"evenement/evenementDetail";
+			};
 		}
 		logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
 		model.addAttribute(Const.MESSAGE, Const.IDEVENEMENTINCONNU);
