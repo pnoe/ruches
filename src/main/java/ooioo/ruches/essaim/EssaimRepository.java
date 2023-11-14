@@ -3,19 +3,19 @@ package ooioo.ruches.essaim;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import ooioo.ruches.IdNom;
 import ooioo.ruches.Nom;
 
 @RepositoryRestResource(collectionResourceRel = "essaimRepository")
-public interface EssaimRepository extends CrudRepository<Essaim, Long> {
+public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 	Essaim findByNom(String nom);
 
 	Iterable<Essaim> findBySouche(Essaim essaim);
 
-	Iterable<Essaim> findByActif(boolean actif);
+	List<Essaim> findByActif(boolean actif);
 
 	// Collection -> List
 	List<Nom> findAllProjectedBy();

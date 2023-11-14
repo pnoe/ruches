@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +23,6 @@ import org.springframework.ui.Model;
 
 import jakarta.servlet.http.HttpSession;
 import ooioo.ruches.Const;
-import ooioo.ruches.IdNom;
 import ooioo.ruches.Nom;
 import ooioo.ruches.Utils;
 import ooioo.ruches.evenement.Evenement;
@@ -131,7 +129,7 @@ public class EssaimService {
 	 */
 	String clone(HttpSession session, Optional<Essaim> essaimOpt, String nomclones, String nomruches) {
 		Essaim essaim = essaimOpt.get();
-		List<Nom> nomsRecords =  essaimRepository.findAllProjectedBy();
+		List<Nom> nomsRecords = essaimRepository.findAllProjectedBy();
 		// Les noms des essaims à créer
 		String[] nomarray = nomclones.split(",");
 		// Les noms des ruches à créer
@@ -293,7 +291,7 @@ public class EssaimService {
 	}
 
 	/**
-	 * Statistiques tableau poids de miel par essaim Appel à partir de la liste des
+	 * Statistiques tableau poids de miel par essaim. Appel à partir de la liste des
 	 * essaims.
 	 *
 	 * @param rucherId       optionnel pour ne prendre en compte que les hausses de
@@ -306,7 +304,9 @@ public class EssaimService {
 			rucherId = null;
 		}
 		Iterable<Recolte> recoltes = recolteRepository.findAllByOrderByDateAsc();
-		Iterable<Essaim> essaims = masquerInactif ? essaimRepository.findByActif(true) : essaimRepository.findAll();
+		List<Essaim> essaims = masquerInactif ? essaimRepository.findByActif(true) : essaimRepository.findAll();
+		// Liste essaimsPoids des essaims ayant participé à des récoltes :
+		// nom, id, dateAcquisition, duree, poids pMoyen, pTotal, pMax et pMin.
 		List<Map<String, String>> essaimsPoids = new ArrayList<>();
 		DecimalFormat decimalFormat = new DecimalFormat("0.00",
 				new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
@@ -364,8 +364,7 @@ public class EssaimService {
 			}
 		}
 		model.addAttribute("essaimsPoids", essaimsPoids);
-		Collection<IdNom> rucherIdNom = rucherRepository.findAllProjectedIdNomByOrderByNom();
-		model.addAttribute("rucherIdNom", rucherIdNom);
+		model.addAttribute("rucherIdNom", rucherRepository.findAllProjectedIdNomByOrderByNom());
 		model.addAttribute("rucherId", rucherId);
 		model.addAttribute("masquerInactif", masquerInactif);
 	}

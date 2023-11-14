@@ -178,10 +178,10 @@ public class EvenementController {
 			Evenement evenement = evenementOpt.get();
 			model.addAttribute(Const.EVENEMENT, evenement);
 			model.addAttribute("type", type);
-			// récupérer le type de l'événement
+			// Récupérer le type de l'événement
 			// pour return vers template spécifique sucre, commentaire...
-			// les modelAttribute servent au retour vers les listes par type
-			// du menu Evenement
+			// Les modelAttribute servent au retour vers les listes par type
+			// du menu Evenement.
 			return switch (evenement.getType()) {
 			case HAUSSEREMPLISSAGE -> "evenement/evenementRemplissageDetail";
 			case ESSAIMTRAITEMENT, ESSAIMTRAITEMENTFIN -> "evenement/evenementTraitementDetail";
@@ -193,7 +193,7 @@ public class EvenementController {
 			case RUCHEPESEE -> "evenement/evenementPeseeDetail";
 			case RUCHECADRE -> "evenement/evenementCadreDetail";
 			default ->
-				// pour faciliter l'ajout d'un type non traité spécifiquement
+				// Pour faciliter l'ajout d'un type non traité spécifiquement.
 				"evenement/evenementDetail";
 			};
 		}
@@ -238,7 +238,7 @@ public class EvenementController {
 	}
 
 	/*
-	 * Appel du formulaire de modification d'un événement
+	 * Appel du formulaire de modification d'un événement.
 	 */
 	@GetMapping("/modifie/{evenementId}")
 	public String modifie(Model model, HttpServletRequest request, @PathVariable long evenementId,
@@ -259,7 +259,7 @@ public class EvenementController {
 	}
 
 	/*
-	 * Enregistrement de l'événement
+	 * Enregistrement de l'événement.
 	 */
 	@PostMapping("/sauve")
 	public String sauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
@@ -268,7 +268,6 @@ public class EvenementController {
 		}
 		// On enlève les blancs aux extémités du commentaire.
 		evenement.setCommentaire(evenement.getCommentaire().trim());
-
 		String action = (evenement.getId() == null) ? "créé" : "modifié";
 		evenementRepository.save(evenement);
 		logger.info("{} {}", evenement, action);
