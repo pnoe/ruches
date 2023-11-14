@@ -59,16 +59,16 @@ public class RecolteController {
 	}
 
 	/**
-	 * Liste des récoltes
+	 * Liste des récoltes.
 	 */
 	@GetMapping("/liste")
 	public String liste(Model model) {
-		Iterable<Recolte> recoltes = recolteRepository.findAllByOrderByDateDesc();
+		List<Recolte> recoltes = recolteRepository.findAllByOrderByDateDesc();
 		model.addAttribute("recoltes", recoltes);
-		List<List<IdNom> > ruchers = new ArrayList<>();
+		// Liste par récolte des id et noms des ruchers. 
+		List<List<IdNom> > ruchers = new ArrayList<>(recoltes.size());
 		for (Recolte recolte : recoltes) {
-			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByRecolte(recolte);
-			ruchers.add(recolteHausseService.idNomRuchers(recolteHausses));
+			ruchers.add(recolteHausseService.idNomRuchers(recolteHausseRepository.findByRecolte(recolte)));
 		}
 		model.addAttribute(Const.RUCHERS, ruchers);
 		return "recolte/recoltesListe";
@@ -118,7 +118,7 @@ public class RecolteController {
 	}
 
 	/**
-	 * Supprimer une récolte et ses hausses de récolte
+	 * Supprimer une récolte et ses hausses de récolte.
 	 */
 	@GetMapping("/supprime/{recolteId}")
 	public String supprime(Model model, @PathVariable long recolteId) {
@@ -174,17 +174,19 @@ public class RecolteController {
 	}
 
 	/**
-	 * Statistiques graphique poids de miel par essaim pour une récolte
+	 * Statistiques graphique poids de miel par essaim pour une récolte.
 	 */
 	@GetMapping("/statistiques/essaim/{recolteId}")
 	public String statistiques(Model model, @PathVariable long recolteId) {
 		Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
 		if (recolteOpt.isPresent()) {
 			Recolte recolte = recolteOpt.get();
-			ArrayList<Long> poidsListe = new ArrayList<>();
+			List <Object[]> poidsNomEssaim = recolteHausseRepository.findPoidsMielNomEssaimByRecolte(recolteId);
+			// Les listes des noms des essaims et leurs poids de miel pour cette récolte,
+			// pour les essaims qui ont eu une production non nulle.
 			ArrayList<String> nomListe = new ArrayList<>();
+			ArrayList<Long> poidsListe = new ArrayList<>();
 			Long poidsTotal = 0l;
-			Iterable <Object[]> poidsNomEssaim = recolteHausseRepository.findPoidsMielNomEssaimByRecolte(recolteId);
 			Long poids;
 			for (Object[] i:poidsNomEssaim) {
 				poids = ((Long)i[0]);

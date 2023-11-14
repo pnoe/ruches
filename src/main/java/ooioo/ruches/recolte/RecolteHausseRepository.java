@@ -62,7 +62,7 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 			  group by r.essaim_id, e.nom
 			  order by p desc
 			""", nativeQuery = true)
-	Iterable<Object[]> findPoidsMielNomEssaimByRecolte(Long recolteId);
+	List<Object[]> findPoidsMielNomEssaimByRecolte(Long recolteId);
 
 	@Query(value = """
 			select sum(poidsAvant) - sum(poidsApres) as poids

@@ -11,7 +11,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 public interface RecolteRepository extends CrudRepository<Recolte, Long> {
 	List<Recolte> findAllByOrderByDateAsc();
 
-	Iterable<Recolte> findAllByOrderByDateDesc();
+	List<Recolte> findAllByOrderByDateDesc();
 
 	Recolte findFirstByOrderByDateDesc();
 
