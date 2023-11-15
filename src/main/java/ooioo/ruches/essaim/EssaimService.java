@@ -126,9 +126,14 @@ public class EssaimService {
 
 	/*
 	 * Clone d'un essaim.
+	 * 
+	 * @param essaimOpt l'essaim à cloner
+	 * @param nomclones les noms des essaims à créer séparés par des ","
+	 * @param nomruches les noms des ruches dans lesquelles mettre les essaims séparés par des ","
 	 */
 	String clone(HttpSession session, Optional<Essaim> essaimOpt, String nomclones, String nomruches) {
 		Essaim essaim = essaimOpt.get();
+		// nomsRecords liste des noms d'essaims pour contrôle d'unicité.
 		List<Nom> nomsRecords = essaimRepository.findAllProjectedBy();
 		// Les noms des essaims à créer
 		String[] nomarray = nomclones.split(",");
