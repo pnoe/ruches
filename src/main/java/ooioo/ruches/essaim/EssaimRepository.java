@@ -19,7 +19,7 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 
 	// Collection -> List
 	List<Nom> findAllProjectedBy();
-	
+
 	@Query(value = """
 			select essaim
 			  from Essaim es, Ruche r
@@ -27,7 +27,7 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 			   and r.rucher.id = :rucherId
 			""")
 	List<Essaim> findByRucherId(Long rucherId);
-	
+
 	// Liste ordonnée par nom d'essaims, des essaims, id et nom de la ruche associée
 	// et
 	// id et nom de son rucher.
@@ -60,13 +60,13 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 	// décroissante
 	// spring boot 3 : "is true" remplacé par "= true"
 	@Query(value = """
-			select essaim.id, essaim.nom
+			select new ooioo.ruches.IdNom(essaim.id, essaim.nom)
 			  from Essaim essaim
 			    left join Ruche ruche on ruche.essaim.id = essaim.id
 			  where ruche.essaim.id is null and essaim.actif = true
 			  order by essaim.dateAcquisition desc
 			""")
-	Iterable<Object[]> findProjectedIdNomByRucheIsNullOrderByDateAcquisitionDesc();
+	List<IdNom> findProjectedIdNomByRucheIsNullOrderByDateAcquisitionDesc();
 
 	@Query(value = """
 			select essaim

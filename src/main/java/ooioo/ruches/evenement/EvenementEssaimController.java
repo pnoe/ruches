@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
 import ooioo.ruches.Const;
+import ooioo.ruches.IdNom;
 import ooioo.ruches.Utils;
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.essaim.EssaimRepository;
@@ -438,9 +439,8 @@ public class EvenementEssaimController {
 		// création décroissante pour remérage.
 		Ruche ruche = rucheRepository.findByEssaimId(essaimId);
 		if (ruche != null) {
-			Iterable<Object[]> essaimsRemerage = essaimRepository
-					.findProjectedIdNomByRucheIsNullOrderByDateAcquisitionDesc();
-			if (essaimsRemerage.iterator().hasNext()) {
+			List<IdNom> essaimsRemerage = essaimRepository.findProjectedIdNomByRucheIsNullOrderByDateAcquisitionDesc();
+			if (essaimsRemerage.size() > 0) {
 				model.addAttribute("nomRuche", ruche.getNom());
 				model.addAttribute("essaimsRemerage", essaimsRemerage);
 			}
