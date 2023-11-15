@@ -69,7 +69,6 @@ public class EvenementRucherController {
 		case 3 -> // moins d'un mois
 			evenementRepository.findTypePeriode(TypeEvenement.RUCHEAJOUTRUCHER, LocalDateTime.now().minusMonths(1));
 		case 4 -> // moins d'une semaine
-
 			evenementRepository.findTypePeriode(TypeEvenement.RUCHEAJOUTRUCHER, LocalDateTime.now().minusWeeks(1));
 		case 5 -> // moins d'un jour
 			evenementRepository.findTypePeriode(TypeEvenement.RUCHEAJOUTRUCHER, LocalDateTime.now().minusDays(1));
@@ -84,16 +83,14 @@ public class EvenementRucherController {
 	}
 
 	/**
-	 * Appel du formulaire pour la création d'un événement COMMENTAIRERUCHER
+	 * Appel du formulaire pour la création d'un événement COMMENTAIRERUCHER.
 	 */
 	@GetMapping("/commentaire/cree/{rucherId}")
 	public String creeCommentaire(HttpSession session, Model model, @PathVariable long rucherId) {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
-			Rucher rucher = rucherOpt.get();
-			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.COMMENTAIRERUCHER, null, null,
-					rucher, null, null, null);
-			model.addAttribute(Const.EVENEMENT, evenement);
+			model.addAttribute(Const.EVENEMENT, new Evenement(Utils.dateTimeDecal(session),
+					TypeEvenement.COMMENTAIRERUCHER, null, null, rucherOpt.get(), null, null, null));
 			return commForm;
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
@@ -104,14 +101,13 @@ public class EvenementRucherController {
 	}
 
 	/**
-	 * Appel du formulaire de modification d'un événement rucher commentaire
+	 * Appel du formulaire de modification d'un événement COMMENTAIRERUCHER.
 	 */
 	@GetMapping("/commentaire/modifie/{evenementId}")
 	public String commentaireModifie(HttpSession session, Model model, @PathVariable long evenementId) {
 		Optional<Evenement> evenementOpt = evenementRepository.findById(evenementId);
 		if (evenementOpt.isPresent()) {
-			Evenement evenement = evenementOpt.get();
-			model.addAttribute(Const.EVENEMENT, evenement);
+			model.addAttribute(Const.EVENEMENT, evenementOpt.get());
 			return commForm;
 		} else {
 			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);
@@ -122,7 +118,7 @@ public class EvenementRucherController {
 
 	/**
 	 * Sauvegarde d'un événement commentaire rucher. Récupère tous les champs de
-	 * l'événement du formulaire
+	 * l'événement du formulaire.
 	 */
 	@PostMapping("/commentaire/sauve")
 	public String commentaireSauve(@ModelAttribute Evenement evenement, BindingResult bindingResult) {
@@ -149,7 +145,7 @@ public class EvenementRucherController {
 	}
 
 	/**
-	 * Liste des événements d'un rucher
+	 * Liste des événements d'un rucher.
 	 */
 	@GetMapping("/{rucherId}")
 	public String listeEvenementRucher(Model model, @PathVariable long rucherId) {
