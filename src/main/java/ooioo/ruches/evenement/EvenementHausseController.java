@@ -90,7 +90,7 @@ public class EvenementHausseController {
 	}
 
 	/**
-	 * Appel du formulaire pour la création d'un événement COMMENTAIREHAUSSE
+	 * Appel du formulaire pour la création d'un événement COMMENTAIREHAUSSE.
 	 */
 	@GetMapping("/commentaire/cree/{hausseId}")
 	public String creeCommentaire(HttpSession session, Model model, @PathVariable long hausseId) {
@@ -99,16 +99,13 @@ public class EvenementHausseController {
 			Hausse hausse = hausseOpt.get();
 			Ruche ruche = hausse.getRuche();
 			Rucher rucher = null;
-			if (ruche != null) {
-				rucher = ruche.getRucher();
-			}
 			Essaim essaim = null;
 			if (ruche != null) {
+				rucher = ruche.getRucher();
 				essaim = ruche.getEssaim();
 			}
-			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.COMMENTAIREHAUSSE, ruche, essaim,
-					rucher, hausse, null, null);
-			model.addAttribute(Const.EVENEMENT, evenement);
+			model.addAttribute(Const.EVENEMENT, new Evenement(Utils.dateTimeDecal(session),
+					TypeEvenement.COMMENTAIREHAUSSE, ruche, essaim, rucher, hausse, null, null));
 			return commForm;
 		} else {
 			logger.error(Const.IDHAUSSEXXINCONNU, hausseId);

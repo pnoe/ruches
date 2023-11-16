@@ -440,7 +440,7 @@ public class EvenementEssaimController {
 		Ruche ruche = rucheRepository.findByEssaimId(essaimId);
 		if (ruche != null) {
 			List<IdNom> essaimsRemerage = essaimRepository.findProjectedIdNomByRucheIsNullOrderByDateAcquisitionDesc();
-			if (essaimsRemerage.size() > 0) {
+			if (!essaimsRemerage.isEmpty()) {
 				model.addAttribute("nomRuche", ruche.getNom());
 				model.addAttribute("essaimsRemerage", essaimsRemerage);
 			}
