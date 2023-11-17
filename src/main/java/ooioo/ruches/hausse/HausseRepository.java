@@ -35,16 +35,18 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 	// Liste des hausses qui ne sont pas dans la récolte recolteId :
 	// hausse.ruche not null pour ne pas afficher des hausses qui n'aurait
 	// pas de ruche/essaim/rucher associé
+	// Ce select n'est pas remplaçable par un left join.
 	@Query(value = """
 			select h
 				from Hausse h
-				where h.ruche is not null and h.id not in
+				where h.ruche is not null
+					and h.id not in
 					(select rh.hausse.id
 						from RecolteHausse rh
-						where rh.recolte.id = ?1)
+						where rh.recolte.id = :recolteId)
 			""")
 	Iterable<Hausse> findHaussesNotInRecolteId(Long recolteId);
-	
+
 	@Query(value = """
 			select rh, h
 			  from RecolteHausse rh, Hausse h

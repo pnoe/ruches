@@ -36,18 +36,24 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 	boolean existsByEssaim(Essaim essaim);
 
 	boolean existsByHausse(Hausse hausse);
-
-	// List<RecolteHausse> findByHausseId(Long hausseId);
-
-	// List<RecolteHausse> findByRucherId(Long rucherId);
-
+	
+	// Poids de miel produit par un essaim pour une récolte
 	@Query(value = """
 			select sum(poidsAvant) - sum(poidsApres) as poids
 			  from RecolteHausse
-			  where essaim.id=?1 and recolte.id=?2
+			  where essaim.id=:essaimId and recolte.id=:recolteId
 			""")
 	Integer findPoidsMielByEssaimByRecolte(Long essaimId, Long recolteId);
 
+	// Poids de miel produit par un essaim pour toutes les récoltes
+	@Query(value = """
+			select sum(poidsAvant) - sum(poidsApres) as poids
+			  from RecolteHausse as rh
+			  where rh.essaim=:essaim
+			""")
+	Integer findPoidsMielByEssaim(Essaim essaim);
+	
+	// Poids de miel produit par un essaim pour une récolte pour un rucher
 	@Query(value = """
 			select sum(poidsAvant) - sum(poidsApres) as poids
 			  from RecolteHausse

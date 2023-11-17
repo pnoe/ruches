@@ -58,7 +58,6 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 	// Pour remérage dans formulaire dispersion
 	// liste des essaims actifs qui ne sont pas dans des ruches ordonnés par date
 	// décroissante
-	// spring boot 3 : "is true" remplacé par "= true"
 	@Query(value = """
 			select new ooioo.ruches.IdNom(essaim.id, essaim.nom)
 			  from Essaim essaim
@@ -70,12 +69,12 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 
 	// Liste des essaims actif hors ruche
 	@Query(value = """
-			select essaim
+			select new ooioo.ruches.IdNom(essaim.id, essaim.nom)
 			  from Essaim essaim
 			  left join Ruche ruche on ruche.essaim = essaim
 			  where essaim.actif = true and ruche is null
 			""")
-	Iterable<Essaim> findEssaimByActifSansRuche();
+	List<IdNom> findEssaimByActifSansRuche();
 
 	// Nombre d'essaims créés dans l'année passée en paramètre.
 	@Query(value = """

@@ -128,8 +128,11 @@ public class EssaimService {
 	 * Clone d'un essaim.
 	 * 
 	 * @param essaimOpt l'essaim à cloner
+	 * 
 	 * @param nomclones les noms des essaims à créer séparés par des ","
-	 * @param nomruches les noms des ruches dans lesquelles mettre les essaims séparés par des ","
+	 * 
+	 * @param nomruches les noms des ruches dans lesquelles mettre les essaims
+	 * séparés par des ","
 	 */
 	String clone(HttpSession session, Optional<Essaim> essaimOpt, String nomclones, String nomruches) {
 		Essaim essaim = essaimOpt.get();
@@ -431,28 +434,31 @@ public class EssaimService {
 	}
 
 	/**
-	 * Renvoie la liste des EssaimTree fils de l'essaim passé en paramètre
+	 * Renvoie la liste des EssaimTree fils de l'essaim passé en paramètre. Appelé
+	 * par EssaimController.graphedescendance avec l'essaim racine d'une
+	 * arborescence en paramètre.
 	 */
 	List<EssaimTree> listeEssaimsFils(Essaim essaim) {
+		// La liste des noeuds du graphe de descendance des essaims.
 		List<EssaimTree> essaimTree = new ArrayList<>();
 		calculeEssaimsFils(essaimTree, essaim);
 		return essaimTree;
 	}
 
 	/**
-	 * Calcul de la liste EssaimTree par appels récursifs
+	 * Calcul de la liste EssaimTree par appels récursifs.
 	 */
 	private Integer calculeEssaimsFils(List<EssaimTree> resultat, Essaim essaim) {
 		Integer poidsMielDescendance = 0;
 		for (Essaim essaimSouche : essaimRepository.findBySouche(essaim)) {
+			// Appel récursif pour ajouter les noeuds de la descendance de cet essaim.
+			// En retour somme des poids de miel de toute la descendance.
 			poidsMielDescendance += calculeEssaimsFils(resultat, essaimSouche);
 		}
-		Integer poidsMielEssaim = 0;
-		for (Recolte recolte : recolteRepository.findAllByOrderByDateAsc()) {
-			Integer poids = recolteHausseRepository.findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId());
-			if (poids != null) {
-				poidsMielEssaim += poids;
-			}
+		// Calcul du poids de miel produit par l'essaim "essaim".
+		Integer poidsMielEssaim = recolteHausseRepository.findPoidsMielByEssaim(essaim);
+		if (poidsMielEssaim == null) {
+			poidsMielEssaim = 0;
 		}
 		poidsMielDescendance += poidsMielEssaim;
 		Ruche ruche = rucheRepository.findByEssaimId(essaim.getId());

@@ -171,7 +171,7 @@ public class AccueilService {
 		Iterable<Ruche> ruchesPasDepotSansEssaim = rucheRepository.findByActiveTrueAndEssaimNullAndRucherDepotFalse();
 		model.addAttribute("ruchesPasDepotSansEssaim", ruchesPasDepotSansEssaim);
 		// Essaims actifs hors ruche.
-		Iterable<Essaim> essaimsActifSansRuche = essaimRepository.findEssaimByActifSansRuche();
+		List<IdNom> essaimsActifSansRuche = essaimRepository.findEssaimByActifSansRuche();
 		model.addAttribute("essaimsActifSansRuche", essaimsActifSansRuche);
 		// Liste des ruchers actifs (coordonées de leur entrée) à plus de 20m du
 		// barycentre de leurs ruches.
