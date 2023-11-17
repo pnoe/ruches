@@ -68,13 +68,12 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 			""")
 	List<IdNom> findProjectedIdNomByRucheIsNullOrderByDateAcquisitionDesc();
 
+	// Liste des essaims actif hors ruche
 	@Query(value = """
 			select essaim
 			  from Essaim essaim
-			  where essaim.actif = true and essaim not in
-			    (select essaim
-			       from Essaim essaim, Ruche ruche
-			       where ruche.essaim = essaim)
+			  left join Ruche ruche on ruche.essaim = essaim
+			  where essaim.actif = true and ruche is null
 			""")
 	Iterable<Essaim> findEssaimByActifSansRuche();
 
