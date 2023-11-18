@@ -217,7 +217,7 @@ public class RucheController {
 		if (rucheOpt.isPresent()) {
 			Ruche ruche = rucheOpt.get();
 			model.addAttribute(Const.RUCHE, ruche);
-			model.addAttribute(Const.RUCHERS, rucherRepository.findProjectedIdNomByActifTrueAndIdNotOrderByNom(
+			model.addAttribute(Const.RUCHERS, rucherRepository.findIdNomByActifTrueAndIdNotOrderByNom(
 					(ruche.getRucher() == null) ? null : ruche.getRucher().getId()));
 			model.addAttribute("depotId", rucherRepository.findByDepotTrue().getId());
 			model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));

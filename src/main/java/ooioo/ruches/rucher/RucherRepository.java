@@ -28,7 +28,8 @@ public interface RucherRepository extends CrudRepository<Rucher, Long> {
 
 	Collection<IdNom> findAllProjectedIdNomByOrderByNom();
 
-	Collection<IdNom> findProjectedIdNomByActifTrueAndIdNotOrderByNom(Long id);
+	// Liste des ruchers actifs différents de ruherId, triés par nom.
+	Collection<IdNom> findIdNomByActifTrueAndIdNotOrderByNom(Long rucherId);
 
 	long countByActifTrue();
 }

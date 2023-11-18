@@ -500,7 +500,9 @@ function rucherDetail(ign) {
 	if (!ign) {
 		document.getElementById('export-png').addEventListener('click', function() {
 			map.once('rendercomplete', function() {
-				domtoimage.toPng(map.getViewport().querySelectorAll('.ol-layer canvas, canvas.ol-layer')[0])
+				domtoimage.toPng(map.getViewport().querySelectorAll('.ol-layer canvas, canvas.ol-layer')[0],
+					// taille nécessaire pour firefox, voir https://github.com/1904labs/dom-to-image-more/issues/146
+					{ width: map.getSize()[0], height: map.getSize()[1] })
 					.then(function(dataURL) {
 						const link = document.getElementById('image-download');
 						link.href = dataURL;
