@@ -21,6 +21,7 @@ module.exports = {
 		"eqeqeq": "error",
 		"for-direction": "error",
 		"func-style": ["error", "declaration"],
+		"no-array-constructor": "error",
 		"no-console": "error",
 		"no-constant-binary-expression": "error",
 		"no-eval": "error",

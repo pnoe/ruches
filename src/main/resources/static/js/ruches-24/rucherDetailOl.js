@@ -498,6 +498,10 @@ function rucherDetail(ign) {
 		translate.setActive(!event.target.checked);
 	});
 	if (!ign) {
+		// domtoimage avec cartes ign : DOMException: Failed to execute 'toDataURL' on 'HTMLCanvasElement': 
+		//  Tainted canvases may not be exported.
+		//  https://github.com/1904labs/dom-to-image-more/issues/14
+		// Avec cares OSM OK, il faut préciser whidth et heigth dans les options pour firefox
 		document.getElementById('export-png').addEventListener('click', function() {
 			map.once('rendercomplete', function() {
 				domtoimage.toPng(map.getViewport().querySelectorAll('.ol-layer canvas, canvas.ol-layer')[0],
