@@ -83,6 +83,14 @@ public class RecolteHausse {
 	public void setRecolte(Recolte recolte) {
 		this.recolte = recolte;
 	}
+	
+	public Integer getPdsAvantGr()  {
+		return poidsAvant;
+	}
+
+	public Integer getPdsApresGr()  {
+		return poidsApres;
+	}
 
 	public BigDecimal getPoidsAvant() {
 		return new BigDecimal(poidsAvant).movePointLeft(3);

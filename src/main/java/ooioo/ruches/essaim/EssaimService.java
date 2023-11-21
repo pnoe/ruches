@@ -124,15 +124,13 @@ public class EssaimService {
 		logger.info(Const.CREE, evenementAjout);
 	}
 
-	/*
+	/**
 	 * Clone d'un essaim.
 	 * 
-	 * @param essaimOpt l'essaim à cloner
-	 * 
-	 * @param nomclones les noms des essaims à créer séparés par des ","
-	 * 
+	 * @param essaimOpt l'essaim à cloner.
+	 * @param nomclones les noms des essaims à créer séparés par des ",".
 	 * @param nomruches les noms des ruches dans lesquelles mettre les essaims
-	 * séparés par des ","
+	 *                  séparés par des ",".
 	 */
 	String clone(HttpSession session, Optional<Essaim> essaimOpt, String nomclones, String nomruches) {
 		Essaim essaim = essaimOpt.get();
@@ -304,49 +302,66 @@ public class EssaimService {
 	 *
 	 * @param rucherId       optionnel pour ne prendre en compte que les hausses de
 	 *                       récolte dans ce rucher.
-	 * @param masquerInactif pour masquer les essaims inactifs.
+	 * @param masquerInactif true pour masquer les essaims inactifs.
 	 */
 	void statistiques(Model model, Long rucherId, boolean masquerInactif) {
 		// pour équivalence appel Get ou Post avec rucherId = 0
 		if ((rucherId != null) && rucherId.equals(0L)) {
 			rucherId = null;
 		}
-		Iterable<Recolte> recoltes = recolteRepository.findAllByOrderByDateAsc();
+		List<Recolte> recoltes = recolteRepository.findAll();
 		List<Essaim> essaims = masquerInactif ? essaimRepository.findByActif(true) : essaimRepository.findAll();
 		// Liste essaimsPoids des essaims ayant participé à des récoltes :
-		// nom, id, dateAcquisition, duree, poids pMoyen, pTotal, pMax et pMin.
+		// nom, id, dateAcquisition, duree, poids pMoyen, pTotal, pMax, pMin et note.
 		List<Map<String, String>> essaimsPoids = new ArrayList<>();
 		DecimalFormat decimalFormat = new DecimalFormat("0.00",
 				new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
-		Integer pTotal; // poids de miel total produit par l'essaim
-		Integer pMax; // poids de miel max lors d'une récolte
-		Integer pMin; // poids de miel min lors d'une récolte
-		boolean essaimOK;
+		// Une note par essaim égale à la moyenne des notes obtenue dans chaque récolte.
+		// La note obtenue dans une récolte est la proportion de miel produite par
+		// l'essaim relativement au poids total de miel produit dans la même récolte,
+		// dans le même rucher.
 		for (Essaim essaim : essaims) {
-			pTotal = 0;
-			pMax = 0;
-			pMin = 1000000;
-			essaimOK = false;
+			// Long essaimId = essaim.getId();
+			Integer pTotal = 0; // poids de miel total produit par l'essaim
+			Integer pMax = 0; // poids de miel max lors d'une récolte
+			Integer pMin = Integer.MAX_VALUE; // poids de miel min lors d'une récolte
+			boolean essaimOK = false;
+			float noteEssaim = 0f;
+			int nbRec = 0;
 			for (Recolte recolte : recoltes) {
+				// Trouver pour cette récolte le rucher correspondant à l'essaim.
+				// Une récolte peut comporter plusieurs ruchers.
+				// Les hausses de récolte d'un essaim proviennent toutes du même rucher.
+				// rrId l'id du rucher de la première hausse de la récolte pour cet essaim.
+				int pTRec = 0;
+				Long rrId = recolteHausseRepository.findRucherIdRecolteEssaim(recolte, essaim);				
+				if (rrId != null) {
+					pTRec = recolteHausseRepository.findPTRecolte(recolte.getId(), rrId);
+				}
 				Integer poids = (rucherId == null)
 						? recolteHausseRepository.findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId())
 						: recolteHausseRepository.findPoidsMielEssaimRecolteRucher(essaim.getId(), recolte.getId(),
 								rucherId);
 				if (poids != null) {
-					// L'essaim à participé à au moins une récolte même si le poids est nul.
+					// L'essaim à participé à au moins une récolte même si le poids est égal à 0.
 					essaimOK = true;
 					pTotal += poids;
 					pMax = Math.max(pMax, poids);
 					pMin = Math.min(pMin, poids);
+					// La note de l'essaim pour cette récolte.
+					float note = 1000 * poids / pTRec;
+					noteEssaim += note;
+					nbRec++;
 				}
 			}
-			if (pMin == 1000000) {
+			if (pMin == Integer.MAX_VALUE) {
 				pMin = 0;
 			}
 			// Si l'essaim n'a participé à aucune récolte, on ne l'affiche pas dans le
 			// tableau.
 			if (essaimOK) {
 				Map<String, String> essaimPoids = new HashMap<>();
+				essaimPoids.put("note", String.valueOf(Math.round(noteEssaim / nbRec)));
 				essaimPoids.put("nom", essaim.getNom());
 				essaimPoids.put("id", essaim.getId().toString());
 				essaimPoids.put("dateAcquisition", essaim.getDateAcquisition().toString());

@@ -82,6 +82,7 @@
 					<th th:text="#{Max}"></th>
 					<th th:text="#{Min}"></th>
 					<th th:if="${rucherId == null}" th:text="#{Moyen}"></th>
+					<th th:text="#{Note}"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -94,6 +95,10 @@
 					<td th:text="${essaimPoids.pMax}"></td>
 					<td th:text="${essaimPoids.pMin}"></td>
 					<td th:if="${rucherId == null}" th:text="${essaimPoids.pMoyen}"></td>
+					
+					<td th:text="${essaimPoids.note}"></td>
+					
+					
 				</tr>
 			</tbody>
 		</table>

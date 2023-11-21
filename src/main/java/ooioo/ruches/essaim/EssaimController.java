@@ -135,7 +135,7 @@ public class EssaimController {
 	 * @param rucherId optionnel pour ne prendre en compte que les hausses de
 	 * récolte dans ce rucher.
 	 * 
-	 * @param masquerInactif pour masquer les essaims inactifs.
+	 * @param masquerInactif true pour masquer les essaims inactifs.
 	 */
 	@GetMapping("/statistiques")
 	public String statistiques(Model model, @RequestParam(required = false) Long rucherId,

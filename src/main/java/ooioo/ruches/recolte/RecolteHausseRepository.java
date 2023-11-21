@@ -36,7 +36,7 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 	boolean existsByEssaim(Essaim essaim);
 
 	boolean existsByHausse(Hausse hausse);
-	
+
 	// Poids de miel produit par un essaim pour une récolte
 	@Query(value = """
 			select sum(poidsAvant) - sum(poidsApres) as poids
@@ -51,7 +51,40 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 			  from RecolteHausse as rh
 			  where rh.essaim=:essaim
 			""")
-	Integer findPoidsMielByEssaim(Essaim essaim);
+	Integer findPoidsMielByEssaim(Essaim essaim);	
+	
+	// Trouve l'id du rucher de l'essaim présent dans la récolte.
+	//  Sans order by, limit n'est pas accepté.
+	@Query(value = """
+			select rh.rucher.id
+			  from RecolteHausse rh
+			  where recolte = :recolte
+			    and essaim = :essaim
+			    and rucher is not null
+			  order by id 
+			  limit 1
+			""")
+	Long findRucherIdRecolteEssaim(Recolte recolte, Essaim essaim);	
+	
+	@Query(value = """
+			select sum(poidsAvant) - sum(poidsApres) as poids
+			  from RecolteHausse
+			  where recolte.id = :recolteId and rucher.id = :rucherId
+			""")
+	Integer findPTRecolte(Long recolteId, Long rucherId);
+	
+	
+	
+	// Poids de miel produit pour une récolte, dans le rucher passé en paramètre.
+	@Query(value = """
+			select sum(poidsAvant) - sum(poidsApres) as poids
+			  from RecolteHausse
+			  where recolte.id = :recolteId and rucher.id = :rucherId
+			""")
+	Integer findPdsRecolteRucher(Long recolteId, Long rucherId);
+
+	
+	
 	
 	// Poids de miel produit par un essaim pour une récolte pour un rucher
 	@Query(value = """
