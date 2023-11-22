@@ -51,40 +51,61 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 			  from RecolteHausse as rh
 			  where rh.essaim=:essaim
 			""")
-	Integer findPoidsMielByEssaim(Essaim essaim);	
-	
+	Integer findPoidsMielByEssaim(Essaim essaim);
+
 	// Trouve l'id du rucher de l'essaim présent dans la récolte.
-	//  Sans order by, limit n'est pas accepté.
+	// Sans order by, limit n'est pas accepté.
 	@Query(value = """
 			select rh.rucher.id
 			  from RecolteHausse rh
 			  where recolte = :recolte
 			    and essaim = :essaim
 			    and rucher is not null
-			  order by id 
+			  order by id
 			  limit 1
 			""")
-	Long findRucherIdRecolteEssaim(Recolte recolte, Essaim essaim);	
-	
+	Long findRucherIdRecolteEssaim(Recolte recolte, Essaim essaim);
+
+	/*
 	@Query(value = """
 			select sum(poidsAvant) - sum(poidsApres) as poids
 			  from RecolteHausse
 			  where recolte.id = :recolteId and rucher.id = :rucherId
 			""")
 	Integer findPTRecolte(Long recolteId, Long rucherId);
+	*/
 	
-	
-	
+	// Compte le nombre d'essaims ayant participé à la récolte recolteId pour le
+	// rucher rucherId
+	/*
+	@Query(value = """
+			select count(distinct essaim)
+			  from RecolteHausse
+			  where recolte.id = :recolteId and rucher.id = :rucherId
+			""")
+	Integer findNbERecolte(Long recolteId, Long rucherId);
+	*/
+
+	// Calcule la moyenne et l'écart type des poids produits par les essaims de la
+	// récolte recolteId, dans le rucher rucherId.
+	@Query(value = """
+			select avg(p), stddev_pop(p) from
+			  (select (sum(poidsAvant) - sum(poidsApres)) as p
+			    from RecolteHausse
+			    where recolte.id = :recolteId and rucher.id = :rucherId
+			    group by essaim) as xx
+			""")
+	List<Float[]> findAvgStdRecolte(Long recolteId, Long rucherId);
+		
 	// Poids de miel produit pour une récolte, dans le rucher passé en paramètre.
+	/*
 	@Query(value = """
 			select sum(poidsAvant) - sum(poidsApres) as poids
 			  from RecolteHausse
 			  where recolte.id = :recolteId and rucher.id = :rucherId
 			""")
 	Integer findPdsRecolteRucher(Long recolteId, Long rucherId);
-
-	
-	
+	*/
 	
 	// Poids de miel produit par un essaim pour une récolte pour un rucher
 	@Query(value = """

@@ -317,39 +317,68 @@ public class EssaimService {
 		DecimalFormat decimalFormat = new DecimalFormat("0.00",
 				new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
 		// Une note par essaim égale à la moyenne des notes obtenue dans chaque récolte.
+		
+		// TODO : commentaire à modifier
 		// La note obtenue dans une récolte est la proportion de miel produite par
 		// l'essaim relativement au poids total de miel produit dans la même récolte,
 		// dans le même rucher.
+		
 		for (Essaim essaim : essaims) {
 			// Long essaimId = essaim.getId();
 			Integer pTotal = 0; // poids de miel total produit par l'essaim
 			Integer pMax = 0; // poids de miel max lors d'une récolte
 			Integer pMin = Integer.MAX_VALUE; // poids de miel min lors d'une récolte
 			boolean essaimOK = false;
-			float noteEssaim = 0f;
+			Float noteEssaim = 0f;
 			int nbRec = 0;
 			for (Recolte recolte : recoltes) {
 				// Trouver pour cette récolte le rucher correspondant à l'essaim.
 				// Une récolte peut comporter plusieurs ruchers.
 				// Les hausses de récolte d'un essaim proviennent toutes du même rucher.
 				// rrId l'id du rucher de la première hausse de la récolte pour cet essaim.
-				int pTRec = 0;
-				Long rrId = recolteHausseRepository.findRucherIdRecolteEssaim(recolte, essaim);				
+				// int pTRec = 0;
+				// int nbERec = 0;
+				Float avgRec = 0f;
+				Float stdRec = 0f;
+				Long rrId = recolteHausseRepository.findRucherIdRecolteEssaim(recolte, essaim);
 				if (rrId != null) {
-					pTRec = recolteHausseRepository.findPTRecolte(recolte.getId(), rrId);
+					// Si l'essaim a bien une hausse de récolte pour cette récolte et dont le
+					// rucher rrId est bien renseigné.
+					// Les poids de miel récolté sont limités aux hausses de récolte qui sont dans
+					// le rucher rrId.
+
+					// pTRec = recolteHausseRepository.findPTRecolte(recolte.getId(), rrId);
+					// nbERec nombre d'essaims ayant participé à cette
+					// récolte limitée au rucher rrId, pour pouvoir faire la moyenne.
+					// nbERec = recolteHausseRepository.findNbERecolte(recolte.getId(), rrId);
+
+					// Calcul de la moyenne et de l'écart type des poids récoltés par essaim pour la
+					// récolte et pour le rucher rrId.
+					List<Float[]> avgStd = recolteHausseRepository.findAvgStdRecolte(recolte.getId(), rrId);
+					avgRec = (Float) avgStd.get(0)[0];
+					stdRec = (Float) avgStd.get(0)[1];
 				}
 				Integer poids = (rucherId == null)
 						? recolteHausseRepository.findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId())
 						: recolteHausseRepository.findPoidsMielEssaimRecolteRucher(essaim.getId(), recolte.getId(),
 								rucherId);
 				if (poids != null) {
-					// L'essaim à participé à au moins une récolte même si le poids est égal à 0.
+					// essaimOK = true, l'essaim a participé à au moins une récolte même si le poids
+					// est égal à 0.
 					essaimOK = true;
 					pTotal += poids;
 					pMax = Math.max(pMax, poids);
 					pMin = Math.min(pMin, poids);
 					// La note de l'essaim pour cette récolte.
-					float note = 1000 * poids / pTRec;
+
+					// Premier calcul, la part du poids produit par l'essaim divisé par le poids
+					// total pour cette récolte et pour le même rucher que l'essaim.
+					// float note = 1000 * poids / pTRec;
+
+					// Ecart simple standardisé : écart par rapport à la moyenne divisé par l'écart
+					// type. note de l'essaim pour la récolte.
+					Float note = (poids - avgRec) / stdRec;
+					// On fait la somme des notes de l'essaim et on divisera par le nombe de notes.
 					noteEssaim += note;
 					nbRec++;
 				}
@@ -361,7 +390,8 @@ public class EssaimService {
 			// tableau.
 			if (essaimOK) {
 				Map<String, String> essaimPoids = new HashMap<>();
-				essaimPoids.put("note", String.valueOf(Math.round(noteEssaim / nbRec)));
+				essaimPoids.put("note", Integer.toString(Math.round(1000 * noteEssaim / nbRec)));
+				essaimPoids.put("nbrec", Integer.toString(nbRec));
 				essaimPoids.put("nom", essaim.getNom());
 				essaimPoids.put("id", essaim.getId().toString());
 				essaimPoids.put("dateAcquisition", essaim.getDateAcquisition().toString());
