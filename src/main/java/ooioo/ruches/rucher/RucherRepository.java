@@ -13,7 +13,7 @@ import ooioo.ruches.Nom;
 public interface RucherRepository extends CrudRepository<Rucher, Long> {
 
 	Rucher findByDepotTrue();
-
+	
 	Rucher findByNom(String nom);
 
 	List<Rucher> findAllByOrderByNom();

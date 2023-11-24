@@ -3,7 +3,6 @@ package ooioo.ruches.recolte;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +25,8 @@ import ooioo.ruches.IdNom;
 import ooioo.ruches.Utils;
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.essaim.EssaimRepository;
+import ooioo.ruches.rucher.Rucher;
+import ooioo.ruches.rucher.RucherRepository;
 
 @Controller
 @RequestMapping("/recolte")
@@ -43,7 +44,8 @@ public class RecolteController {
 	private EssaimRepository essaimRepository;
 	@Autowired
 	private RecolteHausseService recolteHausseService;
-
+	@Autowired
+	private RucherRepository rucherRepository;
 	@Autowired
 	private RecolteService recolteService;
 
@@ -71,39 +73,46 @@ public class RecolteController {
 			// List<RecolteHausse> recolteHausses =
 			// recolteHausseRepository.findByRecolte(recolte);
 			// List<IdNom> idNomRucher = recolteHausseService.idNomRuchers(recolteHausses);
-			List<IdNom> idNomruchers = 
-					// HashSet pour éliminer les doublons
-					new ArrayList<>(new HashSet<>(recolteHausseRepository.findRuchersRecolteEssaim(recolte)));
-			model.addAttribute(Const.RUCHERS, idNomruchers);
-
+			List<Long> idruchers = recolteHausseRepository.findRuchersRecolteEssaim(recolte);
+			// HashSet pour éliminer les doublons
+//					new ArrayList<>(new HashSet<>(recolteHausseRepository.findRuchersRecolteEssaim(recolte)));
+			List<Rucher> ruchers = new ArrayList<>(idruchers.size());
 			// Calcul de la moyenne et de l'écart type des poids récoltés par essaim pour la
 			// récolte et pour le rucher rrId.
-			List<Double> avgRec = new ArrayList<>(idNomruchers.size());
-			List<Double> stdRec = new ArrayList<>(idNomruchers.size());
-			List<Double> poidsRec = new ArrayList<>(idNomruchers.size());
-			List<Long> countEssaimsRec = new ArrayList<>(idNomruchers.size());
-			for (IdNom idNomR : idNomruchers) {
-				List<Object[]> avgStdPoCo = recolteHausseRepository.findAvgStdSumNbRecolte(recolte.getId(), idNomR.id());
-				avgRec.add((Double) avgStdPoCo.get(0)[0]/1000d);
-				stdRec.add((Double) avgStdPoCo.get(0)[1]/1000d);
-				poidsRec.add((Long) avgStdPoCo.get(0)[2]/1000d);
+			List<Double> avgRec = new ArrayList<>(idruchers.size());
+			List<Double> stdRec = new ArrayList<>(idruchers.size());
+			List<Double> poidsRec = new ArrayList<>(idruchers.size());
+			List<Long> countEssaimsRec = new ArrayList<>(idruchers.size());
+			for (Long id : idruchers) {
+				Optional<Rucher> rucherOpt = rucherRepository.findById(id);
+				ruchers.add(rucherOpt.get());
+				List<Object[]> avgStdPoCo = recolteHausseRepository.findAvgStdSumNbRecolte(recolte.getId(), id);
+				avgRec.add((Double) avgStdPoCo.get(0)[0] / 1000d);
+				stdRec.add((Double) avgStdPoCo.get(0)[1] / 1000d);
+				poidsRec.add((Long) avgStdPoCo.get(0)[2] / 1000d);
 				countEssaimsRec.add((Long) avgStdPoCo.get(0)[3]);
-				/*
-				System.out.println(
-						idNomR.nom() +
-						" " + (Double) avgStdPoCo.get(0)[0] +
-						" " + (Double) avgStdPoCo.get(0)[1] +
-						" " + (Long) avgStdPoCo.get(0)[2] +
-						" " + (Long) avgStdPoCo.get(0)[3]
-						);
-				*/
 			}
+			model.addAttribute(Const.RUCHERS, ruchers);
 			model.addAttribute("avgRec", avgRec);
 			model.addAttribute("stdRec", stdRec);
 			model.addAttribute("poidsRec", poidsRec);
 			model.addAttribute("countEssaimsRec", countEssaimsRec);
-			// Pour chaque essaim : poids, écart, écart std, part, note, nb hausses
-			// ...
+			List<Long> idessaims = new ArrayList<>(recolteHausseRepository.findEssaimsRecolteEssaim(recolte));
+			List<Essaim> essaims = new ArrayList<>(idessaims.size());
+			// List<Ruche> ruches = new ArrayList<>(idessaims.size());
+			List<Rucher> ruchersX = new ArrayList<>(idessaims.size());
+
+			for (Long id : idessaims) {
+				Optional<Essaim> essaimOpt = essaimRepository.findById(id);
+				Essaim essaim = essaimOpt.get();
+				essaims.add(essaim);
+				Optional<Rucher> rucherOpt = rucherRepository
+						.findById(recolteHausseRepository.findRuRRRecolte(recolte, essaim));
+				Rucher rucher = rucherOpt.get();
+				ruchersX.add(rucher);
+			}
+			model.addAttribute("ruchersX", ruchersX);
+			model.addAttribute(Const.ESSAIMS, essaims);
 			model.addAttribute(Const.RECOLTE, recolte);
 		} else {
 			logger.error(Const.IDRECOLTEXXINCONNU, recolteId);

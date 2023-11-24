@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import ooioo.ruches.IdNom;
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.hausse.Hausse;
 import ooioo.ruches.ruche.Ruche;
@@ -69,16 +68,65 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 	
 
 	// Trouve les id des rucher de la récolte.
-	// Attention, les IdNoms ne sont pas distints !!!!!!!!!!!!!!!!!!!!
-	// Pas réussi à metttre distinct dans la requête, même avec sous
-	// requête et/ou nativeQuery.
 	@Query(value = """
-			select new ooioo.ruches.IdNom(rh.rucher.id, rh.rucher.nom)
+			select rh.rucher.id
 			    from RecolteHausse rh
 			    where recolte = :recolte
 			      and rucher is not null
+			    group by rucher.id
 			""")
-	List<IdNom> findRuchersRecolteEssaim(Recolte recolte);
+	List<Long> findRuchersRecolteEssaim(Recolte recolte);
+
+	// Trouve les id des essaims de la récolte.
+	@Query(value = """
+			select rh.essaim.id
+			    from RecolteHausse rh
+			    where recolte = :recolte
+			      and essaim is not null
+			    group by essaim.id
+			""")
+	List<Long> findEssaimsRecolteEssaim(Recolte recolte);
+
+	// Trouve l'id du rucher d'un essaim de la récolte.
+	@Query(value = """
+			select rh.rucher.id
+			    from RecolteHausse rh
+			    where recolte = :recolte
+			      and essaim = :essaim
+			    order by id
+			    limit 1
+			""")
+	long findRuRRRecolte(Recolte recolte, Essaim essaim);
+	
+	
+	// Trouve les id et noms des essaims de la récolte.
+	// Attention, les IdNoms ne sont pas distints !!!!!!!!!!!!!!!!!!!!
+	// Pas réussi à metttre distinct dans la requête, même avec sous
+	// requête et/ou nativeQuery.
+	/*
+	@Query(value = """
+			select new ooioo.ruches.IdNom(rh.essaim.id, rh.essaim.nom)
+			    from RecolteHausse rh
+			    where recolte = :recolte
+			      and essaim is not null
+			""")
+	List<IdNom> findEssaimssRecolteEssaim(Recolte recolte);
+	*/
+	
+	// La liste des id essaim, ruche, rucher de la récolte
+	// Pas distincts !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	@Query(value = """
+			select rh.essaim.id, rh.ruche.id, rh.rucher.id 
+			    from RecolteHausse rh
+			    where recolte = :recolte
+			      and essaim is not null
+			      and ruche is not null
+			      and rucher is not null
+			""")
+	List<Long[]> findEsRuRRRecolteEssaim(Recolte recolte);
+	
+	
+	
 	
 	/*
 	@Query(value = """
