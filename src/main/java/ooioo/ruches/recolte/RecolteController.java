@@ -77,8 +77,8 @@ public class RecolteController {
 			// HashSet pour éliminer les doublons
 //					new ArrayList<>(new HashSet<>(recolteHausseRepository.findRuchersRecolteEssaim(recolte)));
 			List<Rucher> ruchers = new ArrayList<>(idruchers.size());
-			// Calcul de la moyenne et de l'écart type des poids récoltés par essaim pour la
-			// récolte et pour le rucher rrId.
+			// Par rucher, calcul de la moyenne, de l'écart type, des poids récoltés et du
+			// nombre d'essaims pour la récolte.
 			List<Double> avgRec = new ArrayList<>(idruchers.size());
 			List<Double> stdRec = new ArrayList<>(idruchers.size());
 			List<Double> poidsRec = new ArrayList<>(idruchers.size());
@@ -97,11 +97,11 @@ public class RecolteController {
 			model.addAttribute("stdRec", stdRec);
 			model.addAttribute("poidsRec", poidsRec);
 			model.addAttribute("countEssaimsRec", countEssaimsRec);
+			// Par essaim de la récolte, calcul du poids, de l'écart par rapport à la
+			// moyenne du rucher, de l'écart standardisé, de la note et du nombre de hausses.
 			List<Long> idessaims = new ArrayList<>(recolteHausseRepository.findEssaimsRecolteEssaim(recolte));
 			List<Essaim> essaims = new ArrayList<>(idessaims.size());
-			// List<Ruche> ruches = new ArrayList<>(idessaims.size());
 			List<Rucher> ruchersX = new ArrayList<>(idessaims.size());
-
 			for (Long id : idessaims) {
 				Optional<Essaim> essaimOpt = essaimRepository.findById(id);
 				Essaim essaim = essaimOpt.get();

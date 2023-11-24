@@ -5,7 +5,12 @@
 	<script>
 		document.addEventListener('DOMContentLoaded', () => {
 			new DataTable('#essaims', {
-				dom: 'Blftip',
+				// Tri par rucher, puis par ruche. Garder les espaces entre les [
+				// https://datatables.net/reference/option/order
+				// https://datatables.net/reference/option/stateSave
+				// Si l'ordre est enregistré par un clic utilisateur, alors order n'est plus appliqué
+				stateSave: false,
+				order: [ [1, 'asc'], [0, 'asc'] ],
 				scrollX: true,
 			});
 		});
@@ -29,8 +34,8 @@
 		</div>
 	</div>
 
-	<div class="container-fluid table-responsive" id="ruchers">
-		<table class="table table-sm table-bordered">
+	<div class="container-fluid table-responsive">
+		<table class="table table-sm table-bordered" id="ruchers">
 			<thead>
 				<tr>
 					<th th:text="#{rucher}"></th>
@@ -54,8 +59,8 @@
 		</table>
 	</div>
 
-	<div class="container-fluid table-responsive" id="essaims">
-		<table class="table table-sm table-bordered">
+	<div class="container-fluid table-responsive">
+		<table class="table table-sm table-bordered" id="essaims">
 			<thead>
 				<tr>
 					<th th:text="#{essaim}"></th>
