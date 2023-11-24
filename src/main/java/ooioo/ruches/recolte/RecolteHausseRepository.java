@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import ooioo.ruches.IdNom;
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.hausse.Hausse;
 import ooioo.ruches.ruche.Ruche;
@@ -65,7 +66,33 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 			  limit 1
 			""")
 	Long findRucherIdRecolteEssaim(Recolte recolte, Essaim essaim);
+	
 
+	// Trouve les id des rucher de la récolte.
+	// Attention, les IdNoms ne sont pas distints !!!!!!!!!!!!!!!!!!!!
+	// Pas réussi à metttre distinct dans la requête, même avec sous
+	// requête et/ou nativeQuery.
+	@Query(value = """
+			select new ooioo.ruches.IdNom(rh.rucher.id, rh.rucher.nom)
+			    from RecolteHausse rh
+			    where recolte = :recolte
+			      and rucher is not null
+			""")
+	List<IdNom> findRuchersRecolteEssaim(Recolte recolte);
+	
+	/*
+	@Query(value = """
+			  select new ooioo.ruches.IdNom(r.id as id, r.nom as nom)
+			    from recolte_hausse as rh, rucher as r
+			    where rh.recolte_id = :recolte_id
+			      and rh.rucher_id = r.id
+			      and rh.rucher_id is not null
+			""", nativeQuery = true)
+	List<IdNom> findRuchersRecolteEssaim(Long recolte_id);
+	*/
+	
+	
+	
 	/*
 	@Query(value = """
 			select sum(poidsAvant) - sum(poidsApres) as poids
@@ -96,6 +123,20 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 			    group by essaim) as xx
 			""")
 	List<Float[]> findAvgStdRecolte(Long recolteId, Long rucherId);
+	
+	// Calcule la moyenne et l'écart type des poids produits par les essaims de la
+	// récolte recolteId, dans le rucher rucherId. Et aussi le nombre d'essaims et
+	// le poids total de mieL.
+	// select avg(p), stddev_pop(p), sum(p), count(*) from (select (sum(poids_avant) - sum(poids_apres)) as p from
+    //  recolte_hausse where recolte_id = 17777 and rucher_id = 2621 group by essaim_id;) as xx;
+	@Query(value = """
+			select avg(p), stddev_pop(p), sum(p), count(p) from
+			  (select (sum(poidsAvant) - sum(poidsApres)) as p
+			    from RecolteHausse
+			    where recolte.id = :recolteId and rucher.id = :rucherId
+			    group by essaim) as xx
+			""")
+	List<Object[]> findAvgStdSumNbRecolte(Long recolteId, Long rucherId);
 		
 	// Poids de miel produit pour une récolte, dans le rucher passé en paramètre.
 	/*

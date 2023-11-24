@@ -3,6 +3,7 @@ package ooioo.ruches.recolte;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,15 +48,69 @@ public class RecolteController {
 	private RecolteService recolteService;
 
 	/*
-	 * Statistiques de production de miel par année.
-	 * Miel pesé dans les hausses, miel mis en pot et miel dans les hausses
-	 *  rapporté au nombre d'essaims moyen actifs dans l'année.
-	 * Diagramme à barres verticales (histogramme)/
+	 * Statistiques de production de miel par année. Miel pesé dans les hausses,
+	 * miel mis en pot et miel dans les hausses rapporté au nombre d'essaims moyen
+	 * actifs dans l'année. Diagramme à barres verticales (histogramme)/
 	 */
 	@GetMapping("/statprod")
 	public String statprod(Model model) {
 		recolteService.statprod(model);
 		return "recolte/recoltesStatProd";
+	}
+
+	/**
+	 * Statistiques d'une récolte.
+	 */
+	@GetMapping("/stat/{recolteId}")
+	public String stat(Model model, @PathVariable long recolteId) {
+		Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
+		if (recolteOpt.isPresent()) {
+			Recolte recolte = recolteOpt.get();
+			// Pour chaque rucher de la récolte calculer poids total rucher, nb essaims,
+			// moyenne, écart type
+			// List<RecolteHausse> recolteHausses =
+			// recolteHausseRepository.findByRecolte(recolte);
+			// List<IdNom> idNomRucher = recolteHausseService.idNomRuchers(recolteHausses);
+			List<IdNom> idNomruchers = 
+					// HashSet pour éliminer les doublons
+					new ArrayList<>(new HashSet<>(recolteHausseRepository.findRuchersRecolteEssaim(recolte)));
+			model.addAttribute(Const.RUCHERS, idNomruchers);
+
+			// Calcul de la moyenne et de l'écart type des poids récoltés par essaim pour la
+			// récolte et pour le rucher rrId.
+			List<Double> avgRec = new ArrayList<>(idNomruchers.size());
+			List<Double> stdRec = new ArrayList<>(idNomruchers.size());
+			List<Double> poidsRec = new ArrayList<>(idNomruchers.size());
+			List<Long> countEssaimsRec = new ArrayList<>(idNomruchers.size());
+			for (IdNom idNomR : idNomruchers) {
+				List<Object[]> avgStdPoCo = recolteHausseRepository.findAvgStdSumNbRecolte(recolte.getId(), idNomR.id());
+				avgRec.add((Double) avgStdPoCo.get(0)[0]/1000d);
+				stdRec.add((Double) avgStdPoCo.get(0)[1]/1000d);
+				poidsRec.add((Long) avgStdPoCo.get(0)[2]/1000d);
+				countEssaimsRec.add((Long) avgStdPoCo.get(0)[3]);
+				/*
+				System.out.println(
+						idNomR.nom() +
+						" " + (Double) avgStdPoCo.get(0)[0] +
+						" " + (Double) avgStdPoCo.get(0)[1] +
+						" " + (Long) avgStdPoCo.get(0)[2] +
+						" " + (Long) avgStdPoCo.get(0)[3]
+						);
+				*/
+			}
+			model.addAttribute("avgRec", avgRec);
+			model.addAttribute("stdRec", stdRec);
+			model.addAttribute("poidsRec", poidsRec);
+			model.addAttribute("countEssaimsRec", countEssaimsRec);
+			// Pour chaque essaim : poids, écart, écart std, part, note, nb hausses
+			// ...
+			model.addAttribute(Const.RECOLTE, recolte);
+		} else {
+			logger.error(Const.IDRECOLTEXXINCONNU, recolteId);
+			model.addAttribute(Const.MESSAGE, Const.IDRECOLTEINCONNU);
+			return Const.INDEX;
+		}
+		return "recolte/recolteStat";
 	}
 
 	/**
@@ -65,8 +120,8 @@ public class RecolteController {
 	public String liste(Model model) {
 		List<Recolte> recoltes = recolteRepository.findAllByOrderByDateDesc();
 		model.addAttribute("recoltes", recoltes);
-		// Liste par récolte des id et noms des ruchers. 
-		List<List<IdNom> > ruchers = new ArrayList<>(recoltes.size());
+		// Liste par récolte des id et noms des ruchers.
+		List<List<IdNom>> ruchers = new ArrayList<>(recoltes.size());
 		for (Recolte recolte : recoltes) {
 			ruchers.add(recolteHausseService.idNomRuchers(recolteHausseRepository.findByRecolte(recolte)));
 		}
@@ -105,7 +160,7 @@ public class RecolteController {
 	 * Enregistrement de la récolte.
 	 */
 	@PostMapping("/sauve")
-	public String sauve(@ModelAttribute  Recolte recolte, BindingResult bindingResult) {
+	public String sauve(@ModelAttribute Recolte recolte, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return RECOLTERECOLTEFORM;
 		}
@@ -136,19 +191,22 @@ public class RecolteController {
 			model.addAttribute(Const.MESSAGE, Const.IDRECOLTEINCONNU);
 			return Const.INDEX;
 		}
-		return "redirect:/recolte/liste";	}
+		return "redirect:/recolte/liste";
+	}
 
 	/**
 	 * Statistiques tableau poids de miel par essaim et par récolte.
 	 *
-	 * @param tous si false n'affiche pas les essaims n'ayant jamais produit de miel.
+	 * @param tous si false n'affiche pas les essaims n'ayant jamais produit de
+	 *             miel.
 	 */
 	@GetMapping("/stat/essaim/{tous}")
 	public String statistiquesEssaim(Model model, @PathVariable boolean tous) {
 		Iterable<Recolte> recoltes = recolteRepository.findAllByOrderByDateAsc();
 		Iterable<Essaim> essaims = essaimRepository.findAll();
 		List<List<String>> essaimsRecoltes = new ArrayList<>();
-		DecimalFormat decimalFormat = new DecimalFormat("0.00", new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
+		DecimalFormat decimalFormat = new DecimalFormat("0.00",
+				new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
 		for (Essaim essaim : essaims) {
 			List<String> poidsListe = new ArrayList<>();
 			poidsListe.add(essaim.getNom());
@@ -156,7 +214,7 @@ public class RecolteController {
 			for (Recolte recolte : recoltes) {
 				Integer poids = recolteHausseRepository.findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId());
 				if (poids != null) {
-					poidsListe.add(decimalFormat.format(poids/1000.0));
+					poidsListe.add(decimalFormat.format(poids / 1000.0));
 					poidsTotal += poids;
 				} else {
 					poidsListe.add("");
@@ -164,7 +222,7 @@ public class RecolteController {
 			}
 			if (tous || (poidsTotal != 0)) {
 				// Si tous est false, on n'affiche que les essaims qui ont produit du miel
-				poidsListe.add(decimalFormat.format(poidsTotal/1000.0));
+				poidsListe.add(decimalFormat.format(poidsTotal / 1000.0));
 				essaimsRecoltes.add(poidsListe);
 			}
 		}
@@ -176,23 +234,23 @@ public class RecolteController {
 	/**
 	 * Statistiques graphique poids de miel par essaim pour une récolte.
 	 */
-	@GetMapping("/statistiques/essaim/{recolteId}")
+	@GetMapping("/statistiques/{recolteId}")
 	public String statistiques(Model model, @PathVariable long recolteId) {
 		Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
 		if (recolteOpt.isPresent()) {
 			Recolte recolte = recolteOpt.get();
-			List <Object[]> poidsNomEssaim = recolteHausseRepository.findPoidsMielNomEssaimByRecolte(recolteId);
+			List<Object[]> poidsNomEssaim = recolteHausseRepository.findPoidsMielNomEssaimByRecolte(recolteId);
 			// Les listes des noms des essaims et leurs poids de miel pour cette récolte,
 			// pour les essaims qui ont eu une production non nulle.
 			ArrayList<String> nomListe = new ArrayList<>();
 			ArrayList<Long> poidsListe = new ArrayList<>();
 			Long poidsTotal = 0l;
 			Long poids;
-			for (Object[] i:poidsNomEssaim) {
-				poids = ((Long)i[0]);
+			for (Object[] i : poidsNomEssaim) {
+				poids = ((Long) i[0]);
 				if (poids > 0) {
 					poidsListe.add(poids);
-					nomListe.add((String)i[1]);
+					nomListe.add((String) i[1]);
 					poidsTotal += poids;
 				}
 			}

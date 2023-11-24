@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+</head>
+
+<body>
+	<nav th:replace="~{navbar::navbar}"></nav>
+	<br />
+	<br />
+	<br />
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					<th:block th:text="#{Statistiques} + ' '"></th:block>
+					<a th:href="@{'/recolte/'+${recolte.id}}"
+						th:text="#{recolte} + ' ' + ${#temporals.format(recolte.date, 'yy/MM/dd HH:mm')}"></a>
+				</h1>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid table-responsive" id="ruchers">
+		<table class="table table-sm table-bordered">
+			<thead>
+				<tr>
+					<th th:text="#{rucher}"></th>
+					<th th:text="#{poidsMielHausses}"></th>
+					<th th:text="#{Moyenne}"></th>
+					<th th:text="#{EcartType}"></th>
+					<th th:text="#{nbEssaims}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="idNom, i : ${ruchers}">
+					<td>
+						<a th:href="@{'/rucher/'+${idNom.id}}" th:text="${idNom.nom}"></a>
+					</td>
+					<td class="num" th:text="${#numbers.formatDecimal(poidsRec[i.index],1,2)}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(avgRec[i.index],1,2)}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(stdRec[i.index],1,2)}"></td>
+					<td class="num" th:text="${countEssaimsRec[i.index]}"></td>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer th:replace="~{include::footer}"></footer>
+</body>
+
+</html>
