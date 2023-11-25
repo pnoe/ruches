@@ -74,8 +74,6 @@ public class RecolteController {
 			// recolteHausseRepository.findByRecolte(recolte);
 			// List<IdNom> idNomRucher = recolteHausseService.idNomRuchers(recolteHausses);
 			List<Long> idruchers = recolteHausseRepository.findRuchersRecolteEssaim(recolte);
-			// HashSet pour éliminer les doublons
-//					new ArrayList<>(new HashSet<>(recolteHausseRepository.findRuchersRecolteEssaim(recolte)));
 			List<Rucher> ruchers = new ArrayList<>(idruchers.size());
 			// Par rucher, calcul de la moyenne, de l'écart type, des poids récoltés et du
 			// nombre d'essaims pour la récolte.
@@ -97,11 +95,14 @@ public class RecolteController {
 			model.addAttribute("stdRec", stdRec);
 			model.addAttribute("poidsRec", poidsRec);
 			model.addAttribute("countEssaimsRec", countEssaimsRec);
+			
 			// Par essaim de la récolte, calcul du poids, de l'écart par rapport à la
 			// moyenne du rucher, de l'écart standardisé, de la note et du nombre de hausses.
 			List<Long> idessaims = new ArrayList<>(recolteHausseRepository.findEssaimsRecolteEssaim(recolte));
 			List<Essaim> essaims = new ArrayList<>(idessaims.size());
 			List<Rucher> ruchersX = new ArrayList<>(idessaims.size());
+			List<Double> poidsEss = new ArrayList<>(idessaims.size());
+			List<Long> countRec = new ArrayList<>(idessaims.size());
 			for (Long id : idessaims) {
 				Optional<Essaim> essaimOpt = essaimRepository.findById(id);
 				Essaim essaim = essaimOpt.get();
@@ -110,9 +111,24 @@ public class RecolteController {
 						.findById(recolteHausseRepository.findRuRRRecolte(recolte, essaim));
 				Rucher rucher = rucherOpt.get();
 				ruchersX.add(rucher);
+				// Somme poids et compte rec pour la récolte et pour l'essaim.
+				
+				List<Object[]> poidsCount = recolteHausseRepository.findSumNbRecolte(recolte.getId(), essaim.getId());
+				
+				
+				// System.out.println(poidsCount.get(0)[0] + " " + poidsCount.get(0)[1]);
+				
+				// List<Double> poidsEss 
+				poidsEss.add(((Long) poidsCount.get(0)[0]) / 1000d);
+				
+				countRec.add((Long) poidsCount.get(0)[1]);
+				
 			}
+			model.addAttribute("poidsEss", poidsEss);
+			model.addAttribute("countRec", countRec);
 			model.addAttribute("ruchersX", ruchersX);
 			model.addAttribute(Const.ESSAIMS, essaims);
+			
 			model.addAttribute(Const.RECOLTE, recolte);
 		} else {
 			logger.error(Const.IDRECOLTEXXINCONNU, recolteId);

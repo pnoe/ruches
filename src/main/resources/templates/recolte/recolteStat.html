@@ -65,6 +65,8 @@
 				<tr>
 					<th th:text="#{essaim}"></th>
 					<th th:text="#{rucher}"></th>
+					<th th:text="#{poidsMielHausses}"></th>
+					<th th:text="#{nbHausses}"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -73,6 +75,9 @@
 						<a th:href="@{'/esssaim/'+${idNom.id}}" th:text="${idNom.nom}"></a>
 					</td>
 					<td th:text="${ruchersX[i.index].nom}"></td>
+					
+					<td th:text="${poidsEss[i.index]}"></td>
+					<td th:text="${countRec[i.index]}"></td>
 				</tr>
 			</tbody>
 		</table>
