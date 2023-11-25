@@ -47,13 +47,13 @@
 					th:title="#{SaisiePoidsMiel}" aria-hidden="true"></a>
 				<span id="enlevehausses" class="bi-reply-all cursorpointer" th:title="#{recolteHausseDepot}"
 					aria-hidden="true"></span>
-				<a th:href="@{'/recolte/statistiques/'+${recolte.id}}" class="bi-pie-chart"
-					th:title="#{statistiquesessaims}" aria-hidden="true"></a>
 				<a id="supprime" th:href="@{'/recolte/supprime/'+${recolte.id}}" class="bi-trash" style="color: red"
 					th:title="#{supprimer}" aria-hidden="true"></a>
 				<input type="text" id="date" name="date">
 				<button id="dateOK" th:text="#{Retirerhausses}"></button>
 				&nbsp;
+				<a th:href="@{'/recolte/statistiques/'+${recolte.id}}" class="bi-pie-chart"
+					th:title="#{statistiquesessaims}" aria-hidden="true"></a>
 				<a id="statistiques" th:href="@{'/recolte/stat/'+${recolte.id}}" class="bi-table"
 					th:title="#{Statistiques}" aria-hidden="true"></a>
 			</div>

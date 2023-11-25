@@ -3,6 +3,7 @@
 
 <head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 	<script>
+		/* globals DataTable */
 		document.addEventListener('DOMContentLoaded', () => {
 			new DataTable('#essaims', {
 				// Tri par rucher, puis par ruche. Garder les espaces entre les [
@@ -67,17 +68,20 @@
 					<th th:text="#{rucher}"></th>
 					<th th:text="#{poidsMielHausses}"></th>
 					<th th:text="#{nbHausses}"></th>
+					<th th:text="#{EcartMoyenne}"></th>
+					<th th:text="#{Note}"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="idNom, i : ${essaims}">
 					<td>
-						<a th:href="@{'/esssaim/'+${idNom.id}}" th:text="${idNom.nom}"></a>
+						<a th:href="@{'/essaim/'+${idNom.id}}" th:text="${idNom.nom}"></a>
 					</td>
 					<td th:text="${ruchersX[i.index].nom}"></td>
-					
 					<td th:text="${poidsEss[i.index]}"></td>
 					<td th:text="${countRec[i.index]}"></td>
+					<td th:text="${#numbers.formatDecimal(ecartEss[i.index],1,2)}"></td>
+					<td th:text="${#numbers.formatDecimal(noteEss[i.index],1,2)}"></td>
 				</tr>
 			</tbody>
 		</table>

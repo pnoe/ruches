@@ -95,40 +95,45 @@ public class RecolteController {
 			model.addAttribute("stdRec", stdRec);
 			model.addAttribute("poidsRec", poidsRec);
 			model.addAttribute("countEssaimsRec", countEssaimsRec);
-			
 			// Par essaim de la récolte, calcul du poids, de l'écart par rapport à la
-			// moyenne du rucher, de l'écart standardisé, de la note et du nombre de hausses.
+			// moyenne du rucher, de l'écart standardisé, de la note et du nombre de
+			// hausses.
 			List<Long> idessaims = new ArrayList<>(recolteHausseRepository.findEssaimsRecolteEssaim(recolte));
 			List<Essaim> essaims = new ArrayList<>(idessaims.size());
 			List<Rucher> ruchersX = new ArrayList<>(idessaims.size());
 			List<Double> poidsEss = new ArrayList<>(idessaims.size());
 			List<Long> countRec = new ArrayList<>(idessaims.size());
+			List<Double> ecartEss = new ArrayList<>(idessaims.size());
+			List<Double> noteEss = new ArrayList<>(idessaims.size());
 			for (Long id : idessaims) {
 				Optional<Essaim> essaimOpt = essaimRepository.findById(id);
 				Essaim essaim = essaimOpt.get();
 				essaims.add(essaim);
+				// Recherche du rucher des hausses de récolte de cet essaim.
 				Optional<Rucher> rucherOpt = rucherRepository
 						.findById(recolteHausseRepository.findRuRRRecolte(recolte, essaim));
 				Rucher rucher = rucherOpt.get();
 				ruchersX.add(rucher);
 				// Somme poids et compte rec pour la récolte et pour l'essaim.
-				
 				List<Object[]> poidsCount = recolteHausseRepository.findSumNbRecolte(recolte.getId(), essaim.getId());
-				
-				
-				// System.out.println(poidsCount.get(0)[0] + " " + poidsCount.get(0)[1]);
-				
-				// List<Double> poidsEss 
-				poidsEss.add(((Long) poidsCount.get(0)[0]) / 1000d);
-				
+				Double poids = ((Long) poidsCount.get(0)[0]) / 1000d;
+				poidsEss.add(poids);
 				countRec.add((Long) poidsCount.get(0)[1]);
-				
+				// Rrouver l'index de rucher.getId() dans idruchers, pour calculer l'écart par
+				// rapport à la moyenne et la note.
+				int i = idruchers.indexOf(rucher.getId());
+				Double avg = avgRec.get(i);
+				Double std = stdRec.get(i);
+				Double ec = poids - avg;
+				ecartEss.add(ec);
+				noteEss.add(ec / std);
 			}
 			model.addAttribute("poidsEss", poidsEss);
 			model.addAttribute("countRec", countRec);
 			model.addAttribute("ruchersX", ruchersX);
 			model.addAttribute(Const.ESSAIMS, essaims);
-			
+			model.addAttribute("ecartEss", ecartEss);
+			model.addAttribute("noteEss", noteEss);
 			model.addAttribute(Const.RECOLTE, recolte);
 		} else {
 			logger.error(Const.IDRECOLTEXXINCONNU, recolteId);
