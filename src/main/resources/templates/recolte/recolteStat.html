@@ -41,6 +41,7 @@
 				<tr>
 					<th th:text="#{rucher}"></th>
 					<th th:text="#{poidsMielHausses}"></th>
+					<th th:text="#{partRecPCent}"></th>
 					<th th:text="#{MoyenneE}"></th>
 					<th th:text="#{EcartTypeE}"></th>
 					<th th:text="#{nbEssaims}"></th>
@@ -52,6 +53,7 @@
 						<a th:href="@{'/rucher/'+${idNom.id}}" th:text="${idNom.nom}"></a>
 					</td>
 					<td class="num" th:text="${#numbers.formatDecimal(poidsRec[i.index],1,2)}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(partRec[i.index],1,2)}"></td>
 					<td class="num" th:text="${#numbers.formatDecimal(avgRec[i.index],1,2)}"></td>
 					<td class="num" th:text="${#numbers.formatDecimal(stdRec[i.index],1,2)}"></td>
 					<td class="num" th:text="${countEssaimsRec[i.index]}"></td>
@@ -67,6 +69,8 @@
 					<th th:text="#{essaim}"></th>
 					<th th:text="#{rucher}"></th>
 					<th th:text="#{poidsMielHausses}"></th>
+					<th th:text="#{partRecPCent}"></th>
+					<th th:text="#{partRrucherPCent}"></th>
 					<th th:text="#{nbHausses}"></th>
 					<th th:text="#{EcartMoyenne}"></th>
 					<th th:text="#{Note}"></th>
@@ -79,6 +83,8 @@
 					</td>
 					<td th:text="${ruchersX[i.index].nom}"></td>
 					<td th:text="${poidsEss[i.index]}"></td>
+					<td th:text="${#numbers.formatDecimal(partRecEss[i.index],1,2)}"></td>
+					<td th:text="${#numbers.formatDecimal(partRucherEss[i.index],1,2)}"></td>
 					<td th:text="${countRec[i.index]}"></td>
 					<td th:text="${#numbers.formatDecimal(ecartEss[i.index],1,2)}"></td>
 					<td th:text="${#numbers.formatDecimal(noteEss[i.index],1,2)}"></td>
