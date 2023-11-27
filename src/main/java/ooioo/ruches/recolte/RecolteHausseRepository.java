@@ -109,6 +109,7 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 
 	// La liste des id essaim, ruche, rucher de la récolte
 	// Pas distincts !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	/*
 	@Query(value = """
 			select rh.essaim.id, rh.ruche.id, rh.rucher.id
 			    from RecolteHausse rh
@@ -118,6 +119,7 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 			      and rucher is not null
 			""")
 	List<Long[]> findEsRuRRRecolteEssaim(Recolte recolte);
+	*/
 
 	/*
 	 * @Query(value = """ select new ooioo.ruches.IdNom(r.id as id, r.nom as nom)

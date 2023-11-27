@@ -316,13 +316,13 @@ public class EssaimService {
 		List<Map<String, String>> essaimsPoids = new ArrayList<>();
 		DecimalFormat decimalFormat = new DecimalFormat("0.00",
 				new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
-		// Une note par essaim égale à la moyenne des notes obtenue dans chaque récolte.
-		
-		// TODO : commentaire à modifier
-		// La note obtenue dans une récolte est la proportion de miel produite par
-		// l'essaim relativement au poids total de miel produit dans la même récolte,
-		// dans le même rucher.
-		
+		// Une note par essaim, égale à la moyenne des notes obtenue dans chaque
+		// récolte. La note obtenue par un essaim dans une récolte est la différence
+		// entre le poids de miel produite par l'essaim (p) et la moyenne de
+		// la production des autres essaims (m) dans le même rucher, divisée par l'écart
+		// type (e) de ces valeurs pour cette récolte et ce rucher. note = (p - m) / e
+		// Pour calculer la note d'un essaim pour toutes ses récoltes on fait la moyenne
+		// de ces notes.
 		for (Essaim essaim : essaims) {
 			// Long essaimId = essaim.getId();
 			Integer pTotal = 0; // poids de miel total produit par l'essaim
@@ -369,15 +369,10 @@ public class EssaimService {
 					pTotal += poids;
 					pMax = Math.max(pMax, poids);
 					pMin = Math.min(pMin, poids);
-					// La note de l'essaim pour cette récolte.
-
-					// Premier calcul, la part du poids produit par l'essaim divisé par le poids
-					// total pour cette récolte et pour le même rucher que l'essaim.
-					// float note = 1000 * poids / pTRec;
-
+					// note, la note de l'essaim pour cette récolte dans son rucher.
 					// Ecart simple standardisé : écart par rapport à la moyenne divisé par l'écart
-					// type. note de l'essaim pour la récolte.
-					Float note = (poids - avgRec) / stdRec;
+					// type.
+					Float note = ((stdRec == 0f) ? 0f : (poids - avgRec) / stdRec);
 					// On fait la somme des notes de l'essaim et on divisera par le nombe de notes.
 					noteEssaim += note;
 					nbRec++;

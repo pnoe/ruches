@@ -128,13 +128,12 @@ public class EssaimController {
 		return "essaim/essaimsStatAges";
 	}
 
-	/*
+	/**
 	 * Statistiques tableau poids de miel par essaim. Appel icône dans page liste
 	 * essaim.
 	 *
-	 * @param rucherId optionnel pour ne prendre en compte que les hausses de
-	 * récolte dans ce rucher.
-	 * 
+	 * @param rucherId       optionnel pour ne prendre en compte que les hausses de
+	 *                       récolte dans ce rucher.
 	 * @param masquerInactif true pour masquer les essaims inactifs.
 	 */
 	@GetMapping("/statistiques")

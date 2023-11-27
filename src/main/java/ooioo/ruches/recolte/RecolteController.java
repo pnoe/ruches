@@ -93,7 +93,7 @@ public class RecolteController {
 			}
 			for (Long id : idruchers) {
 				int i = idruchers.indexOf(id);
-				partRec.add(100d * poidsRec.get(i) / pTotalRec);
+				partRec.add(100d * ((pTotalRec == 0d) ? 0d : poidsRec.get(i) / pTotalRec));
 
 			}
 			model.addAttribute(Const.RUCHERS, ruchers);
@@ -137,7 +137,7 @@ public class RecolteController {
 				ecartEss.add(ec);
 				noteEss.add(std == 0d ? 0d : ec / std);
 				partRecEss.add(100d * poids / pTotalRec);
-				partRucherEss.add(100d * poids / poidsRec.get(i));
+				partRucherEss.add(100d * ((poidsRec.get(i) == 0d) ? 0d : poids / poidsRec.get(i)));
 			}
 			model.addAttribute("poidsEss", poidsEss);
 			model.addAttribute("countRec", countRec);
