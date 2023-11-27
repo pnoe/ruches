@@ -66,7 +66,7 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 			""")
 	Long findRucherIdRecolteEssaim(Recolte recolte, Essaim essaim);
 
-	// Trouve les id des rucher de la récolte.
+	// Trouve les id des ruchers de la récolte.
 	@Query(value = """
 			select rh.rucher.id
 			    from RecolteHausse rh

@@ -70,9 +70,6 @@ public class RecolteController {
 			Recolte recolte = recolteOpt.get();
 			// Pour chaque rucher de la récolte calculer poids total rucher, nb essaims,
 			// moyenne, écart type
-			// List<RecolteHausse> recolteHausses =
-			// recolteHausseRepository.findByRecolte(recolte);
-			// List<IdNom> idNomRucher = recolteHausseService.idNomRuchers(recolteHausses);
 			List<Long> idruchers = recolteHausseRepository.findRuchersRecolteEssaim(recolte);
 			List<Rucher> ruchers = new ArrayList<>(idruchers.size());
 			// Par rucher, calcul de la moyenne, de l'écart type, des poids récoltés et du
@@ -97,7 +94,7 @@ public class RecolteController {
 			for (Long id : idruchers) {
 				int i = idruchers.indexOf(id);
 				partRec.add(100d * poidsRec.get(i) / pTotalRec);
-				
+
 			}
 			model.addAttribute(Const.RUCHERS, ruchers);
 			model.addAttribute("avgRec", avgRec);

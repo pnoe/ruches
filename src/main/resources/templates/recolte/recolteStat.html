@@ -5,11 +5,13 @@
 	<script>
 		/* globals DataTable */
 		document.addEventListener('DOMContentLoaded', () => {
+			new DataTable('#ruchers', {searching: false, paging: false, info: false});
 			new DataTable('#essaims', {
-				// Tri par rucher, puis par ruche. Garder les espaces entre les [
+				// Tri par rucher, puis par ruche.
 				// https://datatables.net/reference/option/order
 				// https://datatables.net/reference/option/stateSave
 				// Si l'ordre est enregistré par un clic utilisateur, alors order n'est plus appliqué
+				// Attention : garder les espaces entre les [
 				stateSave: false,
 				order: [ [1, 'asc'], [0, 'asc'] ],
 				scrollX: true,
@@ -27,7 +29,7 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<th:block th:text="#{Statistiques} + ' '"></th:block>
+					<th:block th:text="#{statistiquesproduction} + ' '"></th:block>
 					<a th:href="@{'/recolte/'+${recolte.id}}"
 						th:text="#{recolte} + ' ' + ${#temporals.format(recolte.date, 'yy/MM/dd HH:mm')}"></a>
 				</h1>
@@ -70,7 +72,7 @@
 					<th th:text="#{rucher}"></th>
 					<th th:text="#{poidsMielHausses}"></th>
 					<th th:text="#{partRecPCent}"></th>
-					<th th:text="#{partRrucherPCent}"></th>
+					<th th:if="${#lists.size(ruchers) > 1}" th:text="#{partRrucherPCent}"></th>
 					<th th:text="#{nbHausses}"></th>
 					<th th:text="#{EcartMoyenne}"></th>
 					<th th:text="#{Note}"></th>
@@ -84,7 +86,8 @@
 					<td th:text="${ruchersX[i.index].nom}"></td>
 					<td th:text="${poidsEss[i.index]}"></td>
 					<td th:text="${#numbers.formatDecimal(partRecEss[i.index],1,2)}"></td>
-					<td th:text="${#numbers.formatDecimal(partRucherEss[i.index],1,2)}"></td>
+					<td th:if="${#lists.size(ruchers) > 1}"
+						th:text="${#numbers.formatDecimal(partRucherEss[i.index],1,2)}"></td>
 					<td th:text="${countRec[i.index]}"></td>
 					<td th:text="${#numbers.formatDecimal(ecartEss[i.index],1,2)}"></td>
 					<td th:text="${#numbers.formatDecimal(noteEss[i.index],1,2)}"></td>
