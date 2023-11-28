@@ -5,13 +5,14 @@
 	<script th:replace="~{include :: jsruches}"></script>
 	<script th:inline="javascript">
 		/* exported Essaims, buttontextprint, buttontextcol, urlTraitLot, urlSucreLot,
-		urlCommLot, selectEssTrt */
+		urlCommLot, urlCadreLot, selectEssTrt */
 		const Essaims = /*[[#{Essaims}]]*/ null;
 		const buttontextprint = /*[[#{buttontextprint}]]*/ null;
 		const buttontextcol = /*[[#{buttontextcol}]]*/ null;
 		const urlTraitLot = /*[[@{/evenement/essaim/traitementLot/}]]*/ null;
 		const urlSucreLot = /*[[@{/evenement/essaim/sucreLot/}]]*/ null;
 		const urlCommLot = /*[[@{/evenement/essaim/commentaireLot/}]]*/ null;
+		const urlCadreLot = /*[[@{/evenement/essaim/cadreLot/}]]*/ null;
 		const selectEssTrt = /*[[#{selectessaimstraiter}]]*/ null;
 	</script>
 </head>
@@ -34,6 +35,8 @@
 					aria-hidden="true"></a>
 				<a id="sucre" href="#" class="selection bi-bucket" th:title="#{evenementsSucre}" aria-hidden="true"></a>
 				<a id="traitement" href="#" class="selection bi-bug" th:title="#{evenementsTraitement}"
+					aria-hidden="true"></a>
+				<a id="cadre" href="#" class="selection bi-layout-three-columns" th:title="#{evenementsCadres}"
 					aria-hidden="true"></a>
 				&nbsp;
 				<a th:href="@{/essaim/statistiques?masquerInactif=on}" class="bi-table"
@@ -72,7 +75,9 @@
 					<td><a th:href="@{'/rucher/'+ ${eRRr.idRucher}}" th:text="${eRRr.nomRucher}"></a></td>
 					<th:block th:if="${session.voirInactif}">
 						<td th:text="${eRRr.essaim.actif}?#{oui}:#{non}"></td>
-						<td th:text="${eRRr.essaim.actif ? '' : #temporals.format(eRRr.essaim.dateDispersion, 'yyyy/MM/dd')}"></td>
+						<td
+							th:text="${eRRr.essaim.actif ? '' : #temporals.format(eRRr.essaim.dateDispersion, 'yyyy/MM/dd')}">
+						</td>
 						<td th:text="${eRRr.essaim.actif ? '' : eRRr.essaim.commDisp}"></td>
 					</th:block>
 					<td th:text="${eRRr.essaim.dateAcquisition}"></td>

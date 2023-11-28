@@ -177,6 +177,24 @@ public class EvenementEssaimController {
 		return "essaim/essaimSucreLotForm";
 	}
 
+	/**
+	 * Appel du formulaire pour l'ajout d'événements cadres pour un lot d'essaims
+	 */
+	@GetMapping("/cadreLot/{essaimIds}")
+	public String cadreLot(HttpSession session, Model model, @PathVariable Long[] essaimIds) {
+		nomsIdsListe(session, model, essaimIds);
+		return "essaim/essaimCadreLotForm";
+	}
+
+	/**
+	 * Pour la création d'événements par lot. Récupère les noms à partir des ids du
+	 * lot. Récupère la date éventuellement décalée. Met cette date, les ids et les
+	 * noms dans model pour le formulaire.
+	 * 
+	 * @param session   pour la date décalée
+	 * @param model
+	 * @param essaimIds les ids du lot d'essaims
+	 */
 	private void nomsIdsListe(HttpSession session, Model model, Long[] essaimIds) {
 		model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
 		// on reconstitue les liste de noms et d'ids d'essaims séparés par des virgules
@@ -218,11 +236,12 @@ public class EvenementEssaimController {
 	}
 
 	/**
-	 * Créations des événements pour un lot d'essaims
+	 * Créations des événements pour un lot d'essaims.
 	 */
 	@PostMapping("/sauve/lot/{essaimIds}")
 	public String sauveLot(@PathVariable Long[] essaimIds, @RequestParam TypeEvenement typeEvenement,
 			@RequestParam String date, @RequestParam String valeur, @RequestParam String commentaire) {
+		// TODO : controles sur "valeur" : int si cadres, float si poids : voir controles js formulaires ?
 		for (Long essaimId : essaimIds) {
 			Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 			if (essaimOpt.isPresent()) {
@@ -233,8 +252,15 @@ public class EvenementEssaimController {
 					rucher = ruche.getRucher();
 				}
 				LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
-				Evenement evenement = new Evenement(dateEve, typeEvenement, ruche, essaim, rucher, null, valeur,
-						commentaire); // valeur commentaire
+				if (typeEvenement.equals(TypeEvenement.RUCHECADRE) &&
+						// Si le nombre de cadre
+						ruche.getType() != null &&
+						ruche.getType().getNbCadresMax() != null &&
+						Integer.parseInt(valeur) > ruche.getType().getNbCadresMax()) {
+						valeur = Integer.toString(ruche.getType().getNbCadresMax());
+				}
+ 				Evenement evenement = new Evenement(dateEve, typeEvenement, ruche, essaim, rucher, null, valeur,
+						commentaire);
 				evenementRepository.save(evenement);
 				logger.info(Const.CREE, evenement);
 			} else {
