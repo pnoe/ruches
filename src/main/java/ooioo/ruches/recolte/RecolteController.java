@@ -79,6 +79,8 @@ public class RecolteController {
 			List<Double> poidsRec = new ArrayList<>(idruchers.size());
 			List<Long> countEssaimsRec = new ArrayList<>(idruchers.size());
 			List<Double> partRec = new ArrayList<>(idruchers.size());
+			List<Double> minRec = new ArrayList<>(idruchers.size());
+			List<Double> maxRec = new ArrayList<>(idruchers.size());
 			Double pTotalRec = 0d;
 			for (Long id : idruchers) {
 				Optional<Rucher> rucherOpt = rucherRepository.findById(id);
@@ -89,6 +91,8 @@ public class RecolteController {
 				Double pRec = ((Long) avgStdPoCo.get(0)[2]) / 1000d;
 				poidsRec.add(pRec);
 				countEssaimsRec.add((Long) avgStdPoCo.get(0)[3]);
+				minRec.add((Long) avgStdPoCo.get(0)[4] / 1000d);
+				maxRec.add((Long) avgStdPoCo.get(0)[5] / 1000d);				
 				pTotalRec += pRec;
 			}
 			for (Long id : idruchers) {
@@ -102,6 +106,8 @@ public class RecolteController {
 			model.addAttribute("poidsRec", poidsRec);
 			model.addAttribute("countEssaimsRec", countEssaimsRec);
 			model.addAttribute("partRec", partRec);
+			model.addAttribute("minRec", minRec);
+			model.addAttribute("maxRec", maxRec);
 			// Par essaim de la récolte, calcul du poids, de l'écart par rapport à la
 			// moyenne du rucher, de l'écart standardisé, de la note et du nombre de
 			// hausses.

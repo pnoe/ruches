@@ -161,7 +161,7 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 	// recolte_hausse where recolte_id = 17777 and rucher_id = 2621 group by
 	// essaim_id;) as xx;
 	@Query(value = """
-			select avg(p), stddev_pop(p), sum(p), count(p) from
+			select avg(p), stddev_pop(p), sum(p), count(p), min(p), max(p) from
 			  (select (sum(poidsAvant) - sum(poidsApres)) as p
 			    from RecolteHausse
 			    where recolte.id = :recolteId and rucher.id = :rucherId

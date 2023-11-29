@@ -50,6 +50,8 @@
 					<th th:text="#{partRecPCent}"></th>
 					<th th:text="#{MoyenneE}"></th>
 					<th th:text="#{EcartTypeE}"></th>
+					<th th:text="#{MinE}"></th>
+					<th th:text="#{MaxE}"></th>
 					<th th:text="#{nbEssaims}"></th>
 				</tr>
 			</thead>
@@ -62,6 +64,8 @@
 					<td class="num" th:text="${#numbers.formatDecimal(partRec[i.index],1,2)}"></td>
 					<td class="num" th:text="${#numbers.formatDecimal(avgRec[i.index],1,2)}"></td>
 					<td class="num" th:text="${#numbers.formatDecimal(stdRec[i.index],1,2)}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(minRec[i.index],1,2)}"></td>
+					<td class="num" th:text="${#numbers.formatDecimal(maxRec[i.index],1,2)}"></td>
 					<td class="num" th:text="${countEssaimsRec[i.index]}"></td>
 				</tr>
 			</tbody>
