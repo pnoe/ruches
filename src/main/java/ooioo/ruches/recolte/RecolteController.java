@@ -141,7 +141,7 @@ public class RecolteController {
 				Double std = stdRec.get(i);
 				Double ec = poids - avg;
 				ecartEss.add(ec);
-				noteEss.add(std == 0d ? 0d : ec / std);
+				noteEss.add(std == 0d ? 0d : Math.round(1000d * ec / std));
 				partRecEss.add(100d * poids / pTotalRec);
 				partRucherEss.add(100d * ((poidsRec.get(i) == 0d) ? 0d : poids / poidsRec.get(i)));
 			}

@@ -297,8 +297,8 @@ public class EssaimService {
 	}
 
 	/**
-	 * Statistiques tableau poids de miel par essaim. Appel à partir de la liste des
-	 * essaims.
+	 * Statistiques tableau poids de miel par essaim, date acquisition, Durée,
+	 * Total, Max, Min, Note, Nb récoltes. Appel à partir de la liste des essaims.
 	 *
 	 * @param rucherId       optionnel pour ne prendre en compte que les hausses de
 	 *                       récolte dans ce rucher.
@@ -336,36 +336,32 @@ public class EssaimService {
 				// Une récolte peut comporter plusieurs ruchers.
 				// Les hausses de récolte d'un essaim proviennent toutes du même rucher.
 				// rrId l'id du rucher de la première hausse de la récolte pour cet essaim.
-				// int pTRec = 0;
-				// int nbERec = 0;
 				Float avgRec = 0f;
 				Float stdRec = 0f;
 				Long rrId = recolteHausseRepository.findRucherIdRecolteEssaim(recolte, essaim);
-				if (rrId != null) {
-					// Si l'essaim a bien une hausse de récolte pour cette récolte et dont le
-					// rucher rrId est bien renseigné.
-					// Les poids de miel récolté sont limités aux hausses de récolte qui sont dans
-					// le rucher rrId.
-
-					// pTRec = recolteHausseRepository.findPTRecolte(recolte.getId(), rrId);
-					// nbERec nombre d'essaims ayant participé à cette
-					// récolte limitée au rucher rrId, pour pouvoir faire la moyenne.
-					// nbERec = recolteHausseRepository.findNbERecolte(recolte.getId(), rrId);
-
-					// Calcul de la moyenne et de l'écart type des poids récoltés par essaim pour la
-					// récolte et pour le rucher rrId.
-					List<Float[]> avgStd = recolteHausseRepository.findAvgStdRecolte(recolte.getId(), rrId);
-					avgRec = (Float) avgStd.get(0)[0];
-					stdRec = (Float) avgStd.get(0)[1];
+				if ((rrId == null) || // l'essaim n'a pas de hausse de récolte pour cette récolte
+						((rucherId != null) && !rucherId.equals(rrId))) // le rucher de cet essaim pour la récolte n'est
+																		// pas celui du filtre // filtre
+				{
+					continue;
 				}
-				Integer poids = (rucherId == null)
-						? recolteHausseRepository.findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId())
-						: recolteHausseRepository.findPoidsMielEssaimRecolteRucher(essaim.getId(), recolte.getId(),
-								rucherId);
-				if (poids != null) {
-					// essaimOK = true, l'essaim a participé à au moins une récolte même si le poids
-					// est égal à 0.
-					essaimOK = true;
+				essaimOK = true; // l'essaim a participé à au moins une récolte même si le poids
+						// est égal à 0.
+				// L'essaim a bien une hausse de récolte pour cette récolte et dont le
+				// rucher rrId est bien renseigné. En cas de filtrage actif, on a rrId=rucherId.
+				// Les poids de miel récoltés sont limités aux hausses de récolte qui sont dans
+				// le rucher rrId.
+				// Calcul de la moyenne et de l'écart type des poids récoltés par essaim pour la
+				// récolte et pour le rucher rrId.
+				List<Float[]> avgStd = recolteHausseRepository.findAvgStdRecolte(recolte.getId(), rrId);
+				avgRec = (Float) avgStd.get(0)[0];
+				stdRec = (Float) avgStd.get(0)[1];
+				Integer poids = recolteHausseRepository.findPoidsMielEssaimRecolteRucher(essaim.getId(),
+						recolte.getId(), rrId);
+				// if (poids != null) {
+				// essaimOK = true, l'essaim a participé à au moins une récolte même si le poids
+				// est égal à 0.
+				// essaimOK = true;
 					pTotal += poids;
 					pMax = Math.max(pMax, poids);
 					pMin = Math.min(pMin, poids);
@@ -376,7 +372,7 @@ public class EssaimService {
 					// On fait la somme des notes de l'essaim et on divisera par le nombe de notes.
 					noteEssaim += note;
 					nbRec++;
-				}
+				// }
 			}
 			if (pMin == Integer.MAX_VALUE) {
 				pMin = 0;
