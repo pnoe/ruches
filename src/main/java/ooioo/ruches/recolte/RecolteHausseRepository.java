@@ -151,7 +151,7 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 			    where recolte.id = :recolteId and rucher.id = :rucherId
 			    group by essaim) as xx
 			""")
-	List<Float[]> findAvgStdRecolte(Long recolteId, Long rucherId);
+	List<Double[]> findAvgStdRecolte(Long recolteId, Long rucherId);
 
 	// Calcule la moyenne et l'écart type des poids produits par les essaims de la
 	// récolte recolteId, dans le rucher rucherId. Et aussi le nombre d'essaims et

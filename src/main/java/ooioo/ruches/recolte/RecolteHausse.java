@@ -2,10 +2,12 @@ package ooioo.ruches.recolte;
 
 import java.math.BigDecimal;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.hausse.Hausse;
@@ -30,17 +32,20 @@ public class RecolteHausse {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
+	@JoinColumn(nullable = false)
 	private Recolte recolte;
 
 	/**
 	 * Poids de la hausse avant récolte, en g. Attention get et set en kg.
 	 */
+	@Column(nullable = false)
 	private Integer poidsAvant = 0;
 
 	/**
 	 * Poids de la hausse après récolte, en g. Attention get et set en kg.
 	 */
+	@Column(nullable = false)
 	private Integer poidsApres = 0;
 
 	/**
@@ -62,8 +67,7 @@ public class RecolteHausse {
 	private Essaim essaim;
 
 	/**
-	 * Le rucher associée à la ruche au moment de la récolte ... en fait avant la
-	 * récolte, au moment de la récolte c'est "Dépôt" !
+	 * Le rucher associée à la ruche pour la récolte.
 	 */
 	@ManyToOne
 	private Rucher rucher;
@@ -83,12 +87,12 @@ public class RecolteHausse {
 	public void setRecolte(Recolte recolte) {
 		this.recolte = recolte;
 	}
-	
-	public Integer getPdsAvantGr()  {
+
+	public Integer getPdsAvantGr() {
 		return poidsAvant;
 	}
 
-	public Integer getPdsApresGr()  {
+	public Integer getPdsApresGr() {
 		return poidsApres;
 	}
 

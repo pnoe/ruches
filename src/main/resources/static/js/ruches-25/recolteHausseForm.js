@@ -32,6 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	function addOpt(elemSel, idNoms, entId) {
 		elemSel.remove(0);
+		// L'option aucune permet de saisir une hausse récolte non 
+		// renseignée pour un des paramètre hausse, ruche, rucher ou essaim.
 		idNoms.unshift({ id: '', nom: 'Aucun(e)' });
 		idNoms.forEach(el => {
 			const opt = document.createElement('option');

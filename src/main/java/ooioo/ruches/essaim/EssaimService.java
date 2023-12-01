@@ -329,50 +329,50 @@ public class EssaimService {
 			Integer pMax = 0; // poids de miel max lors d'une récolte
 			Integer pMin = Integer.MAX_VALUE; // poids de miel min lors d'une récolte
 			boolean essaimOK = false;
-			Float noteEssaim = 0f;
+			Double noteEssaim = 0d;
 			int nbRec = 0;
 			for (Recolte recolte : recoltes) {
 				// Trouver pour cette récolte le rucher correspondant à l'essaim.
 				// Une récolte peut comporter plusieurs ruchers.
 				// Les hausses de récolte d'un essaim proviennent toutes du même rucher.
+				Double avgRec = 0d;
+				Double stdRec = 0d;
 				// rrId l'id du rucher de la première hausse de la récolte pour cet essaim.
-				Float avgRec = 0f;
-				Float stdRec = 0f;
 				Long rrId = recolteHausseRepository.findRucherIdRecolteEssaim(recolte, essaim);
 				if ((rrId == null) || // l'essaim n'a pas de hausse de récolte pour cette récolte
 						((rucherId != null) && !rucherId.equals(rrId))) // le rucher de cet essaim pour la récolte n'est
-																		// pas celui du filtre // filtre
+																		// pas celui du filtre.
 				{
-					continue;
+					continue; // on passe à la récolte suivante.
 				}
 				essaimOK = true; // l'essaim a participé à au moins une récolte même si le poids
-						// est égal à 0.
+				// est égal à 0.
 				// L'essaim a bien une hausse de récolte pour cette récolte et dont le
 				// rucher rrId est bien renseigné. En cas de filtrage actif, on a rrId=rucherId.
 				// Les poids de miel récoltés sont limités aux hausses de récolte qui sont dans
 				// le rucher rrId.
 				// Calcul de la moyenne et de l'écart type des poids récoltés par essaim pour la
-				// récolte et pour le rucher rrId.
-				List<Float[]> avgStd = recolteHausseRepository.findAvgStdRecolte(recolte.getId(), rrId);
-				avgRec = (Float) avgStd.get(0)[0];
-				stdRec = (Float) avgStd.get(0)[1];
+				// récolte et pour le rucher rrId. Ces valeurs sont nécessaires pour calculer la
+				// note de l'essaim pour cette récolte.
+				List<Double[]> avgStd = recolteHausseRepository.findAvgStdRecolte(recolte.getId(), rrId);
+				avgRec = (Double) avgStd.get(0)[0];
+				stdRec = (Double) avgStd.get(0)[1];
 				Integer poids = recolteHausseRepository.findPoidsMielEssaimRecolteRucher(essaim.getId(),
 						recolte.getId(), rrId);
 				// if (poids != null) {
 				// essaimOK = true, l'essaim a participé à au moins une récolte même si le poids
 				// est égal à 0.
 				// essaimOK = true;
-					pTotal += poids;
-					pMax = Math.max(pMax, poids);
-					pMin = Math.min(pMin, poids);
-					// note, la note de l'essaim pour cette récolte dans son rucher.
-					// Ecart simple standardisé : écart par rapport à la moyenne divisé par l'écart
-					// type.
-					Float note = ((stdRec == 0f) ? 0f : (poids - avgRec) / stdRec);
-					// On fait la somme des notes de l'essaim et on divisera par le nombe de notes.
-					noteEssaim += note;
-					nbRec++;
-				// }
+				pTotal += poids;
+				pMax = Math.max(pMax, poids);
+				pMin = Math.min(pMin, poids);
+				// note, la note de l'essaim pour cette récolte dans son rucher.
+				// Ecart simple standardisé : écart par rapport à la moyenne divisé par l'écart
+				// type.
+				Double note = ((stdRec == 0d) ? 0d : (poids - avgRec) / stdRec);
+				// On fait la somme des notes de l'essaim et on divisera par le nombe de notes.
+				noteEssaim += note;
+				nbRec++;
 			}
 			if (pMin == Integer.MAX_VALUE) {
 				pMin = 0;
@@ -381,7 +381,7 @@ public class EssaimService {
 			// tableau.
 			if (essaimOK) {
 				Map<String, String> essaimPoids = new HashMap<>();
-				essaimPoids.put("note", Integer.toString(Math.round(1000 * noteEssaim / nbRec)));
+				essaimPoids.put("note", Long.toString(Math.round(1000d * noteEssaim / nbRec)));
 				essaimPoids.put("nbrec", Integer.toString(nbRec));
 				essaimPoids.put("nom", essaim.getNom());
 				essaimPoids.put("id", essaim.getId().toString());

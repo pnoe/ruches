@@ -86,13 +86,13 @@ public class RecolteController {
 				Optional<Rucher> rucherOpt = rucherRepository.findById(id);
 				ruchers.add(rucherOpt.get());
 				List<Object[]> avgStdPoCo = recolteHausseRepository.findAvgStdSumNbRecolte(recolte.getId(), id);
-				avgRec.add((Double) avgStdPoCo.get(0)[0] / 1000d);
-				stdRec.add((Double) avgStdPoCo.get(0)[1] / 1000d);
+				avgRec.add((Double) avgStdPoCo.get(0)[0] / 1000d); // moyenne des poids des essaims.
+				stdRec.add((Double) avgStdPoCo.get(0)[1] / 1000d); // écart type des poids des essaims.
 				Double pRec = ((Long) avgStdPoCo.get(0)[2]) / 1000d;
-				poidsRec.add(pRec);
+				poidsRec.add(pRec); // somme des poids de miel des essaims.
 				countEssaimsRec.add((Long) avgStdPoCo.get(0)[3]);
-				minRec.add((Long) avgStdPoCo.get(0)[4] / 1000d);
-				maxRec.add((Long) avgStdPoCo.get(0)[5] / 1000d);				
+				minRec.add((Long) avgStdPoCo.get(0)[4] / 1000d); // min poids des essaims.
+				maxRec.add((Long) avgStdPoCo.get(0)[5] / 1000d); // max poids des essaims.
 				pTotalRec += pRec;
 			}
 			for (Long id : idruchers) {
@@ -134,7 +134,7 @@ public class RecolteController {
 				Double poids = ((Long) poidsCount.get(0)[0]) / 1000d;
 				poidsEss.add(poids);
 				countRec.add((Long) poidsCount.get(0)[1]);
-				// Rrouver l'index de rucher.getId() dans idruchers, pour calculer l'écart par
+				// i index de rucher.getId() dans idruchers, pour calculer l'écart par
 				// rapport à la moyenne et la note.
 				int i = idruchers.indexOf(rucher.getId());
 				Double avg = avgRec.get(i);
