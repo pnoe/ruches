@@ -15,6 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
 		return parseFloat(value) >= parseFloat(target.val());
 	}, pdsAvSupPdsAp);
 	$('#recolteHausseForm').validate({
+		errorClass: 'erreur-form',
+		errorPlacement: function(error, element) {
+			error.insertBefore(element.closest('div'));
+		},
 		rules: {
 			poidsAvant: {
 				required: true,

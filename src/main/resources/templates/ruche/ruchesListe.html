@@ -30,9 +30,9 @@
 					aria-hidden="true"></a> &nbsp; <a id="commentaire" href="#" class="bi-chat-text"
 					th:title="#{evenementsCommentaire}" aria-hidden="true"></a>
 			</div>
-			<div class="col">
+			<div class="col-6">
 				<select class="form-control" id="rucher" name="rucher">
-					<option value="" th:text="#{tous}"></option>
+					<option value="" th:text="#{TousRuchers}"></option>
 					<option th:each="rucheropt : ${ruchersNoms}" th:value="${rucheropt}" th:text="${rucheropt}">
 					</option>
 				</select>

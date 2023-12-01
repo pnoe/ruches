@@ -5,13 +5,19 @@
 	<script th:inline="javascript">
 		const pdsAvSupPdsAp = /*[[#{poidsAvantSupPoidsApres}]]*/ null;
 		document.addEventListener('DOMContentLoaded', () => {
-			$('.avant').first().focus();
+			const avant = document.querySelectorAll('input.avant');
+			const apres = document.querySelectorAll('input.apres');
+			avant[0].focus();
 			function validation(event) {
-				const avant = document.querySelectorAll('input.avant');
-				const apres = document.querySelectorAll('input.apres');
 				let err = false;
 				for (let i = 0; i < avant.length; i++) {
-					if (parseFloat(avant[i].value) < parseFloat(apres[i].value)) {
+					// Tous les inputs doivent être renseignés et avant < apres.
+					// On peut faire mettre les champs erronés en couleur et aussi
+					// faire une validation sur keyup des champs. Voir :
+					//  https://developer.mozilla.org/fr/docs/Learn/Forms/Form_validation
+					if ((avant[i].value === '') ||
+						(apres[i].value === '') ||
+						(parseFloat(avant[i].value) < parseFloat(apres[i].value))) {
 						err = true;
 					}
 				}
@@ -22,6 +28,7 @@
 			}
 			const form = document.getElementById('recolteMielForm');
 			form.addEventListener('submit', validation);
+			// Change la couleur des inputs modifiés.
 			const inputs = document.querySelectorAll('input.modif');
 			for (const elem of inputs) {
 				elem.addEventListener('input', function () {
