@@ -11,13 +11,11 @@
 			function validation(event) {
 				let err = false;
 				for (let i = 0; i < avant.length; i++) {
-					// Tous les inputs doivent être renseignés et avant < apres.
+					// Tous les inputs doivent vérifier avant < apres.
 					// On peut faire mettre les champs erronés en couleur et aussi
 					// faire une validation sur keyup des champs. Voir :
 					//  https://developer.mozilla.org/fr/docs/Learn/Forms/Form_validation
-					if ((avant[i].value === '') ||
-						(apres[i].value === '') ||
-						(parseFloat(avant[i].value) < parseFloat(apres[i].value))) {
+					if (parseFloat(avant[i].value) < parseFloat(apres[i].value)) {
 						err = true;
 					}
 				}
@@ -98,11 +96,13 @@
 							th:value="${rHM.recolteHausseId}" /></td>
 					<td th:text="${hausses[itemStat.index].nom}"></td>
 					<td><input type="number" class="modif avant" th:min="${hausses[itemStat.index].poidsVide}" max="80"
-							step="0.001" th:name="|recolteHaussesMiel[${itemStat.index}].poidsAvant|"
-							th:value="${rHM.poidsAvant}" th:data-initval="${rHM.poidsAvant}" /></td>
+							step="0.001" required="required"
+							th:name="|recolteHaussesMiel[${itemStat.index}].poidsAvant|" th:value="${rHM.poidsAvant}"
+							th:data-initval="${rHM.poidsAvant}" /></td>
 					<td><input type="number" class="modif apres" th:min="${hausses[itemStat.index].poidsVide}" max="80"
-							step="0.001" th:name="|recolteHaussesMiel[${itemStat.index}].poidsApres|"
-							th:value="${rHM.poidsApres}" th:data-initval="${rHM.poidsApres}" /></td>
+							step="0.001" required="required"
+							th:name="|recolteHaussesMiel[${itemStat.index}].poidsApres|" th:value="${rHM.poidsApres}"
+							th:data-initval="${rHM.poidsApres}" /></td>
 				</tr>
 			</tbody>
 		</table>
