@@ -9,19 +9,16 @@
 			const apres = document.querySelectorAll('input.apres');
 			avant[0].focus();
 			function validation(event) {
-				let err = false;
 				for (let i = 0; i < avant.length; i++) {
 					// Tous les inputs doivent vérifier avant < apres.
 					// On peut faire mettre les champs erronés en couleur et aussi
 					// faire une validation sur keyup des champs. Voir :
 					//  https://developer.mozilla.org/fr/docs/Learn/Forms/Form_validation
 					if (parseFloat(avant[i].value) < parseFloat(apres[i].value)) {
-						err = true;
+						alert(pdsAvSupPdsAp);
+						event.preventDefault();
+						return;
 					}
-				}
-				if (err) {
-					alert(pdsAvSupPdsAp);
-					event.preventDefault();
 				}
 			}
 			const form = document.getElementById('recolteMielForm');
