@@ -334,11 +334,15 @@ public class EssaimService {
 		List<Double> stdRecList = null;
 		List<Double> poidsRecList = null;
 		List<Double> noteEssList = null;
+		List<Recolte> recolteList = null;
+		List<Rucher> rucherList = null;
 		if (ess != null) {
 			avgRecList = new ArrayList<>();
 			stdRecList = new ArrayList<>();
 			poidsRecList = new ArrayList<>();
 			noteEssList = new ArrayList<>();
+			recolteList = new ArrayList<>();
+			rucherList = new ArrayList<>();
 		}
 
 		DecimalFormat decimalFormat = new DecimalFormat("0.00",
@@ -401,10 +405,13 @@ public class EssaimService {
 				// Si appel pour un essaim unique, on mémorise les valeurs pour la récolte dans
 				// des listes : poids, avgRec, stdRec, note
 				if (ess != null) {
-					avgRecList.add(avgRec);
-					stdRecList.add(stdRec);
+					avgRecList.add(avgRec / 1000d);
+					stdRecList.add(stdRec / 1000d);
 					poidsRecList.add(poids / 1000d);
-					noteEssList.add(note);
+					noteEssList.add(note * 1000d);
+					recolteList.add(recolte);
+					Optional<Rucher> rr = rucherRepository.findById(rrId);
+					rucherList.add(rr.isPresent() ? rr.get() : null);
 				}
 
 				// On fait la somme des notes de l'essaim et on divisera par le nombe de notes.
@@ -457,6 +464,8 @@ public class EssaimService {
 			model.addAttribute("stdRecList", stdRecList);
 			model.addAttribute("poidsRecList", poidsRecList);
 			model.addAttribute("noteEssList", noteEssList);
+			model.addAttribute("recolteList", recolteList);
+			model.addAttribute("rucherList", rucherList);
 		}
 		
 
