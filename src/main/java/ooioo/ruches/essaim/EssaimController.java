@@ -139,8 +139,28 @@ public class EssaimController {
 	@GetMapping("/statistiques")
 	public String statistiques(Model model, @RequestParam(required = false) Long rucherId,
 			@RequestParam(defaultValue = "false") boolean masquerInactif) {
-		essaimService.statistiques(model, rucherId, masquerInactif);
+		essaimService.statistiques(model, rucherId, masquerInactif, null);
 		return "essaim/essaimStatistiques";
+	}
+
+	/**
+	 * Statistiques tableau poids de miel pour un essaim. Appel icône dans page
+	 * détail essaim.
+	 *
+	 * @param essaimId l'essaim dont on veut les statitiques.
+	 */
+	@GetMapping("/statistiques/{essaimId}")
+	public String statistiquesEssaim(Model model, @PathVariable Long essaimId) {
+		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
+		if (essaimOpt.isPresent()) {
+			essaimService.statistiques(model, null, false, essaimOpt.get());
+			return "essaim/essaimStat";
+		} else {
+			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
+			model.addAttribute(Const.MESSAGE,
+					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
+			return Const.INDEX;
+		}
 	}
 
 	/**

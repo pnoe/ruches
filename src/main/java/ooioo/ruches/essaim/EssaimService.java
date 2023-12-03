@@ -304,16 +304,43 @@ public class EssaimService {
 	 *                       récolte dans ce rucher.
 	 * @param masquerInactif true pour masquer les essaims inactifs.
 	 */
-	void statistiques(Model model, Long rucherId, boolean masquerInactif) {
+	void statistiques(Model model, Long rucherId, boolean masquerInactif, Essaim ess) {
 		// pour équivalence appel Get ou Post avec rucherId = 0
 		if ((rucherId != null) && rucherId.equals(0L)) {
 			rucherId = null;
 		}
 		List<Recolte> recoltes = recolteRepository.findAll();
-		List<Essaim> essaims = masquerInactif ? essaimRepository.findByActif(true) : essaimRepository.findAll();
+
+		// Si essaim unique, on crée une liste avec cet essaim, sinon on cherche tous
+		// les essaims actifs ou inactifs.
+		List<Essaim> essaims;
+		if (ess == null) {
+			// List<Essaim> essaims =
+			essaims = masquerInactif ? essaimRepository.findByActif(true) : essaimRepository.findAll();
+		} else {
+			essaims = new ArrayList<>();
+			essaims.add(ess);
+		}
+		// Déclarer les listes pour les poids, avd, std, note des récoltes de l'essaim.
+
 		// Liste essaimsPoids des essaims ayant participé à des récoltes :
-		// nom, id, dateAcquisition, duree, poids pMoyen, pTotal, pMax, pMin et note.
+		// nom, id, dateAcquisition, duree, poids pMoyen, pTotal, pMax, pMin, note,
+		// nbRec.
 		List<Map<String, String>> essaimsPoids = new ArrayList<>();
+
+		// Si essaim unique, liste des récoltes de l'essaim avec moyenne, écart type,
+		// poids, note.
+		List<Double> avgRecList = null;
+		List<Double> stdRecList = null;
+		List<Double> poidsRecList = null;
+		List<Double> noteEssList = null;
+		if (ess != null) {
+			avgRecList = new ArrayList<>();
+			stdRecList = new ArrayList<>();
+			poidsRecList = new ArrayList<>();
+			noteEssList = new ArrayList<>();
+		}
+
 		DecimalFormat decimalFormat = new DecimalFormat("0.00",
 				new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
 		// Une note par essaim, égale à la moyenne des notes obtenue dans chaque
@@ -370,6 +397,16 @@ public class EssaimService {
 				// Ecart simple standardisé : écart par rapport à la moyenne divisé par l'écart
 				// type.
 				Double note = ((stdRec == 0d) ? 0d : (poids - avgRec) / stdRec);
+
+				// Si appel pour un essaim unique, on mémorise les valeurs pour la récolte dans
+				// des listes : poids, avgRec, stdRec, note
+				if (ess != null) {
+					avgRecList.add(avgRec);
+					stdRecList.add(stdRec);
+					poidsRecList.add(poids / 1000d);
+					noteEssList.add(note);
+				}
+
 				// On fait la somme des notes de l'essaim et on divisera par le nombe de notes.
 				noteEssaim += note;
 				nbRec++;
@@ -411,6 +448,18 @@ public class EssaimService {
 		model.addAttribute("rucherIdNom", rucherRepository.findAllProjectedIdNomByOrderByNom());
 		model.addAttribute("rucherId", rucherId);
 		model.addAttribute("masquerInactif", masquerInactif);
+
+		
+		
+		if (ess != null) {
+			model.addAttribute("essaim", ess);
+			model.addAttribute("avgRecList", avgRecList);
+			model.addAttribute("stdRecList", stdRecList);
+			model.addAttribute("poidsRecList", poidsRecList);
+			model.addAttribute("noteEssList", noteEssList);
+		}
+		
+
 	}
 
 	/**
