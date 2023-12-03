@@ -2,25 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script>
-		/* globals DataTable */
-		document.addEventListener('DOMContentLoaded', () => {
-			new DataTable('#ruchers', {searching: false, paging: false, info: false});
-			new DataTable('#essaims', {
-				// Tri par rucher, puis par ruche.
-				// https://datatables.net/reference/option/order
-				// https://datatables.net/reference/option/stateSave
-				// Si l'ordre est enregistré par un clic utilisateur, alors order n'est plus appliqué
-				// Attention : garder les espaces entre les [
-				stateSave: false,
-				order: [ [1, 'asc'], [0, 'asc'] ],
-				scrollX: true,
-			});
-		});
-	</script>
+	<script th:replace="~{include :: jsruches}"></script>
 </head>
 
-<body>
+<body th:with="rs=(${#lists.size(ruchers)} > 1)">
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<br />
 	<br />
@@ -38,7 +23,7 @@
 				<a th:href="@{#{urldoc}+'13359_3141829358'}" class="bi-book" th:title="#{Doc}" target="_blank"
 					aria-hidden="true"></a>
 			</div>
-			
+
 		</div>
 	</div>
 	<div class="container-fluid table-responsive">
@@ -47,7 +32,7 @@
 				<tr>
 					<th th:text="#{rucher}"></th>
 					<th th:text="#{poidsMielHausses}"></th>
-					<th th:text="#{partRecPCent}"></th>
+					<th th:if="${rs}" th:text="#{partRecPCent}"></th>
 					<th th:text="#{MoyenneE}"></th>
 					<th th:text="#{EcartTypeE}"></th>
 					<th th:text="#{MinE}"></th>
@@ -61,7 +46,7 @@
 						<a th:href="@{'/rucher/'+${idNom.id}}" th:text="${idNom.nom}"></a>
 					</td>
 					<td class="num" th:text="${#numbers.formatDecimal(poidsRec[i.index],1,2)}"></td>
-					<td class="num" th:text="${#numbers.formatDecimal(partRec[i.index],1,2)}"></td>
+					<td th:if="${rs}" class="num" th:text="${#numbers.formatDecimal(partRec[i.index],1,2)}"></td>
 					<td class="num" th:text="${#numbers.formatDecimal(avgRec[i.index],1,2)}"></td>
 					<td class="num" th:text="${#numbers.formatDecimal(stdRec[i.index],1,2)}"></td>
 					<td class="num" th:text="${#numbers.formatDecimal(minRec[i.index],1,2)}"></td>
@@ -80,7 +65,7 @@
 					<th th:text="#{rucher}"></th>
 					<th th:text="#{poidsMielHausses}"></th>
 					<th th:text="#{partRecPCent}"></th>
-					<th th:if="${#lists.size(ruchers) > 1}" th:text="#{partRrucherPCent}"></th>
+					<th th:if="${rs}" th:text="#{partRrucherPCent}"></th>
 					<th th:text="#{nbHausses}"></th>
 					<th th:text="#{EcartMoyenne}"></th>
 					<th th:text="#{Note}"></th>
@@ -94,8 +79,7 @@
 					<td th:text="${ruchersX[i.index].nom}"></td>
 					<td th:text="${poidsEss[i.index]}"></td>
 					<td th:text="${#numbers.formatDecimal(partRecEss[i.index],1,2)}"></td>
-					<td th:if="${#lists.size(ruchers) > 1}"
-						th:text="${#numbers.formatDecimal(partRucherEss[i.index],1,2)}"></td>
+					<td th:if="${rs}" th:text="${#numbers.formatDecimal(partRucherEss[i.index],1,2)}"></td>
 					<td th:text="${countRec[i.index]}"></td>
 					<td th:text="${#numbers.formatDecimal(ecartEss[i.index],1,2)}"></td>
 					<td th:text="${#numbers.formatDecimal(noteEss[i.index],1,2)}"></td>
