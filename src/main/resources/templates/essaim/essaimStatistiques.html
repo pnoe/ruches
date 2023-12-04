@@ -54,9 +54,7 @@
 		<form action="#" th:action="@{/essaim/statistiques}" method="get" id="rucherForm">
 			<div class="mb-1 row">
 				<label for="rucherId" th:text="#{rucher}" class="col-sm-1 col-form-label"></label>
-
 				<div class="col-sm-2">
-
 					<select class="form-control" id="rucherId" name="rucherId">
 						<option th:text="#{tous}" value="0" th:selected="0 == (${rucherId}==null?'0':${rucherId})">
 						</option>
@@ -100,7 +98,8 @@
 					<td th:text="${essaimPoids.pMax}"></td>
 					<td th:text="${essaimPoids.pMin}"></td>
 					<td th:if="${rucherId == null}" th:text="${essaimPoids.pMoyen}"></td>
-					<td th:text="${essaimPoids.note}"></td>
+					<td><a th:href="@{'/essaim/statistiques/'+${essaimPoids.id}}" th:text="${essaimPoids.note}"></a>
+					</td>
 					<td th:text="${essaimPoids.nbrec}"></td>
 				</tr>
 			</tbody>
