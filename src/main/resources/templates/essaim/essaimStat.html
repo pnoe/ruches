@@ -28,7 +28,7 @@
 			<div class="col">
 				<a href="#" class="bi-question-lg" data-bs-toggle="popover" data-bs-trigger="focus" tabindex="0"
 					role="button" th:attr="data-bs-content=#{aideStatistiqueEssaim}"></a>
-				<a th:href="@{#{urldoc}+'1084_1613789997'}" class="bi-book" th:title="#{Doc}" target="_blank"
+				<a th:href="@{#{urldoc}+'12438_875194337'}" class="bi-book" th:title="#{Doc}" target="_blank"
 					aria-hidden="true"></a>
 			</div>
 		</div>
@@ -37,7 +37,6 @@
 		<table class="table table-bordered table-striped table-sm" id="essaim">
 			<thead>
 				<tr>
-					<th th:text="#{essaim}"></th>
 					<th th:text="#{dateAcquisition}"></th>
 					<th th:unless="${masquerInactif}" th:text="#{dispersion}"></th>
 					<th th:if="${rucherId == null}" th:text="#{Duree}"></th>
@@ -51,7 +50,6 @@
 			</thead>
 			<tbody>
 				<tr th:each="essaimPoids : ${essaimsPoids}">
-					<td><a th:href="@{'/essaim/'+${essaimPoids.id}}" th:text="${essaimPoids.nom}"></a></td>
 					<td th:text="${essaimPoids.dateAcquisition}"></td>
 					<td th:unless="${masquerInactif}" th:text="${essaimPoids.dateDispersion}"></td>
 					<td th:if="${rucherId == null}" th:text="${essaimPoids.duree}"></td>
