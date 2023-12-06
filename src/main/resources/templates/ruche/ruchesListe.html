@@ -51,7 +51,6 @@
 					<th th:if="${session.voirInactif}" th:text="#{active}"></th>
 					<th th:text="#{dateAcquisition}"></th>
 					<th th:text="#{poidsVide}"></th>
-					<th th:text="#{nbCadres}"></th>
 					<th th:text="#{nbCadresMax}"></th>
 					<th th:text="#{type}"></th>
 					<th th:text="#{Hausses}"></th>
@@ -72,7 +71,6 @@
 					<td th:if="${session.voirInactif}" th:text="${ruche.active}? #{oui} : #{non}"></td>
 					<td th:text="${ruche.dateAcquisition}"></td>
 					<td class="num" th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
-					<td class="num" th:text="${listeEvenCadre[rucheStat.index]?.valeur}"></td>
 					<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
 					<td th:text="${ruche.type?.nom}"></td>
 					<td class="num" th:text="${nbHausses[rucheStat.index]}"></td>

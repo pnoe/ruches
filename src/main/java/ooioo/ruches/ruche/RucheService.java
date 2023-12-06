@@ -133,7 +133,7 @@ public class RucheService {
 		int nbr = ruches.size();
 		List<Integer> nbHausses = new ArrayList<>(nbr);
 		List<String> dateAjoutRucher = new ArrayList<>(nbr);
-		List<Evenement> listeEvenCadre = new ArrayList<>(nbr);
+		// List<Evenement> listeEvenCadre = new ArrayList<>(nbr);
 		// Liste des noms de ruchers pour filtre sur colonne rucher
 		List<String> ruchersNoms = new ArrayList<>();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -147,11 +147,11 @@ public class RucheService {
 			Evenement evenAjoutRucher = evenementRepository.findFirstByRucheAndRucherAndTypeOrderByDateDesc(ruche,
 					ruche.getRucher(), TypeEvenement.RUCHEAJOUTRUCHER);
 			dateAjoutRucher.add((evenAjoutRucher == null) ? "" : evenAjoutRucher.getDate().format(formatter));
-			listeEvenCadre.add(evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
-					TypeEvenement.RUCHECADRE));
+		//	listeEvenCadre.add(evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
+			//		TypeEvenement.RUCHECADRE));
 		}
 		model.addAttribute("dateAjoutRucher", dateAjoutRucher);
-		model.addAttribute("listeEvenCadre", listeEvenCadre);
+		// model.addAttribute("listeEvenCadre", listeEvenCadre);
 		model.addAttribute(Const.NBHAUSSES, nbHausses);
 		model.addAttribute(Const.RUCHES, ruches);
 		Collections.sort(ruchersNoms);
@@ -161,7 +161,10 @@ public class RucheService {
 			List<List<Hausse>> haussesRuches = new ArrayList<>(nbr);
 			List<List<Evenement>> evensHaussesRuches = new ArrayList<>(nbr);
 			List<Evenement> evensPoidsRuches = new ArrayList<>(nbr);
+			List<Evenement> listeEvenCadre = new ArrayList<>(nbr);
 			for (Ruche ruche : ruches) {
+				listeEvenCadre.add(evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
+						TypeEvenement.RUCHECADRE));
 				// Les 3 derniers événements de la ruche (hors HAUSSEPOSERUCHE, RUCHEPESEE et
 				// RUCHECADRE).
 				listeEvensCommentaireEssaim.add(evenementRepository.find3EveListePlus(ruche));
@@ -178,6 +181,7 @@ public class RucheService {
 				evensPoidsRuches.add(
 						evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche, TypeEvenement.RUCHEPESEE));
 			}
+			model.addAttribute("listeEvenCadre", listeEvenCadre);
 			model.addAttribute("listeEvensCommentaireEsaim", listeEvensCommentaireEssaim);
 			model.addAttribute(Const.HAUSSES, haussesRuches);
 			model.addAttribute("evensHaussesRuches", evensHaussesRuches);
