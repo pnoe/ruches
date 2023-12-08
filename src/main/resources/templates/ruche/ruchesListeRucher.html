@@ -53,8 +53,8 @@
 					<th th:text="#{COMMENTAIRERUCHE}"></th>
 				</tr>
 			</thead>
-			<tbody>
-				<tr th:each="ruche : ${ruches}">
+			<tbody th:with="f='dd/MM/yyyy'">
+				<tr th:each="ruche : ${ruches}"  th:with="ec=${listeEvenCadre[rucheStat.index]}">
 					<td th:text="${ordreRuche[rucheStat.index]}"></td>
 					<td><a th:href="@{'/ruche/'+${ruche.id}}" th:text="${ruche.nom}"></a></td>
 					<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}" th:text="${ruche.essaim?.nom}"></a></td>
@@ -63,7 +63,9 @@
 					<td th:if="${session.voirInactif}" th:text="${ruche.active}? #{oui} : #{non}"></td>
 					<td th:text="${ruche.dateAcquisition}"></td>
 					<td class="num" th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
-					<td class="num" th:text="${listeEvenCadre[rucheStat.index]?.valeur}"></td>
+					<td class="num"
+						th:text="${ec == null}?'':${#numbers.formatInteger(ec.valeur,2)}+' '+${#temporals.format(ec.date, f)}+' '+${ec.commentaire}">
+					</td>
 					<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
 					<td th:text="${ruche.type?.nom}"></td>
 					<td class="num" th:text="${nbHausses[rucheStat.index]}"></td>

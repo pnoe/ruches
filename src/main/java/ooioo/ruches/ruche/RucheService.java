@@ -147,8 +147,8 @@ public class RucheService {
 			Evenement evenAjoutRucher = evenementRepository.findFirstByRucheAndRucherAndTypeOrderByDateDesc(ruche,
 					ruche.getRucher(), TypeEvenement.RUCHEAJOUTRUCHER);
 			dateAjoutRucher.add((evenAjoutRucher == null) ? "" : evenAjoutRucher.getDate().format(formatter));
-		//	listeEvenCadre.add(evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
-			//		TypeEvenement.RUCHECADRE));
+			// listeEvenCadre.add(evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
+			// TypeEvenement.RUCHECADRE));
 		}
 		model.addAttribute("dateAjoutRucher", dateAjoutRucher);
 		// model.addAttribute("listeEvenCadre", listeEvenCadre);
@@ -163,8 +163,9 @@ public class RucheService {
 			List<Evenement> evensPoidsRuches = new ArrayList<>(nbr);
 			List<Evenement> listeEvenCadre = new ArrayList<>(nbr);
 			for (Ruche ruche : ruches) {
-				listeEvenCadre.add(evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
-						TypeEvenement.RUCHECADRE));
+				listeEvenCadre.add(ruche.getEssaim() == null ? null
+						: evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(ruche.getEssaim(),
+								TypeEvenement.RUCHECADRE));
 				// Les 3 derniers événements de la ruche (hors HAUSSEPOSERUCHE, RUCHEPESEE et
 				// RUCHECADRE).
 				listeEvensCommentaireEssaim.add(evenementRepository.find3EveListePlus(ruche));
@@ -192,7 +193,9 @@ public class RucheService {
 	/*
 	 * Liste des ruches d'un rucher avec ordre de parcours.
 	 *
-	 * @param parcours liste des ids des ruches ordonnés selon le parcours le plus court.
+	 * @param parcours liste des ids des ruches ordonnés selon le parcours le plus
+	 * court.
+	 * 
 	 * @param plus true pour liste détaillée.
 	 */
 	void listePlusRucher(HttpSession session, Model model, Rucher rucher, List<Long> parcours, boolean plus) {
@@ -234,8 +237,9 @@ public class RucheService {
 			Evenement evenAjoutRucher = evenementRepository.findFirstByRucheAndRucherAndTypeOrderByDateDesc(ruche,
 					ruche.getRucher(), TypeEvenement.RUCHEAJOUTRUCHER);
 			dateAjoutRucher.add((evenAjoutRucher == null) ? "" : evenAjoutRucher.getDate().format(formatter));
-			listeEvenCadre.add(evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
-					TypeEvenement.RUCHECADRE));
+			listeEvenCadre.add(ruche.getEssaim() == null ? null
+					: evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(ruche.getEssaim(),
+							TypeEvenement.RUCHECADRE));
 		}
 		model.addAttribute("ordreRuche", ordreRuche);
 		model.addAttribute("dateAjoutRucher", dateAjoutRucher);

@@ -1,8 +1,10 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org">
 
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:inline="javascript">
 		const personneLogins = /*[[${personneLogins}]]*/null;
 		const loginexiste = /*[[#{loginexiste}]]*/null;
 		const personneEmails = /*[[${personneEmails}]]*/null;
@@ -64,56 +66,58 @@
 				</h1>
 				<h1 class="item" th:if="${personne.id}">
 					<th:block th:text="#{modification}"></th:block>
-					<a th:href="@{'/personne/'+${personne.id}}" th:text="#{personne} + ' ' + ${personne.nom}"></a>
+					<a th:href="@{'/personne/'+${personne.id}}"
+						th:text="#{personne} + ' ' + ${personne.nom}"></a>
 				</h1>
 			</div>
 		</div>
 	</div>
-	<form action="#" th:action="@{/personne/sauve}" th:object="${personne}" method="post" id="personneForm">
-		<input type="hidden" th:field="*{id}" />
-		<input type="hidden" th:field="*{version}" />
-		<input type="hidden" sec:authorize="!hasRole('ROLE_admin')" th:field="*{roles}" />
+	<form action="#" th:action="@{/personne/sauve}" th:object="${personne}"
+		method="post" id="personneForm">
+		<input type="hidden" th:field="*{id}" /> <input type="hidden"
+			th:field="*{version}" /> <input type="hidden"
+			sec:authorize="!hasRole('ROLE_admin')" th:field="*{roles}" />
 		<div th:replace="~{includeForm :: nomField}"></div>
 		<div class="form-floating mb-3">
-			<input class="form-control" type="text" th:field="*{prenom}" placeholder="" th:errorclass="fieldError"
-				maxlength="35" />
-			<label class="form-label" th:text="#{prenom}" for="prenom"></label>
+			<input class="form-control" type="text" th:field="*{prenom}"
+				placeholder="" th:errorclass="fieldError" maxlength="35" /> <label
+				class="form-label" th:text="#{prenom}" for="prenom"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<textarea class="form-control" placeholder="" type="text" th:field="*{tel}" th:errorclass="fieldError"
-				maxlength="255" />
+			<textarea class="form-control" placeholder="" th:field="*{tel}"
+				th:errorclass="fieldError" maxlength="255"></textarea>
 			<label class="form-label" th:text="#{telSep}" for="tel"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<input class="form-control" placeholder="" type="text" th:field="*{email}" th:errorclass="fieldError"
-				maxlength="255" />
-			<label class="form-label" th:text="#{email}" for="email"></label>
+			<input class="form-control" placeholder="" type="text"
+				th:field="*{email}" th:errorclass="fieldError" maxlength="255" /> <label
+				class="form-label" th:text="#{email}" for="email"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<input placeholder="" class="form-control" type="text" th:field="*{adresse}" th:errorclass="fieldError"
-				maxlength="255" />
+			<input placeholder="" class="form-control" type="text"
+				th:field="*{adresse}" th:errorclass="fieldError" maxlength="255" />
 			<label class="form-label" th:text="#{adresse}" for="adresse"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<input placeholder="" class="form-control" type="text" th:field="*{login}" th:errorclass="fieldError"
-				maxlength="35" />
-			<label class="form-label" th:text="#{login}" for="login"></label>
+			<input placeholder="" class="form-control" type="text"
+				th:field="*{login}" th:errorclass="fieldError" maxlength="35" /> <label
+				class="form-label" th:text="#{login}" for="login"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<input placeholder="" class="form-control" type="password" th:field="*{password}" th:errorclass="fieldError"
-				maxlength="35" />
+			<input placeholder="" class="form-control" type="password"
+				th:field="*{password}" th:errorclass="fieldError" maxlength="35" />
 			<label class="form-label" th:text="#{motDePasse}" for="password"></label>
 			<div class="form-check mb-3">
-				<input class="form-check-input" type="checkbox" id="showhide" name="showhide" />
-				<label class="form-check-label" for="showhide" th:text="#{affichermotdepasse}"></label>
+				<input class="form-check-input" type="checkbox" id="showhide"
+					name="showhide" /> <label class="form-check-label" for="showhide"
+					th:text="#{affichermotdepasse}"></label>
 			</div>
 		</div>
 		<div class="form-floating mb-3" sec:authorize="hasRole('ROLE_admin')">
 			<select class="form-control" th:field="*{roles}">
 				<option th:text="#{aucun}" value=""></option>
 				<option th:text="admin" value="admin"></option>
-			</select>
-			<label class="form-label" th:text="#{roles}" for="roles"></label>
+			</select> <label class="form-label" th:text="#{roles}" for="roles"></label>
 		</div>
 		<div th:replace="~{includeForm :: activeField}"></div>
 		<div th:replace="~{includeForm :: BtnForm}"></div>

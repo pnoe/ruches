@@ -544,8 +544,6 @@ public class RucherController {
 			}
 			model.addAttribute("nbHausses", nbHausses);
 			List<Integer> listNbHausses = new ArrayList<>();
-
-			
 			// Nonmbre de cadres dans le dernier événement cadre
 			List<Evenement> listeEvenCadre = new ArrayList<>();
 			for (Ruche ruche : ruches) {
@@ -556,16 +554,6 @@ public class RucherController {
 								TypeEvenement.RUCHECADRE));
 			}
 			model.addAttribute("listeEvenCadre", listeEvenCadre);
-
-			/*
-			 * Collection<String> nbCadres = new ArrayList<>(); for (Ruche ruche : ruches) {
-			 * listNbHausses.add(hausseRepository.countByRucheId(ruche.getId())); Evenement
-			 * evenCadres =
-			 * evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
-			 * TypeEvenement.RUCHECADRE); nbCadres.add((evenCadres == null) ? "" :
-			 * evenCadres.getValeur()); } model.addAttribute("nbCadres", nbCadres);
-			 */
-
 			model.addAttribute("listNbHausses", listNbHausses);
 			// Si des hausses de récolte référencent ce rucher, on ne pourra le supprimer
 			model.addAttribute("recolteHausses", recolteHausseRepository.existsByRucher(rucher));

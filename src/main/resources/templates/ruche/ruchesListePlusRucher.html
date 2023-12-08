@@ -82,7 +82,7 @@
 						th:text="${ep == null}?'':${#numbers.formatDecimal(ep.valeur,1,1,'DEFAULT')}+' '+${#temporals.format(ep.date, f)}+' '+${ep.commentaire}">
 					</td>
 					<td class="num"
-						th:text="${ec == null}?'':${ec.valeur}+' '+${#temporals.format(ec.date, f)}+' '+${ec.commentaire}">
+						th:text="${ec == null}?'':${#numbers.formatInteger(ec.valeur,2)}+' '+${#temporals.format(ec.date, f)}+' '+${ec.commentaire}">
 					</td>
 					<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
 					<td th:text="${ruche.type?.nom}"></td>
