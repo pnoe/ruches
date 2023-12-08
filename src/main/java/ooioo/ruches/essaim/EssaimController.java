@@ -289,11 +289,16 @@ public class EssaimController {
 	@GetMapping("/liste")
 	public String liste(HttpSession session, Model model) {
 		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
-		if (voirInactif != null && (boolean) voirInactif) {
-			model.addAttribute(ESSAIMSRRR, essaimRepository.findEssaimRucheRucherOrderByNom());
-		} else {
-			model.addAttribute(ESSAIMSRRR, essaimRepository.findEssaimActifRucheRucherOrderByNom());
+		List<EssaimRucheRucher> eRR = (voirInactif != null && (boolean) voirInactif)
+				? essaimRepository.findEssaimRucheRucherOrderByNom()
+				: essaimRepository.findEssaimActifRucheRucherOrderByNom();
+		List<Evenement> listeEvenCadre = new ArrayList<>();
+		for (EssaimRucheRucher e : eRR) {
+			listeEvenCadre.add(evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(e.essaim(),
+					TypeEvenement.RUCHECADRE));
 		}
+		model.addAttribute("listeEvenCadre", listeEvenCadre);
+		model.addAttribute(ESSAIMSRRR, eRR);
 		return "essaim/essaimsListe";
 	}
 

@@ -96,7 +96,7 @@ public class RucherController {
 	private boolean ignCarteLiscense;
 	@Value("${ruche.dist.max}")
 	private float distMaxRuche;
-	
+
 	/**
 	 * Calcul des distances entre les ruchers par appel de l'api ign de calcul
 	 * d'itinéraire.
@@ -544,16 +544,28 @@ public class RucherController {
 			}
 			model.addAttribute("nbHausses", nbHausses);
 			List<Integer> listNbHausses = new ArrayList<>();
+
+			
 			// Nonmbre de cadres dans le dernier événement cadre
-			Collection<String> nbCadres = new ArrayList<>();
+			List<Evenement> listeEvenCadre = new ArrayList<>();
 			for (Ruche ruche : ruches) {
 				// Compte du nombre de hausses de chaque ruche
 				listNbHausses.add(hausseRepository.countByRucheId(ruche.getId()));
-				Evenement evenCadres = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
-						TypeEvenement.RUCHECADRE);
-				nbCadres.add((evenCadres == null) ? "" : evenCadres.getValeur());
+				listeEvenCadre.add(ruche.getEssaim() == null ? null
+						: evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(ruche.getEssaim(),
+								TypeEvenement.RUCHECADRE));
 			}
-			model.addAttribute("nbCadres", nbCadres);
+			model.addAttribute("listeEvenCadre", listeEvenCadre);
+
+			/*
+			 * Collection<String> nbCadres = new ArrayList<>(); for (Ruche ruche : ruches) {
+			 * listNbHausses.add(hausseRepository.countByRucheId(ruche.getId())); Evenement
+			 * evenCadres =
+			 * evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
+			 * TypeEvenement.RUCHECADRE); nbCadres.add((evenCadres == null) ? "" :
+			 * evenCadres.getValeur()); } model.addAttribute("nbCadres", nbCadres);
+			 */
+
 			model.addAttribute("listNbHausses", listNbHausses);
 			// Si des hausses de récolte référencent ce rucher, on ne pourra le supprimer
 			model.addAttribute("recolteHausses", recolteHausseRepository.existsByRucher(rucher));

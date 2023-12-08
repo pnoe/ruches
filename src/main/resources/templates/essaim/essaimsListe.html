@@ -65,11 +65,12 @@
 					<th th:text="#{souche}"></th>
 					<th th:text="#{agressivite}"></th>
 					<th th:text="#{proprete}"></th>
+					<th th:text="#{nbCadres}"></th>
 					<th th:text="#{commentaire}"></th>
 				</tr>
 			</thead>
-			<tbody>
-				<tr th:each="eRRr : ${EssaimsRRr}">
+			<tbody th:with="f='dd/MM/yyyy'">
+				<tr th:each="eRRr, i : ${EssaimsRRr}" th:with="ec=${listeEvenCadre[i.index]}">
 					<td><a th:href="@{'/essaim/'+${eRRr.essaim.id}}" th:text="${eRRr.essaim.nom}"></a></td>
 					<td><a th:href="@{'/ruche/'+ ${eRRr.idRuche}}" th:text="${eRRr.nomRuche}"></a></td>
 					<td><a th:href="@{'/rucher/'+ ${eRRr.idRucher}}" th:text="${eRRr.nomRucher}"></a></td>
@@ -88,6 +89,9 @@
 					</td>
 					<td th:text="${eRRr.essaim.agressivite}"></td>
 					<td th:text="${eRRr.essaim.proprete}"></td>
+					<td class="num"
+						th:text="${ec == null}?'':${#numbers.formatInteger(ec.valeur,2)}+' '+${#temporals.format(ec.date, f)}+' '+${ec.commentaire}">
+					</td>
 					<td th:text="${eRRr.essaim.commentaire}"></td>
 				</tr>
 			</tbody>

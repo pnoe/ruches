@@ -29,8 +29,7 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 	List<Essaim> findByRucherId(Long rucherId);
 
 	// Liste ordonnée par nom d'essaims, des essaims, id et nom de la ruche associée
-	// et
-	// id et nom de son rucher.
+	// et id et nom de son rucher.
 	// https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#projections
 	@Query(value = """
 			select new ooioo.ruches.essaim.EssaimRucheRucher(essaim, ruche.id, ruche.nom, rucher.id, rucher.nom)
@@ -39,7 +38,7 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 			    left join Rucher rucher on ruche.rucher.id = rucher.id
 			  where essaim.actif = true order by essaim.nom
 			""")
-	Iterable<EssaimRucheRucher> findEssaimActifRucheRucherOrderByNom();
+	List<EssaimRucheRucher> findEssaimActifRucheRucherOrderByNom();
 
 	// Liste ordonnée par nom d'essaims, des id et nom de la ruche associée et
 	// id et nom de son rucher.
@@ -51,7 +50,7 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 			    left join Rucher rucher on ruche.rucher.id = rucher.id
 			  order by essaim.nom
 			""")
-	Iterable<EssaimRucheRucher> findEssaimRucheRucherOrderByNom();
+	List<EssaimRucheRucher> findEssaimRucheRucherOrderByNom();
 
 	Iterable<IdNom> findAllProjectedIdNomByOrderByNom();
 
