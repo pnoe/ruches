@@ -19,10 +19,8 @@
 		const urlRecHDepot = /*[[@{/recolte/haussesDepot/}]]*/null;
 		const recId = /*[[${recolte.id}]]*/null;
 		const total = /*[[#{Total}]]*/null;
-
 		const pasDeHausses = /*[[${#lists.isEmpty(detailsRecolte)}]]*/null;
 		const pasDeHaussesTxt = /*[[#{pasDeHaussesTxt}]]*/null;
-
 	</script>
 </head>
 
@@ -41,7 +39,7 @@
 			</div>
 			<div class="col">
 				<a th:href="@{'/recolte/modifie/'+${recolte.id}}" class="bi-pencil" th:title="#{modifier}"
-					aria-hidden="true"></a> &nbsp; <a th:href="@{'/recolte/choixHausses/'+${recolte.id}}"
+					aria-hidden="true"></a> &nbsp; <a th:href="@{'/recolte/choixHausses/'+${recolte.id}+'/false'}"
 					class="bi-justify" th:title="#{choixHausesRecolte}" aria-hidden="true"></a>
 				<a id="haussesMiel" th:href="@{'/recolte/haussesMiel/'+${recolte.id}}" class="bi-grid-3x2-gap"
 					th:title="#{SaisiePoidsMiel}" aria-hidden="true"></a>

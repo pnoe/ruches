@@ -1,10 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsChart}"></script>
-	<script th:replace="~{include :: jsruches}"></script>
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsChart}"></script>
+<script th:replace="~{include :: jsruches}"></script>
+<script th:inline="javascript">
 		/* exported longitude,latitude,openweathermapKey,urlPrefix,Chart */
 		/* globals rucherMeteo */
 		const longitude = /*[[${rucher.longitude}]]*/ null;
@@ -15,23 +16,21 @@
 			rucherMeteo();
 		});
 	</script>
-	<style>
-		th {
-			background-color: aliceblue;
-		}
+<style>
+th {
+	background-color: aliceblue;
+}
 
-		.wi {
-			font-size: 20px;
-		}
+.wi {
+	font-size: 20px;
+}
 
-		.scrollx {
-			overflow-x: auto;
-		}
-	</style>
-	<link th:replace="~{include :: weather-icons}">
-	</link>
-	<link th:replace="~{include :: weather-icons-wind}">
-	</link>
+.scrollx {
+	overflow-x: auto;
+}
+</style>
+<link th:replace="~{include :: weather-icons}" />
+<link th:replace="~{include :: weather-icons-wind}" />
 </head>
 
 <body>
@@ -44,7 +43,8 @@
 			<div class="col">
 				<h1 class="item">
 					<th:block th:text="#{meteo}+' '"></th:block>
-					<a th:href="@{'/rucher/'+${rucher.id}}" th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+					<a th:href="@{'/rucher/'+${rucher.id}}"
+						th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
 				</h1>
 			</div>
 		</div>
@@ -52,11 +52,13 @@
 	<div class="accordion" id="accordion">
 		<div class="accordion-item">
 			<h1 class="accordion-header">
-				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-					data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse0" th:text="#{aujourdhui}">
-				</button>
+				<button class="accordion-button collapsed" type="button"
+					data-bs-toggle="collapse" data-bs-target="#collapse1"
+					aria-expanded="true" aria-controls="collapse0"
+					th:text="#{aujourdhui}"></button>
 			</h1>
-			<div id="collapse1" class="accordion-collapse collapse show" data-bs-parent="#accordion">
+			<div id="collapse1" class="accordion-collapse collapse show"
+				data-bs-parent="#accordion">
 				<div class="accordion-body scrollx">
 					<table class="table">
 						<thead>
@@ -144,11 +146,13 @@
 		</div>
 		<div class="accordion-item">
 			<h1 class="accordion-header">
-				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-					data-bs-target="#collapse2" aria-expanded="true" aria-controls="collapse0" th:text="#{TempPress}">
-				</button>
+				<button class="accordion-button collapsed" type="button"
+					data-bs-toggle="collapse" data-bs-target="#collapse2"
+					aria-expanded="true" aria-controls="collapse0"
+					th:text="#{TempPress}"></button>
 			</h1>
-			<div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#accordion">
+			<div id="collapse2" class="accordion-collapse collapse"
+				data-bs-parent="#accordion">
 				<div class="accordion-body scrollx">
 					<canvas id="tempGraphe"></canvas>
 				</div>
@@ -156,11 +160,13 @@
 		</div>
 		<div class="accordion-item">
 			<h1 class="accordion-header">
-				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-					data-bs-target="#collapse3" aria-expanded="true" aria-controls="collapse0" th:text="#{previsions}">
-				</button>
+				<button class="accordion-button collapsed" type="button"
+					data-bs-toggle="collapse" data-bs-target="#collapse3"
+					aria-expanded="true" aria-controls="collapse0"
+					th:text="#{previsions}"></button>
 			</h1>
-			<div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#accordion">
+			<div id="collapse3" class="accordion-collapse collapse"
+				data-bs-parent="#accordion">
 				<div class="accordion-body scrollx">
 					<table class="table table-bordered">
 						<thead>
@@ -186,11 +192,13 @@
 		</div>
 		<div class="accordion-item">
 			<h1 class="accordion-header">
-				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-					data-bs-target="#collapse4" aria-expanded="true" aria-controls="collapse0" th:text="#{historique}">
-				</button>
+				<button class="accordion-button collapsed" type="button"
+					data-bs-toggle="collapse" data-bs-target="#collapse4"
+					aria-expanded="true" aria-controls="collapse0"
+					th:text="#{historique}"></button>
 			</h1>
-			<div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#accordion">
+			<div id="collapse4" class="accordion-collapse collapse"
+				data-bs-parent="#accordion">
 				<div class="accordion-body scrollx">
 					<table class="table table-bordered">
 						<thead>

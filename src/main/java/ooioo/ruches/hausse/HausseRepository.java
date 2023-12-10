@@ -46,6 +46,17 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 						where rh.recolte.id = :recolteId)
 			""")
 	Iterable<Hausse> findHaussesNotInRecolteId(Long recolteId);
+	
+	// Liste des hausses qui ne sont pas dans la récolte recolteId :
+	@Query(value = """
+			select h
+				from Hausse h
+				where h.id not in
+					(select rh.hausse.id
+						from RecolteHausse rh
+						where rh.recolte.id = :recolteId)
+			""")
+	Iterable<Hausse> findTtHNotInRecolteId(Long recolteId);
 
 	@Query(value = """
 			select rh, h

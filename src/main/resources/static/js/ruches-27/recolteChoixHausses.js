@@ -1,7 +1,15 @@
 /* globals urlRetrait, urlAjout, recolteId, selHausRet, selHausAjout, DataTable */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
-	function updateLinks(e, dt, type) {
+	const ttChk = document.getElementById('toutes');
+	if (location.href.endsWith('true')) {
+		ttChk.checked = true;
+	}
+	ttChk.addEventListener('click', event => {
+		location = location.href.slice(0, location.href.lastIndexOf('/'))
+			+ '/' + event.target.checked;
+	});
+	function updateLinks(_e, _dt, type) {
 		let id;
 		let href;
 		let table;

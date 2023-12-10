@@ -234,19 +234,23 @@ public class RecolteHausseController {
 
 	/**
 	 * Appel de la page de choix des hausses d'une récolte.
+	 * 
+	 * @param toutesHausses boolean true si on veut afficher toutes les hausses dans
+	 *                      le tableau de choix des hausses à ajouter.
 	 */
-	@GetMapping("/choixHausses/{recolteId}")
-	public String choixHausses(Model model, @PathVariable long recolteId) {
+	@GetMapping("/choixHausses/{recolteId}/{toutesHausses}")
+	public String choixHausses(Model model, @PathVariable long recolteId, @PathVariable boolean toutesHausses) {
 		Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
 		if (recolteOpt.isPresent()) {
 			Recolte recolte = recolteOpt.get();
 			model.addAttribute(Const.RECOLTE, recolte);
-			// Les hausses récolte déjà ajoutées dans la récolte, pour le tableau "Retirer des
-			// hausses". Attention "hausses récolte" et non hausses.
+			// Les hausses récolte déjà ajoutées dans la récolte, pour le tableau "Retirer
+			// des hausses". Attention "hausses récolte" et non hausses.
 			model.addAttribute(HAUSSESRECOLTE, recolteHausseRepository.findByRecolte(recolte));
 			// Les hausses posées sur des ruches, qui ne sont pas dans la récolte, pour le
 			// tableau "Ajouter des hausses".
-			model.addAttribute(HAUSSESNOTINRECOLTE, hausseRepository.findHaussesNotInRecolteId(recolteId));
+			model.addAttribute(HAUSSESNOTINRECOLTE, toutesHausses ? hausseRepository.findTtHNotInRecolteId(recolteId)
+					: hausseRepository.findHaussesNotInRecolteId(recolteId));
 		} else {
 			logger.error(Const.IDRECOLTEXXINCONNU, recolteId);
 			model.addAttribute(Const.MESSAGE, Const.IDRECOLTEINCONNU);
@@ -300,7 +304,7 @@ public class RecolteHausseController {
 				return Const.INDEX;
 			}
 		}
-		return "redirect:/recolte/choixHausses/" + recolteId;
+		return "redirect:/recolte/choixHausses/" + recolteId + "/false";
 	}
 
 	/**
@@ -330,7 +334,7 @@ public class RecolteHausseController {
 				return Const.INDEX;
 			}
 		}
-		return "redirect:/recolte/choixHausses/" + recolteId;
+		return "redirect:/recolte/choixHausses/" + recolteId + "/false";
 	}
 
 	/**
