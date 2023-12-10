@@ -146,7 +146,7 @@ public class TestRecolte {
 	void recolteAjoutHausse() {
 		// Création d'une hausse de récolte.
 		// Attention écriture en base de données
-		driver.get(baseUrl + "recolte/choixHausses/" + recolteId);
+		driver.get(baseUrl + "recolte/choixHausses/" + recolteId + "/false");
 		// table liste des hausses à ajouter
 		assertEquals("table", driver.findElement(By.id("ajoutHausseRecolte")).getTagName());
 		TestUtils.xpathClick(driver, "//table[@id='ajoutHausseRecolte']//td[contains(., " + hausseId + ")]");
