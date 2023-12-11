@@ -178,7 +178,7 @@ public class RecolteHausseController {
 			model.addAttribute("dateRecolteEpoch", recolte.getDate().toEpochSecond(ZoneOffset.UTC));
 			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByRecolte(recolte);
 			model.addAttribute("detailsRecolte", recolteHausses);
-			model.addAttribute(Const.NBRUCHES, recolteHausseService.nomsRuches(recolteHausses).size());
+			model.addAttribute(Const.NBRUCHES, recolteHausseService.recHausNbRuches(recolteHausses));
 			model.addAttribute(Const.RUCHER, recolteHausseService.idNomRuchers(recolteHausses));
 		} else {
 			logger.error(Const.IDRECOLTEXXINCONNU, recolteId);

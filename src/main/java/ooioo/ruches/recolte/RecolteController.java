@@ -5,6 +5,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -170,7 +171,7 @@ public class RecolteController {
 		List<Recolte> recoltes = recolteRepository.findAllByOrderByDateDesc();
 		model.addAttribute("recoltes", recoltes);
 		// Liste par récolte des id et noms des ruchers.
-		List<List<IdNom>> ruchers = new ArrayList<>(recoltes.size());
+		List<Set<IdNom>> ruchers = new ArrayList<>(recoltes.size());
 		for (Recolte recolte : recoltes) {
 			ruchers.add(recolteHausseService.idNomRuchers(recolteHausseRepository.findByRecolte(recolte)));
 		}

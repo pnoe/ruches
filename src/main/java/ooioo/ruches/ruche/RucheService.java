@@ -101,19 +101,24 @@ public class RucheService {
 	 */
 	public void ordonneHaussesRuche(long rucheId) {
 		Iterable<Hausse> haussesRuche = hausseRepository.findByRucheIdOrderByOrdreSurRuche(rucheId);
+		List<Hausse> haussesToUpdate = new ArrayList<>();
 		int i = 1;
 		for (Hausse hr : haussesRuche) {
 			Integer ordre = hr.getOrdreSurRuche();
 			if (ordre == null) {
 				logger.error("Ruche {} Ordre hausse {} null.", rucheId, hr.getNom());
+				// log de l'erreur, mais on la traite ensuite.
 			}
 			if ((ordre == null) || (ordre != i)) {
 				// On corrige l'ordre s'il est null ou s'il est différent de l'ordre
-				// renvoyé par findByRucheIdOrderByOrdreSurRuche
+				// renvoyé par findByRucheIdOrderByOrdreSurRuche.
 				hr.setOrdreSurRuche(i);
-				hausseRepository.save(hr);
+				haussesToUpdate.add(hr);
 			}
 			i++;
+		}
+		if (!haussesToUpdate.isEmpty()) {
+			hausseRepository.saveAll(haussesToUpdate);
 		}
 	}
 

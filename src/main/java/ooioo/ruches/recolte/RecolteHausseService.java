@@ -1,7 +1,9 @@
 package ooioo.ruches.recolte;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -11,17 +13,16 @@ import ooioo.ruches.IdNom;
 public class RecolteHausseService {
 
 	/**
-	 * Liste des ids et noms des ruchers d'une récolte.
+	 * Set des IdNom : ids et noms des ruchers d'une récolte.
 	 *
 	 * @param recolteHausses la liste des hausses d'une récolte
 	 * @return les records IdNom des ruchers de cette récolte
 	 */
-	List<IdNom> idNomRuchers(List<RecolteHausse> recolteHausses) {
-		List<IdNom> idNoms = new ArrayList<>();
+	Set<IdNom> idNomRuchers(List<RecolteHausse> recolteHausses) {
+		Set<IdNom> idNoms = new HashSet<>();
 		for (RecolteHausse rH : recolteHausses) {
-			if (rH.getRucher() == null) { continue; }
-			IdNom idn = new IdNom(rH.getRucher().getId(), rH.getRucher().getNom());
-			if (!idNoms.contains(idn)) {
+			if (rH.getRucher() != null) {
+				IdNom idn = new IdNom(rH.getRucher().getId(), rH.getRucher().getNom());
 				idNoms.add(idn);
 			}
 		}
@@ -29,16 +30,11 @@ public class RecolteHausseService {
 	}
 
 	/**
-	 * Retourne une liste des noms des ruches de la récolte.
+	 * Retourne le nombre de ruches de la liste recolteHausses passée en argument.
 	 */
-	List<String> nomsRuches(List<RecolteHausse> recolteHausses) {
-		List<String> nomRuches = new ArrayList<>();
-		for (RecolteHausse recolteHausse : recolteHausses) {
-			if ((recolteHausse.getRuche() != null) && (!nomRuches.contains(recolteHausse.getRuche().getNom()))) {
-				nomRuches.add(recolteHausse.getRuche().getNom());
-			}
-		}
-		return nomRuches;
+	int recHausNbRuches(List<RecolteHausse> recolteHausses) {
+		return recolteHausses.stream().filter(recolteHausse -> recolteHausse.getRuche() != null)
+				.map(recolteHausse -> recolteHausse.getRuche().getId()).collect(Collectors.toSet()).size();
 	}
 
 }
