@@ -1,27 +1,28 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsruches}"></script>
-	<script th:replace="~{include :: jsdatetimepicker}"></script>
-	<link th:replace="~{include :: cssdatetimepicker}" />
-	<script th:replace="~{include :: localejsdatetimepicker}"></script>
-	<script th:inline="javascript">
-		/* exported
-		_csrf_token, _csrf_param_name, suppRecHauss, dateRecEpoch
-		enlevHRecDe30, urlRecHDepot, recId, total, pasDeHausses, pasDeHaussesTxt, DataTable
-		*/
-		const _csrf_token = /*[[${_csrf.token}]]*/null;
-		const _csrf_param_name = /*[[${_csrf.parameterName}]]*/null;
-		const suppRecHauss = /*[[#{supprimerrecolteethausses}]]*/null;
-		const dateRecEpoch = /*[[${dateRecolteEpoch}]]*/null;
-		const enlevHRecDe30 = /*[[#{enlverhaussesrecoltedelai(30)}]]*/null;
-		const urlRecHDepot = /*[[@{/recolte/haussesDepot/}]]*/null;
-		const recId = /*[[${recolte.id}]]*/null;
-		const total = /*[[#{Total}]]*/null;
-		const pasDeHausses = /*[[${#lists.isEmpty(detailsRecolte)}]]*/null;
-		const pasDeHaussesTxt = /*[[#{pasDeHaussesTxt}]]*/null;
-	</script>
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsruches}"></script>
+<script th:replace="~{include :: jsdatetimepicker}"></script>
+<link th:replace="~{include :: cssdatetimepicker}" />
+<script th:replace="~{include :: localejsdatetimepicker}"></script>
+<script th:inline="javascript">
+	/* exported
+	_csrf_token, _csrf_param_name, suppRecHauss, dateRecEpoch
+	enlevHRecDe30, urlRecHDepot, recId, total, pasDeHausses, pasDeHaussesTxt, DataTable
+	 */
+	const _csrf_token = /*[[${_csrf.token}]]*/null;
+	const _csrf_param_name = /*[[${_csrf.parameterName}]]*/null;
+	const suppRecHauss = /*[[#{supprimerrecolteethausses}]]*/null;
+	const dateRecEpoch = /*[[${dateRecolteEpoch}]]*/null;
+	const enlevHRecDe30 = /*[[#{enlverhaussesrecoltedelai(30)}]]*/null;
+	const urlRecHDepot = /*[[@{/recolte/haussesDepot/}]]*/null;
+	const recId = /*[[${recolte.id}]]*/null;
+	const total = /*[[#{Total}]]*/null;
+	const pasDeHausses = /*[[${#lists.isEmpty(detailsRecolte)}]]*/null;
+	const pasDeHaussesTxt = /*[[#{pasDeHaussesTxt}]]*/null;
+</script>
 </head>
 
 <body>
@@ -34,30 +35,35 @@
 			<div class="col">
 				<h1 class="item">
 					<a th:href="@{'/recolte/liste'}" th:text="#{recolte}"></a>
-					<th:block th:text="' '+${#temporals.format(recolte.date, 'yyyy/MM/dd HH:mm')}"></th:block>
+					<th:block
+						th:text="' '+${#temporals.format(recolte.date, 'yyyy/MM/dd HH:mm')}"></th:block>
 				</h1>
 			</div>
 			<div class="col">
-				<a th:href="@{'/recolte/modifie/'+${recolte.id}}" class="bi-pencil" th:title="#{modifier}"
-					aria-hidden="true"></a> &nbsp; <a th:href="@{'/recolte/choixHausses/'+${recolte.id}+'/false'}"
-					class="bi-justify" th:title="#{choixHausesRecolte}" aria-hidden="true"></a>
-				<a id="haussesMiel" th:href="@{'/recolte/haussesMiel/'+${recolte.id}}" class="bi-grid-3x2-gap"
-					th:title="#{SaisiePoidsMiel}" aria-hidden="true"></a>
-				<span id="enlevehausses" class="bi-reply-all cursorpointer" th:title="#{recolteHausseDepot}"
-					aria-hidden="true"></span>
-				<a id="supprime" th:href="@{'/recolte/supprime/'+${recolte.id}}" class="bi-trash" style="color: red"
-					th:title="#{supprimer}" aria-hidden="true"></a>
+				<a th:href="@{'/recolte/modifie/'+${recolte.id}}" class="bi-pencil"
+					th:title="#{modifier}" aria-hidden="true"></a> &nbsp; <a
+					th:href="@{'/recolte/choixHausses/'+${recolte.id}+'/false'}"
+					class="bi-justify" th:title="#{choixHausesRecolte}"
+					aria-hidden="true"></a> <a id="haussesMiel"
+					th:href="@{'/recolte/haussesMiel/'+${recolte.id}}"
+					class="bi-grid-3x2-gap" th:title="#{SaisiePoidsMiel}"
+					aria-hidden="true"></a> <span id="enlevehausses"
+					class="bi-reply-all cursorpointer" th:title="#{recolteHausseDepot}"
+					aria-hidden="true"></span> <a id="supprime"
+					th:href="@{'/recolte/supprime/'+${recolte.id}}" class="bi-trash"
+					style="color: red" th:title="#{supprimer}" aria-hidden="true"></a>
 				<input type="text" id="date" name="date">
 				<button id="dateOK" th:text="#{Retirerhausses}"></button>
-				&nbsp;
-				<a th:href="@{'/recolte/statistiques/'+${recolte.id}}" class="bi-pie-chart"
-					th:title="#{statistiquesessaims}" aria-hidden="true"></a>
-				<a id="statistiques" th:href="@{'/recolte/stat/'+${recolte.id}}" class="bi-table"
+				&nbsp; <a th:href="@{'/recolte/statistiques/'+${recolte.id}}"
+					class="bi-pie-chart" th:title="#{statistiquesessaims}"
+					aria-hidden="true"></a> <a id="statistiques"
+					th:href="@{'/recolte/stat/'+${recolte.id}}" class="bi-table"
 					th:title="#{statistiquesproduction}" aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid table-responsive" id="detailRecolte" th:with="pdsMiel=(${nbruches}==0) ? 0.00 : 
+	<div class="container-fluid table-responsive" id="detailRecolte"
+		th:with="pdsMiel=(${nbruches}==0) ? 0.00 : 
 			${#aggregates.sum(detailsRecolte.![poidsAvant])} - ${#aggregates.sum(detailsRecolte.![poidsApres])}">
 		<table class="table table-sm table-bordered">
 			<thead>
@@ -75,20 +81,20 @@
 			<tbody>
 				<tr>
 					<td th:text="#{${recolte.typeMiel}}"></td>
-					<td>
-						<th:block th:each="idn, iterStat : ${rucher}">
+					<td><th:block th:each="idn, iterStat : ${rucher}">
 							<a th:href="@{'/rucher/'+${idn.id}}" th:text="${idn.nom}"></a>
 							<th:block th:text="${iterStat.last} ? '' :'&nbsp;'"></th:block>
-						</th:block>
-					</td>
+						</th:block></td>
 					<td class="num" th:if="${#lists.isEmpty(detailsRecolte)}">0,00</td>
 					<td class="num" th:unless="${#lists.isEmpty(detailsRecolte)}"
 						th:text="${#numbers.formatDecimal(pdsMiel,1,2,'DEFAULT')}"></td>
-					<td class="num" th:text="${#numbers.formatDecimal(recolte.poidsMiel,1,2,'DEFAULT')}"></td>
+					<td class="num"
+						th:text="${#numbers.formatDecimal(recolte.poidsMiel,1,2,'DEFAULT')}"></td>
 					<td th:text="${recolte.commentaire}"></td>
 					<td th:text="${#arrays.length(detailsRecolte)}"></td>
 					<td th:text="${nbruches}"></td>
-					<td th:text="(${nbruches}==0) ? '' : ${#numbers.formatDecimal(pdsMiel/nbruches,1,3,'DEFAULT')}">
+					<td
+						th:text="(${nbruches}==0) ? '' : ${#numbers.formatDecimal(pdsMiel/nbruches,1,3,'DEFAULT')}">
 					</td>
 				</tr>
 			</tbody>
@@ -98,7 +104,11 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col">
-						<h6 class="item" th:text="#{XhaussesRec(${#arrays.length(detailsRecolte)})}"></h6>
+						<h6 class="item">
+							<span th:text="#{XhaussesRec(${#arrays.length(detailsRecolte)})}"></span>
+							<span th:if="${hRecIncomplete != 0}"
+								th:text="#{Xincomplete(${hRecIncomplete})}"></span>
+						</h6>
 					</div>
 					<div class="col">
 						<span class="padicons"> <input type="checkbox" id="group" />
@@ -123,25 +133,24 @@
 				<tbody>
 					<tr th:each="detailRecolte : ${detailsRecolte}">
 						<td><a data-bs-toggle="tooltip" th:title="#{saisirpoids}"
-								th:href="@{'/recolte/modifie/hausse/'+${recolte.id}+'/'+${detailRecolte.id}}"
-								class="bi-pencil"></a></td>
+							th:href="@{'/recolte/modifie/hausse/'+${recolte.id}+'/'+${detailRecolte.id}}"
+							class="bi-pencil"></a></td>
 						<td><a th:href="@{'/hausse/'+${detailRecolte.hausse?.id}}"
-								th:text="${detailRecolte.hausse.nom}"></a></td>
+							th:text="${detailRecolte.hausse.nom}"></a></td>
 						<td><a th:href="@{'/ruche/'+${detailRecolte.ruche?.id}}"
-								th:text="${detailRecolte.ruche?.nom}"></a>
-						</td>
+							th:text="${detailRecolte.ruche?.nom}"></a></td>
 						<td><a th:href="@{'/essaim/'+${detailRecolte.essaim?.id}}"
-								th:text="${detailRecolte.essaim?.nom}"></a>
-						</td>
+							th:text="${detailRecolte.essaim?.nom}"></a></td>
 						<td><a th:href="@{'/rucher/'+${detailRecolte.rucher?.id}}"
-								th:text="${detailRecolte.rucher?.nom}"></a>
-						</td>
+							th:text="${detailRecolte.rucher?.nom}"></a></td>
 						<td class="num"
 							th:text="${#numbers.formatDecimal(detailRecolte.poidsAvant - detailRecolte.poidsApres,1,2,'DEFAULT')}">
 						</td>
-						<td class="num" th:text="${#numbers.formatDecimal(detailRecolte.poidsAvant,1,2,'DEFAULT')}">
+						<td class="num"
+							th:text="${#numbers.formatDecimal(detailRecolte.poidsAvant,1,2,'DEFAULT')}">
 						</td>
-						<td class="num" th:text="${#numbers.formatDecimal(detailRecolte.poidsApres,1,2,'DEFAULT')}">
+						<td class="num"
+							th:text="${#numbers.formatDecimal(detailRecolte.poidsApres,1,2,'DEFAULT')}">
 						</td>
 					</tr>
 				</tbody>

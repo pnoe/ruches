@@ -178,8 +178,12 @@ public class RecolteHausseController {
 			model.addAttribute("dateRecolteEpoch", recolte.getDate().toEpochSecond(ZoneOffset.UTC));
 			List<RecolteHausse> recolteHausses = recolteHausseRepository.findByRecolte(recolte);
 			model.addAttribute("detailsRecolte", recolteHausses);
+			// Pour afficher le nombre de ruches ayant fourni des hausses.
 			model.addAttribute(Const.NBRUCHES, recolteHausseService.recHausNbRuches(recolteHausses));
+			// Pour afficher les noms des ruchers ayant contribués à la récolte.
 			model.addAttribute(Const.RUCHER, recolteHausseService.idNomRuchers(recolteHausses));
+			// Pour afficher le nombre de hausses de récolte incomplètes.
+			model.addAttribute("hRecIncomplete", recolteHausseRepository.countHRecIncompletes(recolte));
 		} else {
 			logger.error(Const.IDRECOLTEXXINCONNU, recolteId);
 			model.addAttribute(Const.MESSAGE, Const.IDRECOLTEINCONNU);
