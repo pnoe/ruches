@@ -4,8 +4,7 @@
 /* exported evenementSucreListe */
 'use strict';
 function evenementSucreListe() {
-	const idTbl = '#evenementssucre';
-	const table = new DataTable(idTbl, {
+	const table = new DataTable('#evenementssucre', {
 		order: [[0, 'desc']],
 		dom: 'Blftip',
 		scrollX: true,

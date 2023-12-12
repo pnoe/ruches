@@ -3,8 +3,7 @@
 */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
-	const idTbl = '#ruches';
-	const table = new DataTable(idTbl, {
+	const table = new DataTable('#ruches', {
 		dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
 		scrollX: true,
 		buttons: ['csv', {

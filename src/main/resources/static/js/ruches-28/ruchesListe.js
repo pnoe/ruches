@@ -6,8 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('rucher').addEventListener('change', event => {
 		table.columns(2).search(event.target.value).draw();
 	});
-	const idTbl = '#ruches';
-	const table = new DataTable(idTbl, {
+	const table = new DataTable('#ruches', {
 		select: {
 			style: 'multi+shift'
 		},
@@ -33,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		]
 	});
-	function updateLinks(e, dt, type) {
+	function updateLinks(_e, _dt, type) {
 		if (type === 'row') {
 			let noms = '';
 			table.rows({

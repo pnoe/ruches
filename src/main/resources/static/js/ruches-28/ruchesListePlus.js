@@ -6,8 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('rucher').addEventListener('change', event => {
 		table.columns(4).search(event.target.value).draw();
 	});
-	const idTbl = '#ruchesplus';
-	const table = new DataTable(idTbl, {
+	const table = new DataTable('#ruchesplus', {
 		dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
 		scrollX: true,
 		buttons: ['csv', {

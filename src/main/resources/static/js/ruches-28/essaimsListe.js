@@ -2,8 +2,7 @@
 	urlCommLot, urlCadreLot, selectEssTrt, DataTable */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
-	const idTbl = '#essaims';
-	const table = new DataTable(idTbl, {
+	const table = new DataTable('#essaims', {
 		select: { style: 'multi+shift' },
 		dom: 'Blftip',
 		scrollX: true,
@@ -25,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const su = document.getElementById('sucre');
 	const co = document.getElementById('commentaire');
 	const ca = document.getElementById('cadre');
-	function updateLinks(e, dt, type) { // }, indexes) {
+	function updateLinks(_e, _dt, type) { // }, indexes) {
 		if (type === 'row') {
 			let noms = '';
 			table.rows({ selected: true }).data().pluck(0).each(function(value) { // , index) {
