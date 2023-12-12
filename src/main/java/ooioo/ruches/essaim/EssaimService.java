@@ -125,7 +125,8 @@ public class EssaimService {
 	}
 
 	/**
-	 * Clone d'un essaim.
+	 * Clone d'un essaim. Crée des essaims clones et met ces essaims dans des ruches
+	 * avec création des événements AJOUTESSAIMRUCHE.
 	 * 
 	 * @param essaimOpt l'essaim à cloner.
 	 * @param nomclones les noms des essaims à créer séparés par des ",".
@@ -136,9 +137,9 @@ public class EssaimService {
 		Essaim essaim = essaimOpt.get();
 		// nomsRecords liste des noms d'essaims pour contrôle d'unicité.
 		List<Nom> nomsRecords = essaimRepository.findAllProjectedBy();
-		// Les noms des essaims à créer
+		// Les noms des essaims à créer.
 		String[] nomarray = nomclones.split(",");
-		// Les noms des ruches à créer
+		// Les noms des ruches dans lesquelles mettre les essaims.
 		String[] nomruchesarray = nomruches.split(",");
 		List<String> nomsCrees = new ArrayList<>();
 		LocalDateTime dateEve = Utils.dateTimeDecal(session);
@@ -152,6 +153,7 @@ public class EssaimService {
 			} else {
 				Essaim clone = new Essaim(essaim, nomarray[i]);
 				essaimRepository.save(clone);
+				logger.info(Const.CREE, clone);
 				nomsCrees.add(nomarray[i]);
 				// pour éviter clone "a,a" : 2 fois le même nom dans la liste
 				nomsRecords.add(new Nom(nomarray[i]));
@@ -160,16 +162,21 @@ public class EssaimService {
 					// (liste des ruches incorrecte en paramètre) et si le nom de la
 					// ruche est différent de ""
 					Ruche ruche = rucheRepository.findByNom(nomruchesarray[i]);
-					if (ruche.getEssaim() == null) {
-						ruche.setEssaim(clone);
-						rucheRepository.save(ruche);
-						Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, ruche, clone,
-								ruche.getRucher(), null, null, "Clone essaim " + essaim.getNom());
-						evenementRepository.save(evenementAjout);
-						logger.info(Const.CREE, evenementAjout);
+					if (ruche == null) {
+						logger.error("Clone d'un essaim : {} la ruche {} n'existe pas", nomarray[i], nomruchesarray[i]);
 					} else {
-						logger.error("Clone d'un essaim : {} la ruche {} n'est pas vide", nomarray[i],
-								nomruchesarray[i]);
+						if (ruche.getEssaim() == null) {
+							// On met l'essaim dans cette ruche et on crée l'événement AJOUTESSAIMRUCHE.
+							ruche.setEssaim(clone);
+							rucheRepository.save(ruche);
+							Evenement evenementAjout = new Evenement(dateEve, TypeEvenement.AJOUTESSAIMRUCHE, ruche,
+									clone, ruche.getRucher(), null, null, "Clone essaim " + essaim.getNom());
+							evenementRepository.save(evenementAjout);
+							logger.info(Const.CREE, evenementAjout);
+						} else {
+							logger.error("Clone d'un essaim : {} la ruche {} n'est pas vide", nomarray[i],
+									nomruchesarray[i]);
+						}
 					}
 				}
 			}
@@ -310,7 +317,6 @@ public class EssaimService {
 			rucherId = null;
 		}
 		List<Recolte> recoltes = recolteRepository.findAll();
-
 		// Si essaim unique, on crée une liste avec cet essaim, sinon on cherche tous
 		// les essaims actifs ou inactifs.
 		List<Essaim> essaims;
@@ -322,12 +328,10 @@ public class EssaimService {
 			essaims.add(ess);
 		}
 		// Déclarer les listes pour les poids, avd, std, note des récoltes de l'essaim.
-
 		// Liste essaimsPoids des essaims ayant participé à des récoltes :
 		// nom, id, dateAcquisition, duree, poids pMoyen, pTotal, pMax, pMin, note,
 		// nbRec.
 		List<Map<String, String>> essaimsPoids = new ArrayList<>();
-
 		// Si essaim unique, liste des récoltes de l'essaim avec moyenne, écart type,
 		// poids, note.
 		List<Double> avgRecList = null;
@@ -344,7 +348,6 @@ public class EssaimService {
 			recolteList = new ArrayList<>();
 			rucherList = new ArrayList<>();
 		}
-
 		DecimalFormat decimalFormat = new DecimalFormat("0.00",
 				new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
 		// Une note par essaim, égale à la moyenne des notes obtenue dans chaque
@@ -401,7 +404,6 @@ public class EssaimService {
 				// Ecart simple standardisé : écart par rapport à la moyenne divisé par l'écart
 				// type.
 				Double note = ((stdRec == 0d) ? 0d : (poids - avgRec) / stdRec);
-
 				// Si appel pour un essaim unique, on mémorise les valeurs pour la récolte dans
 				// des listes : poids, avgRec, stdRec, note
 				if (ess != null) {
@@ -413,7 +415,6 @@ public class EssaimService {
 					Optional<Rucher> rr = rucherRepository.findById(rrId);
 					rucherList.add(rr.isPresent() ? rr.get() : null);
 				}
-
 				// On fait la somme des notes de l'essaim et on divisera par le nombe de notes.
 				noteEssaim += note;
 				nbRec++;
@@ -455,9 +456,6 @@ public class EssaimService {
 		model.addAttribute("rucherIdNom", rucherRepository.findAllProjectedIdNomByOrderByNom());
 		model.addAttribute("rucherId", rucherId);
 		model.addAttribute("masquerInactif", masquerInactif);
-
-		
-		
 		if (ess != null) {
 			model.addAttribute("essaim", ess);
 			model.addAttribute("avgRecList", avgRecList);
@@ -467,8 +465,6 @@ public class EssaimService {
 			model.addAttribute("recolteList", recolteList);
 			model.addAttribute("rucherList", rucherList);
 		}
-		
-
 	}
 
 	/**

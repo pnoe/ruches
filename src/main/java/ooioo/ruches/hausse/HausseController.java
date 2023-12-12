@@ -80,6 +80,7 @@ public class HausseController {
 				} else {
 					Hausse hausseclone = new Hausse(hausse, nom);
 					hausseRepository.save(hausseclone);
+					logger.info(Const.CREE, hausseclone);
 					nomsCrees.add(nom);
 					// pour éviter clone "a,a" : 2 fois le même nom dans la liste
 					nomsRecords.add(new Nom(nom));

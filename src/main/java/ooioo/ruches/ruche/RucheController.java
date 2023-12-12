@@ -124,6 +124,7 @@ public class RucheController {
 					longitude += 0.00004f;
 					Ruche clone = new Ruche(ruche, nom, longitude);
 					rucheRepository.save(clone);
+					logger.info(Const.CREE, clone);
 					Evenement eveAjout = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.RUCHEAJOUTRUCHER,
 							clone, null, ruche.getRucher(), null, null, commentaire);
 					evenementRepository.save(eveAjout);
