@@ -156,7 +156,7 @@
 				th:href="@{'/evenement/rucher/listeRucheAjout'}"
 				th:text="#{evenementsrucheajout}"></a>
 			<th:block
-				th:text="' / '+${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"></th:block>
+				th:text="#{sep}+${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"></th:block>
 		</h1>
 	</div>
 	<footer th:fragment="footer">

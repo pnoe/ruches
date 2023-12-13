@@ -21,13 +21,13 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item" th:unless="${evenement.id}">
-					<th:block th:text="#{ajouterUn} + ' '"></th:block>
-					<a th:href="@{'/evenement/liste'}" th:text="#{evenement}"></a>
+					<a th:href="@{'/evenement/liste'}" th:text="#{evenements}"></a>
+					<th:block th:text="#{sep} + #{Ajout}"></th:block>
 				</h1>
 				<h1 class="item" th:if="${evenement.id}">
-					<th:block th:text="#{modification}"></th:block>
 					<a th:href="@{'/evenement/'+${evenement.id}}"
 						th:text="#{evenement} + ' ' + ${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"></a>
+						<th:block th:text="#{sep} + #{modification}"></th:block>
 				</h1>
 			</div>
 			<div class="col">

@@ -17,13 +17,13 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item" th:unless="${recolte.id}">
-					<th:block th:text="#{ajouterUne} + ' '"></th:block>
 					<a th:href="@{'/recolte/liste'}" th:text="#{recolte}"></a>
+					<th:block th:text="#{sep} + #{Ajout}"></th:block>
 				</h1>
 				<h1 class="item" th:if="${recolte.id}">
-					<th:block th:text="#{modification}"></th:block>
 					<a th:href="@{'/recolte/'+${recolte.id}}"
 						th:text="#{recolte} + ' ' + ${#temporals.format(recolte.date, 'yyyy/MM/dd HH:mm')}"></a>
+					<th:block th:text="#{sep} + #{modification}"></th:block>
 				</h1>
 			</div>
 		</div>

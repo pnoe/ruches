@@ -61,13 +61,13 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item" th:unless="${personne.id}">
-					<th:block th:text="#{ajouterUne} + ' '"></th:block>
 					<a th:href="@{'/personne/liste'}" th:text="#{personne}"></a>
+					<th:block th:text="#{sep} + #{Ajout}"></th:block>
 				</h1>
 				<h1 class="item" th:if="${personne.id}">
-					<th:block th:text="#{modification}"></th:block>
 					<a th:href="@{'/personne/'+${personne.id}}"
 						th:text="#{personne} + ' ' + ${personne.nom}"></a>
+					<th:block th:text="#{sep} + #{modification}"></th:block>
 				</h1>
 			</div>
 		</div>

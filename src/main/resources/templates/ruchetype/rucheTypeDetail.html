@@ -55,7 +55,7 @@
 			<div class="col">
 				<h1 class="item">
 					<a th:href="@{'/rucheType/liste'}" th:text="#{rucheTypes}"></a>
-					<th:block th:text="' / ' + ${rucheType.nom}"></th:block>
+					<th:block th:text="#{sep} + ${rucheType.nom}"></th:block>
 				</h1>
 			</div>
 			<div class="col">
