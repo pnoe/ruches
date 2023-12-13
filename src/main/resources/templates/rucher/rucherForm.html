@@ -38,7 +38,7 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item" th:unless="${rucher.id}">
-					<a th:href="@{'/rucher/liste'}" th:text="#{rucher}"></a>
+					<a th:href="@{'/rucher/liste'}" th:text="#{Ruchers}"></a>
 					<th:block th:text="#{sep} + #{Ajout}"></th:block>
 				</h1>
 				<h1 class="item" th:if="${rucher.id}">

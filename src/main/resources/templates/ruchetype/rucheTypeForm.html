@@ -42,11 +42,11 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item" th:unless="${rucheType.id}">
-					<a th:href="@{'/rucheType/liste'}" th:text="#{rucheType}"></a>
+					<a th:href="@{'/rucheType/liste'}" th:text="#{rucheTypes}"></a>
 					<th:block th:text="#{sep} + #{Ajout}"></th:block>
 				</h1>
 				<h1 class="item" th:if="${rucheType.id}">
-					<a th:href="@{'/rucheType/'+${rucheType.id}}" th:text="#{essaim} + ' ' + $rucheType.nom}"></a>
+					<a th:href="@{'/rucheType/'+${rucheType.id}}" th:text="#{rucheType} + ' ' + ${rucheType.nom}"></a>
 					<th:block th:text="#{sep} + #{modification}"></th:block>
 				</h1>
 			</div>
