@@ -22,15 +22,7 @@
 	<br />
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col">
-				<h1 class="item">
-					<a th:if="${type}==''" th:href="@{'/evenement/liste'}" th:text="#{evenement}"></a> <a
-						th:if="${type}=='hausse'" th:href="@{'/evenement/hausse/'+${evenement.hausse.id}}"
-						th:text="#{evenement}"></a> <a th:if="${type=='comment'}" th:href="@{'/evenement/listecomment'}"
-						th:text="#{evenementscomm}"></a>
-					<th:block th:text="' '+${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"></th:block>
-				</h1>
-			</div>
+			<div th:replace="~{include::evedettitre}"></div>
 			<div class="col">
 				<a th:href="@{'/evenement/hausse/commentaire/modifie/'+${evenement.id}}">
 					<span class="bi-pencil" th:title="#{modifier}" aria-hidden="true"></span>

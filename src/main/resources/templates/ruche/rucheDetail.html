@@ -1,28 +1,29 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsruches}"></script>
-	<script th:inline="javascript">
-		/* exported _csrf_token, _csrf_param_name, ruchenoms, rnpsupprec,
-		recolteHausses, evenements, suppruche, nruchvirg,
-		nexisted, Ruches, creer, urlclone, rucheid, rnpeves
-			*/
-		const _csrf_token = /*[[${_csrf.token}]]*/ null;
-		const _csrf_param_name = /*[[${_csrf.parameterName}]]*/ null;
-		const ruchenoms = /*[[${ruchenoms}]]*/ null;
-		const rnpsupprec = /*[[#{ruchenepeutetresupprimeerecolte}]]*/ null;
-		const rnpeves = /*[[#{rnpeves}]]*/ null;
-		const recolteHausses = /*[[${recolteHausses}]]*/ null;
-		const evenements = /*[[${evenements}]]*/ null;
-		const suppruche = /*[[#{supprimercetteruche?}]]*/ null;
-		const nruchvirg = /*[[#{nomruchesvirgule}]]*/ null;
-		const nexisted = /*[[#{nomexistentdeja}]]*/ null;
-		const Ruches = /*[[#{Ruches}]]*/ null;
-		const creer = /*[[#{creer}]]*/ null;
-		const urlclone = /*[[@{/ruche/clone/}]]*/ null;
-		const rucheid = /*[[${ruche.id}]]*/ null;
-	</script>
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsruches}"></script>
+<script th:inline="javascript">
+	/* exported _csrf_token, _csrf_param_name, ruchenoms, rnpsupprec,
+	recolteHausses, evenements, suppruche, nruchvirg,
+	nexisted, Ruches, creer, urlclone, rucheid, rnpeves
+	 */
+	const _csrf_token = /*[[${_csrf.token}]]*/null;
+	const _csrf_param_name = /*[[${_csrf.parameterName}]]*/null;
+	const ruchenoms = /*[[${ruchenoms}]]*/null;
+	const rnpsupprec = /*[[#{ruchenepeutetresupprimeerecolte}]]*/null;
+	const recolteHausses = /*[[${recolteHausses}]]*/null;
+	const evenements = /*[[${evenements}]]*/null;
+	const suppruche = /*[[#{supprimercetteruche?}]]*/null;
+	const nruchvirg = /*[[#{nomruchesvirgule}]]*/null;
+	const nexisted = /*[[#{nomexistentdeja}]]*/null;
+	const Ruches = /*[[#{Ruches}]]*/null;
+	const creer = /*[[#{creer}]]*/null;
+	const urlclone = /*[[@{/ruche/clone/}]]*/null;
+	const rucheid = /*[[${ruche.id}]]*/null;
+	const rnpeves = /*[[#{rnpeves}]]*/null;
+</script>
 </head>
 
 <body>
@@ -34,23 +35,30 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<a th:href="@{'/ruche/liste'}" th:text="#{ruche}"></a>
-					<th:block th:text="' '+${ruche.nom}"></th:block>
+					<a th:href="@{'/ruche/liste'}" th:text="#{Ruches}"></a>
+					<th:block th:text="' / '+${ruche.nom}"></th:block>
 				</h1>
 			</div>
 			<div class="col">
-				<a th:href="@{'/ruche/modifie/'+${ruche.id}}" class="bi-pencil" th:title="#{modifier}"
-					aria-hidden="true"></a> &nbsp; <span id="clone" class="bi-collection cursorpointer"
-					th:title="#{cloner}" aria-hidden="true"></span> <a th:href="@{'/ruche/hausses/'+${ruche.id}}"
-					class="bi-justify" th:title="#{ajoutRetraitHausses}" aria-hidden="true"></a> <a
-					th:href="@{'/ruche/rucher/'+${ruche.id}}" class="bi-house" th:title="#{changerDeRucher}"
-					aria-hidden="true"></a> <a id="supprime" th:href="@{'/ruche/supprime/'+${ruche.id}}"
-					class="bi-trash" style="color: red" th:title="#{supprimer}" aria-hidden="true"></a>
-				&nbsp; <a th:href="@{'/evenement/ruche/'+${ruche.id}}" class="padicons bi-list-ul"
-					th:title="#{evenements}" aria-hidden="true"></a> <a
-					th:href="@{'/evenement/ruche/commentaire/cree/'+${ruche.id}}" class="bi-chat-text"
-					th:title="#{evenementCommentaire}" aria-hidden="true"></a> &nbsp; <a
-					th:href="@{'/ruche/historique/'+${ruche.id}}" class="bi-calendar-check" th:title="#{histoHausses}"
+				<a th:href="@{'/ruche/modifie/'+${ruche.id}}" class="bi-pencil"
+					th:title="#{modifier}" aria-hidden="true"></a> &nbsp; <span
+					id="clone" class="bi-collection cursorpointer" th:title="#{cloner}"
+					aria-hidden="true"></span> <a
+					th:href="@{'/ruche/hausses/'+${ruche.id}}" class="bi-justify"
+					th:title="#{ajoutRetraitHausses}" aria-hidden="true"></a> <a
+					th:href="@{'/ruche/rucher/'+${ruche.id}}" class="bi-house"
+					th:title="#{changerDeRucher}" aria-hidden="true"></a> <a
+					id="supprime" th:href="@{'/ruche/supprime/'+${ruche.id}}"
+					class="bi-trash" style="color: red" th:title="#{supprimer}"
+					aria-hidden="true"></a> &nbsp; <a
+					th:href="@{'/evenement/ruche/'+${ruche.id}}"
+					class="padicons bi-list-ul" th:title="#{evenements}"
+					aria-hidden="true"></a> <a
+					th:href="@{'/evenement/ruche/commentaire/cree/'+${ruche.id}}"
+					class="bi-chat-text" th:title="#{evenementCommentaire}"
+					aria-hidden="true"></a> &nbsp; <a
+					th:href="@{'/ruche/historique/'+${ruche.id}}"
+					class="bi-calendar-check" th:title="#{histoHausses}"
 					aria-hidden="true"></a>
 			</div>
 		</div>
@@ -74,12 +82,16 @@
 				<tr>
 					<td th:text="${ruche.active}? #{oui} : #{non}"></td>
 					<td th:text="${ruche.dateAcquisition}"></td>
-					<td class="num" th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
+					<td class="num"
+						th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
 					<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
-					<td><a th:href="@{/rucheType/{id}(id=${ruche.type?.id})}" th:text="${ruche.type?.nom}"></a></td>
+					<td><a th:href="@{/rucheType/{id}(id=${ruche.type?.id})}"
+						th:text="${ruche.type?.nom}"></a></td>
 					<td th:text="${ruche.production}? #{oui} : #{non}"></td>
-					<td class="num" th:text="${#numbers.formatDecimal(ruche.latitude,1,4)}"></td>
-					<td class="num" th:text="${#numbers.formatDecimal(ruche.longitude,1,4)}"></td>
+					<td class="num"
+						th:text="${#numbers.formatDecimal(ruche.latitude,1,4)}"></td>
+					<td class="num"
+						th:text="${#numbers.formatDecimal(ruche.longitude,1,4)}"></td>
 					<td th:text="${ruche.commentaire}"></td>
 				</tr>
 			</tbody>
@@ -97,14 +109,18 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td><a th:href="@{/rucher/{id}(id=${ruche.rucher?.id})}" th:text="${ruche.rucher?.nom}"></a></td>
-					<td><a th:href="@{/evenement/{id}(id=${eveRucher?.id},type='ruche')}"
-							th:text="${#temporals.format(eveRucher?.date, 'yyyy/MM/dd')}"></a>
+					<td><a th:href="@{/rucher/{id}(id=${ruche.rucher?.id})}"
+						th:text="${ruche.rucher?.nom}"></a></td>
+					<td><a
+						th:href="@{/evenement/{id}(id=${eveRucher?.id},type='ruche')}"
+						th:text="${#temporals.format(eveRucher?.date, 'yyyy/MM/dd')}"></a>
 					</td>
 					<td th:text="${eveRucher?.commentaire}"></td>
-					<td><a th:href="@{/essaim/{id}(id=${ruche.essaim?.id})}" th:text="${ruche.essaim?.nom}"></a></td>
-					<td><a th:if="${eveEssaim != null}" th:href="@{/evenement/{id}(id=${eveEssaim?.id},type='ruche')}"
-							th:text="${#temporals.format(eveEssaim?.date, 'yyyy/MM/dd')}"></a>
+					<td><a th:href="@{/essaim/{id}(id=${ruche.essaim?.id})}"
+						th:text="${ruche.essaim?.nom}"></a></td>
+					<td><a th:if="${eveEssaim != null}"
+						th:href="@{/evenement/{id}(id=${eveEssaim?.id},type='ruche')}"
+						th:text="${#temporals.format(eveEssaim?.date, 'yyyy/MM/dd')}"></a>
 					</td>
 					<td th:text="${eveEssaim?.commentaire}"></td>
 				</tr>
@@ -122,8 +138,9 @@
 				<tbody>
 					<tr>
 						<td th:text="${eveComm?.commentaire}"></td>
-						<td><a th:if="${eveComm != null}" th:href="@{/evenement/{id}(id=${eveComm?.id},type='ruche')}"
-								th:text="${#temporals.format(eveComm?.date, 'yyyy/MM/dd')}"></a>
+						<td><a th:if="${eveComm != null}"
+							th:href="@{/evenement/{id}(id=${eveComm?.id},type='ruche')}"
+							th:text="${#temporals.format(eveComm?.date, 'yyyy/MM/dd')}"></a>
 						</td>
 					</tr>
 				</tbody>
@@ -148,14 +165,18 @@
 				</thead>
 				<tbody>
 					<tr th:each="hausseRuche : ${haussesRuche}">
-						<td><a href="/retraitHausse" th:href="@{/hausse/{id}(id=${hausseRuche.id})}"
-								th:text="${hausseRuche.nom}"></a></td>
+						<td><a href="/retraitHausse"
+							th:href="@{/hausse/{id}(id=${hausseRuche.id})}"
+							th:text="${hausseRuche.nom}"></a></td>
 						<td th:text="${hausseRuche.ordreSurRuche}"></td>
-						<td th:text="${#temporals.format( datesPoseHausse[hausseRucheStat.index] , 'yyyy/MM/dd')}">
+						<td
+							th:text="${#temporals.format( datesPoseHausse[hausseRucheStat.index] , 'yyyy/MM/dd')}">
 						</td>
-						<td th:if="${session.voirInactif}" th:text="${hausseRuche.active}? #{oui} : #{non}"></td>
+						<td th:if="${session.voirInactif}"
+							th:text="${hausseRuche.active}? #{oui} : #{non}"></td>
 						<td th:text="${hausseRuche.dateAcquisition}"></td>
-						<td class="num" th:text="${#numbers.formatDecimal(hausseRuche.poidsVide,1,1,'DEFAULT')}"></td>
+						<td class="num"
+							th:text="${#numbers.formatDecimal(hausseRuche.poidsVide,1,1,'DEFAULT')}"></td>
 						<td class="num" th:text="${hausseRuche.nbCadres}"></td>
 						<td class="num" th:text="${hausseRuche.nbCadresMax}"></td>
 						<td th:text="${hausseRuche.commentaire}"></td>

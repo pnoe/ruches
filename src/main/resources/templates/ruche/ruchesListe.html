@@ -1,18 +1,19 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsruches}"></script>
-	<script th:inline="javascript">
-		/* exported
-		Ruches  buttTxtPrint  buttTxtCol  urlCommLot  selectRuTrait DataTable
-		*/
-		const Ruches = /*[[#{Ruches}]]*/null;
-		const buttTxtPrint = /*[[#{buttontextprint}]]*/null;
-		const buttTxtCol = /*[[#{buttontextcol}]]*/null;
-		const urlCommLot = /*[[@{/evenement/ruche/commentaireLot/}]]*/null;
-		const selectRuTrait = /*[[#{selectruchestraiter}]]*/null;
-	</script>
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsruches}"></script>
+<script th:inline="javascript">
+	/* exported
+	Ruches, buttTxtPrint, buttTxtCol, urlCommLot, selectRuTrait
+	 */
+	const Ruches = /*[[#{Ruches}]]*/null;
+	const buttTxtPrint = /*[[#{buttontextprint}]]*/null;
+	const buttTxtCol = /*[[#{buttontextcol}]]*/null;
+	const urlCommLot = /*[[@{/evenement/ruche/commentaireLot/}]]*/null;
+	const selectRuTrait = /*[[#{selectruchestraiter}]]*/null;
+</script>
 </head>
 
 <body>
@@ -26,15 +27,16 @@
 				<h1 class="item" th:text="#{Ruches}"></h1>
 			</div>
 			<div class="col">
-				<a id="cree" th:href="@{/ruche/cree}" class="bi-plus-lg" th:title="#{ajouterRuche}"
-					aria-hidden="true"></a> &nbsp; <a id="commentaire" href="#" class="bi-chat-text"
+				<a id="cree" th:href="@{/ruche/cree}" class="bi-plus-lg"
+					th:title="#{ajouterRuche}" aria-hidden="true"></a> &nbsp; <a
+					id="commentaire" href="#" class="bi-chat-text"
 					th:title="#{evenementsCommentaire}" aria-hidden="true"></a>
 			</div>
 			<div class="col-6">
 				<select class="form-control" id="rucher" name="rucher">
 					<option value="" th:text="#{TousRuchers}"></option>
-					<option th:each="rucheropt : ${ruchersNoms}" th:value="${rucheropt}" th:text="${rucheropt}">
-					</option>
+					<option th:each="rucheropt : ${ruchersNoms}"
+						th:value="${rucheropt}" th:text="${rucheropt}"></option>
 				</select>
 			</div>
 		</div>
@@ -63,20 +65,27 @@
 			</thead>
 			<tbody>
 				<tr th:each="ruche : ${ruches}">
-					<td><a th:href="@{'/ruche/'+${ruche.id}}" th:text="${ruche.nom}"></a></td>
-					<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}" th:text="${ruche.essaim?.nom}"></a></td>
-					<td><a th:href="@{'/rucher/'+${ruche.rucher?.id}}" th:text="${ruche.rucher?.nom}"></a></td>
+					<td><a th:href="@{'/ruche/'+${ruche.id}}"
+						th:text="${ruche.nom}"></a></td>
+					<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}"
+						th:text="${ruche.essaim?.nom}"></a></td>
+					<td><a th:href="@{'/rucher/'+${ruche.rucher?.id}}"
+						th:text="${ruche.rucher?.nom}"></a></td>
 					<td th:text="${dateAjoutRucher[rucheStat.index]}"></td>
 					<td th:text="${ruche.production}? #{oui} : #{non}"></td>
-					<td th:if="${session.voirInactif}" th:text="${ruche.active}? #{oui} : #{non}"></td>
+					<td th:if="${session.voirInactif}"
+						th:text="${ruche.active}? #{oui} : #{non}"></td>
 					<td th:text="${ruche.dateAcquisition}"></td>
-					<td class="num" th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
+					<td class="num"
+						th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
 					<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
 					<td th:text="${ruche.type?.nom}"></td>
 					<td class="num" th:text="${nbHausses[rucheStat.index]}"></td>
 					<th:block th:if="${session.voirLatLon}">
-						<td class="num" th:text="${#numbers.formatDecimal(ruche.latitude,1,5)}"></td>
-						<td class="num" th:text="${#numbers.formatDecimal(ruche.longitude,1,5)}"></td>
+						<td class="num"
+							th:text="${#numbers.formatDecimal(ruche.latitude,1,5)}"></td>
+						<td class="num"
+							th:text="${#numbers.formatDecimal(ruche.longitude,1,5)}"></td>
 					</th:block>
 					<td th:text="${ruche.commentaire}"></td>
 				</tr>
