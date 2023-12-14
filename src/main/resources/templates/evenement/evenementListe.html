@@ -32,7 +32,9 @@
 						th:text="#{essaim} + ' ' + ${essaimNom}"></a>
 					<a th:if="${hausseId}" th:href="@{'/hausse/'+${hausseId}}"
 						th:text="#{hausse} + ' ' + ${hausseNom}"></a>
-					<th:block th:text="#{sep}+#{evenements}"></th:block>
+					<th:block th:if="${rucheId} or ${rucherId} or ${essaimId} or ${hausseId}"
+						th:text="#{sep}"></th:block>
+					<th:block th:text="#{evenements}"></th:block>
 				</h1>
 			</div>
 			<th:block th:unless="${rucheId} or ${rucherId} or ${essaimId} or ${hausseId}">
