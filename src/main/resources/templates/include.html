@@ -127,16 +127,16 @@
 				th:text="#{evenements}"></a> 
 			<a th:if="${type}=='hausse'"
 				th:href="@{'/evenement/hausse/'+${evenement.hausse.id}}"
-				th:text="#{evenements}"></a> 
+				th:text="#{hausse}+' '+${evenement.hausse.nom}"></a> 
 			<a th:if="${type}=='essaim'"
 				th:href="@{'/evenement/essaim/'+${evenement.essaim.id}}"
-				th:text="#{evenements}"></a> 
+				th:text="#{essaim}+' '+${evenement.essaim.nom}"></a> 
 			<a th:if="${type}=='ruche'"
 				th:href="@{'/evenement/ruche/'+${evenement.ruche.id}}"
-				th:text="#{evenements}"></a>
+				th:text="#{ruche}+' '+${evenement.ruche.nom}"></a>
 			<a th:if="${type}=='rucher'"
 				th:href="@{'/evenement/rucher/'+${evenement.rucher.id}}"
-				th:text="#{evenements}"></a>
+				th:text="#{rucher}+' '+${evenement.rucher.nom}"></a>
 			 <a th:if="${type=='sucre'}"
 				th:href="@{'/evenement/essaim/listeSucre'}"
 				th:text="#{evenementssucre}"></a>
