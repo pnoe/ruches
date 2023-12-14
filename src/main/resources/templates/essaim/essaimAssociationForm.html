@@ -14,7 +14,6 @@
 		document.addEventListener('DOMContentLoaded', () => {
 			const swapCheck = document.getElementById('swapPositions');
 			$.validator.addMethod('greaterThanEqual', function (value, element, param) {
-//				return (swapCheck && swapCheck.checked &&
 				return (swapCheck?.checked &&
 					(rucherucherid !== ruchesourcerucherid))
 					? (Date.parse(value) > Date.parse(param)) : true;
@@ -60,7 +59,7 @@
 				<h1 class="item">
 					<a th:href="@{'/essaim/associe/'+${essaimId}}"
 						th:text="#{association}+' '+#{essaim}+' '+${essaim.nom}"></a>
-					<th:block th:text="#{ruche} + ' ' + ${ruche.nom}"></th:block>
+					<th:block th:text="#{sep}+#{ruche} + ' ' + ${ruche.nom}"></th:block>
 				</h1>
 			</div>
 		</div>

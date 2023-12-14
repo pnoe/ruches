@@ -30,8 +30,8 @@
 			<div class="col text-center">
 				<h1 class="item">
 					<a th:href="@{'/rucher/'+${rucher.id}}" th:text="#{rucher}+' '+${rucher.nom}"></a>
-					<th:block th:unless="${#arrays.isEmpty(essaims)}" th:text="' '+#{poidsessaims}"></th:block>
-					<th:block th:if="${#arrays.isEmpty(essaims)}" th:text="#{aucunePesee}"></th:block>
+					<th:block th:unless="${#arrays.isEmpty(essaims)}" th:text="#{sep}+#{poidsessaims}"></th:block>
+					<th:block th:if="${#arrays.isEmpty(essaims)}" th:text="#{sep}+#{aucunePesee}"></th:block>
 				</h1>
 			</div>
 		</div>

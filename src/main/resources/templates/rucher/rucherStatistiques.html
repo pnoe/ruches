@@ -1,8 +1,9 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:inline="javascript">
 		/* globals DataTable bootstrap */
 		const buttontextprint = /*[[#{buttontextprint}]]*/null;
 		const buttontextcol = /*[[#{buttontextcol}]]*/null;
@@ -35,22 +36,22 @@
 	<br />
 	<div class="container-fluid">
 		<div class="row">
-
 			<div class="col">
 				<h1 class="item">
 					<a th:href="@{'/rucher/liste'}" th:text="#{Ruchers}"></a>
-					<th:block th:text="#{ProductionRecolte}"></th:block>
+					<th:block th:text="#{sep}+#{ProductionRecolte}"></th:block>
 				</h1>
 			</div>
 			<div class="col">
-				<a href="#" class="bi-question-lg" data-bs-toggle="popover" data-bs-trigger="focus" tabindex="0"
-					role="button" th:attr="data-bs-content=#{aideStatistiqueRucher}"></a>
+				<a href="#" class="bi-question-lg" data-bs-toggle="popover"
+					data-bs-trigger="focus" tabindex="0" role="button"
+					th:attr="data-bs-content=#{aideStatistiqueRucher}"></a>
 			</div>
 		</div>
-
 	</div>
 	<div class="container-fluid">
-		<table class="table table-bordered table-striped table-sm" id="statistiques">
+		<table class="table table-bordered table-striped table-sm"
+			id="statistiques">
 			<thead>
 				<tr>
 					<th th:text="#{rucher}"></th>
@@ -63,7 +64,8 @@
 			</thead>
 			<tbody>
 				<tr th:each="rucherPoids : ${ruchersPoids}">
-					<td><a th:href="@{'/rucher/'+${rucherPoids.id}}" th:text="${rucherPoids.nom}"></a></td>
+					<td><a th:href="@{'/rucher/'+${rucherPoids.id}}"
+						th:text="${rucherPoids.nom}"></a></td>
 					<td th:text="${rucherPoids.nbRecoltes}"></td>
 					<td th:text="${rucherPoids.pTotal}"></td>
 					<td th:text="${rucherPoids.pMax}"></td>

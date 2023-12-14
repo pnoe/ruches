@@ -31,8 +31,8 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<th:block th:text="#{associationruche}"></th:block>
 					<a th:href="@{'/essaim/'+${essaim.id}}" th:text="#{essaim} + ' ' + ${essaim.nom}"></a>
+					<th:block th:text="#{sep}+#{associationruche}"></th:block>
 				</h1>
 			</div>
 		</div>

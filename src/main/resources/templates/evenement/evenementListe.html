@@ -25,7 +25,6 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<th:block th:text="#{evenements}+ ' '"></th:block>
 					<a th:if="${rucheId}" th:href="@{'/ruche/'+${rucheId}}" th:text="#{ruche} + ' ' + ${rucheNom}"></a>
 					<a th:if="${rucherId}" th:href="@{'/rucher/'+${rucherId}}"
 						th:text="#{rucher} + ' ' + ${rucherNom}"></a>
@@ -33,6 +32,7 @@
 						th:text="#{essaim} + ' ' + ${essaimNom}"></a>
 					<a th:if="${hausseId}" th:href="@{'/hausse/'+${hausseId}}"
 						th:text="#{hausse} + ' ' + ${hausseNom}"></a>
+					<th:block th:text="#{sep}+#{evenements}"></th:block>
 				</h1>
 			</div>
 			<th:block th:unless="${rucheId} or ${rucherId} or ${essaimId} or ${hausseId}">

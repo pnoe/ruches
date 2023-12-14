@@ -14,9 +14,9 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<th:block th:text="#{statistiquesproduction} + ' '"></th:block>
 					<a th:href="@{'/recolte/'+${recolte.id}}"
 						th:text="#{recolte} + ' ' + ${#temporals.format(recolte.date, 'yy/MM/dd HH:mm')}"></a>
+					<th:block th:text="#{sep}+#{statistiquesproduction}"></th:block>
 				</h1>
 			</div>
 			<div class="col">

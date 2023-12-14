@@ -39,9 +39,9 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<th:block th:text="#{pesee} + ' '"></th:block>
 					<a th:href="@{'/essaim/'+${evenement.essaim?.id}}"
 						th:text="#{essaim} + ' ' + ${evenement.essaim?.nom}"></a>
+					<th:block th:text="#{sep}+#{pesee}"></th:block>
 				</h1>
 				<th:block th:if="${EveRUCHEPESEE}">
 					<a th:href="@{'/evenement/'+${EveRUCHEPESEE.id}}"

@@ -46,7 +46,7 @@
 			<div class="col">
 				<h1 class="item">
 					<a th:href="@{'/rucher/ruches/'+${rucherId}}" th:text="#{ajoutruches} + ' ' + ${rucher.nom}"></a>
-					<th:block th:text="' ' + #{Ruches} + ' ' + ${ruchesNoms}"></th:block>
+					<th:block th:text="#{sep} + #{Ruches} + ' ' + ${ruchesNoms}"></th:block>
 				</h1>
 				<p th:text="#{dateDernierAjout} + ' ' + ${#temporals.format(dateTime, 'dd/MM/yyyy HH:mm')}">
 				</p>

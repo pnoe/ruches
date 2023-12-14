@@ -36,7 +36,7 @@
 		<div class="row">
 			<h1 class="item">
 				<a th:href="@{'/hausse/liste'}" th:text="#{Hausses}"></a>
-				<th:block th:text="' ' + #{commentaireLot} + ' ' + ${haussesNoms}">
+				<th:block th:text="#{sep} + #{commentaireLot} + ' ' + ${haussesNoms}">
 			</h1>
 		</div>
 	</div>

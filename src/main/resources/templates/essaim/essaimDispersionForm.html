@@ -76,8 +76,8 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<th:block th:text="#{dispersion} + ' '"></th:block>
 					<a th:href="@{'/essaim/'+${essaimId}}" th:text="#{essaim} + ' ' + ${essaim.nom}"></a>
+					<th:block th:text="#{sep} + #{dispersion}"></th:block>
 				</h1>
 			</div>
 			<div class="col">

@@ -22,7 +22,7 @@
 			<div class="col">
 				<h1 class="item">
 					<a th:href="@{'/essaim/'+${essaim.id}}" th:text="#{Essaims}+ ' '+${essaim.nom}"></a>
-					<th:block th:text="' '+#{Production}"></th:block>
+					<th:block th:text="#{sep}+#{Production}"></th:block>
 				</h1>
 			</div>
 			<div class="col">

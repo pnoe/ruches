@@ -28,7 +28,7 @@
 			<div class="col text-center">
 				<h1 class="item">
 					<a th:href="@{'/essaim/'+${essaim.id}}" th:text="#{essaim}+' '+${essaim.nom}"></a>
-					<th:block th:text="' '+#{RUCHEPESEE}"></th:block>
+					<th:block th:text="#{sep}+#{RUCHEPESEE}"></th:block>
 					<th:block th:if="${ruche}" th:text="' ('+#{vide}+' '
 					  +${#numbers.formatDecimal(ruche.poidsVide,1,2,'COMMA')}+' )'"></th:block>
 				</h1>

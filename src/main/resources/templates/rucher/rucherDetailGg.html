@@ -53,8 +53,8 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<th:block th:text="#{carteGg}+' '"></th:block>
 					<a th:href="@{'/rucher/'+${rucher.id}}" th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+					<th:block th:text="#{sep}+#{carteGg}"></th:block>
 				</h1>
 			</div>
 			<div class="col">

@@ -1,8 +1,9 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:inline="javascript">
 		/* globals DataTable */
 		const buttontextprint = /*[[#{buttontextprint}]]*/null;
 		const buttontextcol = /*[[#{buttontextcol}]]*/null;
@@ -38,13 +39,16 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<th:block th:text="#{transhumances}"></th:block>
+					<a th:href="@{'/rucher/liste'}" th:text="#{Ruchers}"></a>
+					<th:block th:text="#{sep}+#{transhumances}"></th:block>
 				</h1>
 			</div>
 			<div class="col">
-				<a th:href="@{#{urldoc}+'6867_3218336070'}" class="bi-book" th:title="#{Doc}" target="_blank"
-					aria-hidden="true"></a> <span class="padicons"> <input type="checkbox" id="groupe"
-						th:title="#{grouper}" th:checked="${group}" /> <label for="groupe" th:text="#{grouper}"></label>
+				<a th:href="@{#{urldoc}+'6867_3218336070'}" class="bi-book"
+					th:title="#{Doc}" target="_blank" aria-hidden="true"></a> <span
+					class="padicons"> <input type="checkbox" id="groupe"
+					th:title="#{grouper}" th:checked="${group}" /> <label for="groupe"
+					th:text="#{grouper}"></label>
 				</span>
 			</div>
 		</div>
@@ -65,9 +69,11 @@
 			</thead>
 			<tbody>
 				<tr th:each="hist : ${histo}" th:class="${hist.type} ? 'coloredrow'">
-					<td><a th:text="${#temporals.format(hist.date, 'yyyy/MM/dd HH:mm')}"
-							th:href="@{'/evenement/'+${hist.eveid}+'?type=ajoutruche'}"></a></td>
-					<td><a th:text="${hist.rucher.nom}" th:href="@{'/rucher/'+${hist.rucher.id}}"></a></td>
+					<td><a
+						th:text="${#temporals.format(hist.date, 'yyyy/MM/dd HH:mm')}"
+						th:href="@{'/evenement/'+${hist.eveid}+'?type=ajoutruche'}"></a></td>
+					<td><a th:text="${hist.rucher.nom}"
+						th:href="@{'/rucher/'+${hist.rucher.id}}"></a></td>
 					<td th:text="${hist.type} ? #{Ajout} : #{Retrait}"></td>
 					<td th:text="${#strings.listJoin(hist.destProv,' ')}"></td>
 					<td th:if="${group}" th:text="${#lists.size(hist.ruche)}"></td>

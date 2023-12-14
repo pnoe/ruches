@@ -20,8 +20,8 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<th:block th:text="#{ajoutretraithausses}"></th:block>
 					<a th:href="@{'/ruche/'+${ruche.id}}" th:text="#{ruche} + ' ' + ${ruche.nom}"></a>
+					<th:block th:text="#{sep}+#{ajoutretraithausses}"></th:block>
 				</h1>
 			</div>
 			<div class="col">
