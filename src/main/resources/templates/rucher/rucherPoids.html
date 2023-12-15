@@ -1,22 +1,23 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsChart}"></script>
-	<script th:replace="~{include :: luxon}"></script>
-	<script th:replace="~{include :: chartjs-adapter}"></script>
-	<script th:replace="~{include :: d3-color}"></script>
-	<script th:replace="~{include :: d3-interpolate}"></script>
-	<script th:replace="~{include :: d3-scale-chromatic}"></script>
-	<script th:replace="~{include :: jsruches}"></script>
-	<script th:inline="javascript">
-		/* exported essaims, poids, dates, ruches, ruche */
-		const essaims = /*[[${essaims}]]*/ null;
-		const ruches = /*[[${ruches}]]*/ null;
-		const poids = /*[[${poids}]]*/ null;
-		const dates = /*[[${dates}]]*/ null;
-		const ruche = /*[[#{ruche}]]*/ null;
-	</script>
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsChart}"></script>
+<script th:replace="~{include :: luxon}"></script>
+<script th:replace="~{include :: chartjs-adapter}"></script>
+<script th:replace="~{include :: d3-color}"></script>
+<script th:replace="~{include :: d3-interpolate}"></script>
+<script th:replace="~{include :: d3-scale-chromatic}"></script>
+<script th:replace="~{include :: jsruches}"></script>
+<script th:inline="javascript">
+	/* exported essaims, poids, dates, ruches, ruche */
+	const essaims = /*[[${essaims}]]*/null;
+	const ruches = /*[[${ruches}]]*/null;
+	const poids = /*[[${poids}]]*/null;
+	const dates = /*[[${dates}]]*/null;
+	const ruche = /*[[#{ruche}]]*/null;
+</script>
 </head>
 
 <body>
@@ -25,17 +26,20 @@
 	<br />
 	<br />
 	<div class="container-fluid">
-		<canvas th:unless="${#arrays.isEmpty(essaims)}" id="ctx"></canvas>
 		<div class="row">
 			<div class="col text-center">
 				<h1 class="item">
-					<a th:href="@{'/rucher/'+${rucher.id}}" th:text="#{rucher}+' '+${rucher.nom}"></a>
-					<th:block th:unless="${#arrays.isEmpty(essaims)}" th:text="#{sep}+#{poidsessaims}"></th:block>
-					<th:block th:if="${#arrays.isEmpty(essaims)}" th:text="#{sep}+#{aucunePesee}"></th:block>
+					<a th:href="@{'/rucher/'+${rucher.id}}"
+						th:text="#{rucher}+' '+${rucher.nom}"></a>
+					<th:block th:unless="${#arrays.isEmpty(essaims)}"
+						th:text="#{sep}+#{poidsessaims}"></th:block>
+					<th:block th:if="${#arrays.isEmpty(essaims)}"
+						th:text="#{sep}+#{aucunePesee}"></th:block>
 				</h1>
 			</div>
 		</div>
 	</div>
+	<canvas th:unless="${#arrays.isEmpty(essaims)}" id="ctx"></canvas>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
 

@@ -23,7 +23,6 @@
 	<br />
 	<br />
 	<div class="container-fluid">
-		<canvas th:unless="${#arrays.isEmpty(dates)}" id="ctx"></canvas>
 		<div class="row">
 			<div class="col text-center">
 				<h1 class="item">
@@ -40,6 +39,7 @@
 			</div>
 		</div>
 	</div>
+	<canvas th:unless="${#arrays.isEmpty(dates)}" id="ctx"></canvas>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
 
