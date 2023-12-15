@@ -1,31 +1,23 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsChart}"></script>
-	<script th:replace="~{include :: d3-color}"></script>
-	<script th:replace="~{include :: d3-interpolate}"></script>
-	<script th:replace="~{include :: d3-scale-chromatic}"></script>
-	<script th:replace="~{include :: jsruches}"></script>
-	<script th:inline="javascript">
-		/* exported agesHisto, pas, ageMinJours, ageMaxJours, Max, Min, ageMoyenJours, 
-		EcartType, ageVarianceJours, Moyenne, ageDesReines, nbReinesTotal, jours, Reines
-		*/
-		const pas = /*[[${pas}]]*/ null;
-		const agesHisto = /*[[${agesHisto}]]*/ null;
-		const ageMoyenJours = /*[[${ageMoyenJours}]]*/ null;
-		const ageVarianceJours = /*[[${ageVarianceJours}]]*/ null;
-		const ageMaxJours = /*[[${ageMaxJours}]]*/ null;
-		const ageMinJours = /*[[${ageMinJours}]]*/ null;
-		const Moyenne = /*[[#{Moyenne}]]*/ null;
-		const EcartType = /*[[#{EcartType}]]*/ null;
-		const Min = /*[[#{Min}]]*/ null;
-		const Max = /*[[#{Max}]]*/ null;
-		const ageDesReines = /*[[#{ageDesReines}]]*/ null;
-		const nbReinesTotal = /*[[#{nbReinesTotal}]]*/ null;
-		const jours = /*[[#{jours}]]*/ null;
-		const Reines = /*[[#{Reines}]]*/ null;
-	</script>
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsChart}"></script>
+<script th:replace="~{include :: d3-color}"></script>
+<script th:replace="~{include :: d3-interpolate}"></script>
+<script th:replace="~{include :: d3-scale-chromatic}"></script>
+<script th:replace="~{include :: jsruches}"></script>
+<script th:inline="javascript">
+	/* exported agesHisto, pas, 
+	   ageDesReines, nbReinesTotal, Reines
+	 */
+	const pas = /*[[${pas}]]*/null;
+	const agesHisto = /*[[${agesHisto}]]*/null;
+	const ageDesReines = /*[[#{ageDesReines}]]*/null;
+	const nbReinesTotal = /*[[#{nbReinesTotal}]]*/null;
+	const Reines = /*[[#{Reines}]]*/null;
+</script>
 </head>
 
 <body>
@@ -33,6 +25,25 @@
 	<br />
 	<br />
 	<br />
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					<a th:href="@{'/essaim/liste'}" th:text="#{Essaims}"></a>
+					<th:block th:text="#{sep}+#{ageDesReines}"></th:block>
+				</h1>
+			</div>
+			<div class="col">
+				<span
+					th:text="#{Min} + ' ' + ${ageMinJours} + ', ' +
+							#{Max} + ' ' + ${ageMaxJours} + ', ' +
+							#{Moyenne} + ' ' + ${ageMoyenJours} + ', ' +
+							#{EcartType} + ' ' + ${ageVarianceJours} + ' ' + #{jours}"></span>
+			</div>
+		</div>
+	</div>
+
 	<div class="container-fluid">
 		<canvas id="ctx"></canvas>
 	</div>

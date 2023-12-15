@@ -1,5 +1,5 @@
-/* globals d3, Chart, agesHisto, pas, ageMinJours, ageMaxJours, Max, Min, ageMoyenJours, 
-	EcartType, ageVarianceJours, Moyenne, ageDesReines, nbReinesTotal, jours, Reines
+/* globals d3, Chart, agesHisto, pas, 
+	ageDesReines, nbReinesTotal, Reines
 */
 'use strict';
 // https://github.com/code-nebula/chart-color-generator
@@ -55,11 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					display: true,
 					title: {
 						display: true,
-						text: ageDesReines + ' - ' +
-							Min + ' ' + ageMinJours + ' ' +
-							Max + ' ' + ageMaxJours + ' ' +
-							Moyenne + ' ' + ageMoyenJours + ' ' +
-							EcartType + ' ' + ageVarianceJours + jours + ' ',
+						text: ageDesReines,
 						font: {
 							size: 14,
 						},
