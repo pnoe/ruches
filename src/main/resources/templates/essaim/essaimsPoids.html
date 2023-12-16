@@ -10,10 +10,17 @@
 	<script th:replace="~{include :: d3-scale-chromatic}"></script>
 	<script th:replace="~{include :: jsruches}"></script>
 	<script th:inline="javascript">
-		/* exported essaim, poids, dates */
-		const essaim = /*[[${essaim}]]*/ null;
+		/* exported poids, dates 
+		    , poidsSucre, datesSucre
+		    , poidsRec, datesRec, ruchersRec
+		*/
 		const poids = /*[[${poids}]]*/ null;
 		const dates = /*[[${dates}]]*/ null;
+		const poidsSucre = /*[[${poidsSucre}]]*/ null;
+		const datesSucre = /*[[${datesSucre}]]*/ null;
+		const poidsRec = /*[[${poidsRec}]]*/ null;
+		const datesRec = /*[[${datesRec}]]*/ null;
+		const ruchersRec = /*[[${ruchersRec}]]*/ null;
 	</script>
 </head>
 

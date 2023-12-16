@@ -79,6 +79,8 @@ public class EssaimController {
 	public String poids(Model model, @PathVariable long essaimId) {
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isPresent()) {
+			Essaim essaim = essaimOpt.get();
+			// Les pesées de l'essaim.
 			List<Evenement> evesPesee = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
 					TypeEvenement.RUCHEPESEE);
 			List<Long> dates = new ArrayList<>(evesPesee.size());
@@ -89,9 +91,42 @@ public class EssaimController {
 			}
 			model.addAttribute("dates", dates);
 			model.addAttribute("poids", poids);
-			model.addAttribute("essaim", essaimOpt.get());
+			model.addAttribute("essaim", essaim);
 			Ruche ruche = rucheRepository.findByEssaimId(essaimId);
 			model.addAttribute("ruche", ruche);
+			// Les événements sucre.
+			List<Evenement> evesSucre = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
+					TypeEvenement.ESSAIMSUCRE);
+			List<Long> datesSucre = new ArrayList<>(evesSucre.size());
+			List<Float> poidsSucre = new ArrayList<>(evesSucre.size());
+			for (Evenement e : evesSucre) {
+				datesSucre.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
+				poidsSucre.add(Float.parseFloat(e.getValeur()));
+			}
+			model.addAttribute("datesSucre", datesSucre);
+			model.addAttribute("poidsSucre", poidsSucre);
+			// Les récoltes.
+			// Calcul du poids de miel par récoltes pour cet essaim
+			Iterable<Recolte> recoltes = recolteRepository.findAllByOrderByDateAsc();
+			List<Long> datesRec = new ArrayList<>();
+			List<Float> poidsRec = new ArrayList<>();
+			// List<Recolte> recoltesListe = new ArrayList<>();
+			List<String> ruchersRec = new ArrayList<>();
+			for (Recolte recolte : recoltes) {
+				Integer pRec = recolteHausseRepository.findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId());
+				if (pRec != null) {
+					RecolteHausse rHFirst = recolteHausseRepository.findFirstByRecolteAndEssaim(recolte, essaim);
+					String rucherNom = ((rHFirst == null) || (rHFirst.getRucher() == null)) ? "" : rHFirst.getRucher().getNom();
+					poidsRec.add(pRec/1000f);
+					datesRec.add(recolte.getDate().toEpochSecond(ZoneOffset.UTC));
+					ruchersRec.add(rucherNom);
+					// recoltesListe.add(recolte);
+				}
+			}
+			model.addAttribute("poidsRec", poidsRec);
+			model.addAttribute("datesRec", datesRec);
+			model.addAttribute("ruchersRec", ruchersRec);
+
 			return "essaim/essaimsPoids";
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
@@ -294,8 +329,8 @@ public class EssaimController {
 				: essaimRepository.findEssaimActifRucheRucherOrderByNom();
 		List<Evenement> listeEvenCadre = new ArrayList<>();
 		for (EssaimRucheRucher e : eRR) {
-			listeEvenCadre.add(evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(e.essaim(),
-					TypeEvenement.RUCHECADRE));
+			listeEvenCadre.add(
+					evenementRepository.findFirstByEssaimAndTypeOrderByDateDesc(e.essaim(), TypeEvenement.RUCHECADRE));
 		}
 		model.addAttribute("listeEvenCadre", listeEvenCadre);
 		model.addAttribute(ESSAIMSRRR, eRR);
