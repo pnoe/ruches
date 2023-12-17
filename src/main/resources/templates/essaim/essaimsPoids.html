@@ -10,9 +10,8 @@
 	<script th:replace="~{include :: d3-scale-chromatic}"></script>
 	<script th:replace="~{include :: jsruches}"></script>
 	<script th:inline="javascript">
-		/* exported poids, dates 
-		    , poidsSucre, datesSucre
-		    , poidsRec, datesRec, ruchersRec
+		/* exported poids, dates, poidsSucre, datesSucre
+		    , poidsRec, datesRec, ruchersRec, datesTrait
 		*/
 		const poids = /*[[${poids}]]*/ null;
 		const dates = /*[[${dates}]]*/ null;
@@ -21,6 +20,7 @@
 		const poidsRec = /*[[${poidsRec}]]*/ null;
 		const datesRec = /*[[${datesRec}]]*/ null;
 		const ruchersRec = /*[[${ruchersRec}]]*/ null;
+		const datesTrait = /*[[${datesTrait}]]*/ null;
 	</script>
 </head>
 
@@ -34,9 +34,7 @@
 			<div class="col text-center">
 				<h1 class="item">
 					<a th:href="@{'/essaim/'+${essaim.id}}" th:text="#{essaim}+' '+${essaim.nom}"></a>
-					<th:block th:text="#{sep}+#{RUCHEPESEE}"></th:block>
-					<th:block th:if="${ruche}" th:text="' ('+#{vide}+' '
-					  +${#numbers.formatDecimal(ruche.poidsVide,1,2,'COMMA')}+' )'"></th:block>
+					<th:block th:text="#{sep}+#{poidsVide}"></th:block>
 				</h1>
 			</div>
 		</div>

@@ -282,7 +282,9 @@ public class RecolteController {
 	}
 
 	/**
-	 * Statistiques graphique poids de miel par essaim pour une récolte.
+	 * Statistiques graphique poids de miel par essaim pour une récolte. Camembert
+	 * chartjs qui affiche la part de chaque essaim dans la récolte en poids et en
+	 * %.
 	 */
 	@GetMapping("/statistiques/{recolteId}")
 	public String statistiques(Model model, @PathVariable long recolteId) {
@@ -292,20 +294,20 @@ public class RecolteController {
 			List<Object[]> poidsNomEssaim = recolteHausseRepository.findPoidsMielNomEssaimByRecolte(recolteId);
 			// Les listes des noms des essaims et leurs poids de miel pour cette récolte,
 			// pour les essaims qui ont eu une production non nulle.
-			ArrayList<String> nomListe = new ArrayList<>();
+			ArrayList<String> noms = new ArrayList<>();
 			ArrayList<Long> poidsListe = new ArrayList<>();
 			Long poidsTotal = 0l;
 			Long poids;
-			for (Object[] i : poidsNomEssaim) {
-				poids = ((Long) i[0]);
+			for (Object[] obj : poidsNomEssaim) {
+				poids = ((Long) obj[0]);
 				if (poids > 0) {
 					poidsListe.add(poids);
-					nomListe.add((String) i[1]);
+					noms.add((String) obj[1]);
 					poidsTotal += poids;
 				}
 			}
 			model.addAttribute("poids", poidsListe);
-			model.addAttribute("noms", nomListe);
+			model.addAttribute("noms", noms);
 			model.addAttribute(Const.RECOLTE, recolte);
 			model.addAttribute("poidsTotal", poidsTotal);
 		} else {

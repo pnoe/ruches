@@ -24,6 +24,9 @@ function interpolateColors(dataLength, colorScale, colorRangeInfo) {
 document.addEventListener('DOMContentLoaded', () => {
 	const lang = navigator.language;
 	const digits2 = { maximumFractionDigits: 2 };
+	// https://www.chartjs.org/docs/latest/charts/doughnut.html
+	// Si plusieurs ruchers tracer des cercles de répartition pour chaque rucher.
+	// https://www.chartjs.org/docs/latest/samples/other-charts/multi-series-pie.html
 	new Chart('ctx', {
 		type: 'doughnut',
 		data: {
@@ -43,11 +46,14 @@ document.addEventListener('DOMContentLoaded', () => {
 					position: 'bottom'
 				},
 				tooltip: {
+					// https://www.chartjs.org/docs/latest/configuration/tooltip.html
 					callbacks: {
+						title: function() { return ''; }, // pour supprimer le nom de l'essaim en double.
 						label: function(tooltipItem) {
 							const poids = tooltipItem.dataset.data[tooltipItem.dataIndex];
-							return tooltipItem.label + ' ' + (poids / 1000).toLocaleString(lang, digits2) + 'kg ' +
-								(poids * 100 / poidsTotal).toLocaleString(lang, digits2) + '%';
+							// return Array pour deux lignes.
+							return [tooltipItem.label,(poids / 1000).toLocaleString(lang, digits2) + 'kg ' +
+								(poids * 100 / poidsTotal).toLocaleString(lang, digits2) + '%'];
 						}
 					}
 				}

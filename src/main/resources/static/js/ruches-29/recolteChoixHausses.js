@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		ttChk.checked = true;
 	}
 	ttChk.addEventListener('click', event => {
-		location = location.href.slice(0, location.href.lastIndexOf('/'))
+		location.href = location.href.slice(0, location.href.lastIndexOf('/'))
 			+ '/' + event.target.checked;
 	});
 	function updateLinks(_e, _dt, type) {

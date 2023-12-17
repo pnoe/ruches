@@ -1,6 +1,5 @@
-/* globals Chart, dates, poids
- , poidsSucre, datesSucre
- , poidsRec, datesRec, ruchersRec
+/* globals Chart, dates, poids, poidsSucre, datesSucre
+ , poidsRec, datesRec, ruchersRec, datesTrait
 */
 'use strict';
 
@@ -16,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			// https://www.chartjs.org/docs/latest/samples/line/multi-axis.html
 			datasets: [{
 				type: 'line',
-				label: 'Poids',
+				label: 'Ruche',
 				yAxisID: 'yp',
 				data: dates.map((v, i) => { return [v * 1000, poids[i]]; })
 			}, {
@@ -29,6 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
 				label: 'Récolte',
 				yAxisID: 'yr',
 				data: datesRec.map((v, i) => { return [v * 1000, poidsRec[i]]; })
+			}, {
+				type: 'scatter',
+				label: 'Traitements',
+				yAxisID: 'yt',
+				data: datesTrait.map(v => { return [v * 1000, 0]; })
 			}],
 		},
 		options: {
@@ -44,6 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
 				},
 				yr: {
 					position: 'right'
+				},
+				yt: {
+					display: false
 				}
 			},
 			plugins: {
@@ -52,9 +59,18 @@ document.addEventListener('DOMContentLoaded', () => {
 						afterLabel: function(context) {
 							// Ajouter le nom du rucher pour la courbe des récoltes.
 							// https://www.chartjs.org/docs/latest/configuration/tooltip.html
+							// footer est global pour tous les datasets.
 							if (context.datasetIndex === 2) {
 								// Si dataSet des récoltes.
 								return ruchersRec[context.dataIndex];
+							}
+						},
+						label: function(context) {
+							if (context.datasetIndex === 3) {
+								// Si dataSet des traitements, ne pas afficher y.
+								// context.parsed.x renvoie le timestamp
+								// context.dataset.label renvoie le label du dataset
+								return [(new Date(context.parsed.x)).toLocaleString(), context.dataset.label];
 							}
 						}
 					}
