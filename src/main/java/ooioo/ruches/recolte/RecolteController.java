@@ -286,12 +286,16 @@ public class RecolteController {
 	 * chartjs qui affiche la part de chaque essaim dans la récolte en poids et en
 	 * %.
 	 */
-	@GetMapping("/statistiques/{recolteId}")
-	public String statistiques(Model model, @PathVariable long recolteId) {
+	@GetMapping(value = {"/statistiques/{recolteId}", "/statistiques/{recolteId}/{rucherId}"})
+	public String statistiques(Model model, @PathVariable long recolteId,
+			@PathVariable(required = false) Long rucherId) {
 		Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
 		if (recolteOpt.isPresent()) {
 			Recolte recolte = recolteOpt.get();
-			List<Object[]> poidsNomEssaim = recolteHausseRepository.findPoidsMielNomEssaimByRecolte(recolteId);
+
+			List<Object[]> poidsNomEssaim = (rucherId == null)
+					? recolteHausseRepository.findPoidsMielNomEssaimByRecolte(recolteId)
+					: recolteHausseRepository.findPoidsMielNomEssaimByRecRucher(recolteId, rucherId);
 			// Les listes des noms des essaims et leurs poids de miel pour cette récolte,
 			// pour les essaims qui ont eu une production non nulle.
 			ArrayList<String> noms = new ArrayList<>();
@@ -310,6 +314,13 @@ public class RecolteController {
 			model.addAttribute("noms", noms);
 			model.addAttribute(Const.RECOLTE, recolte);
 			model.addAttribute("poidsTotal", poidsTotal);
+
+			// Liste des ruchers
+			List<IdNom> ruchers = recolteHausseRepository.findIdNomsEssaimsRecolte(recolte);
+			model.addAttribute("ruchers", ruchers);
+			
+			model.addAttribute("rucherId", rucherId);
+
 		} else {
 			logger.error(Const.IDRECOLTEXXINCONNU, recolteId);
 			model.addAttribute(Const.MESSAGE, Const.IDRECOLTEINCONNU);

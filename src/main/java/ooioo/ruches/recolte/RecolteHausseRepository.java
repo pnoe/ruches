@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import ooioo.ruches.IdNom;
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.hausse.Hausse;
 import ooioo.ruches.ruche.Ruche;
@@ -87,6 +88,16 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 			""")
 	List<Long> findRuchersRecolteEssaim(Recolte recolte);
 
+	// Trouve les idNoms des ruchers de la récolte.
+	@Query(value = """
+			select new ooioo.ruches.IdNom(rucher.id, rucher.nom)
+			    from RecolteHausse
+			    where recolte = :recolte
+			      and rucher is not null
+			    group by rucher.id, rucher.nom
+			""")
+	List<IdNom> findIdNomsEssaimsRecolte(Recolte recolte);
+
 	// Trouve les id des essaims de la récolte.
 	@Query(value = """
 			select rh.essaim.id
@@ -149,14 +160,27 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 			""")
 	Integer findPoidsMielEssaimRecolteRucher(Long essaimId, Long recolteId, Long rucherId);
 
+	// Pour chaque essaim d'une récolte recolteId : poids de miel, nom de l'essaim
 	@Query(value = """
-			select sum(poids_avant) - sum(poids_apres) as p, e.nom
-			  from recolte_hausse as r, essaim as e
-			  where e.id=r.essaim_id and r.recolte_id=?1
-			  group by r.essaim_id, e.nom
+			select sum(poidsAvant) - sum(poidsApres) as p, essaim.nom
+			  from RecolteHausse
+			  where recolte.id = :recolteId
+			  group by essaim.nom
 			  order by p desc
-			""", nativeQuery = true)
+			""")
 	List<Object[]> findPoidsMielNomEssaimByRecolte(Long recolteId);
+
+	// Pour chaque essaim d'une récolte recolteId et d'un rucher rucherId : poids de
+	// miel, nom de l'essaim
+	@Query(value = """
+			select sum(poidsAvant) - sum(poidsApres) as p, essaim.nom
+			  from RecolteHausse
+			  where recolte.id = :recolteId
+			    and rucher.id = :rucherId
+			  group by essaim.nom
+			  order by p desc
+			""")
+	List<Object[]> findPoidsMielNomEssaimByRecRucher(Long recolteId, Long rucherId);
 
 	@Query(value = """
 			select sum(poidsAvant) - sum(poidsApres) as poids

@@ -1,5 +1,5 @@
 /* globals 
-	d3, Chart, poidsmiel, nomsessaims, poidsTotal
+	d3, Chart, poidsmiel, nomsessaims, poidsTotal, urlRecolteStat, rucherId
 */
 'use strict';
 // https://github.com/code-nebula/chart-color-generator
@@ -22,6 +22,14 @@ function interpolateColors(dataLength, colorScale, colorRangeInfo) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+	const rucherSel = document.getElementById('rucher');
+	if (rucherSel !== null) {
+		rucherSel.value = rucherId;
+		rucherSel.addEventListener('change', event => {
+			const v = event.target.value;
+			window.location = urlRecolteStat + (v === 'null' ? '' : '/' + v);
+		});
+	}
 	const lang = navigator.language;
 	const digits2 = { maximumFractionDigits: 2 };
 	// https://www.chartjs.org/docs/latest/charts/doughnut.html
@@ -52,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
 						label: function(tooltipItem) {
 							const poids = tooltipItem.dataset.data[tooltipItem.dataIndex];
 							// return Array pour deux lignes.
-							return [tooltipItem.label,(poids / 1000).toLocaleString(lang, digits2) + 'kg ' +
+							return [tooltipItem.label, (poids / 1000).toLocaleString(lang, digits2) + 'kg ' +
 								(poids * 100 / poidsTotal).toLocaleString(lang, digits2) + '%'];
 						}
 					}
