@@ -41,9 +41,9 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 				from Hausse h
 				where h.ruche is not null
 					and h.id not in
-					(select rh.hausse.id
-						from RecolteHausse rh
-						where rh.recolte.id = :recolteId)
+					(select hausse.id
+						from RecolteHausse
+						where recolte.id = :recolteId)
 			""")
 	Iterable<Hausse> findHaussesNotInRecolteId(Long recolteId);
 	
@@ -52,25 +52,16 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 			select h
 				from Hausse h
 				where h.id not in
-					(select rh.hausse.id
-						from RecolteHausse rh
-						where rh.recolte.id = :recolteId)
+					(select hausse.id
+						from RecolteHausse
+						where recolte.id = :recolteId)
 			""")
 	Iterable<Hausse> findTtHNotInRecolteId(Long recolteId);
 
 	@Query(value = """
-			select rh, h
-			  from RecolteHausse rh, Hausse h
-			  where rh.recolte.id = :recolteId
-			    and rh.hausse.id = h.id
-			  order by h.nom
-			""")
-	List<Object[]> findHaussesRecHausses(Long recolteId);
-
-	@Query(value = """
-			select count(h)
-			  from Hausse h, Ruche r, Rucher rr
-			  where h.ruche.id = r.id and r.rucher.id = rr.id and rr.id = ?1
+			select count(*)
+			  from Hausse
+			  where ruche.rucher.id = :rucherId
 			""")
 	Integer countHausseInRucher(Long rucherId);
 

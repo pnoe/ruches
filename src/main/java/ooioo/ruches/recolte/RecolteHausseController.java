@@ -364,12 +364,10 @@ public class RecolteHausseController {
 					new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
 			Recolte recolte = recolteOpt.get();
 			model.addAttribute(Const.RECOLTE, recolte);
-			// Liste des couples RecoltHausse, Hausse de la récolte
-			List<Object[]> reHH = hausseRepository.findHaussesRecHausses(recolteId);
+			List<RecolteHausse> reH = recolteHausseRepository.findByRecolte(recolte);
 			Set<Long> rucheIds = new HashSet<>();
-			for (Object[] rhh : reHH) {
-				RecolteHausse recolteHausse = (RecolteHausse) rhh[0];
-				Hausse hausse = (Hausse) rhh[1];
+			for (RecolteHausse recolteHausse : reH) {
+				Hausse hausse = recolteHausse.getHausse();
 				Ruche ruche = hausse.getRuche();
 				if ((ruche != null) && (recolteHausse.getRuche() != null)
 						&& (ruche.getId().equals(recolteHausse.getRuche().getId()))) {

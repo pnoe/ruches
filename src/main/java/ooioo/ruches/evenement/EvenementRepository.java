@@ -41,7 +41,11 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			""")
 	List<Evenement> findNotification();
 
-	@Query(value = "select evenement from Evenement evenement where evenement.date > ?1")
+	@Query(value = """
+			select e
+			  from Evenement e
+			  where e.date > :date
+			  """)
 	Iterable<Evenement> findPeriode(LocalDateTime date);
 
 //	https://docs.spring.io/spring-data/rest/docs/current/reference/html/#customizing-sdr.configuring-the-rest-url-path
@@ -49,7 +53,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	@Query(value = """
 			select e
 			  from Evenement e
-			  where e.date > ?1 and e.date < ?2
+			  where e.date > :date1 and e.date < :date2
 			""")
 	Iterable<Evenement> findPeriode(LocalDateTime date1, LocalDateTime date2);
 
