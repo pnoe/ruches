@@ -60,16 +60,16 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 	// Poids de miel produit par un essaim pour toutes les récoltes
 	@Query(value = """
 			select sum(poidsAvant) - sum(poidsApres) as poids
-			  from RecolteHausse as rh
-			  where rh.essaim=:essaim
+			  from RecolteHausse
+			  where essaim=:essaim
 			""")
 	Integer findPoidsMielByEssaim(Essaim essaim);
 
 	// Trouve l'id du rucher de l'essaim présent dans la récolte.
 	// Sans order by, limit n'est pas accepté.
 	@Query(value = """
-			select rh.rucher.id
-			  from RecolteHausse rh
+			select rucher.id
+			  from RecolteHausse
 			  where recolte = :recolte
 			    and essaim = :essaim
 			    and rucher is not null
@@ -80,8 +80,8 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 
 	// Trouve les id des ruchers de la récolte.
 	@Query(value = """
-			select rh.rucher.id
-			    from RecolteHausse rh
+			select rucher.id
+			    from RecolteHausse
 			    where recolte = :recolte
 			      and rucher is not null
 			    group by rucher.id
@@ -100,8 +100,8 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 
 	// Trouve les id des essaims de la récolte.
 	@Query(value = """
-			select rh.essaim.id
-			    from RecolteHausse rh
+			select essaim.id
+			    from RecolteHausse
 			    where recolte = :recolte
 			      and essaim is not null
 			    group by essaim.id
@@ -110,8 +110,8 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 
 	// Trouve l'id du rucher d'un essaim de la récolte.
 	@Query(value = """
-			select rh.rucher.id
-			    from RecolteHausse rh
+			select rucher.id
+			    from RecolteHausse
 			    where recolte = :recolte
 			      and essaim = :essaim
 			    order by id
