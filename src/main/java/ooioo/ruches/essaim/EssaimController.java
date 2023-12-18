@@ -73,7 +73,8 @@ public class EssaimController {
 	private EssaimService essaimService;
 
 	/**
-	 * Graphe affichant les poids d'une ruche.
+	 * Graphe affichant les poids d'un essaim, les récoltes, les événments sucre,
+	 * les traitements, les changements de rucher.
 	 */
 	@GetMapping("/poids/{essaimId}")
 	public String poids(Model model, @PathVariable long essaimId) {
@@ -110,12 +111,13 @@ public class EssaimController {
 			List<Long> datesRec = new ArrayList<>();
 			List<Float> poidsRec = new ArrayList<>();
 			List<String> ruchersRec = new ArrayList<>();
-			for (Recolte recolte :  recolteRepository.findAllByOrderByDateAsc()) {
+			for (Recolte recolte : recolteRepository.findAllByOrderByDateAsc()) {
 				Integer pRec = recolteHausseRepository.findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId());
 				if (pRec != null) {
 					RecolteHausse rHFirst = recolteHausseRepository.findFirstByRecolteAndEssaim(recolte, essaim);
-					String rucherNom = ((rHFirst == null) || (rHFirst.getRucher() == null)) ? "" : rHFirst.getRucher().getNom();
-					poidsRec.add(pRec/1000f);
+					String rucherNom = ((rHFirst == null) || (rHFirst.getRucher() == null)) ? ""
+							: rHFirst.getRucher().getNom();
+					poidsRec.add(pRec / 1000f);
 					datesRec.add(recolte.getDate().toEpochSecond(ZoneOffset.UTC));
 					ruchersRec.add(rucherNom);
 				}
@@ -131,6 +133,19 @@ public class EssaimController {
 				datesTrait.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
 			}
 			model.addAttribute("datesTrait", datesTrait);
+			// Les changements de rucher.
+			List<Evenement> evesRucher = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
+					TypeEvenement.RUCHEAJOUTRUCHER);
+			List<Long> datesRucher = new ArrayList<>(evesRucher.size());
+			List<String> nomsRucher = new ArrayList<>(evesRucher.size());
+			for (Evenement e : evesRucher) {
+				if (e.getRucher() != null) {
+					datesRucher.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
+					nomsRucher.add(e.getRucher().getNom());
+				}
+			}
+			model.addAttribute("datesRucher", datesRucher);
+			model.addAttribute("nomsRucher", nomsRucher);
 			return "essaim/essaimsPoids";
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
