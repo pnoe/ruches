@@ -202,7 +202,7 @@ public class AdminService {
 		}
 		evensListe = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.HAUSSERETRAITRUCHE);
 		for (Evenement eve : evensListe) {
-			if (eve.getHausse() == null || eve.getRuche() == null || !Utils.isIntInf10(eve.getValeur())) {
+			if (eve.getHausse() == null || eve.getRuche() == null || !Utils.isIntInfX(eve.getValeur(), 10)) {
 				eveInc.add(eve);
 			}
 		}
