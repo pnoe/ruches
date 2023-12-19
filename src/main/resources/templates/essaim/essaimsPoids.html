@@ -12,7 +12,7 @@
 	<script th:inline="javascript">
 		/* exported poids, dates, poidsSucre, datesSucre,
 		    poidsRec, datesRec, ruchersRec, datesTrait,
-		    datesRucher, nomsRucher
+		    datesRucher, nomsRucher, datesCadre, nbsCadre
 		*/
 		const poids = /*[[${poids}]]*/ null;
 		const dates = /*[[${dates}]]*/ null;
@@ -23,7 +23,9 @@
 		const ruchersRec = /*[[${ruchersRec}]]*/ null;
 		const datesTrait = /*[[${datesTrait}]]*/ null;
 		const datesRucher = /*[[${datesRucher}]]*/ null;
-		const nomsRucher = /*[[${nomsRucher}]]*/ null;	
+		const nomsRucher = /*[[${nomsRucher}]]*/ null;
+		const datesCadre = /*[[${datesCadre}]]*/ null;
+		const nbsCadre = /*[[${nbsCadre}]]*/ null;	
 	</script>
 </head>
 
@@ -37,7 +39,7 @@
 			<div class="col text-center">
 				<h1 class="item">
 					<a th:href="@{'/essaim/'+${essaim.id}}" th:text="#{essaim}+' '+${essaim.nom}"></a>
-					<th:block th:text="#{sep}+#{poidsVide}"></th:block>
+					<th:block th:text="#{sep}+#{evenements}"></th:block>
 				</h1>
 			</div>
 		</div>

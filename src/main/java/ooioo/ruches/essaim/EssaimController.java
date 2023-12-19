@@ -146,6 +146,22 @@ public class EssaimController {
 			}
 			model.addAttribute("datesRucher", datesRucher);
 			model.addAttribute("nomsRucher", nomsRucher);
+
+			// Les ajouts/retraits de cadres.
+			List<Evenement> evesCadre = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
+					TypeEvenement.RUCHECADRE);
+			List<Long> datesCadre = new ArrayList<>(evesCadre.size());
+			List<String> nbsCadre = new ArrayList<>(evesCadre.size());
+			for (Evenement e : evesCadre) {
+				if (Utils.isIntInfX(e.getValeur(), 20)) {
+					// Si la valeur de l'événement est un nombre (de cadres) compris entre 0 et 20.
+					datesCadre.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
+					nbsCadre.add(e.getValeur());
+				}
+			}
+			model.addAttribute("datesCadre", datesCadre);
+			model.addAttribute("nbsCadre", nbsCadre);
+
 			return "essaim/essaimsPoids";
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);

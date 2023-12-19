@@ -1,11 +1,12 @@
 /* globals Chart, dates, poids, poidsSucre, datesSucre,
  poidsRec, datesRec, ruchersRec, datesTrait,
- datesRucher, nomsRucher
+ datesRucher, nomsRucher, datesCadre, nbsCadre
 */
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
 	if (dates.length === 0) { return; }
+	Chart.defaults.elements.point.radius = 6; // default = 3
 	new Chart('ctx', {
 		data: {
 			// dates evenement.getDate().toEpochSecond(ZoneOffset.UTC));
@@ -17,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			// https://www.chartjs.org/docs/latest/configuration/elements.html#point-styles
 			datasets: [{
 				type: 'line',
-				label: 'Ruche',
+				label: 'Pesée',
 				yAxisID: 'yp',
 				data: dates.map((v, i) => { return [v * 1000, poids[i]]; })
 			}, {
@@ -44,6 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
 				yAxisID: 'yt',
 				data: datesRucher.map(v => { return [v * 1000, 0]; }),
 				pointStyle: 'triangle'
+			}, {
+				type: 'line',
+				stepped: true,
+				label: 'Cadres',
+				yAxisID: 'yc',
+				data: datesCadre.map((v, i) => { return [v * 1000, nbsCadre[i]]; }),
+				pointStyle: 'star'
 			}],
 		},
 		options: {
@@ -61,6 +69,9 @@ document.addEventListener('DOMContentLoaded', () => {
 					position: 'right'
 				},
 				yt: {
+					display: false
+				},
+				yc: {
 					display: false
 				}
 			},

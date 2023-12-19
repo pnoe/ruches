@@ -60,16 +60,15 @@ public final class Utils {
 	}
 
 	/*
-	 * Pour test nb hausses correct Renvoie true si str est un int compris entre 0
-	 * et 10
+	 * Renvoie true si str est un int compris entre 0 et max.
 	 */
-	static boolean isIntInf10(String str) {
+	public static boolean isIntInfX(String str, int max) {
 		if (str == null) {
 			return false;
 		}
 		try {
 			int d = Integer.parseInt(str);
-			if (d < 0 || d > 10) {
+			if (d < 0 || d > max) {
 				return false;
 			}
 		} catch (NumberFormatException nfe) {
