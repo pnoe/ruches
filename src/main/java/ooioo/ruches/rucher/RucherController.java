@@ -717,9 +717,9 @@ public class RucherController {
 	 */
 	@GetMapping({ "/Gg/{rucherId}", "/Ign/{rucherId}", "/Osm/{rucherId}" })
 	public String rucheMap(Model model, @PathVariable long rucherId, HttpServletRequest request) {
-		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
+		Optional<RucherMap> rucherOpt = rucherRepository.findRucherMapById(rucherId);
 		if (rucherOpt.isPresent()) {
-			Rucher rucher = rucherOpt.get();
+			RucherMap rucher = rucherOpt.get();
 			List<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
 			List<RucheParcours> cheminRet = new ArrayList<>(ruches.size() + 2);
 			double retParcours = rucherService.cheminRuchesRucher(cheminRet, rucher, ruches, false);
@@ -745,8 +745,8 @@ public class RucherController {
 				longitude = (float) (Math.atan2(ylon, xlon) * 180d / Math.PI);
 				latitude /= nbRuches;
 			} else {
-				longitude = rucher.getLongitude();
-				latitude = rucher.getLatitude();
+				longitude = rucher.longitude();
+				latitude = rucher.latitude();
 			}
 			model.addAttribute("longitudeCentre", longitude);
 			model.addAttribute("latitudeCentre", latitude);
@@ -772,15 +772,15 @@ public class RucherController {
 	@GetMapping({ "/Gg", "/Ign", "/Osm" })
 	public String rucherMap(HttpSession session, Model model, HttpServletRequest request) {
 		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
-		Iterable<Rucher> ruchers;
+		Iterable<RucherMap> ruchers;
 		if (voirInactif != null && (boolean) voirInactif) {
-			ruchers = rucherRepository.findAllByOrderByNom();
+			ruchers = rucherRepository.findRucherMapBy();
 		} else {
-			ruchers = rucherRepository.findByActifOrderByNom(true);
+			ruchers = rucherRepository.findRucherMapByActifTrue();
 		}
 		List<String> nomRuches = new ArrayList<>();
-		for (Rucher rucher : ruchers) {
-			nomRuches.add(rucheRepository.findByRucherId(rucher.getId()).stream().map(Nom::nom)
+		for (RucherMap rucher : ruchers) {
+			nomRuches.add(rucheRepository.findByRucherId(rucher.id()).stream().map(Nom::nom)
 					.reduce("", (a, b) -> a + " " + b).trim());
 		}
 		model.addAttribute(Const.RUCHENOMS, nomRuches);
@@ -921,9 +921,9 @@ public class RucherController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody Map<String, Object> parcours(@PathVariable Long rucherId, @PathVariable boolean redraw) {
 		Map<String, Object> map = new HashMap<>();
-		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
+		Optional<RucherMap> rucherOpt = rucherRepository.findRucherMapById(rucherId);
 		if (rucherOpt.isPresent()) {
-			Rucher rucher = rucherOpt.get();
+			RucherMap rucher = rucherOpt.get();
 			List<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
 			List<RucheParcours> cheminRet = new ArrayList<>(ruches.size() + 2);
 			double retParcours = rucherService.cheminRuchesRucher(cheminRet, rucher, ruches, redraw);
