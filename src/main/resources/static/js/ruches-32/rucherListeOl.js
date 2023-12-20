@@ -46,9 +46,11 @@ function rucherListeIgn(ign) {
 			new ol.style.Style({
 				image: new ol.style.Circle({
 					radius: 12,
-					fill: new ol.style.Fill({ color: '#FFFF00' })
+					// si pas de ruche cercle bleu clair, jaune sinon.
+					fill: new ol.style.Fill({ color: nomRuches[i] === '' ? '#87CEFA' : '#FFFF00' })
 				}),
 				text: new ol.style.Text({
+					// affiche le nom du rucher sur le cercle.
 					text: ruchers[i].nom,
 					font: '14px sans-serif'
 				})
@@ -56,11 +58,13 @@ function rucherListeIgn(ign) {
 		);
 		markerRuchers.push(iconFeature);
 		if (ruchers[i].depot === true) {
+			// si le rucher est le dépôt on garde ses coordonnées pour le centre de la carte.
 			mapcenter.push(ruchers[i].longitude);
 			mapcenter.push(ruchers[i].latitude);
 		}
 	}
 	const vectorLayer = new ol.layer.Vector({
+		// la couche openlayers contenant les marqueurs des ruchers.
 		source: new ol.source.Vector({
 			features: markerRuchers
 		})
