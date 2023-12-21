@@ -721,6 +721,11 @@ public class RucherController {
 		Optional<RucherMap> rucherOpt = rucherRepository.findRucherMapById(rucherId);
 		if (rucherOpt.isPresent()) {
 			RucherMap rucher = rucherOpt.get();
+			// ruches java : id, longitude, latitude.
+			// js nom, essaim.reineCouleurMarquage, essaim.reineMarquee,
+			// essaim.nom, essaim.id
+			// Comment masquer certains champs, deux listes séparées : ruches (id, long, lat, nom) 
+			//   et essaims (reineCouleurMarquage, reineMarquee, nom, id).
 			List<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
 			List<RucheParcours> cheminRet = new ArrayList<>(ruches.size() + 2);
 			double retParcours = rucherService.cheminRuchesRucher(cheminRet, rucher, ruches, false);
@@ -773,6 +778,8 @@ public class RucherController {
 	@GetMapping({ "/Gg", "/Ign", "/Osm" })
 	public String rucherMap(HttpSession session, Model model, HttpServletRequest request) {
 		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
+		// RucherMap projection de l'entté rucher pour utilisation dans les cartes.
+		// Evite d'afficher le password crypté du contact du rucher, données js simplifiées.
 		Iterable<RucherMap> ruchers;
 		if (voirInactif != null && (boolean) voirInactif) {
 			ruchers = rucherRepository.findRucherMapBy();
