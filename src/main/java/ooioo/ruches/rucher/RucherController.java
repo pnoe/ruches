@@ -39,10 +39,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import ooioo.ruches.Const;
+import ooioo.ruches.IdNom;
 import ooioo.ruches.LatLon;
 import ooioo.ruches.Nom;
 import ooioo.ruches.Utils;
-import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.essaim.EssaimRepository;
 import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
@@ -52,6 +52,7 @@ import ooioo.ruches.personne.PersonneRepository;
 import ooioo.ruches.recolte.Recolte;
 import ooioo.ruches.recolte.RecolteHausseRepository;
 import ooioo.ruches.recolte.RecolteRepository;
+import ooioo.ruches.ruche.PoidsNom;
 import ooioo.ruches.ruche.Ruche;
 import ooioo.ruches.ruche.RucheParcours;
 import ooioo.ruches.ruche.RucheRepository;
@@ -117,14 +118,14 @@ public class RucherController {
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
 			model.addAttribute(Const.RUCHER, rucher);
-			// Traite les essaims du rucher
-			Iterable<Essaim> essaims = essaimRepo.findByRucherId(rucherId);
-			List<Essaim> essaimsPeses = new ArrayList<>();
+			// Traite les essaims du rucher.
+			List<IdNom> essaims = essaimRepo.findIdNomByRucherId(rucherId);
+			List<IdNom> essaimsPeses = new ArrayList<>();
 			List<List<Long>> dates = new ArrayList<>();
 			List<List<Float>> poids = new ArrayList<>();
-			List<Ruche> ruches = new ArrayList<>();
-			for (Essaim ess : essaims) {
-				List<Evenement> evesPesee = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(ess.getId(),
+			List<PoidsNom> ruches = new ArrayList<>();
+			for (IdNom ess : essaims) {
+				List<Evenement> evesPesee = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(ess.id(),
 						TypeEvenement.RUCHEPESEE);
 				if (evesPesee.isEmpty()) {
 					continue;
@@ -138,7 +139,7 @@ public class RucherController {
 				essaimsPeses.add(ess);
 				dates.add(d);
 				poids.add(p);
-				Ruche ruche = rucheRepository.findByEssaimId(ess.getId());
+				PoidsNom ruche = rucheRepository.findPoidsNomByEssaimId(ess.id());
 				ruches.add(ruche);
 			}
 			model.addAttribute("dates", dates);

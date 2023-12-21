@@ -29,6 +29,9 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 
 	Ruche findByEssaimId(Long id);
 
+	// Attention à mettre un constructeur dans PoidsNom sinon erreur à l'exécution.
+	PoidsNom findPoidsNomByEssaimId(Long id);
+	
 	Collection<Ruche> findCollByRucherId(Long rucherId);
 
 	List<Nom> findAllProjectedBy();

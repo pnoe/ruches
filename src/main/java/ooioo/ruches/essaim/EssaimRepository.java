@@ -21,12 +21,15 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 	List<Nom> findAllProjectedBy();
 
 	@Query(value = """
-			select essaim
+			select new ooioo.ruches.IdNom(es.id, es.nom)
 			  from Essaim es, Ruche r
 			  where r.essaim = es
 			   and r.rucher.id = :rucherId
+			  order by es.nom
 			""")
-	List<Essaim> findByRucherId(Long rucherId);
+	List<IdNom> findIdNomByRucherId(Long rucherId);
+	
+	
 
 	// Liste ordonnée par nom d'essaims, des essaims, id et nom de la ruche associée
 	// et id et nom de son rucher.
