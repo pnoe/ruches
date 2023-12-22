@@ -11,7 +11,7 @@
 	<script th:replace="~{include :: dom-to-image}"></script>
 	<script th:inline="javascript">
 		/* exported  ignCarteLiscense,
-				ol, domtoimage, jsPDF, exportGpx, exportKml,
+				ol, domtoimage, jsPDF, exportGpx, exportKml, essaims,
 				rucheParcours:writable, distParcours:writable, longitudeCentre, latitudeCentre, rayonsButinage, cercles, distButinage, ruches, 
 				rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
 				ruchetxt, lesHausses, pasdehaussetxt, parcourstxt,
@@ -29,6 +29,7 @@
 		const cercles = /*[[#{cercles}]]*/ null;
 		const distButinage = /*[[#{distButinage}]]*/ null;
 		const ruches = /*[[${ruches}]]*/ null;
+		const essaims = /*[[${essaims}]]*/ null;
 		const rucher = /*[[${rucher}]]*/ null;
 		const nomHausses = /*[[${hausseNoms}]]*/ null;
 		const rapprochertxt = /*[[#{rapprocher}]]*/ null;

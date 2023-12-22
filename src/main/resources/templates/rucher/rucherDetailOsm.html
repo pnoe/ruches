@@ -11,7 +11,7 @@
 	<script th:inline="javascript">
 		/* exported ol, domtoimage, jsPDF, exportGpx, exportKml,
 				rucheParcours:writable, distParcours:writable, longitudeCentre, latitudeCentre, rayonsButinage, cercles, distButinage, ruches, 
-				rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
+				essaims, rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
 				ruchetxt, lesHausses, pasdehaussetxt, parcourstxt,
 				parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token, dessinEnregistretxt,
 				distRuchesOk, distMaxRuche, geoloc, bootstrap, pasDeGeoLoc, recherchePos, locImpossible, distDiminuee,
@@ -26,6 +26,7 @@
 		const cercles = /*[[#{cercles}]]*/ null;
 		const distButinage = /*[[#{distButinage}]]*/ null;
 		const ruches = /*[[${ruches}]]*/ null;
+		const essaims = /*[[${essaims}]]*/ null;
 		const rucher = /*[[${rucher}]]*/ null;
 		const nomHausses = /*[[${hausseNoms}]]*/ null;
 		const rapprochertxt = /*[[#{rapprocher}]]*/ null;

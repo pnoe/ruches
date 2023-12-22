@@ -29,7 +29,17 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 			""")
 	List<IdNom> findIdNomByRucherId(Long rucherId);
 	
-	
+	// Liste des essaims : id, nom, reineCouleurMarquage, reineMarquee
+	//  triés par nom de ruche pour synchro avec liste des ruches, appel pour la carte
+	//  des ruches d'un rucher. reineCouleurMarquage est déduit de reineDateNaissance par le getter.
+	@Query(value = """
+			select new ooioo.ruches.essaim.EssaimIdNomReine(es.id, es.nom, es.reineDateNaissance, es.reineMarquee) 
+			  from Ruche r
+			  left join Essaim es on r.essaim.id = es.id 
+			  where r.rucher.id = :rucherId
+			  order by r.nom
+			""")
+	List<EssaimIdNomReine> findIdNomReine(Long rucherId);
 
 	// Liste ordonnée par nom d'essaims, des essaims, id et nom de la ruche associée
 	// et id et nom de son rucher.

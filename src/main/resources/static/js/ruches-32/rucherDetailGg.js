@@ -1,4 +1,4 @@
-/* globals google, exportGpx, exportKml,
+/* globals google, exportGpx, exportKml, essaims,
 	rucheParcours:writable, distParcours:writable, rucher, rucherMapZoom, longitudeCentre, latitudeCentre,
 	 rayonsButinage, distButinage, urlruches, nomHausses, essaimtxt, pasdessaimtxt,
 	 ruchetxt, haussestxt, pasdehaussetxt, ruches, ruchestxt, distancedeparcourstxt,
@@ -33,20 +33,20 @@ function initMap() {
 			map: map,
 			icon: {
 				path: 'M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0',
-				fillColor: (ruches[i].essaim === null) ? '#FE00FE' : ruches[i].essaim.reineCouleurMarquage,
+				fillColor: (essaims[i] === null) ? '#FE00FE' : essaims[i].reineCouleurMarquage,
 				fillOpacity: 0.5,
 				anchor: new google.maps.Point(0, 0),
 				strokeWeight: 0,
 				scale: 0.70
 			},
 			label: {
-				text: (((ruches[i].essaim !== null) && ruches[i].essaim.reineMarquee) ? '*' : '') + ruches[i].nom,
+				text: (((essaims[i] !== null) && essaims[i].reineMarquee) ? '*' : '') + ruches[i].nom,
 				fontSize: '15px',
-				fontWeight: ((ruches[i].essaim !== null) && ruches[i].essaim.reineMarquee) ? 'bold' : 'normal'
+				fontWeight: ((essaims[i] !== null) && essaims[i].reineMarquee) ? 'bold' : 'normal'
 			},
 			rucheid: ruches[i].id,
-			essaimnom: (ruches[i].essaim === null) ? '' : ruches[i].essaim.nom,
-			essaimid: (ruches[i].essaim === null) ? '' : ruches[i].essaim.id,
+			essaimnom: (essaims[i] === null) ? '' : essaims[i].nom,
+			essaimid: (essaims[i] === null) ? '' : essaims[i].id,
 			haussesnom: nomHausses[i]
 		});
 		google.maps.event.addListener(markerRuche, 'dragend', function(event) {

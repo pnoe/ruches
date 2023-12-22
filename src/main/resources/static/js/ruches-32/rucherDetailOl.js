@@ -1,6 +1,6 @@
 /* globals ol, domtoimage, jsPDF, exportGpx, exportKml,
    rucheParcours:writable, distParcours:writable, longitudeCentre, latitudeCentre, rayonsButinage, cercles, distButinage, ruches, 
-   rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
+   essaims, rucher, nomHausses, rapprochertxt, pleinecran, lesRuches, couchemarqueursruches, essaimtxt, pasdessaimtxt, 
    ruchetxt, lesHausses, pasdehaussetxt, parcourstxt, ignCarteLiscense,
    parcoursoptimumtxt, ruchestxt, distancedeparcourstxt, entreetxt, ruchesurl, _csrf_token, dessinEnregistretxt,
    distRuchesOk, distMaxRuche, geoloc, bootstrap, distDiminuee, calculEnCours, pasDAmelioration, dessintxt, enregistrer,
@@ -95,11 +95,13 @@ function rucherDetail(ign) {
 				image: new ol.style.Circle({
 					radius: 12,
 					fill: new ol.style.Fill({
-						color: (ruches[i].essaim === null) ? '#FE00FE' : ruches[i].essaim.reineCouleurMarquage
+						color: (essaims[i] === null) ? '#FE00FE' : essaims[i].reineCouleurMarquage 
+						// ruches[i].essaim.reineCouleurMarquage
 					})
 				}),
 				text: new ol.style.Text({
-					text: (((ruches[i].essaim !== null) && ruches[i].essaim.reineMarquee) ? '*' : '') + ruches[i].nom,
+					// text: (((ruches[i].essaim !== null) && ruches[i].essaim.reineMarquee) ? '*' : '') + ruches[i].nom,
+					text: (((essaims[i] !== null) && essaims[i].reineMarquee) ? '*' : '') + ruches[i].nom,
 					font: '14px sans-serif'
 				})
 			})
@@ -409,8 +411,10 @@ function rucherDetail(ign) {
 				ruches.length + ' ' + ruchestxt + '<br/>' + distancedeparcourstxt +
 				' ' + distParcours.toLocaleString(lang, digits2) + ' m';
 		} else {
-			const essnom = (ruches[idx].essaim === null) ? '' : ruches[idx].essaim.nom;
-			const essid = (ruches[idx].essaim === null) ? '' : ruches[idx].essaim.id;
+			// const essnom = (ruches[idx].essaim === null) ? '' : ruches[idx].essaim.nom;
+			// const essid = (ruches[idx].essaim === null) ? '' : ruches[idx].essaim.id;
+			const essnom = (essaims[idx] === null) ? '' : essaims[idx].nom;
+			const essid = (essaims[idx] === null) ? '' : essaims[idx].id;
 			document.getElementById('popup-content').innerHTML =
 				'<a href="' + ruchesurl + 'ruche/' + ruches[idx].id + '">' +
 				ruchetxt + ' ' + ruches[idx].nom +

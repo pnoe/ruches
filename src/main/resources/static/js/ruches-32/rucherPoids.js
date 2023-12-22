@@ -30,7 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
 						footer: (items => {
 							let txt = '';
 							items.forEach(function(item) {
-								// Boucle si plusieurs points superposés
+								// Boucle si plusieurs points superposés (x et y identiques)
+								//   le footer regroupe les deux ruches et leurs poids.
+								//   \n fonctionne bien, c'est vérifié.
+								// Affiche en pied de tooltip : 
+								// Ruche: <nom> <poidsTotal> kg
 								txt += ruche + ': ' + ruches[item.datasetIndex].nom + ' ' + 
 								(item.parsed.y +  ruches[item.datasetIndex].poidsVide) + 'kg\n';
 							});

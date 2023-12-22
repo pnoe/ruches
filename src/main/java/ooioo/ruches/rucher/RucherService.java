@@ -40,6 +40,7 @@ import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
 import ooioo.ruches.ruche.Ruche;
+import ooioo.ruches.ruche.RucheIdNomLatLon;
 import ooioo.ruches.ruche.RucheParcours;
 import ooioo.ruches.ruche.RucheRepository;
 
@@ -271,14 +272,14 @@ public class RucherService {
 	 * https://developers.google.com/optimization/routing/tsp Le chemin est calculé
 	 * dans List<RucheParcours> cheminRet, et la distance en retour de la fonction.
 	 */
-	double cheminRuchesRucher(List<RucheParcours> cheminRet, RucherMap rucher, List<Ruche> ruches, boolean redraw) {
+	double cheminRuchesRucher(List<RucheParcours> cheminRet, RucherMap rucher, List<RucheIdNomLatLon> ruches, boolean redraw) {
 		RucheParcours entree = new RucheParcours(0l, 0, rucher.longitude(), rucher.latitude());
 		List<RucheParcours> chemin = new ArrayList<>(ruches.size() + 1);
 		chemin.add(entree);
 		int ordre = 0;
-		for (Ruche ruche : ruches) {
+		for (RucheIdNomLatLon ruche : ruches) {
 			ordre += 1;
-			chemin.add(new RucheParcours(ruche.getId(), ordre, ruche.getLongitude(), ruche.getLatitude()));
+			chemin.add(new RucheParcours(ruche.id(), ordre, ruche.longitude(), ruche.latitude()));
 		}
 		int cheminSize = chemin.size();
 		if (cheminSize == 1) {

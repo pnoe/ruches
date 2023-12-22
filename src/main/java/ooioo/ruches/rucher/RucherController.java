@@ -43,6 +43,7 @@ import ooioo.ruches.IdNom;
 import ooioo.ruches.LatLon;
 import ooioo.ruches.Nom;
 import ooioo.ruches.Utils;
+import ooioo.ruches.essaim.EssaimIdNomReine;
 import ooioo.ruches.essaim.EssaimRepository;
 import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
@@ -54,6 +55,7 @@ import ooioo.ruches.recolte.RecolteHausseRepository;
 import ooioo.ruches.recolte.RecolteRepository;
 import ooioo.ruches.ruche.PoidsNom;
 import ooioo.ruches.ruche.Ruche;
+import ooioo.ruches.ruche.RucheIdNomLatLon;
 import ooioo.ruches.ruche.RucheParcours;
 import ooioo.ruches.ruche.RucheRepository;
 
@@ -721,12 +723,11 @@ public class RucherController {
 		Optional<RucherMap> rucherOpt = rucherRepository.findRucherMapById(rucherId);
 		if (rucherOpt.isPresent()) {
 			RucherMap rucher = rucherOpt.get();
-			// ruches java : id, longitude, latitude.
-			// js nom, essaim.reineCouleurMarquage, essaim.reineMarquee,
-			// essaim.nom, essaim.id
-			// Comment masquer certains champs, deux listes séparées : ruches (id, long, lat, nom) 
-			//   et essaims (reineCouleurMarquage, reineMarquee, nom, id).
-			List<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
+			// Liste des ruches id, nom, longitude, latitude orderbynom
+			//   et liste des essaims avec from ruche left join essaim et orderbynom de ruche
+			//   pour même index que la liste des ruches.
+			List<RucheIdNomLatLon> ruches = rucheRepository.findIdLatLonByRucherIdOrderByNom(rucherId);
+			List<EssaimIdNomReine> essaims = essaimRepo.findIdNomReine(rucherId);
 			List<RucheParcours> cheminRet = new ArrayList<>(ruches.size() + 2);
 			double retParcours = rucherService.cheminRuchesRucher(cheminRet, rucher, ruches, false);
 			model.addAttribute("distParcours", retParcours);
@@ -738,14 +739,14 @@ public class RucherController {
 			int nbRuches = 0;
 			double xlon = 0d;
 			double ylon = 0d;
-			for (Ruche ruche : ruches) {
-				nomHausses.add(hausseRepository.findByRucheId(ruche.getId()).stream().map(Nom::nom)
+			for (RucheIdNomLatLon ruche : ruches) {
+				nomHausses.add(hausseRepository.findByRucheId(ruche.id()).stream().map(Nom::nom)
 						.reduce("", (a, b) -> a + " " + b).trim());
 				nbRuches++;
-				Float longrad = (float) (ruche.getLongitude() * Math.PI / 180.0d);
+				Float longrad = (float) (ruche.longitude() * Math.PI / 180.0d);
 				xlon += Math.cos(longrad);
 				ylon += Math.sin(longrad);
-				latitude += ruche.getLatitude();
+				latitude += ruche.latitude();
 			}
 			if (nbRuches != 0) {
 				longitude = (float) (Math.atan2(ylon, xlon) * 180d / Math.PI);
@@ -760,6 +761,7 @@ public class RucherController {
 			model.addAttribute(Const.HAUSSENOMS, nomHausses);
 			model.addAttribute(Const.RUCHER, rucher);
 			model.addAttribute(Const.RUCHES, ruches);
+			model.addAttribute(Const.ESSAIMS, essaims);
 			model.addAttribute("ignCarteLiscense", ignCarteLiscense);
 			model.addAttribute("distMaxRuche", distMaxRuche);
 		} else {
@@ -932,7 +934,7 @@ public class RucherController {
 		Optional<RucherMap> rucherOpt = rucherRepository.findRucherMapById(rucherId);
 		if (rucherOpt.isPresent()) {
 			RucherMap rucher = rucherOpt.get();
-			List<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
+			List<RucheIdNomLatLon> ruches = rucheRepository.findIdLatLonByRucherIdOrderByNom(rucherId);
 			List<RucheParcours> cheminRet = new ArrayList<>(ruches.size() + 2);
 			double retParcours = rucherService.cheminRuchesRucher(cheminRet, rucher, ruches, redraw);
 			map.put("distParcours", retParcours);
