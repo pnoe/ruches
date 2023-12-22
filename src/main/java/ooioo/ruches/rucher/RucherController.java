@@ -724,10 +724,13 @@ public class RucherController {
 		if (rucherOpt.isPresent()) {
 			RucherMap rucher = rucherOpt.get();
 			// Liste des ruches id, nom, longitude, latitude orderbynom
-			//   et liste des essaims avec from ruche left join essaim et orderbynom de ruche
-			//   pour même index que la liste des ruches.
+			//   et liste des essaims.
 			List<RucheIdNomLatLon> ruches = rucheRepository.findIdLatLonByRucherIdOrderByNom(rucherId);
-			List<EssaimIdNomReine> essaims = essaimRepo.findIdNomReine(rucherId);
+			List<EssaimIdNomReine> essaims = new ArrayList<>(ruches.size());
+			for (RucheIdNomLatLon ruche : ruches) {
+				EssaimIdNomReine essaim = essaimRepo.findIdNomReine(rucherId, ruche.id());
+				essaims.add(essaim);
+			}
 			List<RucheParcours> cheminRet = new ArrayList<>(ruches.size() + 2);
 			double retParcours = rucherService.cheminRuchesRucher(cheminRet, rucher, ruches, false);
 			model.addAttribute("distParcours", retParcours);
