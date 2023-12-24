@@ -5,9 +5,18 @@ footer {
 	line-height: 0.5em;
 }
 
+.navbar {
+	margin:0 !important;
+	padding: 0px !important;
+}
+
 .navbar-toggler-icon {
 	width: 1em !important;
 	height: 1em !important;
+}
+
+body {
+ padding-top: 40px; 
 }
 
 .accordion-button {

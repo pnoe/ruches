@@ -6,9 +6,6 @@
 </head>
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
-	<br />
-	<br />
-	<br />
 	<div class="logout"
 		sec:authorize="isAuthenticated()">
 		<span th:text="#{connecte}"></span> : <span id="login" sec:authentication="name"></span>

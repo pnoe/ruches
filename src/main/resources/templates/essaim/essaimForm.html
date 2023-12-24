@@ -3,10 +3,8 @@
 
 <head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 	<script th:replace="~{include :: jsdatetimepicker}"></script>
-
 	<!-- active datetimepicker sur #date-->
 	<script th:replace="~{include :: localejsdatetimepicker}"></script>
-
 	<link th:replace="~{include :: cssdatetimepicker}" />
 	<script th:inline="javascript">
 		const essaimNoms = /*[[${essaimNoms}]]*/null;
@@ -59,9 +57,6 @@
 
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
-	<br />
-	<br />
-	<br />
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
