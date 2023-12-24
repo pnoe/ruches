@@ -5,6 +5,11 @@ footer {
 	line-height: 0.5em;
 }
 
+.navbar-toggler-icon {
+	width: 1em !important;
+	height: 1em !important;
+}
+
 .accordion-button {
 	padding: 7px 7px !important;
 }
