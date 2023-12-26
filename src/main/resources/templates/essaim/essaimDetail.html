@@ -1,35 +1,34 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsruches}"></script>
-	<script th:inline="javascript">
-		/* exported _csrf_token, _csrf_param_name, essaimnoms, ruchesvidesnoms, recolteHausses, rucheEssaim,
-		essaimsupprecolttxt, suppessaimevetxt, suppessaimtxt,  evenements, nomessaimsvirgule,
-		nexistPasOuPasVidtxt, nomexistdejatxt, Ruchestxt, Essaimstxt, creertxt, urlessaimclone,
-		essaimid, pasderuchetxt */
-		const _csrf_token = /*[[${_csrf.token}]]*/null;
-		const _csrf_param_name = /*[[${_csrf.parameterName}]]*/null;
-		const essaimnoms = /*[[${essaimnoms}]]*/null;
-		const ruchesvidesnoms = /*[[${ruchesvidesnoms}]]*/null;
-		const recolteHausses = /*[[${recolteHausses}]]*/null;
-		const rucheEssaim = /*[[${rucheEssaim}]]*/null;
-		const pasderuchetxt = /*[[#{essaimPasRuche}]]*/null;
-		const essaimsupprecolttxt = /*[[#{essaimsupprimerecolte}]]*/null;
-		const suppessaimevetxt = /*[[#{supprimeressaimevenements}]]*/null;
-		const suppessaimtxt = /*[[#{supprimeressaim}]]*/null;
-		const evenements = /*[[${evenements}]]*/null;
-		const nomessaimsvirgule = /*[[#{nomessaimsvirgule}]]*/null;
-		const nexistPasOuPasVidtxt = /*[[#{nexistentPasOuPasVides}]]*/null;
-		const nomexistdejatxt = /*[[#{nomexistentdeja}]]*/null;
-		const Ruchestxt = /*[[#{Ruches}]]*/null;
-		const Essaimstxt = /*[[#{Essaims}]]*/null;
-		const creertxt = /*[[#{creer}]]*/null;
-		const urlessaimclone = /*[[@{/essaim/clone/}]]*/null;
-		const essaimid = /*[[${essaim.id}]]*/null;
-	</script>
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsruches}"></script>
+<script th:inline="javascript">
+	/* exported _csrf_token, _csrf_param_name, essaimnoms, ruchesvidesnoms, recolteHausses, rucheEssaim,
+	essaimsupprecolttxt, suppessaimevetxt, suppessaimtxt,  evenements, nomessaimsvirgule,
+	nexistPasOuPasVidtxt, nomexistdejatxt, Ruchestxt, Essaimstxt, creertxt, urlessaimclone,
+	essaimid, pasderuchetxt */
+	const _csrf_token = /*[[${_csrf.token}]]*/null;
+	const _csrf_param_name = /*[[${_csrf.parameterName}]]*/null;
+	const essaimnoms = /*[[${essaimnoms}]]*/null;
+	const ruchesvidesnoms = /*[[${ruchesvidesnoms}]]*/null;
+	const recolteHausses = /*[[${recolteHausses}]]*/null;
+	const rucheEssaim = /*[[${rucheEssaim}]]*/null;
+	const pasderuchetxt = /*[[#{essaimPasRuche}]]*/null;
+	const essaimsupprecolttxt = /*[[#{essaimsupprimerecolte}]]*/null;
+	const suppessaimevetxt = /*[[#{supprimeressaimevenements}]]*/null;
+	const suppessaimtxt = /*[[#{supprimeressaim}]]*/null;
+	const evenements = /*[[${evenements}]]*/null;
+	const nomessaimsvirgule = /*[[#{nomessaimsvirgule}]]*/null;
+	const nexistPasOuPasVidtxt = /*[[#{nexistentPasOuPasVides}]]*/null;
+	const nomexistdejatxt = /*[[#{nomexistentdeja}]]*/null;
+	const Ruchestxt = /*[[#{Ruches}]]*/null;
+	const Essaimstxt = /*[[#{Essaims}]]*/null;
+	const creertxt = /*[[#{creer}]]*/null;
+	const urlessaimclone = /*[[@{/essaim/clone/}]]*/null;
+	const essaimid = /*[[${essaim.id}]]*/null;
+</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -41,36 +40,50 @@
 				</h1>
 			</div>
 			<div class="col">
-				<a th:href="@{'/essaim/modifie/'+${essaim.id}}" th:title="#{modifier}" class="bi-pencil"
-					aria-hidden="true"></a>
-				&nbsp; <a href="#" th:title="#{cloner}" id="clone" class="bi bi-collection" aria-hidden="true"></a> <a
-					th:href="@{'/essaim/essaime/'+${essaim.id}}" th:title="#{essaimer}" id="essaime"
-					class="bi-box-arrow-left" aria-hidden="true"></a> <a th:href="@{'/essaim/associe/'+${essaim.id}}"
-					th:title="#{associationruche}" id="assoRuche" class="bi-box-arrow-in-down-right"
-					aria-hidden="true"></a> <a th:href="@{'/essaim/supprime/'+${essaim.id}}" th:title="#{supprimer}"
-					id="supprime" class="bi-trash" style="color: red" aria-hidden="true"></a> <a id="descend"
-					th:href="@{'/essaim/descendance/'+${essaim.id}}" class="bi-diagram-3"
-					th:title="#{graphedescendance}" aria-hidden="true"></a> <a
-					th:href="@{'/evenement/essaim/dispersion/'+${essaim.id}}" id="dispersion"
-					class="bi-box-arrow-up-left" th:title="#{evenementDispersion}" aria-hidden="true"></a> &nbsp; <a
-					th:href="@{'/evenement/essaim/'+${essaim.id}}" class="padicons bi-list-ul" th:title="#{evenements}"
-					aria-hidden="true"></a> <a th:href="@{'/evenement/essaim/commentaire/cree/'+${essaim.id}}"
-					class="bi-chat-text" th:title="#{evenementCommentaireEssaim}" aria-hidden="true"></a> <a
-					th:href="@{'/evenement/essaim/sucre/cree/'+${essaim.id}}" class="bi-bucket"
-					th:title="#{evenementSucre}" aria-hidden="true"></a> <a
-					th:href="@{'/evenement/essaim/traitement/cree/'+${essaim.id}}" class="bi-bug"
-					th:title="#{evenementTraitement}" aria-hidden="true"></a>
+				<a th:href="@{'/essaim/modifie/'+${essaim.id}}"
+					th:title="#{modifier}" class="bi-pencil" aria-hidden="true"></a>
+				&nbsp; <a href="#" th:title="#{cloner}" id="clone"
+					class="bi bi-collection" aria-hidden="true"></a> <a
+					th:href="@{'/essaim/essaime/'+${essaim.id}}" th:title="#{essaimer}"
+					id="essaime" class="bi-box-arrow-left" aria-hidden="true"></a> <a
+					th:href="@{'/essaim/associe/'+${essaim.id}}"
+					th:title="#{associationruche}" id="assoRuche"
+					class="bi-box-arrow-in-down-right" aria-hidden="true"></a> <a
+					th:href="@{'/essaim/supprime/'+${essaim.id}}"
+					th:title="#{supprimer}" id="supprime" class="bi-trash"
+					style="color: red" aria-hidden="true"></a> <a id="descend"
+					th:href="@{'/essaim/descendance/'+${essaim.id}}"
+					class="bi-diagram-3" th:title="#{graphedescendance}"
+					aria-hidden="true"></a> <a
+					th:href="@{'/evenement/essaim/dispersion/'+${essaim.id}}"
+					id="dispersion" class="bi-box-arrow-up-left"
+					th:title="#{evenementDispersion}" aria-hidden="true"></a> &nbsp; <a
+					th:href="@{'/evenement/essaim/'+${essaim.id}}"
+					class="padicons bi-list-ul" th:title="#{evenements}"
+					aria-hidden="true"></a> <a
+					th:href="@{'/evenement/essaim/commentaire/cree/'+${essaim.id}}"
+					class="bi-chat-text" th:title="#{evenementCommentaireEssaim}"
+					aria-hidden="true"></a> <a
+					th:href="@{'/evenement/essaim/sucre/cree/'+${essaim.id}}"
+					class="bi-bucket" th:title="#{evenementSucre}" aria-hidden="true"></a>
+				<a th:href="@{'/evenement/essaim/traitement/cree/'+${essaim.id}}"
+					class="bi-bug" th:title="#{evenementTraitement}" aria-hidden="true"></a>
 				<th:block th:if="${rucheEssaim}">
-					<a th:href="@{'/evenement/ruche/pesee/cree/'+${rucheEssaim?.id}+'?retourEssaim=true'}"
-						class="bi-chevron-bar-down" th:title="#{evenementPesee}" aria-hidden="true"></a>
-					<a th:href="@{'/evenement/ruche/cadre/cree/'+${rucheEssaim?.id}+'?retourEssaim=true'}"
-						class="bi-layout-three-columns" th:title="#{evenementCadres}" aria-hidden="true"></a>
+					<a
+						th:href="@{'/evenement/ruche/pesee/cree/'+${rucheEssaim?.id}+'?retourEssaim=true'}"
+						class="bi-chevron-bar-down" th:title="#{evenementPesee}"
+						aria-hidden="true"></a>
+					<a
+						th:href="@{'/evenement/ruche/cadre/cree/'+${rucheEssaim?.id}+'?retourEssaim=true'}"
+						class="bi-layout-three-columns" th:title="#{evenementCadres}"
+						aria-hidden="true"></a>
 				</th:block>
-				&nbsp; <a th:href="@{'/essaim/historique/'+${essaim.id}}" class="bi-calendar-check"
-					th:title="#{histoRucheRucher}" aria-hidden="true"></a>
-				&nbsp; <a th:href="@{'/essaim/poids/'+${essaim.id}}" class="bi-graph-up" th:title="#{evenements}"
-					aria-hidden="true"></a>
-				&nbsp; <a th:href="@{'/essaim/statistiques/'+${essaim.id}}" class="bi-table"
+				&nbsp; <a th:href="@{'/essaim/historique/'+${essaim.id}}"
+					class="bi-calendar-check" th:title="#{histoRucheRucher}"
+					aria-hidden="true"></a> &nbsp; <a
+					th:href="@{'/essaim/poids/'+${essaim.id}}" class="bi-graph-up"
+					th:title="#{evenements}" aria-hidden="true"></a> &nbsp; <a
+					th:href="@{'/essaim/statistiques/'+${essaim.id}}" class="bi-table"
 					th:title="#{statistiquesproduction}" aria-hidden="true"></a>
 			</div>
 		</div>
@@ -98,14 +111,16 @@
 				<tr>
 					<td th:text="${essaim.actif}?#{oui}:#{non}"></td>
 					<th:block th:unless="${essaim.actif}">
-						<td th:text="${#temporals.format(essaim.dateDispersion, 'yyyy/MM/dd')}"></td>
+						<td
+							th:text="${#temporals.format(essaim.dateDispersion, 'yyyy/MM/dd')}"></td>
 						<td th:text="${essaim.commDisp}"></td>
 					</th:block>
 					<td th:text="${essaim.dateAcquisition}"></td>
 					<td th:text="${essaim.reineMarquee}? #{oui} : #{non}"></td>
 					<td th:text="#{${essaim.reineCouleurMarquage}}"></td>
 					<td th:text="${essaim.reineDateNaissance}"></td>
-					<td><a th:href="@{'/essaim/'+${essaim.souche?.id}}" th:text="${essaim.souche?.nom}"></a></td>
+					<td><a th:href="@{'/essaim/'+${essaim.souche?.id}}"
+						th:text="${essaim.souche?.nom}"></a></td>
 					<td th:text="${essaim.agressivite}"></td>
 					<td th:text="${essaim.proprete}"></td>
 					<td th:text="${essaim.commentaire}"></td>
@@ -126,21 +141,25 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td><a th:href="@{'/ruche/'+${rucheEssaim?.id}}" th:text="${rucheEssaim?.nom}"></a></td>
-					<td><a th:if="${eveRuche != null}" th:href="@{'/evenement/'+${eveRuche?.id}+'?type=essaim'}"
-							th:text="${#temporals.format(eveRuche?.date, 'yyyy/MM/dd')}"></a>
+					<td><a th:href="@{'/ruche/'+${rucheEssaim?.id}}"
+						th:text="${rucheEssaim?.nom}"></a></td>
+					<td><a th:if="${eveRuche != null}"
+						th:href="@{'/evenement/'+${eveRuche?.id}+'?type=essaim'}"
+						th:text="${#temporals.format(eveRuche?.date, 'yyyy/MM/dd')}"></a>
 					</td>
 					<td th:text="${eveRuche?.commentaire}"></td>
-					<td><a th:href="@{'/rucher/'+${rucheEssaim?.rucher?.id}}" th:text="${rucheEssaim?.rucher?.nom}"></a>
-					</td>
-					<td><a th:if="${eveRucher != null}" th:href="@{'/evenement/'+${eveRucher?.id}+'?type=essaim'}"
-							th:text="${#temporals.format(eveRucher?.date, 'yyyy/MM/dd')}"></a>
+					<td><a th:href="@{'/rucher/'+${rucheEssaim?.rucher?.id}}"
+						th:text="${rucheEssaim?.rucher?.nom}"></a></td>
+					<td><a th:if="${eveRucher != null}"
+						th:href="@{'/evenement/'+${eveRucher?.id}+'?type=essaim'}"
+						th:text="${#temporals.format(eveRucher?.date, 'yyyy/MM/dd')}"></a>
 					</td>
 					<td th:text="${eveRucher?.commentaire}"></td>
 				</tr>
 			</tbody>
 		</table>
-		<h6 th:text="#{derniersEve}" th:if="${(eveTraite != null) or (eveSucre != null) or 
+		<h6 th:text="#{derniersEve}"
+			th:if="${(eveTraite != null) or (eveSucre != null) or 
 			(eveComm != null) or (evePesee != null) or (eveCadre != null)}">
 		</h6>
 		<table class="table table-sm table-bordered"
@@ -160,24 +179,29 @@
 			<tbody>
 				<tr>
 					<td><span th:if="${eveTraite != null}"
-							th:text="${T(ooioo.ruches.evenement.TypeEvenement).ESSAIMTRAITEMENT.equals(eveTraite?.type)}?#{Debut}:#{Fin}">
-						</span></td>
-					<td><a th:if="${eveTraite != null}" th:href="@{'/evenement/'+${eveTraite?.id}+'?type=essaim'}"
-							th:text="${#temporals.format(eveTraite?.date, 'yyyy/MM/dd')}"></a>
+						th:text="${T(ooioo.ruches.evenement.TypeEvenement).ESSAIMTRAITEMENT.equals(eveTraite?.type)}?#{Debut}:#{Fin}">
+					</span></td>
+					<td><a th:if="${eveTraite != null}"
+						th:href="@{'/evenement/'+${eveTraite?.id}+'?type=essaim'}"
+						th:text="${#temporals.format(eveTraite?.date, 'yyyy/MM/dd')}"></a>
 					</td>
 					<td th:text="${eveTraite?.commentaire}"></td>
-					<td class="num" th:text="${#numbers.formatDecimal(eveSucre?.valeur,1,2,'COMMA')}"></td>
-					<td><a th:if="${eveSucre != null}" th:href="@{'/evenement/'+${eveSucre?.id}+'?type=essaim'}"
-							th:text="${#temporals.format(eveSucre?.date, 'yyyy/MM/dd')}"></a>
+					<td class="num"
+						th:text="${#numbers.formatDecimal(eveSucre?.valeur,1,2,'COMMA')}"></td>
+					<td><a th:if="${eveSucre != null}"
+						th:href="@{'/evenement/'+${eveSucre?.id}+'?type=essaim'}"
+						th:text="${#temporals.format(eveSucre?.date, 'yyyy/MM/dd')}"></a>
 					</td>
 					<td th:text="${eveSucre?.commentaire}"></td>
 					<td th:text="${eveComm?.commentaire}"></td>
-					<td><a th:if="${eveComm != null}" th:href="@{'/evenement/'+${eveComm?.id}+'?type=essaim'}"
-							th:text="${#temporals.format(eveComm?.date, 'yyyy/MM/dd')}"></a></td>
+					<td><a th:if="${eveComm != null}"
+						th:href="@{'/evenement/'+${eveComm?.id}+'?type=essaim'}"
+						th:text="${#temporals.format(eveComm?.date, 'yyyy/MM/dd')}"></a></td>
 				</tr>
 			</tbody>
 		</table>
-		<table class="table table-sm table-bordered" th:if="${(evePesee != null) or (eveCadre != null)}">
+		<table class="table table-sm table-bordered"
+			th:if="${(evePesee != null) or (eveCadre != null)}">
 			<thead>
 				<tr>
 					<th th:text="#{poidsVide}"></th>
@@ -191,13 +215,15 @@
 			<tbody>
 				<tr>
 					<td th:text="${#numbers.formatDecimal(evePesee?.valeur,1,2)}"></td>
-					<td><a th:if="${evePesee != null}" th:href="@{'/evenement/'+${evePesee?.id}+'?type=essaim'}"
-							th:text="${#temporals.format(evePesee?.date, 'yyyy/MM/dd')}"></a>
+					<td><a th:if="${evePesee != null}"
+						th:href="@{'/evenement/'+${evePesee?.id}+'?type=essaim'}"
+						th:text="${#temporals.format(evePesee?.date, 'yyyy/MM/dd')}"></a>
 					</td>
 					<td th:text="${evePesee?.commentaire}"></td>
 					<td class="num" th:text="${eveCadre?.valeur}"></td>
-					<td><a th:if="${eveCadre != null}" th:href="@{'/evenement/'+${eveCadre?.id}+'?type=essaim'}"
-							th:text="${#temporals.format(eveCadre?.date, 'yyyy/MM/dd')}"></a>
+					<td><a th:if="${eveCadre != null}"
+						th:href="@{'/evenement/'+${eveCadre?.id}+'?type=essaim'}"
+						th:text="${#temporals.format(eveCadre?.date, 'yyyy/MM/dd')}"></a>
 					</td>
 					<td th:text="${eveCadre?.commentaire}"></td>
 				</tr>
@@ -205,21 +231,23 @@
 		</table>
 		<h6 th:text="#{PasDeRecolte}" th:if="${#lists.isEmpty(poidsListe)}"></h6>
 		<th:block th:unless="${#lists.isEmpty(poidsListe)}">
-			<h6 class="item" th:text="#{nbXRecoltes(${#arrays.length(recoltesListe)})}"></h6>
+			<h6 class="item"
+				th:text="#{nbXRecoltes(${#arrays.length(recoltesListe)})}"></h6>
 			<table class="table table-sm table-bordered">
 				<thead>
 					<tr>
 						<th th:text="#{recolte}"></th>
-						<td th:each="recolte : ${recoltesListe}"><a th:href="@{'/recolte/'+${recolte.id}}"
-								th:text="${#temporals.format(recolte.date, 'yyyy/MM/dd')}"></a></td>
+						<td th:each="recolte : ${recoltesListe}"><a
+							th:href="@{'/recolte/'+${recolte.id}}"
+							th:text="${#temporals.format(recolte.date, 'yyyy/MM/dd')}"></a></td>
 						<th th:text="#{Total}"></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<th th:text="#{rucher}"></th>
-						<td th:each="rucher : ${rucherRecolteListe}"><a th:href="@{'/rucher/'+${rucher?.id}}"
-								th:text="${rucher?.nom}"></a>
+						<td th:each="rucher : ${rucherRecolteListe}"><a
+							th:href="@{'/rucher/'+${rucher?.id}}" th:text="${rucher?.nom}"></a>
 						</td>
 						<td></td>
 					</tr>
@@ -228,12 +256,12 @@
 						<td th:each="poids : ${poidsListe}"
 							th:text="${#numbers.formatDecimal(poids/1000.0,1,2,'DEFAULT')}">
 						</td>
-						<td th:text="${#numbers.formatDecimal(poidsTotal/1000.0,1,2,'DEFAULT')}"></td>
+						<td
+							th:text="${#numbers.formatDecimal(poidsTotal/1000.0,1,2,'DEFAULT')}"></td>
 					</tr>
 				</tbody>
 			</table>
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

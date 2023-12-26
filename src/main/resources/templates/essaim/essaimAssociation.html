@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:inline="javascript">
 		/* globals DataTable */
 		document.addEventListener('DOMContentLoaded', () => {
 			const avecE = document.getElementById('avecEssaim');
@@ -21,31 +21,34 @@
 		});
 	</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<a th:href="@{'/essaim/'+${essaim.id}}" th:text="#{essaim} + ' ' + ${essaim.nom}"></a>
+					<a th:href="@{'/essaim/'+${essaim.id}}"
+						th:text="#{essaim} + ' ' + ${essaim.nom}"></a>
 					<th:block th:text="#{sep}+#{associationruche}"></th:block>
 				</h1>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-auto">
-				<h6 th:if="${rucheEssaim}" th:text="#{essaimdanslaruche}+' '+${rucheEssaim.nom}"></h6>
+				<h6 th:if="${rucheEssaim}"
+					th:text="#{essaimdanslaruche}+' '+${rucheEssaim.nom}"></h6>
 			</div>
 			<div class="col">
 				<input class="form-check-input" type="checkbox" id="avecEssaim" />
-				<label class="form-check-label" for="avecEssaim" th:text="#{avecEssaims}"></label>
+				<label class="form-check-label" for="avecEssaim"
+					th:text="#{avecEssaims}"></label>
 			</div>
 		</div>
 	</div>
 	<div class="container-fluid">
 		<h6 th:text="#{mettreessaimdanslaruche}"></h6>
-		<table class="table table-bordered table-striped table-sm" id="associerRucheEssaim">
+		<table class="table table-bordered table-striped table-sm"
+			id="associerRucheEssaim">
 			<thead>
 				<tr>
 					<th th:text="#{ruche}"></th>
@@ -56,9 +59,10 @@
 			</thead>
 			<tbody>
 				<tr th:each="ruche : ${ruches}">
-					<td><a data-bs-toggle="tooltip" th:title="#{mettreessaimdansruche}"
-							th:href="@{'/essaim/ruche/associe/'+${ruche.id}+'/'+${essaim.id}}"
-							th:text="${ruche.nom}"></a></td>
+					<td><a data-bs-toggle="tooltip"
+						th:title="#{mettreessaimdansruche}"
+						th:href="@{'/essaim/ruche/associe/'+${ruche.id}+'/'+${essaim.id}}"
+						th:text="${ruche.nom}"></a></td>
 					<td th:text="${ruche.essaim?.nom}"></td>
 					<td th:text="${ruche.dateAcquisition}"></td>
 					<td th:text="${ruche.type?.nom}"></td>
@@ -68,5 +72,4 @@
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

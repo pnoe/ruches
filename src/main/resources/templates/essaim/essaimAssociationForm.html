@@ -1,11 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsdatetimepicker}"></script>
-	<link th:replace="~{include :: cssdatetimepicker}" />
-	<script th:replace="~{include :: localejsdatetimepicker}"></script>
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsdatetimepicker}"></script>
+<link th:replace="~{include :: cssdatetimepicker}" />
+<script th:replace="~{include :: localejsdatetimepicker}"></script>
+<script th:inline="javascript">
 		const doitEtreSupA = /*[[#{doitEtreSupA}]]*/ null;
 		const dateFirst = /*[[${dateFirst}]]*/ null;
 		const timeFirst = /*[[${timeFirst}]]*/ null;
@@ -49,7 +49,6 @@
 		});
 	</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -64,26 +63,30 @@
 		</div>
 		<div th:if="${ruche.essaim}" class="row">
 			<div class="col">
-				<h1 class="item" style="color: red;" th:text="#{AttentionDipersion(${ruche.essaim.nom})}"></h1>
+				<h1 class="item" style="color: red;"
+					th:text="#{AttentionDipersion(${ruche.essaim.nom})}"></h1>
 			</div>
 		</div>
 	</div>
-	<form action="#" th:action="@{'/essaim/ruche/associe/sauve/' + ${ruche.id} + '/' + ${essaim.id}}" method="post"
-		id="evenementForm">
+	<form action="#"
+		th:action="@{'/essaim/ruche/associe/sauve/' + ${ruche.id} + '/' + ${essaim.id}}"
+		method="post" id="evenementForm">
 		<div th:replace="~{includeForm :: date}"></div>
 		<div th:replace="~{includeForm :: commentaire}"></div>
 		<div class="form-check" th:if="${rucheSource}">
-			<p th:utext="#{positionRuches(${ruche.nom},${ruche.rucher.nom})} + '<br/>'
+			<p
+				th:utext="#{positionRuches(${ruche.nom},${ruche.rucher.nom})} + '<br/>'
 				 + #{positionRuches(${rucheSource.nom},${rucheSource.rucher.nom})}">
 			</p>
-			<input class="form-check-input" type="checkbox" id="swapPositions" name="swapPositions" />
-			<label class="form-check-label" for="swapPositions"
+			<input class="form-check-input" type="checkbox" id="swapPositions"
+				name="swapPositions" /> <label class="form-check-label"
+				for="swapPositions"
 				th:text="#{echangePositionsRuches(${ruche.nom},${rucheSource.nom})}"></label>
 		</div>
-		<br /><br />
+		<br />
+		<br />
 		<div th:replace="~{includeForm :: BtnForm}"></div>
 	</form>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

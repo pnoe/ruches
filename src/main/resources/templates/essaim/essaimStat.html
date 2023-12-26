@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:inline="javascript">
 		/* globals bootstrap */
 		document.addEventListener('DOMContentLoaded', () => {
 			new bootstrap.Popover(document.getElementsByClassName('bi-question-lg')[0], {
@@ -11,22 +11,23 @@
 		});
 	</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<a th:href="@{'/essaim/'+${essaim.id}}" th:text="#{Essaims}+ ' '+${essaim.nom}"></a>
+					<a th:href="@{'/essaim/'+${essaim.id}}"
+						th:text="#{Essaims}+ ' '+${essaim.nom}"></a>
 					<th:block th:text="#{sep}+#{Production}"></th:block>
 				</h1>
 			</div>
 			<div class="col">
-				<a href="#" class="bi-question-lg" data-bs-toggle="popover" data-bs-trigger="focus" tabindex="0"
-					role="button" th:attr="data-bs-content=#{aideStatistiqueEssaim}"></a>
-				<a th:href="@{#{urldoc}+'12438_875194337'}" class="bi-book" th:title="#{Doc}" target="_blank"
-					aria-hidden="true"></a>
+				<a href="#" class="bi-question-lg" data-bs-toggle="popover"
+					data-bs-trigger="focus" tabindex="0" role="button"
+					th:attr="data-bs-content=#{aideStatistiqueEssaim}"></a> <a
+					th:href="@{#{urldoc}+'12438_875194337'}" class="bi-book"
+					th:title="#{Doc}" target="_blank" aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
@@ -48,7 +49,8 @@
 			<tbody>
 				<tr th:each="essaimPoids : ${essaimsPoids}">
 					<td th:text="${essaimPoids.dateAcquisition}"></td>
-					<td th:unless="${masquerInactif}" th:text="${essaimPoids.dateDispersion}"></td>
+					<td th:unless="${masquerInactif}"
+						th:text="${essaimPoids.dateDispersion}"></td>
 					<td th:if="${rucherId == null}" th:text="${essaimPoids.duree}"></td>
 					<td th:text="${essaimPoids.pTotal}"></td>
 					<td th:text="${essaimPoids.pMax}"></td>
@@ -60,9 +62,9 @@
 			</tbody>
 		</table>
 	</div>
-
 	<div class="container-fluid">
-		<table class="table table-bordered table-striped table-sm" id="recoltes">
+		<table class="table table-bordered table-striped table-sm"
+			id="recoltes">
 			<thead>
 				<tr>
 					<th th:text="#{recolte}"></th>
@@ -76,21 +78,19 @@
 			<tbody>
 				<tr th:each="rec, i : ${recolteList}">
 					<td><a th:href="@{'/recolte/'+${rec.id}}"
-							th:text="${#temporals.format(rec.date, 'yyyy/MM/dd HH:mm')}"></a></td>
-					<td>
-						<a th:href="@{'/rucher/'+${rucherList[i.index].id}}" th:text="${rucherList[i.index].nom}"></a>
-					</td>
-					<td class=" num" th:text="${#numbers.formatDecimal(avgRecList[i.index],1,2)}"></td>
-					<td class="num" th:text="${#numbers.formatDecimal(stdRecList[i.index],1,2)}"></td>
+						th:text="${#temporals.format(rec.date, 'yyyy/MM/dd HH:mm')}"></a></td>
+					<td><a th:href="@{'/rucher/'+${rucherList[i.index].id}}"
+						th:text="${rucherList[i.index].nom}"></a></td>
+					<td class=" num"
+						th:text="${#numbers.formatDecimal(avgRecList[i.index],1,2)}"></td>
+					<td class="num"
+						th:text="${#numbers.formatDecimal(stdRecList[i.index],1,2)}"></td>
 					<td th:text="${#numbers.formatDecimal(poidsRecList[i.index],1,2)}"></td>
 					<td th:text="${#numbers.formatDecimal(noteEssList[i.index],1,2)}"></td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
-
-
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>
