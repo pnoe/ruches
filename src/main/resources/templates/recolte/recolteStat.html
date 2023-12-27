@@ -1,11 +1,9 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsruches}"></script>
 </head>
-
 <body th:with="rs=(${#lists.size(ruchers)} > 1)">
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -91,5 +89,4 @@
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

@@ -1,78 +1,75 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsruches}"></script>
-	<script th:inline="javascript">
-		/* exported google, exportGpx, exportKml, essaims,
-		rucheParcours:writable, distParcours:writable, rucher, rucherMapZoom, longitudeCentre, latitudeCentre,
-		  rayonsButinage, distButinage, urlruches, nomHausses, essaimtxt, pasdessaimtxt,
-		  ruchetxt, haussestxt, pasdehaussetxt, ruches, ruchestxt, distancedeparcourstxt,
-		  entreetxt, _csrf_token, distDiminuee, calculEnCours, pasDAmelioration */
-		let rucheParcours = /*[[${rucheParcours}]]*/ null;
-		let distParcours = /*[[${distParcours}]]*/ null;
-		const rucher = /*[[${rucher}]]*/ null;
-		const rucherMapZoom = /*[[${@environment.getProperty('rucher.map.zoom')}]]*/ null;
-		const longitudeCentre = /*[[${longitudeCentre}]]*/ null;
-		const latitudeCentre = /*[[${latitudeCentre}]]*/ null;
-		const rayonsButinage = /*[[${rayonsButinage}]]*/ null;
-		const distButinage = /*[[#{distButinage}]]*/ null;
-		const urlruches = /*[[@{/}]]*/ null;
-		const nomHausses = /*[[${hausseNoms}]]*/ null;
-		const essaimtxt = /*[[#{essaim}]]*/ null;
-		const pasdessaimtxt = /*[[#{Pasdessaim}]]*/ null;
-		const ruchetxt = /*[[#{ruche}]]*/ null;
-		const haussestxt = /*[[#{Hausses}]]*/ null;
-		const pasdehaussetxt = /*[[#{Pasdehausse}]]*/ null;
-		const ruches = /*[[${ruches}]]*/ null;
-		const essaims = /*[[${essaims}]]*/ null;
-		const ruchestxt = /*[[#{ruches}]]*/ null;
-		const distancedeparcourstxt = /*[[#{distancedeparcours}]]*/ null;
-		const entreetxt = /*[[#{Entree}]]*/ null;
-		const _csrf_token = /*[[${_csrf.token}]]*/ null;
-		const distDiminuee = /*[[#{distDiminuee}]]*/ null;
-		const calculEnCours = /*[[#{calculEnCours}]]*/ null;
-		const pasDAmelioration = /*[[#{pasDAmelioration}]]*/ null;
-	</script>
-	<script th:replace="~{include :: jsruchesnom('rucherDetailCarto')}"></script>
-	<style>
-		.gm-style .gm-style-iw-d::-webkit-scrollbar-track,
-		.gm-style .gm-style-iw-d::-webkit-scrollbar-track-piece,
-		.gm-style .gm-style-iw-c,
-		.gm-style .gm-style-iw-t::after {
-			background: #888888;
-		}
-	</style>
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsruches}"></script>
+<script th:inline="javascript">
+	/* exported google, exportGpx, exportKml, essaims,
+	rucheParcours:writable, distParcours:writable, rucher, rucherMapZoom, longitudeCentre, latitudeCentre,
+	  rayonsButinage, distButinage, urlruches, nomHausses, essaimtxt, pasdessaimtxt,
+	  ruchetxt, haussestxt, pasdehaussetxt, ruches, ruchestxt, distancedeparcourstxt,
+	  entreetxt, _csrf_token, distDiminuee, calculEnCours, pasDAmelioration */
+	let rucheParcours = /*[[${rucheParcours}]]*/null;
+	let distParcours = /*[[${distParcours}]]*/null;
+	const rucher = /*[[${rucher}]]*/null;
+	const rucherMapZoom = /*[[${@environment.getProperty('rucher.map.zoom')}]]*/null;
+	const longitudeCentre = /*[[${longitudeCentre}]]*/null;
+	const latitudeCentre = /*[[${latitudeCentre}]]*/null;
+	const rayonsButinage = /*[[${rayonsButinage}]]*/null;
+	const distButinage = /*[[#{distButinage}]]*/null;
+	const urlruches = /*[[@{/}]]*/null;
+	const nomHausses = /*[[${hausseNoms}]]*/null;
+	const essaimtxt = /*[[#{essaim}]]*/null;
+	const pasdessaimtxt = /*[[#{Pasdessaim}]]*/null;
+	const ruchetxt = /*[[#{ruche}]]*/null;
+	const haussestxt = /*[[#{Hausses}]]*/null;
+	const pasdehaussetxt = /*[[#{Pasdehausse}]]*/null;
+	const ruches = /*[[${ruches}]]*/null;
+	const essaims = /*[[${essaims}]]*/null;
+	const ruchestxt = /*[[#{ruches}]]*/null;
+	const distancedeparcourstxt = /*[[#{distancedeparcours}]]*/null;
+	const entreetxt = /*[[#{Entree}]]*/null;
+	const _csrf_token = /*[[${_csrf.token}]]*/null;
+	const distDiminuee = /*[[#{distDiminuee}]]*/null;
+	const calculEnCours = /*[[#{calculEnCours}]]*/null;
+	const pasDAmelioration = /*[[#{pasDAmelioration}]]*/null;
+</script>
+<script th:replace="~{include :: jsruchesnom('rucherDetailCarto')}"></script>
+<style>
+.gm-style .gm-style-iw-d::-webkit-scrollbar-track, .gm-style .gm-style-iw-d::-webkit-scrollbar-track-piece,
+	.gm-style .gm-style-iw-c, .gm-style .gm-style-iw-t::after {
+	background: #888888;
+}
+</style>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<a th:href="@{'/rucher/'+${rucher.id}}" th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+					<a th:href="@{'/rucher/'+${rucher.id}}"
+						th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
 					<th:block th:text="#{sep}+#{carteGg}"></th:block>
 				</h1>
 			</div>
 			<div class="col">
 				<input type="text" th:placeholder="#{recherche}" id="searchtext" />
-				<span class="padicons">
-					<input type="checkbox" id="dragMarker" th:title="#{markerFixes}" checked />
-				</span>
-				<span id="liste" class="liste bi-list-ul cursorpointer" th:title="#{listeRuchesOrdonnees}"
-					aria-hidden="true"></span>
-				<span id="listeplus" class="liste bi-list-stars cursorpointer" th:title="#{listePlusRuchesOrdonnees}"
-					aria-hidden="true"></span>
-				<span id="export-gpx" class="bi-arrow-up-right-circle cursorpointer" th:title="#{exportGPX}"
-					aria-hidden="true"></span>
-				<a id="gpx-download"></a>
-				<span id="export-kml" class="bi-arrow-up-right-square cursorpointer" th:title="#{exportKML}"
-					aria-hidden="true"></span>
-				<a id="kml-download"></a>
-				<span id="parcours-redraw" class="bi-arrow-clockwise cursorpointer" th:title="#{parcoursRecalcul}"
-					aria-hidden="true"></span>
-				<span id="cercles" class="bi-wifi cursorpointer" aria-hidden="true"></span>
+				<span class="padicons"> <input type="checkbox"
+					id="dragMarker" th:title="#{markerFixes}" checked />
+				</span> <span id="liste" class="liste bi-list-ul cursorpointer"
+					th:title="#{listeRuchesOrdonnees}" aria-hidden="true"></span> <span
+					id="listeplus" class="liste bi-list-stars cursorpointer"
+					th:title="#{listePlusRuchesOrdonnees}" aria-hidden="true"></span> <span
+					id="export-gpx" class="bi-arrow-up-right-circle cursorpointer"
+					th:title="#{exportGPX}" aria-hidden="true"></span> <a
+					id="gpx-download"></a> <span id="export-kml"
+					class="bi-arrow-up-right-square cursorpointer"
+					th:title="#{exportKML}" aria-hidden="true"></span> <a
+					id="kml-download"></a> <span id="parcours-redraw"
+					class="bi-arrow-clockwise cursorpointer"
+					th:title="#{parcoursRecalcul}" aria-hidden="true"></span> <span
+					id="cercles" class="bi-wifi cursorpointer" aria-hidden="true"></span>
 			</div>
 		</div>
 	</div>
@@ -80,5 +77,4 @@
 	<footer th:replace="~{include::footer}"></footer>
 </body>
 <script async defer th:src="${@environment.getProperty('gg.map.url')}"></script>
-
 </html>

@@ -1,16 +1,16 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<a th:href="@{'/essaim/'+${essaim.id}}" th:text="#{essaim} + ' ' + ${essaim.nom}"></a>
+					<a th:href="@{'/essaim/'+${essaim.id}}"
+						th:text="#{essaim} + ' ' + ${essaim.nom}"></a>
 					<th:block th:text="#{sep}+#{histoRucheRucher}"></th:block>
 				</h1>
 			</div>
@@ -29,16 +29,18 @@
 			</thead>
 			<tbody>
 				<tr th:each="eve : ${evensEssaimAjout}">
-					<td><a th:text="${#temporals.format(eve.date, 'yyyy/MM/dd HH:mm')}"
-							th:href="@{'/evenement/'+${eve.id}}"></a></td>
+					<td><a
+						th:text="${#temporals.format(eve.date, 'yyyy/MM/dd HH:mm')}"
+						th:href="@{'/evenement/'+${eve.id}}"></a></td>
 					<td th:text="#{${eve.type}}"></td>
-					<td><a th:text="${eve.ruche?.nom}" th:href="@{'/ruche/'+${eve.ruche?.id}}"></a></td>
-					<td><a th:text="${eve.rucher?.nom}" th:href="@{'/rucher/'+${eve.rucher?.id}}"></a></td>
+					<td><a th:text="${eve.ruche?.nom}"
+						th:href="@{'/ruche/'+${eve.ruche?.id}}"></a></td>
+					<td><a th:text="${eve.rucher?.nom}"
+						th:href="@{'/rucher/'+${eve.rucher?.id}}"></a></td>
 					<td th:text="${durees[eveStat.index]}"></td>
 				</tr>
 		</table>
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

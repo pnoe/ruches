@@ -1,11 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsdatetimepicker}"></script>
-	<link th:replace="~{include :: cssdatetimepicker}" />
-	<script th:replace="~{include :: localejsdatetimepicker}"></script>
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsdatetimepicker}"></script>
+<link th:replace="~{include :: cssdatetimepicker}" />
+<script th:replace="~{include :: localejsdatetimepicker}"></script>
+<script th:inline="javascript">
 		document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById('commentaire').focus();
 			$('#ruchesPoidsForm').validate({
@@ -24,51 +24,52 @@
 			});
 		});
 	</script>
-	<style>
-		.inputpds {
-			width: 5em;
-		}
+<style>
+.inputpds {
+	width: 5em;
+}
 
-		.changed {
-			background-color: #a67c00;
-		}
+.changed {
+	background-color: #a67c00;
+}
 
-		.modif {
-			width: 6em;
-		}
+.modif {
+	width: 6em;
+}
 
-		/* Suppression de fleches de changement des poids de ruche */
-		/* Chrome, Safari, Edge, Opera */
-		input::-webkit-outer-spin-button,
-		input::-webkit-inner-spin-button {
-			-webkit-appearance: none;
-			margin: 0;
-		}
+/* Suppression de fleches de changement des poids de ruche */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
 
-		/* Firefox */
-		input[type="number"] {
-			-moz-appearance: textfield;
-		}
-	</style>
+/* Firefox */
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+</style>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<a th:href="@{'/rucher/'+${rucher.id}}" th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+					<a th:href="@{'/rucher/'+${rucher.id}}"
+						th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
 					<th:block th:text="#{sep}+#{pesee}"></th:block>
 				</h1>
 			</div>
 		</div>
 	</div>
-	<form class="table-responsive" action="#" th:action="@{'/rucher/poidsruches/sauve/'+${rucher.id}}" method="post"
+	<form class="table-responsive" action="#"
+		th:action="@{'/rucher/poidsruches/sauve/'+${rucher.id}}" method="post"
 		id="ruchesPoidsForm">
 		<div th:replace="~{includeForm :: date}"></div>
 		<div th:replace="~{includeForm :: commentaire}"></div>
-		<table class="table table-sm table-bordered table-striped" id="ruchesPoidsTbl">
+		<table class="table table-sm table-bordered table-striped"
+			id="ruchesPoidsTbl">
 			<thead>
 				<tr>
 					<th hidden></th>
@@ -80,14 +81,18 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="ruche, itemStat : ${ruches}" th:with="p=${evesPesee[itemStat.index]}">
-					<td hidden><input type="number" th:name="|idValLst[${itemStat.index}].id|" th:value="${ruche.id}" />
+				<tr th:each="ruche, itemStat : ${ruches}"
+					th:with="p=${evesPesee[itemStat.index]}">
+					<td hidden><input type="number"
+						th:name="|idValLst[${itemStat.index}].id|" th:value="${ruche.id}" />
 					</td>
 					<td th:text="${ruche.nom}"></td>
 					<td th:text="${ruche.poidsVide}"></td>
-					<td><input class="inputpds" type="number" th:min="${ruche.poidsVide}" max="80" step="0.001"
-							th:name="|idValLst[${itemStat.index}].valeur|" /></td>
-					<td th:text="(${p} == null) ? '' :
+					<td><input class="inputpds" type="number"
+						th:min="${ruche.poidsVide}" max="80" step="0.001"
+						th:name="|idValLst[${itemStat.index}].valeur|" /></td>
+					<td
+						th:text="(${p} == null) ? '' :
 						${#numbers.formatDecimal(p.valeur,1,2)}+' '+${#temporals.format(p.date,'dd/MM/yyyy')}">
 					</td>
 					<td th:text="${ruche.essaim?.nom}"></td>
@@ -98,5 +103,4 @@
 	</form>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

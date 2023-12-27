@@ -1,11 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsdatetimepicker}"></script>
-	<link th:replace="~{include :: cssdatetimepicker}" />
-	<script th:replace="~{include ::  localejsdatetimepicker}"></script>
-	<script>
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsdatetimepicker}"></script>
+<link th:replace="~{include :: cssdatetimepicker}" />
+<script th:replace="~{include ::  localejsdatetimepicker}"></script>
+<script>
 		document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById('valeur').focus();
 			$('#evenementForm').validate({
@@ -29,7 +29,6 @@
 		});
 	</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -47,13 +46,12 @@
 			</div>
 		</div>
 	</div>
-	<form action="#" th:action="@{'/evenement/essaim/sauve'}" th:object="${evenement}" method="post" id="evenementForm">
-		<input type="hidden" th:field="*{id}" />
-		<input type="hidden" th:field="*{type}" />
-		<input type="hidden" th:field="*{ruche}" />
-		<input type="hidden" th:field="*{rucher}" />
-		<input type="hidden" th:field="*{essaim}" />
-		<input type="hidden" th:field="*{hausse}" />
+	<form action="#" th:action="@{'/evenement/essaim/sauve'}"
+		th:object="${evenement}" method="post" id="evenementForm">
+		<input type="hidden" th:field="*{id}" /> <input type="hidden"
+			th:field="*{type}" /> <input type="hidden" th:field="*{ruche}" /> <input
+			type="hidden" th:field="*{rucher}" /> <input type="hidden"
+			th:field="*{essaim}" /> <input type="hidden" th:field="*{hausse}" />
 		<div th:replace="~{includeForm :: dateField}"></div>
 		<div th:replace="~{includeForm :: poidskgField}"></div>
 		<div th:replace="~{includeForm :: commentaireField}"></div>
@@ -61,5 +59,4 @@
 	</form>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

@@ -1,11 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsdatetimepicker}"></script>
-	<link th:replace="~{include :: cssdatetimepicker}" />
-	<script th:replace="~{include :: localejsdatetimepicker}"></script>
-	<script>
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsdatetimepicker}"></script>
+<link th:replace="~{include :: cssdatetimepicker}" />
+<script th:replace="~{include :: localejsdatetimepicker}"></script>
+<script>
 		document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById('valeur').focus();
 			$('#evenementForm').validate({
@@ -30,7 +30,6 @@
 		});
 	</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -41,26 +40,28 @@
 						th:text="#{hausse} + ' ' + ${evenement.hausse?.nom}"></a>
 					<th:block th:text="#{sep}+#{remplissage}"></th:block>
 				</h1>
-				<th:block th:text="${valeurHAUSSEREMPLISSAGE}?
+				<th:block
+					th:text="${valeurHAUSSEREMPLISSAGE}?
 					${valeurHAUSSEREMPLISSAGE}+'% le '+${#temporals.format(dateHAUSSEREMPLISSAGE, 'dd/MM/yyyy')}:''">
 				</th:block>
 			</div>
 		</div>
 	</div>
-	<form action="#" th:action="@{'/evenement/hausse/sauve'}" th:object="${evenement}" method="post" id="evenementForm">
-		<input type="hidden" th:field="*{id}" /> <input type="hidden" th:field="*{type}" /> <input type="hidden"
-			th:field="*{ruche}" /> <input type="hidden" th:field="*{rucher}" /> <input type="hidden"
+	<form action="#" th:action="@{'/evenement/hausse/sauve'}"
+		th:object="${evenement}" method="post" id="evenementForm">
+		<input type="hidden" th:field="*{id}" /> <input type="hidden"
+			th:field="*{type}" /> <input type="hidden" th:field="*{ruche}" /> <input
+			type="hidden" th:field="*{rucher}" /> <input type="hidden"
 			th:field="*{essaim}" /> <input type="hidden" th:field="*{hausse}" />
 		<div th:replace="~{includeForm :: dateField}"></div>
 		<div class="form-floating mb-3">
-			<input placeholder="" class="form-control" type="number" step="1" min="0" max="100"
-				th:errorclass="fieldError" th:field="*{valeur}" /> <label class="form-label" th:text="#{remplissage}"
-				for="valeur"></label>
+			<input placeholder="" class="form-control" type="number" step="1"
+				min="0" max="100" th:errorclass="fieldError" th:field="*{valeur}" />
+			<label class="form-label" th:text="#{remplissage}" for="valeur"></label>
 		</div>
 		<div th:replace="~{includeForm :: commentaireField}"></div>
 		<div th:replace="~{includeForm :: BtnForm}"></div>
 	</form>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

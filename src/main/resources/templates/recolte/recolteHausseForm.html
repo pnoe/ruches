@@ -1,18 +1,17 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsruches}"></script>
-	<script th:inline="javascript">
-		/* exported pdsAvSupPdsAp, ruchesurl, essaimId, rucheId, rucherId */
-		const pdsAvSupPdsAp = /*[[#{poidsAvantSupPoidsApres}]]*/ null;
-		const ruchesurl = /*[[@{/}]]*/ null;
-		const essaimId = /*[[${detailRecolte.essaim?.id}]]*/ null;
-		const rucheId = /*[[${detailRecolte.ruche?.id}]]*/ null;
-		const rucherId = /*[[${detailRecolte.rucher?.id}]]*/ null;
-	</script>
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsruches}"></script>
+<script th:inline="javascript">
+	/* exported pdsAvSupPdsAp, ruchesurl, essaimId, rucheId, rucherId */
+	const pdsAvSupPdsAp = /*[[#{poidsAvantSupPoidsApres}]]*/null;
+	const ruchesurl = /*[[@{/}]]*/null;
+	const essaimId = /*[[${detailRecolte.essaim?.id}]]*/null;
+	const rucheId = /*[[${detailRecolte.ruche?.id}]]*/null;
+	const rucherId = /*[[${detailRecolte.rucher?.id}]]*/null;
+</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -21,53 +20,54 @@
 				<h1 class="item">
 					<a th:href="@{'/recolte/'+${detailRecolte.recolte.id}}"
 						th:text="#{recolte} + ' ' + ${#temporals.format(detailRecolte.recolte.date, 'yyyy/MM/dd HH:mm')}"></a>
-					<th:block th:text="' : '+#{HausseRec}+' '+${detailRecolte.hausse.nom}"></th:block>
+					<th:block
+						th:text="' : '+#{HausseRec}+' '+${detailRecolte.hausse.nom}"></th:block>
 				</h1>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col">
-				<p th:text="#{poidsVideKg(${#numbers.formatDecimal(detailRecolte.hausse.poidsVide,1,2,'COMMA')})}"></p>
+				<p
+					th:text="#{poidsVideKg(${#numbers.formatDecimal(detailRecolte.hausse.poidsVide,1,2,'COMMA')})}"></p>
 			</div>
 		</div>
 	</div>
-	<form action="#" th:action="@{/recolte/detail/sauve}" th:object="${detailRecolte}" method="post"
-		id="recolteHausseForm">
-		<input type="hidden" th:field="*{id}" /> <input type="hidden" th:field="*{recolte}" /> <input type="hidden"
-			th:field="*{hausse}" />
+	<form action="#" th:action="@{/recolte/detail/sauve}"
+		th:object="${detailRecolte}" method="post" id="recolteHausseForm">
+		<input type="hidden" th:field="*{id}" /> <input type="hidden"
+			th:field="*{recolte}" /> <input type="hidden" th:field="*{hausse}" />
 		<div class="form-floating mb-3">
-			<input class="form-control" placeholder="" type="number" th:min="${detailRecolte.hausse.poidsVide}" max="80"
-				step="0.001" th:field="*{poidsAvant}" th:errorclass="fieldError" />
-			<label class="form-label" th:text="#{poidsAvant}" for="poidsAvant"></label>
+			<input class="form-control" placeholder="" type="number"
+				th:min="${detailRecolte.hausse.poidsVide}" max="80" step="0.001"
+				th:field="*{poidsAvant}" th:errorclass="fieldError" /> <label
+				class="form-label" th:text="#{poidsAvant}" for="poidsAvant"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<input class="form-control" placeholder="" type="number" th:min="${detailRecolte.hausse.poidsVide}" max="80"
-				step="0.001" th:field="*{poidsApres}" th:errorclass="fieldError" />
-			<label class="form-label" th:text="#{poidsApres}" for="poidsApres"></label>
+			<input class="form-control" placeholder="" type="number"
+				th:min="${detailRecolte.hausse.poidsVide}" max="80" step="0.001"
+				th:field="*{poidsApres}" th:errorclass="fieldError" /> <label
+				class="form-label" th:text="#{poidsApres}" for="poidsApres"></label>
 		</div>
 		<button type="button" id="toggleplus" th:text="#{plus}"></button>
-		<br /><br />
+		<br />
+		<br />
 		<div class="form-floating mb-3 toggleplus">
 			<select class="form-control" th:field="*{essaim}" disabled>
 				<option th:value="*{essaim?.id}" th:text="*{essaim?.nom}"></option>
-			</select>
-			<label class="form-label" for="essaim" th:text="#{essaim}"></label>
+			</select> <label class="form-label" for="essaim" th:text="#{essaim}"></label>
 		</div>
 		<div class="form-floating mb-3 toggleplus">
 			<select class="form-control" th:field="*{ruche}" disabled>
 				<option th:value="*{ruche?.id}" th:text="*{ruche?.nom}"></option>
-			</select>
-			<label class="form-label" for="ruche" th:text="#{ruche}"></label>
+			</select> <label class="form-label" for="ruche" th:text="#{ruche}"></label>
 		</div>
 		<div class="form-floating mb-3 toggleplus">
 			<select class="form-control" th:field="*{rucher}" disabled>
 				<option th:value="*{rucher?.id}" th:text="*{rucher?.nom}"></option>
-			</select>
-			<label class="form-label" for="rucher" th:text="#{rucher}"></label>
+			</select> <label class="form-label" for="rucher" th:text="#{rucher}"></label>
 		</div>
 		<div th:replace="~{includeForm :: BtnForm}"></div>
 	</form>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

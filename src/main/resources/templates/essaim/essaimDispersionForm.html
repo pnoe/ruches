@@ -1,11 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsdatetimepicker}"></script>
-	<link th:replace="~{include :: cssdatetimepicker}" />
-	<script th:replace="~{include :: localejsdatetimepicker}"></script>
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsdatetimepicker}"></script>
+<link th:replace="~{include :: cssdatetimepicker}" />
+<script th:replace="~{include :: localejsdatetimepicker}"></script>
+<script th:inline="javascript">
 		/* globals bootstrap */
 		const doitEtreSupA = /*[[#{doitEtreSupA}]]*/null;
 		const dateFirst = /*[[${dateFirst}]]*/null;
@@ -66,20 +66,21 @@
 		});
 	</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<a th:href="@{'/essaim/'+${essaimId}}" th:text="#{essaim} + ' ' + ${essaim.nom}"></a>
+					<a th:href="@{'/essaim/'+${essaimId}}"
+						th:text="#{essaim} + ' ' + ${essaim.nom}"></a>
 					<th:block th:text="#{sep} + #{dispersion}"></th:block>
 				</h1>
 			</div>
 			<div class="col">
-				<a href="#" class="bi-question-lg" data-bs-toggle="popover" data-bs-trigger="focus" tabindex="0"
-					role="button" th:attr="data-bs-content=#{aideessaimdspersionform}"></a>
+				<a href="#" class="bi-question-lg" data-bs-toggle="popover"
+					data-bs-trigger="focus" tabindex="0" role="button"
+					th:attr="data-bs-content=#{aideessaimdspersionform}"></a>
 			</div>
 		</div>
 		<div class="row">
@@ -90,14 +91,18 @@
 			</div>
 		</div>
 	</div>
-	<form action="#" th:action="@{'/evenement/essaim/sauve/dispersion/'+${essaim.id}}" method="post" id="evenementForm">
+	<form action="#"
+		th:action="@{'/evenement/essaim/sauve/dispersion/'+${essaim.id}}"
+		method="post" id="evenementForm">
 		<div class="form-check">
-			<input class="form-check-input" type="checkbox" id="depot" name="depot" checked /> <label
-				class="form-check-label" for="depot" th:text="#{retourrucheaudepot}"></label>
+			<input class="form-check-input" type="checkbox" id="depot"
+				name="depot" checked /> <label class="form-check-label" for="depot"
+				th:text="#{retourrucheaudepot}"></label>
 		</div>
 		<div id="divevencadre" class="form-check">
-			<input class="form-check-input" type="checkbox" id="evencadre" name="evencadre" checked /> <label
-				class="form-check-label" for="evencadre" th:text="#{creationevecadrezero}"></label>
+			<input class="form-check-input" type="checkbox" id="evencadre"
+				name="evencadre" checked /> <label class="form-check-label"
+				for="evencadre" th:text="#{creationevecadrezero}"></label>
 		</div>
 		<div th:replace="~{includeForm :: date}"></div>
 		<div th:replace="~{includeForm :: commentaire}"></div>
@@ -105,8 +110,8 @@
 			<div class="form-floating mb-3">
 				<select class="form-control" id="remerageId" name="remerageId">
 					<option th:text="#{aucun}" value=""></option>
-					<option th:each="essaimopt : ${essaimsRemerage}" th:value="${essaimopt.id}"
-						th:text="${essaimopt.nom}"></option>
+					<option th:each="essaimopt : ${essaimsRemerage}"
+						th:value="${essaimopt.id}" th:text="${essaimopt.nom}"></option>
 				</select> <label class="form-label" for="remerageId"
 					th:text="#{nouvellereine} + ' ' + ${nomRuche}"></label>
 			</div>
@@ -115,5 +120,4 @@
 	</form>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

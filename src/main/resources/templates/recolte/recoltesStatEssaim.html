@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:inline="javascript">
 		/* globals DataTable */
 		const btnTxtPrint = /*[[#{buttontextprint}]]*/ null;
 		const recoltes = /*[[${recoltes}]]*/ null;
@@ -49,13 +49,12 @@
 			});
 		});
 	</script>
-	<style>
-		.v {
-			writing-mode: sideways-lr;
-		}
-	</style>
+<style>
+.v {
+	writing-mode: sideways-lr;
+}
+</style>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -66,23 +65,23 @@
 					<th:block th:text="#{sep}+#{ProductionEssaims}"></th:block>
 				</h1>
 			</div>
-
 			<div class="col">
-				<span class="padicons"> <input type="checkbox" id="tous" th:title="#{tousEssaims}"
-						th:checked="${tous}" /> <label for="tous" th:text="#{tous}"></label>
+				<span class="padicons"> <input type="checkbox" id="tous"
+					th:title="#{tousEssaims}" th:checked="${tous}" /> <label
+					for="tous" th:text="#{tous}"></label>
 				</span>
 			</div>
-
-
 		</div>
 	</div>
 	<div class="container-fluid table-responsive">
-		<table class="table table-bordered table-striped table-sm" id="recoltes">
+		<table class="table table-bordered table-striped table-sm"
+			id="recoltes">
 			<thead>
 				<tr>
 					<th th:text="#{essaim}"></th>
 					<th:block th:each="recolte : ${recoltes}">
-						<td class="v" th:text="${#temporals.format(recolte.date, 'yy/MM/dd')}"></td>
+						<td class="v"
+							th:text="${#temporals.format(recolte.date, 'yy/MM/dd')}"></td>
 					</th:block>
 					<th th:text="#{Total}"></th>
 				</tr>
@@ -94,7 +93,6 @@
 					</th:block>
 				</tr>
 			</tbody>
-
 			<tfoot>
 				<tr>
 					<th th:text="#{Total}"></th>
@@ -115,5 +113,4 @@
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

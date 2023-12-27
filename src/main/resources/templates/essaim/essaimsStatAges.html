@@ -1,6 +1,5 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsChart}"></script>
@@ -9,8 +8,7 @@
 <script th:replace="~{include :: d3-scale-chromatic}"></script>
 <script th:replace="~{include :: jsruches}"></script>
 <script th:inline="javascript">
-	/* exported agesHisto, pas, 
-	   ageDesReines, nbReinesTotal, Reines
+	/* exported agesHisto, pas, ageDesReines, nbReinesTotal, Reines
 	 */
 	const pas = /*[[${pas}]]*/null;
 	const agesHisto = /*[[${agesHisto}]]*/null;
@@ -19,7 +17,6 @@
 	const Reines = /*[[#{Reines}]]*/null;
 </script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -39,11 +36,9 @@
 			</div>
 		</div>
 	</div>
-
 	<div class="container-fluid">
 		<canvas id="ctx"></canvas>
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

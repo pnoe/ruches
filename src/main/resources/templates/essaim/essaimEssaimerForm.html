@@ -1,11 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsdatetimepicker}"></script>
-	<link th:replace="~{include :: cssdatetimepicker}" />
-	<script th:replace="~{include :: localejsdatetimepicker}"></script>
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsdatetimepicker}"></script>
+<link th:replace="~{include :: cssdatetimepicker}" />
+<script th:replace="~{include :: localejsdatetimepicker}"></script>
+<script th:inline="javascript">
 		const Essaimage = /*[[#{Essaimage}]]*/null;
 		const essaimNom = /*[[${essaim.nom}]]*/null;
 		const essaimNoms = /*[[${essaimNoms}]]*/null;
@@ -37,25 +37,27 @@
 		});
 	</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<a th:href="@{'/essaim/'+${essaimId}}" th:text="#{essaim}+' '+${essaim.nom}"></a>
+					<a th:href="@{'/essaim/'+${essaimId}}"
+						th:text="#{essaim}+' '+${essaim.nom}"></a>
 					<th:block th:text="#{sep} + #{Essaimage}"></th:block>
 					<th:block th:text="#{ruche} + ' ' + ${ruche.nom}"></th:block>
 				</h1>
 			</div>
 		</div>
 	</div>
-	<form action="#" th:action="@{'/essaim/essaime/sauve/' + ${essaim.id}}" method="post" id="essaimeForm">
+	<form action="#" th:action="@{'/essaim/essaime/sauve/' + ${essaim.id}}"
+		method="post" id="essaimeForm">
 		<div th:replace="~{includeForm :: date}"></div>
 		<div class="form-floating mb-3">
-			<input class="form-control" type="text" placeholder="" id="nom" name="nom" maxlength="92" 
-			  th:value="${essaim.nom} + ${@environment.getProperty('essaime.suffix')}" />
+			<input class="form-control" type="text" placeholder="" id="nom"
+				name="nom" maxlength="92"
+				th:value="${essaim.nom} + ${@environment.getProperty('essaime.suffix')}" />
 			<label class="form-label" for="nom" th:text="#{NomNouvelEssaim}"></label>
 		</div>
 		<div th:replace="~{includeForm :: commentaire}"></div>
@@ -63,5 +65,4 @@
 	</form>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

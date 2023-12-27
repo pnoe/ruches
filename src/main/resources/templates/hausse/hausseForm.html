@@ -1,10 +1,10 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsdatetimepicker}"></script>
-	<link th:replace="~{include :: cssdatetimepicker}" />
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsdatetimepicker}"></script>
+<link th:replace="~{include :: cssdatetimepicker}" />
+<script th:inline="javascript">
 		const hausseNoms = /*[[${hausseNoms}]]*/null;
 		const nomexiste = /*[[#{nomexiste}]]*/null;
 		const saisirnbcadresinfmax = /*[[#{saisirnbcadresinfmax}]]*/null;
@@ -55,7 +55,6 @@
 		});
 	</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -66,37 +65,40 @@
 					<th:block th:text="#{sep} + #{Ajout}"></th:block>
 				</h1>
 				<h1 class="item" th:if="${hausse.id}">
-					<a th:href="@{'/hausse/'+${hausse.id}}" th:text="#{hausse} + ' ' + ${hausse.nom}"></a>
+					<a th:href="@{'/hausse/'+${hausse.id}}"
+						th:text="#{hausse} + ' ' + ${hausse.nom}"></a>
 					<th:block th:text="#{sep} + #{modification}"></th:block>
 				</h1>
 			</div>
 		</div>
 	</div>
-	<form action="#" th:action="@{/hausse/sauve}" th:object="${hausse}" method="post" id="hausseForm">
-		<input type="hidden" th:field="*{id}" /> <input type="hidden" th:field="*{ruche}" /> <input type="hidden"
+	<form action="#" th:action="@{/hausse/sauve}" th:object="${hausse}"
+		method="post" id="hausseForm">
+		<input type="hidden" th:field="*{id}" /> <input type="hidden"
+			th:field="*{ruche}" /> <input type="hidden"
 			th:field="*{ordreSurRuche}" />
 		<div th:replace="~{includeForm :: nomField}"></div>
 		<div th:replace="~{includeForm :: activeField}"></div>
 		<div th:replace="~{includeForm :: dateAcquisitionField}"></div>
 		<div class="form-floating mb-3">
-			<input placeholder="5.000" class="form-control" type="number" step="0.001" min="0" max="20"
-				th:field="*{poidsVide}" th:errorclass="fieldError" /> <label class="form-label" for="poidsVide"
-				th:text="#{poidskg}"></label>
+			<input placeholder="5.000" class="form-control" type="number"
+				step="0.001" min="0" max="20" th:field="*{poidsVide}"
+				th:errorclass="fieldError" /> <label class="form-label"
+				for="poidsVide" th:text="#{poidskg}"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<input placeholder="9" class="form-control" type="number" th:field="*{nbCadres}"
-				th:errorclass="fieldError" /> <label class="form-label" for="nbCadres"
-				th:text="#{nombredecadres}"></label>
+			<input placeholder="9" class="form-control" type="number"
+				th:field="*{nbCadres}" th:errorclass="fieldError" /> <label
+				class="form-label" for="nbCadres" th:text="#{nombredecadres}"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<input placeholder="9" class="form-control" type="number" th:field="*{nbCadresMax}"
-				th:errorclass="fieldError" /> <label class="form-label" for="nbCadresMax"
-				th:text="#{nombredecadresmax}"></label>
+			<input placeholder="9" class="form-control" type="number"
+				th:field="*{nbCadresMax}" th:errorclass="fieldError" /> <label
+				class="form-label" for="nbCadresMax" th:text="#{nombredecadresmax}"></label>
 		</div>
 		<div th:replace="~{includeForm :: commentaireField}"></div>
 		<div th:replace="~{includeForm :: BtnForm}"></div>
 	</form>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

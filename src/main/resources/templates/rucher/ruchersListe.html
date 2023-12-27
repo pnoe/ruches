@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:inline="javascript">
 		/* globals DataTable */
 		const buttontextprint = /*[[#{buttontextprint}]]*/null;
 		const buttontextcol = /*[[#{buttontextcol}]]*/null;
@@ -36,7 +36,6 @@
 		});
 	</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -45,19 +44,24 @@
 				<h1 class="item" th:text="#{Ruchers}"></h1>
 			</div>
 			<div class="col">
-				<a id="cree" th:href="@{/rucher/cree}" class="bi-plus-lg" th:title="#{ajouterRucher}"
-					aria-hidden="true"></a> &nbsp; <a th:href="@{/rucher/Gg}" class="bi-google" th:title="#{carteGg}"
-					aria-hidden="true"></a> <a th:href="@{'/rucher/Ign'}" th:title="#{carteIgn}" aria-hidden="true"><img
-						th:src="@{'/images/france.svg'}" style="margin-bottom: 2px;" /></a> <a th:href="@{/rucher/Osm}"
-					class="bi-globe" th:title="#{carteOsm}" aria-hidden="true"></a> &nbsp; <a
-					th:href="@{/rucher/statistiques}" class="bi-table" th:title="#{statistiquesruchers}"
-					aria-hidden="true"></a> &nbsp; <a th:href="@{'/rucher/historiques/true'}" class="bi-truck-front"
+				<a id="cree" th:href="@{/rucher/cree}" class="bi-plus-lg"
+					th:title="#{ajouterRucher}" aria-hidden="true"></a> &nbsp; <a
+					th:href="@{/rucher/Gg}" class="bi-google" th:title="#{carteGg}"
+					aria-hidden="true"></a> <a th:href="@{'/rucher/Ign'}"
+					th:title="#{carteIgn}" aria-hidden="true"><img
+					th:src="@{'/images/france.svg'}" style="margin-bottom: 2px;" /></a> <a
+					th:href="@{/rucher/Osm}" class="bi-globe" th:title="#{carteOsm}"
+					aria-hidden="true"></a> &nbsp; <a th:href="@{/rucher/statistiques}"
+					class="bi-table" th:title="#{statistiquesruchers}"
+					aria-hidden="true"></a> &nbsp; <a
+					th:href="@{'/rucher/historiques/true'}" class="bi-truck-front"
 					th:title="#{transhumances}" aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
 	<div class="container-fluid" id="ruchersDiv">
-		<table class="table table-bordered table-striped table-sm" id="ruchers">
+		<table class="table table-bordered table-striped table-sm"
+			id="ruchers">
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>
@@ -77,13 +81,17 @@
 			</thead>
 			<tbody>
 				<tr th:each="rucher : ${ruchers}">
-					<td><a th:href="@{'/rucher/'+${rucher.id}}" th:text="${rucher.nom}"></a></td>
-					<td th:if="${session.voirInactif}" th:text="${rucher.actif}? #{oui} : #{non}"></td>
+					<td><a th:href="@{'/rucher/'+${rucher.id}}"
+						th:text="${rucher.nom}"></a></td>
+					<td th:if="${session.voirInactif}"
+						th:text="${rucher.actif}? #{oui} : #{non}"></td>
 					<td th:text="${rucher.contact?.nom}"></td>
 					<td th:text="${rucher.adresse}"></td>
 					<th:block th:if="${session.voirLatLon}">
-						<td class="num" th:text="${#numbers.formatDecimal(rucher.latitude,1,4)}"></td>
-						<td class="num" th:text="${#numbers.formatDecimal(rucher.longitude,1,4)}"></td>
+						<td class="num"
+							th:text="${#numbers.formatDecimal(rucher.latitude,1,4)}"></td>
+						<td class="num"
+							th:text="${#numbers.formatDecimal(rucher.longitude,1,4)}"></td>
 					</th:block>
 					<td class="num" th:text="${rucher.altitude}"></td>
 					<td th:text="${rucher.ressource}"></td>
@@ -96,5 +104,4 @@
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

@@ -1,6 +1,5 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsruches}"></script>
@@ -25,7 +24,6 @@
 	const creer = /*[[#{creer}]]*/null;
 </script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -117,8 +115,6 @@
 				</tr>
 			</tbody>
 		</table>
-
-
 		<th:block th:if="${(eveRempl != null) or (eveComm != null)}">
 			<h6 th:text="#{derniersEve}"></h6>
 			<table class="table table-sm table-bordered">
@@ -151,5 +147,4 @@
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

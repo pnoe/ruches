@@ -1,13 +1,13 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: moment}"></script>
-	<script th:replace="~{include :: jquerydaterangepicker}"></script>
-	<link th:replace="~{include :: cssjquerydaterangepicker}" />
-	<script th:replace="~{include :: jsruches}"></script>
-	<script th:replace="~{include :: jsruchesnom('evenementListe')}"></script>
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: moment}"></script>
+<script th:replace="~{include :: jquerydaterangepicker}"></script>
+<link th:replace="~{include :: cssjquerydaterangepicker}" />
+<script th:replace="~{include :: jsruches}"></script>
+<script th:replace="~{include :: jsruchesnom('evenementListe')}"></script>
+<script th:inline="javascript">
 		/* exported Evenements, buttTxtPrint, buttTxtCol */
 		/* globals evenementListe, evenementSucreListe */
 		const Evenements = /*[[#{evenementssucre}]]*/null;
@@ -19,7 +19,6 @@
 		});
 	</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -27,12 +26,14 @@
 			<div class="col">
 				<h1 class="item" th:text="#{evenementssucre}"></h1>
 			</div>
-			<div th:insert="~{includeForm :: evenementListeDates(retController='/evenement/essaim/listeSucre')}"
+			<div
+				th:insert="~{includeForm :: evenementListeDates(retController='/evenement/essaim/listeSucre')}"
 				class="col"></div>
 		</div>
 	</div>
 	<div class="container-fluid">
-		<table class="table table-bordered table-striped table-sm" id="evenementssucre">
+		<table class="table table-bordered table-striped table-sm"
+			id="evenementssucre">
 			<thead>
 				<tr>
 					<th th:text="#{date}"></th>
@@ -46,17 +47,19 @@
 			</thead>
 			<tbody>
 				<tr th:each="eve : ${evenements}">
-					<td><a th:text="${#temporals.format(eve.date, 'yyyy/MM/dd HH:mm')}"
-							th:href="@{'/evenement/'+${eve.id}}+'?type=sucre'"></a></td>
+					<td><a
+						th:text="${#temporals.format(eve.date, 'yyyy/MM/dd HH:mm')}"
+						th:href="@{'/evenement/'+${eve.id}}+'?type=sucre'"></a></td>
 					<td th:text="${eve.ruche?.nom}"></td>
 					<td th:text="${eve.essaim?.nom}"></td>
 					<td th:text="${eve.rucher?.nom}"></td>
-					<td class="num" th:text="${#numbers.formatDecimal(eve.valeur,1,2,'COMMA')}"></td>
+					<td class="num"
+						th:text="${#numbers.formatDecimal(eve.valeur,1,2,'COMMA')}"></td>
 					<td th:text="${eve.commentaire}"></td>
-					<td th:with="ep=${evePose[eveStat.index]}">
-						<a th:if="${ep} != null" th:text="${#temporals.format(ep.date, 'yyyy/MM/dd HH:mm')}"
-							th:href="@{'/evenement/'+${ep.id}}+'?type=sucre'"></a>
-					</td>
+					<td th:with="ep=${evePose[eveStat.index]}"><a
+						th:if="${ep} != null"
+						th:text="${#temporals.format(ep.date, 'yyyy/MM/dd HH:mm')}"
+						th:href="@{'/evenement/'+${ep.id}}+'?type=sucre'"></a></td>
 				</tr>
 			</tbody>
 			<tfoot>
@@ -71,5 +74,4 @@
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

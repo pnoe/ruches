@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:inline="javascript">
 		/* globals DataTable */
 		const Hausses = /*[[#{Hausses}]]*/ null;
 		const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
@@ -58,7 +58,6 @@
 		});
 	</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -67,16 +66,16 @@
 				<h1 class="item" th:text="#{Hausses}"></h1>
 			</div>
 			<div class="col">
-				<a id="cree" th:href="@{/hausse/cree}" class="bi-plus-lg" th:title="#{ajouterHausse}"
-					aria-hidden="true"></a>
-				&nbsp;
-				<a id="commentaire" href="#" class="bi-chat-text" th:title="#{evenementsCommentaire}"
-					aria-hidden="true"></a>
+				<a id="cree" th:href="@{/hausse/cree}" class="bi-plus-lg"
+					th:title="#{ajouterHausse}" aria-hidden="true"></a> &nbsp; <a
+					id="commentaire" href="#" class="bi-chat-text"
+					th:title="#{evenementsCommentaire}" aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
 	<div class="container-fluid">
-		<table class="table table-bordered table-striped table-sm" id="hausses">
+		<table class="table table-bordered table-striped table-sm"
+			id="hausses">
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>
@@ -93,15 +92,19 @@
 			</thead>
 			<tbody>
 				<tr th:each="hausse : ${hausses}">
-					<td><a th:href="@{'/hausse/'+${hausse.id}}" th:text="${hausse.nom}"></a></td>
-					<td><a th:href="@{'/ruche/'+${hausse.ruche?.id}}" th:text="${hausse.ruche?.nom}"></a></td>
+					<td><a th:href="@{'/hausse/'+${hausse.id}}"
+						th:text="${hausse.nom}"></a></td>
+					<td><a th:href="@{'/ruche/'+${hausse.ruche?.id}}"
+						th:text="${hausse.ruche?.nom}"></a></td>
 					<td><a th:href="@{'/essaim/'+${hausse.ruche?.essaim?.id}}"
-							th:text="${hausse.ruche?.essaim?.nom}"></a></td>
+						th:text="${hausse.ruche?.essaim?.nom}"></a></td>
 					<td><a th:href="@{'/rucher/'+${hausse.ruche?.rucher?.id}}"
-							th:text="${hausse.ruche?.rucher?.nom}"></a></td>
+						th:text="${hausse.ruche?.rucher?.nom}"></a></td>
 					<td th:text="${hausse.dateAcquisition}"></td>
-					<td th:if="${session.voirInactif}" th:text="${hausse.active}? #{oui} : #{non}"></td>
-					<td class="num" th:text="${#numbers.formatDecimal(hausse.poidsVide,1,2,'DEFAULT')}"></td>
+					<td th:if="${session.voirInactif}"
+						th:text="${hausse.active}? #{oui} : #{non}"></td>
+					<td class="num"
+						th:text="${#numbers.formatDecimal(hausse.poidsVide,1,2,'DEFAULT')}"></td>
 					<td class="num" th:text="${hausse.nbCadres}"></td>
 					<td class="num" th:text="${hausse.nbCadresMax}"></td>
 					<td th:text="${hausse.commentaire}"></td>
@@ -111,5 +114,4 @@
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

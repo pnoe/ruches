@@ -1,15 +1,15 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsol}"></script>
-	<script th:replace="~{include :: jsGpPluginOpenLayers}"></script>
-	<link th:replace="~{include :: cssol}" />
-	<link th:replace="~{include :: cssGpPluginOpenLayers}" />
-	<script th:replace="~{include :: jsruchesnom('rucherDetailOl')}"></script>
-	<script th:replace="~{include :: jsruchesnom('rucherDetailCarto')}"></script>
-	<script th:replace="~{include :: dom-to-image}"></script>
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsol}"></script>
+<script th:replace="~{include :: jsGpPluginOpenLayers}"></script>
+<link th:replace="~{include :: cssol}" />
+<link th:replace="~{include :: cssGpPluginOpenLayers}" />
+<script th:replace="~{include :: jsruchesnom('rucherDetailOl')}"></script>
+<script th:replace="~{include :: jsruchesnom('rucherDetailCarto')}"></script>
+<script th:replace="~{include :: dom-to-image}"></script>
+<script th:inline="javascript">
 		/* exported  ignCarteLiscense,
 				ol, domtoimage, jsPDF, exportGpx, exportKml, essaims,
 				rucheParcours:writable, distParcours:writable, longitudeCentre, latitudeCentre, rayonsButinage, cercles, distButinage, ruches, 
@@ -62,46 +62,44 @@
 		const ZoomRuches = /*[[#{ZoomRuches}]]*/ null;
 		window.addEventListener('load', () => rucherDetail(true));
 	</script>
-	<script th:replace="~{include :: cssol}"></script>
-	<script th:replace="~{include :: cssGpPluginOpenLayers}"></script>
+<script th:replace="~{include :: cssol}"></script>
+<script th:replace="~{include :: cssGpPluginOpenLayers}"></script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<a th:href="@{'/rucher/'+${rucher.id}}" th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+					<a th:href="@{'/rucher/'+${rucher.id}}"
+						th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
 					<th:block th:text="#{sep}+#{carteIgn}"></th:block>
 				</h1>
 			</div>
 			<div class="col">
-				<a href="#" class="bi-question-lg" data-bs-toggle="popover" data-bs-trigger="focus" tabindex="0"
-					role="button" th:attr="data-bs-content=#{aiderucherdetailignmarkers}"></a>
-				&nbsp;
+				<a href="#" class="bi-question-lg" data-bs-toggle="popover"
+					data-bs-trigger="focus" tabindex="0" role="button"
+					th:attr="data-bs-content=#{aiderucherdetailignmarkers}"></a> &nbsp;
 				<input type="text" th:placeholder="#{recherche}" id="searchtext" />
-				<span class="padicons">
-					<input type="checkbox" id="dragMarker" th:title="#{markerFixes}" checked />
-				</span>
-				<a th:href="@{'/rucher/rapproche/Ign/'+${rucher.id}}" class="rapproche bi-arrows-angle-contract"
-					th:title="#{rapprocher}" aria-hidden="true">
-				</a>
-				<span id="liste" class="liste bi-list-ul cursorpointer" th:title="#{listeRuchesOrdonnees}"
-					aria-hidden="true"></span>
-				<span id="listeplus" class="liste bi-list-stars cursorpointer" th:title="#{listePlusRuchesOrdonnees}"
-					aria-hidden="true"></span>
-				<span id="export-gpx" class="bi-arrow-up-right-circle cursorpointer" th:title="#{exportGPX}"
-					aria-hidden="true"></span>
-				<a id="gpx-download"></a>
-				<span id="export-kml" class="bi-arrow-up-right-square cursorpointer" th:title="#{exportKML}"
-					aria-hidden="true"></span>
-				<a id="kml-download"></a>
-				<span id="parcours-redraw" class="bi-arrow-clockwise cursorpointer" th:title="#{parcoursRecalcul}"
-					aria-hidden="true"></span>
-				&nbsp;
-				<span id="geoloc" class="bi-geo-alt cursorpointer" th:title="'Géolocalisation'"
-					aria-hidden="true"></span>
+				<span class="padicons"> <input type="checkbox"
+					id="dragMarker" th:title="#{markerFixes}" checked />
+				</span> <a th:href="@{'/rucher/rapproche/Ign/'+${rucher.id}}"
+					class="rapproche bi-arrows-angle-contract" th:title="#{rapprocher}"
+					aria-hidden="true"> </a> <span id="liste"
+					class="liste bi-list-ul cursorpointer"
+					th:title="#{listeRuchesOrdonnees}" aria-hidden="true"></span> <span
+					id="listeplus" class="liste bi-list-stars cursorpointer"
+					th:title="#{listePlusRuchesOrdonnees}" aria-hidden="true"></span> <span
+					id="export-gpx" class="bi-arrow-up-right-circle cursorpointer"
+					th:title="#{exportGPX}" aria-hidden="true"></span> <a
+					id="gpx-download"></a> <span id="export-kml"
+					class="bi-arrow-up-right-square cursorpointer"
+					th:title="#{exportKML}" aria-hidden="true"></span> <a
+					id="kml-download"></a> <span id="parcours-redraw"
+					class="bi-arrow-clockwise cursorpointer"
+					th:title="#{parcoursRecalcul}" aria-hidden="true"></span> &nbsp; <span
+					id="geoloc" class="bi-geo-alt cursorpointer"
+					th:title="'Géolocalisation'" aria-hidden="true"></span>
 			</div>
 		</div>
 	</div>
@@ -112,5 +110,4 @@
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

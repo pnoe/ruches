@@ -1,6 +1,5 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsruches}"></script>
@@ -8,8 +7,7 @@
 <link th:replace="~{include :: cssdatetimepicker}" />
 <script th:replace="~{include :: localejsdatetimepicker}"></script>
 <script th:inline="javascript">
-	/* exported
-	_csrf_token, _csrf_param_name, suppRecHauss, dateRecEpoch
+	/* exported	_csrf_token, _csrf_param_name, suppRecHauss, dateRecEpoch
 	enlevHRecDe30, urlRecHDepot, recId, total, pasDeHausses, pasDeHaussesTxt, DataTable
 	 */
 	const _csrf_token = /*[[${_csrf.token}]]*/null;
@@ -24,7 +22,6 @@
 	const pasDeHaussesTxt = /*[[#{pasDeHaussesTxt}]]*/null;
 </script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -156,5 +153,4 @@
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

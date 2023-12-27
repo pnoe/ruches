@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:inline="javascript">
 		document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById('username').focus();
 			document.getElementById('showhide').addEventListener('click', () => {
@@ -12,28 +12,24 @@
 		});
 	</script>
 </head>
-
 <body>
-	<div th:utext="${'&#128029; ' + @environment.getProperty('accueil.titre') + ' &#128029;'}"></div>
+	<div
+		th:utext="${'&#128029; ' + @environment.getProperty('accueil.titre') + ' &#128029;'}"></div>
 	<br />
 	<div th:if="${param.error}" th:text="#{nomOuPassIncorrect}"></div>
 	<div th:if="${param.logout}" th:text="#{deconnecte}"></div>
 	<br />
 	<form th:action="@{/login}" method="post">
-		<label for="username" th:text="#{nomUtilisateur}"></label><br />
-		<input type="text" id="username" name="username" autofocus />
-		<br /><br />
-		<label for="password" th:text="#{motDePasse}"></label><br />
-		<input type="password" id="password" name="password" />
-		<br /><br />
-		<input type="checkbox" id="showhide" name="showhide" />
-		<label for="showhide" th:text="#{affichermotdepasse}"></label>
-		<br /><br />
-		<input type="submit" th:value="#{connexion}" />
+		<label for="username" th:text="#{nomUtilisateur}"></label><br /> <input
+			type="text" id="username" name="username" autofocus /> <br />
+		<br /> <label for="password" th:text="#{motDePasse}"></label><br />
+		<input type="password" id="password" name="password" /> <br />
+		<br /> <input type="checkbox" id="showhide" name="showhide" /> <label
+			for="showhide" th:text="#{affichermotdepasse}"></label> <br />
+		<br /> <input type="submit" th:value="#{connexion}" />
 	</form>
 	<br />
 	<br />
 	<a th:href="@{'/forgotPassword'}" th:utext="#{forgotPassword}"></a>
 </body>
-
 </html>

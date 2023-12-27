@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:inline="javascript">
 		/* globals DataTable */
 		const rucheTypeNom = /*[[${rucheType.nom}]]*/null;
 		const rucheTypetxt = /*[[#{rucheType}]]*/null;
@@ -44,7 +44,6 @@
 		});
 	</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -56,9 +55,11 @@
 				</h1>
 			</div>
 			<div class="col">
-				<a th:href="@{'/rucheType/modifie/'+${rucheType.id}}" class="bi-pencil" th:title="#{modifier}"
-					aria-hidden="true"></a> <a id="supprime" th:href="@{'/rucheType/supprime/'+${rucheType.id}}"
-					class="bi-trash" style="color: red" th:title="#{supprimer}" aria-hidden="true"></a>
+				<a th:href="@{'/rucheType/modifie/'+${rucheType.id}}"
+					class="bi-pencil" th:title="#{modifier}" aria-hidden="true"></a> <a
+					id="supprime" th:href="@{'/rucheType/supprime/'+${rucheType.id}}"
+					class="bi-trash" style="color: red" th:title="#{supprimer}"
+					aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
@@ -79,11 +80,11 @@
 				</tr>
 			</tbody>
 		</table>
-
 		<h6 th:unless="${#arrays.length(ruches)}" th:text="#{PasDeRuche}"></h6>
 		<th:block th:if="${#arrays.length(ruches)}">
 			<h6 th:text="#{listeXRuches(${#arrays.length(ruches)})}"></h6>
-			<table class="table table-sm table-bordered table-striped table-sm" id="ruches">
+			<table class="table table-sm table-bordered table-striped table-sm"
+				id="ruches">
 				<thead>
 					<tr>
 						<th th:text="#{nom}"></th>
@@ -96,11 +97,15 @@
 				</thead>
 				<tbody>
 					<tr th:each="ruche : ${ruches}">
-						<td><a th:href="@{'/ruche/'+${ruche.id}}" th:text="${ruche.nom}"></a></td>
-						<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}" th:text="${ruche.essaim?.nom}"></a></td>
-						<td th:if="${session.voirInactif}" th:text="${ruche.active}? #{oui} : #{non}"></td>
+						<td><a th:href="@{'/ruche/'+${ruche.id}}"
+							th:text="${ruche.nom}"></a></td>
+						<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}"
+							th:text="${ruche.essaim?.nom}"></a></td>
+						<td th:if="${session.voirInactif}"
+							th:text="${ruche.active}? #{oui} : #{non}"></td>
 						<td th:text="${ruche.dateAcquisition}"></td>
-						<td class="num" th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
+						<td class="num"
+							th:text="${#numbers.formatDecimal(ruche.poidsVide,1,2,'DEFAULT')}"></td>
 						<td th:text="${ruche.commentaire}"></td>
 					</tr>
 				</tbody>
@@ -109,5 +114,4 @@
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

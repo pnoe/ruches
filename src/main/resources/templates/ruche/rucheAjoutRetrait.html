@@ -1,29 +1,29 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsruches}"></script>
-	<script th:inline="javascript">
-		/* exported _csrf_token, urlRucheOdreHause, rucheId, DataTable */
-		const _csrf_token = /*[[${_csrf.token}]]*/null;
-		const urlRucheOdreHause = /*[[@{/ruche/ordreHausses/}]]*/null;
-		const rucheId = /*[[${ruche.id}]]*/null;
-	</script>
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsruches}"></script>
+<script th:inline="javascript">
+	/* exported _csrf_token, urlRucheOdreHause, rucheId, DataTable */
+	const _csrf_token = /*[[${_csrf.token}]]*/null;
+	const urlRucheOdreHause = /*[[@{/ruche/ordreHausses/}]]*/null;
+	const rucheId = /*[[${ruche.id}]]*/null;
+</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<a th:href="@{'/ruche/'+${ruche.id}}" th:text="#{ruche} + ' ' + ${ruche.nom}"></a>
+					<a th:href="@{'/ruche/'+${ruche.id}}"
+						th:text="#{ruche} + ' ' + ${ruche.nom}"></a>
 					<th:block th:text="#{sep}+#{ajoutretraithausses}"></th:block>
 				</h1>
 			</div>
 			<div class="col">
-				<a th:href="@{#{urldoc}+'3802_3476563104'}" class="bi-book" th:title="#{Doc}" target="_blank"
-					aria-hidden="true"></a>
+				<a th:href="@{#{urldoc}+'3802_3476563104'}" class="bi-book"
+					th:title="#{Doc}" target="_blank" aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
@@ -41,8 +41,8 @@
 				<tr th:each="hausseRuche : ${haussesRuche}">
 					<td th:text="${hausseRuche.ordreSurRuche}"></td>
 					<td><a data-bs-toggle="tooltip" th:title="#{retirerhausse}"
-							th:href="@{'/evenement/ruche/hausse/retrait/'+${ruche.id}+'/'+${hausseRuche.id}}"
-							th:text="${hausseRuche.nom}"></a></td>
+						th:href="@{'/evenement/ruche/hausse/retrait/'+${ruche.id}+'/'+${hausseRuche.id}}"
+						th:text="${hausseRuche.nom}"></a></td>
 				</tr>
 			</tbody>
 		</table>
@@ -58,8 +58,8 @@
 			<tbody>
 				<tr th:each="hausse : ${haussesRucheAjout}">
 					<td><a data-bs-toggle="tooltip" th:title="#{ajouterhausse}"
-							th:href="@{'/evenement/ruche/hausse/ajout/'+${ruche.id}+'/'+${hausse.id}}"
-							th:text="${hausse.nom}"></a></td>
+						th:href="@{'/evenement/ruche/hausse/ajout/'+${ruche.id}+'/'+${hausse.id}}"
+						th:text="${hausse.nom}"></a></td>
 					<td th:text="${hausse.ruche?.nom}"></td>
 				</tr>
 			</tbody>
@@ -67,5 +67,4 @@
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

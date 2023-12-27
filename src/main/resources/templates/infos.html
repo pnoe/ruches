@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="https://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script>
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script>
 		// https://stackoverflow.com/questions/17237812/datatable-jquery-table-header-width-not-aligned-with-body-width
 		document.addEventListener('DOMContentLoaded', () => {
 			new DataTable('.datatable-tri', {
@@ -22,12 +22,12 @@
 		});
 	</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid" id="info">
 		<div class="row">
-			<h1 class="item" th:utext="${@environment.getProperty('accueil.titre')}"></h1>
+			<h1 class="item"
+				th:utext="${@environment.getProperty('accueil.titre')}"></h1>
 		</div>
 		<div class="row">
 			<ul>
@@ -36,19 +36,21 @@
 				<li th:unless="${nbRuches} eq 0"
 					th:text="|${nbRuches} #{rucheS} (${nbRuchesProd} #{production} + ${nbRuchesElev} #{elevage})|"></li>
 				<th:block th:unless="${nbRuches} eq 0">
-					<li th:if="${nbRuchesAuDepot} eq 0" th:text="|${nbRuchesAuDepot} #{ruchesaudepot}|"></li>
+					<li th:if="${nbRuchesAuDepot} eq 0"
+						th:text="|${nbRuchesAuDepot} #{ruchesaudepot}|"></li>
 					<li th:unless="${nbRuchesAuDepot} eq 0"
 						th:text="|${nbRuchesAuDepot} #{ruchesaudepot} (${nbRuchesAuDepotProd} #{production} + ${nbRuchesAuDepotElev} #{elevage})|">
 					</li>
-					<li th:if="${nbRuchesAvecEssaim} eq 0" th:text="|${nbRuchesAvecEssaim} #{ruchesavecessaim}|">
-					</li>
+					<li th:if="${nbRuchesAvecEssaim} eq 0"
+						th:text="|${nbRuchesAvecEssaim} #{ruchesavecessaim}|"></li>
 					<li th:unless="${nbRuchesAvecEssaim} eq 0"
 						th:text="|${nbRuchesAvecEssaim} #{ruchesavecessaim} (${nbRuchesAvecEssaimProd} #{production} + ${nbRuchesAvecEssaimElev} #{elevage})|">
 					</li>
 				</th:block>
-				<th:block th:with="essaimsloc=${nbRuchesAvecEssaim + #arrays.length(essaimsActifSansRuche)}">
-					<li th:if="${essaimsloc} eq 0" th:text="|${essaimsloc} #{essaim_s}|">
-					</li>
+				<th:block
+					th:with="essaimsloc=${nbRuchesAvecEssaim + #arrays.length(essaimsActifSansRuche)}">
+					<li th:if="${essaimsloc} eq 0"
+						th:text="|${essaimsloc} #{essaim_s}|"></li>
 					<li th:unless="${essaimsloc} eq 0"
 						th:text="|${essaimsloc} #{essaim_s} (${#arrays.length(essaimsActifSansRuche)} #{essaimsHorsRuche})|">
 					</li>
@@ -64,12 +66,13 @@
 	<div class="accordion" id="accordion">
 		<div class="accordion-item">
 			<h1 class="accordion-header">
-				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-					data-bs-target="#collapse0" aria-expanded="true" aria-controls="collapse0"
-					th:text="#{distButinage}">
-				</button>
+				<button class="accordion-button collapsed" type="button"
+					data-bs-toggle="collapse" data-bs-target="#collapse0"
+					aria-expanded="true" aria-controls="collapse0"
+					th:text="#{distButinage}"></button>
 			</h1>
-			<div id="collapse0" class="accordion-collapse collapse" data-bs-parent="#accordion">
+			<div id="collapse0" class="accordion-collapse collapse"
+				data-bs-parent="#accordion">
 				<div class="accordion-body">
 					<table class="table table-bordered table-striped table-sm">
 						<thead>
@@ -81,7 +84,8 @@
 						<tbody>
 							<tr th:each="rayon : ${rayonsButinage}">
 								<td th:text="${#numbers.formatDecimal(rayon/1000.0,1,3)}"></td>
-								<td th:text="${#numbers.formatDecimal(rayon*rayon*3.141592653589793/1000000.0,1,3)}">
+								<td
+									th:text="${#numbers.formatDecimal(rayon*rayon*3.141592653589793/1000000.0,1,3)}">
 								</td>
 							</tr>
 
@@ -92,12 +96,13 @@
 		</div>
 		<div class="accordion-item">
 			<h1 class="accordion-header">
-				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-					data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1"
-					th:text="#{valeursParAnnee}">
-				</button>
+				<button class="accordion-button collapsed" type="button"
+					data-bs-toggle="collapse" data-bs-target="#collapse1"
+					aria-expanded="true" aria-controls="collapse1"
+					th:text="#{valeursParAnnee}"></button>
 			</h1>
-			<div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#accordion">
+			<div id="collapse1" class="accordion-collapse collapse"
+				data-bs-parent="#accordion">
 				<div class="accordion-body table-responsive">
 					<table class="table table-bordered table-striped table-sm">
 						<thead>
@@ -133,7 +138,8 @@
 							</tr>
 							<tr>
 								<th scope="row" th:text="#{nbEssaimsDisperses}"></th>
-								<td th:each="nbDisp : ${nbDispersionEssaims}" th:text="${nbDisp}"></td>
+								<td th:each="nbDisp : ${nbDispersionEssaims}"
+									th:text="${nbDisp}"></td>
 							</tr>
 							<tr>
 								<th scope="row" th:text="#{actionSucre}"></th>
@@ -143,23 +149,28 @@
 							</tr>
 							<tr>
 								<th scope="row" th:text="#{nbTraitements}"></th>
-								<td th:each="nbTraitements : ${nbTraitementsEssaims}" th:text="${nbTraitements}"></td>
+								<td th:each="nbTraitements : ${nbTraitementsEssaims}"
+									th:text="${nbTraitements}"></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
-		<div th:if="${#arrays.length(ruchesDepotEssaim)} &gt; 0" class="accordion-item">
+		<div th:if="${#arrays.length(ruchesDepotEssaim)} &gt; 0"
+			class="accordion-item">
 			<h1 class="accordion-header">
-				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-					data-bs-target="#collapse3" aria-expanded="true" aria-controls="collapse3"
+				<button class="accordion-button collapsed" type="button"
+					data-bs-toggle="collapse" data-bs-target="#collapse3"
+					aria-expanded="true" aria-controls="collapse3"
 					th:text="${#arrays.length(ruchesDepotEssaim)} + ' ' + #{ruchesAvecEssaimDepot}">
 				</button>
 			</h1>
-			<div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#accordion">
+			<div id="collapse3" class="accordion-collapse collapse"
+				data-bs-parent="#accordion">
 				<div class="accordion-body">
-					<table class="table table-bordered table-striped datatable-tri table-sm">
+					<table
+						class="table table-bordered table-striped datatable-tri table-sm">
 						<thead>
 							<tr>
 								<th scope="col" th:text="#{nom}"></th>
@@ -169,26 +180,30 @@
 						<tbody>
 							<tr th:each="rucheDepotEssaim : ${ruchesDepotEssaim}">
 								<td><a th:href="@{'/ruche/'+${rucheDepotEssaim.id}}"
-										th:text="${rucheDepotEssaim.nom}"></a>
-								</td>
-								<td><a th:href="@{'/essaim/'+${rucheDepotEssaim.essaim?.id}}"
-										th:text="${rucheDepotEssaim.essaim?.nom}"></a></td>
+									th:text="${rucheDepotEssaim.nom}"></a></td>
+								<td><a
+									th:href="@{'/essaim/'+${rucheDepotEssaim.essaim?.id}}"
+									th:text="${rucheDepotEssaim.essaim?.nom}"></a></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
-		<div th:if="${#arrays.length(ruchesDepotHausses)} &gt; 0" class="accordion-item">
+		<div th:if="${#arrays.length(ruchesDepotHausses)} &gt; 0"
+			class="accordion-item">
 			<h1 class="accordion-header">
-				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-					data-bs-target="#collapse4" aria-expanded="true" aria-controls="collapse4"
+				<button class="accordion-button collapsed" type="button"
+					data-bs-toggle="collapse" data-bs-target="#collapse4"
+					aria-expanded="true" aria-controls="collapse4"
 					th:text="${#arrays.length(ruchesDepotHausses)} + ' ' + #{ruchesAvecHaussesDepot}">
 				</button>
 			</h1>
-			<div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#accordion">
+			<div id="collapse4" class="accordion-collapse collapse"
+				data-bs-parent="#accordion">
 				<div class="accordion-body">
-					<table class="table table-bordered table-striped datatable-tri table-sm">
+					<table
+						class="table table-bordered table-striped datatable-tri table-sm">
 						<thead>
 							<tr>
 								<th scope="col" th:text="#{nom}"></th>
@@ -197,24 +212,27 @@
 						<tbody>
 							<tr th:each="rucheDepotHausses : ${ruchesDepotHausses}">
 								<td><a th:href="@{'/ruche/'+${rucheDepotHausses.id}}"
-										th:text="${rucheDepotHausses.nom}"></a>
-								</td>
+									th:text="${rucheDepotHausses.nom}"></a></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
-		<div th:if="${#arrays.length(ruchesPasDepotSansEssaim)} &gt; 0" class="accordion-item">
+		<div th:if="${#arrays.length(ruchesPasDepotSansEssaim)} &gt; 0"
+			class="accordion-item">
 			<h1 class="accordion-header">
-				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-					data-bs-target="#collapse5" aria-expanded="true" aria-controls="collapse5"
+				<button class="accordion-button collapsed" type="button"
+					data-bs-toggle="collapse" data-bs-target="#collapse5"
+					aria-expanded="true" aria-controls="collapse5"
 					th:text="${#arrays.length(ruchesPasDepotSansEssaim)} + ' ' + #{ruchesSansEssaimPasDepot}">
 				</button>
 			</h1>
-			<div id="collapse5" class="accordion-collapse collapse" data-bs-parent="#accordion">
+			<div id="collapse5" class="accordion-collapse collapse"
+				data-bs-parent="#accordion">
 				<div class="accordion-body">
-					<table class="table table-bordered table-striped datatable-tri table-sm">
+					<table
+						class="table table-bordered table-striped datatable-tri table-sm">
 						<thead>
 							<tr>
 								<th scope="col" th:text="#{nom}"></th>
@@ -222,27 +240,33 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr th:each="ruchePasDepotSansEssaim : ${ruchesPasDepotSansEssaim}">
+							<tr
+								th:each="ruchePasDepotSansEssaim : ${ruchesPasDepotSansEssaim}">
 								<td><a th:href="@{'/ruche/'+${ruchePasDepotSansEssaim.id}}"
-										th:text="${ruchePasDepotSansEssaim.nom}"></a></td>
-								<td><a th:href="@{'/rucher/'+${ruchePasDepotSansEssaim.rucher?.id}}"
-										th:text="${ruchePasDepotSansEssaim.rucher?.nom}"></a></td>
+									th:text="${ruchePasDepotSansEssaim.nom}"></a></td>
+								<td><a
+									th:href="@{'/rucher/'+${ruchePasDepotSansEssaim.rucher?.id}}"
+									th:text="${ruchePasDepotSansEssaim.rucher?.nom}"></a></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
-		<div th:if="${#arrays.length(essaimsActifSansRuche)} &gt; 0" class="accordion-item">
+		<div th:if="${#arrays.length(essaimsActifSansRuche)} &gt; 0"
+			class="accordion-item">
 			<h1 class="accordion-header">
-				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-					data-bs-target="#collapse6" aria-expanded="true" aria-controls="collapse6"
+				<button class="accordion-button collapsed" type="button"
+					data-bs-toggle="collapse" data-bs-target="#collapse6"
+					aria-expanded="true" aria-controls="collapse6"
 					th:text="${#arrays.length(essaimsActifSansRuche)} + ' ' + #{essaimsHorsRuche}">
 				</button>
 			</h1>
-			<div id="collapse6" class="accordion-collapse collapse" data-bs-parent="#accordion">
+			<div id="collapse6" class="accordion-collapse collapse"
+				data-bs-parent="#accordion">
 				<div class="accordion-body">
-					<table class="table table-bordered table-striped datatable-tri table-sm">
+					<table
+						class="table table-bordered table-striped datatable-tri table-sm">
 						<thead>
 							<tr>
 								<th scope="col" th:text="#{nom}"></th>
@@ -251,23 +275,28 @@
 						<tbody>
 							<tr th:each="essaimActifSansRuche : ${essaimsActifSansRuche}">
 								<td><a th:href="@{'/essaim/'+${essaimActifSansRuche.id}}"
-										th:text="${essaimActifSansRuche.nom}"></a></td>
+									th:text="${essaimActifSansRuche.nom}"></a></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
-		<div th:if="${#arrays.length(ruchersMalCales)} &gt; 0" class="accordion-item">
+		<div th:if="${#arrays.length(ruchersMalCales)} &gt; 0"
+			class="accordion-item">
 			<h1 class="accordion-header">
-				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-					data-bs-target="#collapse7" aria-expanded="true" aria-controls="collapse7" th:text="${#arrays.length(ruchersMalCales)} + ' ' +
+				<button class="accordion-button collapsed" type="button"
+					data-bs-toggle="collapse" data-bs-target="#collapse7"
+					aria-expanded="true" aria-controls="collapse7"
+					th:text="${#arrays.length(ruchersMalCales)} + ' ' +
 			#{ruchersLoinDeLeursRuches(${#numbers.formatDecimal(distRuchersTropLoins,1,0)})}">
 				</button>
 			</h1>
-			<div id="collapse7" class="accordion-collapse collapse" data-bs-parent="#accordion">
+			<div id="collapse7" class="accordion-collapse collapse"
+				data-bs-parent="#accordion">
 				<div class="accordion-body">
-					<table class="table table-bordered table-striped datatable-tri table-sm">
+					<table
+						class="table table-bordered table-striped datatable-tri table-sm">
 						<thead>
 							<tr>
 								<th scope="col" th:text="#{nom}"></th>
@@ -276,25 +305,31 @@
 						</thead>
 						<tbody>
 							<tr th:each="rucherMalCale : ${ruchersMalCales}">
-								<td><a th:href="@{'/rucher/'+${rucherMalCale.id}}" th:text="${rucherMalCale.nom}"></a>
-								</td>
-								<td th:text="${#numbers.formatDecimal(distances[rucherMalCaleStat.index],1,0)}"></td>
+								<td><a th:href="@{'/rucher/'+${rucherMalCale.id}}"
+									th:text="${rucherMalCale.nom}"></a></td>
+								<td
+									th:text="${#numbers.formatDecimal(distances[rucherMalCaleStat.index],1,0)}"></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
-		<div th:if="${#arrays.length(ruchesTropLoins)} &gt; 0" class="accordion-item">
+		<div th:if="${#arrays.length(ruchesTropLoins)} &gt; 0"
+			class="accordion-item">
 			<h1 class="accordion-header">
-				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-					data-bs-target="#collapse8" aria-expanded="true" aria-controls="collapse8" th:text="${#arrays.length(ruchesTropLoins)} + ' ' +
+				<button class="accordion-button collapsed" type="button"
+					data-bs-toggle="collapse" data-bs-target="#collapse8"
+					aria-expanded="true" aria-controls="collapse8"
+					th:text="${#arrays.length(ruchesTropLoins)} + ' ' +
 			#{ruchesAPlusde(${#numbers.formatDecimal(distRuchesTropLoins,1,0)})}">
 				</button>
 			</h1>
-			<div id="collapse8" class="accordion-collapse collapse" data-bs-parent="#accordion">
+			<div id="collapse8" class="accordion-collapse collapse"
+				data-bs-parent="#accordion">
 				<div class="accordion-body">
-					<table class="table table-bordered table-striped datatable-tri table-sm">
+					<table
+						class="table table-bordered table-striped datatable-tri table-sm">
 						<thead>
 							<tr>
 								<th scope="col" th:text="#{nom}"></th>
@@ -303,26 +338,31 @@
 						</thead>
 						<tbody>
 							<tr th:each="rucheTropLoin : ${ruchesTropLoins}">
-								<td><a th:href="@{'/ruche/'+${rucheTropLoin.id}}" th:text="${rucheTropLoin.nom}"></a>
-								</td>
+								<td><a th:href="@{'/ruche/'+${rucheTropLoin.id}}"
+									th:text="${rucheTropLoin.nom}"></a></td>
 								<td><a th:href="@{'/rucher/'+${rucheTropLoin.rucher?.id}}"
-										th:text="${rucheTropLoin.rucher?.nom}"></a></td>
+									th:text="${rucheTropLoin.rucher?.nom}"></a></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
-		<div th:if="${#arrays.length(ruchesPasDEvenement)} &gt; 0" class="accordion-item">
+		<div th:if="${#arrays.length(ruchesPasDEvenement)} &gt; 0"
+			class="accordion-item">
 			<h1 class="accordion-header">
-				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-					data-bs-target="#collapse9" aria-expanded="true" aria-controls="collapse9" th:text="${#arrays.length(ruchesPasDEvenement)} + ' ' +
+				<button class="accordion-button collapsed" type="button"
+					data-bs-toggle="collapse" data-bs-target="#collapse9"
+					aria-expanded="true" aria-controls="collapse9"
+					th:text="${#arrays.length(ruchesPasDEvenement)} + ' ' +
 				#{ruchesSansEven(${retardRucheEvenement})}">
 				</button>
 			</h1>
-			<div id="collapse9" class="accordion-collapse collapse" data-bs-parent="#accordion">
+			<div id="collapse9" class="accordion-collapse collapse"
+				data-bs-parent="#accordion">
 				<div class="accordion-body">
-					<table class="table table-bordered table-striped datatable-tri table-sm">
+					<table
+						class="table table-bordered table-striped datatable-tri table-sm">
 						<thead>
 							<tr>
 								<th scope="col" th:text="#{nom}"></th>
@@ -332,26 +372,31 @@
 						<tbody>
 							<tr th:each="ruchePasDEvenement : ${ruchesPasDEvenement}">
 								<td><a th:href="@{'/ruche/'+${ruchePasDEvenement.id}}"
-										th:text="${ruchePasDEvenement.nom}"></a>
-								</td>
-								<td><a th:href="@{'/rucher/'+${ruchePasDEvenement.rucher?.id}}"
-										th:text="${ruchePasDEvenement.rucher?.nom}"></a></td>
+									th:text="${ruchePasDEvenement.nom}"></a></td>
+								<td><a
+									th:href="@{'/rucher/'+${ruchePasDEvenement.rucher?.id}}"
+									th:text="${ruchePasDEvenement.rucher?.nom}"></a></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
-		<div th:if="${#arrays.length(essaimDateNaissSupAcquis)} &gt; 0" class="accordion-item">
+		<div th:if="${#arrays.length(essaimDateNaissSupAcquis)} &gt; 0"
+			class="accordion-item">
 			<h1 class="accordion-header">
-				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-					data-bs-target="#collapse10" aria-expanded="true" aria-controls="collapse10" th:text="${#arrays.length(essaimDateNaissSupAcquis)} + ' ' +
+				<button class="accordion-button collapsed" type="button"
+					data-bs-toggle="collapse" data-bs-target="#collapse10"
+					aria-expanded="true" aria-controls="collapse10"
+					th:text="${#arrays.length(essaimDateNaissSupAcquis)} + ' ' +
 			#{essaimDateNaissSupAcquis}">
 				</button>
 			</h1>
-			<div id="collapse10" class="accordion-collapse collapse" data-bs-parent="#accordion">
+			<div id="collapse10" class="accordion-collapse collapse"
+				data-bs-parent="#accordion">
 				<div class="accordion-body">
-					<table class="table table-bordered table-striped datatable-tri table-sm">
+					<table
+						class="table table-bordered table-striped datatable-tri table-sm">
 						<thead>
 							<tr>
 								<th scope="col" th:text="#{nom}"></th>
@@ -363,10 +408,12 @@
 						<tbody>
 							<tr th:each="essaim : ${essaimDateNaissSupAcquis}"
 								th:with="N=${essaim.reineDateNaissance},A=${essaim.dateAcquisition},D=${T(java.time.Duration)}">
-								<td><a th:href="@{'/essaim/'+${essaim.id}}" th:text="${essaim.nom}"></a></td>
+								<td><a th:href="@{'/essaim/'+${essaim.id}}"
+									th:text="${essaim.nom}"></a></td>
 								<td th:text="${N}"></td>
 								<td th:text="${A}"></td>
-								<td th:text="${D.between(A.atStartOfDay(),N.atStartOfDay()).toDays()}"></td>
+								<td
+									th:text="${D.between(A.atStartOfDay(),N.atStartOfDay()).toDays()}"></td>
 
 							</tr>
 						</tbody>
@@ -377,5 +424,4 @@
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

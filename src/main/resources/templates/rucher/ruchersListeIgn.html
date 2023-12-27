@@ -1,11 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsol}"></script>
-	<script th:replace="~{include :: jsGpPluginOpenLayers}"></script>
-	<script th:replace="~{include :: jsruchesnom('rucherListeOl')}"></script>
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsol}"></script>
+<script th:replace="~{include :: jsGpPluginOpenLayers}"></script>
+<script th:replace="~{include :: jsruchesnom('rucherListeOl')}"></script>
+<script th:inline="javascript">
 		/* exported ol, ruchers, nomRuches, lesRucherstxt,	lesRuchestxt, pasderuchetxt, 
 		ruchertxt, couchemarqueursrucherstxt, ignCarteLiscense,
 		pleinecrantxt, urlruches, _csrf_token, bootstrap */
@@ -22,20 +22,19 @@
 		const ignCarteLiscense = /*[[${ignCarteLiscense}]]*/ null;
 		window.addEventListener('load', () => rucherListeIgn(true));
 	</script>
-	<script th:replace="~{include :: cssol}"></script>
-	<script th:replace="~{include :: cssGpPluginOpenLayers}"></script>
-	<style>
-		.ol-rotate {
-			top: 4em;
-		}
+<script th:replace="~{include :: cssol}"></script>
+<script th:replace="~{include :: cssGpPluginOpenLayers}"></script>
+<style>
+.ol-rotate {
+	top: 4em;
+}
 
-		[id^=GPsearchEngine-] {
-			top: 37px;
-			left: 42px
-		}
-	</style>
+[id^=GPsearchEngine-] {
+	top: 37px;
+	left: 42px
+}
+</style>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -47,11 +46,12 @@
 				</h1>
 			</div>
 			<div class="col">
-				<a href="#" class="bi-question-lg" data-bs-toggle="popover" data-bs-trigger="focus" tabindex="0"
-					role="button" th:attr="data-bs-content=#{aiderucherlisteignmarkers}"></a>
-				<input type="text" th:placeholder="#{recherche}" id="searchtext" />
-				<span class="padicons">
-					<input type="checkbox" id="dragMarker" th:title="#{markerFixes}" checked />
+				<a href="#" class="bi-question-lg" data-bs-toggle="popover"
+					data-bs-trigger="focus" tabindex="0" role="button"
+					th:attr="data-bs-content=#{aiderucherlisteignmarkers}"></a> <input
+					type="text" th:placeholder="#{recherche}" id="searchtext" /> <span
+					class="padicons"> <input type="checkbox" id="dragMarker"
+					th:title="#{markerFixes}" checked />
 				</span>
 			</div>
 		</div>
@@ -63,5 +63,4 @@
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

@@ -1,16 +1,15 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsruches}"></script>
-	<script th:inline="javascript">
-		/* exported Recoltes, buttontextprint, buttontextcol */
-		const Recoltes = /*[[#{Recoltes}]]*/null;
-		const buttontextprint = /*[[#{buttontextprint}]]*/null;
-		const buttontextcol = /*[[#{buttontextcol}]]*/null;
-	</script>
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsruches}"></script>
+<script th:inline="javascript">
+	/* exported Recoltes, buttontextprint, buttontextcol */
+	const Recoltes = /*[[#{Recoltes}]]*/null;
+	const buttontextprint = /*[[#{buttontextprint}]]*/null;
+	const buttontextcol = /*[[#{buttontextcol}]]*/null;
+</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -19,17 +18,20 @@
 				<h1 class="item" th:text="#{Recoltes}"></h1>
 			</div>
 			<div class="col">
-				<a id="cree" th:href="@{/recolte/cree}" class="bi-plus-lg" th:title="#{ajouterRecolte}"
-					aria-hidden="true"></a> &nbsp; <a th:href="@{/recolte/stat/essaim/false}" class="bi-table"
-					th:title="#{statistiquesessaims}" aria-hidden="true"></a> <a th:href="@{/recolte/statprod}"
-					class="bi-bar-chart" th:title="#{statistiquesProd}" aria-hidden="true"></a> &nbsp;<a
-					th:href="@{#{urldoc}+'1102_1613789997'}" class="bi-book" th:title="#{Doc}" target="_blank"
-					aria-hidden="true"></a>
+				<a id="cree" th:href="@{/recolte/cree}" class="bi-plus-lg"
+					th:title="#{ajouterRecolte}" aria-hidden="true"></a> &nbsp; <a
+					th:href="@{/recolte/stat/essaim/false}" class="bi-table"
+					th:title="#{statistiquesessaims}" aria-hidden="true"></a> <a
+					th:href="@{/recolte/statprod}" class="bi-bar-chart"
+					th:title="#{statistiquesProd}" aria-hidden="true"></a> &nbsp;<a
+					th:href="@{#{urldoc}+'1102_1613789997'}" class="bi-book"
+					th:title="#{Doc}" target="_blank" aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
 	<div class="container-fluid">
-		<table class="table table-bordered table-striped table-sm" id="recoltes">
+		<table class="table table-bordered table-striped table-sm"
+			id="recoltes">
 			<thead>
 				<tr>
 					<th th:text="#{date}"></th>
@@ -42,15 +44,15 @@
 			<tbody>
 				<tr th:each="recolte : ${recoltes}">
 					<td><a th:href="@{'/recolte/'+${recolte.id}}"
-							th:text="${#temporals.format(recolte.date, 'yyyy/MM/dd HH:mm')}"></a></td>
-					<td>
-						<th:block th:each="idn, iterStat : ${ruchers[recolteStat.index]}">
+						th:text="${#temporals.format(recolte.date, 'yyyy/MM/dd HH:mm')}"></a></td>
+					<td><th:block
+							th:each="idn, iterStat : ${ruchers[recolteStat.index]}">
 							<a th:href="@{'/rucher/'+${idn.id}}" th:text="${idn.nom}"></a>
 							<th:block th:text="${iterStat.last} ? '' :'&nbsp;'"></th:block>
-						</th:block>
-					</td>
+						</th:block></td>
 					<td th:text="#{${recolte.typeMiel}}"></td>
-					<td class="num" th:text="${#numbers.formatDecimal(recolte.poidsMiel,1,2,'DEFAULT')}"></td>
+					<td class="num"
+						th:text="${#numbers.formatDecimal(recolte.poidsMiel,1,2,'DEFAULT')}"></td>
 					<td th:text="${recolte.commentaire}"></td>
 				</tr>
 			</tbody>
@@ -58,5 +60,4 @@
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

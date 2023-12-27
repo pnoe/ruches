@@ -1,6 +1,5 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsChart}"></script>
@@ -32,7 +31,6 @@ th {
 <link th:replace="~{include :: weather-icons}" />
 <link th:replace="~{include :: weather-icons-wind}" />
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -217,5 +215,4 @@ th {
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

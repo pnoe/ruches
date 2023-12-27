@@ -1,11 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsdatetimepicker}"></script>
-	<link th:replace="~{include :: cssdatetimepicker}" />
-	<script th:replace="~{include :: localejsdatetimepicker}"></script>
-	<script>
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsdatetimepicker}"></script>
+<link th:replace="~{include :: cssdatetimepicker}" />
+<script th:replace="~{include :: localejsdatetimepicker}"></script>
+<script>
 		document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById('commentaire').focus();
 			$('#evenementForm').validate({
@@ -26,7 +26,6 @@
 		});
 	</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -34,19 +33,21 @@
 			<div class="col">
 				<h1 class="item">
 					<a th:href="@{'/ruche/liste'}" th:text="#{Ruches}"></a>
-					<th:block th:text="#{sep} + #{commentaireLot} + ' ' + ${ruchesNoms}">
+					<th:block
+						th:text="#{sep} + #{commentaireLot} + ' ' + ${ruchesNoms}">
 				</h1>
 			</div>
 		</div>
 	</div>
-	<form action="#" th:action="@{'/evenement/ruche/sauve/lot/' + ${rIds}}" method="post" id="evenementForm">
-		<input type="hidden" id="valeur" name="valeur" />
-		<input type="hidden" id="typeEvenement" name="typeEvenement" value="COMMENTAIRERUCHE" />
+	<form action="#" th:action="@{'/evenement/ruche/sauve/lot/' + ${rIds}}"
+		method="post" id="evenementForm">
+		<input type="hidden" id="valeur" name="valeur" /> <input
+			type="hidden" id="typeEvenement" name="typeEvenement"
+			value="COMMENTAIRERUCHE" />
 		<div th:replace="~{includeForm :: date}"></div>
 		<div th:replace="~{includeForm :: commentaire}"></div>
 		<div th:replace="~{includeForm :: BtnForm}"></div>
 	</form>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

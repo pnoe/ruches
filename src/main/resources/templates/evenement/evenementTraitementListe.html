@@ -1,12 +1,12 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: moment}"></script>
-	<script th:replace="~{include :: jquerydaterangepicker}"></script>
-	<link th:replace="~{include :: cssjquerydaterangepicker}" />
-	<script th:replace="~{include :: jsruchesnom('evenementListe')}"></script>
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: moment}"></script>
+<script th:replace="~{include :: jquerydaterangepicker}"></script>
+<link th:replace="~{include :: cssjquerydaterangepicker}" />
+<script th:replace="~{include :: jsruchesnom('evenementListe')}"></script>
+<script th:inline="javascript">
 		/* exported Evenements, buttontextprint, buttontextcol */
 		/* globals evenementListe */
 		const Evenements = /*[[#{evenementstraitement}]]*/ null;
@@ -21,37 +21,31 @@
 		});
 	</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}">Menu</nav>
 	<div class="container-fluid">
 		<div class="row">
 			<div id="titre" class="col">
-				<h1 class="item" th:text="${tous} ? #{traitement} : #{eveDebutTraitement}"></h1>
+				<h1 class="item"
+					th:text="${tous} ? #{traitement} : #{eveDebutTraitement}"></h1>
 			</div>
 			<div class="col">
-				<span class="padicons"> <input type="checkbox" id="groupe" th:title="#{tous}" th:checked="${tous}" />
-					<label for="tous" th:text="#{tous}"></label>
+				<span class="padicons"> <input type="checkbox" id="groupe"
+					th:title="#{tous}" th:checked="${tous}" /> <label for="tous"
+					th:text="#{tous}"></label>
 				</span>
 			</div>
-			<div th:insert="~{includeForm :: evenementListeDates(retController='/evenement/essaim/listeTraitement/' + ${tous})}"
+			<div
+				th:insert="~{includeForm :: evenementListeDates(retController='/evenement/essaim/listeTraitement/' + ${tous})}"
 				class="col"></div>
 		</div>
 	</div>
 	<div class="container-fluid">
-		<table class="table table-bordered table-striped table-sm" id="evenements">
+		<table class="table table-bordered table-striped table-sm"
+			id="evenements">
 			<thead>
 				<tr>
 					<th th:text="#{date}"></th>
-					<!--/*
-					<th th:if="${tous}"
-						th:text="#{type}"></th>
-					<th th:text="#{ruche}"></th>
-					<th th:text="#{essaim}"></th>
-					<th th:text="#{rucher}"></th>
-					<th th:text="#{valeur}"></th>
-					<th th:text="#{commentaire}"></th>
-					*/-->
 					<th th:if="${tous}" th:text="#{type}"></th>
 					<th th:text="#{ruche}"></th>
 					<th th:text="#{essaim}"></th>
@@ -62,8 +56,9 @@
 			</thead>
 			<tbody>
 				<tr th:each="evenement : ${evenements}">
-					<td><a th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
-							th:href="@{'/evenement/'+${evenement.id}+'?type=traitement'}"></a>
+					<td><a
+						th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
+						th:href="@{'/evenement/'+${evenement.id}+'?type=traitement'}"></a>
 					</td>
 					<td th:if="${tous}"
 						th:text="${T(ooioo.ruches.evenement.TypeEvenement).ESSAIMTRAITEMENT.equals(evenement.type)}?#{Debut}:#{Fin}">
@@ -71,7 +66,8 @@
 					<td th:text="${evenement.ruche?.nom}"></td>
 					<td th:text="${evenement.essaim?.nom}"></td>
 					<td th:text="${evenement.rucher?.nom}"></td>
-					<td class="num" th:text="${#numbers.formatDecimal(evenement.valeur,1,2,'COMMA')}"></td>
+					<td class="num"
+						th:text="${#numbers.formatDecimal(evenement.valeur,1,2,'COMMA')}"></td>
 					<td th:text="${evenement.commentaire}"></td>
 				</tr>
 			</tbody>
@@ -79,5 +75,4 @@
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

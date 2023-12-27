@@ -1,22 +1,21 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsruches}"></script>
-	<script th:inline="javascript">
-		/* exported Essaims, buttontextprint, buttontextcol, urlTraitLot, urlSucreLot,
-		urlCommLot, urlCadreLot, selectEssTrt */
-		const Essaims = /*[[#{Essaims}]]*/ null;
-		const buttontextprint = /*[[#{buttontextprint}]]*/ null;
-		const buttontextcol = /*[[#{buttontextcol}]]*/ null;
-		const urlTraitLot = /*[[@{/evenement/essaim/traitementLot/}]]*/ null;
-		const urlSucreLot = /*[[@{/evenement/essaim/sucreLot/}]]*/ null;
-		const urlCommLot = /*[[@{/evenement/essaim/commentaireLot/}]]*/ null;
-		const urlCadreLot = /*[[@{/evenement/essaim/cadreLot/}]]*/ null;
-		const selectEssTrt = /*[[#{selectessaimstraiter}]]*/ null;
-	</script>
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsruches}"></script>
+<script th:inline="javascript">
+	/* exported Essaims, buttontextprint, buttontextcol, urlTraitLot, urlSucreLot,
+	urlCommLot, urlCadreLot, selectEssTrt */
+	const Essaims = /*[[#{Essaims}]]*/null;
+	const buttontextprint = /*[[#{buttontextprint}]]*/null;
+	const buttontextcol = /*[[#{buttontextcol}]]*/null;
+	const urlTraitLot = /*[[@{/evenement/essaim/traitementLot/}]]*/null;
+	const urlSucreLot = /*[[@{/evenement/essaim/sucreLot/}]]*/null;
+	const urlCommLot = /*[[@{/evenement/essaim/commentaireLot/}]]*/null;
+	const urlCadreLot = /*[[@{/evenement/essaim/cadreLot/}]]*/null;
+	const selectEssTrt = /*[[#{selectessaimstraiter}]]*/null;
+</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -25,26 +24,27 @@
 				<h1 class="item" th:text="#{Essaims}"></h1>
 			</div>
 			<div class="col">
-				<a id="cree" th:href="@{/essaim/cree}" class="bi-plus-lg" th:title="#{ajouterEssaim}"
-					aria-hidden="true"></a>
-				&nbsp;
-				<a id="commentaire" href="#" class="selection bi-chat-text" th:title="#{evenementsCommentaire}"
-					aria-hidden="true"></a>
-				<a id="sucre" href="#" class="selection bi-bucket" th:title="#{evenementsSucre}" aria-hidden="true"></a>
-				<a id="traitement" href="#" class="selection bi-bug" th:title="#{evenementsTraitement}"
-					aria-hidden="true"></a>
-				<a id="cadre" href="#" class="selection bi-layout-three-columns" th:title="#{evenementsCadres}"
-					aria-hidden="true"></a>
-				&nbsp;
-				<a th:href="@{/essaim/statistiques?masquerInactif=on}" class="bi-table"
-					th:title="#{statistiquesproduction}" aria-hidden="true"></a>
-				<a th:href="@{/essaim/statistiquesage}" class="bi-bar-chart" th:title="#{statistiquesage}"
+				<a id="cree" th:href="@{/essaim/cree}" class="bi-plus-lg"
+					th:title="#{ajouterEssaim}" aria-hidden="true"></a> &nbsp; <a
+					id="commentaire" href="#" class="selection bi-chat-text"
+					th:title="#{evenementsCommentaire}" aria-hidden="true"></a> <a
+					id="sucre" href="#" class="selection bi-bucket"
+					th:title="#{evenementsSucre}" aria-hidden="true"></a> <a
+					id="traitement" href="#" class="selection bi-bug"
+					th:title="#{evenementsTraitement}" aria-hidden="true"></a> <a
+					id="cadre" href="#" class="selection bi-layout-three-columns"
+					th:title="#{evenementsCadres}" aria-hidden="true"></a> &nbsp; <a
+					th:href="@{/essaim/statistiques?masquerInactif=on}"
+					class="bi-table" th:title="#{statistiquesproduction}"
+					aria-hidden="true"></a> <a th:href="@{/essaim/statistiquesage}"
+					class="bi-bar-chart" th:title="#{statistiquesage}"
 					aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
 	<div class="container-fluid">
-		<table class="table table-bordered table-striped table-sm" id="essaims">
+		<table class="table table-bordered table-striped table-sm"
+			id="essaims">
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>
@@ -67,10 +67,14 @@
 				</tr>
 			</thead>
 			<tbody th:with="f='dd/MM/yyyy'">
-				<tr th:each="eRRr, i : ${EssaimsRRr}" th:with="ec=${listeEvenCadre[i.index]}">
-					<td><a th:href="@{'/essaim/'+${eRRr.essaim.id}}" th:text="${eRRr.essaim.nom}"></a></td>
-					<td><a th:href="@{'/ruche/'+ ${eRRr.idRuche}}" th:text="${eRRr.nomRuche}"></a></td>
-					<td><a th:href="@{'/rucher/'+ ${eRRr.idRucher}}" th:text="${eRRr.nomRucher}"></a></td>
+				<tr th:each="eRRr, i : ${EssaimsRRr}"
+					th:with="ec=${listeEvenCadre[i.index]}">
+					<td><a th:href="@{'/essaim/'+${eRRr.essaim.id}}"
+						th:text="${eRRr.essaim.nom}"></a></td>
+					<td><a th:href="@{'/ruche/'+ ${eRRr.idRuche}}"
+						th:text="${eRRr.nomRuche}"></a></td>
+					<td><a th:href="@{'/rucher/'+ ${eRRr.idRucher}}"
+						th:text="${eRRr.nomRucher}"></a></td>
 					<th:block th:if="${session.voirInactif}">
 						<td th:text="${eRRr.essaim.actif}?#{oui}:#{non}"></td>
 						<td
@@ -82,8 +86,8 @@
 					<td th:text="${eRRr.essaim.reineMarquee}? #{oui} : #{non}"></td>
 					<td th:text="#{${eRRr.essaim.reineCouleurMarquage}}"></td>
 					<td th:text="${eRRr.essaim.reineDateNaissance}"></td>
-					<td><a th:href="@{'/essaim/'+${eRRr.essaim.souche?.id}}" th:text="${eRRr.essaim.souche?.nom}"></a>
-					</td>
+					<td><a th:href="@{'/essaim/'+${eRRr.essaim.souche?.id}}"
+						th:text="${eRRr.essaim.souche?.nom}"></a></td>
 					<td th:text="${eRRr.essaim.agressivite}"></td>
 					<td th:text="${eRRr.essaim.proprete}"></td>
 					<td class="num"
@@ -96,5 +100,4 @@
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

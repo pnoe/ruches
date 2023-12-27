@@ -1,12 +1,12 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: moment}"></script>
-	<script th:replace="~{include :: jquerydaterangepicker}"></script>
-	<link th:replace="~{include :: cssjquerydaterangepicker}" />
-	<script th:replace="~{include :: jsruches}"></script>
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: moment}"></script>
+<script th:replace="~{include :: jquerydaterangepicker}"></script>
+<link th:replace="~{include :: cssjquerydaterangepicker}" />
+<script th:replace="~{include :: jsruches}"></script>
+<script th:inline="javascript">
 		/* exported Evenements, buttontextprint, buttontextcol */
 		/* globals evenementListe */
 		const Evenements = /*[[#{evenements}]]*/ null;
@@ -15,39 +15,43 @@
 		document.addEventListener('DOMContentLoaded', () => evenementListe(true));
 	</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<a th:if="${rucheId}" th:href="@{'/ruche/'+${rucheId}}" th:text="#{ruche} + ' ' + ${rucheNom}"></a>
-					<a th:if="${rucherId}" th:href="@{'/rucher/'+${rucherId}}"
-						th:text="#{rucher} + ' ' + ${rucherNom}"></a>
-					<a th:if="${essaimId}" th:href="@{'/essaim/'+${essaimId}}"
-						th:text="#{essaim} + ' ' + ${essaimNom}"></a>
-					<a th:if="${hausseId}" th:href="@{'/hausse/'+${hausseId}}"
+					<a th:if="${rucheId}" th:href="@{'/ruche/'+${rucheId}}"
+						th:text="#{ruche} + ' ' + ${rucheNom}"></a> <a th:if="${rucherId}"
+						th:href="@{'/rucher/'+${rucherId}}"
+						th:text="#{rucher} + ' ' + ${rucherNom}"></a> <a
+						th:if="${essaimId}" th:href="@{'/essaim/'+${essaimId}}"
+						th:text="#{essaim} + ' ' + ${essaimNom}"></a> <a
+						th:if="${hausseId}" th:href="@{'/hausse/'+${hausseId}}"
 						th:text="#{hausse} + ' ' + ${hausseNom}"></a>
-					<th:block th:if="${rucheId} or ${rucherId} or ${essaimId} or ${hausseId}"
+					<th:block
+						th:if="${rucheId} or ${rucherId} or ${essaimId} or ${hausseId}"
 						th:text="#{sep}"></th:block>
 					<th:block th:text="#{evenements}"></th:block>
 				</h1>
 			</div>
-			<th:block th:unless="${rucheId} or ${rucherId} or ${essaimId} or ${hausseId}">
+			<th:block
+				th:unless="${rucheId} or ${rucherId} or ${essaimId} or ${hausseId}">
 				<div class="col">
-					<a id="cree" th:href="@{/evenement/cree}" class="bi-plus-lg" th:title="#{evenementCree}"
-						aria-hidden="true"></a>
-					<a th:href="@{#{urldoc}+'1110_1613789997'}" class="bi-book" th:title="#{Doc}" target="_blank"
-						aria-hidden="true"></a>
+					<a id="cree" th:href="@{/evenement/cree}" class="bi-plus-lg"
+						th:title="#{evenementCree}" aria-hidden="true"></a> <a
+						th:href="@{#{urldoc}+'1110_1613789997'}" class="bi-book"
+						th:title="#{Doc}" target="_blank" aria-hidden="true"></a>
 				</div>
-				<div th:insert="~{includeForm :: evenementListeDates(retController='/evenement/liste')}" class="col">
-				</div>
+				<div
+					th:insert="~{includeForm :: evenementListeDates(retController='/evenement/liste')}"
+					class="col"></div>
 			</th:block>
 		</div>
 	</div>
 	<div class="container-fluid">
-		<table class="table table-bordered table-striped table-sm" id="evenements">
+		<table class="table table-bordered table-striped table-sm"
+			id="evenements">
 			<thead>
 				<tr>
 					<th th:text="#{date}"></th>
@@ -62,19 +66,22 @@
 			</thead>
 			<tbody>
 				<tr th:each="evenement : ${evenements}">
-					<td>
-						<a th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}" th:with="url='/evenement/'+${evenement.id}+
-								(${type}?('?type='+${type}):'')" th:href="@{${url}}"></a>
-					</td>
+					<td><a
+						th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
+						th:with="url='/evenement/'+${evenement.id}+
+								(${type}?('?type='+${type}):'')"
+						th:href="@{${url}}"></a></td>
 					<td th:text="#{${evenement.type}}"></td>
 					<td th:unless="${rucheId}" th:text="${evenement.ruche?.nom}"></td>
 					<td th:unless="${essaimId}" th:text="${evenement.essaim?.nom}"></td>
 					<td th:unless="${rucherId}" th:text="${evenement.rucher?.nom}"></td>
 					<td th:unless="${hausseId}" th:text="${evenement.hausse?.nom}"></td>
 					<th:block th:switch="${evenement.type}">
-						<td class="num" th:case="${T(ooioo.ruches.evenement.TypeEvenement).ESSAIMSUCRE}"
+						<td class="num"
+							th:case="${T(ooioo.ruches.evenement.TypeEvenement).ESSAIMSUCRE}"
 							th:text="${#numbers.formatDecimal(evenement.valeur,1,2,'COMMA')}"></td>
-						<td class="num" th:case="${T(ooioo.ruches.evenement.TypeEvenement).RUCHEPESEE}"
+						<td class="num"
+							th:case="${T(ooioo.ruches.evenement.TypeEvenement).RUCHEPESEE}"
 							th:text="${#numbers.formatDecimal(evenement.valeur,1,2,'COMMA')}"></td>
 						<td class="num" th:case="*" th:text="${evenement.valeur}"></td>
 					</th:block>
@@ -85,5 +92,4 @@
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

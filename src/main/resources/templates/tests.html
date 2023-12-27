@@ -1,9 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -12,25 +11,27 @@
 				<h1 class="item" th:text="#{tests}"></h1>
 			</div>
 			<div class="col">
-				<a th:href="@{#{urldoc}+'4457_1171085051'}" class="bi-book" th:title="#{Doc}" target="_blank"
-					aria-hidden="true"></a>
+				<a th:href="@{#{urldoc}+'4457_1171085051'}" class="bi-book"
+					th:title="#{Doc}" target="_blank" aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
 	<div class="accordion" id="accordion">
 		<div class="accordion-item">
-			<h1 class="accordion-header" th:if="${#lists.isEmpty(eveRucherRuche)}">
-				<button class="accordion-button collapsed" type="button" th:text="#{HistRuchersEveOK}">
-				</button>
+			<h1 class="accordion-header"
+				th:if="${#lists.isEmpty(eveRucherRuche)}">
+				<button class="accordion-button collapsed" type="button"
+					th:text="#{HistRuchersEveOK}"></button>
 			</h1>
 			<th:block th:unless="${#lists.isEmpty(eveRucherRuche)}">
 				<h1 class="accordion-header">
-					<button class="accordion-button collapsed bg-success" type="button" data-bs-toggle="collapse"
-						data-bs-target="#collapse0" aria-expanded="false" aria-controls="collapse0"
-						th:text="#{HistRuchersEveKO}">
-					</button>
+					<button class="accordion-button collapsed bg-success" type="button"
+						data-bs-toggle="collapse" data-bs-target="#collapse0"
+						aria-expanded="false" aria-controls="collapse0"
+						th:text="#{HistRuchersEveKO}"></button>
 				</h1>
-				<div id="collapse0" class="accordion-collapse collapse" data-bs-parent="#accordion">
+				<div id="collapse0" class="accordion-collapse collapse"
+					data-bs-parent="#accordion">
 					<div class="accordion-body table-responsive">
 						<table class="table table-sm table-bordered table-striped">
 							<thead>
@@ -47,8 +48,11 @@
 								<tr th:each="eve : ${eveRucherRuche}">
 									<td th:text="${ruchersErr[eveStat.index]}"></td>
 									<td th:text="${errsRucher[eveStat.index]}"></td>
-									<td><a th:text="${#temporals.format(eve.date, 'yyyy/MM/dd HH:mm')}" th:with="url='/evenement/'+${eve.id}+
-								(${type}?('?type='+${type}+'&itemId='+${itemId}):'')" th:href="@{${url}}"></a></td>
+									<td><a
+										th:text="${#temporals.format(eve.date, 'yyyy/MM/dd HH:mm')}"
+										th:with="url='/evenement/'+${eve.id}+
+								(${type}?('?type='+${type}+'&itemId='+${itemId}):'')"
+										th:href="@{${url}}"></a></td>
 									<td th:text="#{${eve.type}}"></td>
 									<td th:text="${eve.ruche?.nom}"></td>
 									<td th:text="${eve.rucher?.nom}"></td>
@@ -61,17 +65,18 @@
 		</div>
 		<div class="accordion-item">
 			<h1 class="accordion-header" th:if="${#lists.isEmpty(rucherNonVide)}">
-				<button class="accordion-button collapsed" type="button" th:text="#{HistRuchersFinOK}">
-				</button>
+				<button class="accordion-button collapsed" type="button"
+					th:text="#{HistRuchersFinOK}"></button>
 			</h1>
 			<th:block th:unless="${#lists.isEmpty(rucherNonVide)}">
 				<h1 class="accordion-header">
-					<button class="accordion-button collapsed bg-success" type="button" data-bs-toggle="collapse"
-						data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1"
-						th:text="#{HistRuchersFinKO}">
-					</button>
+					<button class="accordion-button collapsed bg-success" type="button"
+						data-bs-toggle="collapse" data-bs-target="#collapse1"
+						aria-expanded="false" aria-controls="collapse1"
+						th:text="#{HistRuchersFinKO}"></button>
 				</h1>
-				<div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#accordion">
+				<div id="collapse1" class="accordion-collapse collapse"
+					data-bs-parent="#accordion">
 					<div class="accordion-body">
 						<table class="table table-sm table-bordered table-striped">
 							<thead>
@@ -81,7 +86,8 @@
 							</thead>
 							<tbody>
 								<tr th:each="rucher : ${rucherNonVide}">
-									<td><a th:href="@{'/rucher/'+${rucher.id}}" th:text="${rucher.nom}"></a></td>
+									<td><a th:href="@{'/rucher/'+${rucher.id}}"
+										th:text="${rucher.nom}"></a></td>
 								</tr>
 							</tbody>
 						</table>
@@ -91,17 +97,18 @@
 		</div>
 		<div class="accordion-item">
 			<h1 class="accordion-header" th:if="${#lists.isEmpty(eveInc)}">
-				<button class="accordion-button collapsed" type="button" th:text="#{PasEvenIncomplets}">
-				</button>
+				<button class="accordion-button collapsed" type="button"
+					th:text="#{PasEvenIncomplets}"></button>
 			</h1>
 			<th:block th:unless="${#lists.isEmpty(eveInc)}">
 				<h1 class="accordion-header">
-					<button class="accordion-button collapsed bg-success" type="button" data-bs-toggle="collapse"
-						data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2"
-						th:text="#{EvenIncomplets}">
-					</button>
+					<button class="accordion-button collapsed bg-success" type="button"
+						data-bs-toggle="collapse" data-bs-target="#collapse2"
+						aria-expanded="false" aria-controls="collapse2"
+						th:text="#{EvenIncomplets}"></button>
 				</h1>
-				<div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#accordion">
+				<div id="collapse2" class="accordion-collapse collapse"
+					data-bs-parent="#accordion">
 					<div class="accordion-body table-responsive">
 						<table class="table table-sm table-bordered table-striped">
 							<thead>
@@ -118,17 +125,22 @@
 							</thead>
 							<tbody>
 								<tr th:each="evenement : ${eveInc}">
-									<td><a th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}" th:with="url='/evenement/'+${evenement.id}+
-								(${type}?('?type='+${type}+'&itemId='+${itemId}):'')" th:href="@{${url}}"></a></td>
+									<td><a
+										th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
+										th:with="url='/evenement/'+${evenement.id}+
+								(${type}?('?type='+${type}+'&itemId='+${itemId}):'')"
+										th:href="@{${url}}"></a></td>
 									<td th:text="#{${evenement.type}}"></td>
 									<td th:text="${evenement.ruche?.nom}"></td>
 									<td th:text="${evenement.essaim?.nom}"></td>
 									<td th:text="${evenement.rucher?.nom}"></td>
 									<td th:text="${evenement.hausse?.nom}"></td>
 									<th:block th:switch="${evenement.type}">
-										<td class="num" th:case="${T(ooioo.ruches.evenement.TypeEvenement).ESSAIMSUCRE}"
+										<td class="num"
+											th:case="${T(ooioo.ruches.evenement.TypeEvenement).ESSAIMSUCRE}"
 											th:text="${#numbers.formatDecimal(evenement.valeur,1,2,'COMMA')}"></td>
-										<td class="num" th:case="${T(ooioo.ruches.evenement.TypeEvenement).RUCHEPESEE}"
+										<td class="num"
+											th:case="${T(ooioo.ruches.evenement.TypeEvenement).RUCHEPESEE}"
 											th:text="${#numbers.formatDecimal(evenement.valeur,1,2,'COMMA')}"></td>
 										<td class="num" th:case="*" th:text="${evenement.valeur}"></td>
 									</th:block>
@@ -141,18 +153,20 @@
 			</th:block>
 		</div>
 		<div class="accordion-item">
-			<h1 class="accordion-header" th:if="${#lists.isEmpty(eveRucheHausseErr)}">
-				<button class="accordion-button collapsed" type="button" th:text="#{HistHaussesEveOK}">
-				</button>
+			<h1 class="accordion-header"
+				th:if="${#lists.isEmpty(eveRucheHausseErr)}">
+				<button class="accordion-button collapsed" type="button"
+					th:text="#{HistHaussesEveOK}"></button>
 			</h1>
 			<th:block th:unless="${#lists.isEmpty(eveRucheHausseErr)}">
 				<h1 class="accordion-header">
-					<button class="accordion-button collapsed bg-success" type="button" data-bs-toggle="collapse"
-						data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3"
-						th:text="#{HistHaussesEveKO}">
-					</button>
+					<button class="accordion-button collapsed bg-success" type="button"
+						data-bs-toggle="collapse" data-bs-target="#collapse3"
+						aria-expanded="false" aria-controls="collapse3"
+						th:text="#{HistHaussesEveKO}"></button>
 				</h1>
-				<div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#accordion">
+				<div id="collapse3" class="accordion-collapse collapse"
+					data-bs-parent="#accordion">
 					<div class="accordion-body table-responsive">
 						<table class="table table-sm table-bordered table-striped">
 							<thead>
@@ -165,8 +179,11 @@
 							</thead>
 							<tbody>
 								<tr th:each="eve : ${eveRucheHausseErr}">
-									<td><a th:text="${#temporals.format(eve.date, 'yyyy/MM/dd HH:mm')}" th:with="url='/evenement/'+${eve.id}+
-								(${type}?('?type='+${type}+'&itemId='+${itemId}):'')" th:href="@{${url}}"></a></td>
+									<td><a
+										th:text="${#temporals.format(eve.date, 'yyyy/MM/dd HH:mm')}"
+										th:with="url='/evenement/'+${eve.id}+
+								(${type}?('?type='+${type}+'&itemId='+${itemId}):'')"
+										th:href="@{${url}}"></a></td>
 									<td th:text="#{${eve.type}}"></td>
 									<td th:text="${eve.ruche?.nom}"></td>
 									<td th:text="${eve.hausse?.nom}"></td>
@@ -179,17 +196,18 @@
 		</div>
 		<div class="accordion-item">
 			<h1 class="accordion-header" th:if="${#lists.isEmpty(rucheNonVide)}">
-				<button class="accordion-button collapsed" type="button" th:text="#{HistRuchesFinOK}">
-				</button>
+				<button class="accordion-button collapsed" type="button"
+					th:text="#{HistRuchesFinOK}"></button>
 			</h1>
 			<th:block th:unless="${#lists.isEmpty(rucheNonVide)}">
 				<h1 class=" accordion-header">
-					<button class="accordion-button collapsed bg-success" type="button" data-bs-toggle="collapse"
-						data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4"
-						th:text="#{HistRuchesFinKO}">
-					</button>
+					<button class="accordion-button collapsed bg-success" type="button"
+						data-bs-toggle="collapse" data-bs-target="#collapse4"
+						aria-expanded="false" aria-controls="collapse4"
+						th:text="#{HistRuchesFinKO}"></button>
 				</h1>
-				<div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#accordion">
+				<div id="collapse4" class="accordion-collapse collapse"
+					data-bs-parent="#accordion">
 					<div class="accordion-body">
 						<table class="table table-sm table-bordered table-striped">
 							<thead>
@@ -199,7 +217,8 @@
 							</thead>
 							<tbody>
 								<tr th:each="ruche : ${rucheNonVide}">
-									<td><a th:href="@{'/ruche/'+${ruche.id}}" th:text="${ruche.nom}"></a></td>
+									<td><a th:href="@{'/ruche/'+${ruche.id}}"
+										th:text="${ruche.nom}"></a></td>
 								</tr>
 							</tbody>
 						</table>
@@ -210,5 +229,4 @@
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

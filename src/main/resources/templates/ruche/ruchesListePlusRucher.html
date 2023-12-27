@@ -1,27 +1,26 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsruches}"></script>
-	<script th:inline="javascript">
-		/* exported
-		Ruches rucher nomrucher buttTxtPrint buttTxtCol DataTable
-		*/
-		const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
-		const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
-		const Ruches = /*[[#{Ruches}]]*/ null;
-		const rucher = /*[[#{rucher}]]*/ null;
-		const nomrucher = /*[[${rucher.nom}]]*/ null;
-	</script>
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsruches}"></script>
+<script th:inline="javascript">
+	/* exported	Ruches rucher nomrucher buttTxtPrint buttTxtCol DataTable
+	 */
+	const buttTxtPrint = /*[[#{buttontextprint}]]*/null;
+	const buttTxtCol = /*[[#{buttontextcol}]]*/null;
+	const Ruches = /*[[#{Ruches}]]*/null;
+	const rucher = /*[[#{rucher}]]*/null;
+	const nomrucher = /*[[${rucher.nom}]]*/null;
+</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}">Menu</nav>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<a th:href="@{'/rucher/'+${rucher.id}}" th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+					<a th:href="@{'/rucher/'+${rucher.id}}"
+						th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
 					<th:block th:text="#{sep}+#{listeRuches}"></th:block>
 				</h1>
 			</div>
@@ -60,21 +59,26 @@
 				</tr>
 			</thead>
 			<tbody th:with="f='dd/MM/yyyy'">
-				<tr th:each="ruche : ${ruches}" th:with="e=${listeEvensCommentaireEsaim[rucheStat.index]},
+				<tr th:each="ruche : ${ruches}"
+					th:with="e=${listeEvensCommentaireEsaim[rucheStat.index]},
 						eh=${evensHaussesRuches[rucheStat.index]},
 						h=${hausses[rucheStat.index]},
 						ec=${listeEvenCadre[rucheStat.index]},
 						ep=${evensPoidsRuches[rucheStat.index]}">
 					<td th:text="${ordreRuche[rucheStat.index]}"></td>
-					<td><a th:href="@{'/ruche/'+${ruche.id}}" th:text="${ruche.nom}"></a></td>
-					<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}" th:text="${ruche.essaim?.nom}"></a></td>
+					<td><a th:href="@{'/ruche/'+${ruche.id}}"
+						th:text="${ruche.nom}"></a></td>
+					<td><a th:href="@{'/essaim/'+${ruche.essaim?.id}}"
+						th:text="${ruche.essaim?.nom}"></a></td>
 					<td th:text="${ruche.essaim?.dateAcquisition}"></td>
 					<td th:text="${ruche.essaim?.commentaire}"></td>
 					<td th:text="${dateAjoutRucher[rucheStat.index]}"></td>
 					<td th:text="${ruche.production}? #{oui} : #{non}"></td>
-					<td th:if="${session.voirInactif}" th:text="${ruche.active}? #{oui} : #{non}"></td>
+					<td th:if="${session.voirInactif}"
+						th:text="${ruche.active}? #{oui} : #{non}"></td>
 					<td th:text="${ruche.dateAcquisition}"></td>
-					<td class="num" th:text="${#numbers.formatDecimal(ruche.poidsVide,1,1,'DEFAULT')}"></td>
+					<td class="num"
+						th:text="${#numbers.formatDecimal(ruche.poidsVide,1,1,'DEFAULT')}"></td>
 					<td class="num"
 						th:text="${ep == null}?'':${#numbers.formatDecimal(ep.valeur,1,1,'DEFAULT')}+' '+${#temporals.format(ep.date, f)}+' '+${ep.commentaire}">
 					</td>
@@ -83,18 +87,21 @@
 					</td>
 					<td class="num" th:text="${ruche.type?.nbCadresMax}"></td>
 					<td th:text="${ruche.type?.nom}"></td>
-					<td>
-						<th:block th:each="hh : ${h}" th:with="ev=${eh[hhStat.index]}" th:text="${hh.nom} + ' ' + (${ev == null}?'':${#temporals.format(ev.date, f)})
+					<td><th:block th:each="hh : ${h}"
+							th:with="ev=${eh[hhStat.index]}"
+							th:text="${hh.nom} + ' ' + (${ev == null}?'':${#temporals.format(ev.date, f)})
 						    + ' ' + (${ev == null}?'':${ev.commentaire}) + ' '">
-						</th:block>
-					</td>
+						</th:block></td>
 					<th:block th:if="${session.voirLatLon}">
-						<td class="num" th:text="${#numbers.formatDecimal(ruche.latitude,1,5)}"></td>
-						<td class="num" th:text="${#numbers.formatDecimal(ruche.longitude,1,5)}"></td>
+						<td class="num"
+							th:text="${#numbers.formatDecimal(ruche.latitude,1,5)}"></td>
+						<td class="num"
+							th:text="${#numbers.formatDecimal(ruche.longitude,1,5)}"></td>
 					</th:block>
 					<td th:text="${ruche.commentaire}"></td>
 					<td th:text="${ruche.essaim?.reineMarquee}? #{oui} : #{non}"></td>
-					<td th:text="${ruche.essaim}? #{${ruche.essaim.reineCouleurMarquage}} : '-'"></td>
+					<td
+						th:text="${ruche.essaim}? #{${ruche.essaim.reineCouleurMarquage}} : '-'"></td>
 					<td th:text="${ruche.essaim?.reineDateNaissance}"></td>
 					<td th:each="i : ${ {0,1,2} }"
 						th:text="${#arrays.length(e)} &gt; ${i} ?
@@ -106,5 +113,4 @@
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:inline="javascript">
 		/* globals DataTable */
 		const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
 		const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
@@ -31,7 +31,6 @@
 		});
 	</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -40,13 +39,14 @@
 				<h1 class="item" th:text="#{Personnes}"></h1>
 			</div>
 			<div class="col">
-				<a id="cree" th:href="@{/personne/cree}" class="bi-plus-lg" th:title="#{ajouterPersonne}"
-					aria-hidden="true"></a>
+				<a id="cree" th:href="@{/personne/cree}" class="bi-plus-lg"
+					th:title="#{ajouterPersonne}" aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
 	<div class="container-fluid">
-		<table class="table table-bordered table-striped table-sm" id="personnes">
+		<table class="table table-bordered table-striped table-sm"
+			id="personnes">
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>
@@ -61,19 +61,21 @@
 			</thead>
 			<tbody>
 				<tr th:each="personne : ${personnes}">
-					<td><a th:href="@{'/personne/'+${personne.id}}" th:text="${personne.nom}"></a></td>
+					<td><a th:href="@{'/personne/'+${personne.id}}"
+						th:text="${personne.nom}"></a></td>
 					<td th:text="${personne.prenom}"></td>
-					<td th:utext="${#strings.replace(#strings.escapeXml(personne.tel),'/','<br/>')}"></td>
+					<td
+						th:utext="${#strings.replace(#strings.escapeXml(personne.tel),'/','<br/>')}"></td>
 					<td th:text="${personne.email}"></td>
 					<td th:text="${personne.adresse}"></td>
 					<td th:text="${personne.login}"></td>
 					<td th:text="${personne.roles}"></td>
-					<td th:if="${session.voirInactif}" th:text="${personne.active}? #{oui} : #{non}"></td>
+					<td th:if="${session.voirInactif}"
+						th:text="${personne.active}? #{oui} : #{non}"></td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

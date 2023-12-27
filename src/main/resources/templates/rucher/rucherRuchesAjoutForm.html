@@ -1,11 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsdatetimepicker}"></script>
-	<link th:replace="~{include :: cssdatetimepicker}" />
-	<script th:replace="~{include :: localejsdatetimepicker}"></script>
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsdatetimepicker}"></script>
+<link th:replace="~{include :: cssdatetimepicker}" />
+<script th:replace="~{include :: localejsdatetimepicker}"></script>
+<script th:inline="javascript">
 		const doitEtreSupA = /*[[#{doitEtreSupA}]]*/null;
 		const dateFirst = /*[[${dateFirst}]]*/null;
 		const timeFirst = /*[[${timeFirst}]]*/null;
@@ -35,28 +35,29 @@
 		});
 	</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<a th:href="@{'/rucher/ruches/'+${rucherId}}" th:text="#{ajoutruches} + ' ' + ${rucher.nom}"></a>
+					<a th:href="@{'/rucher/ruches/'+${rucherId}}"
+						th:text="#{ajoutruches} + ' ' + ${rucher.nom}"></a>
 					<th:block th:text="#{sep} + #{Ruches} + ' ' + ${ruchesNoms}"></th:block>
 				</h1>
-				<p th:text="#{dateDernierAjout} + ' ' + ${#temporals.format(dateTime, 'dd/MM/yyyy HH:mm')}">
+				<p
+					th:text="#{dateDernierAjout} + ' ' + ${#temporals.format(dateTime, 'dd/MM/yyyy HH:mm')}">
 				</p>
 			</div>
 		</div>
 	</div>
-	<form action="#" th:action="@{'/rucher/ruches/ajouter/sauve/' + ${rucherId}} + '/' + ${rIds}" method="post"
-		id="evenementForm">
+	<form action="#"
+		th:action="@{'/rucher/ruches/ajouter/sauve/' + ${rucherId}} + '/' + ${rIds}"
+		method="post" id="evenementForm">
 		<div th:replace="~{includeForm :: date}"></div>
 		<div th:replace="~{includeForm :: commentaire}"></div>
 		<div th:replace="~{includeForm :: BtnForm}"></div>
 	</form>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

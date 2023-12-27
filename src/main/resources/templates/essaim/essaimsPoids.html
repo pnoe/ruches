@@ -1,41 +1,40 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsChart}"></script>
-	<script th:replace="~{include :: luxon}"></script>
-	<script th:replace="~{include :: chartjs-adapter}"></script>
-	<script th:replace="~{include :: d3-color}"></script>
-	<script th:replace="~{include :: d3-interpolate}"></script>
-	<script th:replace="~{include :: d3-scale-chromatic}"></script>
-	<script th:replace="~{include :: jsruches}"></script>
-	<script th:inline="javascript">
-		/* exported poids, dates, poidsSucre, datesSucre,
-		    poidsRec, datesRec, ruchersRec, datesTrait,
-		    datesRucher, nomsRucher, datesCadre, nbsCadre
-		*/
-		const poids = /*[[${poids}]]*/ null;
-		const dates = /*[[${dates}]]*/ null;
-		const poidsSucre = /*[[${poidsSucre}]]*/ null;
-		const datesSucre = /*[[${datesSucre}]]*/ null;
-		const poidsRec = /*[[${poidsRec}]]*/ null;
-		const datesRec = /*[[${datesRec}]]*/ null;
-		const ruchersRec = /*[[${ruchersRec}]]*/ null;
-		const datesTrait = /*[[${datesTrait}]]*/ null;
-		const datesRucher = /*[[${datesRucher}]]*/ null;
-		const nomsRucher = /*[[${nomsRucher}]]*/ null;
-		const datesCadre = /*[[${datesCadre}]]*/ null;
-		const nbsCadre = /*[[${nbsCadre}]]*/ null;	
-	</script>
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsChart}"></script>
+<script th:replace="~{include :: luxon}"></script>
+<script th:replace="~{include :: chartjs-adapter}"></script>
+<script th:replace="~{include :: d3-color}"></script>
+<script th:replace="~{include :: d3-interpolate}"></script>
+<script th:replace="~{include :: d3-scale-chromatic}"></script>
+<script th:replace="~{include :: jsruches}"></script>
+<script th:inline="javascript">
+	/* exported poids, dates, poidsSucre, datesSucre, poidsRec, datesRec, ruchersRec, 
+	datesTrait, datesRucher, nomsRucher, datesCadre, nbsCadre
+	 */
+	const poids = /*[[${poids}]]*/null;
+	const dates = /*[[${dates}]]*/null;
+	const poidsSucre = /*[[${poidsSucre}]]*/null;
+	const datesSucre = /*[[${datesSucre}]]*/null;
+	const poidsRec = /*[[${poidsRec}]]*/null;
+	const datesRec = /*[[${datesRec}]]*/null;
+	const ruchersRec = /*[[${ruchersRec}]]*/null;
+	const datesTrait = /*[[${datesTrait}]]*/null;
+	const datesRucher = /*[[${datesRucher}]]*/null;
+	const nomsRucher = /*[[${nomsRucher}]]*/null;
+	const datesCadre = /*[[${datesCadre}]]*/null;
+	const nbsCadre = /*[[${nbsCadre}]]*/null;
+</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col text-center">
 				<h1 class="item">
-					<a th:href="@{'/essaim/'+${essaim.id}}" th:text="#{essaim}+' '+${essaim.nom}"></a>
+					<a th:href="@{'/essaim/'+${essaim.id}}"
+						th:text="#{essaim}+' '+${essaim.nom}"></a>
 					<th:block th:text="#{sep}+#{evenements}"></th:block>
 				</h1>
 			</div>
@@ -49,5 +48,4 @@
 	<canvas th:unless="${#arrays.isEmpty(dates)}" id="ctx"></canvas>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

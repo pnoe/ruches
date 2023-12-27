@@ -1,22 +1,21 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsruches}"></script>
-	<script th:replace="~{include :: jsChart}"></script>
-	<script th:replace="~{include :: d3-color}"></script>
-	<script th:replace="~{include :: d3-interpolate}"></script>
-	<script th:replace="~{include :: d3-scale-chromatic}"></script>
-	<script th:inline="javascript">
-		/* exported	d3, Chart, poidsmiel, nomsessaims, poidsTotal, urlRecolteStat, rucherId */
-		const poidsmiel = /*[[${poids}]]*/ null;
-		const nomsessaims = /*[[${noms}]]*/ null;
-		const poidsTotal = /*[[${poidsTotal}]]*/ null;
-		const urlRecolteStat  = /*[[@{'/recolte/statistiques/'+${recolte.id}}]]*/ null;
-		const rucherId = /*[[${rucherId}]]*/ null;
-	</script>
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsruches}"></script>
+<script th:replace="~{include :: jsChart}"></script>
+<script th:replace="~{include :: d3-color}"></script>
+<script th:replace="~{include :: d3-interpolate}"></script>
+<script th:replace="~{include :: d3-scale-chromatic}"></script>
+<script th:inline="javascript">
+	/* exported	d3, Chart, poidsmiel, nomsessaims, poidsTotal, urlRecolteStat, rucherId */
+	const poidsmiel = /*[[${poids}]]*/null;
+	const nomsessaims = /*[[${noms}]]*/null;
+	const poidsTotal = /*[[${poidsTotal}]]*/null;
+	const urlRecolteStat = /*[[@{'/recolte/statistiques/'+${recolte.id}}]]*/null;
+	const rucherId = /*[[${rucherId}]]*/null;
+</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -29,15 +28,16 @@
 				</h1>
 			</div>
 			<div class="col">
-				<span th:text="#{poidsMielHausses} + ' ' + 
+				<span
+					th:text="#{poidsMielHausses} + ' ' + 
 			  	${#numbers.formatDecimal(poidsTotal/1000.0,1,2,'DEFAULT')} + 'kg'">
 				</span>
 			</div>
 			<div th:if="${#lists.size(ruchers) > 1}" class="col-6">
 				<select class="form-control" id="rucher" name="rucher">
 					<option value="null" th:text="#{TousRuchers}"></option>
-					<option th:each="rucher : ${ruchers}"
-						th:value="${rucher.id}" th:text="${rucher.nom}"></option>
+					<option th:each="rucher : ${ruchers}" th:value="${rucher.id}"
+						th:text="${rucher.nom}"></option>
 				</select>
 			</div>
 		</div>
@@ -47,5 +47,4 @@
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:inline="javascript">
 		const nomexiste = /*[[#{nomexiste}]]*/ null;
 		const rucherNoms = /*[[${rucherNoms}]]*/ null;
 		document.addEventListener('DOMContentLoaded', () => {
@@ -28,7 +28,6 @@
 		});
 	</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -39,43 +38,46 @@
 					<th:block th:text="#{sep} + #{Ajout}"></th:block>
 				</h1>
 				<h1 class="item" th:if="${rucher.id}">
-					<a th:href="@{'/rucher/'+${rucher.id}}" th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
+					<a th:href="@{'/rucher/'+${rucher.id}}"
+						th:text="#{rucher} + ' ' + ${rucher.nom}"></a>
 					<th:block th:text="#{sep} + #{modification}"></th:block>
 				</h1>
 			</div>
 		</div>
 	</div>
-	<form action="#" th:action="@{/rucher/sauve}" th:object="${rucher}" method="post" id="rucherForm">
-		<input type="hidden" th:field="*{id}" /> <input type="hidden" th:field="*{depot}" />
+	<form action="#" th:action="@{/rucher/sauve}" th:object="${rucher}"
+		method="post" id="rucherForm">
+		<input type="hidden" th:field="*{id}" /> <input type="hidden"
+			th:field="*{depot}" />
 		<div th:replace="~{includeForm :: nomField}"></div>
 		<div th:replace="~{includeForm :: actifField}"></div>
 		<div class="form-floating mb-3">
 			<select class="form-control" th:field="*{contact}">
-				<option th:each="personne : ${personnes}" th:value="${personne.id}" th:text="${personne.nom}"></option>
-			</select>
-			<label class="form-label" for="contact" th:text="#{contact}"></label>
+				<option th:each="personne : ${personnes}" th:value="${personne.id}"
+					th:text="${personne.nom}"></option>
+			</select> <label class="form-label" for="contact" th:text="#{contact}"></label>
 		</div>
 		<div th:replace="~{includeForm :: latitudeField}"></div>
 		<div th:replace="~{includeForm :: longitudeField}"></div>
 		<div class="form-floating mb-3">
-			<input class="form-control" placeholder="100" type="number" step="1" min="-200" max="4000"
-				th:field="*{altitude}" th:errorclass="fieldError" />
-			<label class="form-label" for="altitude" th:text="#{altitude}"></label>
+			<input class="form-control" placeholder="100" type="number" step="1"
+				min="-200" max="4000" th:field="*{altitude}"
+				th:errorclass="fieldError" /> <label class="form-label"
+				for="altitude" th:text="#{altitude}"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<input type="text" placeholder="xx" class="form-control" th:field="*{adresse}" th:errorclass="fieldError"
-				maxlength="255" />
+			<input type="text" placeholder="xx" class="form-control"
+				th:field="*{adresse}" th:errorclass="fieldError" maxlength="255" />
 			<label class="form-label" for="adresse" th:text="#{adresse}"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<input placeholder="xx" type="text" class="form-control" th:field="*{ressource}"
-				th:errorclass="fieldError" />
-			<label class="form-label" for="ressource" th:text="#{ressource}"></label>
+			<input placeholder="xx" type="text" class="form-control"
+				th:field="*{ressource}" th:errorclass="fieldError" /> <label
+				class="form-label" for="ressource" th:text="#{ressource}"></label>
 		</div>
 		<div th:replace="~{includeForm :: commentaireField}"></div>
 		<div th:replace="~{includeForm :: BtnForm}"></div>
 	</form>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

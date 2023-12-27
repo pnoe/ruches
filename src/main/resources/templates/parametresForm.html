@@ -1,31 +1,33 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsdatetimepicker}"></script>
-	<link th:replace="~{include :: cssdatetimepicker}" />
-	<script th:replace="~{include :: localejsdatetimepicker}"></script>
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsdatetimepicker}"></script>
+<link th:replace="~{include :: cssdatetimepicker}" />
+<script th:replace="~{include :: localejsdatetimepicker}"></script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
-	<form action="#" th:action="@{/sauveParametres}" method="post" id="parametresForm">
+	<form action="#" th:action="@{/sauveParametres}" method="post"
+		id="parametresForm">
 		<div class="form-check">
-			<input class="form-check-input" type="checkbox" id="voirInactif" name="voirInactif" />
-			<label class="form-check-label" for="voirInactif" th:text="#{voirInactif}"></label>
+			<input class="form-check-input" type="checkbox" id="voirInactif"
+				name="voirInactif" /> <label class="form-check-label"
+				for="voirInactif" th:text="#{voirInactif}"></label>
 		</div>
 		<div class="form-check">
-			<input class="form-check-input" type="checkbox" id="voirLatLon" name="voirLatLon" />
-			<label class="form-check-label" for="voirLatLon" th:text="#{voirLatLon}"></label>
+			<input class="form-check-input" type="checkbox" id="voirLatLon"
+				name="voirLatLon" /> <label class="form-check-label"
+				for="voirLatLon" th:text="#{voirLatLon}"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<input placeholder="" class="form-control datepicker" type="text" id="date" name="date" />
-			<label class="form-label" for="date" th:text="#{datedecalee}"></label>
+			<input placeholder="" class="form-control datepicker" type="text"
+				id="date" name="date" /> <label class="form-label" for="date"
+				th:text="#{datedecalee}"></label>
 		</div>
 		<br />
 		<div th:replace="~{includeForm :: BtnForm}"></div>
 	</form>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>

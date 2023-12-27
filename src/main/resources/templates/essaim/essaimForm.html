@@ -1,12 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
-	<script th:replace="~{include :: jsdatetimepicker}"></script>
-	<!-- active datetimepicker sur #date-->
-	<script th:replace="~{include :: localejsdatetimepicker}"></script>
-	<link th:replace="~{include :: cssdatetimepicker}" />
-	<script th:inline="javascript">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsdatetimepicker}"></script>
+<script th:replace="~{include :: localejsdatetimepicker}"></script>
+<link th:replace="~{include :: cssdatetimepicker}" />
+<script th:inline="javascript">
 		const essaimNoms = /*[[${essaimNoms}]]*/null;
 		const nomexiste = /*[[#{nomexiste}]]*/null;
 		document.addEventListener('DOMContentLoaded', () => {
@@ -54,7 +53,6 @@
 		});
 	</script>
 </head>
-
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
@@ -65,23 +63,27 @@
 					<th:block th:text="#{sep} + #{Ajout}"></th:block>
 				</h1>
 				<h1 class="item" th:if="${essaim.id}">
-					<a th:href="@{'/essaim/'+${essaim.id}}" th:text="#{essaim} + ' ' + ${essaim.nom}"></a>
+					<a th:href="@{'/essaim/'+${essaim.id}}"
+						th:text="#{essaim} + ' ' + ${essaim.nom}"></a>
 					<th:block th:text="#{sep} + #{modification}"></th:block>
 				</h1>
 			</div>
 		</div>
 	</div>
-	<form action="#" th:action="@{/essaim/sauve}" th:object="${essaim}" method="post" id="essaimForm">
+	<form action="#" th:action="@{/essaim/sauve}" th:object="${essaim}"
+		method="post" id="essaimForm">
 		<input class="form-control" type="hidden" th:field="*{id}" />
 		<div th:replace="~{includeForm :: nomField}"></div>
 		<div class="mb-3 form-check">
-			<input class="form-check-input" type="checkbox" th:field="*{reineMarquee}" /> <label
-				class="form-check-label" for="reineMarquee" th:text="#{reineMarquee}"></label>
+			<input class="form-check-input" type="checkbox"
+				th:field="*{reineMarquee}" /> <label class="form-check-label"
+				for="reineMarquee" th:text="#{reineMarquee}"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<input class="form-control" type="text" placeholder="2021-03-26" th:field="*{reineDateNaissance}"
-				th:errorclass="fieldError" />
-			<label class="form-label" th:text="#{reineDateNaissance}" for="reineDateNaissance"></label>
+			<input class="form-control" type="text" placeholder="2021-03-26"
+				th:field="*{reineDateNaissance}" th:errorclass="fieldError" /> <label
+				class="form-label" th:text="#{reineDateNaissance}"
+				for="reineDateNaissance"></label>
 		</div>
 		<div class="form-floating mb-3">
 			<fieldset class="border rounded-3 p-3">
@@ -92,13 +94,15 @@
 			*/-->
 				<div id="disp">
 					<div class="form-floating mb-3">
-						<input id="date" placeholder="" class="form-control datepicker" type="text"
-							th:field="*{dateDispersion}" th:errorclass="fieldError" /> <label class="form-label"
+						<input id="date" placeholder="" class="form-control datepicker"
+							type="text" th:field="*{dateDispersion}"
+							th:errorclass="fieldError" /> <label class="form-label"
 							th:text="#{dateDispersion}" for="dateDispersion"></label>
 					</div>
 					<div class="form-floating mb-3">
-						<textarea class="form-control" th:field="*{commDisp}" placeholder="Commentaire"
-							th:errorclass="fieldError" maxlength="255"></textarea>
+						<textarea class="form-control" th:field="*{commDisp}"
+							placeholder="Commentaire" th:errorclass="fieldError"
+							maxlength="255"></textarea>
 						<label class="form-label" th:text="#{commDisp}" for="commDisp"></label>
 					</div>
 				</div>
@@ -109,21 +113,22 @@
 		<div class="form-floating mb-3">
 			<select class="form-control datepicker" th:field="*{souche}">
 				<option th:text="#{aucune}" value=""></option>
-				<option th:each="essaimopt : ${essaims}" th:value="${essaimopt.id}" th:text="${essaimopt.nom}"></option>
-			</select>
-			<label class="form-label" for="essaim" th:text="#{souche}"></label>
+				<option th:each="essaimopt : ${essaims}" th:value="${essaimopt.id}"
+					th:text="${essaimopt.nom}"></option>
+			</select> <label class="form-label" for="essaim" th:text="#{souche}"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<input class="form-control" type="number" min="1" max="5" th:field="*{agressivite}" placeholder="1" />
-			<label class="form-label" th:text="#{agressivite}" for="agressivite"></label>
+			<input class="form-control" type="number" min="1" max="5"
+				th:field="*{agressivite}" placeholder="1" /> <label
+				class="form-label" th:text="#{agressivite}" for="agressivite"></label>
 		</div>
 		<div class="form-floating mb-3">
-			<input class="form-control" type="number" min="1" max="5" th:field="*{proprete}" placeholder="1" />
-			<label class="form-label" th:text="#{proprete}" for="proprete"></label>
+			<input class="form-control" type="number" min="1" max="5"
+				th:field="*{proprete}" placeholder="1" /> <label class="form-label"
+				th:text="#{proprete}" for="proprete"></label>
 		</div>
 		<div th:replace="~{includeForm :: BtnForm}"></div>
 	</form>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
-
 </html>
