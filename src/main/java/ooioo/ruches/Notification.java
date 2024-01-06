@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,10 +30,8 @@ public class Notification {
 	private static final String HAUSSEPREF = ", Hausse : ";
 	private static final String ESSAIMPREF = ", Essaim : ";
 
-	@Autowired
-	private EvenementRepository evenementRepository;
-	@Autowired
-	public EmailService emailService;
+	private final EvenementRepository evenementRepository;
+	private final EmailService emailService;
 
 	@Value("${notification.destinataires}")
 	private String[] destinataires;
@@ -44,6 +41,11 @@ public class Notification {
 	private String entete;
 	@Value("${notification.pied}")
 	private String pied;
+
+	public Notification(EvenementRepository evenementRepository, EmailService emailService) {
+		this.evenementRepository = evenementRepository;
+		this.emailService = emailService;
+	}
 
 	@Bean
 	TaskScheduler taskScheduler() {

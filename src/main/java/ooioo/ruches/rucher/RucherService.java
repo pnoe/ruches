@@ -14,7 +14,6 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -49,19 +48,25 @@ public class RucherService {
 
 	private final Logger logger = LoggerFactory.getLogger(RucherService.class);
 
-	@Autowired
-	private RucheRepository rucheRepository;
-	@Autowired
-	private EvenementRepository evenementRepository;
-	@Autowired
-	private DistRucherRepository drRepo;
-	@Autowired
-	private RucherRepository rucherRepository;
+	private final RucheRepository rucheRepository;
+	private final EvenementRepository evenementRepository;
+	private final DistRucherRepository drRepo;
+	private final RucherRepository rucherRepository;
 
 	@Value("${rucher.ruche.dispersion}")
 	private double dispersionRuche;
 	@Value("${ign.url.itineraire}")
 	private String urlIgnItineraire;
+
+	public RucherService(RucheRepository rucheRepository, EvenementRepository evenementRepository,
+			DistRucherRepository drRepo, RucherRepository rucherRepository
+
+	) {
+		this.rucheRepository = rucheRepository;
+		this.evenementRepository = evenementRepository;
+		this.drRepo = drRepo;
+		this.rucherRepository = rucherRepository;
+	}
 
 	/**
 	 * Calcul des distances entre les ruchers par appel de l'api ign de calcul
@@ -272,7 +277,8 @@ public class RucherService {
 	 * https://developers.google.com/optimization/routing/tsp Le chemin est calculé
 	 * dans List<RucheParcours> cheminRet, et la distance en retour de la fonction.
 	 */
-	double cheminRuchesRucher(List<RucheParcours> cheminRet, RucherMap rucher, List<RucheIdNomLatLon> ruches, boolean redraw) {
+	double cheminRuchesRucher(List<RucheParcours> cheminRet, RucherMap rucher, List<RucheIdNomLatLon> ruches,
+			boolean redraw) {
 		RucheParcours entree = new RucheParcours(0l, 0, rucher.longitude(), rucher.latitude());
 		List<RucheParcours> chemin = new ArrayList<>(ruches.size() + 1);
 		chemin.add(entree);

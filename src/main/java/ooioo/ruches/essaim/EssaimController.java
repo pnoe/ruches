@@ -9,7 +9,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -55,22 +54,25 @@ public class EssaimController {
 
 	private final Logger logger = LoggerFactory.getLogger(EssaimController.class);
 
-	@Autowired
-	private EssaimRepository essaimRepository;
-	@Autowired
-	private RucheRepository rucheRepository;
-	@Autowired
-	private EvenementRepository evenementRepository;
-	@Autowired
-	private RecolteRepository recolteRepository;
-	@Autowired
-	private RecolteHausseRepository recolteHausseRepository;
+	private final EssaimRepository essaimRepository;
+	private final RucheRepository rucheRepository;
+	private final EvenementRepository evenementRepository;
+	private final RecolteRepository recolteRepository;
+	private final RecolteHausseRepository recolteHausseRepository;
+	private final MessageSource messageSource;
+	private final EssaimService essaimService;
 
-	@Autowired
-	private MessageSource messageSource;
-
-	@Autowired
-	private EssaimService essaimService;
+	public EssaimController(EssaimRepository essaimRepository, RucheRepository rucheRepository,
+			EvenementRepository evenementRepository, RecolteRepository recolteRepository,
+			RecolteHausseRepository recolteHausseRepository, MessageSource messageSource, EssaimService essaimService) {
+		this.essaimRepository = essaimRepository;
+		this.rucheRepository = rucheRepository;
+		this.evenementRepository = evenementRepository;
+		this.recolteRepository = recolteRepository;
+		this.recolteHausseRepository = recolteHausseRepository;
+		this.messageSource = messageSource;
+		this.essaimService = essaimService;
+	}
 
 	/**
 	 * Graphe affichant les poids d'un essaim, les récoltes, les événments sucre,

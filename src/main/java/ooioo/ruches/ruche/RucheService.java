@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -32,18 +31,23 @@ public class RucheService {
 
 	private final Logger logger = LoggerFactory.getLogger(RucheService.class);
 
-	@Autowired
-	private EvenementRepository evenementRepository;
-	@Autowired
-	private HausseRepository hausseRepository;
-	@Autowired
-	private RucheRepository rucheRepository;
-	@Autowired
-	private RucheTypeRepository rucheTypeRepository;
-	@Autowired
-	private RucherRepository rucherRepository;
-	@Autowired
-	private RucherService rucherService;
+	private final EvenementRepository evenementRepository;
+	private final HausseRepository hausseRepository;
+	private final RucheRepository rucheRepository;
+	private final RucheTypeRepository rucheTypeRepository;
+	private final RucherRepository rucherRepository;
+	private final RucherService rucherService;
+
+	public RucheService(EvenementRepository evenementRepository, HausseRepository hausseRepository,
+			RucheRepository rucheRepository, RucheTypeRepository rucheTypeRepository, RucherRepository rucherRepository,
+			RucherService rucherService) {
+		this.evenementRepository = evenementRepository;
+		this.hausseRepository = hausseRepository;
+		this.rucheRepository = rucheRepository;
+		this.rucheTypeRepository = rucheTypeRepository;
+		this.rucherRepository = rucherRepository;
+		this.rucherService = rucherService;
+	}
 
 	/**
 	 * Historique de l'ajout des hausses sur une ruche.

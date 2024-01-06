@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -37,15 +36,19 @@ public class EvenementHausseController {
 
 	final Logger logger = LoggerFactory.getLogger(EvenementHausseController.class);
 
-	@Autowired
-	private EvenementRepository evenementRepository;
-	@Autowired
-	private HausseRepository hausseRepository;
-	@Autowired
-	private HausseService hausseService;
+	private final EvenementRepository evenementRepository;
+	private final HausseRepository hausseRepository;
+	private final HausseService hausseService;
+	private final MessageSource messageSource;
 
-	@Autowired
-	private MessageSource messageSource;
+	public EvenementHausseController(EvenementRepository evenementRepository,
+			 HausseRepository hausseRepository,  HausseService hausseService,
+			 MessageSource messageSource) {
+		this.evenementRepository = evenementRepository;
+		this.hausseRepository = hausseRepository;
+		this.hausseService = hausseService;
+		this.messageSource = messageSource;
+	}
 
 	private static final String commForm = "hausse/hausseCommentaireForm";
 

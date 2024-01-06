@@ -30,13 +30,17 @@ public class SecurityConfig {
 
 	private final Logger loggerSecConfig = LoggerFactory.getLogger(SecurityConfig.class);
 
-	@Autowired
-	private MessageSource messageSource;
+	private final MessageSource messageSource;
 
 	@Resource(name = "userDetailService")
 	private UserDetailsService userDetailsService;
 
-	// attention dans tomcat/conf/web.xml mettre la servlet jsp et son mapping en commentaire
+	public SecurityConfig(MessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
+
+	// attention dans tomcat/conf/web.xml mettre la servlet jsp et son mapping en
+	// commentaire
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		// https://docs.spring.io/spring-security/reference/migration-7/configuration.html

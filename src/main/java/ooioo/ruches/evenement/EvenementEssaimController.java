@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -44,24 +43,27 @@ public class EvenementEssaimController {
 
 	final Logger logger = LoggerFactory.getLogger(EvenementEssaimController.class);
 
-	@Autowired
-	private EvenementRepository evenementRepository;
-	@Autowired
-	private RucheRepository rucheRepository;
-	@Autowired
-	private RucherRepository rucherRepository;
-	@Autowired
-	private EssaimRepository essaimRepository;
-
-	@Autowired
-	private MessageSource messageSource;
-
-	@Autowired
-	private RucherService rucherService;
-	@Autowired
-	private EssaimService essaimService;
+	private final EvenementRepository evenementRepository;
+	private final RucheRepository rucheRepository;
+	private final EssaimRepository essaimRepository;
+	private final RucherRepository rucherRepository;
+	private final MessageSource messageSource;
+	private final RucherService rucherService;
+	private final EssaimService essaimService;
 
 	private static final String commForm = "essaim/essaimCommentaireForm";
+
+	public EvenementEssaimController(EvenementRepository evenementRepository, RucheRepository rucheRepository,
+			EssaimRepository essaimRepository, RucherRepository rucherRepository, MessageSource messageSource,
+			RucherService rucherService, EssaimService essaimService) {
+		this.evenementRepository = evenementRepository;
+		this.rucheRepository = rucheRepository;
+		this.essaimRepository = essaimRepository;
+		this.rucherRepository = rucherRepository;
+		this.messageSource = messageSource;
+		this.rucherService = rucherService;
+		this.essaimService = essaimService;
+	}
 
 	/*
 	 * Liste événements essaim sucre. Période moins d'un an par défaut (value = "p",
@@ -241,7 +243,8 @@ public class EvenementEssaimController {
 	@PostMapping("/sauve/lot/{essaimIds}")
 	public String sauveLot(@PathVariable Long[] essaimIds, @RequestParam TypeEvenement typeEvenement,
 			@RequestParam String date, @RequestParam String valeur, @RequestParam String commentaire) {
-		// TODO : controles sur "valeur" : int si cadres, float si poids : voir controles js formulaires ?
+		// TODO : controles sur "valeur" : int si cadres, float si poids : voir
+		// controles js formulaires ?
 		for (Long essaimId : essaimIds) {
 			Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 			if (essaimOpt.isPresent()) {
@@ -253,13 +256,12 @@ public class EvenementEssaimController {
 				}
 				LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 				if (typeEvenement.equals(TypeEvenement.RUCHECADRE) &&
-						// Si le nombre de cadre
-						ruche.getType() != null &&
-						ruche.getType().getNbCadresMax() != null &&
-						Integer.parseInt(valeur) > ruche.getType().getNbCadresMax()) {
-						valeur = Integer.toString(ruche.getType().getNbCadresMax());
+				// Si le nombre de cadre
+						ruche.getType() != null && ruche.getType().getNbCadresMax() != null
+						&& Integer.parseInt(valeur) > ruche.getType().getNbCadresMax()) {
+					valeur = Integer.toString(ruche.getType().getNbCadresMax());
 				}
- 				Evenement evenement = new Evenement(dateEve, typeEvenement, ruche, essaim, rucher, null, valeur,
+				Evenement evenement = new Evenement(dateEve, typeEvenement, ruche, essaim, rucher, null, valeur,
 						commentaire);
 				evenementRepository.save(evenement);
 				logger.info(Const.CREE, evenement);

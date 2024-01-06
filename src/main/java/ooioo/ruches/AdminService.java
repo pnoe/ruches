@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -23,14 +22,18 @@ import ooioo.ruches.rucher.RucherRepository;
 @Service
 public class AdminService {
 
-	@Autowired
-	private RucherRepository rucherRepository;
-	@Autowired
-	private EvenementRepository evenementRepository;
-	@Autowired
-	private RucheRepository rucheRepository;
-	@Autowired
-	private HausseRepository hausseRepository;
+	private final RucherRepository rucherRepository;
+	private final EvenementRepository evenementRepository;
+	private final RucheRepository rucheRepository;
+	private final HausseRepository hausseRepository;
+
+	public AdminService(RucherRepository rucherRepository, EvenementRepository evenementRepository,
+			RucheRepository rucheRepository, HausseRepository hausseRepository) {
+		this.rucherRepository = rucherRepository;
+		this.evenementRepository = evenementRepository;
+		this.rucheRepository = rucheRepository;
+		this.hausseRepository = hausseRepository;
+	}
 
 	/**
 	 * Tests2 recherche les erreurs de l'ajout et du retrait des ruches dans les

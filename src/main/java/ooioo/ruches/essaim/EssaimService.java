@@ -15,7 +15,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
@@ -41,21 +40,26 @@ public class EssaimService {
 
 	private final Logger logger = LoggerFactory.getLogger(EssaimService.class);
 
-	@Autowired
-	private EssaimRepository essaimRepository;
-	@Autowired
-	private EvenementRepository evenementRepository;
-	@Autowired
-	private RucheRepository rucheRepository;
-	@Autowired
-	private RecolteRepository recolteRepository;
-	@Autowired
-	private RecolteHausseRepository recolteHausseRepository;
-	@Autowired
-	private RucherRepository rucherRepository;
+	private final EssaimRepository essaimRepository;
+	private final EvenementRepository evenementRepository;
+	private final RucheRepository rucheRepository;
+	private final RecolteRepository recolteRepository;
+	private final RecolteHausseRepository recolteHausseRepository;
+	private final RucherRepository rucherRepository;
+	private final MessageSource messageSource;
 
-	@Autowired
-	private MessageSource messageSource;
+	public EssaimService(EssaimRepository essaimRepository, EvenementRepository evenementRepository,
+			RucheRepository rucheRepository, RecolteRepository recolteRepository,
+			RecolteHausseRepository recolteHausseRepository, RucherRepository rucherRepository,
+			MessageSource messageSource) {
+		this.essaimRepository = essaimRepository;
+		this.evenementRepository = evenementRepository;
+		this.rucheRepository = rucheRepository;
+		this.recolteRepository = recolteRepository;
+		this.recolteHausseRepository = recolteHausseRepository;
+		this.rucherRepository = rucherRepository;
+		this.messageSource = messageSource;
+	}
 
 	/**
 	 * Change un essaim de ruche. Si la ruche contient un essaim, le disperser.

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -25,18 +24,12 @@ import ooioo.ruches.rucher.RucherRepository;
 @Service
 public class AccueilService {
 
-	@Autowired
-	private EssaimRepository essaimRepository;
-	@Autowired
-	private EvenementRepository evenementRepository;
-	@Autowired
-	private RucherRepository rucherRepository;
-	@Autowired
-	private RucheRepository rucheRepository;
-	@Autowired
-	private HausseRepository hausseRepository;
-	@Autowired
-	private RecolteRepository recolteRepository;
+	private final EssaimRepository essaimRepository;
+	private final EvenementRepository evenementRepository;
+	private final RucherRepository rucherRepository;
+	private final RucheRepository rucheRepository;
+	private final HausseRepository hausseRepository;
+	private final RecolteRepository recolteRepository;
 
 	@Value("${dist.ruches.loins}")
 	private double distRuchesTropLoins;
@@ -46,6 +39,17 @@ public class AccueilService {
 	private int retardRucheEvenement;
 	@Value("${rucher.butinage.rayons}")
 	private int[] rayonsButinage;
+
+	public AccueilService(EssaimRepository essaimRepository, EvenementRepository evenementRepository,
+			RucherRepository rucherRepository, RucheRepository rucheRepository, HausseRepository hausseRepository,
+			RecolteRepository recolteRepository) {
+		this.essaimRepository = essaimRepository;
+		this.evenementRepository = evenementRepository;
+		this.rucherRepository = rucherRepository;
+		this.rucheRepository = rucheRepository;
+		this.hausseRepository = hausseRepository;
+		this.recolteRepository = recolteRepository;
+	}
 
 	/**
 	 * Infos

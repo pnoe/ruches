@@ -10,7 +10,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -56,26 +55,30 @@ public class RucheController {
 
 	private final Logger logger = LoggerFactory.getLogger(RucheController.class);
 
-	@Autowired
-	private RucheRepository rucheRepository;
-	@Autowired
-	private HausseRepository hausseRepository;
-	@Autowired
-	private RucheTypeRepository rucheTypeRepository;
-	@Autowired
-	private RucherRepository rucherRepository;
-	@Autowired
-	private EvenementRepository evenementRepository;
-	@Autowired
-	private RecolteHausseRepository recolteHausseRepository;
+	private final RucheRepository rucheRepository;
+	private final HausseRepository hausseRepository;
+	private final RucheTypeRepository rucheTypeRepository;
+	private final RucherRepository rucherRepository;
+	private final EvenementRepository evenementRepository;
+	private final RecolteHausseRepository recolteHausseRepository;
+	private final RucheService rucheService;
+	private final RucherService rucherService;
+	private final MessageSource messageSource;
 
-	@Autowired
-	private RucheService rucheService;
-	@Autowired
-	private RucherService rucherService;
-
-	@Autowired
-	private MessageSource messageSource;
+	public RucheController(RucheRepository rucheRepository, HausseRepository hausseRepository,
+			RucheTypeRepository rucheTypeRepository, RucherRepository rucherRepository,
+			EvenementRepository evenementRepository, RecolteHausseRepository recolteHausseRepository,
+			RucheService rucheService, RucherService rucherService, MessageSource messageSource) {
+		this.rucheRepository = rucheRepository;
+		this.hausseRepository = hausseRepository;
+		this.rucheTypeRepository = rucheTypeRepository;
+		this.rucherRepository = rucherRepository;
+		this.evenementRepository = evenementRepository;
+		this.recolteHausseRepository = recolteHausseRepository;
+		this.rucheService = rucheService;
+		this.rucherService = rucherService;
+		this.messageSource = messageSource;
+	}
 
 	/**
 	 * Historique de l'ajout des hausses sur une ruche

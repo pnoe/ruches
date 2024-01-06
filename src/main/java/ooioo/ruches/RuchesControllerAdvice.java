@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Locale;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -16,10 +15,14 @@ import jakarta.servlet.http.HttpSession;
 
 @ControllerAdvice
 public class RuchesControllerAdvice {
-	@Autowired
-	private MessageSource messageSource;
-	@Autowired
-	BuildProperties buildProperties;
+
+	private final MessageSource messageSource;
+	private final BuildProperties buildProperties;
+
+	public RuchesControllerAdvice(MessageSource messageSource, BuildProperties buildProperties) {
+		this.messageSource = messageSource;
+		this.buildProperties = buildProperties;
+	}
 
 	/**
 	 * Pour affichage de la date décalée en-tête de chaque page

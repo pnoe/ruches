@@ -2,7 +2,6 @@ package ooioo.ruches.personne;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
@@ -16,8 +15,11 @@ public class PersonneService {
 
 	private final Logger logger = LoggerFactory.getLogger(PersonneService.class);
 
-	@Autowired
-	private PersonneRepository persRepository;
+	private final PersonneRepository persRepository;
+
+	public PersonneService(PersonneRepository persRepository) {
+		this.persRepository = persRepository;
+	}
 
 	private static final String droitsInsuff = "Droits insuffisants.";
 	private static final String roleIncorrect = "Erreur rôle incorrect.";

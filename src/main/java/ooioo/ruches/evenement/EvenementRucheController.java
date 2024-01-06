@@ -9,7 +9,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -41,18 +40,22 @@ public class EvenementRucheController {
 
 	final Logger logger = LoggerFactory.getLogger(EvenementRucheController.class);
 
-	@Autowired
-	private EvenementRepository evenementRepository;
-	@Autowired
-	private RucheRepository rucheRepository;
-	@Autowired
-	private HausseRepository hausseRepository;
-	@Autowired
-	private MessageSource messageSource;
-	@Autowired
-	private EssaimService essaimService;
+	private final EvenementRepository evenementRepository;
+	private final RucheRepository rucheRepository;
+	private final HausseRepository hausseRepository;
+	private final MessageSource messageSource;
+	private final EssaimService essaimService;
 
 	private static final String commForm = "ruche/rucheCommentaireForm";
+
+	public EvenementRucheController(EvenementRepository evenementRepository, RucheRepository rucheRepository,
+			HausseRepository hausseRepository, MessageSource messageSource, EssaimService essaimService) {
+		this.evenementRepository = evenementRepository;
+		this.rucheRepository = rucheRepository;
+		this.hausseRepository = hausseRepository;
+		this.messageSource = messageSource;
+		this.essaimService = essaimService;
+	}
 
 	/*
 	 * Liste événements poids ruche

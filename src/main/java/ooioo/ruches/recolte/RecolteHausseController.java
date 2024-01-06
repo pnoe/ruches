@@ -16,7 +16,6 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -60,31 +59,35 @@ public class RecolteHausseController {
 
 	final Logger logger = LoggerFactory.getLogger(RecolteHausseController.class);
 
-	@Autowired
-	private RecolteRepository recolteRepository;
-	@Autowired
-	private RecolteHausseRepository recolteHausseRepository;
-	@Autowired
-	private HausseRepository hausseRepository;
-	@Autowired
-	private EvenementRepository evenementRepository;
-	@Autowired
-	private RucheRepository rucheRepository;
-	@Autowired
-	private EssaimRepository essaimRepository;
-	@Autowired
-	private RucherRepository rucherRepository;
+	private final RecolteRepository recolteRepository;
+	private final RecolteHausseRepository recolteHausseRepository;
+	private final HausseRepository hausseRepository;
+	private final EvenementRepository evenementRepository;
+	private final RucheRepository rucheRepository;
+	private final EssaimRepository essaimRepository;
+	private final RucherRepository rucherRepository;
+	private final MessageSource messageSource;
+	private final RecolteHausseService recolteHausseService;
+	private final RucheService rucheService;
 
-	@Autowired
-	private MessageSource messageSource;
+	public RecolteHausseController(RecolteRepository recolteRepository, RecolteHausseRepository recolteHausseRepository,
+			HausseRepository hausseRepository, EvenementRepository evenementRepository, RucheRepository rucheRepository,
+			EssaimRepository essaimRepository, RucherRepository rucherRepository, MessageSource messageSource,
+			RecolteHausseService recolteHausseService, RucheService rucheService) {
+		this.recolteRepository = recolteRepository;
+		this.recolteHausseRepository = recolteHausseRepository;
+		this.hausseRepository = hausseRepository;
+		this.evenementRepository = evenementRepository;
+		this.rucheRepository = rucheRepository;
+		this.essaimRepository = essaimRepository;
+		this.rucherRepository = rucherRepository;
+		this.messageSource = messageSource;
+		this.recolteHausseService = recolteHausseService;
+		this.rucheService = rucheService;
+	}
 
 	@Value("${hausse.reste.miel}")
 	private BigDecimal hausseResteMiel;
-
-	@Autowired
-	private RecolteHausseService recolteHausseService;
-	@Autowired
-	private RucheService rucheService;
 
 	private static final String modifiee = "{} modifiée";
 

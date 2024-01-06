@@ -2,7 +2,6 @@ package ooioo.ruches.mail;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -17,8 +16,11 @@ public class EmailService {
 	@Value("${email.from}")
 	private String emailFrom;
 
-	@Autowired
-	private JavaMailSender emailSender;
+	private final JavaMailSender emailSender;
+
+	public EmailService(JavaMailSender emailSender) {
+		this.emailSender = emailSender;
+	}
 
 	public void sendSimpleMessage(String to, String subject, String text) {
 		try {

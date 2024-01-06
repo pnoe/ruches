@@ -1,6 +1,5 @@
 package ooioo.ruches.hausse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -12,16 +11,18 @@ import ooioo.ruches.evenement.TypeEvenement;
 @Service
 public class HausseService {
 
-	@Autowired
-	private EvenementRepository evenementRepository;
+	private final EvenementRepository evenementRepository;
+
+	public HausseService(EvenementRepository evenementRepository) {
+		this.evenementRepository = evenementRepository;
+	}
 
 	/*
-	 * Ajoute au model Spring les chaînes date, valeur et commentaire du
-	 * dernier événement de type typeEvenement
+	 * Ajoute au model Spring les chaînes date, valeur et commentaire du dernier
+	 * événement de type typeEvenement
 	 */
 	public void modelAddEvenement(Model model, Hausse hausse, TypeEvenement typeEvenement) {
-		Evenement evenement = evenementRepository
-				.findFirstByHausseAndTypeOrderByDateDesc(hausse, typeEvenement);
+		Evenement evenement = evenementRepository.findFirstByHausseAndTypeOrderByDateDesc(hausse, typeEvenement);
 		String type = typeEvenement.toString();
 		if (evenement == null) {
 			model.addAttribute(Const.DATE + type, null);

@@ -1,6 +1,5 @@
 package ooioo.ruches;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,8 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class AdminController {
 
-	@Autowired
-	private AdminService adminService;
+	private final AdminService adminService;
+
+	public AdminController(AdminService adminService) {
+		this.adminService = adminService;
+	}
 
 	/**
 	 * Tests2 recherche les erreurs de l'ajout et du retrait des ruches dans les

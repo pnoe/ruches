@@ -7,7 +7,6 @@ import java.util.stream.StreamSupport;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -34,12 +33,17 @@ public class RucheTypeController {
 
 	final Logger logger = LoggerFactory.getLogger(RucheTypeController.class);
 
-	@Autowired
-	private RucheTypeRepository rucheTypeRepo;
-	@Autowired
-	private RucheRepository rucheRepo;
-	@Autowired
-	private MessageSource messageSource;
+	// https://docs.spring.io/spring-framework/reference/core/beans/annotation-config/autowired.html
+	private final RucheTypeRepository rucheTypeRepo;
+	private final RucheRepository rucheRepo;
+	private final MessageSource messageSource;
+
+	public RucheTypeController(RucheTypeRepository rucheTypeRepo, RucheRepository rucheRepo,
+			MessageSource messageSource) {
+		this.rucheTypeRepo = rucheTypeRepo;
+		this.rucheRepo = rucheRepo;
+		this.messageSource = messageSource;
+	}
 
 	/**
 	 * Liste des types de ruche.

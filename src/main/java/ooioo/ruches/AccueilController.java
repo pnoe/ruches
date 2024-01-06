@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import ooioo.ruches.mail.EmailService;
@@ -27,14 +25,16 @@ public class AccueilController {
 
 	private final Logger logger = LoggerFactory.getLogger(AccueilController.class);
 
-	@Autowired
-	ServletContext servletContext;
-	@Autowired
-	public EmailService emailService;
-	@Autowired
-	private PersonneRepository personneRepository;
-	@Autowired
-	private AccueilService accueilService;
+	private final EmailService emailService;
+	private final PersonneRepository personneRepository;
+	private final AccueilService accueilService;
+
+	public AccueilController(EmailService emailService, PersonneRepository personneRepository,
+			AccueilService accueilService) {
+		this.emailService = emailService;
+		this.personneRepository = personneRepository;
+		this.accueilService = accueilService;
+	}
 
 	/**
 	 * Page d'accueil

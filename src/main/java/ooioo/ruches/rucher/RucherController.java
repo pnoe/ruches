@@ -17,7 +17,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -69,29 +68,17 @@ public class RucherController {
 
 	private final Logger logger = LoggerFactory.getLogger(RucherController.class);
 
-	@Autowired
-	private RucherRepository rucherRepository;
-	@Autowired
-	private EssaimRepository essaimRepo;
-	@Autowired
-	private RucheRepository rucheRepository;
-	@Autowired
-	private HausseRepository hausseRepository;
-	@Autowired
-	private PersonneRepository personneRepository;
-	@Autowired
-	private EvenementRepository evenementRepository;
-	@Autowired
-	private RecolteHausseRepository recolteHausseRepository;
-	@Autowired
-	private RucherService rucherService;
-	@Autowired
-	private RecolteRepository recolteRepository;
-	@Autowired
-	private DistRucherRepository drRepo;
-
-	@Autowired
-	private MessageSource messageSource;
+	private final RucherRepository rucherRepository;
+	private final EssaimRepository essaimRepo;
+	private final RucheRepository rucheRepository;
+	private final HausseRepository hausseRepository;
+	private final PersonneRepository personneRepository;
+	private final EvenementRepository evenementRepository;
+	private final RecolteHausseRepository recolteHausseRepository;
+	private final RucherService rucherService;
+	private final RecolteRepository recolteRepository;
+	private final DistRucherRepository drRepo;
+	private final MessageSource messageSource;
 
 	@Value("${rucher.butinage.rayons}")
 	private int[] rayonsButinage;
@@ -99,6 +86,24 @@ public class RucherController {
 	private boolean ignCarteLiscense;
 	@Value("${ruche.dist.max}")
 	private float distMaxRuche;
+
+	public RucherController(RucherRepository rucherRepository, EssaimRepository essaimRepo,
+			RucheRepository rucheRepository, HausseRepository hausseRepository, PersonneRepository personneRepository,
+			EvenementRepository evenementRepository, RecolteHausseRepository recolteHausseRepository,
+			RucherService rucherService, RecolteRepository recolteRepository, DistRucherRepository drRepo,
+			MessageSource messageSource) {
+		this.rucherRepository = rucherRepository;
+		this.essaimRepo = essaimRepo;
+		this.rucheRepository = rucheRepository;
+		this.hausseRepository = hausseRepository;
+		this.personneRepository = personneRepository;
+		this.evenementRepository = evenementRepository;
+		this.recolteHausseRepository = recolteHausseRepository;
+		this.rucherService = rucherService;
+		this.recolteRepository = recolteRepository;
+		this.drRepo = drRepo;
+		this.messageSource = messageSource;
+	}
 
 	/**
 	 * Calcul des distances entre les ruchers par appel de l'api ign de calcul
@@ -724,7 +729,7 @@ public class RucherController {
 		if (rucherOpt.isPresent()) {
 			RucherMap rucher = rucherOpt.get();
 			// Liste des ruches id, nom, longitude, latitude orderbynom
-			//   et liste des essaims.
+			// et liste des essaims.
 			List<RucheIdNomLatLon> ruches = rucheRepository.findIdLatLonByRucherIdOrderByNom(rucherId);
 			List<EssaimIdNomReine> essaims = new ArrayList<>(ruches.size());
 			for (RucheIdNomLatLon ruche : ruches) {
@@ -784,7 +789,8 @@ public class RucherController {
 	public String rucherMap(HttpSession session, Model model, HttpServletRequest request) {
 		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
 		// RucherMap projection de l'entté rucher pour utilisation dans les cartes.
-		// Evite d'afficher le password crypté du contact du rucher, données js simplifiées.
+		// Evite d'afficher le password crypté du contact du rucher, données js
+		// simplifiées.
 		Iterable<RucherMap> ruchers;
 		if (voirInactif != null && (boolean) voirInactif) {
 			ruchers = rucherRepository.findRucherMapBy();

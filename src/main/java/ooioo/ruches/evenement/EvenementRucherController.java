@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -32,14 +31,18 @@ public class EvenementRucherController {
 
 	private final Logger logger = LoggerFactory.getLogger(EvenementRucherController.class);
 
-	@Autowired
-	private EvenementRepository evenementRepository;
-	@Autowired
-	private RucherRepository rucherRepository;
-	@Autowired
-	private MessageSource messageSource;
+	private final EvenementRepository evenementRepository;
+	private final RucherRepository rucherRepository;
+	private final MessageSource messageSource;
 
 	private static final String commForm = "rucher/rucherCommentaireForm";
+
+	public EvenementRucherController(EvenementRepository evenementRepository, RucherRepository rucherRepository,
+			MessageSource messageSource) {
+		this.evenementRepository = evenementRepository;
+		this.rucherRepository = rucherRepository;
+		this.messageSource = messageSource;
+	}
 
 	/*
 	 * Liste événements ajout ruche rucher

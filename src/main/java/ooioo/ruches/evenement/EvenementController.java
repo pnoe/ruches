@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -43,22 +42,29 @@ public class EvenementController {
 
 	final Logger logger = LoggerFactory.getLogger(EvenementController.class);
 
-	@Autowired
-	private EvenementRepository evenementRepository;
-	@Autowired
-	private RucheRepository rucheRepository;
-	@Autowired
-	private HausseRepository hausseRepository;
-	@Autowired
-	private EssaimRepository essaimRepository;
-	@Autowired
-	private RucherRepository rucherRepository;
-
-	@Autowired
-	private MessageSource messageSource;
+	private final EvenementRepository evenementRepository;
+	private final RucheRepository rucheRepository;
+	private final HausseRepository hausseRepository;
+	private final EssaimRepository essaimRepository;
+	private final RucherRepository rucherRepository;
+	private final MessageSource messageSource;
 
 	@Value("${notification.destinataires}")
 	private String[] notifDest;
+
+	public EvenementController(EvenementRepository evenementRepository,
+	RucheRepository rucheRepository,
+	HausseRepository hausseRepository,
+	EssaimRepository essaimRepository,
+	RucherRepository rucherRepository,
+	MessageSource messageSource) {
+		this.evenementRepository=evenementRepository;
+		this.rucheRepository=rucheRepository;
+		this.hausseRepository=hausseRepository;
+		this.essaimRepository=essaimRepository;
+		this.rucherRepository=rucherRepository;
+		this.messageSource=messageSource;
+	}
 
 	/**
 	 * Liste événements par période de temps (par défaut 1 mois) la période est

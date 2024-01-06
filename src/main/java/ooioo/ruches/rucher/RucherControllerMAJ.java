@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,12 +23,16 @@ public class RucherControllerMAJ {
 
 	private final Logger logger = LoggerFactory.getLogger(RucherControllerMAJ.class);
 
-	@Autowired
-	private RucherRepository rucherRepository;
-	@Autowired
-	private EvenementRepository evenementRepository;
-	@Autowired
-	private RucherService rucherService;
+	private final RucherRepository rucherRepository;
+	private final EvenementRepository evenementRepository;
+	private final RucherService rucherService;
+
+	public RucherControllerMAJ(RucherRepository rucherRepository, EvenementRepository evenementRepository,
+			RucherService rucherService) {
+		this.rucherRepository = rucherRepository;
+		this.evenementRepository = evenementRepository;
+		this.rucherService = rucherService;
+	}
 
 	/**
 	 * Mise à jour eve "ruche ajout rucher" avec noms des ruchers de provenance.
@@ -76,7 +79,7 @@ public class RucherControllerMAJ {
 					Rucher ruTr = rucherRepository.findByNom(tr.destProv().iterator().next());
 					if (ruTr != null) {
 						// On met dans la valeur de l'événmeent ajout, le nom du rucher si différent
-						//   de celui trouvé par l'analyse des transhumances.
+						// de celui trouvé par l'analyse des transhumances.
 						// Mémo eve.getValeur avant save eve pour log.
 						String val = eve.getValeur();
 						if (val == null || !val.equals(ruTr.getNom())) {

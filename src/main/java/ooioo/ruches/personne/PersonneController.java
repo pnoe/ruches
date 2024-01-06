@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,12 +32,16 @@ public class PersonneController {
 
 	private final Logger logger = LoggerFactory.getLogger(PersonneController.class);
 
-	@Autowired
-	private PersonneRepository personneRepository;
-	@Autowired
-	private RucherRepository rucherRepository;
-	@Autowired
-	private PersonneService pService;
+	private final PersonneRepository personneRepository;
+	private final RucherRepository rucherRepository;
+	private final PersonneService pService;
+
+	public PersonneController(PersonneRepository personneRepository, RucherRepository rucherRepository,
+			PersonneService pService) {
+		this.personneRepository = personneRepository;
+		this.rucherRepository = rucherRepository;
+		this.pService = pService;
+	}
 
 	@GetMapping("/liste")
 	public String liste(HttpSession session, Model model) {
@@ -171,7 +174,7 @@ public class PersonneController {
 
 		// On enlève les blancs aux extémités de l'adresse.
 		personne.setAdresse(personne.getAdresse().trim());
-				
+
 		// Vérification de l'unicité du login si différent de ""
 		// et si la personne retrouvée en base n'est pas la personne elle même
 		personne.setLogin(personne.getLogin().trim());

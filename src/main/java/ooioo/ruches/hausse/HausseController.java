@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -41,16 +40,20 @@ public class HausseController {
 
 	private final Logger logger = LoggerFactory.getLogger(HausseController.class);
 
-	@Autowired
-	private HausseRepository hausseRepository;
-	@Autowired
-	private EvenementRepository evenementRepository;
-	@Autowired
-	private RecolteHausseRepository recolteHausseRepository;
-	@Autowired
-	private MessageSource messageSource;
-	@Autowired
-	private RucheService rucheService;
+	private final HausseRepository hausseRepository;
+	private final EvenementRepository evenementRepository;
+	private final RecolteHausseRepository recolteHausseRepository;
+	private final MessageSource messageSource;
+	private final RucheService rucheService;
+
+	public HausseController(HausseRepository hausseRepository, EvenementRepository evenementRepository,
+			RecolteHausseRepository recolteHausseRepository, MessageSource messageSource, RucheService rucheService) {
+		this.hausseRepository = hausseRepository;
+		this.evenementRepository = evenementRepository;
+		this.recolteHausseRepository = recolteHausseRepository;
+		this.messageSource = messageSource;
+		this.rucheService = rucheService;
+	}
 
 	/**
 	 * Clonage multiple d'une hausse (appel XMLHttpRequest de la page détail d'une

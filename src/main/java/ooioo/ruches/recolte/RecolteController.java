@@ -9,7 +9,6 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,18 +36,23 @@ public class RecolteController {
 
 	private final Logger logger = LoggerFactory.getLogger(RecolteController.class);
 
-	@Autowired
-	private RecolteRepository recolteRepository;
-	@Autowired
-	private RecolteHausseRepository recolteHausseRepository;
-	@Autowired
-	private EssaimRepository essaimRepository;
-	@Autowired
-	private RecolteHausseService recolteHausseService;
-	@Autowired
-	private RucherRepository rucherRepository;
-	@Autowired
-	private RecolteService recolteService;
+	private final RecolteRepository recolteRepository;
+	private final RecolteHausseRepository recolteHausseRepository;
+	private final EssaimRepository essaimRepository;
+	private final RecolteHausseService recolteHausseService;
+	private final RucherRepository rucherRepository;
+	private final RecolteService recolteService;
+
+	public RecolteController(RecolteRepository recolteRepository, RecolteHausseRepository recolteHausseRepository,
+			EssaimRepository essaimRepository, RecolteHausseService recolteHausseService,
+			RucherRepository rucherRepository, RecolteService recolteService) {
+		this.recolteRepository = recolteRepository;
+		this.recolteHausseRepository = recolteHausseRepository;
+		this.essaimRepository = essaimRepository;
+		this.recolteHausseService = recolteHausseService;
+		this.rucherRepository = rucherRepository;
+		this.recolteService = recolteService;
+	}
 
 	/*
 	 * Statistiques de production de miel par année. Miel pesé dans les hausses,
@@ -266,7 +270,7 @@ public class RecolteController {
 			// Il faudrait supprimer cet ajout, ajouter dans model essaims, et modifier le
 			// code du template pour afficher le nom de l'essaim avec un lien vers l'essaim.
 			poidsListe.add(essaim.getNom());
-			
+
 			int poidsTotal = 0;
 			for (Recolte recolte : recoltes) {
 				Integer poids = recolteHausseRepository.findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId());
