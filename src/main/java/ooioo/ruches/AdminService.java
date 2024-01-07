@@ -37,11 +37,11 @@ public class AdminService {
 
 	/**
 	 * Tests2 recherche les erreurs de l'ajout et du retrait des ruches dans les
-	 * ruchers En partant du rucher vide et en ajoutant et retirant les ruches en
+	 * ruchers en partant du rucher vide et en ajoutant et retirant les ruches en
 	 * parcourant les événements RUCHEAJOUTRUCHER dans l'orde ascendant des dates
-	 * (plus ancien au plus récent) résultat dans la page tests.html Test2
+	 * (plus ancien au plus récent). Résultat dans la page tests.html. Test2
 	 * (contrairement à Tests ci-dessous) n'est pas appelé par un menu et doit être
-	 * appelé en tapant son url
+	 * appelé en tapant son url.
 	 */
 	public void tests2(Model model) {
 		// Recherche des erreurs dans l'historique des ajouts de ruches dans les ruchers

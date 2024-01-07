@@ -18,7 +18,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
-import jakarta.annotation.Resource;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,12 +29,11 @@ public class SecurityConfig {
 	private final Logger loggerSecConfig = LoggerFactory.getLogger(SecurityConfig.class);
 
 	private final MessageSource messageSource;
+	private final UserDetailsService userDetailsService;
 
-	@Resource(name = "userDetailService")
-	private UserDetailsService userDetailsService;
-
-	public SecurityConfig(MessageSource messageSource) {
+	public SecurityConfig(MessageSource messageSource, UserDetailsService userDetailsService) {
 		this.messageSource = messageSource;
+		this.userDetailsService = userDetailsService;
 	}
 
 	// attention dans tomcat/conf/web.xml mettre la servlet jsp et son mapping en
