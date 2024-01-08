@@ -80,14 +80,16 @@
 				<tr>
 					<th th:text="#{essaim}"></th>
 					<th:block th:each="recolte : ${recoltes}">
-						<td class="v"
-							th:text="${#temporals.format(recolte.date, 'yy/MM/dd')}"></td>
+						<td class="v"><a th:href="@{'/recolte/'+${recolte.id}}"
+							th:text="${#temporals.format(recolte.date, 'yy/MM/dd')}"></a></td>
 					</th:block>
 					<th th:text="#{Total}"></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="essaimRecolte : ${essaimsRecoltes}">
+				<tr th:each="essaimRecolte, i : ${essaimsRecoltes}">
+					<td><a th:href="@{'/essaim/'+${essaimsAffiches[i.index].id}}"
+						th:text="${essaimsAffiches[i.index].nom}"></a></td>
 					<th:block th:each="txttab : ${essaimRecolte}">
 						<td th:text="${txttab}"></td>
 					</th:block>

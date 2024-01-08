@@ -249,28 +249,21 @@ public class RecolteController {
 	}
 
 	/**
-	 * Statistiques tableau poids de miel par essaim et par récolte. Seuls les
-	 * essaims actifs sont affichés. Utiliser menu Admin/Preferences pour afficher
-	 * les inactifs.
+	 * Statistiques tableau poids de miel par essaim et par récolte.
 	 *
 	 * @param tous si false n'affiche pas les essaims n'ayant jamais produit de
 	 *             miel.
 	 */
 	@GetMapping("/stat/essaim/{tous}")
-	public String statistiquesEssaim(HttpSession session, Model model, @PathVariable boolean tous) {
-		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
-		boolean voirInac = voirInactif != null && (boolean) voirInactif;
-		Iterable<Essaim> essaims = voirInac ? essaimRepository.findAll() : essaimRepository.findByActif(true);
+	public String statistiquesEssaim(Model model, @PathVariable boolean tous) {
+		Iterable<Essaim> essaims = essaimRepository.findAll();
 		List<List<String>> essaimsRecoltes = new ArrayList<>();
 		DecimalFormat decimalFormat = new DecimalFormat("0.00",
 				new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
 		Iterable<Recolte> recoltes = recolteRepository.findAllByOrderByDateAsc();
+		List<Essaim> essaimsAffiches = new ArrayList<>();  
 		for (Essaim essaim : essaims) {
 			List<String> poidsListe = new ArrayList<>();
-			// Il faudrait supprimer cet ajout, ajouter dans model essaims, et modifier le
-			// code du template pour afficher le nom de l'essaim avec un lien vers l'essaim.
-			poidsListe.add(essaim.getNom());
-
 			int poidsTotal = 0;
 			for (Recolte recolte : recoltes) {
 				Integer poids = recolteHausseRepository.findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId());
@@ -285,13 +278,10 @@ public class RecolteController {
 				// Si tous est false, on n'affiche que les essaims qui ont produit du miel
 				poidsListe.add(decimalFormat.format(poidsTotal / 1000.0));
 				essaimsRecoltes.add(poidsListe);
+				essaimsAffiches.add(essaim);
 			}
 		}
-
-		// Si afficher inactifs false, il faut chercher les colonnes de essaimsRecoltes
-		// dont le poids est nul, noter leurs index, puis recontituer recoltes et
-		// essaimsRecoltes sans ces colonnes. Non ?
-
+		model.addAttribute("essaimsAffiches", essaimsAffiches);
 		model.addAttribute("recoltes", recoltes);
 		model.addAttribute("essaimsRecoltes", essaimsRecoltes);
 		return "recolte/recoltesStatEssaim";
