@@ -5,7 +5,7 @@
 <script th:inline="javascript">
 		/* globals DataTable */
 		const btnTxtPrint = /*[[#{buttontextprint}]]*/ null;
-		const recoltes = /*[[${recoltes}]]*/ null;
+		const recLen = /*[[${#lists.size(recoltes)}]]*/ null;
 		document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById('tous').addEventListener('click', event => {
 				location = location.href.slice(0, location.href.lastIndexOf('/'))
@@ -26,7 +26,7 @@
 							typeof p === 'number' ?
 								p : 0;
 					}
-					for (let i = 1; i < recoltes.length + 2; i++) {
+					for (let i = 1; i < recLen + 2; i++) {
 						const total = api
 							.column(i, {search: 'applied'})
 							.data()

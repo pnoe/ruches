@@ -319,13 +319,10 @@ public class RecolteController {
 			model.addAttribute("noms", noms);
 			model.addAttribute(Const.RECOLTE, recolte);
 			model.addAttribute("poidsTotal", poidsTotal);
-
 			// Liste des ruchers
 			List<IdNom> ruchers = recolteHausseRepository.findIdNomsEssaimsRecolte(recolte);
 			model.addAttribute("ruchers", ruchers);
-
 			model.addAttribute("rucherId", rucherId);
-
 		} else {
 			logger.error(Const.IDRECOLTEXXINCONNU, recolteId);
 			model.addAttribute(Const.MESSAGE, Const.IDRECOLTEINCONNU);
