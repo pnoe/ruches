@@ -3,6 +3,7 @@
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script>
+	/* globals DataTable */
 		// https://stackoverflow.com/questions/17237812/datatable-jquery-table-header-width-not-aligned-with-body-width
 		document.addEventListener('DOMContentLoaded', () => {
 			new DataTable('.datatable-tri', {
@@ -415,6 +416,40 @@
 								<td
 									th:text="${D.between(A.atStartOfDay(),N.atStartOfDay()).toDays()}"></td>
 
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div th:if="${#arrays.length(rucheDepotFalseInact)} &gt; 0"
+			class="accordion-item">
+			<h1 class="accordion-header">
+				<button class="accordion-button collapsed" type="button"
+					data-bs-toggle="collapse" data-bs-target="#collapse11"
+					aria-expanded="true" aria-controls="collapse11"
+					th:text="${#arrays.length(rucheDepotFalseInact)} + ' ' +
+				#{ruchesInactPasDepot}">
+				</button>
+			</h1>
+			<div id="collapse11" class="accordion-collapse collapse"
+				data-bs-parent="#accordion">
+				<div class="accordion-body">
+					<table
+						class="table table-bordered table-striped datatable-tri table-sm">
+						<thead>
+							<tr>
+								<th scope="col" th:text="#{nom}"></th>
+								<th scope="col" th:text="#{rucher}"></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="r : ${rucheDepotFalseInact}">
+								<td><a th:href="@{'/ruche/'+${r.id}}"
+									th:text="${r.nom}"></a></td>
+								<td><a
+									th:href="@{'/rucher/'+${r.rucher?.id}}"
+									th:text="${r.rucher?.nom}"></a></td>
 							</tr>
 						</tbody>
 					</table>

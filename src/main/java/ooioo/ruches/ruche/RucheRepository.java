@@ -26,6 +26,8 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	List<RucheIdNomLatLon> findIdLatLonByRucherIdOrderByNom(Long rucherId);
 	
 	List<Ruche> findByRucherIdAndActiveTrueOrderByNom(Long id);
+	
+	List<Ruche> findByRucherDepotFalseAndActiveFalse();
 
 	Iterable<Ruche> findByRucherIdNotOrderByNom(Long id);
 

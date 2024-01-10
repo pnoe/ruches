@@ -233,12 +233,11 @@ public class AccueilService {
 		// Liste des ruches actives et pas au dépôt sans événements depuis 4 semaines.
 		model.addAttribute("retardRucheEvenement", retardRucheEvenement);
 		LocalDateTime date4sem = LocalDateTime.now().minus(retardRucheEvenement, ChronoUnit.WEEKS);
-		Iterable<Ruche> ruchesPasDEvenement = rucheRepository.findPasDEvenementAvant(date4sem);
-		model.addAttribute("ruchesPasDEvenement", ruchesPasDEvenement);
+		model.addAttribute("ruchesPasDEvenement", rucheRepository.findPasDEvenementAvant(date4sem));
 		// Liste des essaims actifs dont la date naissance de la reine est supérieure à
 		// la date d'acquisition.
-		Iterable<Essaim> essaimDateNaissSupAcquis = essaimRepository.findEssaimDateNaissSupAcquis();
-		model.addAttribute("essaimDateNaissSupAcquis", essaimDateNaissSupAcquis);
+		model.addAttribute("essaimDateNaissSupAcquis", essaimRepository.findEssaimDateNaissSupAcquis());
+		model.addAttribute("rucheDepotFalseInact", rucheRepository.findByRucherDepotFalseAndActiveFalse());
 	}
 
 }
