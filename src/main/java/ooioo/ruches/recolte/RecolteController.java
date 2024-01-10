@@ -256,17 +256,17 @@ public class RecolteController {
 	 */
 	@GetMapping("/stat/essaim/{tous}")
 	public String statistiquesEssaim(Model model, @PathVariable boolean tous) {
-		Iterable<Essaim> essaims = essaimRepository.findAll();
+		List<IdNom> essaims = essaimRepository.findAllProjectedIdNomBy();
 		List<List<String>> essaimsRecoltes = new ArrayList<>();
 		DecimalFormat decimalFormat = new DecimalFormat("0.00",
 				new DecimalFormatSymbols(LocaleContextHolder.getLocale()));
-		Iterable<Recolte> recoltes = recolteRepository.findAllByOrderByDateAsc();
-		List<Essaim> essaimsAffiches = new ArrayList<>();  
-		for (Essaim essaim : essaims) {
+		Iterable<IdDate> recoltes = recolteRepository.findAllIdDateByOrderByDateAsc();
+		List<IdNom> essaimsAffiches = new ArrayList<>();
+		for (IdNom essaim : essaims) {
 			List<String> poidsListe = new ArrayList<>();
 			int poidsTotal = 0;
-			for (Recolte recolte : recoltes) {
-				Integer poids = recolteHausseRepository.findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId());
+			for (IdDate recolte : recoltes) {
+				Integer poids = recolteHausseRepository.findPoidsMielByEssaimByRecolte(essaim.id(), recolte.id());
 				if (poids != null) {
 					poidsListe.add(decimalFormat.format(poids / 1000.0));
 					poidsTotal += poids;

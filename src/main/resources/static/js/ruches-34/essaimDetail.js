@@ -6,14 +6,14 @@
 document.addEventListener('DOMContentLoaded', () => {
 
 	document.getElementById('dispersion').addEventListener('click', function(event) {
-		if (!rucheEssaim) {
+		if (rucheEssaim) {
 			alert(pasderuchetxt);
 			event.preventDefault();
 		}
 	});
 
 	document.getElementById('essaime').addEventListener('click', function(event) {
-		if (!rucheEssaim) {
+		if (rucheEssaim) {
 			alert(pasderuchetxt);
 			event.preventDefault();
 		}

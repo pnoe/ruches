@@ -459,7 +459,7 @@ public class EvenementEssaimController {
 	}
 
 	/**
-	 * Appel du formulaire de dispersion d'un essaim
+	 * Appel du formulaire de dispersion d'un essaim.
 	 */
 	@GetMapping("/dispersion/{essaimId}")
 	public String dispersion(HttpSession session, Model model, @PathVariable long essaimId) {
@@ -467,6 +467,8 @@ public class EvenementEssaimController {
 		// création décroissante pour remérage.
 		Ruche ruche = rucheRepository.findByEssaimId(essaimId);
 		if (ruche != null) {
+			// Liste IdNom des essaims actifs, hors ruche, ordonnés par date acquisition décroissante.
+			// Pour choix éventuel si remérage.
 			List<IdNom> essaimsRemerage = essaimRepository.findProjectedIdNomByRucheIsNullOrderByDateAcquisitionDesc();
 			if (!essaimsRemerage.isEmpty()) {
 				model.addAttribute("nomRuche", ruche.getNom());

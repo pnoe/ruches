@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="https://www.thymeleaf.org">
 
-<head th:with="ruchesjs='/js/ruches-34/'" 
+<head th:with="ruchesjs='/js/ruches-34/'"
 	th:fragment="common_header(scripts,styles,links)">
 <title th:text="#{Ruches}"></title>
 <meta charset="UTF-8" />
@@ -20,14 +20,13 @@
 <link rel="stylesheet" type="text/css" media="all"
 	th:href="@{/js/bootstrap-5.3.2/bootstrap.min.css}" />
 <script th:src="@{/js/datatables-1.13.8/datatables.min.js}"></script>
-<script th:inline="javascript">
-	/* exported urlValMessFr, urlDatatMessFr, datatPageLength, tout */
+<script th:inline="javascript">	/*[- exported urlValMessFr, urlDatatMessFr, datatPageLength, tout -]*/
 	const urlValMessFr = /*[[@{/js/jquery.validate-1.20.0-messages_fr.min.js}]]*/null;
 	const urlDatatMessFr = /*[[@{/js/datatables_fr.json}]]*/null;
 	const datatPageLength = /*[[${@environment.getProperty('datatables.pageLength')}]]*/null;
 	const tout = /*[[#{Tout}]]*/null;
 	</script>
-<script th:src="@{${ruchesjs} + 'include.js'}"></script>	
+<script th:src="@{${ruchesjs} + 'include.js'}"></script>
 <th:block th:replace="${scripts} ?: ~{}" />
 <th:block th:replace="${styles} ?: ~{}" />
 <th:block th:replace="${links} ?: ~{}" />
@@ -103,35 +102,30 @@
 	<div th:fragment="evedettitre" class="col">
 		<h1 class="item">
 			<a th:if="${type}==''" th:href="@{'/evenement/liste'}"
-				th:text="#{evenements}"></a> 
-			<a th:if="${type}=='hausse'"
+				th:text="#{evenements}"></a> <a th:if="${type}=='hausse'"
 				th:href="@{'/evenement/hausse/'+${evenement.hausse.id}}"
-				th:text="#{hausse}+' '+${evenement.hausse.nom}"></a> 
-			<a th:if="${type}=='essaim'"
+				th:text="#{hausse}+' '+${evenement.hausse.nom}"></a> <a
+				th:if="${type}=='essaim'"
 				th:href="@{'/evenement/essaim/'+${evenement.essaim.id}}"
-				th:text="#{essaim}+' '+${evenement.essaim.nom}"></a> 
-			<a th:if="${type}=='ruche'"
+				th:text="#{essaim}+' '+${evenement.essaim.nom}"></a> <a
+				th:if="${type}=='ruche'"
 				th:href="@{'/evenement/ruche/'+${evenement.ruche.id}}"
-				th:text="#{ruche}+' '+${evenement.ruche.nom}"></a>
-			<a th:if="${type}=='rucher'"
+				th:text="#{ruche}+' '+${evenement.ruche.nom}"></a> <a
+				th:if="${type}=='rucher'"
 				th:href="@{'/evenement/rucher/'+${evenement.rucher.id}}"
-				th:text="#{rucher}+' '+${evenement.rucher.nom}"></a>
-			 <a th:if="${type=='sucre'}"
-				th:href="@{'/evenement/essaim/listeSucre'}"
-				th:text="#{evenementssucre}"></a>
-			<a th:if="${type=='traitement'}"
+				th:text="#{rucher}+' '+${evenement.rucher.nom}"></a> <a
+				th:if="${type=='sucre'}" th:href="@{'/evenement/essaim/listeSucre'}"
+				th:text="#{evenementssucre}"></a> <a th:if="${type=='traitement'}"
 				th:href="@{'/evenement/essaim/listeTraitement/false'}"
-				th:text="#{evenementstraitement}"></a>
-			<a th:if="${type=='poids'}"
+				th:text="#{evenementstraitement}"></a> <a th:if="${type=='poids'}"
 				th:href="@{'/evenement/ruche/listePoidsRuche'}"
-				th:text="#{evenementspoidsruche}"></a>
-			<a th:if="${type=='cadre'}"
+				th:text="#{evenementspoidsruche}"></a> <a th:if="${type=='cadre'}"
 				th:href="@{'/evenement/ruche/listeCadreRuche'}"
-				th:text="#{evenementcadreruche}"></a>
-			<a th:if="${type=='remplissage'}"
+				th:text="#{evenementcadreruche}"></a> <a
+				th:if="${type=='remplissage'}"
 				th:href="@{'/evenement/hausse/listeRemplissageHausse'}"
-				th:text="#{evenementremplissagehausse}"></a>
-			<a th:if="${type=='ajoutruche'}"
+				th:text="#{evenementremplissagehausse}"></a> <a
+				th:if="${type=='ajoutruche'}"
 				th:href="@{'/evenement/rucher/listeRucheAjout'}"
 				th:text="#{evenementsrucheajout}"></a>
 			<th:block

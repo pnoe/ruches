@@ -17,9 +17,10 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 
 	List<Essaim> findByActif(boolean actif);
 
-	// Collection -> List
 	List<Nom> findAllProjectedBy();
 
+	List<IdNom> findAllProjectedIdNomBy();
+	
 	@Query(value = """
 			select new ooioo.ruches.IdNom(es.id, es.nom)
 			  from Essaim es, Ruche r

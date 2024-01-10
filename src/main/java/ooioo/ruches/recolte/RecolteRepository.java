@@ -10,13 +10,15 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(collectionResourceRel = "recolteRepository")
 public interface RecolteRepository extends ListCrudRepository<Recolte, Long> {
 	List<Recolte> findAllByOrderByDateAsc();
-	
+
+	List<IdDate> findAllIdDateByOrderByDateAsc();
+
 	List<Recolte> findAllByOrderByDateDesc();
 
 	Recolte findFirstByOrderByDateDesc();
 
 	Recolte findFirstByOrderByDateAsc();
-	
+
 	/*
 	 * Renvoie le poids de miel mis en pot en kg pour l'année passée en paramètre Si
 	 * aucune ligne trouvée (année sans récolte) Optional permet de traiter le
