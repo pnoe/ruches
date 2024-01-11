@@ -25,11 +25,23 @@ public interface RecolteRepository extends ListCrudRepository<Recolte, Long> {
 	 * retour null
 	 */
 	@Query(value = """
-			select sum(poids_miel) as poids
+			select sum(poids_miel)
 				from recolte
 				where date_part('year', date) = ?1
 			""", nativeQuery = true)
 	Optional<Double> findPoidsMielByYear(int year);
+	
+	/*
+	 * Renvoie le nombre de récoltes pour l'année passée en paramètre Si
+	 * aucune ligne trouvée (année sans récolte) Optional permet de traiter le
+	 * retour null
+	 */
+	@Query(value = """
+			select count(*)
+				from recolte
+				where date_part('year', date) = ?1
+			""", nativeQuery = true)
+	Optional<Integer> findRecoltesByYear(int year);
 
 	/*
 	 * Renvoie le poids de miel récolté dans les hausses pour l'année passée en

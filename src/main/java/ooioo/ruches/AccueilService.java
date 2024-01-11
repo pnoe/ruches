@@ -56,8 +56,7 @@ public class AccueilService {
 	 */
 	void infos(Model model) {
 		// Nombre de ruchers actifs.
-		long nbRuchers = rucherRepository.countByActifTrue();
-		model.addAttribute("nbRuchers", nbRuchers);
+		model.addAttribute("nbRuchers", rucherRepository.countByActifTrue());
 		// Nombre de ruches actives, nb production, nb élevage
 		long nbRuches = rucheRepository.countByActiveTrue();
 		long nbRuchesProd = rucheRepository.countByActiveTrueAndProductionTrue();
@@ -65,8 +64,7 @@ public class AccueilService {
 		model.addAttribute("nbRuchesProd", nbRuchesProd);
 		model.addAttribute("nbRuchesElev", nbRuches - nbRuchesProd);
 		// Hausses actives.
-		long nbHausses = hausseRepository.countByActiveTrue();
-		model.addAttribute("nbHausses", nbHausses);
+		model.addAttribute("nbHausses", hausseRepository.countByActiveTrue());
 		// Ruches actives au dépôt, nb production, nb élevage
 		long nbRuchesAuDepot = rucheRepository.countByActiveTrueAndRucherDepotTrue();
 		model.addAttribute("nbRuchesAuDepot", nbRuchesAuDepot);
@@ -74,8 +72,7 @@ public class AccueilService {
 		model.addAttribute("nbRuchesAuDepotProd", nbRuchesAuDepotProd);
 		model.addAttribute("nbRuchesAuDepotElev", nbRuchesAuDepot - nbRuchesAuDepotProd);
 		// Hausses actives non posées.
-		long nbHaussesHorsRuche = hausseRepository.countByActiveTrueAndRucheNull();
-		model.addAttribute("nbHaussesHorsRuche", nbHaussesHorsRuche);
+		model.addAttribute("nbHaussesHorsRuche", hausseRepository.countByActiveTrueAndRucheNull());
 		// Nombre de ruches actives avec essaim
 		long nbRuchesAvecEssaim = rucheRepository.countByEssaimNotNullAndActiveTrue();
 		model.addAttribute("nbRuchesAvecEssaim", nbRuchesAvecEssaim);
@@ -83,9 +80,8 @@ public class AccueilService {
 		model.addAttribute("nbRuchesAvecEssaimProd", nbRuchesAvecEssaimProd);
 		model.addAttribute("nbRuchesAvecEssaimElev", nbRuchesAvecEssaim - nbRuchesAvecEssaimProd);
 		// Nombre de hausses actives posées sur des ruches avec essaim.
-		long nbHaussesSurRuchesAvecEssaim = hausseRepository
-				.countByActiveTrueAndRucheNotNullAndRucheActiveTrueAndRucheEssaimNotNull();
-		model.addAttribute("nbHaussesSurRuchesAvecEssaim", nbHaussesSurRuchesAvecEssaim);
+		model.addAttribute("nbHaussesSurRuchesAvecEssaim",
+				hausseRepository.countByActiveTrueAndRucheNotNullAndRucheActiveTrueAndRucheEssaimNotNull());
 		// Distances de butinage : les rayons des cercles de butinages affichables sur
 		// les cartes des ruchers.
 		model.addAttribute("rayonsButinage", rayonsButinage);
@@ -109,19 +105,22 @@ public class AccueilService {
 			dateFin = java.lang.Math.max(dernierEssaim.getDateAcquisition().getYear(),
 					derniereRecolte.getDate().getYear());
 		}
-		// nban pour dimensionner les ArrayList, avec une colonne de plus pour le total.
+		// nban, nombre d'années, pour dimensionner les ArrayList, avec une colonne de
+		// plus pour le total.
 		int nban = dateFin - dateDebut + 2;
 		if (nban < 1) {
 			nban = 1;
 		} // nécessaire dans certains cas, plantage si < 0
 		List<Integer> annees = new ArrayList<>(nban);
 		List<Double> pdsMiel = new ArrayList<>(nban);
+		List<Integer> nbRecoltes = new ArrayList<>(nban);
 		List<Integer> nbEssaims = new ArrayList<>(nban);
 		List<Integer> nbCreationEssaims = new ArrayList<>(nban);
 		List<Integer> nbDispersionEssaims = new ArrayList<>(nban);
 		List<Double> sucreEssaims = new ArrayList<>(nban);
 		List<Integer> nbTraitementsEssaims = new ArrayList<>(nban);
 		Double pdsMielTotal = 0d;
+		Integer nbRecTotal = 0;
 		Integer nbCreationEssaimsTotal = 0;
 		Integer nbDispersionEssaimsTotal = 0;
 		Double sucreEssaimsTotal = 0.0;
@@ -130,8 +129,12 @@ public class AccueilService {
 			annees.add(date);
 			Optional<Double> poidsOpt = recolteRepository.findPoidsMielByYear(date);
 			Double poids = poidsOpt.isPresent() ? poidsOpt.get() : 0.0;
-			pdsMiel.add(poids == null ? 0 : poids);
-			pdsMielTotal += (poids == null ? 0 : poids);
+			pdsMiel.add(poids);
+			pdsMielTotal += poids;
+			Optional<Integer> nbRecOpt = recolteRepository.findRecoltesByYear(date);
+			Integer nbRec = nbRecOpt.isPresent() ? nbRecOpt.get() : 0;
+			nbRecoltes.add(nbRec);
+			nbRecTotal += nbRec;
 			// Nombre d'essaims créés dans l'année (année acquisition = date)
 			Integer nbCree = essaimRepository.countEssaimsCreesDate(date);
 			nbCreationEssaimsTotal += nbCree;
@@ -151,6 +154,7 @@ public class AccueilService {
 			nbTraitementsEssaims.add(nbTraitements);
 		}
 		pdsMiel.add(pdsMielTotal);
+		nbRecoltes.add(nbRecTotal);
 		nbCreationEssaims.add(nbCreationEssaimsTotal);
 		nbTraitementsEssaims.add(nbTraitementsEssaimsTotal);
 		sucreEssaims.add(sucreEssaimsTotal);
@@ -160,23 +164,21 @@ public class AccueilService {
 		}
 		model.addAttribute("annees", annees);
 		model.addAttribute("pdsMiel", pdsMiel);
+		model.addAttribute("nbRecoltes", nbRecoltes);
 		model.addAttribute("nbEssaims", nbEssaims);
 		model.addAttribute("nbCreationEssaims", nbCreationEssaims);
 		model.addAttribute("nbDispersionEssaims", nbDispersionEssaims);
 		model.addAttribute("sucreEssaims", sucreEssaims);
 		model.addAttribute("nbTraitementsEssaims", nbTraitementsEssaims);
 		// Liste des ruches actives au dépôt avec essaim.
-		Iterable<Ruche> ruchesDepotEssaim = rucheRepository.findByActiveTrueAndEssaimNotNullAndRucherDepotTrue();
-		model.addAttribute("ruchesDepotEssaim", ruchesDepotEssaim);
+		model.addAttribute("ruchesDepotEssaim", rucheRepository.findByActiveTrueAndEssaimNotNullAndRucherDepotTrue());
 		// Liste des ruches actives au dépôt avec des hausses.
-		Iterable<Ruche> ruchesDepotHausses = rucheRepository.findByHaussesAndDepot();
-		model.addAttribute("ruchesDepotHausses", ruchesDepotHausses);
+		model.addAttribute("ruchesDepotHausses", rucheRepository.findByHaussesAndDepot());
 		// Liste des ruches actives sans essaim qui ne sont pas au dépôt.
-		Iterable<Ruche> ruchesPasDepotSansEssaim = rucheRepository.findByActiveTrueAndEssaimNullAndRucherDepotFalse();
-		model.addAttribute("ruchesPasDepotSansEssaim", ruchesPasDepotSansEssaim);
+		model.addAttribute("ruchesPasDepotSansEssaim",
+				rucheRepository.findByActiveTrueAndEssaimNullAndRucherDepotFalse());
 		// Essaims actifs hors ruche.
-		List<IdNom> essaimsActifSansRuche = essaimRepository.findEssaimByActifSansRuche();
-		model.addAttribute("essaimsActifSansRuche", essaimsActifSansRuche);
+		model.addAttribute("essaimsActifSansRuche", essaimRepository.findEssaimByActifSansRuche());
 		// Liste des ruchers actifs (coordonées de leur entrée) à plus de 20m du
 		// barycentre de leurs ruches.
 		model.addAttribute("distRuchersTropLoins", distRuchersTropLoins);
@@ -232,8 +234,8 @@ public class AccueilService {
 		model.addAttribute("distRuchesTropLoins", distRuchesTropLoins);
 		// Liste des ruches actives et pas au dépôt sans événements depuis 4 semaines.
 		model.addAttribute("retardRucheEvenement", retardRucheEvenement);
-		LocalDateTime date4sem = LocalDateTime.now().minus(retardRucheEvenement, ChronoUnit.WEEKS);
-		model.addAttribute("ruchesPasDEvenement", rucheRepository.findPasDEvenementAvant(date4sem));
+		model.addAttribute("ruchesPasDEvenement", rucheRepository
+				.findPasDEvenementAvant(LocalDateTime.now().minus(retardRucheEvenement, ChronoUnit.WEEKS)));
 		// Liste des essaims actifs dont la date naissance de la reine est supérieure à
 		// la date d'acquisition.
 		model.addAttribute("essaimDateNaissSupAcquis", essaimRepository.findEssaimDateNaissSupAcquis());

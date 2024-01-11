@@ -122,6 +122,12 @@
 								</td>
 							</tr>
 							<tr>
+								<th scope="row" th:text="#{Recoltes}"></th>
+								<td th:each="nb : ${nbRecoltes}"
+									th:text="${nb}">
+								</td>
+							</tr>
+							<tr>
 								<th scope="row" th:text="#{nbEssaims}"></th>
 								<td th:each="nbE : ${nbEssaims}" th:text="${nbE}"></td>
 								<td></td>
