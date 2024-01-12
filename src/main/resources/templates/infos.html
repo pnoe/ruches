@@ -32,20 +32,20 @@
 		</div>
 		<div class="row">
 			<ul>
-				<li th:text="|${nbRuchers} #{ruchersdepot(${nbRuchers}==0?'':'s')}|"></li>
+				<li th:text="|${nbRuchers} #{ruchersdepot(${nbRuchers<2}?'':'s')}|"></li>
 				<li th:if="${nbRuches} eq 0" th:text="|${nbRuches} #{rucheS('')}|"></li>
 				<li th:unless="${nbRuches} eq 0"
-					th:text="|${nbRuches} #{rucheS(${nbRuches}==0?'':'s')} (${nbRuchesProd} #{production} + ${nbRuchesElev} #{elevage})|"></li>
+					th:text="|${nbRuches} #{rucheS(${nbRuches<2}?'':'s')} (${nbRuchesProd} #{production} + ${nbRuchesElev} #{elevage})|"></li>
 				<th:block th:unless="${nbRuches} eq 0">
 					<li th:if="${nbRuchesAuDepot} eq 0"
 						th:text="|${nbRuchesAuDepot} #{ruchesaudepot('')}|"></li>
 					<li th:unless="${nbRuchesAuDepot} eq 0"
-						th:text="|${nbRuchesAuDepot} #{ruchesaudepot(${nbRuchesAuDepot}==0?'':'s')} (${nbRuchesAuDepotProd} #{production} + ${nbRuchesAuDepotElev} #{elevage})|">
+						th:text="|${nbRuchesAuDepot} #{ruchesaudepot(${nbRuchesAuDepot<2}?'':'s')} (${nbRuchesAuDepotProd} #{production} + ${nbRuchesAuDepotElev} #{elevage})|">
 					</li>
 					<li th:if="${nbRuchesAvecEssaim} eq 0"
 						th:text="|${nbRuchesAvecEssaim} #{ruchesavecessaim('')}|"></li>
 					<li th:unless="${nbRuchesAvecEssaim} eq 0"
-						th:text="|${nbRuchesAvecEssaim} #{ruchesavecessaim(${nbRuchesAvecEssaim}==0?'':'s')} (${nbRuchesAvecEssaimProd} #{production} + ${nbRuchesAvecEssaimElev} #{elevage})|">
+						th:text="|${nbRuchesAvecEssaim} #{ruchesavecessaim(${nbRuchesAvecEssaim<2}?'':'s')} (${nbRuchesAvecEssaimProd} #{production} + ${nbRuchesAvecEssaimElev} #{elevage})|">
 					</li>
 				</th:block>
 				<th:block
@@ -53,18 +53,18 @@
 					<li th:if="${essaimsloc} eq 0"
 						th:text="|${essaimsloc} #{essaim_s('')}|"></li>
 					<li th:unless="${essaimsloc} eq 0"
-						th:text="|${essaimsloc} #{essaim_s(${essaimsloc}==0?'':'s')} 
+						th:text="|${essaimsloc} #{essaim_s(${essaimsloc<2}?'':'s')} 
 						(${#arrays.length(essaimsActifSansRuche)} #{essaimsHorsRuche
-						(${#arrays.length(essaimsActifSansRuche)}==0?'':'s')
+						(${#arrays.length(essaimsActifSansRuche)<2}?'':'s')
 						})|">
 					</li>
 				</th:block>
 				<li th:if="${nbHausses} eq 0"
 					th:text="|${nbHausses} #{hausseS('')}|"></li>
 				<li th:unless="${nbHausses} eq 0"
-					th:text="|${nbHausses} #{hausseS(hausseS==0?'':'s')} (${nbHaussesSurRuchesAvecEssaim} 
-					#{posees((${nbHaussesSurRuchesAvecEssaim}==0?'':'s'))} + ${nbHaussesHorsRuche} 
-					#{nonposees(${nbHaussesHorsRuche}==0?'':'s')})|">
+					th:text="|${nbHausses} #{hausseS(${nbHausses<2}?'':'s')} (${nbHaussesSurRuchesAvecEssaim} 
+					#{posees((${nbHaussesSurRuchesAvecEssaim<2}?'':'s'))} + ${nbHaussesHorsRuche} 
+					#{nonposees(${nbHaussesHorsRuche<2}?'':'s')})|">
 				</li>
 			</ul>
 		</div>
