@@ -32,34 +32,39 @@
 		</div>
 		<div class="row">
 			<ul>
-				<li th:text="|${nbRuchers} #{ruchersdepot}|"></li>
-				<li th:if="${nbRuches} eq 0" th:text="|${nbRuches} #{rucheS}|"></li>
+				<li th:text="|${nbRuchers} #{ruchersdepot(${nbRuchers}==0?'':'s')}|"></li>
+				<li th:if="${nbRuches} eq 0" th:text="|${nbRuches} #{rucheS('')}|"></li>
 				<li th:unless="${nbRuches} eq 0"
-					th:text="|${nbRuches} #{rucheS} (${nbRuchesProd} #{production} + ${nbRuchesElev} #{elevage})|"></li>
+					th:text="|${nbRuches} #{rucheS(${nbRuches}==0?'':'s')} (${nbRuchesProd} #{production} + ${nbRuchesElev} #{elevage})|"></li>
 				<th:block th:unless="${nbRuches} eq 0">
 					<li th:if="${nbRuchesAuDepot} eq 0"
-						th:text="|${nbRuchesAuDepot} #{ruchesaudepot}|"></li>
+						th:text="|${nbRuchesAuDepot} #{ruchesaudepot('')}|"></li>
 					<li th:unless="${nbRuchesAuDepot} eq 0"
-						th:text="|${nbRuchesAuDepot} #{ruchesaudepot} (${nbRuchesAuDepotProd} #{production} + ${nbRuchesAuDepotElev} #{elevage})|">
+						th:text="|${nbRuchesAuDepot} #{ruchesaudepot(${nbRuchesAuDepot}==0?'':'s')} (${nbRuchesAuDepotProd} #{production} + ${nbRuchesAuDepotElev} #{elevage})|">
 					</li>
 					<li th:if="${nbRuchesAvecEssaim} eq 0"
-						th:text="|${nbRuchesAvecEssaim} #{ruchesavecessaim}|"></li>
+						th:text="|${nbRuchesAvecEssaim} #{ruchesavecessaim('')}|"></li>
 					<li th:unless="${nbRuchesAvecEssaim} eq 0"
-						th:text="|${nbRuchesAvecEssaim} #{ruchesavecessaim} (${nbRuchesAvecEssaimProd} #{production} + ${nbRuchesAvecEssaimElev} #{elevage})|">
+						th:text="|${nbRuchesAvecEssaim} #{ruchesavecessaim(${nbRuchesAvecEssaim}==0?'':'s')} (${nbRuchesAvecEssaimProd} #{production} + ${nbRuchesAvecEssaimElev} #{elevage})|">
 					</li>
 				</th:block>
 				<th:block
 					th:with="essaimsloc=${nbRuchesAvecEssaim + #arrays.length(essaimsActifSansRuche)}">
 					<li th:if="${essaimsloc} eq 0"
-						th:text="|${essaimsloc} #{essaim_s}|"></li>
+						th:text="|${essaimsloc} #{essaim_s('')}|"></li>
 					<li th:unless="${essaimsloc} eq 0"
-						th:text="|${essaimsloc} #{essaim_s} (${#arrays.length(essaimsActifSansRuche)} #{essaimsHorsRuche})|">
+						th:text="|${essaimsloc} #{essaim_s(${essaimsloc}==0?'':'s')} 
+						(${#arrays.length(essaimsActifSansRuche)} #{essaimsHorsRuche
+						(${#arrays.length(essaimsActifSansRuche)}==0?'':'s')
+						})|">
 					</li>
 				</th:block>
-				<li th:if="${nbHausses} eq 0" th:text="|${nbHausses} #{hausseS}|">
-				</li>
+				<li th:if="${nbHausses} eq 0"
+					th:text="|${nbHausses} #{hausseS('')}|"></li>
 				<li th:unless="${nbHausses} eq 0"
-					th:text="|${nbHausses} #{hausseS} (${nbHaussesSurRuchesAvecEssaim} #{posees} + ${nbHaussesHorsRuche} #{nonposees})|">
+					th:text="|${nbHausses} #{hausseS(hausseS==0?'':'s')} (${nbHaussesSurRuchesAvecEssaim} 
+					#{posees((${nbHaussesSurRuchesAvecEssaim}==0?'':'s'))} + ${nbHaussesHorsRuche} 
+					#{nonposees(${nbHaussesHorsRuche}==0?'':'s')})|">
 				</li>
 			</ul>
 		</div>
@@ -123,9 +128,7 @@
 							</tr>
 							<tr>
 								<th scope="row" th:text="#{Recoltes}"></th>
-								<td th:each="nb : ${nbRecoltes}"
-									th:text="${nb}">
-								</td>
+								<td th:each="nb : ${nbRecoltes}" th:text="${nb}"></td>
 							</tr>
 							<tr>
 								<th scope="row" th:text="#{nbEssaims}"></th>
@@ -451,10 +454,8 @@
 						</thead>
 						<tbody>
 							<tr th:each="r : ${rucheDepotFalseInact}">
-								<td><a th:href="@{'/ruche/'+${r.id}}"
-									th:text="${r.nom}"></a></td>
-								<td><a
-									th:href="@{'/rucher/'+${r.rucher?.id}}"
+								<td><a th:href="@{'/ruche/'+${r.id}}" th:text="${r.nom}"></a></td>
+								<td><a th:href="@{'/rucher/'+${r.rucher?.id}}"
 									th:text="${r.rucher?.nom}"></a></td>
 							</tr>
 						</tbody>
