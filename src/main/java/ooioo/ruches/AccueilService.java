@@ -114,6 +114,7 @@ public class AccueilService {
 		List<Integer> annees = new ArrayList<>(nban);
 		List<Double> pdsMiel = new ArrayList<>(nban);
 		List<Integer> nbRecoltes = new ArrayList<>(nban);
+		List<Integer> nbEves = new ArrayList<>(nban);
 		List<Integer> nbEssaims = new ArrayList<>(nban);
 		List<Integer> nbCreationEssaims = new ArrayList<>(nban);
 		List<Integer> nbDispersionEssaims = new ArrayList<>(nban);
@@ -121,6 +122,7 @@ public class AccueilService {
 		List<Integer> nbTraitementsEssaims = new ArrayList<>(nban);
 		Double pdsMielTotal = 0d;
 		Integer nbRecTotal = 0;
+		Integer nbEveTotal = 0;
 		Integer nbCreationEssaimsTotal = 0;
 		Integer nbDispersionEssaimsTotal = 0;
 		Double sucreEssaimsTotal = 0.0;
@@ -135,6 +137,14 @@ public class AccueilService {
 			Integer nbRec = nbRecOpt.isPresent() ? nbRecOpt.get() : 0;
 			nbRecoltes.add(nbRec);
 			nbRecTotal += nbRec;
+			Optional<Integer> nbEveOpt = evenementRepository.countEveAnnee(date,
+					ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHE.ordinal(),
+					ooioo.ruches.evenement.TypeEvenement.COMMENTAIREHAUSSE.ordinal(),
+					ooioo.ruches.evenement.TypeEvenement.COMMENTAIREHAUSSE.ordinal(),
+					ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHER.ordinal());
+			Integer nbEv = nbEveOpt.isPresent() ? nbEveOpt.get() : 0;
+			nbEves.add(nbEv);
+			nbEveTotal += nbEv;
 			// Nombre d'essaims créés dans l'année (année acquisition = date)
 			Integer nbCree = essaimRepository.countEssaimsCreesDate(date);
 			nbCreationEssaimsTotal += nbCree;
@@ -155,6 +165,7 @@ public class AccueilService {
 		}
 		pdsMiel.add(pdsMielTotal);
 		nbRecoltes.add(nbRecTotal);
+		nbEves.add(nbEveTotal);
 		nbCreationEssaims.add(nbCreationEssaimsTotal);
 		nbTraitementsEssaims.add(nbTraitementsEssaimsTotal);
 		sucreEssaims.add(sucreEssaimsTotal);
@@ -165,6 +176,7 @@ public class AccueilService {
 		model.addAttribute("annees", annees);
 		model.addAttribute("pdsMiel", pdsMiel);
 		model.addAttribute("nbRecoltes", nbRecoltes);
+		model.addAttribute("nbEves", nbEves);
 		model.addAttribute("nbEssaims", nbEssaims);
 		model.addAttribute("nbCreationEssaims", nbCreationEssaims);
 		model.addAttribute("nbDispersionEssaims", nbDispersionEssaims);

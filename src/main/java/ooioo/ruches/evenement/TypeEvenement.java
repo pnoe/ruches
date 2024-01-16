@@ -8,7 +8,7 @@ package ooioo.ruches.evenement;
  *   5 ESSAIMTRAITEMENT, 6 ESSAIMTRAITEMENTFIN, 7 ESSAIMSUCRE
  *   8 COMMENTAIRERUCHE, 9 COMMENTAIREHAUSSE, 10 COMMENTAIREESSAIM, 11 COMMENTAIRERUCHER
  *   12 LIBRE, 13 RUCHEPESEE, 14 RUCHECADRE
- *    l'événement 12 anciennnement dispersion à été intégré à l'entité essaim
+ *    l'événement 12 anciennnement dispersion a été intégré à l'entité essaim
  */
 public enum TypeEvenement {
 	RUCHEAJOUTRUCHER, AJOUTESSAIMRUCHE,

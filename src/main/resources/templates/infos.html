@@ -120,6 +120,14 @@
 							</tr>
 						</thead>
 						<tbody>
+
+							<tr>
+								<th scope="row" th:text="#{nbInterv}"></th>
+								<td th:each="nbE : ${nbEves}"
+									th:text="${nbE}">
+								</td>
+							</tr>
+
 							<tr>
 								<th scope="row" th:text="#{poidsMielEnPot}"></th>
 								<td th:each="pds : ${pdsMiel}"

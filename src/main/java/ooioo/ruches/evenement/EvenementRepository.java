@@ -2,6 +2,7 @@ package ooioo.ruches.evenement;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -164,6 +165,27 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			  order by date desc limit 3
 			""")
 	List<Evenement> find3EveListePlus(Ruche ruche);
+	
+	
+	/* Renvoie le nombre d'interventions dans les ruchers par année.
+	RUCHEAJOUTRUCHER, AJOUTESSAIMRUCHE,
+	HAUSSEPOSERUCHE, HAUSSERETRAITRUCHE, HAUSSEREMPLISSAGE,
+	ESSAIMTRAITEMENT, ESSAIMTRAITEMENTFIN, ESSAIMSUCRE,
+	COMMENTAIRERUCHE, COMMENTAIREHAUSSE, COMMENTAIREESSAIM, COMMENTAIRERUCHER,
+	LIBRE, RUCHEPESEE, RUCHECADRE
+	*/
+	@Query(value = """
+			select count(*) from (
+			  select distinct rucher_id, date_trunc('day', date)
+			    from evenement e
+			    where extract(year from date) = :annee and
+			      e.type <> :type1 and
+			      e.type <> :type2 and
+			      e.type <> :type3 and
+			      e.type <> :type4)
+			    as x
+			""", nativeQuery = true)
+	Optional<Integer> countEveAnnee(Integer annee, int type1, int type2, int type3, int type4);
 
 	@Query(value = """
 			select e
