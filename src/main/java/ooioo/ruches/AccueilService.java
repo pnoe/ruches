@@ -85,6 +85,30 @@ public class AccueilService {
 		// Distances de butinage : les rayons des cercles de butinages affichables sur
 		// les cartes des ruchers.
 		model.addAttribute("rayonsButinage", rayonsButinage);
+		valeurParAnnee(model);
+		// Liste des ruches actives au dépôt avec essaim.
+		model.addAttribute("ruchesDepotEssaim", rucheRepository.findByActiveTrueAndEssaimNotNullAndRucherDepotTrue());
+		// Liste des ruches actives au dépôt avec des hausses.
+		model.addAttribute("ruchesDepotHausses", rucheRepository.findByHaussesAndDepot());
+		// Liste des ruches actives sans essaim qui ne sont pas au dépôt.
+		model.addAttribute("ruchesPasDepotSansEssaim",
+				rucheRepository.findByActiveTrueAndEssaimNullAndRucherDepotFalse());
+		// Essaims actifs hors ruche.
+		model.addAttribute("essaimsActifSansRuche", essaimRepository.findEssaimByActifSansRuche());
+		List<Rucher> ruchers = rucherRepository.findByActifOrderByNom(true);
+		ruchersMalCale(model, ruchers);
+		rucherTropLoin(model, ruchers);
+		// Liste des ruches actives et pas au dépôt sans événements depuis 4 semaines.
+		model.addAttribute("retardRucheEvenement", retardRucheEvenement);
+		model.addAttribute("ruchesPasDEvenement", rucheRepository
+				.findPasDEvenementAvant(LocalDateTime.now().minus(retardRucheEvenement, ChronoUnit.WEEKS)));
+		// Liste des essaims actifs dont la date naissance de la reine est supérieure à
+		// la date d'acquisition.
+		model.addAttribute("essaimDateNaissSupAcquis", essaimRepository.findEssaimDateNaissSupAcquis());
+		model.addAttribute("rucheDepotFalseInact", rucheRepository.findByRucherDepotFalseAndActiveFalse());
+	}
+
+	private void valeurParAnnee(Model model) {
 		// Valeurs par année : poids de miel mis en pots, nb d'essaims, nb d'essaims
 		// créés, nb essaims dispersés, sucre, nb traitements.
 		Essaim premierEssaim = essaimRepository.findFirstByOrderByDateAcquisition();
@@ -182,19 +206,12 @@ public class AccueilService {
 		model.addAttribute("nbDispersionEssaims", nbDispersionEssaims);
 		model.addAttribute("sucreEssaims", sucreEssaims);
 		model.addAttribute("nbTraitementsEssaims", nbTraitementsEssaims);
-		// Liste des ruches actives au dépôt avec essaim.
-		model.addAttribute("ruchesDepotEssaim", rucheRepository.findByActiveTrueAndEssaimNotNullAndRucherDepotTrue());
-		// Liste des ruches actives au dépôt avec des hausses.
-		model.addAttribute("ruchesDepotHausses", rucheRepository.findByHaussesAndDepot());
-		// Liste des ruches actives sans essaim qui ne sont pas au dépôt.
-		model.addAttribute("ruchesPasDepotSansEssaim",
-				rucheRepository.findByActiveTrueAndEssaimNullAndRucherDepotFalse());
-		// Essaims actifs hors ruche.
-		model.addAttribute("essaimsActifSansRuche", essaimRepository.findEssaimByActifSansRuche());
+	}
+
+	private void ruchersMalCale(Model model, List<Rucher> ruchers) {
 		// Liste des ruchers actifs (coordonées de leur entrée) à plus de 20m du
 		// barycentre de leurs ruches.
 		model.addAttribute("distRuchersTropLoins", distRuchersTropLoins);
-		Iterable<Rucher> ruchers = rucherRepository.findByActifOrderByNom(true);
 		List<Rucher> ruchersMalCales = new ArrayList<>();
 		List<Double> distances = new ArrayList<>();
 		for (Rucher rucher : ruchers) {
@@ -227,6 +244,9 @@ public class AccueilService {
 		}
 		model.addAttribute("ruchersMalCales", ruchersMalCales);
 		model.addAttribute("distances", distances);
+	}
+
+	private void rucherTropLoin(Model model, List<Rucher> ruchers) {
 		// Liste de ruches actives trop éloignées de leurs ruchers.
 		List<Ruche> ruchesTropLoins = new ArrayList<>();
 		for (Rucher rucher : ruchers) {
@@ -244,14 +264,6 @@ public class AccueilService {
 		}
 		model.addAttribute("ruchesTropLoins", ruchesTropLoins);
 		model.addAttribute("distRuchesTropLoins", distRuchesTropLoins);
-		// Liste des ruches actives et pas au dépôt sans événements depuis 4 semaines.
-		model.addAttribute("retardRucheEvenement", retardRucheEvenement);
-		model.addAttribute("ruchesPasDEvenement", rucheRepository
-				.findPasDEvenementAvant(LocalDateTime.now().minus(retardRucheEvenement, ChronoUnit.WEEKS)));
-		// Liste des essaims actifs dont la date naissance de la reine est supérieure à
-		// la date d'acquisition.
-		model.addAttribute("essaimDateNaissSupAcquis", essaimRepository.findEssaimDateNaissSupAcquis());
-		model.addAttribute("rucheDepotFalseInact", rucheRepository.findByRucherDepotFalseAndActiveFalse());
 	}
 
 }
