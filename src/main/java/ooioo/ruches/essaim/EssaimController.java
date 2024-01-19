@@ -1,7 +1,6 @@
 package ooioo.ruches.essaim;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,96 +74,15 @@ public class EssaimController {
 	}
 
 	/**
-	 * Graphe affichant les poids d'un essaim, les récoltes, les événments sucre,
-	 * les traitements, les changements de rucher.
+	 * Graphe affichant les événements d'un essaim. Pesée, récoltes, sucre,
+	 * traitements, changements de rucher.
 	 */
-	@GetMapping("/poids/{essaimId}")
-	public String poids(Model model, @PathVariable long essaimId) {
+	@GetMapping("/grapheeveesssaim/{essaimId}")
+	public String grapheEveEssaim(Model model, @PathVariable long essaimId) {
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isPresent()) {
-			Essaim essaim = essaimOpt.get();
-			// Les pesées de l'essaim.
-			List<Evenement> evesPesee = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
-					TypeEvenement.RUCHEPESEE);
-			List<Long> dates = new ArrayList<>(evesPesee.size());
-			List<Float> poids = new ArrayList<>(evesPesee.size());
-			for (Evenement e : evesPesee) {
-				dates.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
-				poids.add(Float.parseFloat(e.getValeur()));
-			}
-			model.addAttribute("dates", dates);
-			model.addAttribute("poids", poids);
-			model.addAttribute("essaim", essaim);
-			Ruche ruche = rucheRepository.findByEssaimId(essaimId);
-			model.addAttribute("ruche", ruche);
-			// Les événements sucre.
-			List<Evenement> evesSucre = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
-					TypeEvenement.ESSAIMSUCRE);
-			List<Long> datesSucre = new ArrayList<>(evesSucre.size());
-			List<Float> poidsSucre = new ArrayList<>(evesSucre.size());
-			for (Evenement e : evesSucre) {
-				datesSucre.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
-				poidsSucre.add(Float.parseFloat(e.getValeur()));
-			}
-			model.addAttribute("datesSucre", datesSucre);
-			model.addAttribute("poidsSucre", poidsSucre);
-			// Les récoltes.
-			// Calcul du poids de miel par récoltes pour cet essaim
-			List<Long> datesRec = new ArrayList<>();
-			List<Float> poidsRec = new ArrayList<>();
-			List<String> ruchersRec = new ArrayList<>();
-			for (Recolte recolte : recolteRepository.findAllByOrderByDateAsc()) {
-				Integer pRec = recolteHausseRepository.findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId());
-				if (pRec != null) {
-					RecolteHausse rHFirst = recolteHausseRepository.findFirstByRecolteAndEssaim(recolte, essaim);
-					String rucherNom = ((rHFirst == null) || (rHFirst.getRucher() == null)) ? ""
-							: rHFirst.getRucher().getNom();
-					poidsRec.add(pRec / 1000f);
-					datesRec.add(recolte.getDate().toEpochSecond(ZoneOffset.UTC));
-					ruchersRec.add(rucherNom);
-				}
-			}
-			model.addAttribute("poidsRec", poidsRec);
-			model.addAttribute("datesRec", datesRec);
-			model.addAttribute("ruchersRec", ruchersRec);
-			// Les traitements.
-			List<Evenement> evesTrait = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
-					TypeEvenement.ESSAIMTRAITEMENT);
-			List<Long> datesTrait = new ArrayList<>(evesTrait.size());
-			for (Evenement e : evesTrait) {
-				datesTrait.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
-			}
-			model.addAttribute("datesTrait", datesTrait);
-			// Les changements de rucher.
-			List<Evenement> evesRucher = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
-					TypeEvenement.RUCHEAJOUTRUCHER);
-			List<Long> datesRucher = new ArrayList<>(evesRucher.size());
-			List<String> nomsRucher = new ArrayList<>(evesRucher.size());
-			for (Evenement e : evesRucher) {
-				if (e.getRucher() != null) {
-					datesRucher.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
-					nomsRucher.add(e.getRucher().getNom());
-				}
-			}
-			model.addAttribute("datesRucher", datesRucher);
-			model.addAttribute("nomsRucher", nomsRucher);
-
-			// Les ajouts/retraits de cadres.
-			List<Evenement> evesCadre = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaimId,
-					TypeEvenement.RUCHECADRE);
-			List<Long> datesCadre = new ArrayList<>(evesCadre.size());
-			List<String> nbsCadre = new ArrayList<>(evesCadre.size());
-			for (Evenement e : evesCadre) {
-				if (Utils.isIntInfX(e.getValeur(), 20)) {
-					// Si la valeur de l'événement est un nombre (de cadres) compris entre 0 et 20.
-					datesCadre.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
-					nbsCadre.add(e.getValeur());
-				}
-			}
-			model.addAttribute("datesCadre", datesCadre);
-			model.addAttribute("nbsCadre", nbsCadre);
-
-			return "essaim/essaimsPoids";
+			essaimService.grapheEve(model, essaimOpt.get());
+			return "essaim/essaimGrapheEve";
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 			model.addAttribute(Const.MESSAGE,
@@ -467,11 +385,11 @@ public class EssaimController {
 				return Const.INDEX;
 			}
 			Iterable<Evenement> evenements = evenementRepository.findByEssaimId(essaimId);
-			// on supprime les événements associées à cette essaim
+			// Supprime les événements associés à cette essaim.
 			for (Evenement evenement : evenements) {
 				evenementRepository.delete(evenement);
 			}
-			// On enlève cet essaim de sa ruche.
+			// Enlève cet essaim de sa ruche.
 			Ruche ruche = rucheRepository.findByEssaimId(essaimId);
 			if (ruche != null) {
 				ruche.setEssaim(null);

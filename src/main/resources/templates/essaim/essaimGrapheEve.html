@@ -3,6 +3,7 @@
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsChart}"></script>
+<script th:replace="~{include :: jsChartZoom}"></script>
 <script th:replace="~{include :: luxon}"></script>
 <script th:replace="~{include :: chartjs-adapter}"></script>
 <script th:replace="~{include :: d3-color}"></script>
@@ -31,12 +32,16 @@
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col text-center">
+			<div class="col">
 				<h1 class="item">
 					<a th:href="@{'/essaim/'+${essaim.id}}"
 						th:text="#{essaim}+' '+${essaim.nom}"></a>
 					<th:block th:text="#{sep}+#{evenements}"></th:block>
 				</h1>
+			</div>
+			<div class="col">
+				<button id="zoomini" type="button" class="btn btn-primary btn-sm"
+					th:text="#{ZoomIni}"></button>
 			</div>
 		</div>
 		<div th:if="${#arrays.isEmpty(dates)}" class="row">

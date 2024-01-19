@@ -5,9 +5,13 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
+	const datemin = Math.min(Math.min(...dates), Math.min(...datesSucre), Math.min(...datesRec),
+		Math.min(...datesTrait), Math.min(...datesRucher), Math.min(...datesCadre)) * 1000; // - 500000000;
+	const datemax = Math.max(Math.max(...dates), Math.max(...datesSucre), Math.max(...datesRec),
+		Math.max(...datesTrait), Math.max(...datesRucher), Math.max(...datesCadre)) * 1000; //  + 500000000;
 	if (dates.length === 0) { return; }
 	Chart.defaults.elements.point.radius = 6; // default = 3
-	new Chart('ctx', {
+	const graphe = new Chart('ctx', {
 		data: {
 			// dates evenement.getDate().toEpochSecond(ZoneOffset.UTC));
 			// poids Float.parseFloat(evenement.getValeur()));
@@ -76,6 +80,30 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 			},
 			plugins: {
+				zoom: {
+					limits: {
+						x: { min:datemin, max: datemax },
+					},
+					/*
+					pan: {
+						enabled: true,
+						// scaleMode: 'x',
+						// modifierKey: 'ctrl',
+						mode: 'x',
+						//  [1 542 383 004,1614188220,1616584080,1650031920];
+						threshold: 1000000
+					},
+					*/
+					zoom: {
+						wheel: {
+							enabled: true,
+						},
+						pinch: {
+							enabled: true
+						},
+						mode: 'x'
+					}
+				},
 				legend: {
 					labels: {
 						usePointStyle: true,
@@ -111,5 +139,9 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 			}
 		}
+	});
+	const zoomini = document.getElementById('zoomini');
+	zoomini.addEventListener('click', () => {
+		graphe.resetZoom();
 	});
 });

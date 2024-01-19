@@ -5,6 +5,7 @@ import java.text.DecimalFormatSymbols;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
 import ooioo.ruches.recolte.Recolte;
+import ooioo.ruches.recolte.RecolteHausse;
 import ooioo.ruches.recolte.RecolteHausseRepository;
 import ooioo.ruches.recolte.RecolteRepository;
 import ooioo.ruches.ruche.Ruche;
@@ -59,6 +61,89 @@ public class EssaimService {
 		this.recolteHausseRepository = recolteHausseRepository;
 		this.rucherRepository = rucherRepository;
 		this.messageSource = messageSource;
+	}
+
+	public void grapheEve(Model model, Essaim essaim) {
+		// Les événements pesée de l'essaim.
+		List<Evenement> evesPesee = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
+				TypeEvenement.RUCHEPESEE);
+		List<Long> dates = new ArrayList<>(evesPesee.size());
+		List<Float> poids = new ArrayList<>(evesPesee.size());
+		for (Evenement e : evesPesee) {
+			dates.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
+			poids.add(Float.parseFloat(e.getValeur()));
+		}
+		model.addAttribute("dates", dates);
+		model.addAttribute("poids", poids);
+
+		model.addAttribute("essaim", essaim);
+		Ruche ruche = rucheRepository.findByEssaimId(essaim.getId());
+		model.addAttribute("ruche", ruche);
+		// Les événements sucre.
+		List<Evenement> evesSucre = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
+				TypeEvenement.ESSAIMSUCRE);
+		List<Long> datesSucre = new ArrayList<>(evesSucre.size());
+		List<Float> poidsSucre = new ArrayList<>(evesSucre.size());
+		for (Evenement e : evesSucre) {
+			datesSucre.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
+			poidsSucre.add(Float.parseFloat(e.getValeur()));
+		}
+		model.addAttribute("datesSucre", datesSucre);
+		model.addAttribute("poidsSucre", poidsSucre);
+		// Les récoltes.
+		// Calcul du poids de miel par récoltes pour cet essaim
+		List<Long> datesRec = new ArrayList<>();
+		List<Float> poidsRec = new ArrayList<>();
+		List<String> ruchersRec = new ArrayList<>();
+		for (Recolte recolte : recolteRepository.findAllByOrderByDateAsc()) {
+			Integer pRec = recolteHausseRepository.findPoidsMielByEssaimByRecolte(essaim.getId(), recolte.getId());
+			if (pRec != null) {
+				RecolteHausse rHFirst = recolteHausseRepository.findFirstByRecolteAndEssaim(recolte, essaim);
+				String rucherNom = ((rHFirst == null) || (rHFirst.getRucher() == null)) ? ""
+						: rHFirst.getRucher().getNom();
+				poidsRec.add(pRec / 1000f);
+				datesRec.add(recolte.getDate().toEpochSecond(ZoneOffset.UTC));
+				ruchersRec.add(rucherNom);
+			}
+		}
+		model.addAttribute("poidsRec", poidsRec);
+		model.addAttribute("datesRec", datesRec);
+		model.addAttribute("ruchersRec", ruchersRec);
+		// Les traitements.
+		List<Evenement> evesTrait = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
+				TypeEvenement.ESSAIMTRAITEMENT);
+		List<Long> datesTrait = new ArrayList<>(evesTrait.size());
+		for (Evenement e : evesTrait) {
+			datesTrait.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
+		}
+		model.addAttribute("datesTrait", datesTrait);
+		// Les changements de rucher.
+		List<Evenement> evesRucher = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
+				TypeEvenement.RUCHEAJOUTRUCHER);
+		List<Long> datesRucher = new ArrayList<>(evesRucher.size());
+		List<String> nomsRucher = new ArrayList<>(evesRucher.size());
+		for (Evenement e : evesRucher) {
+			if (e.getRucher() != null) {
+				datesRucher.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
+				nomsRucher.add(e.getRucher().getNom());
+			}
+		}
+		model.addAttribute("datesRucher", datesRucher);
+		model.addAttribute("nomsRucher", nomsRucher);
+		// Les ajouts/retraits de cadres.
+		List<Evenement> evesCadre = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
+				TypeEvenement.RUCHECADRE);
+		List<Long> datesCadre = new ArrayList<>(evesCadre.size());
+		List<String> nbsCadre = new ArrayList<>(evesCadre.size());
+		for (Evenement e : evesCadre) {
+			if (Utils.isIntInfX(e.getValeur(), 20)) {
+				// Si la valeur de l'événement est un nombre (de cadres) compris entre 0 et 20.
+				datesCadre.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
+				nbsCadre.add(e.getValeur());
+			}
+		}
+		model.addAttribute("datesCadre", datesCadre);
+		model.addAttribute("nbsCadre", nbsCadre);
 	}
 
 	/**
