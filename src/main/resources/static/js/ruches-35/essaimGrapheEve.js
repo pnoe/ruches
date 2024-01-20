@@ -6,21 +6,15 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 	if (vide) { return; }
-	// Les listes de dates sont triées par dates croissantes.
-	const datemin = Math.min(
-		dates.length === 0 ? Number.MAX_SAFE_INTEGER : dates[0],
-		datesSucre.length === 0 ? Number.MAX_SAFE_INTEGER : datesSucre[0],
-		datesRec.length === 0 ? Number.MAX_SAFE_INTEGER : datesRec[0],
-		datesTrait.length === 0 ? Number.MAX_SAFE_INTEGER : datesTrait[0],
-		datesRucher.length === 0 ? Number.MAX_SAFE_INTEGER : datesRucher[0],
-		datesCadre.length === 0 ? Number.MAX_SAFE_INTEGER : datesCadre[0]) * 1000;
-	const datemax = Math.max(
-		dates.length === 0 ? Number.MIN_SAFE_INTEGER : dates.slice(-1),
-		datesSucre.length === 0 ? Number.MIN_SAFE_INTEGER : datesSucre.slice(-1),
-		datesRec.length === 0 ? Number.MIN_SAFE_INTEGER : datesRec.slice(-1),
-		datesTrait.length === 0 ? Number.MIN_SAFE_INTEGER : datesTrait.slice(-1),
-		datesRucher.length === 0 ? Number.MIN_SAFE_INTEGER : datesRucher.slice(-1),
-		datesCadre.length === 0 ? Number.MIN_SAFE_INTEGER : datesCadre.slice(-1)) * 1000;
+	// Les tableaux de dates sont triées par dates croissantes
+	//  et il existe au moins une date dans un des tableaux
+	//  (vide = false).
+	const datemin = Math.min(...[dates, datesSucre, datesRec, datesTrait, datesRucher, datesCadre].map(x => {
+			return x[0] === undefined ? Number.MAX_SAFE_INTEGER : x[0];
+		})) * 1000;
+	const datemax = Math.max(...[dates, datesSucre, datesRec, datesTrait, datesRucher, datesCadre].map(x => {
+			return x.slice(-1) === undefined ? Number.MIN_SAFE_INTEGER : x.slice(-1);
+		})) * 1000;
 	Chart.defaults.elements.point.radius = 6; // default = 3
 	const graphe = new Chart('ctx', {
 		data: {
