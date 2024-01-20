@@ -144,6 +144,8 @@ public class EssaimService {
 		}
 		model.addAttribute("datesCadre", datesCadre);
 		model.addAttribute("nbsCadre", nbsCadre);
+		model.addAttribute("vide", dates.isEmpty() && datesCadre.isEmpty() && datesRec.isEmpty()
+				&& datesRucher.isEmpty() && datesSucre.isEmpty() && datesTrait.isEmpty());
 	}
 
 	/**

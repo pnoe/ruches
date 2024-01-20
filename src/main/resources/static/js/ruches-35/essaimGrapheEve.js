@@ -5,11 +5,22 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
-	const datemin = Math.min(Math.min(...dates), Math.min(...datesSucre), Math.min(...datesRec),
-		Math.min(...datesTrait), Math.min(...datesRucher), Math.min(...datesCadre)) * 1000; // - 500000000;
-	const datemax = Math.max(Math.max(...dates), Math.max(...datesSucre), Math.max(...datesRec),
-		Math.max(...datesTrait), Math.max(...datesRucher), Math.max(...datesCadre)) * 1000; //  + 500000000;
-	if (dates.length === 0) { return; }
+	if (vide) { return; }
+	// Les listes de dates sont triées par dates croissantes.
+	const datemin = Math.min(
+		dates.length === 0 ? Number.MAX_SAFE_INTEGER : dates[0],
+		datesSucre.length === 0 ? Number.MAX_SAFE_INTEGER : datesSucre[0],
+		datesRec.length === 0 ? Number.MAX_SAFE_INTEGER : datesRec[0],
+		datesTrait.length === 0 ? Number.MAX_SAFE_INTEGER : datesTrait[0],
+		datesRucher.length === 0 ? Number.MAX_SAFE_INTEGER : datesRucher[0],
+		datesCadre.length === 0 ? Number.MAX_SAFE_INTEGER : datesCadre[0]) * 1000;
+	const datemax = Math.max(
+		dates.length === 0 ? Number.MIN_SAFE_INTEGER : dates.slice(-1),
+		datesSucre.length === 0 ? Number.MIN_SAFE_INTEGER : datesSucre.slice(-1),
+		datesRec.length === 0 ? Number.MIN_SAFE_INTEGER : datesRec.slice(-1),
+		datesTrait.length === 0 ? Number.MIN_SAFE_INTEGER : datesTrait.slice(-1),
+		datesRucher.length === 0 ? Number.MIN_SAFE_INTEGER : datesRucher.slice(-1),
+		datesCadre.length === 0 ? Number.MIN_SAFE_INTEGER : datesCadre.slice(-1)) * 1000;
 	Chart.defaults.elements.point.radius = 6; // default = 3
 	const graphe = new Chart('ctx', {
 		data: {
@@ -82,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			plugins: {
 				zoom: {
 					limits: {
-						x: { min:datemin, max: datemax },
+						x: { min: datemin, max: datemax },
 					},
 					/*
 					pan: {

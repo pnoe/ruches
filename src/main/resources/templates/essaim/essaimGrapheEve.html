@@ -26,6 +26,7 @@
 	const nomsRucher = /*[[${nomsRucher}]]*/null;
 	const datesCadre = /*[[${datesCadre}]]*/null;
 	const nbsCadre = /*[[${nbsCadre}]]*/null;
+	const vide = /*[[${vide}]]*/null;
 </script>
 </head>
 <body>
@@ -44,13 +45,13 @@
 					th:text="#{ZoomIni}"></button>
 			</div>
 		</div>
-		<div th:if="${#arrays.isEmpty(dates)}" class="row">
+		<div th:if="${vide}" class="row">
 			<div class="col text-center">
-				<span th:text="#{aucunePesee}"></span>
+				<span th:text="#{AucunEve}"></span>
 			</div>
 		</div>
 	</div>
-	<canvas th:unless="${#arrays.isEmpty(dates)}" id="ctx"></canvas>
+	<canvas th:unless="${vide}" id="ctx"></canvas>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
 </html>
