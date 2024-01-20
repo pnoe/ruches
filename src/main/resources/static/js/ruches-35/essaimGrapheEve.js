@@ -1,6 +1,6 @@
 /* globals Chart, dates, poids, poidsSucre, datesSucre,
  poidsRec, datesRec, ruchersRec, datesTrait,
- datesRucher, nomsRucher, datesCadre, nbsCadre
+ datesRucher, nomsRucher, datesCadre, nbsCadre, vide
 */
 'use strict';
 
