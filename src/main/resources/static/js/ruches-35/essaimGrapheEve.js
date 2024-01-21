@@ -6,15 +6,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 	if (vide) { return; }
-	// Les tableaux de dates sont triées par dates croissantes
-	//  et il existe au moins une date dans un des tableaux
-	//  (vide = false).
-	const datemin = Math.min(...[dates, datesSucre, datesRec, datesTrait, datesRucher, datesCadre].map(x => {
-			return x[0] === undefined ? Number.MAX_SAFE_INTEGER : x[0];
-		})) * 1000;
-	const datemax = Math.max(...[dates, datesSucre, datesRec, datesTrait, datesRucher, datesCadre].map(x => {
-			return x.slice(-1) === undefined ? Number.MIN_SAFE_INTEGER : x.slice(-1);
-		})) * 1000;
 	Chart.defaults.elements.point.radius = 6; // default = 3
 	const graphe = new Chart('ctx', {
 		data: {
@@ -87,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			plugins: {
 				zoom: {
 					limits: {
-						x: { min: datemin, max: datemax },
+						x: { min: 'original', max: 'original' },
 					},
 					/*
 					pan: {
