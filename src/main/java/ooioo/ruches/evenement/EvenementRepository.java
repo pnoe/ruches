@@ -168,11 +168,9 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	
 	
 	/* Renvoie le nombre d'interventions dans les ruchers par année.
-	RUCHEAJOUTRUCHER, AJOUTESSAIMRUCHE,
-	HAUSSEPOSERUCHE, HAUSSERETRAITRUCHE, HAUSSEREMPLISSAGE,
-	ESSAIMTRAITEMENT, ESSAIMTRAITEMENTFIN, ESSAIMSUCRE,
-	COMMENTAIRERUCHE, COMMENTAIREHAUSSE, COMMENTAIREESSAIM, COMMENTAIRERUCHER,
-	LIBRE, RUCHEPESEE, RUCHECADRE
+       Une même journée d'intervention sur deux ruchers comptera pour 2 interventions.
+       Les événements type1 à 4 sont exclus de la recherche.
+       Appelé avec les types d'événements commentaires ruche, hausse, rucher et essaim.
 	*/
 	@Query(value = """
 			select count(*) from (
@@ -185,8 +183,25 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			      e.type <> :type4)
 			    as x
 			""", nativeQuery = true)
-	Optional<Integer> countEveAnnee(Integer annee, int type1, int type2, int type3, int type4);
+	Optional<Integer> countEveAnneeRucher(Integer annee, int type1, int type2, int type3, int type4);
 
+	/* Renvoie le nombre de jours d'interventions par année.
+    Les événements type1 à 4 sont exclus de la recherche.
+    Appelé avec les types d'événements commentaires ruche, hausse, rucher et essaim.
+	*/
+	@Query(value = """
+			select count(*) from (
+			  select distinct date_trunc('day', date)
+			    from evenement e
+			    where extract(year from date) = :annee and
+			      e.type <> :type1 and
+			      e.type <> :type2 and
+			      e.type <> :type3 and
+			      e.type <> :type4)
+			    as x
+			""", nativeQuery = true)
+	Optional<Integer> countEveAnnee(Integer annee, int type1, int type2, int type3, int type4);
+	
 	@Query(value = """
 			select e
 			  from Evenement e

@@ -31,6 +31,7 @@
 				th:utext="${@environment.getProperty('accueil.titre')}"></h1>
 		</div>
 		<div class="row">
+			<th:block th:text="#{ElementActifUniq}"></th:block> 
 			<ul>
 				<li th:text="|${nbRuchers} #{ruchersdepot(${nbRuchers<2}?'':'s')}|"></li>
 				<li th:if="${nbRuches} eq 0" th:text="|${nbRuches} #{rucheS('')}|"></li>
@@ -120,14 +121,14 @@
 							</tr>
 						</thead>
 						<tbody>
-
+							<tr>
+								<th scope="row" th:text="#{nbIntervRucher}"></th>
+								<td th:each="nbER : ${nbEvesRucher}" th:text="${nbER}"></td>
+							</tr>
 							<tr>
 								<th scope="row" th:text="#{nbInterv}"></th>
-								<td th:each="nbE : ${nbEves}"
-									th:text="${nbE}">
-								</td>
+								<td th:each="nbE : ${nbEves}" th:text="${nbE}"></td>
 							</tr>
-
 							<tr>
 								<th scope="row" th:text="#{poidsMielEnPot}"></th>
 								<td th:each="pds : ${pdsMiel}"

@@ -138,6 +138,7 @@ public class AccueilService {
 		List<Integer> annees = new ArrayList<>(nban);
 		List<Double> pdsMiel = new ArrayList<>(nban);
 		List<Integer> nbRecoltes = new ArrayList<>(nban);
+		List<Integer> nbEvesRucher = new ArrayList<>(nban);
 		List<Integer> nbEves = new ArrayList<>(nban);
 		List<Integer> nbEssaims = new ArrayList<>(nban);
 		List<Integer> nbCreationEssaims = new ArrayList<>(nban);
@@ -146,6 +147,7 @@ public class AccueilService {
 		List<Integer> nbTraitementsEssaims = new ArrayList<>(nban);
 		Double pdsMielTotal = 0d;
 		Integer nbRecTotal = 0;
+		Integer nbEveRucherTotal = 0;
 		Integer nbEveTotal = 0;
 		Integer nbCreationEssaimsTotal = 0;
 		Integer nbDispersionEssaimsTotal = 0;
@@ -161,6 +163,17 @@ public class AccueilService {
 			Integer nbRec = nbRecOpt.isPresent() ? nbRecOpt.get() : 0;
 			nbRecoltes.add(nbRec);
 			nbRecTotal += nbRec;
+			
+			Optional<Integer> nbEveRucherOpt = evenementRepository.countEveAnneeRucher(date,
+					ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHE.ordinal(),
+					ooioo.ruches.evenement.TypeEvenement.COMMENTAIREHAUSSE.ordinal(),
+					ooioo.ruches.evenement.TypeEvenement.COMMENTAIREHAUSSE.ordinal(),
+					ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHER.ordinal());
+			Integer nbEvRucher = nbEveRucherOpt.isPresent() ? nbEveRucherOpt.get() : 0;
+			nbEvesRucher.add(nbEvRucher);
+			nbEveRucherTotal += nbEvRucher;
+			
+			
 			Optional<Integer> nbEveOpt = evenementRepository.countEveAnnee(date,
 					ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHE.ordinal(),
 					ooioo.ruches.evenement.TypeEvenement.COMMENTAIREHAUSSE.ordinal(),
@@ -169,6 +182,9 @@ public class AccueilService {
 			Integer nbEv = nbEveOpt.isPresent() ? nbEveOpt.get() : 0;
 			nbEves.add(nbEv);
 			nbEveTotal += nbEv;
+			
+			
+			
 			// Nombre d'essaims créés dans l'année (année acquisition = date)
 			Integer nbCree = essaimRepository.countEssaimsCreesDate(date);
 			nbCreationEssaimsTotal += nbCree;
@@ -189,6 +205,7 @@ public class AccueilService {
 		}
 		pdsMiel.add(pdsMielTotal);
 		nbRecoltes.add(nbRecTotal);
+		nbEvesRucher.add(nbEveRucherTotal);
 		nbEves.add(nbEveTotal);
 		nbCreationEssaims.add(nbCreationEssaimsTotal);
 		nbTraitementsEssaims.add(nbTraitementsEssaimsTotal);
@@ -200,6 +217,7 @@ public class AccueilService {
 		model.addAttribute("annees", annees);
 		model.addAttribute("pdsMiel", pdsMiel);
 		model.addAttribute("nbRecoltes", nbRecoltes);
+		model.addAttribute("nbEvesRucher", nbEvesRucher);
 		model.addAttribute("nbEves", nbEves);
 		model.addAttribute("nbEssaims", nbEssaims);
 		model.addAttribute("nbCreationEssaims", nbCreationEssaims);
