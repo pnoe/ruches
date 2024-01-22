@@ -136,8 +136,13 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		}
 	});
-	const zoomini = document.getElementById('zoomini');
-	zoomini.addEventListener('click', () => {
+	document.getElementById('zoomini').addEventListener('click', () => {
 		graphe.resetZoom();
+	});
+	document.getElementById('scales').addEventListener('click', e => {
+		graphe.options.scales.yp.display = e.target.checked;
+		graphe.options.scales.ys.display = e.target.checked;
+		graphe.options.scales.yr.display = e.target.checked;
+		graphe.update();
 	});
 });
