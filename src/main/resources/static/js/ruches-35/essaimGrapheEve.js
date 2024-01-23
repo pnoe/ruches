@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
 							} else if (context.datasetIndex === 6) {
 								// Si dataSet des ajout/retrait de hausse, ajout du type ajout ou retrait.
 								return [ajoutHausses[context.dataIndex] ? 'Ajout' : 'Retrait',
-								 'Ruche: ' + nomRucheHausses[context.dataIndex]];
+								'Ruche: ' + nomRucheHausses[context.dataIndex]];
 							}
 						},
 						label: function(context) {
