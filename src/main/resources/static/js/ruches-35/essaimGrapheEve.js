@@ -1,6 +1,7 @@
 /* globals Chart, dates, poids, poidsSucre, datesSucre,
  poidsRec, datesRec, ruchersRec, datesTrait,
- datesRucher, nomsRucher, datesCadre, nbsCadre, , datesHausses, nbHausses, vide
+ datesRucher, nomsRucher, datesCadre, nbsCadre, , datesHausses, nbHausses,
+ ajoutHausses, nomRucheHausses, vide
 */
 'use strict';
 
@@ -127,6 +128,10 @@ document.addEventListener('DOMContentLoaded', () => {
 							} else if (context.datasetIndex === 4) {
 								// Si dataSet des changements de ruchers, ajouter le nom du rucher.
 								return nomsRucher[context.dataIndex];
+							} else if (context.datasetIndex === 6) {
+								// Si dataSet des ajout/retrait de hausse, ajout du type ajout ou retrait.
+								return [ajoutHausses[context.dataIndex] ? 'Ajout' : 'Retrait',
+								 'Ruche: ' + nomRucheHausses[context.dataIndex]];
 							}
 						},
 						label: function(context) {

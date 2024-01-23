@@ -153,6 +153,9 @@ public class EssaimService {
 		List<Evenement> evesHausses = evenementRepository.findEveEssaimHausseAsc(essaim.getId());
 		List<Long> datesHausses = new ArrayList<>(evesHausses.size());
 		List<Integer> nbHausses = new ArrayList<>(evesHausses.size());
+		List<String> nomRucheHausses = new ArrayList<>(evesHausses.size());
+		// ajoutHausses true ajout d'une hausse, false retrait.
+		List<Boolean> ajoutHausses = new ArrayList<>(evesHausses.size());
 		Integer nbH = 0;
 		for (Evenement e : evesHausses) {
 			if (e.getType().equals(TypeEvenement.HAUSSEPOSERUCHE)) {
@@ -163,6 +166,7 @@ public class EssaimService {
 					// On abandonne le compte des hausses.
 					break;
 				}
+				ajoutHausses.add(true);
 			} else {
 				// Événement retrait.
 				if (nbH < 1) {
@@ -170,13 +174,17 @@ public class EssaimService {
 					break;
 				}
 				nbH -= 1;
+				ajoutHausses.add(false);
 			}
 			datesHausses.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
 			nbHausses.add(nbH);
+			nomRucheHausses.add(e.getRuche() == null ? "" : e.getRuche().getNom());
 			// infos supp utiles : nom ruche, ajout ou retrait ?
 		}
 		model.addAttribute("datesHausses", datesHausses);
 		model.addAttribute("nbHausses", nbHausses);
+		model.addAttribute("ajoutHausses", ajoutHausses);
+		model.addAttribute("nomRucheHausses", nomRucheHausses);
 		model.addAttribute("vide", dates.isEmpty() && datesCadre.isEmpty() && datesRec.isEmpty()
 				&& datesRucher.isEmpty() && datesSucre.isEmpty() && datesTrait.isEmpty() && datesHausses.isEmpty());
 	}
