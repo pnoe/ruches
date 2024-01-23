@@ -28,6 +28,7 @@ import ooioo.ruches.Utils;
 import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
+import ooioo.ruches.hausse.HausseRepository;
 import ooioo.ruches.recolte.Recolte;
 import ooioo.ruches.recolte.RecolteHausse;
 import ooioo.ruches.recolte.RecolteHausseRepository;
@@ -50,10 +51,10 @@ public class EssaimService {
 	private final RucherRepository rucherRepository;
 	private final MessageSource messageSource;
 
-	public EssaimService(EssaimRepository essaimRepository, EvenementRepository evenementRepository,
-			RucheRepository rucheRepository, RecolteRepository recolteRepository,
-			RecolteHausseRepository recolteHausseRepository, RucherRepository rucherRepository,
-			MessageSource messageSource) {
+	public EssaimService(EssaimRepository essaimRepository, HausseRepository hausseRepository,
+			EvenementRepository evenementRepository, RucheRepository rucheRepository,
+			RecolteRepository recolteRepository, RecolteHausseRepository recolteHausseRepository,
+			RucherRepository rucherRepository, MessageSource messageSource) {
 		this.essaimRepository = essaimRepository;
 		this.evenementRepository = evenementRepository;
 		this.rucheRepository = rucheRepository;
@@ -144,8 +145,40 @@ public class EssaimService {
 		}
 		model.addAttribute("datesCadre", datesCadre);
 		model.addAttribute("nbsCadre", nbsCadre);
+		// Les ajouts/retraits de hausses pour l'essaim.
+		// Cela peut concerner plusieurs ruches.
+		// Le numéro d'ordre de la hausse dans l'eve ajout est le nombre de hausses sur
+		// la ruche.
+		// Un retrait indique -1 sur le nombre de hausses.
+		List<Evenement> evesHausses = evenementRepository.findEveEssaimHausseAsc(essaim.getId());
+		List<Long> datesHausses = new ArrayList<>(evesHausses.size());
+		List<Integer> nbHausses = new ArrayList<>(evesHausses.size());
+		Integer nbH = 0;
+		for (Evenement e : evesHausses) {
+			if (e.getType().equals(TypeEvenement.HAUSSEPOSERUCHE)) {
+				try {
+					nbH = (Integer.valueOf(e.getValeur()));
+				} catch (NumberFormatException ex) {
+					logger.error("{} erreur champ Valeur non int", e);
+					// On abandonne le compte des hausses.
+					break;
+				}
+			} else {
+				// Événement retrait.
+				if (nbH < 1) {
+					logger.error("{} erreur nombre de hausse inférieur à 0", e);
+					break;
+				}
+				nbH -= 1;
+			}
+			datesHausses.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
+			nbHausses.add(nbH);
+			// infos supp utiles : nom ruche, ajout ou retrait ?
+		}
+		model.addAttribute("datesHausses", datesHausses);
+		model.addAttribute("nbHausses", nbHausses);
 		model.addAttribute("vide", dates.isEmpty() && datesCadre.isEmpty() && datesRec.isEmpty()
-				&& datesRucher.isEmpty() && datesSucre.isEmpty() && datesTrait.isEmpty());
+				&& datesRucher.isEmpty() && datesSucre.isEmpty() && datesTrait.isEmpty() && datesHausses.isEmpty());
 	}
 
 	/**

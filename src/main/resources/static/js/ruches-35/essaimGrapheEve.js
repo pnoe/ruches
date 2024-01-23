@@ -1,6 +1,6 @@
 /* globals Chart, dates, poids, poidsSucre, datesSucre,
  poidsRec, datesRec, ruchersRec, datesTrait,
- datesRucher, nomsRucher, datesCadre, nbsCadre, vide
+ datesRucher, nomsRucher, datesCadre, nbsCadre, , datesHausses, nbHausses, vide
 */
 'use strict';
 
@@ -52,6 +52,13 @@ document.addEventListener('DOMContentLoaded', () => {
 				yAxisID: 'yc',
 				data: datesCadre.map((v, i) => { return [v * 1000, nbsCadre[i]]; }),
 				pointStyle: 'star'
+			}, {
+				type: 'line',
+				stepped: true,
+				label: 'Hausses',
+				yAxisID: 'yh',
+				data: datesHausses.map((v, i) => { return [v * 1000, nbHausses[i]]; }),
+				pointStyle: 'cross'
 			}],
 		},
 		options: {
@@ -72,6 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
 					display: false
 				},
 				yc: {
+					display: false
+				},
+				yh: {
 					display: false
 				}
 			},
