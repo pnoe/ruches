@@ -76,7 +76,6 @@ public class EssaimService {
 		}
 		model.addAttribute("dates", dates);
 		model.addAttribute("poids", poids);
-
 		model.addAttribute("essaim", essaim);
 		Ruche ruche = rucheRepository.findByEssaimId(essaim.getId());
 		model.addAttribute("ruche", ruche);
@@ -110,7 +109,7 @@ public class EssaimService {
 		model.addAttribute("poidsRec", poidsRec);
 		model.addAttribute("datesRec", datesRec);
 		model.addAttribute("ruchersRec", ruchersRec);
-		// Les traitements.
+		// Les débuts de traitement.
 		List<Evenement> evesTrait = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
 				TypeEvenement.ESSAIMTRAITEMENT);
 		List<Long> datesTrait = new ArrayList<>(evesTrait.size());
@@ -118,6 +117,14 @@ public class EssaimService {
 			datesTrait.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
 		}
 		model.addAttribute("datesTrait", datesTrait);
+		// Les fins de traitement.
+		List<Evenement> evesFinTrait = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
+				TypeEvenement.ESSAIMTRAITEMENTFIN);
+		List<Long> datesFinTrait = new ArrayList<>(evesFinTrait.size());
+		for (Evenement e : evesFinTrait) {
+			datesFinTrait.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
+		}
+		model.addAttribute("datesFinTrait", datesFinTrait);
 		// Les changements de rucher.
 		List<Evenement> evesRucher = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
 				TypeEvenement.RUCHEAJOUTRUCHER);

@@ -1,5 +1,5 @@
 /* globals Chart, dates, poids, poidsSucre, datesSucre,
- poidsRec, datesRec, ruchersRec, datesTrait,
+ poidsRec, datesRec, ruchersRec, datesTrait, datesFinTrait,
  datesRucher, nomsRucher, datesCadre, nbsCadre, datesHausses, nbHausses,
  ajoutHausses, nomRucheHausses, vide, ruchetxt, ajout, retrait
 */
@@ -36,10 +36,16 @@ document.addEventListener('DOMContentLoaded', () => {
 				pointStyle: 'rectRot'
 			}, {
 				type: 'scatter',
-				label: 'Traitements',
+				label: 'Début traitement',
 				yAxisID: 'yt',
 				data: datesTrait.map(v => { return [v * 1000, 0]; }),
 				pointStyle: 'rect'
+			}, {
+				type: 'scatter',
+				label: 'Fin traitement',
+				yAxisID: 'yf',
+				data: datesFinTrait.map(v => { return [v * 1000, 0]; }),
+				pointStyle: 'crossRot'
 			}, {
 				type: 'scatter',
 				label: 'Rucher',
@@ -77,6 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
 					position: 'right'
 				},
 				yt: {
+					display: false
+				},
+				yf: {
 					display: false
 				},
 				yc: {
@@ -125,25 +134,23 @@ document.addEventListener('DOMContentLoaded', () => {
 							if (context.datasetIndex === 2) {
 								// Ajouter le nom du rucher pour la courbe des récoltes.
 								return ruchersRec[context.dataIndex];
-							} else if (context.datasetIndex === 4) {
-								// Si dataSet des changements de ruchers, ajouter le nom du rucher.
-								return nomsRucher[context.dataIndex];
-							} else if (context.datasetIndex === 6) {
+							} else if (context.datasetIndex === 7) {
 								// Si dataSet des ajout/retrait de hausse, ajout du type ajout ou retrait.
 								return [ajoutHausses[context.dataIndex] ? ajout : retrait,
 								ruchetxt + ': ' + nomRucheHausses[context.dataIndex]];
 							}
 						},
 						label: function(context) {
-							if (context.datasetIndex === 3) {
+							if ((context.datasetIndex === 3) || (context.datasetIndex === 4)) {
 								// Si dataSet des traitements, ne pas afficher y.
 								// context.parsed.x renvoie le timestamp
 								// context.dataset.label renvoie le label du dataset
 								return [(new Date(context.parsed.x)).toLocaleString(), context.dataset.label];
-							} else if (context.datasetIndex === 4) {
+							} else if (context.datasetIndex === 5) {
 								// Si dataSet des chgt de ruchers, ne pas afficher y. Ajout de ' : '
 								// et nom du rucher dans afterLabel.
-								return [(new Date(context.parsed.x)).toLocaleString(), context.dataset.label + ' : '];
+								return [(new Date(context.parsed.x)).toLocaleString(),
+									context.dataset.label + ' : ' + nomsRucher[context.dataIndex]];
 							}
 						},
 					}
