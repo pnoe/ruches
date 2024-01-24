@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.essaim.EssaimRepository;
+import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.hausse.HausseRepository;
 import ooioo.ruches.recolte.Recolte;
@@ -122,13 +123,9 @@ public class AccueilService {
 		// Calcul de l'année finale du tableau.
 		Essaim dernierEssaim = essaimRepository.findFirstByOrderByDateAcquisitionDesc();
 		Recolte derniereRecolte = recolteRepository.findFirstByOrderByDateDesc();
-		int dateFin;
-		if ((dernierEssaim == null) || (derniereRecolte == null)) {
-			dateFin = 0;
-		} else {
-			dateFin = java.lang.Math.max(dernierEssaim.getDateAcquisition().getYear(),
-					derniereRecolte.getDate().getYear());
-		}
+		Evenement dernierEve = evenementRepository.findFirstByOrderByDateDesc();
+		int dateFin = Math.max(Math.max(dernierEssaim == null ? 0 : dernierEssaim.getDateAcquisition().getYear(),
+				derniereRecolte == null ? 0 : derniereRecolte.getDate().getYear()), dernierEve.getDate().getYear());
 		// nban, nombre d'années, pour dimensionner les ArrayList, avec une colonne de
 		// plus pour le total.
 		int nban = dateFin - dateDebut + 2;
@@ -163,7 +160,6 @@ public class AccueilService {
 			Integer nbRec = nbRecOpt.isPresent() ? nbRecOpt.get() : 0;
 			nbRecoltes.add(nbRec);
 			nbRecTotal += nbRec;
-			
 			Optional<Integer> nbEveRucherOpt = evenementRepository.countEveAnneeRucher(date,
 					ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHE.ordinal(),
 					ooioo.ruches.evenement.TypeEvenement.COMMENTAIREHAUSSE.ordinal(),
@@ -172,8 +168,6 @@ public class AccueilService {
 			Integer nbEvRucher = nbEveRucherOpt.isPresent() ? nbEveRucherOpt.get() : 0;
 			nbEvesRucher.add(nbEvRucher);
 			nbEveRucherTotal += nbEvRucher;
-			
-			
 			Optional<Integer> nbEveOpt = evenementRepository.countEveAnnee(date,
 					ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHE.ordinal(),
 					ooioo.ruches.evenement.TypeEvenement.COMMENTAIREHAUSSE.ordinal(),
@@ -182,9 +176,6 @@ public class AccueilService {
 			Integer nbEv = nbEveOpt.isPresent() ? nbEveOpt.get() : 0;
 			nbEves.add(nbEv);
 			nbEveTotal += nbEv;
-			
-			
-			
 			// Nombre d'essaims créés dans l'année (année acquisition = date)
 			Integer nbCree = essaimRepository.countEssaimsCreesDate(date);
 			nbCreationEssaimsTotal += nbCree;

@@ -24,6 +24,8 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	boolean existsByEssaim(Essaim essaim);
 
 	boolean existsByHausse(Hausse hausse);
+	
+	Evenement findFirstByOrderByDateDesc();
 
 	/**
 	 * Les événements notifications : événements Commentaire avec le champ valeur
