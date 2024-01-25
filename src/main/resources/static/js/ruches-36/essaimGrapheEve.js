@@ -97,19 +97,19 @@ document.addEventListener('DOMContentLoaded', () => {
 			},
 			plugins: {
 				zoom: {
-					limits: {
-						x: { min: 'original', max: 'original' },
-					},
-					/*
+					// https://www.chartjs.org/chartjs-plugin-zoom
+					// https://www.chartjs.org/chartjs-plugin-zoom/samples/drag/timeseries.html
+					// https://www.chartjs.org/chartjs-plugin-zoom/guide/options.html
 					pan: {
 						enabled: true,
-						// scaleMode: 'x',
 						// modifierKey: 'ctrl',
 						mode: 'x',
 						//  [1 542 383 004,1614188220,1616584080,1650031920];
-						threshold: 1000000
+						// threshold: 10000000
 					},
-					*/
+					limits: {
+						x: { min: 'original', max: 'original' },
+					},
 					zoom: {
 						wheel: {
 							enabled: true,
