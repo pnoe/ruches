@@ -8,6 +8,21 @@ import jakarta.servlet.http.HttpSession;
 
 public final class Utils {
 
+	/**
+	 * Calcule un point dans un cercle centré sur lat,lon de rayon dispersion.
+	 */
+	public static final LatLon dispersion(Double dispersion, Float lat, Float lon) {
+		// Math.random : double value in a range from 0.0 (inclusive) to 1.0
+		// (exclusive).
+		// w random distance, /111300d transformation en degrés au centre de la terre
+		// sqrt() pour une distribution plus régulère dans le cercle
+		double w = dispersion * Math.sqrt(Math.random()) / 111300d;
+		// angle en radians random par rapport au centre du cercle
+		double t = 2d * Math.PI * Math.random();
+		return new LatLon(lat + (float) (w * Math.sin(t)),
+				lon + (float) (w * Math.cos(t) / Math.cos(Math.toRadians(lat))));
+	}
+
 	/*
 	 * Formatte le nbre de jours d'une notification si int enlève les 0 en tête
 	 * (0023 -> 23) si 0 renvoie "" si pas un integer renvoie ""

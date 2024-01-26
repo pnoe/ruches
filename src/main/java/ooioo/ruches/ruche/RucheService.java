@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -36,17 +37,18 @@ public class RucheService {
 	private final RucheRepository rucheRepository;
 	private final RucheTypeRepository rucheTypeRepository;
 	private final RucherRepository rucherRepository;
-	private final RucherService rucherService;
+
+	@Value("${rucher.ruche.dispersion}")
+	private double dispersionRuche;
 
 	public RucheService(EvenementRepository evenementRepository, HausseRepository hausseRepository,
-			RucheRepository rucheRepository, RucheTypeRepository rucheTypeRepository, RucherRepository rucherRepository,
-			RucherService rucherService) {
+			RucheRepository rucheRepository, RucheTypeRepository rucheTypeRepository,
+			RucherRepository rucherRepository) {
 		this.evenementRepository = evenementRepository;
 		this.hausseRepository = hausseRepository;
 		this.rucheRepository = rucheRepository;
 		this.rucheTypeRepository = rucheTypeRepository;
 		this.rucherRepository = rucherRepository;
-		this.rucherService = rucherService;
 	}
 
 	/**
@@ -278,7 +280,7 @@ public class RucheService {
 		Ruche ruche = new Ruche();
 		ruche.setDateAcquisition(Utils.dateDecal(session));
 		Rucher rucher = rucherRepository.findByDepotTrue();
-		LatLon latLon = rucherService.dispersion(rucher.getLatitude(), rucher.getLongitude());
+		LatLon latLon = Utils.dispersion(dispersionRuche, rucher.getLatitude(), rucher.getLongitude());
 		ruche.setLatitude(latLon.lat());
 		ruche.setLongitude(latLon.lon());
 		model.addAttribute(Const.RUCHE, ruche);

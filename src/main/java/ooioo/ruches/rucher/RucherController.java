@@ -86,6 +86,10 @@ public class RucherController {
 	private boolean ignCarteLiscense;
 	@Value("${ruche.dist.max}")
 	private float distMaxRuche;
+	@Value("${rucher.dispersion}")
+	private double dispersionRucher;
+	@Value("${rucher.ruche.dispersion}")
+	private double dispersionRuche;
 
 	public RucherController(RucherRepository rucherRepository, EssaimRepository essaimRepo,
 			RucheRepository rucheRepository, HausseRepository hausseRepository, PersonneRepository personneRepository,
@@ -456,7 +460,7 @@ public class RucherController {
 		Rucher rucher = new Rucher();
 		// Récupération des coordonnées du dépôt
 		Rucher rucherDepot = rucherRepository.findByDepotTrue();
-		LatLon latLon = rucherService.dispersion(rucherDepot.getLatitude(), rucherDepot.getLongitude());
+		LatLon latLon = Utils.dispersion(dispersionRucher, rucherDepot.getLatitude(), rucherDepot.getLongitude());
 		rucher.setLatitude(latLon.lat());
 		rucher.setLongitude(latLon.lon());
 		rucher.setContact(rucherDepot.getContact());
@@ -633,7 +637,7 @@ public class RucherController {
 				if (Utils.distance(diametreTerre, latRucher, ruche.getLatitude(), longRucher,
 						ruche.getLongitude()) > distMaxRuche) {
 					// On calcule un point près de l'entrée du rucher
-					LatLon latLon = rucherService.dispersion(rucher.getLatitude(), rucher.getLongitude());
+					LatLon latLon = Utils.dispersion(dispersionRuche, rucher.getLatitude(), rucher.getLongitude());
 					// On met la ruche à ce point
 					ruche.setLatitude(latLon.lat());
 					ruche.setLongitude(latLon.lon());

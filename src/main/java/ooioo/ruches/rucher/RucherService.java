@@ -374,7 +374,7 @@ public class RucherService {
 				ruche.setRucher(rucher);
 				// Mettre les coord. de la ruche à celles du rucher
 				// dans un rayon égal à dispersion
-				LatLon latLon = dispersion(rucher.getLatitude(), rucher.getLongitude());
+				LatLon latLon = Utils.dispersion(dispersionRuche, rucher.getLatitude(), rucher.getLongitude());
 				ruche.setLatitude(latLon.lat());
 				ruche.setLongitude(latLon.lon());
 				rucheRepository.save(ruche);
@@ -395,6 +395,7 @@ public class RucherService {
 	 * Calcule un point dans un cercle centré sur lat,lon de rayon dispersionRuche
 	 * (voir application.properties).
 	 */
+	/*
 	public LatLon dispersion(Float lat, Float lon) {
 		// Math.random : double value in a range from 0.0 (inclusive) to 1.0
 		// (exclusive).
@@ -406,5 +407,6 @@ public class RucherService {
 		return new LatLon(lat + (float) (w * Math.sin(t)),
 				lon + (float) (w * Math.cos(t) / Math.cos(Math.toRadians(lat))));
 	}
-
+	*/
+	
 }
