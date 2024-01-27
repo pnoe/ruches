@@ -1,9 +1,6 @@
-package ooioo.ruches.recolte;
+package ooioo.ruches;
 
 import java.time.LocalDateTime;
 
-/**
- * Projection Id/Date
- */
 public record IdDate(Long id, LocalDateTime date) {
 }

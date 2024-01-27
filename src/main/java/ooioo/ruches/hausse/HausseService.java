@@ -1,5 +1,6 @@
 package ooioo.ruches.hausse;
 
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,19 +29,25 @@ public class HausseService {
 		List<Long> dates = new ArrayList<>();
 		List<Integer> nbPosees = new ArrayList<>();
 		if (!eves.isEmpty()) {
-			int jour = eves.get(0).getDate().getDayOfYear();
+			LocalDateTime datecour = eves.get(0).getDate();
+			// int jour = eves.get(0).getDate().getDayOfYear();
 			int nbPose = 0;
 			for (Evenement e : eves) {
-				nbPose += e.getType().equals(TypeEvenement.HAUSSEPOSERUCHE) ? 1 : -1;
-				if (jour != e.getDate().getDayOfYear()) {
+				if (datecour.getDayOfYear() != e.getDate().getDayOfYear()) {
+					// Si l'événement est à un autre jour
+					// TODO si 14 janvier 2023 suivi d'un évé le 14 janvier 2024 bug...
 					nbPosees.add(nbPose);
-					dates.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
-					jour = e.getDate().getDayOfYear();
+					dates.add(datecour.toEpochSecond(ZoneOffset.UTC));
+					datecour = e.getDate();
 				}
+				nbPose += e.getType().equals(TypeEvenement.HAUSSEPOSERUCHE) ? 1 : -1;
 			}
 		}
 		model.addAttribute("dates", dates);
 		model.addAttribute("nbPosees", nbPosees);
+		// On ne peut tracer la courbe du nombre total de hausses car la date
+		// d'inactivation d'une hausse est inconnue. Le nombre total de hausses n'est
+		// connu qu'à la date courante.
 	}
 
 	/*

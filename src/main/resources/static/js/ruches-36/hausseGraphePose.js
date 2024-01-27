@@ -1,9 +1,8 @@
-/* globals dates, nbPosees */
+/* globals Chart, dates, nbPosees */
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
-	if (dates.length == 0) { return; }
-	Chart.defaults.elements.point.radius = 6; // default = 3
+	if (dates.length === 0) { return; }
 	const graphe = new Chart('ctx', {
 		data: {
 			datasets: [{

@@ -9,6 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
+import ooioo.ruches.IdDate;
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.hausse.Hausse;
 import ooioo.ruches.ruche.Ruche;
@@ -136,7 +137,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	// l'essaim et la date sont donnés en paramètre.
 	// ruche et essaim identiques.
 	@Query(value = """
-			select new ooioo.ruches.evenement.IdDate(e.id, e.date) from Evenement e
+			select new ooioo.ruches.IdDate(e.id, e.date) from Evenement e
 			  where e.type = ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE
 			    and e.ruche = :ruche
 			    and e.essaim = :essaim

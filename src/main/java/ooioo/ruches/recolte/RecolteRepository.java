@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import ooioo.ruches.IdDate;
+
 @RepositoryRestResource(collectionResourceRel = "recolteRepository")
 public interface RecolteRepository extends ListCrudRepository<Recolte, Long> {
 	List<Recolte> findAllByOrderByDateAsc();

@@ -15,7 +15,7 @@ import ooioo.ruches.Nom;
 public interface HausseRepository extends CrudRepository<Hausse, Long> {
 
 	Optional<Hausse> findByNom(String hausseNom);
-
+	
 	List<Hausse> findByRucheIdOrderByOrdreSurRuche(Long rucheId);
 
 	@Query(value = """

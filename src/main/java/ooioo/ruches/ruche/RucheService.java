@@ -25,7 +25,6 @@ import ooioo.ruches.hausse.HausseRepository;
 import ooioo.ruches.ruche.type.RucheTypeRepository;
 import ooioo.ruches.rucher.Rucher;
 import ooioo.ruches.rucher.RucherRepository;
-import ooioo.ruches.rucher.RucherService;
 
 @Service
 public class RucheService {
