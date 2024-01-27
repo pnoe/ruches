@@ -232,6 +232,8 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	Evenement findFirstByRucheAndHausseAndTypeOrderByDateDesc(Ruche ruche, Hausse hausse, TypeEvenement typeEvenement);
 
 	Evenement findFirstByRucheAndRucherAndTypeOrderByDateDesc(Ruche ruche, Rucher rucher, TypeEvenement typeEvenement);
+	
+	List<Evenement> findByTypeOrTypeOrderByDateAsc(TypeEvenement type1, TypeEvenement type2);
 
 	// https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definitions
 	// pour éviter de passer ruche en param.

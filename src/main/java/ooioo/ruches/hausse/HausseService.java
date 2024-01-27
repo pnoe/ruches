@@ -1,5 +1,9 @@
 package ooioo.ruches.hausse;
 
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -15,6 +19,28 @@ public class HausseService {
 
 	public HausseService(EvenementRepository evenementRepository) {
 		this.evenementRepository = evenementRepository;
+	}
+
+	public void grapheHaussePose(Model model) {
+		// Liste des événements pose et retrait hausse triés par date croissante
+		List<Evenement> eves = evenementRepository.findByTypeOrTypeOrderByDateAsc(TypeEvenement.HAUSSEPOSERUCHE,
+				TypeEvenement.HAUSSERETRAITRUCHE);
+		List<Long> dates = new ArrayList<>();
+		List<Integer> nbPosees = new ArrayList<>();
+		if (!eves.isEmpty()) {
+			int jour = eves.get(0).getDate().getDayOfYear();
+			int nbPose = 0;
+			for (Evenement e : eves) {
+				nbPose += e.getType().equals(TypeEvenement.HAUSSEPOSERUCHE) ? 1 : -1;
+				if (jour != e.getDate().getDayOfYear()) {
+					nbPosees.add(nbPose);
+					dates.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
+					jour = e.getDate().getDayOfYear();
+				}
+			}
+		}
+		model.addAttribute("dates", dates);
+		model.addAttribute("nbPosees", nbPosees);
 	}
 
 	/*

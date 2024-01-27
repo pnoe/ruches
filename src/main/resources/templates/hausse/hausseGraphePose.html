@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsChart}"></script>
+<script th:replace="~{include :: jsChartZoomHammer}"></script>
+<script th:replace="~{include :: jsChartZoom}"></script>
+<script th:replace="~{include :: luxon}"></script>
+<script th:replace="~{include :: chartjs-adapter}"></script>
+<script th:replace="~{include :: d3-color}"></script>
+<script th:replace="~{include :: d3-interpolate}"></script>
+<script th:replace="~{include :: d3-scale-chromatic}"></script>
+<script th:replace="~{include :: jsruches}"></script>
+<script th:inline="javascript">
+	/* exported dates, nbPosees */
+	const dates = /*[[${dates}]]*/null;
+	const nbPosees = /*[[${nbPosees}]]*/null;
+</script>
+</head>
+<body>
+	<nav th:replace="~{navbar::navbar}"></nav>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					<a th:href="@{'/hausse/liste'}"
+						th:text="#{hausse}"></a>
+					<th:block th:text="#{sep}+#{evenements}"></th:block>
+				</h1>
+			</div>
+			<div class="col">
+				<label th:text="#{AfficherEchelle}" for="scales"></label> <input
+					type="checkbox" id="scales" checked /> &nbsp;
+				<button id="zoomini" type="button" class="btn btn-primary btn-sm"
+					th:text="#{ZoomIni}"></button>
+			</div>
+		</div>
+		<div th:if="${#lists.isEmpty(dates)}" class="row">
+			<div class="col text-center">
+				<span th:text="#{AucunEve}"></span>
+			</div>
+		</div>
+	</div>
+	<canvas th:unless="${#lists.isEmpty(dates)}" id="ctx"></canvas>
+	<footer th:replace="~{include::footer}"></footer>
+</body>
+</html>

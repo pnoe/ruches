@@ -45,14 +45,27 @@ public class HausseController {
 	private final RecolteHausseRepository recolteHausseRepository;
 	private final MessageSource messageSource;
 	private final RucheService rucheService;
+	private final HausseService hausseService;
 
 	public HausseController(HausseRepository hausseRepository, EvenementRepository evenementRepository,
-			RecolteHausseRepository recolteHausseRepository, MessageSource messageSource, RucheService rucheService) {
+			RecolteHausseRepository recolteHausseRepository, MessageSource messageSource, RucheService rucheService,
+			HausseService hausseService) {
 		this.hausseRepository = hausseRepository;
 		this.evenementRepository = evenementRepository;
 		this.recolteHausseRepository = recolteHausseRepository;
 		this.messageSource = messageSource;
 		this.rucheService = rucheService;
+		this.hausseService = hausseService;
+	}
+
+	/**
+	 * Graphique affichant la courbe du nombre de hausse posées. En abscisse le
+	 * temps.
+	 */
+	@GetMapping("/graphehaussepose")
+	public String grapheHaussePose(Model model) {
+		hausseService.grapheHaussePose(model);
+		return "hausse/hausseGraphePose";
 	}
 
 	/**
