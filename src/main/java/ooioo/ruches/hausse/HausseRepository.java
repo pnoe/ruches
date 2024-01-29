@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import ooioo.ruches.IdDateNoTime;
 import ooioo.ruches.IdNom;
 import ooioo.ruches.Nom;
 
@@ -17,7 +18,14 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 	Optional<Hausse> findByNom(String hausseNom);
 	
 	List<Hausse> findByRucheIdOrderByOrdreSurRuche(Long rucheId);
-
+	
+	@Query(value = """
+			select new ooioo.ruches.IdDateNoTime(id as id, dateAcquisition as date)
+				from Hausse
+				order by dateAcquisition asc
+			""")
+	List<IdDateNoTime> findByOrderByDateAcquisition();
+	
 	@Query(value = """
 			select h
 				from Hausse h

@@ -26,7 +26,6 @@ import ooioo.ruches.Utils;
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.hausse.Hausse;
 import ooioo.ruches.hausse.HausseRepository;
-import ooioo.ruches.hausse.HausseService;
 import ooioo.ruches.ruche.Ruche;
 import ooioo.ruches.rucher.Rucher;
 
@@ -38,15 +37,15 @@ public class EvenementHausseController {
 
 	private final EvenementRepository evenementRepository;
 	private final HausseRepository hausseRepository;
-	private final HausseService hausseService;
+	// private final HausseService hausseService;
 	private final MessageSource messageSource;
 
 	public EvenementHausseController(EvenementRepository evenementRepository,
-			 HausseRepository hausseRepository,  HausseService hausseService,
+			 HausseRepository hausseRepository,  // HausseService hausseService,
 			 MessageSource messageSource) {
 		this.evenementRepository = evenementRepository;
 		this.hausseRepository = hausseRepository;
-		this.hausseService = hausseService;
+		// this.hausseService = hausseService;
 		this.messageSource = messageSource;
 	}
 
@@ -210,8 +209,17 @@ public class EvenementHausseController {
 			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.HAUSSEREMPLISSAGE, ruche, essaim,
 					rucher, hausse, null, null);
 			model.addAttribute(Const.EVENEMENT, evenement);
-			// pour affichage rappel du dernier événement de remplissage
-			hausseService.modelAddEvenement(model, hausse, TypeEvenement.HAUSSEREMPLISSAGE);
+			Evenement eveRemp = evenementRepository.findFirstByHausseAndTypeOrderByDateDesc(hausse,  TypeEvenement.HAUSSEREMPLISSAGE);
+			String type = TypeEvenement.HAUSSEREMPLISSAGE.toString();
+			if (eveRemp == null) {
+				model.addAttribute(Const.DATE + type, null);
+				model.addAttribute(Const.VALEUR + type, null);
+				model.addAttribute(Const.COMMENTAIRE + type, null);
+			} else {
+				model.addAttribute(Const.DATE + type, eveRemp.getDate());
+				model.addAttribute(Const.VALEUR + type, eveRemp.getValeur());
+				model.addAttribute(Const.COMMENTAIRE + type, eveRemp.getCommentaire());
+			}
 			return "hausse/hausseRemplissageForm";
 		} else {
 			logger.error(Const.IDHAUSSEXXINCONNU, hausseId);

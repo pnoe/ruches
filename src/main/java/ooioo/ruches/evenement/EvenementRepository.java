@@ -10,6 +10,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import ooioo.ruches.IdDate;
+import ooioo.ruches.TypeDate;
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.hausse.Hausse;
 import ooioo.ruches.ruche.Ruche;
@@ -25,7 +26,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	boolean existsByEssaim(Essaim essaim);
 
 	boolean existsByHausse(Hausse hausse);
-	
+
 	Evenement findFirstByOrderByDateDesc();
 
 	/**
@@ -45,6 +46,38 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			""")
 	List<Evenement> findNotification();
 
+	
+	
+	
+	
+	// select h.id, h.nom, h.date_acquisition, max(e.date) 
+	//   from hausse h 
+	//   left join evenement e 
+	//     on h.id = e.hausse_id 
+	//   group by h.id; 
+	// Trouve le dernier événement de chaque hausse incactive.
+	// Utilisé pour calculer le nombre total de hausse pour la courbe des hausses posées.
+	// Problème : il n'y a qu'une hausse inactive, c'est louche !
+	
+	 // No property 'date' found for type 'Hausse'
+	// new ooioo.ruches.IdDate(
+	 
+	@Query(value = """
+			select new ooioo.ruches.IdDate(null as id, max(e.date) as date)
+			  from Hausse h, Evenement e
+			  where
+			    h.active = false and 
+			    h.id = e.hausse.id
+			  group by h.id
+			  order by max(e.date) asc 
+			""")
+	List<IdDate> findHausseInacLastEve();
+
+	
+	
+	
+	
+	
 	@Query(value = """
 			select e
 			  from Evenement e
@@ -111,7 +144,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			  order by date desc
 			""")
 	List<Evenement> findEveRucheHausseDesc(Long rucheId);
-	
+
 	// Les événéments ajout et retrait de hausses pour un essaim.
 	@Query(value = """
 			select e
@@ -122,8 +155,6 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			  order by date asc
 			""")
 	List<Evenement> findEveEssaimHausseAsc(Long essaimId);
-	
-	
 
 	List<Evenement> findByEssaimIdAndTypeOrderByDateAsc(Long essaimId, TypeEvenement typeEvenement);
 
@@ -233,8 +264,8 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	Evenement findFirstByRucheAndHausseAndTypeOrderByDateDesc(Ruche ruche, Hausse hausse, TypeEvenement typeEvenement);
 
 	Evenement findFirstByRucheAndRucherAndTypeOrderByDateDesc(Ruche ruche, Rucher rucher, TypeEvenement typeEvenement);
-	
-	List<Evenement> findByTypeOrTypeOrderByDateAsc(TypeEvenement type1, TypeEvenement type2);
+
+	List<TypeDate> findByTypeOrTypeOrderByDateAsc(TypeEvenement type1, TypeEvenement type2);
 
 	// https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definitions
 	// pour éviter de passer ruche en param.

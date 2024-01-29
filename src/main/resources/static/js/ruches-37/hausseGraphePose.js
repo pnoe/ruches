@@ -1,4 +1,4 @@
-/* globals Chart, dates, nbPosees */
+/* globals Chart, dates, nbPosees, datesTotal, nbTotal */
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -7,15 +7,27 @@ document.addEventListener('DOMContentLoaded', () => {
 		data: {
 			datasets: [{
 				type: 'line',
+				stepped: true,
 				label: 'Nombre de hausses posées',
 				yAxisID: 'y',
-				data: dates.map((v, i) => { return [v * 1000, nbPosees[i]]; })
+				data: dates.map((v, i) => { return [v * 1000, nbPosees[i]]; }),
+				fill: true
+			}, {
+				type: 'line',
+				stepped: true,
+				label: 'Nombre de hausses total',
+				yAxisID: 'y',
+				data: datesTotal.map((v, i) => { return [v * 1000, nbTotal[i]]; }),
+				fill: '-1'
 			}],
 		},
 		options: {
 			scales: {
 				x: {
-					type: 'time'
+					type: 'time',
+					// On limite aux dates du dataset des hausses posées.
+					min: dates[0] * 1000 - 200000000,
+					max: dates[dates.lentgh - 1] * 1000 + 200000000
 				},
 				y: {
 					position: 'left'
@@ -34,6 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
 						// threshold: 10000000
 					},
 					limits: {
+						// les limites ne fonctionnent pas bien avec min et max imposés sur x
+						// ça ne marche pas mieux avec les valeurs de "dates" au lieu de 'original'
 						x: { min: 'original', max: 'original' },
 					},
 					zoom: {
