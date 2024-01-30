@@ -1,4 +1,4 @@
-/* globals Chart, dates, nbPosees, datesTotal, nbTotal */
+/* globals Chart, dates, nbPosees, datesTotal, nbTotal, datesRec, poidsRec */
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -19,6 +19,18 @@ document.addEventListener('DOMContentLoaded', () => {
 				yAxisID: 'y',
 				data: datesTotal.map((v, i) => { return [v * 1000, nbTotal[i]]; }),
 				fill: '-1'
+			}, {
+				// type: 'bar',   rien ne s'affiche !?
+				// https://www.chartjs.org/docs/latest/charts/mixed.html
+				// https://www.chartjs.org/docs/latest/samples/other-charts/combo-bar-line.html
+				// idem si ce dataset est mis en premier.
+				// idem si type: 'bar' est mis avant data:
+				// idem si même axe y
+				type: 'scatter',
+				label: 'Récoltes',
+				yAxisID: 'yr',
+				data: datesRec.map((v, i) => { return [v * 1000, poidsRec[i]]; }),
+				pointStyle: 'triangle'
 			}],
 		},
 		options: {
@@ -31,6 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
 				},
 				y: {
 					position: 'left'
+				}, 
+				yr: {
+					// position: 'right',
+					display: false
 				}
 			},
 			plugins: {

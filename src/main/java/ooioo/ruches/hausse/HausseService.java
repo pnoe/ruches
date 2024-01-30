@@ -16,16 +16,21 @@ import ooioo.ruches.IdDateNoTime;
 import ooioo.ruches.TypeDate;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
+import ooioo.ruches.recolte.Recolte;
+import ooioo.ruches.recolte.RecolteRepository;
 
 @Service
 public class HausseService {
 
 	private final EvenementRepository evenementRepository;
 	private final HausseRepository hausseRepository;
+	private final RecolteRepository recolteRepository;
 
-	public HausseService(EvenementRepository evenementRepository, HausseRepository hausseRepository) {
+	public HausseService(EvenementRepository evenementRepository, HausseRepository hausseRepository,
+			RecolteRepository recolteRepository) {
 		this.evenementRepository = evenementRepository;
 		this.hausseRepository = hausseRepository;
+		this.recolteRepository = recolteRepository;
 	}
 
 	public void grapheHaussePose(Model model) {
@@ -39,13 +44,18 @@ public class HausseService {
 		// Pour le nombre de hausses total.
 		List<Long> datesTotal = new ArrayList<>();
 		List<Integer> nbTotal = new ArrayList<>();
+		// POur les récoltes.
+		List<Long> datesRec = new ArrayList<>();
+		List<Float> poidsRec = new ArrayList<>();
+
 		if (!eves.isEmpty()) {
 			LocalDateTime datecour = eves.get(0).date();
 			int nbPose = 0;
 			for (TypeDate e : eves) {
 				if (datecour.getDayOfYear() != e.date().getDayOfYear() || datecour.getYear() != e.date().getYear()) {
 					// Si l'événement est à un autre jour ou une autre année que les précédents, on
-					// ajoute le nombre de hausses et la date précédente aux listes pour le graphique.
+					// ajoute le nombre de hausses et la date précédente aux listes pour le
+					// graphique.
 					nbPosees.add(nbPose);
 					dates.add(datecour.toEpochSecond(ZoneOffset.UTC));
 					// On mémorise la nouvelle date courante.
@@ -98,7 +108,15 @@ public class HausseService {
 					nbTotal.add(nbHTotal);
 				}
 			}
+			// Les récoltes.
+			// Calcul du poids de miel par récolte.
+			for (Recolte recolte : recolteRepository.findAllByOrderByDateAsc()) {
+				datesRec.add(recolte.getDate().toEpochSecond(ZoneOffset.UTC));
+				poidsRec.add(recolte.getIntPoidsMiel() / 1000f);
+			}
 		}
+		model.addAttribute("datesRec", datesRec);
+		model.addAttribute("poidsRec", poidsRec);
 		model.addAttribute("dates", dates);
 		model.addAttribute("nbPosees", nbPosees);
 		model.addAttribute("datesTotal", datesTotal);
