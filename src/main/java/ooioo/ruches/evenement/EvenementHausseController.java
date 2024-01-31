@@ -37,19 +37,61 @@ public class EvenementHausseController {
 
 	private final EvenementRepository evenementRepository;
 	private final HausseRepository hausseRepository;
-	// private final HausseService hausseService;
 	private final MessageSource messageSource;
 
-	public EvenementHausseController(EvenementRepository evenementRepository,
-			 HausseRepository hausseRepository,  // HausseService hausseService,
-			 MessageSource messageSource) {
+	public EvenementHausseController(EvenementRepository evenementRepository, HausseRepository hausseRepository,
+			MessageSource messageSource) {
 		this.evenementRepository = evenementRepository;
 		this.hausseRepository = hausseRepository;
-		// this.hausseService = hausseService;
 		this.messageSource = messageSource;
 	}
 
 	private static final String commForm = "hausse/hausseCommentaireForm";
+
+	/*
+	 * Liste des événements pose et retrait de hausse.
+	 */
+	@GetMapping("/poseRetraitHausse")
+	public String poseRetraitHausseListe(Model model, @RequestParam(required = false) Integer periode,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
+			@RequestParam(required = false) String datestext,
+			@CookieValue(value = "p", defaultValue = "1") Integer pCookie,
+			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
+			@CookieValue(value = "d1", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
+			@CookieValue(value = "d2", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie) {
+		if (periode == null) {
+			periode = pCookie;
+			if (pCookie == 6) {
+				date1 = d1Cookie;
+				date2 = d2Cookie;
+				datestext = dxCookie;
+			}
+		}
+		model.addAttribute(Const.EVENEMENTS, switch (periode) {
+		case 1 -> // toute période
+			evenementRepository.findPoseHausseDateDesc();
+		case 2 -> // moins d'un an
+			evenementRepository.findTypePeriode(LocalDateTime.now().minusYears(1), TypeEvenement.HAUSSEPOSERUCHE,
+					TypeEvenement.HAUSSERETRAITRUCHE);
+		case 3 -> // moins d'un mois
+			evenementRepository.findTypePeriode(LocalDateTime.now().minusMonths(1), TypeEvenement.HAUSSEPOSERUCHE,
+					TypeEvenement.HAUSSERETRAITRUCHE);
+		case 4 -> // moins d'une semaine
+			evenementRepository.findTypePeriode(LocalDateTime.now().minusWeeks(1), TypeEvenement.HAUSSEPOSERUCHE,
+					TypeEvenement.HAUSSERETRAITRUCHE);
+		case 5 -> // moins d'un jour
+			evenementRepository.findTypePeriode(LocalDateTime.now().minusDays(1), TypeEvenement.HAUSSEPOSERUCHE,
+					TypeEvenement.HAUSSERETRAITRUCHE);
+		default -> { // ajouter tests date1 et date2 non null
+			model.addAttribute("datestext", datestext);
+			yield evenementRepository.findTypePeriode(date1, date2, TypeEvenement.HAUSSEPOSERUCHE,
+					TypeEvenement.HAUSSERETRAITRUCHE);
+		}
+		});
+		model.addAttribute("periode", periode);
+		return "evenement/evenementPoseHausseListe";
+	}
 
 	/*
 	 * Liste événements remplissage hausse
@@ -209,7 +251,8 @@ public class EvenementHausseController {
 			var evenement = new Evenement(Utils.dateTimeDecal(session), TypeEvenement.HAUSSEREMPLISSAGE, ruche, essaim,
 					rucher, hausse, null, null);
 			model.addAttribute(Const.EVENEMENT, evenement);
-			Evenement eveRemp = evenementRepository.findFirstByHausseAndTypeOrderByDateDesc(hausse,  TypeEvenement.HAUSSEREMPLISSAGE);
+			Evenement eveRemp = evenementRepository.findFirstByHausseAndTypeOrderByDateDesc(hausse,
+					TypeEvenement.HAUSSEREMPLISSAGE);
 			String type = TypeEvenement.HAUSSEREMPLISSAGE.toString();
 			if (eveRemp == null) {
 				model.addAttribute(Const.DATE + type, null);

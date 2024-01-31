@@ -145,25 +145,31 @@ public class EvenementEssaimController {
 			tous ? evenementRepository.findTraitementDateDesc()
 					: evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.ESSAIMTRAITEMENT);
 		case 2 -> // moins d'un an
-			tous ? evenementRepository.findTypePeriode(LocalDateTime.now().minusYears(1))
+			tous ? evenementRepository.findTypePeriode(LocalDateTime.now().minusYears(1),
+					TypeEvenement.ESSAIMTRAITEMENT, TypeEvenement.ESSAIMTRAITEMENTFIN)
 					: evenementRepository.findTypePeriode(TypeEvenement.ESSAIMTRAITEMENT,
 							LocalDateTime.now().minusYears(1));
 		case 3 -> // moins d'un mois
-			tous ? evenementRepository.findTypePeriode(LocalDateTime.now().minusMonths(1))
+			tous ? evenementRepository.findTypePeriode(LocalDateTime.now().minusMonths(1),
+					TypeEvenement.ESSAIMTRAITEMENT, TypeEvenement.ESSAIMTRAITEMENTFIN)
 					: evenementRepository.findTypePeriode(TypeEvenement.ESSAIMTRAITEMENT,
 							LocalDateTime.now().minusMonths(1));
 		case 4 -> // moins d'une semaine
-			tous ? evenementRepository.findTypePeriode(LocalDateTime.now().minusWeeks(1))
+			tous ? evenementRepository.findTypePeriode(LocalDateTime.now().minusWeeks(1),
+					TypeEvenement.ESSAIMTRAITEMENT, TypeEvenement.ESSAIMTRAITEMENTFIN)
 					: evenementRepository.findTypePeriode(TypeEvenement.ESSAIMTRAITEMENT,
 							LocalDateTime.now().minusWeeks(1));
 		case 5 -> // moins d'un jour
-			tous ? evenementRepository.findTypePeriode(LocalDateTime.now().minusDays(1))
+			tous ? evenementRepository.findTypePeriode(LocalDateTime.now().minusDays(1), TypeEvenement.ESSAIMTRAITEMENT,
+					TypeEvenement.ESSAIMTRAITEMENTFIN)
 					: evenementRepository.findTypePeriode(TypeEvenement.ESSAIMTRAITEMENT,
 							LocalDateTime.now().minusDays(1));
 		default -> {
 			// ajouter tests date1 et date2 non null
 			model.addAttribute("datestext", datestext);
-			yield tous ? evenementRepository.findTypePeriode(date1, date2)
+			yield tous
+					? evenementRepository.findTypePeriode(date1, date2, TypeEvenement.ESSAIMTRAITEMENT,
+							TypeEvenement.ESSAIMTRAITEMENTFIN)
 					: evenementRepository.findTypePeriode(TypeEvenement.ESSAIMTRAITEMENT, date1, date2);
 		}
 		});
@@ -468,7 +474,8 @@ public class EvenementEssaimController {
 		// création décroissante pour remérage.
 		Ruche ruche = rucheRepository.findByEssaimId(essaimId);
 		if (ruche != null) {
-			// Liste IdNom des essaims actifs, hors ruche, ordonnés par date acquisition décroissante.
+			// Liste IdNom des essaims actifs, hors ruche, ordonnés par date acquisition
+			// décroissante.
 			// Pour choix éventuel si remérage.
 			List<IdNom> essaimsRemerage = essaimRepository.findProjectedIdNomByRucheIsNullOrderByDateAcquisitionDesc();
 			if (!essaimsRemerage.isEmpty()) {

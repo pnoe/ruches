@@ -109,27 +109,25 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			  where e.type = ?1 and e.date > ?2 and e.date < ?3
 			""")
 	List<Evenement> findTypePeriode(TypeEvenement typeEvenement, LocalDateTime date1, LocalDateTime date2);
-
+	
 	@RestResource(path = "findPeriodeType1Type2Date1")
 	@Query(value = """
 			select e
 			  from Evenement e
-			  where (e.type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENT
-			    or e.type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENTFIN)
-			    and e.date > ?1
+			  where (type = :type1 or type = :type2)
+			    and date > :date
 			""")
-	Iterable<Evenement> findTypePeriode(LocalDateTime date);
+	Iterable<Evenement> findTypePeriode(LocalDateTime date, TypeEvenement type1, TypeEvenement type2);
 
 	@RestResource(path = "findPeriodeType1Type2Date1Date2")
 	@Query(value = """
 			select e
 			  from Evenement e
-			  where (e.type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENT
-			      or e.type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENTFIN)
-			    and e.date > ?1 and e.date < ?2
+			  where (type = :type1 or type = :type2)
+			    and date > :date1 and date < :date2
 			""")
-	Iterable<Evenement> findTypePeriode(LocalDateTime date1, LocalDateTime date2);
-
+	Iterable<Evenement> findTypePeriode(LocalDateTime date1, LocalDateTime date2, TypeEvenement type1, TypeEvenement type2);
+	
 	List<Evenement> findByRucheId(Long rucheId);
 
 	Iterable<Evenement> findByEssaimId(Long essaimId);
@@ -181,11 +179,20 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	@Query(value = """
 			select e
 			  from Evenement e
-			  where e.type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENT
-			    or e.type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENTFIN
+			  where type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENT
+			    or type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENTFIN
 			""")
 	List<Evenement> findTraitementDateDesc();
 
+	@Query(value = """
+			select e
+			  from Evenement e
+			  where type = ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE
+			    or type = ooioo.ruches.evenement.TypeEvenement.HAUSSERETRAITRUCHE
+			""")
+	List<Evenement> findPoseHausseDateDesc();
+
+	
 	@Query(value = """
 			select e from Evenement e
 			  where e.type = ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER

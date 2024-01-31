@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: moment}"></script>
+<script th:replace="~{include :: jquerydaterangepicker}"></script>
+<link th:replace="~{include :: cssjquerydaterangepicker}" />
+<script th:replace="~{include :: jsruchesnom('evenementListe')}"></script>
+<script th:inline="javascript">
+		/* exported Evenements, buttontextprint, buttontextcol */
+		/* globals evenementListe */
+		const Evenements = /*[[#{evtsPoseRetraitHausses}]]*/ null;
+		const buttontextprint = /*[[#{buttontextprint}]]*/null;
+		const buttontextcol = /*[[#{buttontextcol}]]*/null;
+		document.addEventListener('DOMContentLoaded', () => evenementListe(true));
+	</script>
+</head>
+<body>
+	<nav th:replace="~{navbar::navbar}"></nav>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item" th:text="#{evtsPoseRetraitHausses}"></h1>
+			</div>
+			<div
+				th:insert="~{includeForm :: evenementListeDates(retController='/evenement/hausse/poseRetraitHausse')}"
+				class="col"></div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<table class="table table-bordered table-striped table-sm"
+			id="evenements">
+			<thead>
+				<tr>
+					<th th:text="#{date}"></th>
+					<th th:text="#{evenement}"></th>
+					<th th:text="#{ruche}"></th>
+					<th th:text="#{Ordre}"></th>
+					<th th:text="#{rucher}"></th>
+					<th th:text="#{essaim}"></th>
+					<th th:text="#{commentaire}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="evenement : ${evenements}">
+					<td><a
+						th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
+						th:href="@{'/evenement/'+${evenement.id}+'?type=ajoutruche'}"></a>
+					</td>
+					<td th:text="#{${evenement.type}}"></td>
+					<td th:text="${evenement.ruche?.nom}"></td>
+					<td th:text="${evenement.valeur}"></td>
+					<td th:text="${evenement.rucher?.nom}"></td>
+					<td th:text="${evenement.essaim?.nom}"></td>
+					<td th:text="${evenement.commentaire}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<footer th:replace="~{include::footer}"></footer>
+</body>
+</html>
