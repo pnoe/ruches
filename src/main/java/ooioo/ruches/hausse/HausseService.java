@@ -16,7 +16,6 @@ import ooioo.ruches.IdDateNoTime;
 import ooioo.ruches.TypeDate;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
-import ooioo.ruches.recolte.Recolte;
 import ooioo.ruches.recolte.RecolteRepository;
 
 @Service
@@ -46,8 +45,7 @@ public class HausseService {
 		List<Integer> nbTotal = new ArrayList<>();
 		// POur les récoltes.
 		List<Long> datesRec = new ArrayList<>();
-		List<Float> poidsRec = new ArrayList<>();
-
+		List<Long> nbHaussesRec = new ArrayList<>();
 		if (!eves.isEmpty()) {
 			LocalDateTime datecour = eves.get(0).date();
 			int nbPose = 0;
@@ -109,14 +107,14 @@ public class HausseService {
 				}
 			}
 			// Les récoltes.
-			// Calcul du poids de miel par récolte.
-			for (Recolte recolte : recolteRepository.findAllByOrderByDateAsc()) {
-				datesRec.add(recolte.getDate().toEpochSecond(ZoneOffset.UTC));
-				poidsRec.add(recolte.getIntPoidsMiel() / 1000f);
+			// Calcul le nombre de hausses par récoltes.
+			for (IdDate idDate : recolteRepository.recoltesNbHaussesDate()) {
+				datesRec.add(idDate.date().toEpochSecond(ZoneOffset.UTC));
+				nbHaussesRec.add(idDate.id());
 			}
 		}
 		model.addAttribute("datesRec", datesRec);
-		model.addAttribute("poidsRec", poidsRec);
+		model.addAttribute("nbHaussesRec", nbHaussesRec);
 		model.addAttribute("dates", dates);
 		model.addAttribute("nbPosees", nbPosees);
 		model.addAttribute("datesTotal", datesTotal);

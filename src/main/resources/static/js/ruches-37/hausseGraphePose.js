@@ -1,4 +1,4 @@
-/* globals Chart, dates, nbPosees, datesTotal, nbTotal, datesRec, poidsRec */
+/* globals Chart, dates, nbPosees, datesTotal, nbTotal, datesRec, nbHaussesRec */
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -27,9 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
 				// idem si type: 'bar' est mis avant data:
 				// idem si même axe y
 				type: 'scatter',
-				label: 'Récoltes',
-				yAxisID: 'yr',
-				data: datesRec.map((v, i) => { return [v * 1000, poidsRec[i]]; }),
+				label: 'Récoltes, nb hausses',
+				yAxisID: 'y',
+				data: datesRec.map((v, i) => { return [v * 1000, nbHaussesRec[i]]; }),
 				pointStyle: 'triangle'
 			}],
 		},
@@ -43,10 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
 				},
 				y: {
 					position: 'left'
-				}, 
-				yr: {
-					// position: 'right',
-					display: false
 				}
 			},
 			plugins: {

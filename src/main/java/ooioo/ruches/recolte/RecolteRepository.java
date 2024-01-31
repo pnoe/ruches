@@ -20,6 +20,19 @@ public interface RecolteRepository extends ListCrudRepository<Recolte, Long> {
 	Recolte findFirstByOrderByDateDesc();
 
 	Recolte findFirstByOrderByDateAsc();
+	
+	/*
+	 * Renvoie pour la liste des récoltes, le nombre de hausses de la récolte et la
+	 * date de la récolte dans le Record IdDate.
+	 */
+	@Query(value = """
+			select new ooioo.ruches.IdDate(count(rh), date)
+			  from Recolte r
+			  left join RecolteHausse rh on r.id = rh.recolte.id
+			  group by r.id
+			  order by date asc
+			""")
+	List<IdDate> recoltesNbHaussesDate();
 
 	/*
 	 * Renvoie le poids de miel mis en pot en kg pour l'année passée en paramètre Si

@@ -48,7 +48,7 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 			        or essaim is null)
 			""")
 	Integer countHRecIncompletes(Recolte recolte);
-		
+
 	// Poids de miel produit par un essaim pour une récolte
 	@Query(value = """
 			select sum(poidsAvant) - sum(poidsApres) as poids
