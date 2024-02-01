@@ -1,8 +1,12 @@
 package ooioo.ruches.ruche;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +18,8 @@ import org.springframework.ui.Model;
 
 import jakarta.servlet.http.HttpSession;
 import ooioo.ruches.Const;
+import ooioo.ruches.IdDate;
+import ooioo.ruches.IdDateNoTime;
 import ooioo.ruches.LatLon;
 import ooioo.ruches.Nom;
 import ooioo.ruches.Utils;
@@ -48,6 +54,59 @@ public class RucheService {
 		this.rucheRepository = rucheRepository;
 		this.rucheTypeRepository = rucheTypeRepository;
 		this.rucherRepository = rucherRepository;
+	}
+
+	/*
+	 * Graphe ruches actives. La date d'inactivation pour les ruches inactives est
+	 * celle du dernier événement de la ruche augmentée d'un jour.
+	 */
+	void grapheRuches(Model model) {
+		// Pour le nombre de ruches actives total.
+		List<Long> datesTotal = new ArrayList<>();
+		List<Integer> nbTotal = new ArrayList<>();
+		// Courbe du nombre total de ruches actives.
+		// Estimation de la date d'inactivation d'une ruche d'après la date du dernier
+		// événement qui la référence.
+		// Liste des dates d'acquisition des ruches (actives et inactives).
+		List<IdDateNoTime> ruchesAcqu = rucheRepository.findByOrderByDateAcquisition();
+		// Pour chaque ruche inactive, on recherche la date du dernier événement la
+		// concernant.
+		// Id est forcé à null pour distinguer la liste acqusition qui ajoute la ruche
+		// (+1) et la liste lastEve qui retire la ruche (-1).
+		List<IdDate> ruInacLastEve = evenementRepository.findRucheInacLastEve();
+		// Incrémenter d'un jour les dates de ruInacLastEve.
+		List<IdDate> rucheInacLastEve = new ArrayList<>(ruInacLastEve.size());
+		for (IdDate idD : ruInacLastEve) {
+			
+			// rien ne s'affiche !
+			System.out.println(idD);
+			
+			rucheInacLastEve.add(new IdDate(null, idD.date().plusDays(1)));
+		}
+		// Fusion des deux listes.
+		for (IdDateNoTime rA : ruchesAcqu) {
+			rucheInacLastEve.add(new IdDate(rA.id(), LocalDateTime.of(rA.date(), LocalTime.NOON)));
+		}
+		// Trier rucheInacLastEve par date.
+		Collections.sort(rucheInacLastEve, Comparator.comparing(IdDate::date));
+		if (!rucheInacLastEve.isEmpty()) {
+			LocalDateTime datecourTotal = rucheInacLastEve.get(0).date();
+			int nbHTotal = 0;
+			for (IdDate rA : rucheInacLastEve) {
+				if (datecourTotal.getDayOfYear() != rA.date().getDayOfYear()
+						|| datecourTotal.getYear() != rA.date().getYear()) {
+					// Si l'événement est à un autre jour que les précédents.
+					nbTotal.add(nbHTotal);
+					datesTotal.add(datecourTotal.toEpochSecond(ZoneOffset.UTC));
+					datecourTotal = rA.date();
+				}
+				nbHTotal += (rA.id() == null) ? -1 : +1;
+			}
+			nbTotal.add(nbHTotal);
+			datesTotal.add(datecourTotal.toEpochSecond(ZoneOffset.UTC));
+		}
+		model.addAttribute("datesTotal", datesTotal);
+		model.addAttribute("nbTotal", nbTotal);
 	}
 
 	/**

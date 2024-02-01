@@ -7,22 +7,11 @@
 <script th:replace="~{include :: jsChartZoom}"></script>
 <script th:replace="~{include :: luxon}"></script>
 <script th:replace="~{include :: chartjs-adapter}"></script>
-<script th:replace="~{include :: d3-color}"></script>
-<script th:replace="~{include :: d3-interpolate}"></script>
-<script th:replace="~{include :: d3-scale-chromatic}"></script>
 <script th:replace="~{include :: jsruches}"></script>
 <script th:inline="javascript">
-	/* exported dates, nbPosees, datesTotal, nbTotal, datesRec, nbHaussesRec 
-	nbHaussesP, nbHaussesT, recNbHausses */
-	const dates = /*[[${dates}]]*/null;
-	const nbPosees = /*[[${nbPosees}]]*/null;
+	/* exported datesTotal, nbTotal */
 	const datesTotal = /*[[${datesTotal}]]*/null;
 	const nbTotal = /*[[${nbTotal}]]*/null;
-	const datesRec = /*[[${datesRec}]]*/null;
-	const nbHaussesRec = /*[[${nbHaussesRec}]]*/null;
-	const nbHaussesP = /*[[#{nbHaussesP}]]*/null;
-	const nbHaussesT = /*[[#{nbHaussesT}]]*/null;
-	const recNbHausses = /*[[#{recNbHausses}]]*/null;
 </script>
 </head>
 <body>
@@ -31,8 +20,8 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item">
-					<a th:href="@{'/hausse/liste'}" th:text="#{hausse}"></a>
-					<th:block th:text="#{sep}+#{GrapheHaussePose}"></th:block>
+					<a th:href="@{'/ruche/liste'}" th:text="#{ruche}"></a>
+					<th:block th:text="#{sep}+#{GrapheNbRuches}"></th:block>
 				</h1>
 			</div>
 			<div class="col">
@@ -42,13 +31,13 @@
 					th:text="#{ZoomIni}"></button>
 			</div>
 		</div>
-		<div th:if="${#lists.isEmpty(dates)}" class="row">
+		<div th:if="${#lists.isEmpty(datesTotal)}" class="row">
 			<div class="col text-center">
 				<span th:text="#{AucunEve}"></span>
 			</div>
 		</div>
 	</div>
-	<canvas th:unless="${#lists.isEmpty(dates)}" id="ctx"></canvas>
+	<canvas th:unless="${#lists.isEmpty(datesTotal)}" id="ctx"></canvas>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
 </html>

@@ -81,6 +81,16 @@ public class RucheController {
 	}
 
 	/**
+	 * Graphique affichant la courbe du nombre de ruches actives. En abscisse le
+	 * temps.
+	 */
+	@GetMapping("/grapheRuches")
+	public String grapheHaussePose(Model model) {
+		rucheService.grapheRuches(model);
+		return "ruche/ruchesGraphe";
+	}
+	
+	/**
 	 * Historique de l'ajout des hausses sur une ruche
 	 */
 	@GetMapping("/historique/{rucheId}")

@@ -4,9 +4,7 @@
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsruches}"></script>
 <script th:inline="javascript">
-	/* exported
-	Ruches, buttTxtPrint, buttTxtCol, urlCommLot, selectRuTrait
-	 */
+	/* exported	Ruches, buttTxtPrint, buttTxtCol, urlCommLot, selectRuTrait */
 	const Ruches = /*[[#{Ruches}]]*/null;
 	const buttTxtPrint = /*[[#{buttontextprint}]]*/null;
 	const buttTxtCol = /*[[#{buttontextcol}]]*/null;
@@ -25,7 +23,9 @@
 				<a id="cree" th:href="@{/ruche/cree}" class="bi-plus-lg"
 					th:title="#{ajouterRuche}" aria-hidden="true"></a> &nbsp; <a
 					id="commentaire" href="#" class="bi-chat-text"
-					th:title="#{evenementsCommentaire}" aria-hidden="true"></a>
+					th:title="#{evenementsCommentaire}" aria-hidden="true"></a> &nbsp;<a
+					th:href="@{'/ruche/grapheRuches'}" class="bi-graph-up"
+					th:title="#{GrapheNbRuches}" aria-hidden="true"></a>
 			</div>
 			<div class="col-6">
 				<select class="form-control" id="rucher" name="rucher">

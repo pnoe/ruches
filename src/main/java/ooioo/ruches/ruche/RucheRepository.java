@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import ooioo.ruches.IdDateNoTime;
 import ooioo.ruches.IdNom;
 import ooioo.ruches.Nom;
 import ooioo.ruches.ruche.type.RucheType;
@@ -15,6 +16,14 @@ import ooioo.ruches.rucher.Rucher;
 
 @RepositoryRestResource(collectionResourceRel = "rucheRepository")
 public interface RucheRepository extends CrudRepository<Ruche, Long> {
+	
+	@Query(value = """
+			select new ooioo.ruches.IdDateNoTime(id as id, dateAcquisition as date)
+				from Ruche
+				order by dateAcquisition asc
+			""")
+	List<IdDateNoTime> findByOrderByDateAcquisition();
+	
 	Ruche findByNom(String nom);
 
 	List<Ruche> findAllByOrderByNom();

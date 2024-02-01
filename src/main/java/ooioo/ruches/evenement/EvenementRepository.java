@@ -46,38 +46,34 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			""")
 	List<Evenement> findNotification();
 
-	
-	
-	
-	
-	// select h.id, h.nom, h.date_acquisition, max(e.date) 
-	//   from hausse h 
-	//   left join evenement e 
-	//     on h.id = e.hausse_id 
-	//   group by h.id; 
-	// Trouve le dernier événement de chaque hausse incactive.
-	// Utilisé pour calculer le nombre total de hausse pour la courbe des hausses posées.
-	// Problème : il n'y a qu'une hausse inactive, c'est louche !
-	
-	 // No property 'date' found for type 'Hausse'
-	// new ooioo.ruches.IdDate(
-	 
+	/*
+	 * Trouve pour chaque hausse inactive, le dernier événement la référençant.
+	 */
 	@Query(value = """
 			select new ooioo.ruches.IdDate(null as id, max(e.date) as date)
 			  from Hausse h, Evenement e
 			  where
-			    h.active = false and 
+			    h.active = false and
 			    h.id = e.hausse.id
 			  group by h.id
-			  order by max(e.date) asc 
+			  order by max(e.date) asc
 			""")
 	List<IdDate> findHausseInacLastEve();
 
-	
-	
-	
-	
-	
+	/*
+	 * Trouve pour chaque ruche inactive, le dernier événement la référençant.
+	 */
+	@Query(value = """
+			select new ooioo.ruches.IdDate(null as id, max(e.date) as date)
+			  from Ruche r, Evenement e
+			  where
+			    r.active = false and
+			    r.id = e.ruche.id
+			  group by r.id
+			  order by max(e.date) asc
+			""")
+	List<IdDate> findRucheInacLastEve();
+
 	@Query(value = """
 			select e
 			  from Evenement e
@@ -109,7 +105,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			  where e.type = ?1 and e.date > ?2 and e.date < ?3
 			""")
 	List<Evenement> findTypePeriode(TypeEvenement typeEvenement, LocalDateTime date1, LocalDateTime date2);
-	
+
 	@RestResource(path = "findPeriodeType1Type2Date1")
 	@Query(value = """
 			select e
@@ -126,8 +122,9 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			  where (type = :type1 or type = :type2)
 			    and date > :date1 and date < :date2
 			""")
-	Iterable<Evenement> findTypePeriode(LocalDateTime date1, LocalDateTime date2, TypeEvenement type1, TypeEvenement type2);
-	
+	Iterable<Evenement> findTypePeriode(LocalDateTime date1, LocalDateTime date2, TypeEvenement type1,
+			TypeEvenement type2);
+
 	List<Evenement> findByRucheId(Long rucheId);
 
 	Iterable<Evenement> findByEssaimId(Long essaimId);
@@ -192,7 +189,6 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			""")
 	List<Evenement> findPoseHausseDateDesc();
 
-	
 	@Query(value = """
 			select e from Evenement e
 			  where e.type = ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER
