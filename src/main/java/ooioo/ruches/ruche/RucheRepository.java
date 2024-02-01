@@ -96,8 +96,8 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	@Query(value = """
 			select r
 			  from Ruche r
-			  where r.active = true and r.id <> ?1
-			  order by r.nom
+			  where active = true and id <> :id
+			  order by nom
 			""")
 	Iterable<Ruche> findActiveIdDiffOrderByNom(Long id);
 

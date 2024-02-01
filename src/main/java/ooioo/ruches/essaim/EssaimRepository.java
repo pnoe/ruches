@@ -99,9 +99,9 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 	Essaim findFirstByOrderByDateAcquisitionDesc();
 
 	@Query(value = """
-			select essaim
-			  from Essaim essaim
-			  where essaim.actif = true and essaim.reineDateNaissance > essaim.dateAcquisition
+			select e
+			  from Essaim e
+			  where actif = true and reineDateNaissance > dateAcquisition
 			""")
 	Iterable<Essaim> findEssaimDateNaissSupAcquis();
 

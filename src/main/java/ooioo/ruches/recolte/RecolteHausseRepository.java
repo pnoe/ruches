@@ -26,7 +26,7 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 	@Query(value = """
 			select count(distinct ruche) as nbruches
 			  from RecolteHausse
-			  where recolte.id=?1 and rucher.id=?2
+			  where recolte.id=:recolteId and rucher.id=:rucherId
 			""")
 	Integer countRucheByRecolteByRucher(Long recolteId, Long rucherId);
 
@@ -41,7 +41,7 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 	// Trouve le nombre de hausses de récolte incomplètes dans une recolte.
 	@Query(value = """
 			select count(*)
-			    from RecolteHausse r
+			    from RecolteHausse
 			    where recolte = :recolte
 			      and (rucher is null
 			        or ruche is null
@@ -145,7 +145,7 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 	// Calcule le poids de miel produit par un essaim pour une récolte, ainsi que le
 	// nombre de hausses de récoltes.
 	@Query(value = """
-			  select (sum(poidsAvant) - sum(poidsApres)) as p, count(*) as c
+			  select (sum(poidsAvant) - sum(poidsApres)), count(*)
 			    from RecolteHausse
 			    where recolte.id = :recolteId
 			      and essaim.id = :essaimId
@@ -154,7 +154,7 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 
 	// Poids de miel produit par un essaim pour une récolte pour un rucher
 	@Query(value = """
-			select sum(poidsAvant) - sum(poidsApres) as poids
+			select sum(poidsAvant) - sum(poidsApres)
 			  from RecolteHausse
 			  where essaim.id = :essaimId and recolte.id = :recolteId and rucher.id = :rucherId
 			""")
@@ -183,9 +183,9 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 	List<Object[]> findPoidsMielNomEssaimByRecRucher(Long recolteId, Long rucherId);
 
 	@Query(value = """
-			select sum(poidsAvant) - sum(poidsApres) as poids
+			select sum(poidsAvant) - sum(poidsApres)
 			  from RecolteHausse
-			  where rucher.id=?1 and recolte.id=?2
+			  where rucher.id=:rucherId and recolte.id=:recolteId
 			""")
 	Integer findPoidsMielByRucherByRecolte(Long rucherId, Long recolteId);
 

@@ -29,8 +29,8 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 	@Query(value = """
 			select h
 				from Hausse h
-				where h.active = true
-				  and (h.ruche is null or h.ruche.id <> ?1)
+				where active = true
+				  and (ruche is null or ruche.id <> ?1)
 			""")
 	List<Hausse> findHaussesPourAjout(Long rucheId);
 
@@ -47,8 +47,8 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 	@Query(value = """
 			select h
 				from Hausse h
-				where h.ruche is not null
-					and h.id not in
+				where ruche is not null
+					and id not in
 					(select hausse.id
 						from RecolteHausse
 						where recolte.id = :recolteId)
@@ -59,7 +59,7 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 	@Query(value = """
 			select h
 				from Hausse h
-				where h.id not in
+				where id not in
 					(select hausse.id
 						from RecolteHausse
 						where recolte.id = :recolteId)

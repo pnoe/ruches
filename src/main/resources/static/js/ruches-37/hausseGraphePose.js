@@ -1,4 +1,6 @@
-/* globals Chart, dates, nbPosees, datesTotal, nbTotal, datesRec, nbHaussesRec */
+/* globals Chart, dates, nbPosees, datesTotal, nbTotal, datesRec, nbHaussesRec
+  nbHaussesP, nbHaussesT, recNbHausses  
+ */
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -8,14 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
 			datasets: [{
 				type: 'line',
 				stepped: true,
-				label: 'Nombre de hausses posées',
+				label: nbHaussesP,
 				yAxisID: 'y',
 				data: dates.map((v, i) => { return [v * 1000, nbPosees[i]]; }),
 				fill: true
 			}, {
 				type: 'line',
 				stepped: true,
-				label: 'Nombre de hausses total',
+				label: nbHaussesT,
 				yAxisID: 'y',
 				data: datesTotal.map((v, i) => { return [v * 1000, nbTotal[i]]; }),
 				fill: '-1'
@@ -27,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				// idem si type: 'bar' est mis avant data:
 				// idem si même axe y
 				type: 'scatter',
-				label: 'Récoltes, nb hausses',
+				label: recNbHausses,
 				yAxisID: 'y',
 				data: datesRec.map((v, i) => { return [v * 1000, nbHaussesRec[i]]; }),
 				pointStyle: 'triangle'
