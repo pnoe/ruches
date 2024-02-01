@@ -9,7 +9,8 @@
 <script th:replace="~{include :: chartjs-adapter}"></script>
 <script th:replace="~{include :: jsruches}"></script>
 <script th:inline="javascript">
-	/* exported datesTotal, nbTotal */
+	/* exported ruches, datesTotal, nbTotal */
+	const ruches = /*[[#{Ruches}]]*/null;
 	const datesTotal = /*[[${datesTotal}]]*/null;
 	const nbTotal = /*[[${nbTotal}]]*/null;
 </script>

@@ -1,4 +1,4 @@
-/* globals Chart, datesTotal, nbTotal */
+/* globals Chart, ruches, datesTotal, nbTotal */
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		data: {
 			datasets: [{
 				type: 'line',
-				label: 'Ruches',
+				label: ruches,
 				yAxisID: 'y',
 				data: datesTotal.map((v, i) => { return [v * 1000, nbTotal[i]]; }),
 			}],
