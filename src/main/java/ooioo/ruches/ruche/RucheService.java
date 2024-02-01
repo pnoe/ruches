@@ -77,10 +77,6 @@ public class RucheService {
 		// Incrémenter d'un jour les dates de ruInacLastEve.
 		List<IdDate> rucheInacLastEve = new ArrayList<>(ruInacLastEve.size());
 		for (IdDate idD : ruInacLastEve) {
-			
-			// rien ne s'affiche !
-			System.out.println(idD);
-			
 			rucheInacLastEve.add(new IdDate(null, idD.date().plusDays(1)));
 		}
 		// Fusion des deux listes.

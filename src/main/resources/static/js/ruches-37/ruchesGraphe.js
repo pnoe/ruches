@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
 					position: 'left'
 				}
 			},
-			/*
 			plugins: {
 				zoom: {
 					pan: {
@@ -47,7 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
 					},
 				}
 			}
-			*/
 		}
 	});
 	document.getElementById('zoomini').addEventListener('click', () => {
