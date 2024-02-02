@@ -43,11 +43,12 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 	// et id et nom de son rucher.
 	// https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#projections
 	@Query(value = """
-			select new ooioo.ruches.essaim.EssaimRucheRucher(essaim, ruche.id, ruche.nom, rucher.id, rucher.nom)
-			  from Essaim essaim
-			    left join Ruche ruche on ruche.essaim.id = essaim.id
-			    left join Rucher rucher on ruche.rucher.id = rucher.id
-			  where essaim.actif = true order by essaim.nom
+			select new ooioo.ruches.essaim.EssaimRucheRucher(e, r.id, r.nom, rr.id, rr.nom)
+			  from Essaim e
+			    left join Ruche r on r.essaim.id = e.id
+			    left join Rucher rr on r.rucher.id = rr.id
+			  where e.actif = true 
+			  order by e.nom
 			""")
 	List<EssaimRucheRucher> findEssaimActifRucheRucherOrderByNom();
 
@@ -55,35 +56,35 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 	// id et nom de son rucher.
 	// https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#projections
 	@Query(value = """
-			select new ooioo.ruches.essaim.EssaimRucheRucher(essaim, ruche.id, ruche.nom, rucher.id, rucher.nom)
-			  from Essaim essaim
-			    left join Ruche ruche on ruche.essaim.id = essaim.id
-			    left join Rucher rucher on ruche.rucher.id = rucher.id
-			  order by essaim.nom
+			select new ooioo.ruches.essaim.EssaimRucheRucher(e, r.id, r.nom, rr.id, rr.nom)
+			  from Essaim e
+			    left join Ruche r on r.essaim.id = e.id
+			    left join Rucher rr on r.rucher.id = rr.id
+			  order by e.nom
 			""")
 	List<EssaimRucheRucher> findEssaimRucheRucherOrderByNom();
 
 	Iterable<IdNom> findAllProjectedIdNomByOrderByNom();
 
 	// Pour remérage dans formulaire dispersion
-	// liste des essaims actifs qui ne sont pas dans des ruches ordonnés par date
-	// décroissante
+	// liste des essaims actifs qui ne sont pas dans des ruches, ordonnés par date
+	// décroissante.
 	@Query(value = """
-			select new ooioo.ruches.IdNom(essaim.id, essaim.nom)
-			  from Essaim essaim
-			    left join Ruche ruche on ruche.essaim.id = essaim.id
-			  where ruche.essaim.id is null and essaim.actif = true
-			  order by essaim.dateAcquisition desc
+			select new ooioo.ruches.IdNom(e.id, e.nom)
+			  from Essaim e
+			    left join Ruche r on r.essaim = e
+			  where r is null and e.actif = true
+			  order by e.dateAcquisition desc
 			""")
 	List<IdNom> findProjectedIdNomByRucheIsNullOrderByDateAcquisitionDesc();
 
-	// Liste des essaims actif hors ruche
+	// Liste des essaims actif hors ruche.
 	@Query(value = """
-			select new ooioo.ruches.IdNom(essaim.id, essaim.nom)
-			  from Essaim essaim
-			  left join Ruche ruche on ruche.essaim = essaim
-			  where essaim.actif = true and ruche is null
-			""")
+			select new ooioo.ruches.IdNom(e.id, e.nom)
+			  from Essaim e
+			  left join Ruche r on r.essaim = e
+			  where r is null and e.actif = true
+ 			""")
 	List<IdNom> findEssaimByActifSansRuche();
 
 	// Nombre d'essaims créés dans l'année passée en paramètre.
