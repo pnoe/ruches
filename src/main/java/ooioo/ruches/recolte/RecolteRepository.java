@@ -42,7 +42,7 @@ public interface RecolteRepository extends ListCrudRepository<Recolte, Long> {
 	@Query(value = """
 			select sum(poids_miel)
 				from recolte
-				where date_part('year', date) = ?1
+				where date_part('year', date) = :year
 			""", nativeQuery = true)
 	Optional<Double> findPoidsMielByYear(int year);
 	
@@ -54,7 +54,7 @@ public interface RecolteRepository extends ListCrudRepository<Recolte, Long> {
 	@Query(value = """
 			select count(*)
 				from recolte
-				where date_part('year', date) = ?1
+				where date_part('year', date) = :year
 			""", nativeQuery = true)
 	Optional<Integer> findRecoltesByYear(int year);
 
@@ -64,9 +64,9 @@ public interface RecolteRepository extends ListCrudRepository<Recolte, Long> {
 	 * traiter le retour null
 	 */
 	@Query(value = """
-			select sum(rh.poids_avant) - sum(rh.poids_apres) as p
+			select sum(rh.poids_avant) - sum(rh.poids_apres)
 				from recolte r , recolte_hausse rh
-				where date_part('year', r.date) = ?1 and rh.recolte_id = r.id
+				where date_part('year', r.date) = :year and rh.recolte_id = r.id
 			""", nativeQuery = true)
 	Optional<Integer> findPoidsHaussesByYear(Double year);
 }

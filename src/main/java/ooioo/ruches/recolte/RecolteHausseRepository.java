@@ -24,7 +24,7 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 	List<RecolteHausse> findByRecolteOrderByHausseNom(Recolte recolte);
 
 	@Query(value = """
-			select count(distinct ruche) as nbruches
+			select count(distinct ruche)
 			  from RecolteHausse
 			  where recolte.id=:recolteId and rucher.id=:rucherId
 			""")
@@ -51,7 +51,7 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 
 	// Poids de miel produit par un essaim pour une récolte
 	@Query(value = """
-			select sum(poidsAvant) - sum(poidsApres) as poids
+			select sum(poidsAvant) - sum(poidsApres)
 			  from RecolteHausse
 			  where essaim.id=:essaimId and recolte.id=:recolteId
 			""")
@@ -59,7 +59,7 @@ public interface RecolteHausseRepository extends CrudRepository<RecolteHausse, L
 
 	// Poids de miel produit par un essaim pour toutes les récoltes
 	@Query(value = """
-			select sum(poidsAvant) - sum(poidsApres) as poids
+			select sum(poidsAvant) - sum(poidsApres)
 			  from RecolteHausse
 			  where essaim=:essaim
 			""")
