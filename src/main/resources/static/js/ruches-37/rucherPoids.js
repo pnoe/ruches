@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		);
 	});
-	new Chart('ctx', {
+	const graphe = new Chart('ctx', {
 		type: 'line',
 		data: {
 			datasets: datasets
@@ -25,6 +25,24 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 			},
 			plugins: {
+				zoom: {
+					pan: {
+						enabled: true,
+						mode: 'x',
+					},
+					limits: {
+						x: { min: 'original', max: 'original' },
+					},
+					zoom: {
+						wheel: {
+							enabled: true,
+						},
+						pinch: {
+							enabled: true
+						},
+						mode: 'x'
+					}
+				},
 				tooltip: {
 					callbacks: {
 						footer: (items => {
@@ -35,8 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
 								//   \n fonctionne bien, c'est vérifié.
 								// Affiche en pied de tooltip : 
 								// Ruche: <nom> <poidsTotal> kg
-								txt += ruche + ': ' + ruches[item.datasetIndex].nom + ' ' + 
-								(item.parsed.y +  ruches[item.datasetIndex].poidsVide) + 'kg\n';
+								txt += ruche + ': ' + ruches[item.datasetIndex].nom + ' ' +
+									(item.parsed.y + ruches[item.datasetIndex].poidsVide) + 'kg\n';
 							});
 							return txt.slice(0, -1);
 						}),
@@ -44,5 +62,12 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 			}
 		},
+	});
+	document.getElementById('zoomini').addEventListener('click', () => {
+		graphe.resetZoom();
+	});
+	document.getElementById('scales').addEventListener('click', e => {
+		graphe.options.scales.y.display = e.target.checked;
+		graphe.update();
 	});
 });

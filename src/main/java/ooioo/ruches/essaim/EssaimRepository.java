@@ -22,11 +22,11 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 	List<IdNom> findAllProjectedIdNomBy();
 	
 	@Query(value = """
-			select new ooioo.ruches.IdNom(es.id, es.nom)
-			  from Essaim es, Ruche r
-			  where r.essaim = es
+			select new ooioo.ruches.IdNom(e.id, e.nom)
+			  from Essaim e, Ruche r
+			  where r.essaim = e
 			   and r.rucher.id = :rucherId
-			  order by es.nom
+			  order by e.nom
 			""")
 	List<IdNom> findIdNomByRucherId(Long rucherId);
 	
