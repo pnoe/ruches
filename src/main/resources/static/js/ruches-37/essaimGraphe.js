@@ -25,15 +25,15 @@ document.addEventListener('DOMContentLoaded', () => {
 		bottom: 90,
 		left: 90
 	};
-	const width = 1300 - margin.left - margin.right;
-	const height = 700 - margin.top - margin.bottom;
+	const width = 1300;
+	const height = 700;
 	const treemap = d3.tree()
-		.size([width, height]);
+		.size([width - margin.left - margin.right, height - margin.top - margin.bottom]);
 	let nodes = d3.hierarchy(treeData[0]);
 	nodes = treemap(nodes);
 	const svg = d3.select('#graph').append('svg')
-		.attr('width', width + margin.left + margin.right)
-		.attr('height', height + margin.top + margin.bottom);
+		.attr('width', width)
+		.attr('height', height);
 	const g = svg.append('g')
 		.attr('transform',
 			'translate(' + margin.left + ',' + margin.top + ')');
@@ -100,8 +100,16 @@ document.addEventListener('DOMContentLoaded', () => {
 				return 'black';
 			}
 		});
+	// https://d3js.org/d3-zoom
+	// https://observablehq.com/@d3/zoom?collection=@d3/d3-zoom
+	svg.call(d3.zoom()
+		.on("zoom", zoomed));
+	function zoomed({ transform }) {
+		g.attr("transform", transform);
+	}
 	document.querySelectorAll('[data-bs-toggle="popover"]').forEach(item => {
-	new bootstrap.Popover(item, {
-		html: true
-	})});
+		new bootstrap.Popover(item, {
+			html: true
+		})
+	});
 });
