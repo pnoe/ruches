@@ -234,12 +234,16 @@ public class RucheService {
 				// Les 3 derniers événements de la ruche (hors HAUSSEPOSERUCHE, RUCHEPESEE et
 				// RUCHECADRE).
 				listeEvensCommentaireEssaim.add(evenementRepository.find3EveListePlus(ruche));
-				// hausses et eve pose hausses en deux listes séparées pour
-				// afficher les hausses même si les eves ont été effacés.
+				// Pour afficher les listes des : hausses, date de pose et commentaire de pose
+				// de chaque ruche.
+				// Liste des hausses et des événements pose hausses de la ruche en deux listes
+				// séparées pour afficher les hausses même si les événements ont été effacés.
+				// Liste des hausses actuellement posées sur la ruche.
 				List<Hausse> hausses = hausseRepository.findByRucheIdOrderByOrdreSurRuche(ruche.getId());
 				haussesRuches.add(hausses);
 				List<Evenement> eveHaussesRuche = new ArrayList<>();
 				for (Hausse h : hausses) {
+					// Liste des événements pose de chaque hausse actuellement posées sur la ruche.
 					eveHaussesRuche.add(evenementRepository.findEvePoseHausse(h));
 				}
 				evensHaussesRuches.add(eveHaussesRuche);

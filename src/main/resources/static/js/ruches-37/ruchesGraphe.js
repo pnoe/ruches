@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		data: {
 			datasets: [{
 				type: 'line',
+				stepped: true,
 				label: ruches,
 				yAxisID: 'y',
 				data: datesTotal.map((v, i) => { return [v * 1000, nbTotal[i]]; }),

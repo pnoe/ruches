@@ -272,6 +272,8 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 	// https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definitions
 	// pour éviter de passer ruche en param.
+	// Liste du dernier événement pose hausse de la hausse passée en paramètre, et
+	// de la ruche sur laquelle est posée cette hausse.
 	@Query(value = """
 			select e
 			 from Evenement e

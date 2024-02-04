@@ -20,7 +20,7 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 	List<Hausse> findByRucheIdOrderByOrdreSurRuche(Long rucheId);
 	
 	@Query(value = """
-			select new ooioo.ruches.IdDateNoTime(id as id, dateAcquisition as date)
+			select new ooioo.ruches.IdDateNoTime(id, dateAcquisition)
 				from Hausse
 				order by dateAcquisition asc
 			""")
@@ -30,7 +30,7 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 			select h
 				from Hausse h
 				where active = true
-				  and (ruche is null or ruche.id <> ?1)
+				  and (ruche is null or ruche.id <> :rucheId)
 			""")
 	List<Hausse> findHaussesPourAjout(Long rucheId);
 

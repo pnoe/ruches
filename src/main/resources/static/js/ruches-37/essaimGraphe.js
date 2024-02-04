@@ -103,9 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	// https://d3js.org/d3-zoom
 	// https://observablehq.com/@d3/zoom?collection=@d3/d3-zoom
 	svg.call(d3.zoom()
-		.on("zoom", zoomed));
+		.on('zoom', zoomed));
 	function zoomed({ transform }) {
-		g.attr("transform", transform);
+		g.attr('transform', transform);
 	}
 	document.querySelectorAll('[data-bs-toggle="popover"]').forEach(item => {
 		new bootstrap.Popover(item, {
