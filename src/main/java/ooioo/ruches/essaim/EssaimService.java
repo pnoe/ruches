@@ -9,6 +9,8 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,8 @@ import org.springframework.ui.Model;
 
 import jakarta.servlet.http.HttpSession;
 import ooioo.ruches.Const;
+import ooioo.ruches.IdDate;
+import ooioo.ruches.IdDateNoTime;
 import ooioo.ruches.Nom;
 import ooioo.ruches.Utils;
 import ooioo.ruches.evenement.Evenement;
@@ -62,6 +66,42 @@ public class EssaimService {
 		this.recolteHausseRepository = recolteHausseRepository;
 		this.rucherRepository = rucherRepository;
 		this.messageSource = messageSource;
+	}
+
+	/**
+	 * Graphique du nombre d'essaim.
+	 */
+	public void grapheEssaims(Model model) {
+		// Pour le nombre de ruches actives total.
+		List<Long> dates = new ArrayList<>();
+		List<Integer> nbs = new ArrayList<>();
+		List<IdDateNoTime> essaimsAcqu = essaimRepository.findByOrderByDateAcquisition();
+		List<IdDate> essaimsDisp = essaimRepository.findByOrderByDateDispersion();
+
+		for (IdDate e : essaimsDisp) {
+			essaimsAcqu.add(new IdDateNoTime(null, e.date().toLocalDate()));
+		}
+
+		Collections.sort(essaimsAcqu, Comparator.comparing(IdDateNoTime::date));
+
+		if (!essaimsAcqu.isEmpty()) {
+			LocalDate datecour = essaimsAcqu.get(0).date();
+			int nb = 0;
+			for (IdDateNoTime e : essaimsAcqu) {
+				if (datecour.getDayOfYear() != e.date().getDayOfYear() || datecour.getYear() != e.date().getYear()) {
+					// Si l'événement est à un autre jour que les précédents.
+					nbs.add(nb);
+					dates.add(datecour.atStartOfDay().toEpochSecond(ZoneOffset.UTC));
+					datecour = e.date();
+				}
+				nb += (e.id() == null) ? -1 : +1;
+			}
+			nbs.add(nb);
+			dates.add(datecour.atStartOfDay().toEpochSecond(ZoneOffset.UTC));
+		}
+		model.addAttribute("dates", dates);
+		model.addAttribute("nbs", nbs);
+
 	}
 
 	public void grapheEve(Model model, Essaim essaim) {

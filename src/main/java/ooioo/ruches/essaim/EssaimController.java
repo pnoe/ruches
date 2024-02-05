@@ -72,6 +72,17 @@ public class EssaimController {
 		this.messageSource = messageSource;
 		this.essaimService = essaimService;
 	}
+	
+	
+	/**
+	 * Graphique affichant la courbe du nombre d'essaims. En abscisse le
+	 * temps.
+	 */
+	@GetMapping("/grapheEssaims")
+	public String grapheEssaims(Model model) {
+		essaimService.grapheEssaims(model);
+		return "essaim/essaimsGraphe";
+	}
 
 	/**
 	 * Graphe affichant les événements d'un essaim. Pesée, récoltes, sucre,

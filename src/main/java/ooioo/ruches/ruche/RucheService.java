@@ -80,7 +80,7 @@ public class RucheService {
 		for (IdDate idD : ruInacLastEve) {
 			rucheInacLastEve.add(new IdDate(null, idD.date().plusDays(1)));
 		}
-		// Fusion des deux listes.
+		// Fusion des deux listes en convertissant les dates d'acquisition en LocalDateTime.
 		for (IdDateNoTime rA : ruchesAcqu) {
 			rucheInacLastEve.add(new IdDate(rA.id(), LocalDateTime.of(rA.date(), LocalTime.NOON)));
 		}
@@ -104,7 +104,6 @@ public class RucheService {
 		}
 		model.addAttribute("datesTotal", datesTotal);
 		model.addAttribute("nbTotal", nbTotal);
-
 		// En se limitant aux ruches qui sont actuellement en production.
 		// Attention, il est possible de changer l'état d'une ruche de production
 		// élevage dans le temps et cet état n'est pas mémorisé.

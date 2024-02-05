@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import ooioo.ruches.IdDate;
+import ooioo.ruches.IdDateNoTime;
 import ooioo.ruches.IdNom;
 import ooioo.ruches.Nom;
 
@@ -20,7 +22,28 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 	List<Nom> findAllProjectedBy();
 
 	List<IdNom> findAllProjectedIdNomBy();
-	
+
+	/*
+	 * Liste des id, dateAcqusition des essaims triés par dateAcquisition.
+	 */
+	@Query(value = """
+			select new ooioo.ruches.IdDateNoTime(id, dateAcquisition)
+				from Essaim
+				order by dateAcquisition asc
+			""")
+	List<IdDateNoTime> findByOrderByDateAcquisition();
+
+	/*
+	 * Liste id, dateDispersion des essaims triés par dateDispersion.
+	 */
+	@Query(value = """
+			select new ooioo.ruches.IdDate(id, dateDispersion)
+				from Essaim
+				where actif = false
+				order by dateDispersion asc
+			""")
+	List<IdDate> findByOrderByDateDispersion();
+
 	@Query(value = """
 			select new ooioo.ruches.IdNom(e.id, e.nom)
 			  from Essaim e, Ruche r
@@ -29,11 +52,11 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 			  order by e.nom
 			""")
 	List<IdNom> findIdNomByRucherId(Long rucherId);
-	
+
 	@Query(value = """
 			select new ooioo.ruches.essaim.EssaimIdNomReine(e.id, e.nom, e.reineDateNaissance, e.reineMarquee)
 			  from Essaim e, Ruche r
-			  where r.rucher.id = :rucherId 
+			  where r.rucher.id = :rucherId
 			    and r.essaim = e
 			    and r.id = :rucheId
 			""")
@@ -47,7 +70,7 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 			  from Essaim e
 			    left join Ruche r on r.essaim.id = e.id
 			    left join Rucher rr on r.rucher.id = rr.id
-			  where e.actif = true 
+			  where e.actif = true
 			  order by e.nom
 			""")
 	List<EssaimRucheRucher> findEssaimActifRucheRucherOrderByNom();
@@ -84,7 +107,7 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 			  from Essaim e
 			  left join Ruche r on r.essaim = e
 			  where r is null and e.actif = true
- 			""")
+				""")
 	List<IdNom> findEssaimByActifSansRuche();
 
 	// Nombre d'essaims créés dans l'année passée en paramètre.
