@@ -64,7 +64,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	 * Trouve pour chaque ruche inactive, le dernier événement la référençant.
 	 */
 	@Query(value = """
-			select new ooioo.ruches.IdDate(null as id, max(e.date) as date)
+			select new ooioo.ruches.IdDate(null, max(e.date))
 			  from Ruche r, Evenement e
 			  where
 			    r.active = false and
@@ -73,6 +73,22 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			  order by max(e.date) asc
 			""")
 	List<IdDate> findRucheInacLastEve();
+
+	/*
+	 * Trouve pour chaque ruche de production et inactive, le dernier événement la
+	 * référençant.
+	 */
+	@Query(value = """
+			select new ooioo.ruches.IdDate(null, max(e.date))
+			  from Ruche r, Evenement e
+			  where
+			    r.production = true and
+			    r.active = false and
+			    r.id = e.ruche.id
+			  group by r.id
+			  order by max(e.date) asc
+			""")
+	List<IdDate> findRucheProdInacLastEve();
 
 	@Query(value = """
 			select e

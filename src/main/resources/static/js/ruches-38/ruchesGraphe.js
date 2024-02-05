@@ -1,4 +1,4 @@
-/* globals Chart, ruches, datesTotal, nbTotal */
+/* globals Chart, ruches, datesTotal, nbTotal, ruchesProd, datesProdTotal, nbProdTotal */
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -11,6 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
 				label: ruches,
 				yAxisID: 'y',
 				data: datesTotal.map((v, i) => { return [v * 1000, nbTotal[i]]; }),
+			}, {
+				type: 'line',
+				stepped: true,
+				label: ruchesProd,
+				yAxisID: 'y',
+				data: datesProdTotal.map((v, i) => { return [v * 1000, nbProdTotal[i]]; }),
 			}],
 		},
 		options: {

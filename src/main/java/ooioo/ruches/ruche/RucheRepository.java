@@ -16,26 +16,41 @@ import ooioo.ruches.rucher.Rucher;
 
 @RepositoryRestResource(collectionResourceRel = "rucheRepository")
 public interface RucheRepository extends CrudRepository<Ruche, Long> {
-	
+
+	/*
+	 * Liste des id, dateAcqusition des ruches triées par dateAcquisition.
+	 */
 	@Query(value = """
-			select new ooioo.ruches.IdDateNoTime(id as id, dateAcquisition as date)
+			select new ooioo.ruches.IdDateNoTime(id, dateAcquisition)
 				from Ruche
 				order by dateAcquisition asc
 			""")
 	List<IdDateNoTime> findByOrderByDateAcquisition();
-	
+
+	/*
+	 * Liste des id, dateAcqusition des ruches en production triées par
+	 * dateAcquisition.
+	 */
+	@Query(value = """
+			select new ooioo.ruches.IdDateNoTime(id, dateAcquisition)
+				from Ruche
+				where production = true
+				order by dateAcquisition asc
+			""")
+	List<IdDateNoTime> findByProdOrderByDateAcquisition();
+
 	Ruche findByNom(String nom);
 
 	List<Ruche> findAllByOrderByNom();
 
 	List<Ruche> findByActiveTrueOrderByNom();
-	
+
 	List<Ruche> findByRucherIdOrderByNom(Long id);
-	
+
 	List<RucheIdNomLatLon> findIdLatLonByRucherIdOrderByNom(Long rucherId);
-	
+
 	List<Ruche> findByRucherIdAndActiveTrueOrderByNom(Long id);
-	
+
 	List<Ruche> findByRucherDepotFalseAndActiveFalse();
 
 	Iterable<Ruche> findByRucherIdNotOrderByNom(Long id);
@@ -44,7 +59,7 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 
 	// Attention à mettre un constructeur dans PoidsNom sinon erreur à l'exécution.
 	PoidsNom findPoidsNomByEssaimId(Long id);
-	
+
 	Collection<Ruche> findCollByRucherId(Long rucherId);
 
 	List<Nom> findAllProjectedBy();
@@ -60,10 +75,13 @@ public interface RucheRepository extends CrudRepository<Ruche, Long> {
 	Collection<IdNom> findAllProjectedIdNomByOrderByNom();
 
 	List<Ruche> findByRucherIdOrderById(Long id);
+
 	List<Ruche> findByActiveTrueAndRucherIdOrderById(Long id);
 
 	List<Ruche> findByTypeIdOrderByNom(Long id);
+
 	long countByTypeIdOrderByNom(Long id);
+
 	List<Ruche> findByActiveTrueAndTypeIdOrderByNom(Long id);
 
 	long countByActiveTrue();

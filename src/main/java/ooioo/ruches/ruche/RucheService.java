@@ -57,8 +57,8 @@ public class RucheService {
 	}
 
 	/*
-	 * Graphe ruches actives. La date d'inactivation pour les ruches inactives est
-	 * celle du dernier événement de la ruche augmentée d'un jour.
+	 * Graphe du nombre de ruches actives. La date d'inactivation pour les ruches
+	 * inactives est celle du dernier événement de la ruche augmentée d'un jour.
 	 */
 	void grapheRuches(Model model) {
 		// Pour le nombre de ruches actives total.
@@ -68,6 +68,7 @@ public class RucheService {
 		// Estimation de la date d'inactivation d'une ruche d'après la date du dernier
 		// événement qui la référence.
 		// Liste des dates d'acquisition des ruches (actives et inactives).
+		// La date est une date sans le temps contrairemenent aux dates des événements.
 		List<IdDateNoTime> ruchesAcqu = rucheRepository.findByOrderByDateAcquisition();
 		// Pour chaque ruche inactive, on recherche la date du dernier événement la
 		// concernant.
@@ -103,6 +104,40 @@ public class RucheService {
 		}
 		model.addAttribute("datesTotal", datesTotal);
 		model.addAttribute("nbTotal", nbTotal);
+
+		// En se limitant aux ruches qui sont actuellement en production.
+		// Attention, il est possible de changer l'état d'une ruche de production
+		// élevage dans le temps et cet état n'est pas mémorisé.
+		List<Long> datesProdTotal = new ArrayList<>();
+		List<Integer> nbProdTotal = new ArrayList<>();
+		List<IdDateNoTime> ruchesProdAcqu = rucheRepository.findByProdOrderByDateAcquisition();
+		List<IdDate> ruProdInacLastEve = evenementRepository.findRucheProdInacLastEve();
+		List<IdDate> rucheProdInacLastEve = new ArrayList<>(ruProdInacLastEve.size());
+		for (IdDate idD : ruProdInacLastEve) {
+			rucheProdInacLastEve.add(new IdDate(null, idD.date().plusDays(1)));
+		}
+		for (IdDateNoTime rA : ruchesProdAcqu) {
+			rucheProdInacLastEve.add(new IdDate(rA.id(), LocalDateTime.of(rA.date(), LocalTime.NOON)));
+		}
+		Collections.sort(rucheProdInacLastEve, Comparator.comparing(IdDate::date));
+		if (!rucheProdInacLastEve.isEmpty()) {
+			LocalDateTime datecourProdTotal = rucheProdInacLastEve.get(0).date();
+			int nbHProdTotal = 0;
+			for (IdDate rA : rucheProdInacLastEve) {
+				if (datecourProdTotal.getDayOfYear() != rA.date().getDayOfYear()
+						|| datecourProdTotal.getYear() != rA.date().getYear()) {
+					// Si l'événement est à un autre jour que les précédents.
+					nbProdTotal.add(nbHProdTotal);
+					datesProdTotal.add(datecourProdTotal.toEpochSecond(ZoneOffset.UTC));
+					datecourProdTotal = rA.date();
+				}
+				nbHProdTotal += (rA.id() == null) ? -1 : +1;
+			}
+			nbProdTotal.add(nbHProdTotal);
+			datesProdTotal.add(datecourProdTotal.toEpochSecond(ZoneOffset.UTC));
+		}
+		model.addAttribute("datesProdTotal", datesProdTotal);
+		model.addAttribute("nbProdTotal", nbProdTotal);
 	}
 
 	/**
