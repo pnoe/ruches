@@ -9,10 +9,13 @@
 <script th:replace="~{include :: chartjs-adapter}"></script>
 <script th:replace="~{include :: jsruches}"></script>
 <script th:inline="javascript">
-	/* exported essaims, dates, nbs */
+	/* exported essaims, dates, nbs, datesProd, nbsProd, essaimsProd */
 	const essaims = /*[[#{Essaims}]]*/null;
 	const dates = /*[[${dates}]]*/null;
 	const nbs = /*[[${nbs}]]*/null;
+	const nbsProd = /*[[${nbsProd}]]*/null;
+	const datesProd = /*[[${datesProd}]]*/null;
+	const essaimsProd = /*[[#{EssaimsProd}]]*/null;
 </script>
 </head>
 <body>

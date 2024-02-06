@@ -72,18 +72,30 @@ public class EssaimService {
 	 * Graphique du nombre d'essaim.
 	 */
 	public void grapheEssaims(Model model) {
-		// Pour le nombre de ruches actives total.
+		// Calcul du nombre de ruches actives en fonction du temps.
+		nbRuches(model, essaimRepository.findByOrderByDateAcquisition(), essaimRepository.findByOrderByDateDispersion(),
+				"");
+		// Calcul du nombre de ruches de production actives en fonction du temps.
+		nbRuches(model, essaimRepository.findProdOrderByDateAcquisition(),
+				essaimRepository.findProdOrderByDateDispersion(), "Prod");
+	}
+
+	private void nbRuches(Model model, List<IdDateNoTime> essaimsAcqu, List<IdDate> essaimsDisp, String suffixe) {
+		// Calcul du nombre de ruches actives en fonction du temps.
 		List<Long> dates = new ArrayList<>();
 		List<Integer> nbs = new ArrayList<>();
-		List<IdDateNoTime> essaimsAcqu = essaimRepository.findByOrderByDateAcquisition();
-		List<IdDate> essaimsDisp = essaimRepository.findByOrderByDateDispersion();
-
+		// essaimsAcqu les ids et dates (LocalDateTime) d'acquisition des essaims.
+		// essaimsDisp les ids et dates (LocalDate) de dispersion des essaims
+		// (inactifs).
+		// Fusion des deux listes, on met null comme id pour les dispersions, ce qui
+		// permettra de les différencier des acquisitions.
 		for (IdDate e : essaimsDisp) {
 			essaimsAcqu.add(new IdDateNoTime(null, e.date().toLocalDate()));
 		}
-
+		// Tri de la fusion par dates croissantes.
 		Collections.sort(essaimsAcqu, Comparator.comparing(IdDateNoTime::date));
-
+		// On compte le nombre d'essaims pour toutes ces dates : acquisition +1,
+		// dispersion -1.
 		if (!essaimsAcqu.isEmpty()) {
 			LocalDate datecour = essaimsAcqu.get(0).date();
 			int nb = 0;
@@ -99,9 +111,8 @@ public class EssaimService {
 			nbs.add(nb);
 			dates.add(datecour.atStartOfDay().toEpochSecond(ZoneOffset.UTC));
 		}
-		model.addAttribute("dates", dates);
-		model.addAttribute("nbs", nbs);
-
+		model.addAttribute("dates" + suffixe, dates);
+		model.addAttribute("nbs" + suffixe, nbs);
 	}
 
 	public void grapheEve(Model model, Essaim essaim) {
