@@ -52,13 +52,15 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 	@Query(value = """
 			select new ooioo.ruches.IdDateNoTime(id, dateAcquisition)
 				from Essaim e
-				where id in (
-				  select ev.essaim.id
-				    from Evenement ev
-				    where e.id = ev.essaim.id and
-				      ev.type = ooioo.ruches.evenement.TypeEvenement.AJOUTESSAIMRUCHE and
-				      ev.ruche.production = true
-				)
+				where (
+				  select id
+				    from Evenement
+				    where e.id = essaim.id and
+				      type = ooioo.ruches.evenement.TypeEvenement.AJOUTESSAIMRUCHE and
+				      ruche.production = true
+				    order by date desc
+				    limit 1
+				) is not null
 				order by dateAcquisition asc
 			""")
 	List<IdDateNoTime> findProdOrderByDateAcquisition();
@@ -72,13 +74,14 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 			select new ooioo.ruches.IdDate(id, dateDispersion)
 				from Essaim e
 				where actif = false and
-				id in (
-				  select ev.essaim.id
-				    from Evenement ev
-				    where e.id = ev.essaim.id and
-				      ev.type = ooioo.ruches.evenement.TypeEvenement.AJOUTESSAIMRUCHE and
-				      ev.ruche.production = true
-				)
+				  (select id
+				     from Evenement
+				     where e.id = essaim.id and
+				       type = ooioo.ruches.evenement.TypeEvenement.AJOUTESSAIMRUCHE and
+				       ruche.production = true
+				     order by date desc
+				     limit 1
+				  ) is not null
 				order by dateDispersion asc
 			""")
 	List<IdDate> findProdOrderByDateDispersion();
