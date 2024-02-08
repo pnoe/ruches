@@ -116,16 +116,19 @@ public class AccueilService {
 		// Calcul de l'année initiale du tableau à afficher.
 		int dateDebut;
 		if (premierEssaim == null) {
-			dateDebut = 1;
+			dateDebut = 1970;
 		} else {
 			dateDebut = premierEssaim.getDateAcquisition().getYear();
 		}
-		// Calcul de l'année finale du tableau.
+		// Calcul de l'année finale du tableau : max de la date d'acquisition du dernier
+		// essaim, de la date de la dernière récolte, de la date du dernier événement.
 		Essaim dernierEssaim = essaimRepository.findFirstByOrderByDateAcquisitionDesc();
 		Recolte derniereRecolte = recolteRepository.findFirstByOrderByDateDesc();
 		Evenement dernierEve = evenementRepository.findFirstByOrderByDateDesc();
-		int dateFin = Math.max(Math.max(dernierEssaim == null ? 0 : dernierEssaim.getDateAcquisition().getYear(),
-				derniereRecolte == null ? 0 : derniereRecolte.getDate().getYear()), dernierEve.getDate().getYear());
+		int dateFin = Math.max(
+				Math.max(dernierEssaim == null ? 1970 : dernierEssaim.getDateAcquisition().getYear(),
+						derniereRecolte == null ? 1970 : derniereRecolte.getDate().getYear()),
+				dernierEve == null ? 1970 : dernierEve.getDate().getYear());
 		// nban, nombre d'années, pour dimensionner les ArrayList, avec une colonne de
 		// plus pour le total.
 		int nban = dateFin - dateDebut + 2;
