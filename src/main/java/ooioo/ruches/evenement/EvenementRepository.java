@@ -214,7 +214,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			""")
 	List<Evenement> findAjoutRucheOK();
 
-	Iterable<Evenement> findByTypeOrderByDateAsc(TypeEvenement typeEvenement);
+	List<Evenement> findByTypeOrderByDateAsc(TypeEvenement typeEvenement);
 
 	Evenement findFirstByRucheAndTypeOrderByDateDesc(Ruche ruche, TypeEvenement typeEvenement);
 

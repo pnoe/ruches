@@ -48,19 +48,13 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 	 * Liste id, dateAcqusition des essaims de production triés par dateAcquisition.
 	 * Essaim de production s'il existe un événement mise en ruche, référençant cet
 	 * essaim et tel que la ruche soit actuellement une ruche de production.
-	 */
+	 */	
 	@Query(value = """
-			select new ooioo.ruches.IdDateNoTime(id, dateAcquisition)
-				from Essaim e
-				where (
-				  select id
-				    from Evenement
-				    where e.id = essaim.id and
-				      type = ooioo.ruches.evenement.TypeEvenement.AJOUTESSAIMRUCHE and
-				      ruche.production = true
-				    order by date desc
-				    limit 1
-				) is not null
+			select distinct new ooioo.ruches.IdDateNoTime(e.id, dateAcquisition)
+				from Essaim e, Evenement ev
+				where e.id = essaim.id and
+				  type = ooioo.ruches.evenement.TypeEvenement.AJOUTESSAIMRUCHE and
+				  ruche.production = true
 				order by dateAcquisition asc
 			""")
 	List<IdDateNoTime> findProdOrderByDateAcquisition();
@@ -69,19 +63,14 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 	 * Liste id, dateDispersion des essaims de production triés par dateDispersion.
 	 * Essaim de production s'il existe un événement mise en ruche, référençant cet
 	 * essaim et tel que la ruche soit actuellement une ruche de production.
-	 */
+	 */	
 	@Query(value = """
-			select new ooioo.ruches.IdDate(id, dateDispersion)
-				from Essaim e
+			select distinct new ooioo.ruches.IdDate(e.id, dateDispersion)
+				from Essaim e, Evenement ev
 				where actif = false and
-				  (select id
-				     from Evenement
-				     where e.id = essaim.id and
-				       type = ooioo.ruches.evenement.TypeEvenement.AJOUTESSAIMRUCHE and
-				       ruche.production = true
-				     order by date desc
-				     limit 1
-				  ) is not null
+                  e.id = essaim.id and
+				  type = ooioo.ruches.evenement.TypeEvenement.AJOUTESSAIMRUCHE and
+				  ruche.production = true
 				order by dateDispersion asc
 			""")
 	List<IdDate> findProdOrderByDateDispersion();

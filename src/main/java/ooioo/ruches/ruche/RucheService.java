@@ -23,6 +23,8 @@ import ooioo.ruches.IdDateNoTime;
 import ooioo.ruches.LatLon;
 import ooioo.ruches.Nom;
 import ooioo.ruches.Utils;
+import ooioo.ruches.essaim.EssaimRepository;
+import ooioo.ruches.essaim.EssaimService;
 import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
@@ -42,18 +44,22 @@ public class RucheService {
 	private final RucheRepository rucheRepository;
 	private final RucheTypeRepository rucheTypeRepository;
 	private final RucherRepository rucherRepository;
+	private final EssaimRepository essaimRepository;
+	private final EssaimService essaimService;
 
 	@Value("${rucher.ruche.dispersion}")
 	private double dispersionRuche;
 
 	public RucheService(EvenementRepository evenementRepository, HausseRepository hausseRepository,
-			RucheRepository rucheRepository, RucheTypeRepository rucheTypeRepository,
-			RucherRepository rucherRepository) {
+			RucheRepository rucheRepository, RucheTypeRepository rucheTypeRepository, RucherRepository rucherRepository,
+			EssaimRepository essaimRepository, EssaimService essaimService) {
 		this.evenementRepository = evenementRepository;
 		this.hausseRepository = hausseRepository;
 		this.rucheRepository = rucheRepository;
 		this.rucheTypeRepository = rucheTypeRepository;
 		this.rucherRepository = rucherRepository;
+		this.essaimRepository = essaimRepository;
+		this.essaimService = essaimService;
 	}
 
 	/*
@@ -61,26 +67,49 @@ public class RucheService {
 	 * inactives est celle du dernier événement de la ruche augmentée d'un jour.
 	 */
 	void grapheRuches(Model model) {
-		// Pour le nombre de ruches actives total.
-		List<Long> datesTotal = new ArrayList<>();
-		List<Integer> nbTotal = new ArrayList<>();
 		// Courbe du nombre total de ruches actives.
 		// Estimation de la date d'inactivation d'une ruche d'après la date du dernier
 		// événement qui la référence.
-		// Liste des dates d'acquisition des ruches (actives et inactives).
+		// findByOrderByDateAcquisition liste des dates d'acquisition des ruches
+		// (actives et inactives).
 		// La date est une date sans le temps contrairemenent aux dates des événements.
-		List<IdDateNoTime> ruchesAcqu = rucheRepository.findByOrderByDateAcquisition();
+
+		nbRuches(model, rucheRepository.findByOrderByDateAcquisition(), evenementRepository.findRucheInacLastEve(),
+				"Total");
+		// En se limitant aux ruches qui sont actuellement en production.
+		// Attention, il est possible de changer l'état d'une ruche de production
+		// élevage dans le temps et cet état n'est pas mémorisé.
+		nbRuches(model, rucheRepository.findByProdOrderByDateAcquisition(),
+				evenementRepository.findRucheProdInacLastEve(), "ProdTotal");
+
+		// evenementRepository liste des événements Mise en Ruche triés par dates
+		// ascendantes.
+		// List<Evenement> evesMiseEnRuche =
+		// evenementRepository.findByTypeOrderByDateAsc(TypeEvenement.AJOUTESSAIMRUCHE);
+		// findByOrderByDateDispersion liste des dates de dispersion des essaims
+		// inactifs.
+		// List<IdDate> inactEssaims = essaimRepository.findByOrderByDateDispersion();
+
+		// Calcul du nombre d'essaims de "production" en fonction du temps.
+		essaimService.nbEssaims(model, essaimRepository.findProdOrderByDateAcquisition(),
+				essaimRepository.findProdOrderByDateDispersion(), "Prod");
+
+	}
+
+	private void nbRuches(Model model, List<IdDateNoTime> ruchesAcqu, List<IdDate> ruInacLastEve, String suffixe) {
+		List<Long> datesTotal = new ArrayList<>();
+		List<Integer> nbTotal = new ArrayList<>();
 		// Pour chaque ruche inactive, on recherche la date du dernier événement la
 		// concernant.
 		// Id est forcé à null pour distinguer la liste acqusition qui ajoute la ruche
 		// (+1) et la liste lastEve qui retire la ruche (-1).
-		List<IdDate> ruInacLastEve = evenementRepository.findRucheInacLastEve();
 		// Incrémenter d'un jour les dates de ruInacLastEve.
 		List<IdDate> rucheInacLastEve = new ArrayList<>(ruInacLastEve.size());
 		for (IdDate idD : ruInacLastEve) {
 			rucheInacLastEve.add(new IdDate(null, idD.date().plusDays(1)));
 		}
-		// Fusion des deux listes en convertissant les dates d'acquisition en LocalDateTime.
+		// Fusion des deux listes en convertissant les dates d'acquisition en
+		// LocalDateTime.
 		for (IdDateNoTime rA : ruchesAcqu) {
 			rucheInacLastEve.add(new IdDate(rA.id(), LocalDateTime.of(rA.date(), LocalTime.NOON)));
 		}
@@ -102,41 +131,8 @@ public class RucheService {
 			nbTotal.add(nbHTotal);
 			datesTotal.add(datecourTotal.toEpochSecond(ZoneOffset.UTC));
 		}
-		model.addAttribute("datesTotal", datesTotal);
-		model.addAttribute("nbTotal", nbTotal);
-		// En se limitant aux ruches qui sont actuellement en production.
-		// Attention, il est possible de changer l'état d'une ruche de production
-		// élevage dans le temps et cet état n'est pas mémorisé.
-		List<Long> datesProdTotal = new ArrayList<>();
-		List<Integer> nbProdTotal = new ArrayList<>();
-		List<IdDateNoTime> ruchesProdAcqu = rucheRepository.findByProdOrderByDateAcquisition();
-		List<IdDate> ruProdInacLastEve = evenementRepository.findRucheProdInacLastEve();
-		List<IdDate> rucheProdInacLastEve = new ArrayList<>(ruProdInacLastEve.size());
-		for (IdDate idD : ruProdInacLastEve) {
-			rucheProdInacLastEve.add(new IdDate(null, idD.date().plusDays(1)));
-		}
-		for (IdDateNoTime rA : ruchesProdAcqu) {
-			rucheProdInacLastEve.add(new IdDate(rA.id(), LocalDateTime.of(rA.date(), LocalTime.NOON)));
-		}
-		Collections.sort(rucheProdInacLastEve, Comparator.comparing(IdDate::date));
-		if (!rucheProdInacLastEve.isEmpty()) {
-			LocalDateTime datecourProdTotal = rucheProdInacLastEve.get(0).date();
-			int nbHProdTotal = 0;
-			for (IdDate rA : rucheProdInacLastEve) {
-				if (datecourProdTotal.getDayOfYear() != rA.date().getDayOfYear()
-						|| datecourProdTotal.getYear() != rA.date().getYear()) {
-					// Si l'événement est à un autre jour que les précédents.
-					nbProdTotal.add(nbHProdTotal);
-					datesProdTotal.add(datecourProdTotal.toEpochSecond(ZoneOffset.UTC));
-					datecourProdTotal = rA.date();
-				}
-				nbHProdTotal += (rA.id() == null) ? -1 : +1;
-			}
-			nbProdTotal.add(nbHProdTotal);
-			datesProdTotal.add(datecourProdTotal.toEpochSecond(ZoneOffset.UTC));
-		}
-		model.addAttribute("datesProdTotal", datesProdTotal);
-		model.addAttribute("nbProdTotal", nbProdTotal);
+		model.addAttribute("dates" + suffixe, datesTotal);
+		model.addAttribute("nb" + suffixe, nbTotal);
 	}
 
 	/**

@@ -72,15 +72,15 @@ public class EssaimService {
 	 * Graphique du nombre d'essaim.
 	 */
 	public void grapheEssaims(Model model) {
-		// Calcul du nombre de ruches actives en fonction du temps.
-		nbRuches(model, essaimRepository.findByOrderByDateAcquisition(), essaimRepository.findByOrderByDateDispersion(),
+		// Calcul du nombre d'essaims actifs en fonction du temps.
+		nbEssaims(model, essaimRepository.findByOrderByDateAcquisition(), essaimRepository.findByOrderByDateDispersion(),
 				"");
-		// Calcul du nombre de ruches de production actives en fonction du temps.
-		nbRuches(model, essaimRepository.findProdOrderByDateAcquisition(),
+		// Calcul du nombre d'essaims de "production" en fonction du temps.
+		nbEssaims(model, essaimRepository.findProdOrderByDateAcquisition(),
 				essaimRepository.findProdOrderByDateDispersion(), "Prod");
 	}
 
-	private void nbRuches(Model model, List<IdDateNoTime> essaimsAcqu, List<IdDate> essaimsDisp, String suffixe) {
+	public void nbEssaims(Model model, List<IdDateNoTime> essaimsAcqu, List<IdDate> essaimsDisp, String suffixe) {
 		// Calcul du nombre de ruches actives en fonction du temps.
 		List<Long> dates = new ArrayList<>();
 		List<Integer> nbs = new ArrayList<>();
