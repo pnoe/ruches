@@ -1,6 +1,6 @@
 package ooioo.ruches.ruche;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -73,7 +73,6 @@ public class RucheService {
 		// findByOrderByDateAcquisition liste des dates d'acquisition des ruches
 		// (actives et inactives).
 		// La date est une date sans le temps contrairemenent aux dates des événements.
-
 		nbRuches(model, rucheRepository.findByOrderByDateAcquisition(), evenementRepository.findRucheInacLastEve(),
 				"Total");
 		// En se limitant aux ruches qui sont actuellement en production.
@@ -81,7 +80,6 @@ public class RucheService {
 		// élevage dans le temps et cet état n'est pas mémorisé.
 		nbRuches(model, rucheRepository.findByProdOrderByDateAcquisition(),
 				evenementRepository.findRucheProdInacLastEve(), "ProdTotal");
-
 		// evenementRepository liste des événements Mise en Ruche triés par dates
 		// ascendantes.
 		// List<Evenement> evesMiseEnRuche =
@@ -104,32 +102,26 @@ public class RucheService {
 		// Id est forcé à null pour distinguer la liste acqusition qui ajoute la ruche
 		// (+1) et la liste lastEve qui retire la ruche (-1).
 		// Incrémenter d'un jour les dates de ruInacLastEve.
-		List<IdDate> rucheInacLastEve = new ArrayList<>(ruInacLastEve.size());
-		for (IdDate idD : ruInacLastEve) {
-			rucheInacLastEve.add(new IdDate(null, idD.date().plusDays(1)));
+		for (IdDate e : ruInacLastEve) {
+			ruchesAcqu.add(new IdDateNoTime(null, e.date().toLocalDate()));
 		}
-		// Fusion des deux listes en convertissant les dates d'acquisition en
-		// LocalDateTime.
-		for (IdDateNoTime rA : ruchesAcqu) {
-			rucheInacLastEve.add(new IdDate(rA.id(), LocalDateTime.of(rA.date(), LocalTime.NOON)));
-		}
-		// Trier rucheInacLastEve par date.
-		Collections.sort(rucheInacLastEve, Comparator.comparing(IdDate::date));
-		if (!rucheInacLastEve.isEmpty()) {
-			LocalDateTime datecourTotal = rucheInacLastEve.get(0).date();
+		if (!ruchesAcqu.isEmpty()) {
+			// Trier rucheInacLastEve par date.
+			Collections.sort(ruchesAcqu, Comparator.comparing(IdDateNoTime::date));
+			LocalDate datecourTotal = ruchesAcqu.get(0).date();
 			int nbHTotal = 0;
-			for (IdDate rA : rucheInacLastEve) {
+			for (IdDateNoTime rA : ruchesAcqu) {
 				if (datecourTotal.getDayOfYear() != rA.date().getDayOfYear()
 						|| datecourTotal.getYear() != rA.date().getYear()) {
 					// Si l'événement est à un autre jour que les précédents.
 					nbTotal.add(nbHTotal);
-					datesTotal.add(datecourTotal.toEpochSecond(ZoneOffset.UTC));
+					datesTotal.add(datecourTotal.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC));
 					datecourTotal = rA.date();
 				}
 				nbHTotal += (rA.id() == null) ? -1 : +1;
 			}
 			nbTotal.add(nbHTotal);
-			datesTotal.add(datecourTotal.toEpochSecond(ZoneOffset.UTC));
+			datesTotal.add(datecourTotal.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC));
 		}
 		model.addAttribute("dates" + suffixe, datesTotal);
 		model.addAttribute("nb" + suffixe, nbTotal);

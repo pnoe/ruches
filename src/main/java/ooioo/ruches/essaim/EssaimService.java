@@ -5,6 +5,7 @@ import java.text.DecimalFormatSymbols;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -92,24 +93,25 @@ public class EssaimService {
 		for (IdDate e : essaimsDisp) {
 			essaimsAcqu.add(new IdDateNoTime(null, e.date().toLocalDate()));
 		}
-		// Tri de la fusion par dates croissantes.
-		Collections.sort(essaimsAcqu, Comparator.comparing(IdDateNoTime::date));
+		
 		// On compte le nombre d'essaims pour toutes ces dates : acquisition +1,
 		// dispersion -1.
 		if (!essaimsAcqu.isEmpty()) {
+			// Tri de la fusion par dates croissantes.
+			Collections.sort(essaimsAcqu, Comparator.comparing(IdDateNoTime::date));
 			LocalDate datecour = essaimsAcqu.get(0).date();
 			int nb = 0;
 			for (IdDateNoTime e : essaimsAcqu) {
 				if (datecour.getDayOfYear() != e.date().getDayOfYear() || datecour.getYear() != e.date().getYear()) {
 					// Si l'événement est à un autre jour que les précédents.
 					nbs.add(nb);
-					dates.add(datecour.atStartOfDay().toEpochSecond(ZoneOffset.UTC));
+					dates.add(datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC));
 					datecour = e.date();
 				}
 				nb += (e.id() == null) ? -1 : +1;
 			}
 			nbs.add(nb);
-			dates.add(datecour.atStartOfDay().toEpochSecond(ZoneOffset.UTC));
+			dates.add(datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC));
 		}
 		model.addAttribute("dates" + suffixe, dates);
 		model.addAttribute("nbs" + suffixe, nbs);

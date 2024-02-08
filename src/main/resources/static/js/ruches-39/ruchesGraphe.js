@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		options: {
 			scales: {
 				x: {
-					type: 'time',
+					type: 'time'
 				},
 				y: {
 					position: 'left'
