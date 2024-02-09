@@ -74,31 +74,37 @@ public class EssaimService {
 	 */
 	public void grapheEssaims(Model model) {
 		// Calcul du nombre d'essaims actifs en fonction du temps.
-		nbEssaims(model, essaimRepository.findByOrderByDateAcquisition(), essaimRepository.findByOrderByDateDispersion(),
-				"");
+		nbEssaims(model, essaimRepository.findByOrderByDateAcquisition(),
+				essaimRepository.findByOrderByDateDispersion(), "");
 		// Calcul du nombre d'essaims de "production" en fonction du temps.
 		nbEssaims(model, essaimRepository.findProdOrderByDateAcquisition(),
 				essaimRepository.findProdOrderByDateDispersion(), "Prod");
 	}
 
+	/**
+	 * Calcul des listes dates et nombre d'essaims regroupés par jour.
+	 * 
+	 * @param essaimsAcqu les ids et dates (LocalDate) d'acquisition des
+	 *                    essaims.
+	 * @param essaimsDisp les ids et dates (LocalDateTime) de dispersion des essaims
+	 *                    (inactifs).
+	 * @param suffixe     pour mettre les listes résultat dans "dates" ou
+	 *                    "datesProd" idem pour nbs.
+	 */
 	public void nbEssaims(Model model, List<IdDateNoTime> essaimsAcqu, List<IdDate> essaimsDisp, String suffixe) {
 		// Calcul du nombre de ruches actives en fonction du temps.
 		List<Long> dates = new ArrayList<>();
 		List<Integer> nbs = new ArrayList<>();
-		// essaimsAcqu les ids et dates (LocalDateTime) d'acquisition des essaims.
-		// essaimsDisp les ids et dates (LocalDate) de dispersion des essaims
-		// (inactifs).
 		// Fusion des deux listes, on met null comme id pour les dispersions, ce qui
 		// permettra de les différencier des acquisitions.
 		for (IdDate e : essaimsDisp) {
 			essaimsAcqu.add(new IdDateNoTime(null, e.date().toLocalDate()));
 		}
-		
-		// On compte le nombre d'essaims pour toutes ces dates : acquisition +1,
-		// dispersion -1.
 		if (!essaimsAcqu.isEmpty()) {
 			// Tri de la fusion par dates croissantes.
 			Collections.sort(essaimsAcqu, Comparator.comparing(IdDateNoTime::date));
+			// On compte le nombre d'essaims pour toutes ces dates : acquisition +1,
+			// dispersion -1.
 			LocalDate datecour = essaimsAcqu.get(0).date();
 			int nb = 0;
 			for (IdDateNoTime e : essaimsAcqu) {

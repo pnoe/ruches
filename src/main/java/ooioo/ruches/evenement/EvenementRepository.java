@@ -76,10 +76,11 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 	/*
 	 * Trouve pour chaque ruche de production et inactive, le dernier événement la
-	 * référençant.
+	 * référençant. En retour id de la ruche, date de cet événement.
+	 * Cette date est un estimation de la date d'inactivation de la ruche.
 	 */
 	@Query(value = """
-			select new ooioo.ruches.IdDate(null, max(e.date))
+			select new ooioo.ruches.IdDate(r.id, max(e.date))
 			  from Ruche r, Evenement e
 			  where
 			    r.production = true and

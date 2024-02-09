@@ -67,12 +67,7 @@ public class RucheService {
 	 * inactives est celle du dernier événement de la ruche augmentée d'un jour.
 	 */
 	void grapheRuches(Model model) {
-		// Courbe du nombre total de ruches actives.
-		// Estimation de la date d'inactivation d'une ruche d'après la date du dernier
-		// événement qui la référence.
-		// findByOrderByDateAcquisition liste des dates d'acquisition des ruches
-		// (actives et inactives).
-		// La date est une date sans le temps contrairemenent aux dates des événements.
+		// Courbe du nombre de ruches actives.
 		nbRuches(model, rucheRepository.findByOrderByDateAcquisition(), evenementRepository.findRucheInacLastEve(),
 				"Total");
 		// En se limitant aux ruches qui sont actuellement en production.
@@ -80,20 +75,20 @@ public class RucheService {
 		// élevage dans le temps et cet état n'est pas mémorisé.
 		nbRuches(model, rucheRepository.findByProdOrderByDateAcquisition(),
 				evenementRepository.findRucheProdInacLastEve(), "ProdTotal");
-		// evenementRepository liste des événements Mise en Ruche triés par dates
-		// ascendantes.
-		// List<Evenement> evesMiseEnRuche =
-		// evenementRepository.findByTypeOrderByDateAsc(TypeEvenement.AJOUTESSAIMRUCHE);
-		// findByOrderByDateDispersion liste des dates de dispersion des essaims
-		// inactifs.
-		// List<IdDate> inactEssaims = essaimRepository.findByOrderByDateDispersion();
-
 		// Calcul du nombre d'essaims de "production" en fonction du temps.
 		essaimService.nbEssaims(model, essaimRepository.findProdOrderByDateAcquisition(),
 				essaimRepository.findProdOrderByDateDispersion(), "Prod");
-
 	}
 
+	/**
+	 * 
+	 * @param ruchesAcqu    les ids et dates (LocalDateTime) d'acquisition des
+	 *                      ruches.
+	 * @param ruInacLastEve les ids et dates (LocalDateTime) d'inactivation des
+	 *                      ruches. C'est une estimation de cette date d'après le
+	 *                      dernier événement qui la référence.
+	 * @param suffixe
+	 */
 	private void nbRuches(Model model, List<IdDateNoTime> ruchesAcqu, List<IdDate> ruInacLastEve, String suffixe) {
 		List<Long> datesTotal = new ArrayList<>();
 		List<Integer> nbTotal = new ArrayList<>();

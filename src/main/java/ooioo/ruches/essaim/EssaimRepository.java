@@ -45,10 +45,11 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 	List<IdDate> findByOrderByDateDispersion();
 
 	/*
-	 * Liste id, dateAcqusition des essaims de production triés par dateAcquisition.
-	 * Essaim de production s'il existe un événement mise en ruche, référençant cet
-	 * essaim et tel que la ruche soit actuellement une ruche de production.
-	 */	
+	 * Liste id, dateAcqusition des essaims de production triés par dateAcquisition
+	 * croissante. Essaim de production s'il existe un événement mise en ruche,
+	 * référençant cet essaim et tel que la ruche soit actuellement une ruche de
+	 * production.
+	 */
 	@Query(value = """
 			select distinct new ooioo.ruches.IdDateNoTime(e.id, dateAcquisition)
 				from Essaim e, Evenement ev
@@ -63,12 +64,12 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 	 * Liste id, dateDispersion des essaims de production triés par dateDispersion.
 	 * Essaim de production s'il existe un événement mise en ruche, référençant cet
 	 * essaim et tel que la ruche soit actuellement une ruche de production.
-	 */	
+	 */
 	@Query(value = """
 			select distinct new ooioo.ruches.IdDate(e.id, dateDispersion)
 				from Essaim e, Evenement ev
-				where actif = false and
-                  e.id = essaim.id and
+				where e.id = essaim.id and
+				  actif = false and
 				  type = ooioo.ruches.evenement.TypeEvenement.AJOUTESSAIMRUCHE and
 				  ruche.production = true
 				order by dateDispersion asc
