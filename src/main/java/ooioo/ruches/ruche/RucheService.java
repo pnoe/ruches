@@ -76,8 +76,12 @@ public class RucheService {
 		nbRuches(model, rucheRepository.findByProdOrderByDateAcquisition(),
 				evenementRepository.findRucheProdInacLastEve(), "ProdTotal");
 		// Calcul du nombre d'essaims de "production" en fonction du temps.
-		essaimService.nbEssaims(model, essaimRepository.findProdOrderByDateAcquisition(),
-				essaimRepository.findProdOrderByDateDispersion(), "Prod");
+		essaimService.nbEssaims(model, essaimRepository.findByOrderByDateAcquisition(),
+				essaimRepository.findByOrderByDateDispersion());
+		// Calcul du nombre d'essaims de "production" en fonction du temps.
+		essaimService.nbEssaimsProd(model);
+		//, essaimRepository.findProdOrderByDateAcquisition(),
+		//		essaimRepository.findProdOrderByDateDispersion(), "Prod");
 	}
 
 	/**
@@ -103,6 +107,18 @@ public class RucheService {
 		if (!ruchesAcqu.isEmpty()) {
 			// Trier rucheInacLastEve par date.
 			Collections.sort(ruchesAcqu, Comparator.comparing(IdDateNoTime::date));
+
+			// test sans regroupement par jour
+			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			/*-
+			int nbHTotal = 0;
+			for (IdDateNoTime e : ruchesAcqu) {
+				nbHTotal += (e.id() == null) ? -1 : +1;
+				nbTotal.add(nbHTotal);
+				datesTotal.add(e.date().toEpochSecond(LocalTime.MIN, ZoneOffset.UTC));
+			}
+			*/
+
 			LocalDate datecourTotal = ruchesAcqu.get(0).date();
 			int nbHTotal = 0;
 			for (IdDateNoTime rA : ruchesAcqu) {
@@ -117,6 +133,7 @@ public class RucheService {
 			}
 			nbTotal.add(nbHTotal);
 			datesTotal.add(datecourTotal.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC));
+
 		}
 		model.addAttribute("dates" + suffixe, datesTotal);
 		model.addAttribute("nb" + suffixe, nbTotal);

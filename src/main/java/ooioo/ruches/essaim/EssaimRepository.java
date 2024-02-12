@@ -144,11 +144,11 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 
 	// Nombre d'essaims créés dans l'année passée en paramètre.
 	@Query(value = """
-			select count(*) as nbessaims
+			select count(*)
 			  from Essaim
-			  where date_part('year', dateAcquisition)=?1
+			  where date_part('year', dateAcquisition)=:annee
 			""")
-	Integer countEssaimsCreesDate(int date);
+	Integer countEssaimsCreesDate(int annee);
 
 	Essaim findFirstByOrderByDateAcquisition();
 

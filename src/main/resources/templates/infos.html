@@ -31,7 +31,7 @@
 				th:utext="${@environment.getProperty('accueil.titre')}"></h1>
 		</div>
 		<div class="row">
-			<th:block th:text="#{ElementActifUniq}"></th:block> 
+			<th:block th:text="#{ElementActifUniq}"></th:block>
 			<ul>
 				<li th:text="|${nbRuchers} #{ruchersdepot(${nbRuchers<2}?'':'s')}|"></li>
 				<li th:if="${nbRuches} eq 0" th:text="|${nbRuches} #{rucheS('')}|"></li>
@@ -159,6 +159,14 @@
 								<th scope="row" th:text="#{nbEssaimsDisperses}"></th>
 								<td th:each="nbDisp : ${nbDispersionEssaims}"
 									th:text="${nbDisp}"></td>
+							</tr>
+							<tr>
+								<th scope="row" th:text="#{NbRuchesAcq}"></th>
+								<td th:each="nbCree : ${nbRuchesCr}" th:text="${nbCree}"></td>
+							</tr>
+							<tr>
+								<th scope="row" th:text="#{NbHaussesAcq}"></th>
+								<td th:each="nbCree : ${nbHaussesCr}" th:text="${nbCree}"></td>
 							</tr>
 							<tr>
 								<th scope="row" th:text="#{actionSucre}"></th>

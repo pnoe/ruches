@@ -142,6 +142,8 @@ public class AccueilService {
 		List<Integer> nbEves = new ArrayList<>(nban);
 		List<Integer> nbEssaims = new ArrayList<>(nban);
 		List<Integer> nbCreationEssaims = new ArrayList<>(nban);
+		List<Integer> nbCreationRuches = new ArrayList<>(nban);
+		List<Integer> nbCreationHausses = new ArrayList<>(nban);
 		List<Integer> nbDispersionEssaims = new ArrayList<>(nban);
 		List<Double> sucreEssaims = new ArrayList<>(nban);
 		List<Integer> nbTraitementsEssaims = new ArrayList<>(nban);
@@ -153,6 +155,8 @@ public class AccueilService {
 		Integer nbDispersionEssaimsTotal = 0;
 		Double sucreEssaimsTotal = 0.0;
 		Integer nbTraitementsEssaimsTotal = 0;
+		Integer nbCrRuchesTotal = 0;
+		Integer nbCrHaussesTotal = 0;
 		for (int date = dateDebut; date <= dateFin; date++) {
 			annees.add(date);
 			Optional<Double> poidsOpt = recolteRepository.findPoidsMielByYear(date);
@@ -196,12 +200,22 @@ public class AccueilService {
 			Integer nbTraitements = evenementRepository.countTraitementsEssaimParAnnee(date);
 			nbTraitementsEssaimsTotal += nbTraitements;
 			nbTraitementsEssaims.add(nbTraitements);
+			// Nombre de ruches créées dans l'année (année acquisition = date)
+			Integer nbCrRuche = rucheRepository.countRuchesCreeesDate(date);
+			nbCreationRuches.add(nbCrRuche);
+			nbCrRuchesTotal += nbCrRuche;
+			// Nombre d'essaims créés dans l'année (année acquisition = date)
+			Integer nbCrHausse = hausseRepository.countHaussesCreeesDate(date);
+			nbCreationHausses.add(nbCrHausse);
+			nbCrHaussesTotal += nbCrHausse;
 		}
 		pdsMiel.add(pdsMielTotal);
 		nbRecoltes.add(nbRecTotal);
 		nbEvesRucher.add(nbEveRucherTotal);
 		nbEves.add(nbEveTotal);
 		nbCreationEssaims.add(nbCreationEssaimsTotal);
+		nbCreationRuches.add(nbCrRuchesTotal);
+		nbCreationHausses.add(nbCrHaussesTotal);
 		nbTraitementsEssaims.add(nbTraitementsEssaimsTotal);
 		sucreEssaims.add(sucreEssaimsTotal);
 		nbDispersionEssaims.add(nbDispersionEssaimsTotal);
@@ -218,6 +232,8 @@ public class AccueilService {
 		model.addAttribute("nbDispersionEssaims", nbDispersionEssaims);
 		model.addAttribute("sucreEssaims", sucreEssaims);
 		model.addAttribute("nbTraitementsEssaims", nbTraitementsEssaims);
+		model.addAttribute("nbRuchesCr", nbCreationRuches);
+		model.addAttribute("nbHaussesCr", nbCreationHausses);
 	}
 
 	private void ruchersMalCale(Model model, List<Rucher> ruchers) {

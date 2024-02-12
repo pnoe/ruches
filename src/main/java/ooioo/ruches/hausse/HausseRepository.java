@@ -15,17 +15,25 @@ import ooioo.ruches.Nom;
 @RepositoryRestResource(collectionResourceRel = "hausseRepository")
 public interface HausseRepository extends CrudRepository<Hausse, Long> {
 
+	// Nombre de hausses créées dans l'année passée en paramètre.
+	@Query(value = """
+			select count(*)
+			  from Hausse
+			  where date_part('year', dateAcquisition)=:annee
+			""")
+	Integer countHaussesCreeesDate(int annee);
+
 	Optional<Hausse> findByNom(String hausseNom);
-	
+
 	List<Hausse> findByRucheIdOrderByOrdreSurRuche(Long rucheId);
-	
+
 	@Query(value = """
 			select new ooioo.ruches.IdDateNoTime(id, dateAcquisition)
 				from Hausse
 				order by dateAcquisition asc
 			""")
 	List<IdDateNoTime> findByOrderByDateAcquisition();
-	
+
 	@Query(value = """
 			select h
 				from Hausse h
@@ -54,7 +62,7 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 						where recolte.id = :recolteId)
 			""")
 	Iterable<Hausse> findHaussesNotInRecolteId(Long recolteId);
-	
+
 	// Liste des hausses qui ne sont pas dans la récolte recolteId :
 	@Query(value = """
 			select h

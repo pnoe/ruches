@@ -17,6 +17,14 @@ import ooioo.ruches.rucher.Rucher;
 @RepositoryRestResource(collectionResourceRel = "rucheRepository")
 public interface RucheRepository extends CrudRepository<Ruche, Long> {
 
+	// Nombre de ruches créées dans l'année passée en paramètre.
+	@Query(value = """
+			select count(*)
+			  from Ruche
+			  where date_part('year', dateAcquisition)=:annee
+			""")
+	Integer countRuchesCreeesDate(int annee);
+
 	/*
 	 * Liste des id, dateAcqusition des ruches triées par dateAcquisition.
 	 */
