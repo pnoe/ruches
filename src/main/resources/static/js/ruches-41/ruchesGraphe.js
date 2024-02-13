@@ -1,5 +1,5 @@
-/* globals Chart, ruches, datesTotal, ruchesProd, datesProdTotal, nbsProd, 
-  datesProd, essaimsProd, dates, nbs, essaims */
+/* globals Chart, ruches, datesTotal, ruchesProd, datesProdTotal, 
+  datesProd, essaimsProd, dates, essaims */
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -23,14 +23,14 @@ document.addEventListener('DOMContentLoaded', () => {
 				stepped: true,
 				label: essaims,
 				yAxisID: 'y',
-				data: dates.map((v, i) => { return [v * 1000, nbs[i]]; }),
+				data: dates,
 				hidden: true,
 			}, {
 				type: 'line',
 				stepped: true,
 				label: essaimsProd,
 				yAxisID: 'y',
-				data: datesProd.map((v, i) => { return [v * 1000, nbsProd[i]]; }),
+				data: datesProd,
 				hidden: true,
 			}],
 		},

@@ -1,13 +1,8 @@
 package ooioo.ruches.ruche;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,13 +14,11 @@ import org.springframework.ui.Model;
 
 import jakarta.servlet.http.HttpSession;
 import ooioo.ruches.Const;
-import ooioo.ruches.IdDate;
-import ooioo.ruches.IdDateNoTime;
+import ooioo.ruches.GrapheEsRuService;
 import ooioo.ruches.LatLon;
 import ooioo.ruches.Nom;
 import ooioo.ruches.Utils;
 import ooioo.ruches.essaim.EssaimRepository;
-import ooioo.ruches.essaim.EssaimService;
 import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
@@ -46,21 +39,21 @@ public class RucheService {
 	private final RucheTypeRepository rucheTypeRepository;
 	private final RucherRepository rucherRepository;
 	private final EssaimRepository essaimRepository;
-	private final EssaimService essaimService;
+	private final GrapheEsRuService grapheEsRuService;
 
 	@Value("${rucher.ruche.dispersion}")
 	private double dispersionRuche;
 
 	public RucheService(EvenementRepository evenementRepository, HausseRepository hausseRepository,
 			RucheRepository rucheRepository, RucheTypeRepository rucheTypeRepository, RucherRepository rucherRepository,
-			EssaimRepository essaimRepository, EssaimService essaimService) {
+			EssaimRepository essaimRepository, GrapheEsRuService grapheEsRuService) {
 		this.evenementRepository = evenementRepository;
 		this.hausseRepository = hausseRepository;
 		this.rucheRepository = rucheRepository;
 		this.rucheTypeRepository = rucheTypeRepository;
 		this.rucherRepository = rucherRepository;
 		this.essaimRepository = essaimRepository;
-		this.essaimService = essaimService;
+		this.grapheEsRuService = grapheEsRuService;
 	}
 
 	/*
@@ -69,58 +62,18 @@ public class RucheService {
 	 */
 	void grapheRuches(Model model) {
 		// Courbe du nombre de ruches actives.
-		nbRuches(model, rucheRepository.findByOrderByDateAcquisition(), evenementRepository.findRucheInacLastEve(),
-				"Total");
+		grapheEsRuService.nbRuches(model, rucheRepository.findByOrderByDateAcquisition(),
+				evenementRepository.findRucheInacLastEve(), "Total");
 		// En se limitant aux ruches qui sont actuellement en production.
 		// Attention, il est possible de changer l'état d'une ruche de production
-		// élevage dans le temps et cet état n'est pas mémorisé.
-		nbRuches(model, rucheRepository.findByProdOrderByDateAcquisition(),
+		// à élevage dans le temps et seul l'état final est mémorisé.
+		grapheEsRuService.nbRuches(model, rucheRepository.findByProdOrderByDateAcquisition(),
 				evenementRepository.findRucheProdInacLastEve(), "ProdTotal");
 		// Calcul du nombre d'essaims de "production" en fonction du temps.
-		essaimService.nbEssaims(model, essaimRepository.findByOrderByDateAcquisition(),
+		grapheEsRuService.nbEssaims(model, essaimRepository.findByOrderByDateAcquisition(),
 				essaimRepository.findByOrderByDateDispersion());
 		// Calcul du nombre d'essaims de "production" en fonction du temps.
-		essaimService.nbEssaimsProd(model);
-	}
-
-	/**
-	 * 
-	 * @param ruchesAcqu    les ids et dates (LocalDateTime) d'acquisition des
-	 *                      ruches.
-	 * @param ruInacLastEve les ids et dates (LocalDateTime) d'inactivation des
-	 *                      ruches. C'est une estimation de cette date d'après le
-	 *                      dernier événement qui la référence.
-	 * @param suffixe
-	 */
-	private void nbRuches(Model model, List<IdDateNoTime> ruchesAcqu, List<IdDate> ruInacLastEve, String suffixe) {
-		List<List<Long>> datesTotal = new ArrayList<>();
-		// Pour chaque ruche inactive, on recherche la date du dernier événement la
-		// concernant.
-		// Id est forcé à null pour distinguer la liste acqusition qui ajoute la ruche
-		// (+1) et la liste lastEve qui retire la ruche (-1).
-		// Incrémenter d'un jour les dates de ruInacLastEve.
-		for (IdDate e : ruInacLastEve) {
-			ruchesAcqu.add(new IdDateNoTime(null, e.date().toLocalDate()));
-		}
-		if (!ruchesAcqu.isEmpty()) {
-			// Trier rucheInacLastEve par date.
-			Collections.sort(ruchesAcqu, Comparator.comparing(IdDateNoTime::date));
-			LocalDate datecourTotal = ruchesAcqu.get(0).date();
-			int nbHTotal = 0;
-			for (IdDateNoTime rA : ruchesAcqu) {
-				if (!datecourTotal.equals(rA.date())) {
-					// Si l'événement est à un autre jour que les précédents.
-					// Dates en millisecondes pour Chartjs.
-					datesTotal.add(new ArrayList<Long>(Arrays
-							.asList(1000 * datecourTotal.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nbHTotal)));
-					datecourTotal = rA.date();
-				}
-				nbHTotal += (rA.id() == null) ? -1 : +1;
-			}
-			datesTotal.add(new ArrayList<Long>(
-					Arrays.asList(1000 * datecourTotal.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nbHTotal)));
-		}
-		model.addAttribute("dates" + suffixe, datesTotal);
+		grapheEsRuService.nbEssaimsProd(model);
 	}
 
 	/**

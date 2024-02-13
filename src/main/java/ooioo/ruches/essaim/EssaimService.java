@@ -5,13 +5,10 @@ import java.text.DecimalFormatSymbols;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,9 +23,7 @@ import org.springframework.ui.Model;
 
 import jakarta.servlet.http.HttpSession;
 import ooioo.ruches.Const;
-import ooioo.ruches.IdDate;
-import ooioo.ruches.IdDateNoTime;
-import ooioo.ruches.IdNom;
+import ooioo.ruches.GrapheEsRuService;
 import ooioo.ruches.Nom;
 import ooioo.ruches.Utils;
 import ooioo.ruches.evenement.Evenement;
@@ -56,11 +51,12 @@ public class EssaimService {
 	private final RecolteHausseRepository recolteHausseRepository;
 	private final RucherRepository rucherRepository;
 	private final MessageSource messageSource;
+	private final GrapheEsRuService grapheEsRuService;
 
 	public EssaimService(EssaimRepository essaimRepository, HausseRepository hausseRepository,
 			EvenementRepository evenementRepository, RucheRepository rucheRepository,
 			RecolteRepository recolteRepository, RecolteHausseRepository recolteHausseRepository,
-			RucherRepository rucherRepository, MessageSource messageSource) {
+			RucherRepository rucherRepository, MessageSource messageSource, GrapheEsRuService grapheEsRuService) {
 		this.essaimRepository = essaimRepository;
 		this.evenementRepository = evenementRepository;
 		this.rucheRepository = rucheRepository;
@@ -68,6 +64,7 @@ public class EssaimService {
 		this.recolteHausseRepository = recolteHausseRepository;
 		this.rucherRepository = rucherRepository;
 		this.messageSource = messageSource;
+		this.grapheEsRuService = grapheEsRuService;
 	}
 
 	/**
@@ -75,135 +72,18 @@ public class EssaimService {
 	 */
 	public void grapheEssaims(Model model) {
 		// Calcul du nombre d'essaims actifs en fonction du temps.
-		nbEssaims(model, essaimRepository.findByOrderByDateAcquisition(),
+		grapheEsRuService.nbEssaims(model, essaimRepository.findByOrderByDateAcquisition(),
 				essaimRepository.findByOrderByDateDispersion());
 		// Calcul du nombre d'essaims de "production" en fonction du temps.
-		nbEssaimsProd(model);
-	}
-
-	/**
-	 * Calcul des listes dates et nombre d'essaims de production regroupés par jour.
-	 */
-	public void nbEssaimsProd(Model model) {
-		List<Long> dates = new ArrayList<>();
-		List<Integer> nbs = new ArrayList<>();
-		// essaims liste de tous les essaims.
-		List<IdNom> essaims = essaimRepository.findAllProjectedIdNomBy();
-		// signeDate liste des dates (LocalDate) d'ajout si id = 1 ou de retrait si id =
-		// -1.
-		List<IdDateNoTime> signeDate = new ArrayList<>();
-		for (IdNom esIdNom : essaims) {
-			Long esId = esIdNom.id();
-			Optional<Essaim> esOpt = essaimRepository.findById(esId);
-			if (esOpt.isPresent()) {
-				Essaim es = esOpt.get();
-				// liste des événements mise en ruche de l'essaim esId. Voir si projection
-				// possible, les champs date et ruche.production sont utilisés, plus log en cas
-				// d'erreur de l'événement.
-				List<Evenement> eves = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(esId,
-						TypeEvenement.AJOUTESSAIMRUCHE);
-				// eProd état de l'essaim es : production ou non.
-				boolean eProd = false;
-				for (Evenement ev : eves) {
-					if (ev.getDate().toLocalDate().isBefore(es.getDateAcquisition())) {
-						// Si date événement ev (LocalDateTime) est avant date acquisition (LocalDate)
-						// on ignore l'événement ev.
-						logger.error("{} est avant le date d'acquisition de l'essaim {}", ev, es);
-					} else if ((es.getActif() == false) && (ev.getDate().isAfter(es.getDateDispersion()))) {
-						// Si essaim inactif et date événement ev(LocalDateTime) est après la date
-						// dispersion de l'essaim on ignore ev.
-						logger.error("{} est après le date de dispersion de l'essaim {}", ev, es);
-					} else {
-						// Trouver si la ruche de l'événement est une ruche de prod :
-						if (ev.getRuche() == null) {
-							// Si la ruche n'est pas renseignée dans l'événement on ignore ev.
-							// On pourrait ne pas l'ignorer pour la courbe de nombre d'essaims total.
-							logger.error("{} ruche non renseignée", ev);
-						} else {
-							boolean prod = ev.getRuche().getProduction();
-							if (eProd && !prod) {
-								// Si l'état courant est essaim dans une ruche de production et que l'on passe
-								// dans une ruche qui n'est pas de production.
-								eProd = false;
-								// mémoriser date et -1 essaim de prod.
-								signeDate.add(new IdDateNoTime(-1l, ev.getDate().toLocalDate()));
-							} else if (!eProd && prod) {
-								// Si l'état courant est essaim dans une ruche pas de production et que l'on
-								// passe dans une ruche de production.
-								eProd = true;
-								// mémoriser date et +1 essaim de prod.
-								signeDate.add(new IdDateNoTime(1l, ev.getDate().toLocalDate()));
-							}
-							if (!es.getActif() && eProd) {
-								// L'essaim est inactif et l'état courant est production.
-								// mémoriser date dispersion et -1
-								signeDate.add(new IdDateNoTime(-1l, es.getDateDispersion().toLocalDate()));
-							}
-						}
-					}
-				} // Fin boucle événements.
-			} else {
-				logger.error(Const.IDESSAIMXXINCONNU, esIdNom.id());
-			}
-		} // Fin boucle essaims.
-			// Trie signeDate par dates.
-		Collections.sort(signeDate, Comparator.comparing(IdDateNoTime::date));
-		// Alimenter dates et nbs
-		LocalDate datecour = signeDate.get(0).date();
-		int nb = 0;
-		for (IdDateNoTime i : signeDate) {
-			// Regroupement par jour.
-			if (!datecour.equals(i.date())) {
-				nbs.add(nb);
-				dates.add(datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC));
-				datecour = i.date();
-			}
-			nb += i.id();
-		}
-		nbs.add(nb);
-		dates.add(datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC));
-		model.addAttribute("datesProd", dates);
-		model.addAttribute("nbsProd", nbs);
-	}
-
-	/**
-	 * Calcul des listes dates et nombre d'essaims regroupés par jour.
-	 * 
-	 * @param essaimsAcqu les ids et dates (LocalDate) d'acquisition des essaims.
-	 * @param essaimsDisp les ids et dates (LocalDateTime) de dispersion des essaims
-	 *                    (inactifs).
-	 */
-	public void nbEssaims(Model model, List<IdDateNoTime> essaimsAcqu, List<IdDate> essaimsDisp) {
-		// La taille de ces List n'est pas connue ( < essaimsAcqu.size() +
-		// essaimsDisp.size()).
-		List<Long> dates = new ArrayList<>();
-		List<Integer> nbs = new ArrayList<>();
-		// Fusion des deux listes, on met null comme id pour les dispersions, ce qui
-		// permettra de les différencier des acquisitions.
-		for (IdDate e : essaimsDisp) {
-			essaimsAcqu.add(new IdDateNoTime(null, e.date().toLocalDate()));
-		}
-		if (!essaimsAcqu.isEmpty()) {
-			// Tri de la fusion par dates croissantes.
-			Collections.sort(essaimsAcqu, Comparator.comparing(IdDateNoTime::date));
-			// On compte le nombre d'essaims pour toutes ces dates : acquisition +1,
-			// dispersion -1.
-			LocalDate datecour = essaimsAcqu.get(0).date();
-			int nb = 0;
-			for (IdDateNoTime e : essaimsAcqu) {
-				if (!datecour.equals(e.date())) {
-					// Si l'événement est à une autre date que les précédents.
-					nbs.add(nb);
-					dates.add(datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC));
-					datecour = e.date();
-				}
-				nb += (e.id() == null) ? -1 : +1;
-			}
-			nbs.add(nb);
-			dates.add(datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC));
-		}
-		model.addAttribute("dates", dates);
-		model.addAttribute("nbs", nbs);
+		grapheEsRuService.nbEssaimsProd(model);
+		// Courbe du nombre de ruches actives.
+		grapheEsRuService.nbRuches(model, rucheRepository.findByOrderByDateAcquisition(),
+				evenementRepository.findRucheInacLastEve(), "Total");
+		// En se limitant aux ruches qui sont actuellement en production.
+		// Attention, il est possible de changer l'état d'une ruche de production
+		// à élevage dans le temps et seul l'état final est mémorisé.
+		grapheEsRuService.nbRuches(model, rucheRepository.findByProdOrderByDateAcquisition(),
+				evenementRepository.findRucheProdInacLastEve(), "ProdTotal");
 	}
 
 	public void grapheEve(Model model, Essaim essaim) {
