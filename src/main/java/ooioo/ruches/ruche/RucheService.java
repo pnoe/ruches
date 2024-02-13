@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -80,8 +81,6 @@ public class RucheService {
 				essaimRepository.findByOrderByDateDispersion());
 		// Calcul du nombre d'essaims de "production" en fonction du temps.
 		essaimService.nbEssaimsProd(model);
-		//, essaimRepository.findProdOrderByDateAcquisition(),
-		//		essaimRepository.findProdOrderByDateDispersion(), "Prod");
 	}
 
 	/**
@@ -94,8 +93,7 @@ public class RucheService {
 	 * @param suffixe
 	 */
 	private void nbRuches(Model model, List<IdDateNoTime> ruchesAcqu, List<IdDate> ruInacLastEve, String suffixe) {
-		List<Long> datesTotal = new ArrayList<>();
-		List<Integer> nbTotal = new ArrayList<>();
+		List<List<Long>> datesTotal = new ArrayList<>();
 		// Pour chaque ruche inactive, on recherche la date du dernier événement la
 		// concernant.
 		// Id est forcé à null pour distinguer la liste acqusition qui ajoute la ruche
@@ -107,36 +105,22 @@ public class RucheService {
 		if (!ruchesAcqu.isEmpty()) {
 			// Trier rucheInacLastEve par date.
 			Collections.sort(ruchesAcqu, Comparator.comparing(IdDateNoTime::date));
-
-			// test sans regroupement par jour
-			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			/*-
-			int nbHTotal = 0;
-			for (IdDateNoTime e : ruchesAcqu) {
-				nbHTotal += (e.id() == null) ? -1 : +1;
-				nbTotal.add(nbHTotal);
-				datesTotal.add(e.date().toEpochSecond(LocalTime.MIN, ZoneOffset.UTC));
-			}
-			*/
-
 			LocalDate datecourTotal = ruchesAcqu.get(0).date();
 			int nbHTotal = 0;
 			for (IdDateNoTime rA : ruchesAcqu) {
-				if (datecourTotal.getDayOfYear() != rA.date().getDayOfYear()
-						|| datecourTotal.getYear() != rA.date().getYear()) {
+				if (!datecourTotal.equals(rA.date())) {
 					// Si l'événement est à un autre jour que les précédents.
-					nbTotal.add(nbHTotal);
-					datesTotal.add(datecourTotal.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC));
+					// Dates en millisecondes pour Chartjs.
+					datesTotal.add(new ArrayList<Long>(Arrays
+							.asList(1000 * datecourTotal.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nbHTotal)));
 					datecourTotal = rA.date();
 				}
 				nbHTotal += (rA.id() == null) ? -1 : +1;
 			}
-			nbTotal.add(nbHTotal);
-			datesTotal.add(datecourTotal.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC));
-
+			datesTotal.add(new ArrayList<Long>(
+					Arrays.asList(1000 * datecourTotal.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nbHTotal)));
 		}
 		model.addAttribute("dates" + suffixe, datesTotal);
-		model.addAttribute("nb" + suffixe, nbTotal);
 	}
 
 	/**
