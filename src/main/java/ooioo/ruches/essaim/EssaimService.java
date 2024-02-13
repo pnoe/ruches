@@ -82,13 +82,7 @@ public class EssaimService {
 	}
 
 	/**
-	 * Calcul des listes dates et nombre d'essaims regroupés par jour.
-	 * 
-	 * @param essaimsAcqu les ids et dates (LocalDate) d'acquisition des essaims.
-	 * @param essaimsDisp les ids et dates (LocalDateTime) de dispersion des essaims
-	 *                    (inactifs).
-	 * @param suffixe     pour mettre les listes résultat dans "dates" ou
-	 *                    "datesProd" idem pour nbs.
+	 * Calcul des listes dates et nombre d'essaims de production regroupés par jour.
 	 */
 	public void nbEssaimsProd(Model model) {
 		List<Long> dates = new ArrayList<>();
@@ -104,7 +98,8 @@ public class EssaimService {
 			if (esOpt.isPresent()) {
 				Essaim es = esOpt.get();
 				// liste des événements mise en ruche de l'essaim esId. Voir si projection
-				// possible.
+				// possible, les champs date et ruche.production sont utilisés, plus log en cas
+				// d'erreur de l'événement.
 				List<Evenement> eves = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(esId,
 						TypeEvenement.AJOUTESSAIMRUCHE);
 				// eProd état de l'essaim es : production ou non.
@@ -151,15 +146,22 @@ public class EssaimService {
 				logger.error(Const.IDESSAIMXXINCONNU, esIdNom.id());
 			}
 		} // Fin boucle essaims.
-		// Trie signeDate par dates.
+			// Trie signeDate par dates.
 		Collections.sort(signeDate, Comparator.comparing(IdDateNoTime::date));
 		// Alimenter dates et nbs
-		int n = 0;
+		LocalDate datecour = signeDate.get(0).date();
+		int nb = 0;
 		for (IdDateNoTime i : signeDate) {
-			dates.add(i.date().toEpochSecond(LocalTime.MIN, ZoneOffset.UTC));
-			n += i.id();
-			nbs.add(n);
+			// Regroupement par jour.
+			if (!datecour.equals(i.date())) {
+				nbs.add(nb);
+				dates.add(datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC));
+				datecour = i.date();
+			}
+			nb += i.id();
 		}
+		nbs.add(nb);
+		dates.add(datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC));
 		model.addAttribute("datesProd", dates);
 		model.addAttribute("nbsProd", nbs);
 	}
@@ -189,8 +191,8 @@ public class EssaimService {
 			LocalDate datecour = essaimsAcqu.get(0).date();
 			int nb = 0;
 			for (IdDateNoTime e : essaimsAcqu) {
-				if (datecour.getDayOfYear() != e.date().getDayOfYear() || datecour.getYear() != e.date().getYear()) {
-					// Si l'événement est à un autre jour que les précédents.
+				if (!datecour.equals(e.date())) {
+					// Si l'événement est à une autre date que les précédents.
 					nbs.add(nb);
 					dates.add(datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC));
 					datecour = e.date();

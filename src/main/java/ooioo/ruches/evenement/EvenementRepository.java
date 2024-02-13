@@ -76,8 +76,8 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 	/*
 	 * Trouve pour chaque ruche de production et inactive, le dernier événement la
-	 * référençant. En retour id de la ruche, date de cet événement.
-	 * Cette date est un estimation de la date d'inactivation de la ruche.
+	 * référençant. En retour id de la ruche, date de cet événement. Cette date est
+	 * un estimation de la date d'inactivation de la ruche.
 	 */
 	@Query(value = """
 			select new ooioo.ruches.IdDate(r.id, max(e.date))
@@ -180,7 +180,8 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	// l'essaim et la date sont donnés en paramètre.
 	// ruche et essaim identiques.
 	@Query(value = """
-			select new ooioo.ruches.IdDate(id, date) from Evenement
+			select new ooioo.ruches.IdDate(id, date) 
+			  from Evenement
 			  where type = ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE
 			    and ruche = :ruche
 			    and essaim = :essaim
