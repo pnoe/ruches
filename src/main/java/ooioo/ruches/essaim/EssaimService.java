@@ -69,16 +69,21 @@ public class EssaimService {
 
 	public void descendance(Model model) {
 		List<Essaim> essaims = essaimRepository.findAll();
-		List<Essaim> essRoot = new ArrayList<Essaim>();
+		List<Essaim> essRoot = new ArrayList<>();
+		List<Integer> essProfond = new ArrayList<>();
 		for (Essaim ess : essaims) {
 			Essaim essaimRoot = ess;
+			int profond = 0;
 			while (essaimRoot.getSouche() != null) {
 				essaimRoot = essaimRoot.getSouche();
+				profond++;
 			}
 			essRoot.add(essaimRoot);
+			essProfond.add(profond);
 		}
 		model.addAttribute("essaims", essaims);
 		model.addAttribute("essRoot", essRoot);
+		model.addAttribute("essProfond", essProfond);
 	}
 
 	/**

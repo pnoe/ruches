@@ -21,10 +21,11 @@
 	</div>
 	<div class="container-fluid">
 		<table class="table table-bordered table-striped table-sm"
-			id="essaims">
+			id="descendance">
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>
+					<th th:text="#{Profondeur}"></th>
 					<th th:text="#{souche}"></th>
 					<th th:text="#{Racine}"></th>
 				</tr>
@@ -32,6 +33,7 @@
 			<tbody th:with="f='dd/MM/yyyy'">
 				<tr th:each="e, i : ${essaims}">
 					<td><a th:href="@{'/essaim/'+${e.id}}" th:text="${e.nom}"></a></td>
+					<td><a th:text="${essProfond[i.index]}"></a></td>
 					<td><a th:href="@{'/essaim/'+${e.souche?.id}}" th:text="${e.souche?.nom}"></a></td>
 					<td><a th:href="@{'/essaim/'+${essRoot[i.index]?.id}}" th:text="${essRoot[i.index]?.nom}"></a></td>
 				</tr>
