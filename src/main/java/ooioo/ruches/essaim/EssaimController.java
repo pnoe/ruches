@@ -73,6 +73,11 @@ public class EssaimController {
 		this.essaimService = essaimService;
 	}
 	
+	@GetMapping("/descendance")
+	public String descendance(Model model) {
+		essaimService.descendance(model);
+		return "essaim/essaimsDescendance";
+	}
 	
 	/**
 	 * Graphique affichant la courbe du nombre d'essaims. En abscisse le

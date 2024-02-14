@@ -67,6 +67,20 @@ public class EssaimService {
 		this.grapheEsRuService = grapheEsRuService;
 	}
 
+	public void descendance(Model model) {
+		List<Essaim> essaims = essaimRepository.findAll();
+		List<Essaim> essRoot = new ArrayList<Essaim>();
+		for (Essaim ess : essaims) {
+			Essaim essaimRoot = ess;
+			while (essaimRoot.getSouche() != null) {
+				essaimRoot = essaimRoot.getSouche();
+			}
+			essRoot.add(essaimRoot);
+		}
+		model.addAttribute("essaims", essaims);
+		model.addAttribute("essRoot", essRoot);
+	}
+
 	/**
 	 * Graphique du nombre d'essaim.
 	 */
