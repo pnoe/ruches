@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -44,7 +43,7 @@ public class GrapheEsRuService {
 	 * @param suffixe
 	 */
 	public void nbRuches(Model model, List<IdDateNoTime> ruchesAcqu, List<IdDate> ruInacLastEve, String suffixe) {
-		List<List<Long>> datesTotal = new ArrayList<>();
+		List<Long[]> datesTotal = new ArrayList<>();
 		// Pour chaque ruche inactive, on recherche la date du dernier événement la
 		// concernant.
 		// Id est forcé à null pour distinguer la liste acqusition qui ajoute la ruche
@@ -62,14 +61,14 @@ public class GrapheEsRuService {
 				if (!datecourTotal.equals(rA.date())) {
 					// Si l'événement est à un autre jour que les précédents.
 					// Dates en millisecondes pour Chartjs.
-					datesTotal.add(new ArrayList<Long>(Arrays.asList(
-							1000 * datecourTotal.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nbHTotal)));
+					datesTotal.add(new Long[] { 1000 * datecourTotal.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC),
+							(long) nbHTotal });
 					datecourTotal = rA.date();
 				}
 				nbHTotal += (rA.id() == null) ? -1 : +1;
 			}
-			datesTotal.add(new ArrayList<Long>(
-					Arrays.asList(1000 * datecourTotal.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nbHTotal)));
+			datesTotal.add(
+					new Long[] { 1000 * datecourTotal.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nbHTotal });
 		}
 		model.addAttribute("dates" + suffixe, datesTotal);
 	}
@@ -78,7 +77,7 @@ public class GrapheEsRuService {
 	 * Calcul des listes dates et nombre d'essaims de production regroupés par jour.
 	 */
 	public void nbEssaimsProd(Model model) {
-		List<List<Long>> dates = new ArrayList<>();
+		List<Long[]> dates = new ArrayList<>();
 		// essaims liste de tous les essaims.
 		List<IdNom> essaims = essaimRepository.findAllProjectedIdNomBy();
 		// signeDate liste des dates (LocalDate) d'ajout si id = 1 ou de retrait si id =
@@ -146,18 +145,12 @@ public class GrapheEsRuService {
 		for (IdDateNoTime i : signeDate) {
 			// Regroupement par jour.
 			if (!datecour.equals(i.date())) {
-
-				dates.add(new ArrayList<Long>(
-						Arrays.asList(1000 * datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nb)));
-
-				// nbs.add(nb);
-				// dates.add(datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC));
+				dates.add(new Long[] { 1000 * datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nb });
 				datecour = i.date();
 			}
 			nb += i.id();
 		}
-		dates.add(new ArrayList<Long>(
-				Arrays.asList(1000 * datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nb)));
+		dates.add(new Long[] { 1000 * datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nb });
 		model.addAttribute("datesProd", dates);
 	}
 
@@ -171,7 +164,7 @@ public class GrapheEsRuService {
 	public void nbEssaims(Model model, List<IdDateNoTime> essaimsAcqu, List<IdDate> essaimsDisp) {
 		// La taille de ces List n'est pas connue ( < essaimsAcqu.size() +
 		// essaimsDisp.size()).
-		List<List<Long>> dates = new ArrayList<>();
+		List<Long[]> dates = new ArrayList<>();
 		// Fusion des deux listes, on met null comme id pour les dispersions, ce qui
 		// permettra de les différencier des acquisitions.
 		for (IdDate e : essaimsDisp) {
@@ -187,14 +180,12 @@ public class GrapheEsRuService {
 			for (IdDateNoTime e : essaimsAcqu) {
 				if (!datecour.equals(e.date())) {
 					// Si l'événement est à une autre date que les précédents.
-					dates.add(new ArrayList<Long>(
-							Arrays.asList(1000 * datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nb)));
+					dates.add(new Long[] { 1000 * datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nb });
 					datecour = e.date();
 				}
 				nb += (e.id() == null) ? -1 : +1;
 			}
-			dates.add(new ArrayList<Long>(
-					Arrays.asList(1000 * datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nb)));
+			dates.add(new Long[] { 1000 * datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nb });
 		}
 		model.addAttribute("dates", dates);
 		// model.addAttribute("nbs", nbs);
