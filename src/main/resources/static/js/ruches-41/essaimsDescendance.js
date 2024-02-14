@@ -1,4 +1,4 @@
-/* globals buttontextprint, buttontextcol, DataTable */
+/* globals DataTable */
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
