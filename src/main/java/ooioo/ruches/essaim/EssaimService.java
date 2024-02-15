@@ -67,8 +67,16 @@ public class EssaimService {
 		this.grapheEsRuService = grapheEsRuService;
 	}
 
-	public void descendance(Model model) {
-		List<Essaim> essaims = essaimRepository.findAll();
+	public void descendance(HttpSession session, Model model) {
+		
+		
+		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
+		List<Essaim> essaims = (voirInactif != null && (boolean) voirInactif)
+				? essaimRepository.findAll()
+				: essaimRepository.findByActif(true);
+		
+		
+//		List<Essaim> essaims = essaimRepository.findAll();
 		List<Essaim> essRoot = new ArrayList<>();
 		List<Integer> essProfond = new ArrayList<>();
 		for (Essaim ess : essaims) {

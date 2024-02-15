@@ -74,8 +74,8 @@ public class EssaimController {
 	}
 	
 	@GetMapping("/descendance")
-	public String descendance(Model model) {
-		essaimService.descendance(model);
+	public String descendance(HttpSession session, Model model) {
+		essaimService.descendance(session, model);
 		return "essaim/essaimsDescendance";
 	}
 	
