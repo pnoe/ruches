@@ -67,31 +67,41 @@ public class EssaimService {
 		this.grapheEsRuService = grapheEsRuService;
 	}
 
-	public void descendance(HttpSession session, Model model) {
-		
-		
-		Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
-		List<Essaim> essaims = (voirInactif != null && (boolean) voirInactif)
-				? essaimRepository.findAll()
-				: essaimRepository.findByActif(true);
-		
-		
-//		List<Essaim> essaims = essaimRepository.findAll();
-		List<Essaim> essRoot = new ArrayList<>();
-		List<Integer> essProfond = new ArrayList<>();
+	public void descendance(Model model) {
+		List<Essaim> essaims = essaimRepository.findAll();
+		List<Essaim> racines = new ArrayList<>();
+		List<Integer> profondeurs = new ArrayList<>();
+		List<Integer> nbessaims = new ArrayList<>();
+		List<Boolean> inactifs = new ArrayList<>();
 		for (Essaim ess : essaims) {
-			Essaim essaimRoot = ess;
+			Essaim essR = ess;
 			int profond = 0;
-			while (essaimRoot.getSouche() != null) {
-				essaimRoot = essaimRoot.getSouche();
+			while (essR.getSouche() != null) {
+				essR = essR.getSouche();
 				profond++;
 			}
-			essRoot.add(essaimRoot);
-			essProfond.add(profond);
+			// Si la souche est non nulle, alors esR est une racine d'un arbre non réduit à
+			// un seul essaim.
+			if (ess.getSouche() != null) {
+				// Mémoriser : essaim racine, max profond, +1 pour nb essaims et arbre inactif.
+				int i = racines.indexOf(essR);
+				if (i == -1) {
+					racines.add(essR);
+					profondeurs.add(profond);
+					// nbessaims initialisé à 2 pour ajouter la racine.
+					nbessaims.add(2);
+					inactifs.add(!ess.getActif() && !essR.getActif());
+				} else {
+					profondeurs.set(i, Math.max(profond, profondeurs.get(i)));
+					nbessaims.set(i, nbessaims.get(i) + 1);
+					inactifs.set(i, inactifs.get(i) && !ess.getActif());
+				}
+			}
 		}
-		model.addAttribute("essaims", essaims);
-		model.addAttribute("essRoot", essRoot);
-		model.addAttribute("essProfond", essProfond);
+		model.addAttribute("racines", racines);
+		model.addAttribute("profondeurs", profondeurs);
+		model.addAttribute("nbessaims", nbessaims);
+		model.addAttribute("inactifs", inactifs);
 	}
 
 	/**

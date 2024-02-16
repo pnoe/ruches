@@ -23,18 +23,19 @@
 				<tr>
 					<th th:text="#{nom}"></th>
 					<th th:text="#{Profondeur}"></th>
-					<th th:text="#{souche}"></th>
-					<th th:text="#{Racine}"></th>
+					<th th:text="#{NombreEssaims}"></th>
+					<th th:text="#{ArbreInactif}"></th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody th:with="f='dd/MM/yyyy'">
-				<tr th:each="e, i : ${essaims}">
+				<tr th:each="e, i : ${racines}">
 					<td><a th:href="@{'/essaim/'+${e.id}}" th:text="${e.nom}"></a></td>
-					<td><a th:text="${essProfond[i.index]}"></a></td>
-					<td><a th:href="@{'/essaim/'+${e.souche?.id}}"
-						th:text="${e.souche?.nom}"></a></td>
-					<td><a th:href="@{'/essaim/'+${essRoot[i.index]?.id}}"
-						th:text="${essRoot[i.index]?.nom}"></a></td>
+					<td><a th:text="${profondeurs[i.index]}"></a></td>
+					<td><a th:text="${nbessaims[i.index]}"></a></td>
+					<td><a th:text="${inactifs[i.index]}?#{oui}:#{non}"></a></td>
+					<td><a data-bs-toggle="tooltip" th:title="#{GraphArbre}"
+						th:href="@{'/essaim/descendance/'+${e.id}}" class="bi-diagram-3"></a></td>
 				</tr>
 			</tbody>
 		</table>
