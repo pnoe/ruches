@@ -78,19 +78,19 @@ public class GrapheEsRuService {
 	 */
 	public void nbEssaimsProd(Model model) {
 		List<Long[]> dates = new ArrayList<>();
-		// essaims liste de tous les essaims.
+		// essaims liste de tous les essaims actifs et inactifs projetés Id, Nom
 		List<IdNom> essaims = essaimRepository.findAllProjectedIdNomBy();
 		// signeDate liste des dates (LocalDate) d'ajout si id = 1 ou de retrait si id =
-		// -1.
+		// -1 (emploi de IdDateNoTime pour éviter de recréer un record).
 		List<IdDateNoTime> signeDate = new ArrayList<>();
 		for (IdNom esIdNom : essaims) {
 			Long esId = esIdNom.id();
 			Optional<Essaim> esOpt = essaimRepository.findById(esId);
 			if (esOpt.isPresent()) {
 				Essaim es = esOpt.get();
-				// liste des événements mise en ruche de l'essaim esId. Voir si projection
-				// possible, les champs date et ruche.production sont utilisés, plus log en cas
-				// d'erreur de l'événement.
+				// liste des événements mise en ruche triés par date ascendante de l'essaim
+				// esId. Voir si projection possible, les champs date et ruche.production sont
+				// utilisés, plus log en cas d'erreur de l'événement.
 				List<Evenement> eves = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(esId,
 						TypeEvenement.AJOUTESSAIMRUCHE);
 				// eProd état de l'essaim es : production ou non.
@@ -101,7 +101,7 @@ public class GrapheEsRuService {
 						// on ignore l'événement ev.
 						logger.error("{} est avant le date d'acquisition de l'essaim {}", ev, es);
 					} else if ((es.getActif() == false) && (ev.getDate().isAfter(es.getDateDispersion()))) {
-						// Si essaim inactif et date événement ev(LocalDateTime) est après la date
+						// Si essaim inactif et date événement ev (LocalDateTime) est après la date
 						// dispersion de l'essaim on ignore ev.
 						logger.error("{} est après le date de dispersion de l'essaim {}", ev, es);
 					} else {
@@ -125,14 +125,14 @@ public class GrapheEsRuService {
 								// mémoriser date et +1 essaim de prod.
 								signeDate.add(new IdDateNoTime(1l, ev.getDate().toLocalDate()));
 							}
-							if (!es.getActif() && eProd) {
-								// L'essaim est inactif et l'état courant est production.
-								// mémoriser date dispersion et -1
-								signeDate.add(new IdDateNoTime(-1l, es.getDateDispersion().toLocalDate()));
-							}
 						}
 					}
-				} // Fin boucle événements.
+				} // Fin boucle événements
+				if (!es.getActif() && eProd) {
+					// L'essaim est inactif et l'état courant à la fin du traitement des événements
+					// est production. Mémoriser date dispersion et -1.
+					signeDate.add(new IdDateNoTime(-1l, es.getDateDispersion().toLocalDate()));
+				}
 			} else {
 				logger.error(Const.IDESSAIMXXINCONNU, esIdNom.id());
 			}
