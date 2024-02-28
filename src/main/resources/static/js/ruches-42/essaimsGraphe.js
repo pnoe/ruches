@@ -1,43 +1,46 @@
-/* globals Chart, ruches, datesTotal, ruchesProd, datesProdTotal, 
-  datesProd, essaimsProd, dates, essaims */
+/* globals Chart, ruches, datesTotal, ruchesProd, datesProdTotal, essaims, dates, datesProd, essaimsProd  */
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
-	if (datesTotal.length === 0) { return; }
+	if (dates.length === 0) { return; }
 	const graphe = new Chart('ctx', {
 		data: {
 			datasets: [{
 				type: 'line',
 				stepped: true,
-				label: ruches,
-				yAxisID: 'y',
-				data: datesTotal
-			}, {
-				type: 'line',
-				stepped: true,
-				label: ruchesProd,
-				yAxisID: 'y',
-				data: datesProdTotal
-			}, {
-				type: 'line',
-				stepped: true,
 				label: essaims,
 				yAxisID: 'y',
-				data: dates,
-				hidden: true,
+				data: dates
 			}, {
 				type: 'line',
 				stepped: true,
 				label: essaimsProd,
 				yAxisID: 'y',
-				data: datesProd,
+				data: datesProd
+			}, {
+				type: 'line',
+				stepped: true,
+				label: ruches,
+				yAxisID: 'y',
+				data: datesTotal,
 				hidden: true,
-			}],
+			}, {
+				type: 'line',
+				stepped: true,
+				label: ruchesProd,
+				yAxisID: 'y',
+				data: datesProdTotal,
+				hidden: true,
+			}]
 		},
 		options: {
 			scales: {
 				x: {
-					type: 'time'
+					type: 'time',
+					time: {
+						minUnit: 'day',
+						tooltipFormat: 'dd MMM yyyy'
+					}
 				},
 				y: {
 					position: 'left'
