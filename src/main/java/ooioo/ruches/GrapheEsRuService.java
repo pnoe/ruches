@@ -100,24 +100,27 @@ public class GrapheEsRuService {
 				// eProd état de l'essaim es : production ou non.
 				boolean eProd = false;
 				for (Evenement ev : eves) {
-					if (ev.getDate().toLocalDate().isBefore(es.getDateAcquisition())) {
-						// Si date événement ev (LocalDateTime) est avant date acquisition (LocalDate)
-						// on ignore l'événement ev.
-						logger.error("{} est avant le date d'acquisition de l'essaim {}", ev, es);
-						continue;
-					}
-					if ((es.getActif() == false) && (ev.getDate().isAfter(es.getDateDispersion()))) {
-						// Si essaim inactif et date événement ev (LocalDateTime) est après la date
-						// dispersion de l'essaim on ignore ev.
-						logger.error("{} est après le date de dispersion de l'essaim {}", ev, es);
+					// Si date événement ev (LocalDateTime) est avant date acquisition (LocalDate)
+					boolean errDateAcq = ev.getDate().toLocalDate().isBefore(es.getDateAcquisition());
+					// Si essaim inactif et date événement ev (LocalDateTime) est après la date
+					// dispersion de l'essaim.
+					boolean errDateDisp = (es.getActif() == false) && (ev.getDate().isAfter(es.getDateDispersion()));
+					// Si la ruche n'est pas renseignée
+					boolean errEveRuche = ev.getRuche() == null;
+					if (errDateAcq || errDateDisp || errEveRuche) {
+						// Si erreur événement, on l'ignore.
+						if (errDateAcq) {
+							logger.error("{} est avant le date d'acquisition de l'essaim {}", ev, es);
+						}
+						if (errDateDisp) {
+							logger.error("{} est après le date de dispersion de l'essaim {}", ev, es);
+						}
+						if (errEveRuche) {
+							logger.error("{} ruche non renseignée", ev);
+						}
 						continue;
 					}
 					// Trouver si la ruche de l'événement est une ruche de production.
-					if (ev.getRuche() == null) {
-						// Si la ruche n'est pas renseignée dans l'événement on ignore ev.
-						logger.error("{} ruche non renseignée", ev);
-						continue;
-					}
 					boolean prod = ev.getRuche().getProduction();
 					if (eProd && !prod) {
 						// Si l'état courant est essaim dans une ruche de production et que l'on passe
