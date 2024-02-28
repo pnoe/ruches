@@ -130,8 +130,15 @@ public class EssaimService {
 		List<Long> dates = new ArrayList<>(evesPesee.size());
 		List<Float> poids = new ArrayList<>(evesPesee.size());
 		for (Evenement e : evesPesee) {
+			try {
+				poids.add(Float.parseFloat(e.getValeur()));
+			} catch (NumberFormatException ex) {
+				// Le champ valeur de l'événement pesée ne contient pas un nombre.
+				// On ignore cet événement.
+				logger.error("{} valeur événement incorrecte", e);
+				continue;
+			}
 			dates.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
-			poids.add(Float.parseFloat(e.getValeur()));
 		}
 		model.addAttribute("dates", dates);
 		model.addAttribute("poids", poids);
