@@ -20,6 +20,9 @@ import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
 
+/*
+ * Pour le calcul des données des graphiques du nombre de ruches et d'essaims. 
+ */
 @Service
 public class GrapheEsRuService {
 
@@ -74,7 +77,8 @@ public class GrapheEsRuService {
 	}
 
 	/**
-	 * Calcul des listes dates et nombre d'essaims de production regroupés par jour.
+	 * Calcul de la liste dates et nombre d'essaims de production regroupés par
+	 * jour.
 	 */
 	public void nbEssaimsProd(Model model) {
 		List<Long[]> dates = new ArrayList<>();
@@ -88,8 +92,8 @@ public class GrapheEsRuService {
 			Optional<Essaim> esOpt = essaimRepository.findById(esId);
 			if (esOpt.isPresent()) {
 				Essaim es = esOpt.get();
-				// liste des événements mise en ruche triés par date ascendante de l'essaim
-				// esId. Voir si projection possible, les champs date et ruche.production sont
+				// eves liste des événements mise en ruche triés par date ascendante de l'essaim
+				// esId. Projection difficile, les champs date et ruche.production sont
 				// utilisés, plus log en cas d'erreur de l'événement.
 				List<Evenement> eves = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(esId,
 						TypeEvenement.AJOUTESSAIMRUCHE);
@@ -100,32 +104,36 @@ public class GrapheEsRuService {
 						// Si date événement ev (LocalDateTime) est avant date acquisition (LocalDate)
 						// on ignore l'événement ev.
 						logger.error("{} est avant le date d'acquisition de l'essaim {}", ev, es);
-					} else if ((es.getActif() == false) && (ev.getDate().isAfter(es.getDateDispersion()))) {
+						continue;
+					}
+					if ((es.getActif() == false) && (ev.getDate().isAfter(es.getDateDispersion()))) {
 						// Si essaim inactif et date événement ev (LocalDateTime) est après la date
 						// dispersion de l'essaim on ignore ev.
 						logger.error("{} est après le date de dispersion de l'essaim {}", ev, es);
-					} else {
-						// Trouver si la ruche de l'événement est une ruche de prod :
-						if (ev.getRuche() == null) {
-							// Si la ruche n'est pas renseignée dans l'événement on ignore ev.
-							// On pourrait ne pas l'ignorer pour la courbe de nombre d'essaims total.
-							logger.error("{} ruche non renseignée", ev);
-						} else {
-							boolean prod = ev.getRuche().getProduction();
-							if (eProd && !prod) {
-								// Si l'état courant est essaim dans une ruche de production et que l'on passe
-								// dans une ruche qui n'est pas de production.
-								eProd = false;
-								// mémoriser date et -1 essaim de prod.
-								signeDate.add(new IdDateNoTime(-1l, ev.getDate().toLocalDate()));
-							} else if (!eProd && prod) {
-								// Si l'état courant est essaim dans une ruche pas de production et que l'on
-								// passe dans une ruche de production.
-								eProd = true;
-								// mémoriser date et +1 essaim de prod.
-								signeDate.add(new IdDateNoTime(1l, ev.getDate().toLocalDate()));
-							}
-						}
+						continue;
+					}
+					// Trouver si la ruche de l'événement est une ruche de production.
+					if (ev.getRuche() == null) {
+						// Si la ruche n'est pas renseignée dans l'événement on ignore ev.
+						logger.error("{} ruche non renseignée", ev);
+						continue;
+					}
+					boolean prod = ev.getRuche().getProduction();
+					if (eProd && !prod) {
+						// Si l'état courant est essaim dans une ruche de production et que l'on passe
+						// dans une ruche qui n'est pas de production.
+						eProd = false;
+						// mémoriser date et -1 essaim de prod.
+						signeDate.add(new IdDateNoTime(-1l, ev.getDate().toLocalDate()));
+						continue;
+					}
+					if (!eProd && prod) {
+						// Si l'état courant est essaim dans une ruche pas de production et que l'on
+						// passe dans une ruche de production.
+						eProd = true;
+						// mémoriser date et +1 essaim de prod.
+						signeDate.add(new IdDateNoTime(1l, ev.getDate().toLocalDate()));
+						continue;
 					}
 				} // Fin boucle événements
 				if (!es.getActif() && eProd) {
@@ -139,16 +147,17 @@ public class GrapheEsRuService {
 		} // Fin boucle essaims.
 			// Trie signeDate par dates.
 		Collections.sort(signeDate, Comparator.comparing(IdDateNoTime::date));
-		// Alimenter dates et nbs
+		// Alimente dates avec la date Epoch en millisecondes et le nombre d'essaims de
+		// production à cette date. Regroupement par jour.
 		LocalDate datecour = signeDate.get(0).date();
 		int nb = 0;
-		for (IdDateNoTime i : signeDate) {
+		for (IdDateNoTime idd : signeDate) {
 			// Regroupement par jour.
-			if (!datecour.equals(i.date())) {
+			if (!datecour.equals(idd.date())) {
 				dates.add(new Long[] { 1000 * datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nb });
-				datecour = i.date();
+				datecour = idd.date();
 			}
-			nb += i.id();
+			nb += idd.id();
 		}
 		dates.add(new Long[] { 1000 * datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nb });
 		model.addAttribute("datesProd", dates);
