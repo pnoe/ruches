@@ -81,7 +81,6 @@ public class GrapheEsRuService {
 	 * jour.
 	 */
 	public void nbEssaimsProd(Model model) {
-		List<Long[]> dates = new ArrayList<>();
 		// essaims liste de tous les essaims actifs et inactifs projetés Id, Nom
 		List<IdNom> essaims = essaimRepository.findAllProjectedIdNomBy();
 		// signeDate liste des dates (LocalDate) d'ajout si id = 1 ou de retrait si id =
@@ -150,31 +149,32 @@ public class GrapheEsRuService {
 		} // Fin boucle essaims.
 			// Trie signeDate par dates.
 		Collections.sort(signeDate, Comparator.comparing(IdDateNoTime::date));
-		// Alimente dates avec la date Epoch en millisecondes et le nombre d'essaims de
-		// production à cette date. Regroupement par jour.
+		// Alimente datesNb avec la date Epoch en millisecondes et le nombre d'essaims
+		// de production à cette date. Regroupement par jour.
+		List<Long[]> datesNb = new ArrayList<>();
 		LocalDate datecour = signeDate.get(0).date();
-		int nb = 0;
+		long nb = 0;
 		for (IdDateNoTime idd : signeDate) {
 			// Regroupement par jour.
 			if (!datecour.equals(idd.date())) {
-				dates.add(new Long[] { 1000 * datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nb });
+				datesNb.add(new Long[] { 1000 * datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), nb });
 				datecour = idd.date();
 			}
 			nb += idd.id();
 		}
-		dates.add(new Long[] { 1000 * datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nb });
-		model.addAttribute("datesProd", dates);
+		datesNb.add(new Long[] { 1000 * datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), nb });
+		model.addAttribute("datesProd", datesNb);
 	}
 
 	/**
-	 * Calcul des listes dates et nombre d'essaims regroupés par jour.
+	 * Calcul de la liste des dates et nombre d'essaims regroupés par jour.
 	 * 
 	 * @param essaimsAcqu les ids et dates (LocalDate) d'acquisition des essaims.
 	 * @param essaimsDisp les ids et dates (LocalDateTime) de dispersion des essaims
 	 *                    (inactifs).
 	 */
 	public void nbEssaims(Model model, List<IdDateNoTime> essaimsAcqu, List<IdDate> essaimsDisp) {
-		// La taille de ces List n'est pas connue ( < essaimsAcqu.size() +
+		// La taille de ces listes n'est pas connue ( inférieure à essaimsAcqu.size() +
 		// essaimsDisp.size()).
 		List<Long[]> dates = new ArrayList<>();
 		// Fusion des deux listes, on met null comme id pour les dispersions, ce qui
@@ -188,19 +188,18 @@ public class GrapheEsRuService {
 			// On compte le nombre d'essaims pour toutes ces dates : acquisition +1,
 			// dispersion -1.
 			LocalDate datecour = essaimsAcqu.get(0).date();
-			int nb = 0;
+			long nb = 0;
 			for (IdDateNoTime e : essaimsAcqu) {
 				if (!datecour.equals(e.date())) {
 					// Si l'événement est à une autre date que les précédents.
-					dates.add(new Long[] { 1000 * datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nb });
+					dates.add(new Long[] { 1000 * datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), nb });
 					datecour = e.date();
 				}
 				nb += (e.id() == null) ? -1 : +1;
 			}
-			dates.add(new Long[] { 1000 * datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), (long) nb });
+			dates.add(new Long[] { 1000 * datecour.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), nb });
 		}
 		model.addAttribute("dates", dates);
-		// model.addAttribute("nbs", nbs);
 	}
 
 }
