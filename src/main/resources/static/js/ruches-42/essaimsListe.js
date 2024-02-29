@@ -4,21 +4,33 @@
 document.addEventListener('DOMContentLoaded', () => {
 	const table = new DataTable('#essaims', {
 		select: { style: 'multi+shift' },
-		dom: 'Blftip',
 		scrollX: true,
-		buttons: [
-			'csv',
-			{
-				extend: 'pdf', exportOptions: { columns: ':visible' },
-				title: function() {
-					return Essaims + ' ' + new Date().toLocaleDateString() +
-						(table.search().length === 0 ? '' : ' <' + table.search() + '>');
-				},
-				orientation: 'landscape'
-			},
-			{ extend: 'print', text: buttontextprint },
-			{ extend: 'colvis', text: buttontextcol }
-		]
+		layout: {
+			topStart: {
+				buttons: [
+					'csv',
+					{
+						extend: 'pdfHtml5',
+						exportOptions: { columns: ':visible' },
+						customize: function(doc) {
+							let title = Essaims + ' ' + (new Date()).toLocaleDateString();
+							const inputSearch = table.search();
+							if (inputSearch.length !== 0) {
+								title += ' <' + inputSearch + '>';
+							}
+							doc.content[0].text = title;
+						},
+						orientation: 'landscape'
+					},
+					{
+						extend: 'print', text: buttontextprint,
+						exportOptions: { columns: ':visible' },
+					},
+					{ extend: 'colvis', text: buttontextcol },
+					'pageLength'
+				]
+			}
+		}
 	});
 	const tr = document.getElementById('traitement');
 	const su = document.getElementById('sucre');
@@ -34,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					substring(a.content.children[0].getAttribute('href').lastIndexOf('/') + 1) + ',';
 			});
 			if (noms) {
-				/*[- on enlève la dernière virgule et met à jour l'url de traitement -]*/
+				// On enlève la dernière virgule et met à jour l'url de traitement.
 				noms = noms.substring(0, noms.length - 1);
 				tr.setAttribute('href', urlTraitLot + noms);
 				su.setAttribute('href', urlSucreLot + noms);

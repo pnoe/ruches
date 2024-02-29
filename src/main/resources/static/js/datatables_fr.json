@@ -16,7 +16,12 @@
 		"colvis": "Visibilité colonnes",
 		"csv": "CSV",
 		"pdf": "PDF",
-		"print": "Imprimer"
+		"print": "Imprimer",
+		"pageLength": {
+            "-1": "Afficher tout",
+            "_": "Afficher %d",
+            "1": "Afficher 1 ligne"
+        }
 	},
 	"decimal": ",",
 	"search": "Rechercher",
@@ -25,8 +30,8 @@
 	"infoFiltered": "(filtrées depuis un total de _MAX_)",
 	"lengthMenu": "Afficher _MENU_ éléments",
 	"paginate": {
-		"first": "Premier",
-		"last": "Dernier",
+		"first": "<<",
+		"last": ">>",
 		"previous": "<",
 		"next": ">"
 	},
