@@ -40,7 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
 					type: 'time',
 					time: {
 						minUnit: 'day',
-						tooltipFormat: 'dd MMM yyyy'
+						tooltipFormat: 'DDD'
+						// https://moment.github.io/luxon/#/formatting
+						// https://www.chartjs.org/docs/latest/samples/scales/time-line.html
 					}
 				},
 				y: {
