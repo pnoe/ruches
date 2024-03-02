@@ -3,38 +3,42 @@
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:inline="javascript">
-		/* globals DataTable */
-		const buttontextprint = /*[[#{buttontextprint}]]*/null;
-		const buttontextcol = /*[[#{buttontextcol}]]*/null;
-		const Ruchers = /*[[#{Ruchers}]]*/null;
-		document.addEventListener('DOMContentLoaded', () => {
-			const idTbl = '#ruchers';
-			const table = new DataTable(idTbl, {
-				scrollX: true,
-				layout:  {
-	                  topStart: {
-					    buttons: [
-						  'csv',
-						  {  extend: 'pdfHtml5', 
-						    exportOptions: {columns: ':visible'},
-						    customize: function (doc) {
-						    let title = Ruchers + ' ' + (new Date()).toLocaleDateString();
-						    const inputSearch = table.search();
-						    if (inputSearch.length !== 0) {
-						       title += ' <' + inputSearch + '>';
-						    }
-						    doc.content[0].text = title;
-						  }},
-						  {extend: 'print', text: buttontextprint,
+	/* globals DataTable */
+	const buttontextprint = /*[[#{buttontextprint}]]*/null;
+	const buttontextcol = /*[[#{buttontextcol}]]*/null;
+	const Ruchers = /*[[#{Ruchers}]]*/null;
+	document.addEventListener('DOMContentLoaded', () => {
+		const idTbl = '#ruchers';
+		const table = new DataTable(idTbl, {
+			scrollX: true,
+			layout: {
+				topStart: {
+					buttons: [
+						'csv',
+						{
+							extend: 'pdfHtml5',
 							exportOptions: { columns: ':visible' },
-							},
-						  {extend: 'colvis', text: buttontextcol},
-						  'pageLength'
-					    ]}
-				  }
-			 });
+							customize: function(doc) {
+								let title = Ruchers + ' ' + (new Date()).toLocaleDateString();
+								const inputSearch = table.search();
+								if (inputSearch.length !== 0) {
+									title += ' <' + inputSearch + '>';
+								}
+								doc.content[0].text = title;
+							}
+						},
+						{
+							extend: 'print', text: buttontextprint,
+							exportOptions: { columns: ':visible' },
+						},
+						{ extend: 'colvis', text: buttontextcol },
+						'pageLength'
+					]
+				}
+			}
 		});
-	</script>
+	});
+  </script>
 </head>
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>

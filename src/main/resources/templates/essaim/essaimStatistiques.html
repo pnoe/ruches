@@ -3,30 +3,57 @@
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:inline="javascript">
-		/* globals DataTable bootstrap */
-		const buttontextprint = /*[[#{buttontextprint}]]*/ null;
-		const buttontextcol = /*[[#{buttontextcol}]]*/ null;
-		const Essaims = /*[[#{Essaims}]]*/ null;
-		const Production = /*[[#{Production}]]*/ null;
-		document.addEventListener('DOMContentLoaded', () => {
-			new bootstrap.Popover(document.getElementsByClassName('bi-question-lg')[0], {
-				html: true
-			});
-			new DataTable('#statistiques', {
-				dom: 'Blftip',
-				scrollX: true,
+/* globals DataTable bootstrap */
+const buttontextprint = /*[[#{buttontextprint}]]*/ null;
+const buttontextcol = /*[[#{buttontextcol}]]*/ null;
+const Essaims = /*[[#{Essaims}]]*/ null;
+const Production = /*[[#{Production}]]*/ null;
+const actif = /*[[#{actif}]]*/ null;
+document.addEventListener('DOMContentLoaded', () => {
+	new bootstrap.Popover(document.getElementsByClassName('bi-question-lg')[0], {
+		html: true
+	});
+	const table = new DataTable('#statistiques', {
+		scrollX: true,
+		layout: {
+			topStart: {
 				buttons: [
 					'csv',
 					{
-						extend: 'pdf', exportOptions: {columns: ':visible'},
-						title: Essaims + ' ' + Production + ' ' + (new Date()).toLocaleDateString()
+						extend: 'pdfHtml5',
+						exportOptions: { columns: ':visible' },
+						customize: function(doc) {
+							const params = new URLSearchParams(document.location.search);
+							let txtParams = '';
+							const sru = document.getElementById('rucherId');
+							if (params.get('rucherId') && params.get('rucherId') !== '0') {
+								// Si un rucher a été choisi dans la liste déroulante et que 
+								//  le bouton "Filtrer" a été actionné.
+								txtParams = ' [' + sru.options[sru.selectedIndex].text + ']';
+							}
+							if (params.get('masquerInactif') === 'on') {
+								// Si masquer les inactifs a été changé et que 
+								//  le bouton "Filtrer" a été actionné.
+								txtParams += ' ' + actif;
+							}
+							doc.content[0].text = Essaims + ' ' + Production + ' ' + (new Date()).toLocaleDateString() +
+								(table.search().length === 0 ? '' : ' <' + table.search() + '>') +
+								txtParams;
+						},
 					},
-					{extend: 'print', text: buttontextprint},
-					{extend: 'colvis', text: buttontextcol}
+					{
+						extend: 'print',
+						text: buttontextprint,
+						exportOptions: { columns: ':visible' },
+					},
+					{ extend: 'colvis', text: buttontextcol },
+					'pageLength'
 				]
-			});
-		});
-	</script>
+			}
+		}
+	});
+});
+</script>
 </head>
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>

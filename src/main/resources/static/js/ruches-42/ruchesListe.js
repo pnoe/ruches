@@ -21,14 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
 						customize: function(doc) {
 							const sru = document.getElementById('rucher');
 							const valr = sru.options[sru.selectedIndex].value;
-							let title = Ruches + ' ' + (new Date()).toLocaleDateString() +
+							doc.content[0].text = Ruches + ' ' + (new Date()).toLocaleDateString() +
 								(table.search().length === 0 ? '' : ' <' + table.search() + '>') +
 								(valr === '' ? '' : ' [' + valr + ']');
-							const inputSearch = table.search();
-							if (inputSearch.length !== 0) {
-								title += ' <' + inputSearch + '>';
-							}
-							doc.content[0].text = title;
 						},
 						orientation: 'landscape'
 					},

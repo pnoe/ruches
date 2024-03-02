@@ -11,18 +11,33 @@
 			new bootstrap.Popover(document.getElementsByClassName('bi-question-lg')[0], {
 				html: true
 			});
-			new DataTable('#statistiques', {
-				dom: 'Blftip',
+			const table = new DataTable('#statistiques', {
 				scrollX: true,
-				buttons: [
-					'csv',
-					{
-						extend: 'pdf', exportOptions: {columns: ':visible'},
-						title: ruchersProdRecolte + ' ' + (new Date()).toLocaleDateString()
-					},
-					{extend: 'print', text: buttontextprint},
-					{extend: 'colvis', text: buttontextcol}
-				]
+				layout: {
+					topStart: {
+						buttons: [
+							'csv',
+							{
+								extend: 'pdfHtml5',
+								exportOptions: { columns: ':visible' },
+								customize: function(doc) {
+									let title = ruchersProdRecolte + ' ' + (new Date()).toLocaleDateString();
+									const inputSearch = table.search();
+									if (inputSearch.length !== 0) {
+										title += ' <' + inputSearch + '>';
+									}
+									doc.content[0].text = title;
+								}
+							},
+							{
+								extend: 'print', text: buttontextprint,
+								exportOptions: { columns: ':visible' },
+							},
+							{ extend: 'colvis', text: buttontextcol },
+							'pageLength'
+						]
+					}
+				}				
 			});
 		});
 	</script>

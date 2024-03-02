@@ -6,24 +6,32 @@
 function evenementSucreListe() {
 	const table = new DataTable('#evenementssucre', {
 		order: [[0, 'desc']],
-		dom: 'Blftip',
 		scrollX: true,
-		buttons: ['csv', {
-			extend: 'pdf',
-			exportOptions: {
-				columns: ':visible'
-			},
-			title: function() {
-				return Evenements + ' ' + new Date().toLocaleDateString() +
-					(table.search().length === 0 ? '' : ' <' + table.search() + '>');
+		layout: {
+			topStart: {
+				buttons: [
+					'csv',
+					{
+						extend: 'pdfHtml5',
+						exportOptions: { columns: ':visible' },
+						customize: function(doc) {
+							let title = Evenements + ' ' + (new Date()).toLocaleDateString();
+							const inputSearch = table.search();
+							if (inputSearch.length !== 0) {
+								title += ' <' + inputSearch + '>';
+							}
+							doc.content[0].text = title;
+						}
+					},
+					{
+						extend: 'print', text: buttTxtPrint,
+						exportOptions: { columns: ':visible' },
+					},
+					{ extend: 'colvis', text: buttTxtCol },
+					'pageLength'
+				]
 			}
-		}, {
-				extend: 'print',
-				text: buttTxtPrint
-			}, {
-				extend: 'colvis',
-				text: buttTxtCol
-			}],
+		},
 		footerCallback: function() {
 			const api = this.api();
 			// Remove the formatting to get integer data for summation

@@ -3,64 +3,68 @@
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:inline="javascript">
-		/* globals DataTable */
-		const Hausses = /*[[#{Hausses}]]*/ null;
-		const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
-		const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
-		const urlCommLot = /*[[@{/evenement/hausse/commentaireLot/}]]*/ null;
-		const selectHaTrait = /*[[#{selecthaussestraiter}]]*/ null;
-		document.addEventListener('DOMContentLoaded', () => {
-			const table = new DataTable('#hausses', {
-				select: {style: 'multi+shift'},
-				scrollX: true,
-				layout:  {
-	                  topStart: {
-					    buttons: [
-						  'csv',
-						  {  extend: 'pdfHtml5', 
-						    exportOptions: {columns: ':visible'},
-						    customize: function (doc) {
-						    let title = Hausses + ' ' + (new Date()).toLocaleDateString();
-						    const inputSearch = table.search();
-						    if (inputSearch.length !== 0) {
-						       title += ' <' + inputSearch + '>';
-						    }
-						    doc.content[0].text = title;
-						  }},
-						  {extend: 'print', text: buttTxtPrint,
+	/* globals DataTable */
+	const Hausses = /*[[#{Hausses}]]*/ null;
+	const buttTxtPrint = /*[[#{buttontextprint}]]*/ null;
+	const buttTxtCol = /*[[#{buttontextcol}]]*/ null;
+	const urlCommLot = /*[[@{/evenement/hausse/commentaireLot/}]]*/ null;
+	const selectHaTrait = /*[[#{selecthaussestraiter}]]*/ null;
+	document.addEventListener('DOMContentLoaded', () => {
+		const table = new DataTable('#hausses', {
+			select: { style: 'multi+shift' },
+			scrollX: true,
+			layout: {
+				topStart: {
+					buttons: [
+						'csv',
+						{
+							extend: 'pdfHtml5',
 							exportOptions: { columns: ':visible' },
-							},
-						  {extend: 'colvis', text: buttTxtCol},
-						  'pageLength'
-					    ]}
-					}
-			});
-			function updateLinks(e, dt, type) {
-				if (type === 'row') {
-					let noms = '';
-					table.rows({selected: true}).data().pluck(0).each(function (value) {
-						const a = document.createElement('template');
-						a.innerHTML = value;
-						noms += a.content.children[0].getAttribute('href').
-							substring(a.content.children[0].getAttribute('href').lastIndexOf('/') + 1) + ',';
-					});
-					if (noms) {
-						noms = noms.substring(0, noms.length - 1);
-						document.getElementById('commentaire').setAttribute('href',
-							urlCommLot + noms);
-					} else {
-						document.getElementById('commentaire').setAttribute('href', '#');
-					}
+							customize: function(doc) {
+								let title = Hausses + ' ' + (new Date()).toLocaleDateString();
+								const inputSearch = table.search();
+								if (inputSearch.length !== 0) {
+									title += ' <' + inputSearch + '>';
+								}
+								doc.content[0].text = title;
+							}
+						},
+						{
+							extend: 'print', text: buttTxtPrint,
+							exportOptions: { columns: ':visible' },
+						},
+						{ extend: 'colvis', text: buttTxtCol },
+						'pageLength'
+					]
 				}
 			}
-			table.on('select deselect', updateLinks);
-			document.getElementById('commentaire').addEventListener('click', event => {
-				if (event.target.getAttribute('href') === '#') {
-					alert(selectHaTrait);
-				}
-			});
 		});
-	</script>
+		function updateLinks(e, dt, type) {
+			if (type === 'row') {
+				let noms = '';
+				table.rows({ selected: true }).data().pluck(0).each(function(value) {
+					const a = document.createElement('template');
+					a.innerHTML = value;
+					noms += a.content.children[0].getAttribute('href').
+						substring(a.content.children[0].getAttribute('href').lastIndexOf('/') + 1) + ',';
+				});
+				if (noms) {
+					noms = noms.substring(0, noms.length - 1);
+					document.getElementById('commentaire').setAttribute('href',
+						urlCommLot + noms);
+				} else {
+					document.getElementById('commentaire').setAttribute('href', '#');
+				}
+			}
+		}
+		table.on('select deselect', updateLinks);
+		document.getElementById('commentaire').addEventListener('click', event => {
+			if (event.target.getAttribute('href') === '#') {
+				alert(selectHaTrait);
+			}
+		});
+	});
+  </script>
 </head>
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>

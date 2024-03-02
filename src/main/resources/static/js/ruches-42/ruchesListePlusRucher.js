@@ -4,22 +4,32 @@
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
 	const table = new DataTable('#ruches', {
-		dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
 		scrollX: true,
-		buttons: ['csv', {
-			extend: 'pdf', exportOptions: { columns: ':visible' },
-			title: function() {
-				return `${Ruches} ${rucher} ${nomrucher} ${(new Date()).toLocaleDateString()}` +
-					(table.search().length === 0 ? '' : ' <' + table.search() + '>');
-			},
-			orientation: 'landscape'
-		}, {
-				extend: 'print',
-				text: buttTxtPrint,
-				exportOptions: { columns: ':visible' },
-				orientation: 'landscape'
-			},
-			{ extend: 'colvis', text: buttTxtCol }
-		]
+		layout: {
+			topStart: {
+				buttons: [
+					'csv',
+					{
+						extend: 'pdfHtml5',
+						exportOptions: { columns: ':visible' },
+						customize: function(doc) {
+							let title = `${Ruches} ${rucher} ${nomrucher} ${(new Date()).toLocaleDateString()}`;
+							const inputSearch = table.search();
+							if (inputSearch.length !== 0) {
+								title += ' <' + inputSearch + '>';
+							}
+							doc.content[0].text = title;
+						},
+						orientation: 'landscape'
+					},
+					{
+						extend: 'print', text: buttTxtPrint,
+						exportOptions: { columns: ':visible' },
+					},
+					{ extend: 'colvis', text: buttTxtCol },
+					'pageLength'
+				]
+			}
+		}
 	});
 });

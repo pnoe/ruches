@@ -39,17 +39,33 @@
 				}
 				event.preventDefault();
 			});
-			new DataTable('#ruches', {
-				dom: '<"buttonsData" Blf>t<"buttonsData" ip>',
-				buttons: [
-					'csv',
-					{
-						extend: 'pdf', exportOptions: {columns: ':visible'},
-						title: ruchertxt + ' : ' + rucherNom + ' - ' + listeRuches + ' ' + (new Date()).toLocaleDateString()
-					},
-					{extend: 'print', text: buttontextprint},
-					{extend: 'colvis', text: buttontextcol}
-				]
+			const table = new DataTable('#ruches', {
+				layout: {
+					topStart: {
+						buttons: [
+							'csv',
+							{
+								extend: 'pdfHtml5',
+								exportOptions: { columns: ':visible' },
+								customize: function(doc) {
+									let title = ruchertxt + ' : ' + rucherNom + ' - ' + listeRuches + ' ' + 
+										(new Date()).toLocaleDateString();
+									const inputSearch = table.search();
+									if (inputSearch.length !== 0) {
+										title += ' <' + inputSearch + '>';
+									}
+									doc.content[0].text = title;
+								}
+							},
+							{
+								extend: 'print', text: buttontextprint,
+								exportOptions: { columns: ':visible' },
+							},
+							{ extend: 'colvis', text: buttontextcol },
+							'pageLength'
+						]
+					}
+				}
 			});
 		});
 	</script>

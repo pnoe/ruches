@@ -10,22 +10,33 @@ document.addEventListener('DOMContentLoaded', () => {
 		// location = url + event.target.checked;
 		window.location.assign(url + event.target.checked);
 	});
-	new DataTable('#evenementsnotif', {
+	const table = new DataTable('#evenementsnotif', {
 		order: [[0, 'desc']],
-		dom: 'Blftip',
 		scrollX: true,
-		buttons: ['csv', {
-			extend: 'pdf',
-			exportOptions: {
-				columns: ':visible'
-			},
-			title: Evenements + ' ' + Notifications + ' ' + (new Date()).toLocaleDateString()
-		}, {
-				extend: 'print',
-				text: btp
-			}, {
-				extend: 'colvis',
-				text: btc
-			}]
+		layout: {
+			topStart: {
+				buttons: [
+					'csv',
+					{
+						extend: 'pdfHtml5',
+						exportOptions: { columns: ':visible' },
+						customize: function(doc) {
+							let title = Evenements + ' ' + Notifications + ' ' + (new Date()).toLocaleDateString();
+							const inputSearch = table.search();
+							if (inputSearch.length !== 0) {
+								title += ' <' + inputSearch + '>';
+							}
+							doc.content[0].text = title;
+						}
+					},
+					{
+						extend: 'print', text: btp,
+						exportOptions: { columns: ':visible' },
+					},
+					{ extend: 'colvis', text: btc },
+					'pageLength'
+				]
+			}
+		}
 	});
 });
