@@ -3,45 +3,45 @@
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:inline="javascript">
-		/* globals DataTable */
-		const buttontextprint = /*[[#{buttontextprint}]]*/null;
-		const buttontextcol = /*[[#{buttontextcol}]]*/null;
-		const transhumances = /*[[#{transhumances}]]*/null;
-		document.addEventListener('DOMContentLoaded', () => {
-			document.getElementById('groupe').addEventListener('click', event => {
-				location = location.href.slice(0, location.href.lastIndexOf('/'))
-					+ '/' + event.target.checked;
-			});
-			const table = new DataTable('#transhumances', {
-				scrollX: true,
-				layout: {
-					topStart: {
-						buttons: [
-							'csv',
-							{
-								extend: 'pdfHtml5',
-								exportOptions: { columns: ':visible' },
-								customize: function(doc) {
-									let title = transhumances + ' ' + (new Date()).toLocaleDateString();
-									const inputSearch = table.search();
-									if (inputSearch.length !== 0) {
-										title += ' <' + inputSearch + '>';
-									}
-									doc.content[0].text = title;
-								}
-							},
-							{
-								extend: 'print', text: buttontextprint,
-								exportOptions: { columns: ':visible' },
-							},
-							{ extend: 'colvis', text: buttontextcol },
-							'pageLength'
-						]
-					}
-				}
-			});
-		});
-	</script>
+/* globals DataTable */
+const buttontextprint = /*[[#{buttontextprint}]]*/null;
+const buttontextcol = /*[[#{buttontextcol}]]*/null;
+const transhumances = /*[[#{transhumances}]]*/null;
+document.addEventListener('DOMContentLoaded', () => {
+	document.getElementById('groupe').addEventListener('click', event => {
+		location = location.href.slice(0, location.href.lastIndexOf('/'))
+			+ '/' + event.target.checked;
+	});
+	const table = new DataTable('#transhumances', {
+		scrollX: true,
+		layout: {
+			topStart: {
+				buttons: [
+					'csv',
+					{
+						extend: 'pdfHtml5',
+						exportOptions: { columns: ':visible' },
+						customize: function(doc) {
+							let title = transhumances + ' ' + (new Date()).toLocaleDateString();
+							const inputSearch = table.search();
+							if (inputSearch.length !== 0) {
+								title += ' <' + inputSearch + '>';
+							}
+							doc.content[0].text = title;
+						}
+					},
+					{
+						extend: 'print', text: buttontextprint,
+						exportOptions: { columns: ':visible' },
+					},
+					{ extend: 'colvis', text: buttontextcol },
+					'pageLength'
+				]
+			}
+		}
+	});
+});
+</script>
 </head>
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
