@@ -30,6 +30,23 @@ document.addEventListener('DOMContentLoaded', () => {
 					'pageLength'
 				]
 			}
+		},
+		// https://datatables.net/examples/api/multi_filter.html
+		initComplete: function() {
+			this.api()
+				.columns()
+				.every(function() {
+					let column = this;
+					let title = column.footer().textContent;
+					let input = document.createElement('input');
+					input.placeholder = title;
+					column.footer().replaceChildren(input);
+					input.addEventListener('keyup', () => {
+						if (column.search() !== this.value) {
+							column.search(input.value).draw();
+						}
+					});
+				});
 		}
 	});
 	const tr = document.getElementById('traitement');

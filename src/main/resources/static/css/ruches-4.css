@@ -6,6 +6,12 @@ footer {
 	line-height: 0.5em;
 }
 
+tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
+
 .navbar {
 	margin:0 !important;
 	padding: 0px !important;

@@ -40,13 +40,10 @@
 					class="bi-bar-chart" th:title="#{statistiquesage}"
 					aria-hidden="true"></a> &nbsp; <a
 					th:href="@{'/essaim/grapheEssaims'}" class="bi-graph-up"
-					th:title="#{GrapheNbEssaims}" aria-hidden="true"></a>
-					
-					<a id="descend"
-					th:href="@{/essaim/descendance}"
-					class="bi-diagram-3" th:title="#{Descendance}"
-					aria-hidden="true"></a>
-					
+					th:title="#{GrapheNbEssaims}" aria-hidden="true"></a> <a
+					id="descend" th:href="@{/essaim/descendance}" class="bi-diagram-3"
+					th:title="#{Descendance}" aria-hidden="true"></a>
+
 			</div>
 		</div>
 	</div>
@@ -104,6 +101,27 @@
 					<td th:text="${eRRr.essaim.commentaire}"></td>
 				</tr>
 			</tbody>
+			<tfoot>
+				<tr>
+					<th th:text="#{nom}"></th>
+					<th th:text="#{ruche}"></th>
+					<th th:text="#{rucher}"></th>
+					<th:block th:if="${session.voirInactif}">
+						<th th:text="#{actif}"></th>
+						<th th:text="#{dateDispersion}"></th>
+						<th th:text="#{commDisp}"></th>
+					</th:block>
+					<th th:text="#{dateAcquisition}"></th>
+					<th th:text="#{reineMarquee}"></th>
+					<th th:text="#{reineCouleurMarquage}"></th>
+					<th th:text="#{reineDateNaissance}"></th>
+					<th th:text="#{souche}"></th>
+					<th th:text="#{agressivite}"></th>
+					<th th:text="#{proprete}"></th>
+					<th th:text="#{nbCadres}"></th>
+					<th th:text="#{commentaire}"></th>
+				</tr>
+			</tfoot>
 		</table>
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
