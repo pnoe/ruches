@@ -36,10 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
 			this.api()
 				.columns()
 				.every(function() {
-					let column = this;
-					let title = column.footer().textContent;
-					let input = document.createElement('input');
-					input.placeholder = title;
+					const column = this; // indispensabe pour addEventListener
+					// const title = column.footer().textContent;
+					const input = document.createElement('input');
+					input.placeholder = column.footer().textContent;
 					column.footer().replaceChildren(input);
 					input.addEventListener('keyup', () => {
 						if (column.search() !== this.value) {
