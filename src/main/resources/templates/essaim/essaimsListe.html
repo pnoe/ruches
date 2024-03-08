@@ -52,23 +52,26 @@
 			id="essaims">
 			<thead>
 				<tr>
-					<th th:text="#{nom}"></th>
-					<th th:text="#{ruche}"></th>
-					<th th:text="#{rucher}"></th>
+					<th rowspan="2" th:text="#{nom}"></th>
+					<th rowspan="2" th:text="#{ruche}"></th>
+					<th rowspan="2" th:text="#{rucher}"></th>
 					<th:block th:if="${session.voirInactif}">
-						<th th:text="#{actif}"></th>
-						<th th:text="#{dateDispersion}"></th>
-						<th th:text="#{commDisp}"></th>
+						<th rowspan="2" th:text="#{actif}"></th>
+						<th rowspan="2" th:text="#{dateDispersion}"></th>
+						<th rowspan="2" th:text="#{commDisp}"></th>
 					</th:block>
-					<th th:text="#{dateAcquisition}"></th>
-					<th th:text="#{reineMarquee}"></th>
-					<th th:text="#{reineCouleurMarquage}"></th>
-					<th th:text="#{reineDateNaissance}"></th>
-					<th th:text="#{souche}"></th>
-					<th th:text="#{agressivite}"></th>
-					<th th:text="#{proprete}"></th>
-					<th th:text="#{nbCadres}"></th>
-					<th th:text="#{commentaire}"></th>
+					<th rowspan="2" th:text="#{dateAcquisition}"></th>
+					<th colspan="3" th:text="#{Reine}"></th>
+					<th rowspan="2" th:text="#{souche}"></th>
+					<th rowspan="2" th:text="#{ag}" th:title="#{agressivite}"></th>
+					<th rowspan="2" th:text="#{pr}" th:title="#{proprete}"></th>
+					<th rowspan="2" th:text="#{nbCadres}" th:title="#{nbCadres}"></th>
+					<th rowspan="2" th:text="#{commentaire}"></th>
+				</tr>
+				<tr>
+					<th th:text="#{marque}"></th>
+					<th th:text="#{couleur}"></th>
+					<th th:text="#{naissance}"></th>
 				</tr>
 			</thead>
 			<tbody th:with="f='dd/MM/yyyy'">
@@ -112,12 +115,12 @@
 						<th th:text="#{commDisp}"></th>
 					</th:block>
 					<th th:text="#{dateAcquisition}"></th>
-					<th th:text="#{reineMarquee}"></th>
-					<th th:text="#{reineCouleurMarquage}"></th>
-					<th th:text="#{reineDateNaissance}"></th>
+					<th th:text="#{marque}"></th>
+					<th th:text="#{couleur}"></th>
+					<th th:text="#{naissance}"></th>
 					<th th:text="#{souche}"></th>
-					<th th:text="#{agressivite}"></th>
-					<th th:text="#{proprete}"></th>
+					<th th:text="#{ag}"></th>
+					<th th:text="#{pr}"></th>
 					<th th:text="#{nbCadres}"></th>
 					<th th:text="#{commentaire}"></th>
 				</tr>

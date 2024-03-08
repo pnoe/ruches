@@ -3,9 +3,11 @@
 */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
+	/*
 	document.getElementById('rucher').addEventListener('change', event => {
 		table.columns(2).search(event.target.value).draw();
 	});
+	*/
 	const table = new DataTable('#ruches', {
 		select: {
 			style: 'multi+shift'
