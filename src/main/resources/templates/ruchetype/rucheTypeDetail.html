@@ -32,7 +32,7 @@
 								exportOptions: { columns: ':visible' },
 								customize: function(doc) {
 									let title = rucheTypetxt + ' : ' + rucheTypeNom + ' - ' + listeRuches + ' '
-									  + (new Date()).toLocaleDateString();
+										+ (new Date()).toLocaleDateString();
 									const inputSearch = table.search();
 									if (inputSearch.length !== 0) {
 										title += ' <' + inputSearch + '>';

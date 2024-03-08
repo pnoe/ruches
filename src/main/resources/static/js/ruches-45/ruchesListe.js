@@ -37,8 +37,32 @@ document.addEventListener('DOMContentLoaded', () => {
 					'pageLength'
 				]
 			}
+		},
+		// https://datatables.net/examples/api/multi_filter.html
+		initComplete: function() {
+			this.api()
+				.columns()
+				// https://datatables.net/reference/api/columns().every()
+				.every(function() {
+					const column = this; // indispensabe pour addEventListener
+					// const title = column.footer().textContent;
+					const input = document.createElement('input');
+					input.placeholder = column.footer().textContent;
+					column.footer().replaceChildren(input);
+					input.addEventListener('keyup', () => {
+						if (column.search() !== this.value) {
+							column.search(input.value).draw();
+						}
+					});
+					const state = column.state.loaded();
+					if (state) {
+						const val = state.columns[column.index()];
+						input.value = val.search.search;
+					}
+				});
 		}
 	});
+	const co = document.getElementById('commentaire');
 	function updateLinks(_e, _dt, type) {
 		if (type === 'row') {
 			let noms = '';
@@ -53,15 +77,15 @@ document.addEventListener('DOMContentLoaded', () => {
 						+ ',';
 				});
 			if (noms) {
-				document.getElementById('commentaire').setAttribute('href',
+				co.setAttribute('href',
 					urlCommLot + noms.substring(0, noms.length - 1));
 			} else {
-				document.getElementById('commentaire').setAttribute('href', '#');
+				co.setAttribute('href', '#');
 			}
 		}
 	}
 	table.on('select deselect', updateLinks);
-	document.getElementById('commentaire').addEventListener('click', event => {
+	co.addEventListener('click', event => {
 		if (event.target.getAttribute('href') === '#') {
 			alert(selectRuTrait);
 		}

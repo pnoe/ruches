@@ -25,7 +25,7 @@
 								exportOptions: { columns: ':visible' },
 								customize: function(doc) {
 									let title = rucher + ' ' + nomrucher + ' ' + transhumances + ' ' +
-									  (new Date()).toLocaleDateString();
+										(new Date()).toLocaleDateString();
 									const inputSearch = table.search();
 									if (inputSearch.length !== 0) {
 										title += ' <' + inputSearch + '>';
