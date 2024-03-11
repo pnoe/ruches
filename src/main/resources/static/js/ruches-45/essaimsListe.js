@@ -2,6 +2,7 @@
 	urlCommLot, urlCadreLot, selectEssTrt, DataTable */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
+	const tblNbCol = 11;
 	const table = new DataTable('#essaims', {
 		select: { style: 'multi+shift' },
 		scrollX: true,
@@ -11,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					'csv',
 					{
 						extend: 'pdfHtml5',
-						exportOptions: { columns: ':visible' },
+						exportOptions: { columns: [...Array(tblNbCol).keys()].map(x => x + ':visIdx') },
 						customize: function(doc) {
 							let title = Essaims + ' ' + (new Date()).toLocaleDateString();
 							const inputSearch = table.search();
