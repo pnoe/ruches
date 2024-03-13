@@ -3,11 +3,6 @@
 */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
-	/*
-	document.getElementById('rucher').addEventListener('change', event => {
-		table.columns(2).search(event.target.value).draw();
-	});
-	*/
 	const table = new DataTable('#ruches', {
 		select: {
 			style: 'multi+shift'
@@ -21,11 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
 						extend: 'pdfHtml5',
 						exportOptions: { columns: ':visible' },
 						customize: function(doc) {
-							const sru = document.getElementById('rucher');
-							const valr = sru.options[sru.selectedIndex].value;
 							doc.content[0].text = Ruches + ' ' + (new Date()).toLocaleDateString() +
-								(table.search().length === 0 ? '' : ' <' + table.search() + '>') +
-								(valr === '' ? '' : ' [' + valr + ']');
+								(table.search().length === 0 ? '' : ' <' + table.search() + '>');
 						},
 						orientation: 'landscape'
 					},

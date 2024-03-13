@@ -2,7 +2,13 @@
 	urlCommLot, urlCadreLot, selectEssTrt, DataTable */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
-	const tblNbCol = 11;
+	// Pour forcer la visibilité des colonnes en pdf
+	// exportOptions: { columns: '0:visible, 1:visible... }
+	// car bug avec colspan
+	const tbodyTr = document.querySelectorAll("#essaims tbody tr");
+	const visib = tbodyTr.length === 0 ? ':visible' :
+		[...Array(tbodyTr[0].cells.length).keys()].map(x => x + ':visIdx');
+	console.log(visib);
 	const table = new DataTable('#essaims', {
 		select: { style: 'multi+shift' },
 		scrollX: true,
@@ -12,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					'csv',
 					{
 						extend: 'pdfHtml5',
-						exportOptions: { columns: [...Array(tblNbCol).keys()].map(x => x + ':visIdx') },
+						exportOptions: { columns: visib },
 						customize: function(doc) {
 							let title = Essaims + ' ' + (new Date()).toLocaleDateString();
 							const inputSearch = table.search();
