@@ -12,7 +12,7 @@
 		<ortools.version>9.9.3963</ortools.version>
 		<java.version>21</java.version>
 		<selenium-java.version>4.15.0</selenium-java.version>
-		<ruches.js.version>45</ruches.js.version>
+		<ruches.js.version>46</ruches.js.version>
 	</properties>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
