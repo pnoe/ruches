@@ -1,65 +1,10 @@
 /* globals Essaims, buttontextprint, buttontextcol, urlTraitLot, urlSucreLot,
-	urlCommLot, urlCadreLot, selectEssTrt, DataTable */
+	urlCommLot, urlCadreLot, selectEssTrt, dtListe */
 'use strict';
+
 document.addEventListener('DOMContentLoaded', () => {
-	// Pour forcer la visibilité des colonnes en pdf
-	// exportOptions: { columns: '0:visible, 1:visible... }
-	// car bug avec colspan
-	const tbodyTr = document.querySelectorAll('#essaims tbody tr');
-	const visib = tbodyTr.length === 0 ? ':visible' :
-		[...Array(tbodyTr[0].cells.length).keys()].map(x => x + ':visIdx');
-	const table = new DataTable('#essaims', {
-		select: { style: 'multi+shift' },
-		scrollX: true,
-		layout: {
-			topStart: {
-				buttons: [
-					'csv',
-					{
-						extend: 'pdfHtml5',
-						exportOptions: { columns: visib },
-						customize: function(doc) {
-							let title = Essaims + ' ' + (new Date()).toLocaleDateString();
-							const inputSearch = table.search();
-							if (inputSearch.length !== 0) {
-								title += ' <' + inputSearch + '>';
-							}
-							doc.content[0].text = title;
-						},
-						orientation: 'landscape'
-					},
-					{
-						extend: 'print', text: buttontextprint,
-						exportOptions: { columns: ':visible' },
-					},
-					{ extend: 'colvis', text: buttontextcol },
-					'pageLength'
-				]
-			}
-		},
-		// https://datatables.net/examples/api/multi_filter.html
-		initComplete: function() {
-			this.api()
-				.columns()
-				// https://datatables.net/reference/api/columns().every()
-				.every(function() {
-					const column = this; // indispensable pour addEventListener
-					const input = document.createElement('input');
-					input.placeholder = column.footer().textContent;
-					column.footer().replaceChildren(input);
-					input.addEventListener('keyup', () => {
-						if (column.search() !== this.value) {
-							column.search(input.value).draw();
-						}
-					});
-					const state = column.state.loaded();
-					if (state) {
-						const val = state.columns[column.index()];
-						input.value = val.search.search;
-					}
-				});
-		}
-	});
+	// dtListe est dans include.js
+	const table = dtListe('essaims', Essaims, buttontextprint, buttontextcol, 'lanscape');
 	const tr = document.getElementById('traitement');
 	const su = document.getElementById('sucre');
 	const co = document.getElementById('commentaire');
