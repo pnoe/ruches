@@ -8,7 +8,7 @@
 	<version>6.0.0</version>
 	<packaging>war</packaging>
 	<properties>
-		<closure-compiler.version>2.28.0</closure-compiler.version>
+		<closure-compiler.version>2.30.0</closure-compiler.version>
 		<ortools.version>9.9.3963</ortools.version>
 		<java.version>21</java.version>
 		<selenium-java.version>4.15.0</selenium-java.version>

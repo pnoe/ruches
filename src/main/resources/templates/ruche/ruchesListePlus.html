@@ -4,8 +4,7 @@
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsruches}"></script>
 <script th:inline="javascript">
-	/* exported	Ruches buttTxtPrint buttTxtCol DataTable
-	 */
+	/* exported	Ruches, buttTxtPrint, buttTxtCol */
 	const Ruches = /*[[#{Ruches}]]*/null;
 	const buttTxtPrint = /*[[#{buttontextprint}]]*/null;
 	const buttTxtCol = /*[[#{buttontextcol}]]*/null;
@@ -17,13 +16,6 @@
 		<div class="row">
 			<div class="col">
 				<h1 class="item" th:text="#{Ruches}"></h1>
-			</div>
-			<div class="col">
-				<select class="form-control" id="rucher" name="rucher">
-					<option value="" th:text="#{TousRuchers}"></option>
-					<option th:each="rucheropt : ${ruchersNoms}"
-						th:value="${rucheropt}" th:text="${rucheropt}"></option>
-				</select>
 			</div>
 		</div>
 	</div>
@@ -112,6 +104,36 @@
 					</td>
 				</tr>
 			</tbody>
+			<tfoot>
+				<tr>
+					<th th:text="#{nom}"></th>
+					<th th:text="#{essaim}"></th>
+					<th th:text="#{essaimAcquisition}"></th>
+					<th th:text="#{COMMENTAIREESSAIM}"></th>
+					<th th:text="#{rucher}"></th>
+					<th th:text="#{daterucher}"></th>
+					<th th:text="#{prod}"></th>
+					<th th:if="${session.voirInactif}" th:text="#{active}"></th>
+					<th th:text="#{dateAcquisition}"></th>
+					<th th:text="#{poidsVide}"></th>
+					<th th:text="#{PoidsTotal}"></th>
+					<th th:text="#{nbCadres}"></th>
+					<th th:text="#{nbCadresMax}"></th>
+					<th th:text="#{type}"></th>
+					<th th:text="#{Hausses}"></th>
+					<th:block th:if="${session.voirLatLon}">
+						<th th:text="#{latitude}"></th>
+						<th th:text="#{longitude}"></th>
+					</th:block>
+					<th th:text="#{COMMENTAIRERUCHE}"></th>
+					<th th:text="#{reineMarquee}"></th>
+					<th th:text="#{reineCouleurMarquage}"></th>
+					<th th:text="#{reineDateNaissance}"></th>
+					<th th:text="#{evenement1}"></th>
+					<th th:text="#{evenement2}"></th>
+					<th th:text="#{evenement3}"></th>
+				</tr>
+			</tfoot>
 		</table>
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
