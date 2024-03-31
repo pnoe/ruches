@@ -43,7 +43,9 @@
 			</div>
 		</div>
 	</div>
-	<canvas th:unless="${#lists.isEmpty(dates)}" id="ctx"></canvas>
+	<div th:unless="${#lists.isEmpty(dates)}" id="chart-wrapper" style="position: relative; height:80vh; width:100vw">
+		<canvas id="ctx"></canvas>
+	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>
 </html>

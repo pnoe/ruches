@@ -34,6 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			}]
 		},
 		options: {
+			// https://www.chartjs.org/docs/latest/configuration/responsive.html
+			maintainAspectRatio: false,
 			scales: {
 				x: {
 					type: 'time',
@@ -82,4 +84,23 @@ document.addEventListener('DOMContentLoaded', () => {
 		graphe.options.scales.y.display = e.target.checked;
 		graphe.update();
 	});
+
+/*
+	window.addEventListener("resize", resizeCanvas, false);
+	const canvas = document.getElementById("ctx");
+	function resizeCanvas() {
+		if (window.innerHeight >= (9 * window.innerWidth / 16)) {
+			canvas.width = window.innerWidth;
+			canvas.height = Math.floor(9 * canvas.width / 16);
+		}
+		else {
+			canvas.height = window.innerHeight;
+			canvas.width = Math.floor(16 * canvas.height / 9);
+		}
+		graphe.update();
+	};
+*/ 
+  
+	
+	
 });

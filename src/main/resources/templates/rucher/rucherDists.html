@@ -14,8 +14,6 @@
 			});
 			document.getElementById('dist').addEventListener('click', event => {
 				if (confirm(distCalc)) {
-					// https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog
-					// document.querySelector("dialog").showModal();
 					// https://getbootstrap.com/docs/5.3/components/modal/
 					new bootstrap.Modal(document.getElementById('distmod')).show();
 					return;
@@ -44,11 +42,6 @@
 				</h1>
 			</div>
 			<div class="col">
-				<!--/*
-				<dialog>
-				<p th:text="#{calculEnCours}"></p>
-				</dialog>
-				*/-->
 				<div id="distmod" data-bs-backdrop="static" class="modal fade"
 					tabindex="-1" aria-hidden="true">
 					<div class="modal-dialog modal-dialog-centered modal-sm">
