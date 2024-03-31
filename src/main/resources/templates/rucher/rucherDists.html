@@ -3,7 +3,7 @@
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:inline="javascript">
-		/* globals DataTable */
+		/* globals DataTable, bootstrap */
 		document.addEventListener('DOMContentLoaded', () => {
 			const distCalc = /*[[#{distCalc}]]*/ null;
 			const distCalcReset = /*[[#{distCalcReset}]]*/ null;
