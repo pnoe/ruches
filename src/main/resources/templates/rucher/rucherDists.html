@@ -18,7 +18,7 @@
 					// document.querySelector("dialog").showModal();
 					// https://getbootstrap.com/docs/5.3/components/modal/
 					new bootstrap.Modal(document.getElementById('distmod')).show();
-				return;
+					return;
 				}
 				event.preventDefault();
 			});
@@ -49,8 +49,9 @@
 				<p th:text="#{calculEnCours}"></p>
 				</dialog>
 				*/-->
-				<div id="distmod" data-bs-backdrop="static" class="modal" tabindex="-1">
-					<div class="modal-dialog modal-dialog-centered">
+				<div id="distmod" data-bs-backdrop="static" class="modal fade"
+					tabindex="-1" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered modal-sm">
 						<div class="modal-content">
 							<div class="modal-body">
 								<p th:text="#{calculEnCours}"></p>
