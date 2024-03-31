@@ -14,12 +14,17 @@
 			});
 			document.getElementById('dist').addEventListener('click', event => {
 				if (confirm(distCalc)) {
-					return;
+					// https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog
+					// document.querySelector("dialog").showModal();
+					// https://getbootstrap.com/docs/5.3/components/modal/
+					new bootstrap.Modal(document.getElementById('distmod')).show();
+				return;
 				}
 				event.preventDefault();
 			});
 			document.getElementById('distreset').addEventListener('click', event => {
 				if (confirm(distCalcReset)) {
+					new bootstrap.Modal(document.getElementById('distmod')).show();
 					return;
 				}
 				event.preventDefault();
@@ -39,6 +44,20 @@
 				</h1>
 			</div>
 			<div class="col">
+				<!--/*
+				<dialog>
+				<p th:text="#{calculEnCours}"></p>
+				</dialog>
+				*/-->
+				<div id="distmod" data-bs-backdrop="static" class="modal" tabindex="-1">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-body">
+								<p th:text="#{calculEnCours}"></p>
+							</div>
+						</div>
+					</div>
+				</div>
 				<a id="dist" th:href="@{'/rucher/dist'}" class="bi-truck-front"
 					th:title="#{distances}" aria-hidden="true"></a> &nbsp; <a
 					id="distreset" th:href="@{'/rucher/dist?reset=true'}"
