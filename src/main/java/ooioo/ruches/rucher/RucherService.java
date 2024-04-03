@@ -99,9 +99,15 @@ public class RucherService {
 					continue;
 				}
 				if (r1.getId().intValue() < r2.getId().intValue()) {
-					if (!reset && (drRepo.findByRucherStartAndRucherEnd(r1, r2) != null)) {
-						// pas de reset demandé et la distance a déjà été calculée
-						continue;
+					DistRucher drExist = drRepo.findByRucherStartAndRucherEnd(r1, r2);
+					if (drExist != null) {
+						if (reset) {
+							// reset on supprime l'ancienne distance
+							drRepo.delete(drExist);
+						} else {
+							// pas de reset demandé et la distance a déjà été calculée
+							continue;
+						}
 					}
 					DistRucher dr = new DistRucher(r1, r2, 0, 0);
 					StringBuilder uri = new StringBuilder(urlIgnItineraire);
@@ -109,6 +115,10 @@ public class RucherService {
 							.append(r2.getLongitude()).append(",").append(r2.getLatitude());
 					try {
 						Itineraire result = restTemplate.getForObject(uri.toString(), Itineraire.class);
+						if (result == null) {
+							logger.error("{} => {} - {}", r1.getNom(), r2.getNom(), "API call return null");
+							continue;
+						}
 						dr.setDist(Math.round(result.distance()));
 						dr.setTemps(Math.round(result.duration()));
 					} catch (HttpClientErrorException | HttpServerErrorException e) {

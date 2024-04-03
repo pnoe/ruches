@@ -113,7 +113,7 @@ public class RucherController {
 	 * Calcul des distances entre les ruchers par appel de l'api ign de calcul
 	 * d'itinéraire.
 	 */
-	@GetMapping(path = "/dist")
+	@GetMapping("/dist")
 	public String dist(Model model, @RequestParam(required = false) boolean reset) {
 		rucherService.dist(reset);
 		model.addAttribute(Const.MESSAGE, "Calcul des distances terminé.");
