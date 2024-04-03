@@ -11,7 +11,7 @@ import jakarta.persistence.UniqueConstraint;
 
 // Distances et temps de parcours en voiture entre les ruchers
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"rucherStart", "rucherEnd"})})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"rucher_start_id", "rucher_end_id"})})
 public class DistRucher {
 
 	@Id

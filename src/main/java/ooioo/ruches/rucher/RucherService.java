@@ -72,10 +72,9 @@ public class RucherService {
 	 * Calcul des distances entre les ruchers par appel de l'api ign de calcul
 	 * d'itinéraire. Ne calcule qu'un sens et non une valeur pour l'aller et une
 	 * autre pour le retour. Le sens calculé est : départ du rucher de plus petit
-	 * Id. Ne stocke pas la distance d'un rucher à lui même. En cas d'erreur
-	 * renvoyée par l'api ign met 0 comme distance et temps de parcours. Pour
-	 * éventuel intégration dans un calcul de distances parcourues pour les
-	 * transhumances ou affichage brut du tableau.
+	 * Id. Ne stocke pas la distance d'un rucher à lui même. Pour éventuel
+	 * intégration dans un calcul de distances parcourues pour les transhumances ou
+	 * affichage brut du tableau.
 	 * 
 	 * @param reset si true toutes les distances sont effacées puis recalculées,
 	 *              sinon seules les distances non enregistées sont recalculées.
@@ -92,6 +91,7 @@ public class RucherService {
 			// deux fois
 			drRepo.deleteAll();
 		}
+		List<DistRucher> distsRuchers = new ArrayList<>();
 		for (Rucher r1 : ruchers) {
 			for (Rucher r2 : ruchers) {
 				if (r1.getId().equals(r2.getId())) {
@@ -99,15 +99,10 @@ public class RucherService {
 					continue;
 				}
 				if (r1.getId().intValue() < r2.getId().intValue()) {
-					DistRucher drExist = drRepo.findByRucherStartAndRucherEnd(r1, r2);
-					if (drExist != null) {
-						if (reset) {
-							// reset on supprime l'ancienne distance
-							drRepo.delete(drExist);
-						} else {
-							// pas de reset demandé et la distance a déjà été calculée
-							continue;
-						}
+					if (!reset && (drRepo.findByRucherStartAndRucherEnd(r1, r2) != null)) {
+						// Pas de reset demandé et la distance a déjà été calculée.
+						continue;
+						// Si reset voir deleteAll ci-dessus.
 					}
 					DistRucher dr = new DistRucher(r1, r2, 0, 0);
 					StringBuilder uri = new StringBuilder(urlIgnItineraire);
@@ -126,12 +121,13 @@ public class RucherService {
 						logger.error("{} => {} - {}", r1.getNom(), r2.getNom(), e.getMessage());
 						continue;
 					}
-					drRepo.save(dr);
+					distsRuchers.add(dr);
 					logger.info("{} => {}, distance {}m et temps {}min, enregistrés", r1.getNom(), r2.getNom(),
 							dr.getDist(), dr.getTemps());
 				}
 			}
 		}
+		drRepo.saveAll(distsRuchers);
 	}
 
 	/**
@@ -406,17 +402,14 @@ public class RucherService {
 	 * (voir application.properties).
 	 */
 	/*
-	public LatLon dispersion(Float lat, Float lon) {
-		// Math.random : double value in a range from 0.0 (inclusive) to 1.0
-		// (exclusive).
-		// w random distance, /111300d transformation en degrés au centre de la terre
-		// sqrt() pour une distribution plus régulère dans le cercle
-		double w = dispersionRuche * Math.sqrt(Math.random()) / 111300d;
-		// angle en radians random par rapport au centre du cercle
-		double t = 2d * Math.PI * Math.random();
-		return new LatLon(lat + (float) (w * Math.sin(t)),
-				lon + (float) (w * Math.cos(t) / Math.cos(Math.toRadians(lat))));
-	}
-	*/
-	
+	 * public LatLon dispersion(Float lat, Float lon) { // Math.random : double
+	 * value in a range from 0.0 (inclusive) to 1.0 // (exclusive). // w random
+	 * distance, /111300d transformation en degrés au centre de la terre // sqrt()
+	 * pour une distribution plus régulère dans le cercle double w = dispersionRuche
+	 * * Math.sqrt(Math.random()) / 111300d; // angle en radians random par rapport
+	 * au centre du cercle double t = 2d * Math.PI * Math.random(); return new
+	 * LatLon(lat + (float) (w * Math.sin(t)), lon + (float) (w * Math.cos(t) /
+	 * Math.cos(Math.toRadians(lat)))); }
+	 */
+
 }
