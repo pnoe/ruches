@@ -10,7 +10,15 @@
 			new DataTable('#distsRuchers', {
 				paging: false,
 				searching: false,
-				scrollX: true
+				scrollX: true,
+				columnDefs: [
+				    {
+				    	// Pour aligner à droite la colonne des temps.
+				    	// https://datatables.net/manual/styling/classes#Cell-classes
+				        targets: 2,
+				        className: 'dt-right'
+				    }
+				  ]
 			});
 			document.getElementById('dist').addEventListener('click', event => {
 				if (confirm(distCalc)) {
