@@ -246,15 +246,23 @@ public class RucherController {
 	 * aux autres ruchers actifs. Affiche aussi les distances à vol d'oiseau.
 	 */
 	@GetMapping("/dists/{rucherId}")
-	public String dists(Model model, @PathVariable long rucherId) {
+	public String dists(HttpSession session, Model model, @PathVariable long rucherId) {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
 			List<Float> dist = new ArrayList<>();
 			List<LocalTime> temps = new ArrayList<>();
+			List<Float> vitesse = new ArrayList<>();
 			List<Double> distOiseau = new ArrayList<>();
 			List<Rucher> rrs = new ArrayList<>();
-			List<Rucher> ruchers = rucherRepository.findByActifTrue();
+			Object voirInactif = session.getAttribute(Const.VOIRINACTIF);
+			List<Rucher> ruchers;
+			if (voirInactif != null && (boolean) voirInactif) {
+				// OrderBy utile ?
+				ruchers = rucherRepository.findAllByOrderByNom();
+			} else {
+				ruchers = rucherRepository.findByActifOrderByNom(true);
+			}
 			for (Rucher rr : ruchers) {
 				if (rr.getId().equals(rucherId)) {
 					continue;
@@ -268,9 +276,15 @@ public class RucherController {
 				if (dr == null) {
 					dist.add(0f);
 					temps.add(null);
+					vitesse.add(null);
 				} else {
 					dist.add(dr.getDist() / 1000f);
 					temps.add(LocalTime.MIN.plus(Duration.ofMinutes(dr.getTemps())));
+					if (dr.getTemps() == 0) {
+						vitesse.add(null);
+					} else {
+						vitesse.add(0.06f * (dr.getDist())/dr.getTemps());
+					}
 				}
 				double diametreTerre = ((rr.getAltitude() == null) ? 0 : rr.getAltitude())
 						+ 2 * Utils.rTerreLat(rucher.getLatitude());
@@ -279,6 +293,7 @@ public class RucherController {
 			}
 			model.addAttribute("dist", dist);
 			model.addAttribute("temps", temps);
+			model.addAttribute("vitesse", vitesse);
 			model.addAttribute("distOiseau", distOiseau);
 			model.addAttribute("rucher", rucher);
 			model.addAttribute("rrs", rrs);
