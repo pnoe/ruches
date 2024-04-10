@@ -86,12 +86,9 @@ public class RucherService {
 		// https://wxs.ign.fr/calcul/geoportail/itineraire/rest/1.0.0/route?resource=bdtopo-pgr&getSteps=false&start=
 		Iterable<Rucher> ruchers = rucherRepository.findAll();
 		RestTemplate restTemplate = new RestTemplate();
-		if (reset) {
-			// Effacer la table dist_rucher sinon les distances déjà calculées apparaîtront
-			// deux fois
-			drRepo.deleteAll();
-		}
 		List<DistRucher> distsRuchers = new ArrayList<>();
+		int iCalc = 0;
+		int iErr = 0;
 		for (Rucher r1 : ruchers) {
 			for (Rucher r2 : ruchers) {
 				if (r1.getId().equals(r2.getId())) {
@@ -109,9 +106,12 @@ public class RucherService {
 					uri.append(r1.getLongitude()).append(",").append(r1.getLatitude()).append("&end=")
 							.append(r2.getLongitude()).append(",").append(r2.getLatitude());
 					try {
+						// Attente de 100ms entre chaque appel de l'api rest ign.
+						Thread.sleep(100);
 						Itineraire result = restTemplate.getForObject(uri.toString(), Itineraire.class);
 						if (result == null) {
 							logger.error("{} => {} - {}", r1.getNom(), r2.getNom(), "API call return null");
+							iErr++;
 							continue;
 						}
 						dr.setDist(Math.round(result.distance()));
@@ -119,13 +119,23 @@ public class RucherService {
 					} catch (HttpClientErrorException | HttpServerErrorException e) {
 						// erreur 4xx ou 5xx, on n'enregistre pas la distance et le temps
 						logger.error("{} => {} - {}", r1.getNom(), r2.getNom(), e.getMessage());
+						iErr++;
 						continue;
+					} catch (InterruptedException ie) {
+						Thread.currentThread().interrupt();
 					}
 					distsRuchers.add(dr);
 					logger.info("{} => {}, distance {}m et temps {}min, enregistrés", r1.getNom(), r2.getNom(),
 							dr.getDist(), dr.getTemps());
+					iCalc++;
 				}
 			}
+		}
+		logger.info("{} distance(s) calculées, {} erreur(s)", iCalc, iErr);
+		if (reset) {
+			// Effacer la table dist_rucher sinon les distances déjà calculées apparaîtront
+			// deux fois.
+			drRepo.deleteAll();
 		}
 		drRepo.saveAll(distsRuchers);
 	}

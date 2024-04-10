@@ -55,14 +55,14 @@
 <!--/* th:attr="data-url=@{/js/autoconf.js}" */-->
 
 <script th:fragment="jsGpPluginOpenLayers"
-	th:attr="data-url=@{/js/autoconf.js}"
-	th:src="@{/js/GpPluginOpenLayers-3.2.22/GpPluginOpenLayers.js}"></script>
+	th:data-key="${@environment.getProperty('ign.data.key')}"
+	th:src="@{/js/GpPluginOpenLayers-3.4.1/GpPluginOpenLayers.js}"></script>
 
 <script th:fragment="jsGpOsmPluginOpenLayers"
-	th:src="@{/js/GpPluginOpenLayers-3.2.22/GpPluginOpenLayers.js}"></script>
+	th:src="@{/js/GpPluginOpenLayers-3.4.1/GpPluginOpenLayers.js}"></script>
 <link th:fragment="cssGpPluginOpenLayers" rel="stylesheet"
 	type="text/css" media="all"
-	th:href="@{/js/GpPluginOpenLayers-3.2.22/GpPluginOpenLayers.css}" />
+	th:href="@{/js/GpPluginOpenLayers-3.4.1/GpPluginOpenLayers.css}" />
 
 <script defer th:fragment="dom-to-image"
 	th:src="@{/js/dom-to-image-more.min-3.3.0.js}"></script>
