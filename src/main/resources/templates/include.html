@@ -53,9 +53,10 @@
 
 <!--/* th:data-key="${@environment.getProperty('ign.data.key')}" */-->
 <!--/* th:attr="data-url=@{/js/autoconf.js}" */-->
+<!--/* th:attr="data-url=@{/js/customConfig.json}" */-->
 
 <script th:fragment="jsGpPluginOpenLayers"
-	th:data-key="${@environment.getProperty('ign.data.key')}"
+	th:attr="data-url=@{/js/customConfig.json}"
 	th:src="@{/js/GpPluginOpenLayers-3.4.1/GpPluginOpenLayers.js}"></script>
 
 <script th:fragment="jsGpOsmPluginOpenLayers"
