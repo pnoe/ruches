@@ -286,7 +286,7 @@
 				<button class="accordion-button collapsed" type="button"
 					data-bs-toggle="collapse" data-bs-target="#collapse6"
 					aria-expanded="true" aria-controls="collapse6"
-					th:text="${#arrays.length(essaimsActifSansRuche)} + ' ' + #{essaimsHorsRuche}">
+					th:text="${#arrays.length(essaimsActifSansRuche)} + ' ' + #{essaimsHorsRuche(${#arrays.length(essaimsActifSansRuche)<2}?'':'s')}">
 				</button>
 			</h1>
 			<div id="collapse6" class="accordion-collapse collapse"
