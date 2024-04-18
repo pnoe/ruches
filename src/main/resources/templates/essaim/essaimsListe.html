@@ -13,6 +13,7 @@
 	const urlSucreLot = /*[[@{/evenement/essaim/sucreLot/}]]*/null;
 	const urlCommLot = /*[[@{/evenement/essaim/commentaireLot/}]]*/null;
 	const urlCadreLot = /*[[@{/evenement/essaim/cadreLot/}]]*/null;
+	const urlDispLot = /*[[@{/evenement/essaim/dispersionLot/}]]*/null;
 	const selectEssTrt = /*[[#{selectessaimstraiter}]]*/null;
 </script>
 </head>
@@ -34,6 +35,8 @@
 					th:title="#{evenementsTraitement}" aria-hidden="true"></a> <a
 					id="cadre" href="#" class="selection bi-layout-three-columns"
 					th:title="#{evenementsCadres}" aria-hidden="true"></a> &nbsp; <a
+					id="dispersion" href="#" class="selection bi-box-arrow-up-left"
+					th:title="#{evenementDispersion}" aria-hidden="true"></a> &nbsp; <a
 					th:href="@{/essaim/statistiques?masquerInactif=on}"
 					class="bi-table" th:title="#{statistiquesproduction}"
 					aria-hidden="true"></a> <a th:href="@{/essaim/statistiquesage}"
@@ -61,7 +64,8 @@
 						<th rowspan="2" th:text="#{commDisp}"></th>
 					</th:block>
 					<th rowspan="2" th:text="#{dateAcquisition}"></th>
-					<th colspan="3" th:text="#{Reine}" style="text-align:center" data-dt-order="disable"></th>
+					<th colspan="3" th:text="#{Reine}" style="text-align: center"
+						data-dt-order="disable"></th>
 					<th rowspan="2" th:text="#{souche}"></th>
 					<th rowspan="2" th:text="#{ag}" th:title="#{agressivite}"></th>
 					<th rowspan="2" th:text="#{pr}" th:title="#{proprete}"></th>

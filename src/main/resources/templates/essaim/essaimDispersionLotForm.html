@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsdatetimepicker}"></script>
+<link th:replace="~{include :: cssdatetimepicker}" />
+<script th:replace="~{include :: localejsdatetimepicker}"></script>
+<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			document.getElementById('commentaire').focus();
+			$('#evenementForm').validate({
+				errorClass: 'erreur-form',
+				errorPlacement: function (error, element) {
+					error.insertBefore(element.closest('div'));
+				},
+				rules: {
+					date: {
+						required: true
+					},
+					commentaire: {
+						maxlength: 255
+					}
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+	<nav th:replace="~{navbar::navbar}"></nav>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h1 class="item">
+					<a th:href="@{'/essaim/liste'}" th:text="#{Essaims}"></a>
+					<th:block
+						th:text="#{sep} + #{dispersionLot} + ' ' + ${essaimsNoms}">
+				</h1>
+			</div>
+		</div>
+	</div>
+	<form action="#"
+		th:action="@{'/essaim/sauve/dispersion/lot/' + ${eIds}}" method="post"
+		id="essaimDispLotForm">
+		<div class="form-check">
+			<input class="form-check-input" type="checkbox" id="depot"
+				name="depot" checked /> <label class="form-check-label" for="depot"
+				th:text="#{retourrucheaudepot}"></label>
+		</div>
+		<div id="divevencadre" class="form-check">
+			<input class="form-check-input" type="checkbox" id="evencadre"
+				name="evencadre" checked /> <label class="form-check-label"
+				for="evencadre" th:text="#{creationevecadrezero}"></label>
+		</div>
+		<div th:replace="~{includeForm :: date}"></div>
+		<div th:replace="~{includeForm :: commentaire}"></div>
+		<div th:replace="~{includeForm :: BtnForm}"></div>
+	</form>
+	<footer th:replace="~{include::footer}"></footer>
+</body>
+</html>

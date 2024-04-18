@@ -178,7 +178,16 @@ public class EvenementEssaimController {
 	}
 
 	/**
-	 * Appel du formulaire pour l'ajout de sucre pour un lot d'essaims
+	 * Appel du formulaire pour la dispersion d'un lot d'essaims.
+	 */
+	@GetMapping("/dispersionLot/{essaimIds}")
+	public String dispersionLot(HttpSession session, Model model, @PathVariable Long[] essaimIds) {
+		nomsIdsListe(session, model, essaimIds);
+		return "essaim/essaimDispersionLotForm";
+	}
+
+	/**
+	 * Appel du formulaire pour l'ajout de sucre pour un lot d'essaims.
 	 */
 	@GetMapping("/sucreLot/{essaimIds}")
 	public String sucreLot(HttpSession session, Model model, @PathVariable Long[] essaimIds) {
@@ -187,7 +196,7 @@ public class EvenementEssaimController {
 	}
 
 	/**
-	 * Appel du formulaire pour l'ajout d'événements cadres pour un lot d'essaims
+	 * Appel du formulaire pour l'ajout d'événements cadres pour un lot d'essaims.
 	 */
 	@GetMapping("/cadreLot/{essaimIds}")
 	public String cadreLot(HttpSession session, Model model, @PathVariable Long[] essaimIds) {
@@ -503,11 +512,10 @@ public class EvenementEssaimController {
 	}
 
 	/**
-	 * Enregistrement de la dispersion Crée un événement dispersion, enlève l'essaim
-	 * de la ruche et inactive l'essaim met cette ruche au dépôt si option choisie,
-	 * crée événement RUCHEAJOUTRUCHER et crée un événement 0 cadre si demandé
-	 * Option remérage : met l'essaim choisi dans la ruche et crée l'événement
-	 * AJOUTESSAIMRUCHE
+	 * Enregistrement de la dispersion. Enlève l'essaim de la ruche et inactive
+	 * l'essaim, met cette ruche au dépôt si option choisie, crée événement
+	 * RUCHEAJOUTRUCHER et crée un événement 0 cadre si demandé. Option remérage :
+	 * met l'essaim choisi dans la ruche et crée l'événement AJOUTESSAIMRUCHE.
 	 */
 	@PostMapping("/sauve/dispersion/{essaimId}")
 	public String sauveDispersion(Model model, @PathVariable long essaimId,
@@ -560,7 +568,9 @@ public class EvenementEssaimController {
 					evenementRepository.save(eveCadre);
 					logger.info(Const.CREE, eveCadre);
 				}
-				// On inactive l'essaim
+				// On inactive l'essaim.
+				// TODO à mettre hors de if ruche == null
+				//   ruche == null est bloqué par js
 				essaim.setActif(false);
 				essaim.setDateDispersion(dateEve);
 				essaim.setCommDisp(commentaire);

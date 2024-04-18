@@ -1,5 +1,5 @@
 /* globals Essaims, buttontextprint, buttontextcol, urlTraitLot, urlSucreLot,
-	urlCommLot, urlCadreLot, selectEssTrt, dtListe */
+	urlCommLot, urlCadreLot, urlDispLot, selectEssTrt, dtListe */
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	const su = document.getElementById('sucre');
 	const co = document.getElementById('commentaire');
 	const ca = document.getElementById('cadre');
+	
+	const di = document.getElementById('dispersion');
+	
 	function updateLinks(_e, _dt, type) { // }, indexes) {
 		if (type === 'row') {
 			let noms = '';
@@ -19,17 +22,19 @@ document.addEventListener('DOMContentLoaded', () => {
 					substring(a.content.children[0].getAttribute('href').lastIndexOf('/') + 1) + ',';
 			});
 			if (noms) {
-				// On enlève la dernière virgule et met à jour l'url de traitement.
+				// On enlève la dernière virgule et met à jour les urls de traitement.
 				noms = noms.substring(0, noms.length - 1);
 				tr.setAttribute('href', urlTraitLot + noms);
 				su.setAttribute('href', urlSucreLot + noms);
 				co.setAttribute('href', urlCommLot + noms);
 				ca.setAttribute('href', urlCadreLot + noms);
+				di.setAttribute('href', urlDispLot + noms);
 			} else {
 				tr.setAttribute('href', '#');
 				su.setAttribute('href', '#');
 				co.setAttribute('href', '#');
 				ca.setAttribute('href', '#');
+				di.setAttribute('href', '#');
 			}
 		}
 	}

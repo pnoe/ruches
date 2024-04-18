@@ -43,6 +43,8 @@ import ooioo.ruches.recolte.RecolteRepository;
 import ooioo.ruches.ruche.Ruche;
 import ooioo.ruches.ruche.RucheRepository;
 import ooioo.ruches.rucher.Rucher;
+import ooioo.ruches.rucher.RucherRepository;
+import ooioo.ruches.rucher.RucherService;
 
 @Controller
 @RequestMapping("/essaim")
@@ -55,6 +57,10 @@ public class EssaimController {
 
 	private final EssaimRepository essaimRepository;
 	private final RucheRepository rucheRepository;
+
+	private final RucherRepository rucherRepository;
+	private final RucherService rucherService;
+
 	private final EvenementRepository evenementRepository;
 	private final RecolteRepository recolteRepository;
 	private final RecolteHausseRepository recolteHausseRepository;
@@ -62,26 +68,80 @@ public class EssaimController {
 	private final EssaimService essaimService;
 
 	public EssaimController(EssaimRepository essaimRepository, RucheRepository rucheRepository,
-			EvenementRepository evenementRepository, RecolteRepository recolteRepository,
-			RecolteHausseRepository recolteHausseRepository, MessageSource messageSource, EssaimService essaimService) {
+			RucherRepository rucherRepository, RucherService rucherService, EvenementRepository evenementRepository,
+			RecolteRepository recolteRepository, RecolteHausseRepository recolteHausseRepository,
+			MessageSource messageSource, EssaimService essaimService) {
 		this.essaimRepository = essaimRepository;
 		this.rucheRepository = rucheRepository;
+		this.rucherRepository = rucherRepository;
+		this.rucherService = rucherService;
 		this.evenementRepository = evenementRepository;
 		this.recolteRepository = recolteRepository;
 		this.recolteHausseRepository = recolteHausseRepository;
 		this.messageSource = messageSource;
 		this.essaimService = essaimService;
 	}
-	
+
+	/**
+	 * Enregistrement de la dispersion d'un lot dessaim. Enlève l'essaim de la ruche
+	 * et inactive l'essaim, met cette ruche au dépôt si option choisie, crée
+	 * événement RUCHEAJOUTRUCHER au dépôt et crée un événement 0 cadre si demandé.
+	 */
+	@PostMapping("/sauve/dispersion/lot/{essaimIds}")
+	public String sauveLotDispersion(Model model, @PathVariable Long[] essaimIds,
+			@RequestParam(defaultValue = "false") boolean depot, @RequestParam String date,
+			@RequestParam String commentaire, @RequestParam(defaultValue = "false") boolean evencadre) {
+		LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
+		for (Long essaimId : essaimIds) {
+			Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
+			if (essaimOpt.isPresent()) {
+				Essaim essaim = essaimOpt.get();
+				Ruche ruche = rucheRepository.findByEssaimId(essaimId);
+				if (ruche != null) {
+					Rucher rucherDepot = rucherRepository.findByDepotTrue();
+					// On enlève l'esssaim de la ruche.
+					ruche.setEssaim(null);
+					rucheRepository.save(ruche);
+					Rucher rucher = ruche.getRucher();
+					// rucher toujours non null ?
+					if ((depot) && (!rucher.getId().equals(rucherDepot.getId()))) {
+						// Met la ruche au dépôt et crée l'événement RUCHEAJOUTRUCHER
+						// Si la ruche est déjà au dépôt ou un remérage a été fait, on ne fait rien
+						Long[] ruchesIds = { ruche.getId() };
+						rucherService.sauveAjouterRuches(rucherDepot, ruchesIds, date,
+								"Dispersion essaim " + essaim.getNom() + ". " + commentaire);
+					}
+					if (evencadre) {
+						// Evénement cadre : valeur 0 pour zéro cadre, essaim null, commentaire
+						// "Dispersion essaim xx"
+						Evenement eveCadre = new Evenement(dateEve, TypeEvenement.RUCHECADRE, ruche, null,
+								(depot) ? rucherDepot : rucher, null, "0", "Dispersion essaim " + essaim.getNom());
+						evenementRepository.save(eveCadre);
+						logger.info(Const.CREE, eveCadre);
+					}
+				}
+				// On inactive l'essaim
+				essaim.setActif(false);
+				essaim.setDateDispersion(dateEve);
+				essaim.setCommDisp(commentaire);
+				essaimRepository.save(essaim);
+				logger.info(Const.MODIFIE, essaim);
+			} else {
+				// On continue le traitement des autres essaims.
+				logger.error(Const.IDESSAIMXXINCONNU, essaimId);
+			}
+		}
+		return "redirect:/essaim/liste";
+	}
+
 	@GetMapping("/descendance")
 	public String descendance(Model model) {
 		essaimService.descendance(model);
 		return "essaim/essaimsDescendance";
 	}
-	
+
 	/**
-	 * Graphique affichant la courbe du nombre d'essaims. En abscisse le
-	 * temps.
+	 * Graphique affichant la courbe du nombre d'essaims. En abscisse le temps.
 	 */
 	@GetMapping("/grapheEssaims")
 	public String grapheEssaims(Model model) {
