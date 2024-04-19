@@ -569,8 +569,6 @@ public class EvenementEssaimController {
 					logger.info(Const.CREE, eveCadre);
 				}
 				// On inactive l'essaim.
-				// TODO à mettre hors de if ruche == null
-				//   ruche == null est bloqué par js
 				essaim.setActif(false);
 				essaim.setDateDispersion(dateEve);
 				essaim.setCommDisp(commentaire);
