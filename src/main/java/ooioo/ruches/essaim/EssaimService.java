@@ -5,6 +5,7 @@ import java.text.DecimalFormatSymbols;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -36,6 +37,8 @@ import ooioo.ruches.recolte.RecolteHausseRepository;
 import ooioo.ruches.recolte.RecolteRepository;
 import ooioo.ruches.ruche.Ruche;
 import ooioo.ruches.ruche.RucheRepository;
+import ooioo.ruches.rucher.DistRucher;
+import ooioo.ruches.rucher.DistRucherRepository;
 import ooioo.ruches.rucher.Rucher;
 import ooioo.ruches.rucher.RucherRepository;
 
@@ -52,11 +55,13 @@ public class EssaimService {
 	private final RucherRepository rucherRepository;
 	private final MessageSource messageSource;
 	private final GrapheEsRuService grapheEsRuService;
+	private final DistRucherRepository drRepo;
 
 	public EssaimService(EssaimRepository essaimRepository, HausseRepository hausseRepository,
 			EvenementRepository evenementRepository, RucheRepository rucheRepository,
 			RecolteRepository recolteRepository, RecolteHausseRepository recolteHausseRepository,
-			RucherRepository rucherRepository, MessageSource messageSource, GrapheEsRuService grapheEsRuService) {
+			RucherRepository rucherRepository, MessageSource messageSource, GrapheEsRuService grapheEsRuService,
+			DistRucherRepository drRepo) {
 		this.essaimRepository = essaimRepository;
 		this.evenementRepository = evenementRepository;
 		this.rucheRepository = rucheRepository;
@@ -65,6 +70,7 @@ public class EssaimService {
 		this.rucherRepository = rucherRepository;
 		this.messageSource = messageSource;
 		this.grapheEsRuService = grapheEsRuService;
+		this.drRepo = drRepo;
 	}
 
 	public void descendance(Model model) {
@@ -634,10 +640,26 @@ public class EssaimService {
 				essaimPoids.put("note", Long.toString(Math.round(1000d * noteEssaim / nbRec)));
 				essaimPoids.put("nbrec", Integer.toString(nbRec));
 				essaimPoids.put("nom", essaim.getNom());
+				essaimPoids.put("pr", essaim.getProprete() == null ? "" : essaim.getProprete().toString());
+				essaimPoids.put("ag", essaim.getAgressivite() == null ? "" : essaim.getAgressivite().toString());
+
+				DistRucher dr = null;
+				Ruche ruche = rucheRepository.findByEssaimId(essaim.getId());
+				if (ruche != null) {
+					Rucher rucher = ruche.getRucher();
+					if (rucher != null) {
+						Rucher depot = rucherRepository.findByDepotTrue();
+						dr = (depot.getId().intValue() > rucher.getId().intValue())
+								? drRepo.findByRucherStartAndRucherEnd(rucher, depot)
+								: drRepo.findByRucherStartAndRucherEnd(depot, rucher);
+					}
+				}
+				essaimPoids.put("dist", dr == null ? "" : Double.toString(dr.getDist() / 1000.));
+
 				essaimPoids.put("id", essaim.getId().toString());
-				essaimPoids.put("dateAcquisition", essaim.getDateAcquisition().toString());
+				essaimPoids.put("dateA", essaim.getDateAcquisition().toString());
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-				essaimPoids.put("dateDispersion",
+				essaimPoids.put("dateD",
 						(essaim.getActif()) ? "" : essaim.getDateDispersion().format(formatter));
 				// calcul moyenne production miel par jour d'existence de l'essaim
 				if (rucherId == null) {

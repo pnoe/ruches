@@ -15,6 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 	const table = new DataTable('#statistiques', {
 		scrollX: true,
+		columnDefs: [
+            {
+                targets: [-1, -2, -3],
+                visible: false
+            }
+        ],
 		layout: {
 			topStart: {
 				buttons: [
@@ -115,15 +121,17 @@ document.addEventListener('DOMContentLoaded', () => {
 					<th th:if="${rucherId == null}" th:text="#{Moyen}"></th>
 					<th th:text="#{Note}"></th>
 					<th th:text="#{NbRecolte}"></th>
+					<th th:text="#{ag}" th:title="#{agressivite}"></th>
+					<th th:text="#{pr}" th:title="#{proprete}"></th>
+					<th th:text="#{Distance}"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="essaimPoids : ${essaimsPoids}">
 					<td><a th:href="@{'/essaim/'+${essaimPoids.id}}"
 						th:text="${essaimPoids.nom}"></a></td>
-					<td th:text="${essaimPoids.dateAcquisition}"></td>
-					<td th:unless="${masquerInactif}"
-						th:text="${essaimPoids.dateDispersion}"></td>
+					<td th:text="${essaimPoids.dateA}"></td>
+					<td th:unless="${masquerInactif}" th:text="${essaimPoids.dateD}"></td>
 					<td th:if="${rucherId == null}" th:text="${essaimPoids.duree}"></td>
 					<td th:text="${essaimPoids.pTotal}"></td>
 					<td th:text="${essaimPoids.pMax}"></td>
@@ -132,6 +140,9 @@ document.addEventListener('DOMContentLoaded', () => {
 					<td><a th:href="@{'/essaim/statistiques/'+${essaimPoids.id}}"
 						th:text="${essaimPoids.note}"></a></td>
 					<td th:text="${essaimPoids.nbrec}"></td>
+					<td th:text="${essaimPoids.ag}"></td>
+					<td th:text="${essaimPoids.pr}"></td>
+					<td th:text="${essaimPoids.dist}"></td>
 				</tr>
 			</tbody>
 		</table>
