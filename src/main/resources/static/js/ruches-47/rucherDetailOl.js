@@ -6,7 +6,7 @@
    distRuchesOk, distMaxRuche, geoloc, bootstrap, distDiminuee, calculEnCours, pasDAmelioration, dessintxt, enregistrer,
    ZoomRuches
    */
-/* exported rucherDetail jsPDF */
+/* exported rucherDetail, jsPDF */
 'use strict';
 
 let iconFeatureEntree;
