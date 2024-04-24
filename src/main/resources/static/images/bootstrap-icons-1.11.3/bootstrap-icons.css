@@ -1,14 +1,14 @@
 /*!
- * Bootstrap Icons v1.11.1 (https://icons.getbootstrap.com/)
- * Copyright 2019-2023 The Bootstrap Authors
+ * Bootstrap Icons v1.11.3 (https://icons.getbootstrap.com/)
+ * Copyright 2019-2024 The Bootstrap Authors
  * Licensed under MIT (https://github.com/twbs/icons/blob/main/LICENSE)
  */
 
 @font-face {
   font-display: block;
   font-family: "bootstrap-icons";
-  src: url("./fonts/bootstrap-icons.woff2?5d3ecc93abc94ff0e40a39fb23cdd06c") format("woff2"),
-url("./fonts/bootstrap-icons.woff?5d3ecc93abc94ff0e40a39fb23cdd06c") format("woff");
+  src: url("./fonts/bootstrap-icons.woff2?5e387b95ad3597e02fbec53dc0cc1818") format("woff2"),
+url("./fonts/bootstrap-icons.woff?5e387b95ad3597e02fbec53dc0cc1818") format("woff");
 }
 
 .bi::before,
@@ -35,6 +35,7 @@ url("./fonts/bootstrap-icons.woff?5d3ecc93abc94ff0e40a39fb23cdd06c") format("wof
 .bi-box-arrow-in-down-right::before { content: "\f1bb"; }
 .bi-box-arrow-left::before { content: "\f1c2"; }
 .bi-box-arrow-up-left::before { content: "\f1c4"; }
+.bi-brush::before { content: "\f1d8"; }
 .bi-bucket::before { content: "\f1da"; }
 .bi-bug::before { content: "\f1dc"; }
 .bi-calendar-check::before { content: "\f1e2"; }

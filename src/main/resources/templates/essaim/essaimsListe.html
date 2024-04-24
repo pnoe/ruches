@@ -5,7 +5,7 @@
 <script th:replace="~{include :: jsruches}"></script>
 <script th:inline="javascript">
 	/* exported Essaims,buttontextprint,buttontextcol,urlTraitLot,urlSucreLot,urlCommLot,
-	urlCadreLot,selectEssTrt */
+	urlCadreLot,urlDispLot,urlMarkLot,selectEssTrt */
 	const Essaims = /*[[#{Essaims}]]*/null;
 	const buttontextprint = /*[[#{buttontextprint}]]*/null;
 	const buttontextcol = /*[[#{buttontextcol}]]*/null;
@@ -14,6 +14,7 @@
 	const urlCommLot = /*[[@{/evenement/essaim/commentaireLot/}]]*/null;
 	const urlCadreLot = /*[[@{/evenement/essaim/cadreLot/}]]*/null;
 	const urlDispLot = /*[[@{/evenement/essaim/dispersionLot/}]]*/null;
+	const urlMarkLot = /*[[@{/evenement/essaim/marquageLot/}]]*/null;
 	const selectEssTrt = /*[[#{selectessaimstraiter}]]*/null;
 </script>
 </head>
@@ -36,7 +37,9 @@
 					id="cadre" href="#" class="selection bi-layout-three-columns"
 					th:title="#{evenementsCadres}" aria-hidden="true"></a> &nbsp; <a
 					id="dispersion" href="#" class="selection bi-box-arrow-up-left"
-					th:title="#{Disperser}" aria-hidden="true"></a> &nbsp; <a
+					th:title="#{Disperser}" aria-hidden="true"></a> <a id="marquage"
+					href="#" class="selection bi-brush" th:title="#{Marquer}"
+					aria-hidden="true"></a> &nbsp; <a
 					th:href="@{/essaim/statistiques?masquerInactif=on}"
 					class="bi-table" th:title="#{statistiquesproduction}"
 					aria-hidden="true"></a> <a th:href="@{/essaim/statistiquesage}"

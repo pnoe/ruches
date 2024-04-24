@@ -1,5 +1,5 @@
 /* globals Essaims, buttontextprint, buttontextcol, urlTraitLot, urlSucreLot,
-	urlCommLot, urlCadreLot, urlDispLot, selectEssTrt, dtListe */
+	urlCommLot, urlCadreLot, urlDispLot, urlMarkLot, selectEssTrt, dtListe */
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -9,9 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	const su = document.getElementById('sucre');
 	const co = document.getElementById('commentaire');
 	const ca = document.getElementById('cadre');
-	
 	const di = document.getElementById('dispersion');
-	
+	const ma = document.getElementById('marquage');
 	function updateLinks(_e, _dt, type) { // }, indexes) {
 		if (type === 'row') {
 			let noms = '';
@@ -29,12 +28,14 @@ document.addEventListener('DOMContentLoaded', () => {
 				co.setAttribute('href', urlCommLot + noms);
 				ca.setAttribute('href', urlCadreLot + noms);
 				di.setAttribute('href', urlDispLot + noms);
+				ma.setAttribute('href', urlMarkLot + noms);
 			} else {
 				tr.setAttribute('href', '#');
 				su.setAttribute('href', '#');
 				co.setAttribute('href', '#');
 				ca.setAttribute('href', '#');
 				di.setAttribute('href', '#');
+				ma.setAttribute('href', '#');
 			}
 		}
 	}

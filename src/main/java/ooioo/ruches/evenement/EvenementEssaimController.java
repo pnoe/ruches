@@ -1,5 +1,7 @@
 package ooioo.ruches.evenement;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -184,6 +186,30 @@ public class EvenementEssaimController {
 	public String dispersionLot(HttpSession session, Model model, @PathVariable Long[] essaimIds) {
 		nomsIdsListe(session, model, essaimIds);
 		return "essaim/essaimDispersionLotForm";
+	}
+
+	/**
+	 * Marquage d'un lot d'essaims.
+	 */
+	@GetMapping("/marquageLot/{essaimIds}")
+	public String marquageLot(Model model, @PathVariable Long[] essaimIds) {
+		// Marquer les essaims.
+		for (Long essaimId : essaimIds) {
+			Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
+			if (essaimOpt.isPresent()) {
+				Essaim essaim = essaimOpt.get();
+				if (essaim.getReineMarquee()) {
+					logger.info("{} déjà marqué", essaim);
+				} else {
+					essaim.setReineMarquee(true);
+					essaimRepository.save(essaim);
+					logger.info("{} marqué", essaim);
+				}
+			} else {
+				logger.error(Const.IDESSAIMXXINCONNU, essaimId);
+			}
+		}
+		return "redirect:/essaim/liste";
 	}
 
 	/**
