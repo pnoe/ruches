@@ -19,23 +19,21 @@ import ooioo.ruches.rucher.Rucher;
 @Entity
 public class Evenement {
 
-
 	@Override
 	public String toString() {
-		return "Evenement [id=" + id + ", date=" + date + ", type=" + type +
-				", ruche=" + ((ruche == null)?"null":ruche.getNom()) +
-				", essaim=" + ((essaim == null)?"null":essaim.getNom()) +
-				", rucher=" + ((rucher == null)?"null":rucher.getNom()) +
-				", hausse=" + ((hausse == null)?"null":hausse.getNom()) +
-				", valeur=" + valeur + ", commentaire=" + commentaire
+		return "Evenement [id=" + id + ", date=" + date + ", type=" + type + ", ruche="
+				+ ((ruche == null) ? "null" : ruche.getNom()) + ", essaim="
+				+ ((essaim == null) ? "null" : essaim.getNom()) + ", rucher="
+				+ ((rucher == null) ? "null" : rucher.getNom()) + ", hausse="
+				+ ((hausse == null) ? "null" : hausse.getNom()) + ", valeur=" + valeur + ", commentaire=" + commentaire
 				+ "]";
 	}
 
 	public Evenement() {
 	}
 
-	public Evenement(LocalDateTime date, TypeEvenement typeEvenement, Ruche ruche,
-			Essaim essaim, Rucher rucher, Hausse hausse, String valeur,	String commentaire) {
+	public Evenement(LocalDateTime date, TypeEvenement typeEvenement, Ruche ruche, Essaim essaim, Rucher rucher,
+			Hausse hausse, String valeur, String commentaire) {
 		this.date = date;
 		this.type = typeEvenement;
 		this.ruche = ruche;
@@ -84,10 +82,8 @@ public class Evenement {
 	private Hausse hausse;
 
 	/**
-	 * La valeur de l'événement :
-	 *   poids de sucre ajouté, taux de remplissage d'une hausse,
-	 *    nombre de languettes pour le traitement varoa,
-	 *    ...
+	 * La valeur de l'événement : poids de sucre ajouté, taux de remplissage d'une
+	 * hausse, nombre de languettes pour le traitement varoa, ...
 	 */
 	@Column(length = 64)
 	private String valeur;

@@ -4,8 +4,8 @@
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsruches}"></script>
 <script th:inline="javascript">
-	/* exported Essaims,buttontextprint,buttontextcol,urlTraitLot,urlSucreLot,urlCommLot,
-	urlCadreLot,urlDispLot,urlMarkLot,selectEssTrt */
+	/* exported Essaims,buttontextprint,buttontextcol,urlTraitLot,urlSucreLot,urlCommLot,urlCadreLot,
+	urlDispLot,urlMarkLot,selectEssTrt,	evComm, evSucre, evTrait, evCadre, disp, marq */
 	const Essaims = /*[[#{Essaims}]]*/null;
 	const buttontextprint = /*[[#{buttontextprint}]]*/null;
 	const buttontextcol = /*[[#{buttontextcol}]]*/null;
@@ -16,6 +16,12 @@
 	const urlDispLot = /*[[@{/evenement/essaim/dispersionLot/}]]*/null;
 	const urlMarkLot = /*[[@{/evenement/essaim/marquageLot/}]]*/null;
 	const selectEssTrt = /*[[#{selectessaimstraiter}]]*/null;
+	const evComm = /*[[#{evenementsCommentaire}]]*/null;
+	const evSucre = /*[[#{evenementsSucre}]]*/null;
+	const evTrait = /*[[#{evenementsTraitement}]]*/null;
+	const evCadre = /*[[#{evenementsCadres}]]*/null;
+	const disp = /*[[#{Marquer}]]*/null;
+	const marq = /*[[#{Disperser}]]*/null;
 </script>
 </head>
 <body>

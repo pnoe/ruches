@@ -202,15 +202,17 @@ public class EvenementRucheController {
 			Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 			if (rucheOpt.isPresent()) {
 				Ruche ruche = rucheOpt.get();
-				ruchesNoms.append(ruche.getNom() + ",");
+				ruchesNoms.append(ruche.getNom() + ", ");
 				rIds.append(ruche.getId() + ",");
 			} else {
 				// on continue le traitement des autres ruches
 				logger.error(Const.IDRUCHEXXINCONNU, rucheId);
 			}
 		}
-		ruchesNoms.deleteCharAt(ruchesNoms.length() - 1);
-		rIds.deleteCharAt(rIds.length() - 1);
+		if (ruchesNoms.length() > 2) {
+			ruchesNoms.delete(ruchesNoms.length() - 2, ruchesNoms.length());
+			rIds.deleteCharAt(rIds.length() - 1);
+		}
 		model.addAttribute("ruchesNoms", ruchesNoms);
 		model.addAttribute("rIds", rIds);
 		return "ruche/rucheCommentaireLotForm";

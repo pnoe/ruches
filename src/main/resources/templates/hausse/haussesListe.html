@@ -4,12 +4,13 @@
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsruches}"></script>
 <script th:inline="javascript">
-	/* exported	Hausses, buttTxtPrint, buttTxtCol, urlCommLot, selectHaTrait */
+	/* exported	Hausses, buttTxtPrint, buttTxtCol, urlCommLot, selectHaTrait, eveComm */
 	const Hausses = /*[[#{Hausses}]]*/null;
 	const buttTxtPrint = /*[[#{buttontextprint}]]*/null;
 	const buttTxtCol = /*[[#{buttontextcol}]]*/null;
 	const urlCommLot = /*[[@{/evenement/hausse/commentaireLot/}]]*/null;
 	const selectHaTrait = /*[[#{selecthaussestraiter}]]*/null;
+	const eveComm = /*[[#{evenementsCommentaire}]]*/null;
 </script>
 </head>
 <body>

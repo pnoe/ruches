@@ -1,7 +1,5 @@
 package ooioo.ruches.evenement;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -248,15 +246,17 @@ public class EvenementEssaimController {
 			Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 			if (essaimOpt.isPresent()) {
 				Essaim essaim = essaimOpt.get();
-				essaimsNoms.append(essaim.getNom() + ",");
+				essaimsNoms.append(essaim.getNom() + ", ");
 				eIds.append(essaim.getId() + ",");
 			} else {
 				// on continue le traitement des autres essaims
 				logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 			}
 		}
-		essaimsNoms.deleteCharAt(essaimsNoms.length() - 1);
-		eIds.deleteCharAt(eIds.length() - 1);
+		if (essaimsNoms.length() > 2) {
+			essaimsNoms.delete(essaimsNoms.length() - 2, essaimsNoms.length());
+			eIds.deleteCharAt(eIds.length() - 1);
+		}
 		model.addAttribute("essaimsNoms", essaimsNoms);
 		model.addAttribute("eIds", eIds);
 	}

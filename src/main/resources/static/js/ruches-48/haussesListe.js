@@ -1,5 +1,5 @@
 /* globals
-	Hausses, buttTxtPrint, buttTxtCol, urlCommLot, selectHaTrait, dtListe
+	Hausses, buttTxtPrint, buttTxtCol, urlCommLot, selectHaTrait, dtListe, eveComm
 */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	table.on('select deselect', updateLinks);
 	co.addEventListener('click', event => {
 		if (event.target.getAttribute('href') === '#') {
-			alert(selectHaTrait);
+			alert(eveComm + ' : ' + selectHaTrait);
 		}
 	});
 });

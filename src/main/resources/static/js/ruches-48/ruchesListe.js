@@ -1,5 +1,5 @@
 /* globals
-	Ruches, buttTxtPrint, buttTxtCol, urlCommLot, selectRuTrait, dtListe
+	Ruches, buttTxtPrint, buttTxtCol, urlCommLot, selectRuTrait, dtListe, eveComm
 */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	table.on('select deselect', updateLinks);
 	co.addEventListener('click', event => {
 		if (event.target.getAttribute('href') === '#') {
-			alert(selectRuTrait);
+			alert(eveComm + ' : ' + selectRuTrait);
 		}
 	});
 });

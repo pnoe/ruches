@@ -188,15 +188,17 @@ public class EvenementHausseController {
 			Optional<Hausse> hausseOpt = hausseRepository.findById(hausseId);
 			if (hausseOpt.isPresent()) {
 				Hausse hausse = hausseOpt.get();
-				haussesNoms.append(hausse.getNom() + ",");
+				haussesNoms.append(hausse.getNom() + ", ");
 				hIds.append(hausse.getId() + ",");
 			} else {
 				// on continue le traitement des autres hausses
 				logger.error(Const.IDHAUSSEXXINCONNU, hausseId);
 			}
 		}
-		haussesNoms.deleteCharAt(haussesNoms.length() - 1);
-		hIds.deleteCharAt(hIds.length() - 1);
+		if (haussesNoms.length() > 2) {
+			haussesNoms.delete(haussesNoms.length() - 2, haussesNoms.length());
+			hIds.deleteCharAt(hIds.length() - 1);
+		}
 		model.addAttribute("haussesNoms", haussesNoms);
 		model.addAttribute("hIds", hIds);
 		return "hausse/hausseCommentaireLotForm";
