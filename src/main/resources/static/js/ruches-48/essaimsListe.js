@@ -11,13 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
 	const ca = document.getElementById('cadre');
 	const di = document.getElementById('dispersion');
 	const ma = document.getElementById('marquage');
-
 	const els = [[tr, urlTraitLot], [su, urlSucreLot], [co, urlCommLot]
 		, [ca, urlCadreLot], [di, urlDispLot], [ma, urlMarkLot]];
-	let noms = '';
 	function updateLinks(_e, _dt, type) { // }, indexes) {
 		if (type === 'row') {
-			noms = '';
+			let noms = '';
 			table.rows({ selected: true }).data().pluck(0).each(function(value) { // , index) {
 				const a = document.createElement('template');
 				a.innerHTML = value;
