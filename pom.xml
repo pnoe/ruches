@@ -172,8 +172,13 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- -->
-
+			<!-- Pour exclure un éventuel fichier local context.xml-->
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<packagingExcludes>META-INF/context.xml</packagingExcludes>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
