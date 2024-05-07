@@ -3,42 +3,15 @@
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:inline="javascript">
-		/* globals DataTable bootstrap */
+		/* globals bootstrap */
 		const buttontextprint = /*[[#{buttontextprint}]]*/null;
 		const buttontextcol = /*[[#{buttontextcol}]]*/null;
 		const ruchersProdRecolte = /*[[#{ruchersProdRecolte}]]*/null;
 		document.addEventListener('DOMContentLoaded', () => {
+			// dtListe est dans include.js
+			dtListe('statistiques', ruchersProdRecolte, buttontextprint, buttontextcol, 'portrait');
 			new bootstrap.Popover(document.getElementsByClassName('bi-question-lg')[0], {
-				html: true
-			});
-			const table = new DataTable('#statistiques', {
-				scrollX: true,
-				layout: {
-					topStart: {
-						buttons: [
-							'csv',
-							{
-								extend: 'pdfHtml5',
-								exportOptions: { columns: ':visible' },
-								customize: function(doc) {
-									let title = ruchersProdRecolte + ' ' + (new Date()).toLocaleDateString();
-									const inputSearch = table.search();
-									if (inputSearch.length !== 0) {
-										title += ' <' + inputSearch + '>';
-									}
-									doc.content[0].text = title;
-								}
-							},
-							{
-								extend: 'print', text: buttontextprint,
-								exportOptions: { columns: ':visible' },
-							},
-							{ extend: 'colvis', text: buttontextcol },
-							'pageLength'
-						]
-					}
-				}				
-			});
+				html: true});
 		});
 	</script>
 </head>
@@ -65,6 +38,7 @@
 			<thead>
 				<tr>
 					<th th:text="#{rucher}"></th>
+					<th th:text="#{actif}"></th>
 					<th th:text="#{recolte}"></th>
 					<th th:text="#{Total}"></th>
 					<th th:text="#{Max}"></th>
@@ -76,13 +50,31 @@
 				<tr th:each="rucherPoids : ${ruchersPoids}">
 					<td><a th:href="@{'/rucher/'+${rucherPoids.id}}"
 						th:text="${rucherPoids.nom}"></a></td>
+					<td th:text="${rucherPoids.actif == '1'}? #{oui} : #{non}"></td>
 					<td th:text="${rucherPoids.nbRecoltes}"></td>
 					<td th:text="${rucherPoids.pTotal}"></td>
-					<td th:text="${rucherPoids.pMax}"></td>
-					<td th:text="${rucherPoids.pMin}"></td>
+					<td th:if="${rucherPoids.idMax == '0'}"></td>
+					<td th:unless="${rucherPoids.idMax == '0'}"><a
+						th:href="@{'/recolte/'+${rucherPoids.idMax}}"
+						th:text="${rucherPoids.pMax}"></a></td>
+					<td th:if="${rucherPoids.idMin == '0'}"></td>
+					<td th:unless="${rucherPoids.idMin == '0'}"><a
+						th:href="@{'/recolte/'+${rucherPoids.idMin}}"
+						th:text="${rucherPoids.pMin}"></a></td>
 					<td th:text="${rucherPoids.pMoyen}"></td>
 				</tr>
 			</tbody>
+			<tfoot>
+				<tr>
+					<th th:text="#{rucher}"></th>
+					<th th:text="#{actif}"></th>
+					<th th:text="#{recolte}"></th>
+					<th th:text="#{Total}"></th>
+					<th th:text="#{Max}"></th>
+					<th th:text="#{Min}"></th>
+					<th th:text="#{Moyen}"></th>
+				</tr>
+			</tfoot>
 		</table>
 	</div>
 	<footer th:replace="~{include::footer}"></footer>

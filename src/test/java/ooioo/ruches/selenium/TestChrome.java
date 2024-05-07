@@ -633,7 +633,7 @@ public class TestChrome {
 	void adminLog() {
 		driver.get(baseUrl + "admin/logs/logfile");
 		// La page de log contient la classe d'authentification
-		assertTrue(driver.getPageSource().contains("ooioo.ruches.SecurityConfig.onAuthenticationSuccess"));
+		assertTrue(driver.getPageSource().contains("o.r.SecurityConfig.onAuthenticationSuccess"));
 	}
 
 	@Test

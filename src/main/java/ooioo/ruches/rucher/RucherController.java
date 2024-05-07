@@ -283,7 +283,7 @@ public class RucherController {
 					if (dr.getTemps() == 0) {
 						vitesse.add(null);
 					} else {
-						vitesse.add(0.06f * (dr.getDist())/dr.getTemps());
+						vitesse.add(0.06f * (dr.getDist()) / dr.getTemps());
 					}
 				}
 				double diametreTerre = ((rr.getAltitude() == null) ? 0 : rr.getAltitude())
@@ -392,17 +392,29 @@ public class RucherController {
 		Integer pMin; // poids de miel min lors d'une récolte
 		int nbRecoltes;
 		for (Rucher rucher : ruchers) {
+			if (rucher.getDepot()) {
+				// Pas de production de miel dans le dépôt.
+				continue;
+			}
 			pTotal = 0;
 			pMax = 0;
 			pMin = Integer.MAX_VALUE;
 			nbRecoltes = 0;
+			Long idMax = 0l;
+			Long idMin = 0l;
 			for (Recolte recolte : recoltes) {
 				Integer poids = recolteHausseRepository.findPoidsMielByRucherByRecolte(rucher.getId(), recolte.getId());
 				if (poids != null) {
 					nbRecoltes++;
 					pTotal += poids;
-					pMax = Math.max(pMax, poids);
-					pMin = Math.min(pMin, poids);
+					if (poids > pMax) {
+						pMax = poids;
+						idMax = recolte.getId();
+					}
+					if (poids < pMin) {
+						pMin = poids;
+						idMin = recolte.getId();
+					}
 				}
 			}
 			if (pMin == Integer.MAX_VALUE) {
@@ -411,10 +423,13 @@ public class RucherController {
 			Map<String, String> rucherPoids = new HashMap<>();
 			rucherPoids.put("nom", rucher.getNom());
 			rucherPoids.put("id", rucher.getId().toString());
-			rucherPoids.put("pTotal", decimalFormat.format(pTotal / 1000.0));
+			rucherPoids.put("actif", rucher.getActif() ? "1" : "0");
+			rucherPoids.put("pTotal", nbRecoltes == 0 ? "" : decimalFormat.format(pTotal / 1000.0));
 			rucherPoids.put("pMax", decimalFormat.format(pMax / 1000.0));
+			rucherPoids.put("idMax", idMax.toString());
 			rucherPoids.put("pMin", decimalFormat.format(pMin / 1000.0));
-			if (nbRecoltes <= 0) {
+			rucherPoids.put("idMin", idMin.toString());
+			if (nbRecoltes == 0) {
 				rucherPoids.put("pMoyen", "");
 			} else {
 				float pMoyen = pTotal / (float) nbRecoltes;

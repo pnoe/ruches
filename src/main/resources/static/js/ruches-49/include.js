@@ -26,13 +26,23 @@ $.extend(true, $.fn.dataTable.defaults, {
 	pageLength: parseInt(datatPageLength),
 });
 
+// dtListe création d'un tableau datatables
+//  idTable : l'id de la table html
+//  titre : le titre pdf
+//  txtPrint : le titre du bouton imprimer
+//  txtCol : le titre du bouton visibilité
+//  orientation : pour le pdf 'portrait' ou 'landscape'
 function dtListe(idTable, titre, txtPrint, txtCol, orientation) {
 	// Pour forcer la visibilité des colonnes en pdf
 	// exportOptions: { columns: '0:visible, 1:visible... }
 	// car bug datatables avec colspan
-	const tbodyTr = document.querySelectorAll('#essaims tbody tr');
-	const visib = tbodyTr.length === 0 ? ':visible' :
-		[...Array(tbodyTr[0].cells.length).keys()].map(x => x + ':visIdx');
+	//  si pas de colspan dans les titres, inutile (seule la liste des essaims a des colspans)
+	let visib = ':visible';
+	if (idTable === 'essaims') {
+		const tbodyTr = document.querySelectorAll('#essaims tbody tr');
+		visib = tbodyTr.length === 0 ?
+			':visible' : [...Array(tbodyTr[0].cells.length).keys()].map(x => x + ':visIdx');
+	}
 	const table = new DataTable('#' + idTable, {
 		select: { style: 'multi+shift' },
 		scrollX: true,
@@ -44,11 +54,14 @@ function dtListe(idTable, titre, txtPrint, txtCol, orientation) {
 						extend: 'pdfHtml5',
 						exportOptions: { columns: visib },
 						customize: function(doc) {
+							// title pdf = titre passé en paramètre + date + ...
 							let title = titre + ' ' + (new Date()).toLocaleDateString();
 							const inputSearch = table.search();
+							//  titre + chaîne de recherche globale datatable
 							if (inputSearch.length !== 0) {
 								title += ' <' + inputSearch + '>';
 							}
+							// titre + chaînes de recherche dans le footer
 							table
 								.columns()
 								.every(function() {
