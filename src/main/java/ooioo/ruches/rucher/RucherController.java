@@ -407,7 +407,8 @@ public class RucherController {
 				if (poids != null) {
 					nbRecoltes++;
 					pTotal += poids;
-					if (poids > pMax) {
+					if (poids >= pMax) {
+						// >= pour initialiser idMax si poids de miel dans les hausses à 0.
 						pMax = poids;
 						idMax = recolte.getId();
 					}
