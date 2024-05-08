@@ -397,18 +397,18 @@ public class RucherController {
 				continue;
 			}
 			pTotal = 0;
-			pMax = 0;
+			pMax = -1;
 			pMin = Integer.MAX_VALUE;
 			nbRecoltes = 0;
 			Long idMax = 0l;
 			Long idMin = 0l;
+			// Le template n'affiche pas le max si IdMax = 0 et idem avec min.
 			for (Recolte recolte : recoltes) {
 				Integer poids = recolteHausseRepository.findPoidsMielByRucherByRecolte(rucher.getId(), recolte.getId());
 				if (poids != null) {
 					nbRecoltes++;
 					pTotal += poids;
-					if (poids >= pMax) {
-						// >= pour initialiser idMax si poids de miel dans les hausses à 0.
+					if (poids > pMax) {
 						pMax = poids;
 						idMax = recolte.getId();
 					}
@@ -417,9 +417,6 @@ public class RucherController {
 						idMin = recolte.getId();
 					}
 				}
-			}
-			if (pMin == Integer.MAX_VALUE) {
-				pMin = 0;
 			}
 			Map<String, String> rucherPoids = new HashMap<>();
 			rucherPoids.put("nom", rucher.getNom());
