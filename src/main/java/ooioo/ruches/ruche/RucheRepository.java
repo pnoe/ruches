@@ -17,6 +17,31 @@ import ooioo.ruches.rucher.Rucher;
 @RepositoryRestResource(collectionResourceRel = "rucheRepository")
 public interface RucheRepository extends CrudRepository<Ruche, Long> {
 
+	// Nombre de ruchers actifs ayant des ruches de production actives avec des
+	// essaims.
+	@Query(value = """
+			select count(distinct rucher)
+			  from Ruche
+			  where active = true
+			    and rucher.actif = true
+			    and essaim is not null
+			    and production = true
+			""")
+	Integer countRucherAvecRuches();
+
+	// Nombre de ruchers actifs ayant des ruches de production actives avec des
+	// essaims et des hausses.
+	@Query(value = """
+			select count(distinct r.rucher)
+			  from Ruche r, Hausse h
+			  where r.active = true
+			    and r.rucher.actif = true
+			    and r.essaim is not null
+			    and r.production = true
+			    and h.ruche = r
+			""")
+	Integer countRucherAvecRuchesEtHausses();
+
 	// Nombre de ruches créées dans l'année passée en paramètre.
 	@Query(value = """
 			select count(*)

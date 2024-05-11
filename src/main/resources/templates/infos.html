@@ -34,6 +34,10 @@
 			<th:block th:text="#{ElementActifUniq}"></th:block>
 			<ul>
 				<li th:text="|${nbRuchers} #{ruchersdepot(${nbRuchers<2}?'':'s')}|"></li>
+				<li
+					th:text="|${nbRrAvecRuches} #{ruchersRuches(${nbRuchers<2}?'':'s')}|"></li>
+				<li
+					th:text="|${nbRrAvecRuchesEtHausses} #{ruchersHausses(${nbRuchers<2}?'':'s')}|"></li>
 				<li th:if="${nbRuches} eq 0" th:text="|${nbRuches} #{rucheS('')}|"></li>
 				<li th:unless="${nbRuches} eq 0"
 					th:text="|${nbRuches} #{rucheS(${nbRuches<2}?'':'s')} (${nbRuchesProd} #{production} + ${nbRuchesElev} #{elevage})|"></li>

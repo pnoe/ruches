@@ -58,6 +58,14 @@ public class AccueilService {
 	void infos(Model model) {
 		// Nombre de ruchers actifs.
 		model.addAttribute("nbRuchers", rucherRepository.countByActifTrue());
+		// Nombre de ruchers actifs ayant des ruches de production actives avec des
+		// essaims.
+		Integer nbRrAvecRuches = rucheRepository.countRucherAvecRuches();
+		model.addAttribute("nbRrAvecRuches", nbRrAvecRuches);
+		// Nombre de ruchers actifs ayant des ruches de production actives avec des
+		// essaims et des hausses.
+		Integer nbRrAvecRuchesEtHausses = rucheRepository.countRucherAvecRuchesEtHausses();
+		model.addAttribute("nbRrAvecRuchesEtHausses", nbRrAvecRuchesEtHausses);
 		// Nombre de ruches actives, nb production, nb élevage
 		long nbRuches = rucheRepository.countByActiveTrue();
 		long nbRuchesProd = rucheRepository.countByActiveTrueAndProductionTrue();
