@@ -47,7 +47,19 @@
 			</tbody>
 		</table>
 		<br />
-		<h6 th:text="#{ajouterHausses}"></h6>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col">
+					<h6 th:text="#{ajouterHausses}"></h6>
+				</div>
+				<div class="col">
+					<span class="padicons"> <input type="checkbox" id="toutes"
+						 th:checked="${tth}" /> <label
+						for="toutes" th:text="#{ToutesH}"></label>
+					</span>
+				</div>
+			</div>
+		</div>
 		<table class="table table-bordered table-striped" id="ajoutHausses">
 			<thead>
 				<tr>

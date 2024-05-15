@@ -34,6 +34,8 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 			""")
 	List<IdDateNoTime> findByOrderByDateAcquisition();
 
+	// Liste des hausses pour ajout sur la ruche d'id rucheId. Toutes les hausses
+	// actives sauf celles posées sur la ruche rucheId.
 	@Query(value = """
 			select h
 				from Hausse h
@@ -41,6 +43,19 @@ public interface HausseRepository extends CrudRepository<Hausse, Long> {
 				  and (ruche is null or ruche.id <> :rucheId)
 			""")
 	List<Hausse> findHaussesPourAjout(Long rucheId);
+
+	// Liste des hausses pour ajout sur la ruche d'id rucheId. Toutes les hausses
+	// actives sauf celles posées sur la ruche rucheId et sauf celles posées sur des
+	// ruches d'un autre rucher. nativeQuery nécessaire pour left join, left join
+	// nécessaire sinon on n'a pas les ruche is null dans le résultat.
+	@Query(value = """
+			select h.*
+				from hausse h
+				left join ruche r on h.ruche_id = r.id
+				where h.active = true
+				  and (r is null or (r.id <> :rucheId and r.rucher_id = :rucherId))
+			""", nativeQuery = true)
+	List<Hausse> findHaussesPourAjout(Long rucheId, Long rucherId);
 
 	Iterable<Hausse> findAllByOrderByNom();
 

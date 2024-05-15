@@ -446,13 +446,14 @@ public class RucheController {
 	/**
 	 * Afficher une ruche pour le choix des hausses à ajouter/retirer.
 	 */
-	@GetMapping("/hausses/{rucheId}")
-	public String ajoutRetraitHausses(Model model, @PathVariable long rucheId) {
+	@GetMapping("/hausses/{rucheId}/{toutes}")
+	public String ajoutRetraitHausses(Model model, @PathVariable long rucheId, @PathVariable boolean toutes) {
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 		if (rucheOpt.isPresent()) {
 			Ruche ruche = rucheOpt.get();
 			Iterable<Hausse> haussesRuche = hausseRepository.findByRucheIdOrderByOrdreSurRuche(rucheId);
-			List<Hausse> haussesRucheAjout = hausseRepository.findHaussesPourAjout(rucheId);
+			List<Hausse> haussesRucheAjout = toutes ? hausseRepository.findHaussesPourAjout(rucheId) :
+				hausseRepository.findHaussesPourAjout(rucheId, ruche.getRucher().getId());
 			model.addAttribute(Const.RUCHE, ruche);
 			model.addAttribute("haussesRuche", haussesRuche);
 			model.addAttribute("haussesRucheAjout", haussesRucheAjout);
@@ -545,7 +546,7 @@ public class RucheController {
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
 			return Const.INDEX;
 		}
-		return "redirect:/ruche/hausses/{rucheId}";
+		return "redirect:/ruche/hausses/{rucheId}/false";
 	}
 
 	/**
@@ -595,7 +596,7 @@ public class RucheController {
 					messageSource.getMessage(Const.IDRUCHEINCONNU, null, LocaleContextHolder.getLocale()));
 			return Const.INDEX;
 		}
-		return "redirect:/ruche/hausses/{rucheId}";
+		return "redirect:/ruche/hausses/{rucheId}/false";
 	}
 
 	/**

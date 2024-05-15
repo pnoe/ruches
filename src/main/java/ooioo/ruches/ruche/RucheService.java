@@ -131,7 +131,10 @@ public class RucheService {
 	 * après suppression d'une hausse par exemple.
 	 */
 	public void ordonneHaussesRuche(long rucheId) {
+		// haussesRuche la liste des hausses de la ruche d'id rucheId, triée par ordre
+		// sur ruche.
 		Iterable<Hausse> haussesRuche = hausseRepository.findByRucheIdOrderByOrdreSurRuche(rucheId);
+		// pour mise à jour de toutes les hausses modifiées d'un seul ordre saveAll.
 		List<Hausse> haussesToUpdate = new ArrayList<>();
 		int i = 1;
 		for (Hausse hr : haussesRuche) {

@@ -2,6 +2,16 @@
  */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
+
+	const ttChk = document.getElementById('toutes');
+	if (location.href.endsWith('true')) {
+		ttChk.checked = true;
+	}
+	ttChk.addEventListener('click', event => {
+		location.href = location.href.slice(0, location.href.lastIndexOf('/'))
+			+ '/' + event.target.checked;
+	});
+
 	const tableRetrait = new DataTable('#retraitHausses', {
 		paging: false,
 		searching: false,
