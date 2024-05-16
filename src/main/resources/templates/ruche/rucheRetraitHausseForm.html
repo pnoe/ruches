@@ -32,9 +32,9 @@
 			<div class="col">
 				<h1 class="item">
 					<th:block th:text="#{hausseXX(${hausse.nom})}"></th:block>
-					<a th:href="@{'/ruche/hausses/'+${ruche.id}}"
-						th:text="#{retraitDeLaruche(${ruche.nom})}"></a>
-
+					<span th:text="#{retraitDeLaruche}" style="color: red"></span> <a
+						th:href="@{'/ruche/hausses/'+${ruche.id}}+'/false'"
+						th:text="#{ruche} + ' ' + ${ruche.nom}"></a>
 				</h1>
 			</div>
 		</div>

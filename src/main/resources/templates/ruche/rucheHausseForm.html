@@ -32,15 +32,16 @@
 			<div class="col">
 				<h1 class="item">
 					<th:block th:text="#{hausseXX(${hausse.nom})}"></th:block>
-					<a th:href="@{'/ruche/hausses/'+${ruche.id}}"
+					<a th:href="@{'/ruche/hausses/'+${ruche.id}+'/false'}"
 						th:text="#{ajoutSurLaruche(${ruche.nom})}"></a>
 				</h1>
 			</div>
 		</div>
 		<div th:if="${hausse.ruche}" class="row">
 			<div class="col">
-				<a th:href="@{'/ruche/'+${hausse.ruche.id}}"
-					th:text="#{retraitDeLaruche(${hausse.ruche.nom})}"></a>
+				<span th:text="#{retraitDeLaruche}" style="color: red"></span> <a
+					th:href="@{'/ruche/'+${hausse.ruche.id}}"
+					th:text="#{ruche} + ' ' + ${hausse.ruche.nom}"></a>
 			</div>
 		</div>
 	</div>
