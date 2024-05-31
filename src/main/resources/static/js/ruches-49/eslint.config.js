@@ -10,8 +10,9 @@ module.exports = [
 			html: htmlPlugin
 		},
 		settings: {
-			'html/html-extensions"': ['.html']
+			'html/html-extensions': ['.html']
 		},
+		files: ['**/*.html', '**/*.js'],
 		rules: {
 			'array-callback-return': 'error',
 			'arrow-parens': ['error', 'as-needed'],
