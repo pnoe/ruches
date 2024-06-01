@@ -179,7 +179,6 @@ public class RucherController {
 			// liste des ruches de ce rucher
 			Iterable<Ruche> ruches = rucheRepository.findByRucherIdOrderByNom(rucherId);
 			model.addAttribute(Const.RUCHES, ruches);
-
 			List<Evenement> evesPesee = new ArrayList<>();
 			for (Ruche r : ruches) {
 				evesPesee.add((r.getEssaim() == null) ? null
@@ -304,6 +303,47 @@ public class RucherController {
 			return Const.INDEX;
 		}
 		return "rucher/rucherDists";
+	}
+
+	/**
+	 * Graphe des transhumances d'un rucher.
+	 *
+	 * @param model : on ajoute au model "histo" la liste des événements, "rucher"
+	 *              l'objet rucher (titre, lien)
+	 */
+	@GetMapping("/graphtranshum/{rucherId}")
+	public String graphTranshum(Model model, @PathVariable long rucherId) {
+		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
+		if (rucherOpt.isPresent()) {
+			Rucher rucher = rucherOpt.get();
+			model.addAttribute(Const.RUCHER, rucher);
+			// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date
+			// descendante avec les champs ruche et rucher non null.
+			List<Transhumance> histo = new ArrayList<>();
+			List<Transhumance> histoGroup = new ArrayList<>();
+			rucherService.transhum(rucher, evenementRepository.findAjoutRucheOK(), true, histo, histoGroup);
+			List<Long[]> datesNb = new ArrayList<>();
+			// Parcours pour dates croissantes
+			// Ajoute un nbre ruche à 0 un jour avant le premier Ajout
+			int hSize = histoGroup.size();
+
+			if (histoGroup.get(hSize - 1).etat().size() != 0) {
+				datesNb.add(new Long[] { 1000 * histoGroup.get(hSize - 1).date().toLocalDate().minusDays(1l)
+						.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), 0l });
+			}
+			for (int i = hSize; i-- > 0;) {
+				datesNb.add(new Long[] {
+						1000 * histoGroup.get(i).date().toLocalDate().toEpochSecond(LocalTime.MIN, ZoneOffset.UTC),
+						(long) histoGroup.get(i).etat().size() });
+			}
+			model.addAttribute("datesNb", datesNb);
+		} else {
+			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
+			model.addAttribute(Const.MESSAGE,
+					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
+			return Const.INDEX;
+		}
+		return "rucher/rucherGraphTransh";
 	}
 
 	/**
