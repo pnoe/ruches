@@ -9,9 +9,18 @@
 <script th:replace="~{include :: chartjs-adapter}"></script>
 <script th:replace="~{include :: jsruches}"></script>
 <script th:inline="javascript">
-	/* exported datesNb, ruchestxt */
+	/* exported datesNb, ruchestxt, ruches, type, ajout, ajouttxt, retraittxt, datesRec, recNbRuch, pdsListe, pdsPPtxt */
 	const datesNb = /*[[${datesNb}]]*/null;
-	const ruchestxt = /*[[#{ruches}]]*/null;
+	const ruchestxt = /*[[#{Ruches}]]*/null;
+	const ruches = /*[[${ruches}]]*/null;
+	const type = /*[[${type}]]*/null;
+	const ajout = /*[[${ajout}]]*/null;
+	const ajouttxt = /*[[#{Ajout}]]*/null;
+	const retraittxt = /*[[#{Retrait}]]*/null;
+	const datesRec = /*[[${datesRec}]]*/null;
+	const recNbRuch = /*[[${recoltesNbRuches}]]*/null;
+	const pdsListe = /*[[${poidsListe}]]*/null;
+	const pdsPPtxt = /*[[#{poidsParRuches}]]*/null;
 </script>
 </head>
 <body>
@@ -22,7 +31,7 @@
 				<h1 class="item">
 					<a th:href="@{'/rucher/'+${rucher.id}}"
 						th:text="#{rucher}+' '+${rucher.nom}"></a>
-					<th:block th:text="#{sep}+#{GrapheNbRuches}"></th:block>
+					<th:block th:text="#{sep}+#{transhumances}"></th:block>
 				</h1>
 			</div>
 			<div class="col" th:unless="${#arrays.isEmpty(datesNb)}">

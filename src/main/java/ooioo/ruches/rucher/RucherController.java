@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -322,21 +323,65 @@ public class RucherController {
 			List<Transhumance> histo = new ArrayList<>();
 			List<Transhumance> histoGroup = new ArrayList<>();
 			rucherService.transhum(rucher, evenementRepository.findAjoutRucheOK(), true, histo, histoGroup);
-			List<Long[]> datesNb = new ArrayList<>();
 			// Parcours pour dates croissantes
 			// Ajoute un nbre ruche à 0 un jour avant le premier Ajout
 			int hSize = histoGroup.size();
-
-			if (histoGroup.get(hSize - 1).etat().size() != 0) {
+			// datesBb les dates des transhumances et le nombre de ruches dans le rucher
+			List<Long[]> datesNb = new ArrayList<>(hSize + 1);
+			// ruches les noms des ruches dans le rucher à chaque date
+			List<String> ruches = new ArrayList<>(hSize + 1);
+			// type 1 ajout, 0 retrait
+			List<Integer> type = new ArrayList<>(hSize + 1);
+			// ajout les noms des ruches ajoutées
+			List<String> ajout = new ArrayList<>(hSize + 1);
+			if ((hSize > 0) && (histoGroup.get(hSize - 1).etat().size() != 0)) {
 				datesNb.add(new Long[] { 1000 * histoGroup.get(hSize - 1).date().toLocalDate().minusDays(1l)
 						.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), 0l });
+				ruches.add("");
+				ajout.add("");
+				type.add(0);
 			}
 			for (int i = hSize; i-- > 0;) {
 				datesNb.add(new Long[] {
 						1000 * histoGroup.get(i).date().toLocalDate().toEpochSecond(LocalTime.MIN, ZoneOffset.UTC),
 						(long) histoGroup.get(i).etat().size() });
+				type.add(histoGroup.get(i).type() ? 1 : 0);
+				ruches.add(String.join(",", histoGroup.get(i).etat().stream().sorted().collect(Collectors.toList())));
+				ajout.add(String.join(",", histoGroup.get(i).ruche().stream().sorted().collect(Collectors.toList())));
 			}
 			model.addAttribute("datesNb", datesNb);
+			model.addAttribute("ruches", ruches);
+			model.addAttribute("type", type);
+			model.addAttribute("ajout", ajout);
+
+			// Calcul du poids de miel par récoltes pour ce rucher.
+			List<Recolte> recoltes = recolteRepository.findAllByOrderByDateAsc();
+			// Seules les récoltes du rucher sont ajoutées aux ArrayList suivantes
+			List<Float> poidsListe = new ArrayList<>();
+			List<Recolte> recoltesListe = new ArrayList<>();
+			List<Integer> recoltesNbRuches = new ArrayList<>();
+			for (Recolte recolte : recoltes) {
+				Integer poids = recolteHausseRepository.findPoidsMielByRucherByRecolte(rucher.getId(), recolte.getId());
+				if (poids != null) {
+					recoltesListe.add(recolte);
+					poidsListe.add(poids / 1000f);
+					// nombre de ruche du rucher rucherId dans cette récolte
+					recoltesNbRuches
+							.add(recolteHausseRepository.countRucheByRecolteByRucher(recolte.getId(), rucherId));
+				}
+			}
+			
+			List<Long> datesRec = new ArrayList<>(recoltesListe.size());
+			for (Recolte rec : recoltesListe) {
+				datesRec.add(rec.getDate().toEpochSecond( ZoneOffset.UTC));
+			}
+			
+			model.addAttribute("datesRec", datesRec);
+			// model.addAttribute("recoltesListe", recoltesListe);
+			model.addAttribute("recoltesNbRuches", recoltesNbRuches);
+			model.addAttribute("poidsListe", poidsListe);
+			// model.addAttribute("poidsTotal", poidsTotal);
+
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,

@@ -1,4 +1,5 @@
-/* globals Chart, datesNb, ruchestxt */
+/* globals Chart, datesNb, ruchestxt, ruches, type, ajout, ajouttxt, retraittxt, 
+datesRec, recNbRuch, pdsListe, pdsPPtxt */
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -11,6 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
 				label: ruchestxt,
 				yAxisID: 'y',
 				data: datesNb
+			}, {
+				type: 'line',
+				label: 'Récolte',
+				yAxisID: 'yr',
+				data: datesRec.map((v, i) => { return [v * 1000, pdsListe[i]]; }),
+				pointStyle: 'rectRot'
 			}]
 		},
 		options: {
@@ -29,6 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
 				},
 				y: {
 					position: 'left'
+				},
+				yr: {
+					position: 'right'
 				}
 			},
 			plugins: {
@@ -48,6 +58,24 @@ document.addEventListener('DOMContentLoaded', () => {
 							enabled: true
 						},
 						mode: 'x'
+					}
+				},
+				tooltip: {
+					usePointStyle: true,
+					callbacks: {
+						afterLabel: function(context) {
+							if (context.datasetIndex === 0) {
+								if (ajout[context.dataIndex] !== '') {
+									return [ruches[context.dataIndex],
+									((type[context.dataIndex] === 1) ? ajouttxt : retraittxt) +
+									' ' + ajout[context.dataIndex].split(',').length +
+									': ' + ajout[context.dataIndex]];
+								}
+							} else {
+								return [ruchestxt + ': ' + recNbRuch[context.dataIndex],
+								pdsPPtxt + ': ' + (pdsListe[context.dataIndex] / recNbRuch[context.dataIndex]).toFixed(2)];
+							}
+						}
 					}
 				},
 				legend: {
