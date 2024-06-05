@@ -91,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 	document.getElementById('scales').addEventListener('click', e => {
 		graphe.options.scales.y.display = e.target.checked;
+		graphe.options.scales.yr.display = e.target.checked;
 		graphe.update();
 	});
 });
