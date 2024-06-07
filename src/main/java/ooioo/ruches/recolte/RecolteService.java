@@ -97,8 +97,7 @@ public class RecolteService {
 				nbEssaims[annee - debutAnnee] += ChronoUnit.DAYS.between(dDebut, dFin) / (nbJoursAnnee);
 			}
 		}
-		// faire l'arrondi de nbEssaims dans un tableau d'int nbIEssaims
-		// et calculer le poids de miel moyen pas essaim par année
+		// nbIEssaims : poids de miel moyen pas essaim pour chaque année
 		int[] nbIEssaims = new int[dureeAns];
 		for (int i = 0; i < dureeAns; i++) {
 			nbIEssaims[i] = Math.round(poidsMielHausses[i] / nbEssaims[i]);
