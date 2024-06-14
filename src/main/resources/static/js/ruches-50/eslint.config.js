@@ -32,6 +32,7 @@ module.exports = [
 			'no-lonely-if': 'error',
 			'no-negated-condition': 'error',
 			'no-self-compare': 'error',
+			'no-sparse-arrays': 'error',
 			'no-template-curly-in-string': 'error',
 			'no-unmodified-loop-condition': 'error',
 			'no-unreachable-loop': 'error',
