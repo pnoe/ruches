@@ -11,13 +11,12 @@
 		<closure-compiler.version>2.30.0</closure-compiler.version>
 		<ortools.version>9.10.4067</ortools.version>
 		<java.version>22</java.version>
-		<selenium-java.version>4.15.0</selenium-java.version>
 		<ruches.js.version>50</ruches.js.version>
 	</properties>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.2</version>
+		<version>3.3.3</version>
 	</parent>
 	<dependencies>
 		<dependency>
@@ -81,7 +80,6 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>${selenium-java.version}</version><!--$NO-MVN-MAN-VER$-->
 			<scope>test</scope>
 		</dependency>
 		<dependency>

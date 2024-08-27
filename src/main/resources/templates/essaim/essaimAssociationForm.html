@@ -57,7 +57,10 @@
 				<h1 class="item">
 					<a th:href="@{'/essaim/associe/'+${essaimId}}"
 						th:text="#{association}+' '+#{essaim}+' '+${essaim.nom}"></a>
-					<th:block th:text="#{sep}+#{ruche} + ' ' + ${ruche.nom}"></th:block>
+					<th:block th:text="#{sep}+#{ruche}+' '+${ruche.nom} 
+					  +' ('+#{rucher}+' '+${ruche.rucher.nom}+
+					  (${ruche.essaim}?(', '+#{essaim}+' '+${ruche.essaim.nom}):'')+
+					  ')'"></th:block>
 				</h1>
 			</div>
 		</div>
