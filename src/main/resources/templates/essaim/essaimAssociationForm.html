@@ -11,6 +11,12 @@
 		const timeFirst = /*[[${timeFirst}]]*/ null;
 		const rucherucherid = /*[[${ruche.rucher?.id}]]*/ null;
 		const ruchesourcerucherid = /*[[${rucheSource?.rucher?.id}]]*/ null;
+		const ruche = /*[[${ruche}]]*/ null;
+		const ruchesource = /*[[${rucheSource}]]*/ null;
+		const ruchetxt = /*[[#{ruche}]]*/ null;
+		const essaimtxt = /*[[#{essaim}]]*/ null;
+		const ruchertxt = /*[[#{rucher}]]*/ null;
+		const essaim = /*[[${essaim}]]*/ null;
 		document.addEventListener('DOMContentLoaded', () => {
 			const swapCheck = document.getElementById('swapPositions');
 			$.validator.addMethod('greaterThanEqual', function (value, element, param) {
@@ -44,8 +50,22 @@
 					minDate: isChk ? dateFirst : false,
 					minTime: isChk ? timeFirst : false
 				});
+				afficheEtatEnreg();
 			}
 			if (swapCheck) {swapCheck.addEventListener('change', swapChange);}
+			const etatRucheSource = document.getElementById('etatRucheSource');
+			const deplacementE = document.getElementById('deplacementE');
+			function afficheEtatEnreg() {
+				if (ruchesource) {
+					etatRucheSource.textContent = ruchetxt + ' ' + ruchesource.nom + ' vide dans le rucher ' +
+						(swapCheck.checked?ruche.rucher.nom:ruchesource.rucher.nom);
+					deplacementE.textContent = 'L\'esaim ' + essaim.nom + 
+						(swapCheck.checked?' reste en place':' est déplacé');
+				}
+				etatRuche.textContent = ruchetxt + ' ' + ruche.nom + ', ' + essaimtxt + ' ' + essaim.nom + ' dans le rucher ' +
+					(swapCheck?.checked?ruchesource.rucher.nom:ruche.rucher.nom);
+			}
+			afficheEtatEnreg();
 		});
 	</script>
 </head>
@@ -57,11 +77,7 @@
 				<h1 class="item">
 					<a th:href="@{'/essaim/associe/'+${essaimId}}"
 						th:text="#{association}+' '+#{essaim}+' '+${essaim.nom}"></a>
-					<th:block
-						th:text="#{sep}+#{ruche}+' '+${ruche.nom} 
-					  +' ('+#{rucher}+' '+${ruche.rucher.nom}+
-					  (${ruche.essaim}?(', '+#{essaim}+' '+${ruche.essaim.nom}):'')+
-					  ')'"></th:block>
+					<th:block th:text="#{sep}+#{ruche}+' '+${ruche.nom}"></th:block>
 				</h1>
 			</div>
 		</div>
@@ -71,25 +87,32 @@
 					th:text="#{AttentionDipersion(${ruche.essaim.nom})}"></h1>
 			</div>
 		</div>
+		<div class="row" th:if="${ruche.essaim}"
+			th:text="#{positionRuchesE(${ruche.nom},${ruche.essaim.nom},${ruche.rucher.nom})}"></div>
+		<div class="row" th:unless="${ruche.essaim}"
+			th:text="#{positionRuches(${ruche.nom},${ruche.rucher.nom})}"></div>
+		<div class="row" th:if="${rucheSource}"
+			th:text="#{positionRuchesE(${rucheSource.nom},${rucheSource.essaim.nom},${rucheSource.rucher.nom})}"></div>
 	</div>
+	<br />
 	<form action="#"
 		th:action="@{'/essaim/ruche/associe/sauve/' + ${ruche.id} + '/' + ${essaim.id}}"
 		method="post" id="evenementForm">
 		<div th:replace="~{includeForm :: date}"></div>
 		<div th:replace="~{includeForm :: commentaire}"></div>
 		<div class="form-check" th:if="${rucheSource}">
-			<p th:if="${ruche.essaim}"
-				th:text="#{positionRuchesE(${ruche.nom},${ruche.essaim.nom},${ruche.rucher.nom})}"></p>
-			<p th:unless="${ruche.essaim}"
-				th:text="#{positionRuches(${ruche.nom},${ruche.rucher.nom})}"></p>
-			<p
-				th:text="#{positionRuchesE(${rucheSource.nom},${rucheSource.essaim.nom},${rucheSource.rucher.nom})}"></p>
-			<input class="form-check-input" type="checkbox" id="swapPositions" th:checked="${ruche.rucher.depot}"
-				name="swapPositions" /> <label class="form-check-label"
-				for="swapPositions"
+			<input class="form-check-input" type="checkbox" id="swapPositions"
+				th:checked="${ruche.rucher.depot}" name="swapPositions" /> <label
+				class="form-check-label" for="swapPositions"
 				th:text="#{echangePositionsRuches(${ruche.nom},${rucheSource.nom})}"></label>
 		</div>
-		<br /> <br />
+		<br />
+		<div th:text="'Si vous enregistrez vous aurez l\'état suivant :'"></div>
+		<div th:if="${ruche.essaim}"
+			th:text="#{essaim} + ' ' + ${ruche.essaim.nom} + ' dispersé'"></div>
+		<div th:if="${rucheSource}" id="deplacementE"></div> 	
+		<div id="etatRuche"></div>
+		<div th:if="${rucheSource}" id="etatRucheSource"></div>
 		<div th:replace="~{includeForm :: BtnForm}"></div>
 	</form>
 	<footer th:replace="~{include::footer}"></footer>
