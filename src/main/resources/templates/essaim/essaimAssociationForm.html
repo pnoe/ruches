@@ -9,15 +9,19 @@
 		const doitEtreSupA = /*[[#{doitEtreSupA}]]*/ null;
 		const dateFirst = /*[[${dateFirst}]]*/ null;
 		const timeFirst = /*[[${timeFirst}]]*/ null;
-		const rucherucherid = /*[[${ruche.rucher?.id}]]*/ null;
-		const ruchesourcerucherid = /*[[${rucheSource?.rucher?.id}]]*/ null;
 		const ruche = /*[[${ruche}]]*/ null;
 		const ruchesource = /*[[${rucheSource}]]*/ null;
 		const ruchetxt = /*[[#{ruche}]]*/ null;
+		const lEssaim = /*[[#{Lessaim}]]*/ null;
 		const essaimtxt = /*[[#{essaim}]]*/ null;
-		const ruchertxt = /*[[#{rucher}]]*/ null;
 		const essaim = /*[[${essaim}]]*/ null;
+		const resteEnPlace = /*[[#{resteEnPlace}]]*/ null;
+		const estDeplace = /*[[#{estDeplace}]]*/ null;
+		const videDansLeRuher = /*[[#{videDansLeRuher}]]*/ null;
+		const dansLeRucher = /*[[#{dansLeRucher}]]*/ null;
 		document.addEventListener('DOMContentLoaded', () => {
+			const rucherucherid = ruche.rucher?.id;
+			const ruchesourcerucherid = ruchesource?.rucher?.id;
 			const swapCheck = document.getElementById('swapPositions');
 			$.validator.addMethod('greaterThanEqual', function (value, element, param) {
 				return (swapCheck?.checked &&
@@ -55,15 +59,20 @@
 			if (swapCheck) {swapCheck.addEventListener('change', swapChange);}
 			const etatRucheSource = document.getElementById('etatRucheSource');
 			const deplacementE = document.getElementById('deplacementE');
+			const etrTxt = ruchetxt + ' ' + ruche.nom + ', ' + essaimtxt + ' ' + essaim.nom + ' ' + dansLeRucher + ' ';
+			let etrSTxt, deplTxt;
+			if (ruchesource) {
+				etrSTxt = ruchetxt + ' ' + ruchesource.nom + ' ' + videDansLeRuher + ' ';
+				deplTxt = lEssaim + ' ' + essaim.nom + ' ';
+			}
 			function afficheEtatEnreg() {
 				if (ruchesource) {
-					etatRucheSource.textContent = ruchetxt + ' ' + ruchesource.nom + ' vide dans le rucher ' +
+					etatRucheSource.textContent = etrSTxt +
 						(swapCheck.checked?ruche.rucher.nom:ruchesource.rucher.nom);
-					deplacementE.textContent = 'L\'esaim ' + essaim.nom + 
-						(swapCheck.checked?' reste en place':' est déplacé');
+					deplacementE.textContent = deplTxt +
+						(swapCheck.checked?resteEnPlace:estDeplace);
 				}
-				etatRuche.textContent = ruchetxt + ' ' + ruche.nom + ', ' + essaimtxt + ' ' + essaim.nom + ' dans le rucher ' +
-					(swapCheck?.checked?ruchesource.rucher.nom:ruche.rucher.nom);
+				etatRuche.textContent = etrTxt + (swapCheck?.checked?ruchesource.rucher.nom:ruche.rucher.nom);
 			}
 			afficheEtatEnreg();
 		});
@@ -110,7 +119,7 @@
 		<div th:text="'Si vous enregistrez vous aurez l\'état suivant :'"></div>
 		<div th:if="${ruche.essaim}"
 			th:text="#{essaim} + ' ' + ${ruche.essaim.nom} + ' dispersé'"></div>
-		<div th:if="${rucheSource}" id="deplacementE"></div> 	
+		<div th:if="${rucheSource}" id="deplacementE"></div>
 		<div id="etatRuche"></div>
 		<div th:if="${rucheSource}" id="etatRucheSource"></div>
 		<div th:replace="~{includeForm :: BtnForm}"></div>
