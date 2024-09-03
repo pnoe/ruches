@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		//  - elle n'a pas participé à des récoltes
 		//  - aucun événement ne la référence
 		if (recolteHausses) {
+			// recolteHausses true s'il existe des hausses de récolte associées à cette hausse
 			alert(haussesupp);
 		} else if (evenements) {
 			alert(supphausseeve);
@@ -26,17 +27,20 @@ document.addEventListener('DOMContentLoaded', () => {
 				haussenoms.pop();
 			}
 		}
-		// Saisi des noms des hausses à créer séparés par une virgule.
+		// Saisie des noms des hausses à créer séparés par une virgule.
 		const noms = prompt(nomhaussesv);
 		if (!noms) {
 			return;
 		}
 		const tabNomExiste = [];
 		const tabNomOk = [];
+		// filter supprime les noms vides ou blancs
+		// map trim supprime les blancs aux extrémités des noms
 		noms.split(',').filter(s => s.trim()).map(item => item.trim()).forEach(function(item) {
 			if (haussenoms.includes(item)) {
 				tabNomExiste.push(item);
 			} else {
+				// On va créer la hausse item
 				tabNomOk.push(item);
 				// Ce nom ne doit pas être réutilisé.
 				haussenoms.push(item);
@@ -59,9 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			annule();
 			return;
 		}
-		// Remplacé XMLHttpRequest par fetch
-		// https://developer.mozilla.org/fr/docs/Web/API/Fetch_API
-		// https://developer.mozilla.org/fr/docs/Web/API/Fetch_API/Using_Fetch
+		// Clone des hausses, appel de l'url hausse/clone/hausseid
 		fetch(`${urlclone}${hausseid}`, {
 			method: 'POST',
 			headers: {
