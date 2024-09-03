@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	document.getElementById('clone').addEventListener('click', function() {
-		// pour mémo ajout essaim dans essaimnoms
+		// Clone de l'essaim
 		let iajout = 0;
 		// pour retrait ruche vide
 		const ruchesvidesmem = [];
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 		// Saisie des couples nomEssaim;nomRuche séparés par une ","
 		const noms = prompt(nomessaimsvirgule);
-		if (noms === null || noms === '') {
+		if (!noms) {
 			return;
 		}
 		const tabNomExiste = [];
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			// ne nom de l'essaim
 			const ne = arr[0].trim();
 			// Si le nom de ruche est vide ou blanc, on passe à la ruche suivante
-			if ('' === ne) { continue; }
+			if (!ne) { continue; }
 			let nr = '';
 			// nr nom de la ruche
 			if (arr.length > 1) {
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				// ce nom ne doit pas être réutilisé
 				essaimnoms.push(ne);
 				iajout++;
-				if (nr === '') {
+				if (!nr) {
 					// pas de ruche
 					tabNomRucheOk.push('');
 				} else if (ruchesvidesnoms.includes(nr)) {
@@ -99,46 +99,54 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 		let prompterreur = '';
 		if (tabNomRucheIncorrect.length > 0) {
-			prompterreur = Ruchestxt + ' : ' + tabNomRucheIncorrect.join(',') + ' ' + nexistPasOuPasVidtxt;
+			prompterreur = `${Ruchestxt} : ${tabNomRucheIncorrect.join(',')} ${nexistPasOuPasVidtxt}`;
 		}
 		if (tabNomExiste.length > 0) {
 			if (prompterreur !== '') { prompterreur += '\n'; }
-			prompterreur += Essaimstxt + ' : ' + tabNomExiste.join(',') + ' ' + nomexistdejatxt;
+			prompterreur += `${Essaimstxt} : ${tabNomExiste.join(',')} ${nomexistdejatxt}`;
 			if (tabNomOk.length === 0) {
 				alert(prompterreur);
 				// Pas d'essaim ajouté
 				return;
 			}
-			if (!confirm(prompterreur + '. ' + creertxt + ' ' + tabNomOk.join(',') + ' ?')) {
+			if (!confirm(`${prompterreur}. ${creertxt} ${tabNomOk.join(',')} ?`)) {
 				annule();
 				return;
 			}
 		} else if (tabNomRucheIncorrect.length > 0) {
 			// Il n'y a pas d'erreur sur les noms d'essaim mais il y en a sur les 
 			//   noms de ruche
-			if (!confirm(prompterreur + '. ' + creertxt + ' ' + tabNomOk.join(',') + ' ?')) {
+			if (!confirm(`${prompterreur}. ${creertxt} ${tabNomOk.join(',')} ?`)) {
 				annule();
 				return;
 			}
 		} else if (tabNomOk.length === 0) {
 			return;
-		} else if (!confirm(creertxt + ' ' + tabNomOk.join(',') + ' ?')) {
+		} else if (!confirm(`${creertxt} ${tabNomOk.join(',')} ?`)) {
 			annule();
 			return;
 		}
 		if (tabNomOk.length === 0) { return; }
-		const req = new XMLHttpRequest();
-		req.open('POST', urlessaimclone + essaimid, true);
-		req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-		req.onload = function() {
-			if (req.readyState === 4) {
-				if (req.status === 200) {
-					alert(req.responseText);
+		// Clone des essaims, appel de l'url essaim/clone/essaimid
+		fetch(`${urlessaimclone}${essaimid}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: new URLSearchParams({
+				[_csrf_param_name]: _csrf_token,
+				nomclones: tabNomOk.join(','),
+				nomruches: tabNomRucheOk.join(','),
+			})
+		})
+			.then(response => {
+				if (response.ok) {
+					return response.text();
 				}
-			}
-		};
-		req.send(_csrf_param_name + '=' + _csrf_token +
-			'&nomclones=' + tabNomOk.join(',') + '&nomruches=' + tabNomRucheOk.join(','));
+				throw new Error('Erreur en réponse du réseau.');
+			})
+			.then(text => alert(text))
+			.catch(error => alert('Fetch error:', error));
 	});
 });
 
