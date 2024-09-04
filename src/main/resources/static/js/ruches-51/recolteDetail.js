@@ -3,80 +3,93 @@
 	enlevHRecDe30, urlRecHDepot, recId, total, pasDeHausses, pasDeHaussesTxt, DataTable
 */
 'use strict';
+
 document.addEventListener('DOMContentLoaded', () => {
 	const itDate = document.getElementById('date');
 	const itDateOk = document.getElementById('dateOK');
 	itDate.style.display = 'none';
 	itDateOk.style.display = 'none';
+
+	function toggleDateInputs(show) {
+		itDate.style.display = show ? 'block' : 'none';
+		itDateOk.style.display = show ? 'block' : 'none';
+	}
+
+	function postRequest(url, data, onSuccess, onError) {
+		fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: new URLSearchParams(data),
+		})
+			.then(response => response.text())
+			.then(text => {
+				if (onSuccess) { onSuccess(text); }
+			})
+			.catch(error => {
+				if (onError) { onError(error); }
+				alert('Request failed', error);
+			});
+	}
+
 	document.getElementById('haussesMiel').addEventListener('click', event => {
 		if (pasDeHausses) {
 			alert(pasDeHaussesTxt);
 			event.preventDefault();
 		}
 	});
+
 	document.getElementById('enlevehausses').addEventListener('click', function() {
+		// Retire tous les hausses de la récolte recId de leurs ruches.
 		// La fonction est désactivée après 30 jours 
-		// 30 * 24 * 3600 * 1000 =  2592000000 
+		// 30 * 24 * 3600 * 1000 =  2592000000 en millisecondes
 		if (Date.now() > dateRecEpoch * 1000 + 2592000000) {
 			alert(enlevHRecDe30);
 			return;
 		}
-		const req = new XMLHttpRequest();
-		req.open('POST', urlRecHDepot + recId, true);
-		req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-		req.onload = function() {
-			if (req.readyState === 4) {
-				if (req.status === 200) {
-					if (req.responseText.slice(-1) === '?') {
-						if (!confirm(req.responseText)) {
-							return;
-						}
-					} else {
-						alert(req.responseText);
-						return;
-					}
-					itDate.style.display = 'block';
-					itDateOk.style.display = 'block';
-					const d = new Date();
-					itDate.setAttribute('value',
-						`${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()} ${d.getHours()}:${d.getMinutes()}`
-					);
-					itDate.focus();
+		postRequest(urlRecHDepot + recId, {
+			[_csrf_param_name]: _csrf_token,
+		}, responseText => {
+			if (responseText.endsWith('?')) {
+				if (!confirm(responseText)) {
+					return;
 				}
+			} else {
+				alert(responseText);
+				return;
 			}
-		};
-		req.send(_csrf_param_name + '=' + _csrf_token);
+			const now = new Date();
+			itDate.value = `${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()} ${now.getHours()}:${now.getMinutes()}`;
+			toggleDateInputs(true);
+			itDate.focus();
+		});
 	});
 
 	itDateOk.addEventListener('click', function() {
+		// Validation du retrait des hausses de leurs ruches par clic sur
+		// le bouton sous le calendrier après choix de la date de retrait.
 		const date = itDate.value;
-		itDate.style.display = 'none';
-		itDateOk.style.display = 'none';
-		const req = new XMLHttpRequest();
-		req.open('POST', urlRecHDepot + recId, true);
-		req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-		req.onload = function() {
-			if (req.readyState === 4) {
-				if (req.status === 200) {
-					alert(req.responseText);
-				}
-			}
-		};
-		req.send(_csrf_param_name + '=' + _csrf_token + '&date=' + date);
+		toggleDateInputs(false);
+		postRequest(urlRecHDepot + recId, {
+			[_csrf_param_name]: _csrf_token,
+			date: date
+		}, responseText => {
+			alert(responseText);
+		});
 	});
 
 	document.getElementById('supprime').addEventListener('click', event => {
-		if (confirm(suppRecHauss)) {
-			return;
+		if (!confirm(suppRecHauss)) {
+			event.preventDefault();
 		}
-		event.preventDefault();
 	});
 
 	function addCell(tr, content, colSpan = 1, classN = '') {
 		const td = document.createElement('td');
 		td.colSpan = colSpan;
 		td.textContent = content;
-		if (classN !== '') { td.className = classN }
+		if (classN) { td.className = classN }
 		tr.appendChild(td);
 	}
 
