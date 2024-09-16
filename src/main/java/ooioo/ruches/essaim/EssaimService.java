@@ -695,6 +695,7 @@ public class EssaimService {
 
 	/**
 	 * Enregistrement de l'essaimage.
+	 * Sauve en base le nouvel essaim restant dans la ruche après l'essaimage.
 	 *
 	 * @param essaimId    l'id de l'essaim qui essaime.
 	 * @param date        la date saisie dans le formulaire d'essaimage.
@@ -714,6 +715,10 @@ public class EssaimService {
 		// = date formulaire, souche = essaim dispersé
 		Essaim nouvelEssaim = new Essaim(nom, true, // actif
 				dateEveAjout.toLocalDate(), // acquisition
+				
+				// TODO créer une origine pour l'essaimage ?
+				ReineOrigine.AEC,
+				
 				commentaire, // Le champ commentaire du formulaire ? essaim ou événement dispersion ?
 				dateEveAjout.toLocalDate(), // reineDateNaissance
 				false, // reineMarquee

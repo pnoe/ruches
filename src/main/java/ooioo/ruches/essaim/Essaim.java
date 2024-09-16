@@ -18,7 +18,8 @@ public class Essaim {
 
 	@Override
 	public String toString() {
-		return "Essaim [id=" + id + ", nom=" + nom + ", Acquisition=" + dateAcquisition + ", actif=" + actif
+		return "Essaim [id=" + id + ", nom=" + nom + ", Acquisition=" + dateAcquisition + ", Origine=" + origine + 
+				", actif=" + actif
 				+ ", commentaire=" + commentaire + ", Naissance=" + reineDateNaissance + ", Marquee=" + reineMarquee
 				+ ", souche=" + ((souche == null) ? "null" : souche.getNom()) + ", agressivite=" + agressivite
 				+ ", proprete=" + proprete + ", Dispersion=" + dateDispersion + ", Comm. dispersion=" + commDisp + "]";
@@ -36,6 +37,7 @@ public class Essaim {
 		// champs identiques
 		this.actif = essaim.getActif();
 		this.dateAcquisition = essaim.getDateAcquisition();
+		this.origine = essaim.getOrigine();
 		this.commentaire = essaim.getCommentaire();
 		this.reineDateNaissance = essaim.getReineDateNaissance();
 		this.reineMarquee = essaim.getReineMarquee();
@@ -50,13 +52,14 @@ public class Essaim {
 	/**
 	 * Constructeur : tous les champs sauf l'id.
 	 */
-	public Essaim(String nom, boolean actif, LocalDate dateAcquisition, String commentaire,
+	public Essaim(String nom, boolean actif, LocalDate dateAcquisition, ReineOrigine origine, String commentaire,
 			LocalDate reineDateNaissance, boolean reineMarquee, Essaim souche, Integer agressivite, Integer proprete
 	// , LocalDateTime dateDispersion, String commDisp
 	) {
 		this.nom = nom;
 		this.actif = actif;
 		this.dateAcquisition = dateAcquisition;
+		this.origine = origine;
 		this.commentaire = commentaire;
 		this.reineDateNaissance = reineDateNaissance;
 		this.reineMarquee = reineMarquee;
@@ -80,6 +83,11 @@ public class Essaim {
 	 */
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dateAcquisition;
+	
+	/**
+	 * Origine de la reine
+	 */
+	private ReineOrigine origine;
 
 	/**
 	 * Essaim actif
@@ -161,6 +169,14 @@ public class Essaim {
 
 	public void setDateAcquisition(LocalDate dateAcquisition) {
 		this.dateAcquisition = dateAcquisition;
+	}
+	
+	public ReineOrigine getOrigine() {
+		return origine;
+	}
+
+	public void setOrigine(ReineOrigine origine) {
+		this.origine = origine;
 	}
 
 	public boolean getActif() {

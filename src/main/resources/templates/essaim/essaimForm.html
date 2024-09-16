@@ -109,6 +109,20 @@
 			</fieldset>
 		</div>
 		<div th:replace="~{includeForm :: dateAcquisitionField}"></div>
+		
+		
+		
+		<div class="form-floating mb-3">
+			<select class="form-control" th:field="*{origine}">
+				<option
+					th:each="origine : ${T(ooioo.ruches.essaim.ReineOrigine).values()}"
+					th:value="${origine}" th:text="#{${origine}}"></option>
+			</select> <label class="form-label" for="origine"
+				th:text="#{origine}"></label>
+		</div>
+		
+		
+		
 		<div th:replace="~{includeForm :: commentaireField}"></div>
 		<div class="form-floating mb-3">
 			<select class="form-control datepicker" th:field="*{souche}">
