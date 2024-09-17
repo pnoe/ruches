@@ -73,6 +73,7 @@
 						<th rowspan="2" th:text="#{commDisp}"></th>
 					</th:block>
 					<th rowspan="2" th:text="#{dateAcquisition}"></th>
+					<th rowspan="2" th:text="#{origine}"></th>
 					<th colspan="3" th:text="#{Reine}" style="text-align: center"
 						data-dt-order="disable"></th>
 					<th rowspan="2" th:text="#{souche}"></th>
@@ -104,6 +105,10 @@
 						<td th:text="${eRRr.essaim.actif ? '' : eRRr.essaim.commDisp}"></td>
 					</th:block>
 					<td th:text="${eRRr.essaim.dateAcquisition}"></td>
+					
+					<td th:if="${eRRr.essaim.origine}" th:text="${eRRr.essaim.origine}"></td>
+					<td th:unless="${eRRr.essaim.origine}"></td>
+					
 					<td th:text="${eRRr.essaim.reineMarquee}? #{oui} : #{non}"></td>
 					<td th:text="#{${eRRr.essaim.reineCouleurMarquage}}"></td>
 					<td th:text="${eRRr.essaim.reineDateNaissance}"></td>

@@ -98,6 +98,7 @@
 						<th th:text="#{commDisp}"></th>
 					</th:block>
 					<th th:text="#{dateAcquisition}"></th>
+					<th th:text="#{origine}"></th>
 					<th th:text="#{reineMarquee}"></th>
 					<th th:text="#{reineCouleurMarquage}"></th>
 					<th th:text="#{reineDateNaissance}"></th>
@@ -116,6 +117,8 @@
 						<td th:text="${essaim.commDisp}"></td>
 					</th:block>
 					<td th:text="${essaim.dateAcquisition}"></td>
+					<td th:if="${essaim.origine}" th:text="#{${essaim.origine}}"></td>
+					<td th:unless="${essaim.origine}"></td>
 					<td th:text="${essaim.reineMarquee}? #{oui} : #{non}"></td>
 					<td th:text="#{${essaim.reineCouleurMarquage}}"></td>
 					<td th:text="${essaim.reineDateNaissance}"></td>

@@ -715,10 +715,8 @@ public class EssaimService {
 		// = date formulaire, souche = essaim dispersé
 		Essaim nouvelEssaim = new Essaim(nom, true, // actif
 				dateEveAjout.toLocalDate(), // acquisition
-				
-				// TODO créer une origine pour l'essaimage ?
-				ReineOrigine.AEC,
-				
+				// ESS Essaimage. la reine en place succède à l'essaimage de le ruche.
+				ReineOrigine.ESS,
 				commentaire, // Le champ commentaire du formulaire ? essaim ou événement dispersion ?
 				dateEveAjout.toLocalDate(), // reineDateNaissance
 				false, // reineMarquee
