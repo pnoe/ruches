@@ -114,7 +114,7 @@
 				<tr>
 					<td th:text="${essaim.actif}?#{oui}:#{non}"></td>
 					<th:block th:unless="${essaim.actif}">
-						<td th:text="#{${essaim.sortie}}"></td>
+						<td th:text="${essaim.sortie} ? #{${essaim.sortie}} : ''"></td>
 						<td
 							th:text="${#temporals.format(essaim.dateDispersion, 'yyyy/MM/dd')}"></td>
 						<td th:text="${essaim.commDisp}"></td>
