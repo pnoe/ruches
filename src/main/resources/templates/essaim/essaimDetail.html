@@ -81,10 +81,11 @@
 				&nbsp; <a th:href="@{'/essaim/historique/'+${essaim.id}}"
 					class="bi-calendar-check" th:title="#{histoRucheRucher}"
 					aria-hidden="true"></a> &nbsp; <a
-					th:href="@{'/essaim/grapheeveesssaim/'+${essaim.id}}" class="bi-graph-up"
-					th:title="#{GrapheEve}" aria-hidden="true"></a> &nbsp; <a
-					th:href="@{'/essaim/statistiques/'+${essaim.id}}" class="bi-table"
-					th:title="#{statistiquesproduction}" aria-hidden="true"></a>
+					th:href="@{'/essaim/grapheeveesssaim/'+${essaim.id}}"
+					class="bi-graph-up" th:title="#{GrapheEve}" aria-hidden="true"></a>
+				&nbsp; <a th:href="@{'/essaim/statistiques/'+${essaim.id}}"
+					class="bi-table" th:title="#{statistiquesproduction}"
+					aria-hidden="true"></a>
 			</div>
 		</div>
 	</div>
@@ -94,6 +95,7 @@
 				<tr>
 					<th th:text="#{actif}"></th>
 					<th:block th:unless="${essaim.actif}">
+						<th th:text="#{sortie}"></th>
 						<th th:text="#{dateDispersion}"></th>
 						<th th:text="#{commDisp}"></th>
 					</th:block>
@@ -112,6 +114,7 @@
 				<tr>
 					<td th:text="${essaim.actif}?#{oui}:#{non}"></td>
 					<th:block th:unless="${essaim.actif}">
+						<td th:text="#{${essaim.sortie}}"></td>
 						<td
 							th:text="${#temporals.format(essaim.dateDispersion, 'yyyy/MM/dd')}"></td>
 						<td th:text="${essaim.commDisp}"></td>

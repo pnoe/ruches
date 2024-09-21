@@ -18,11 +18,13 @@ public class Essaim {
 
 	@Override
 	public String toString() {
-		return "Essaim [id=" + id + ", nom=" + nom + ", Acquisition=" + dateAcquisition + ", Origine=" + origine + 
-				", actif=" + actif
-				+ ", commentaire=" + commentaire + ", Naissance=" + reineDateNaissance + ", Marquee=" + reineMarquee
-				+ ", souche=" + ((souche == null) ? "null" : souche.getNom()) + ", agressivite=" + agressivite
-				+ ", proprete=" + proprete + ", Dispersion=" + dateDispersion + ", Comm. dispersion=" + commDisp + "]";
+		return "Essaim [id=" + id + ", nom=" + nom + ", Acquisition=" + dateAcquisition + ", Origine=" + origine
+				+ ", actif=" + actif + ", commentaire=" + commentaire + ", Naissance=" + reineDateNaissance
+				+ ", Marquee=" + reineMarquee + ", souche=" + ((souche == null) ? "null" : souche.getNom())
+				+ ", agressivite=" + agressivite + ", proprete=" + proprete
+				+ (actif ? ""
+						: ", Sortie=" + sortie + ", Dispersion=" + dateDispersion + ", Comm. dispersion=" + commDisp)
+				+ "]";
 	}
 
 	public Essaim() {
@@ -47,10 +49,11 @@ public class Essaim {
 		this.proprete = essaim.getProprete();
 		this.dateDispersion = essaim.getDateDispersion();
 		this.commDisp = essaim.getCommDisp();
+		this.sortie = essaim.getSortie();
 	}
 
 	/**
-	 * Constructeur : tous les champs sauf l'id.
+	 * Constructeur : tous les champs sauf l'id, sortie, dateDispersion et commDisp
 	 */
 	public Essaim(String nom, boolean actif, LocalDate dateAcquisition, ReineOrigine origine, String commentaire,
 			LocalDate reineDateNaissance, boolean reineMarquee, Essaim souche, Integer agressivite, Integer proprete
@@ -83,7 +86,7 @@ public class Essaim {
 	 */
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dateAcquisition;
-	
+
 	/**
 	 * Origine de la reine
 	 */
@@ -125,6 +128,11 @@ public class Essaim {
 	 * Propreté de l'essaim de 1 à 5
 	 */
 	private Integer proprete;
+
+	/**
+	 * Sortie
+	 */
+	private ReineSortie sortie;
 
 	/**
 	 * Date de la dispersion
@@ -170,7 +178,7 @@ public class Essaim {
 	public void setDateAcquisition(LocalDate dateAcquisition) {
 		this.dateAcquisition = dateAcquisition;
 	}
-	
+
 	public ReineOrigine getOrigine() {
 		return origine;
 	}
@@ -233,6 +241,14 @@ public class Essaim {
 
 	public void setProprete(Integer proprete) {
 		this.proprete = proprete;
+	}
+
+	public ReineSortie getSortie() {
+		return sortie;
+	}
+
+	public void setSortie(ReineSortie sortie) {
+		this.sortie = sortie;
 	}
 
 	public LocalDateTime getDateDispersion() {

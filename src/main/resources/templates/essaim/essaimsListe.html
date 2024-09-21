@@ -69,6 +69,7 @@
 					<th rowspan="2" th:text="#{rucher}"></th>
 					<th:block th:if="${session.voirInactif}">
 						<th rowspan="2" th:text="#{actif}"></th>
+						<th rowspan="2" th:text="#{sortie}"></th>
 						<th rowspan="2" th:text="#{dateDispersion}"></th>
 						<th rowspan="2" th:text="#{commDisp}"></th>
 					</th:block>
@@ -99,16 +100,14 @@
 						th:text="${eRRr.nomRucher}"></a></td>
 					<th:block th:if="${session.voirInactif}">
 						<td th:text="${eRRr.essaim.actif}?#{oui}:#{non}"></td>
+						<td th:text="${eRRr.essaim.actif ? '' : eRRr.essaim.sortie}"></td>
 						<td
 							th:text="${eRRr.essaim.actif ? '' : #temporals.format(eRRr.essaim.dateDispersion, 'yyyy/MM/dd')}">
 						</td>
 						<td th:text="${eRRr.essaim.actif ? '' : eRRr.essaim.commDisp}"></td>
 					</th:block>
 					<td th:text="${eRRr.essaim.dateAcquisition}"></td>
-					
-					<td th:if="${eRRr.essaim.origine}" th:text="${eRRr.essaim.origine}"></td>
-					<td th:unless="${eRRr.essaim.origine}"></td>
-					
+					<td th:text="${eRRr.essaim.origine}"></td>
 					<td th:text="${eRRr.essaim.reineMarquee}? #{oui} : #{non}"></td>
 					<td th:text="#{${eRRr.essaim.reineCouleurMarquage}}"></td>
 					<td th:text="${eRRr.essaim.reineDateNaissance}"></td>

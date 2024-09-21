@@ -88,11 +88,18 @@
 		<div class="form-floating mb-3">
 			<fieldset class="border rounded-3 p-3">
 				<div th:replace="~{includeForm :: actifField}"></div>
-				<!--/* on force l'id pour datetimepicker sur #date 
-				https://stackoverflow.com/questions/75988981/does-thymeleafs-thfield-generate-an-id-attribute-too
-				en gardant le fragment localejsdatetimepicker
-			*/-->
 				<div id="disp">
+					<div class="form-floating mb-3">
+						<select class="form-control" th:field="*{sortie}">
+							<option
+								th:each="sortie : ${T(ooioo.ruches.essaim.ReineSortie).values()}"
+								th:value="${sortie}" th:text="#{${sortie}}"></option>
+						</select> <label class="form-label" for="sortie" th:text="#{sortie}"></label>
+					</div>
+					<!--/* on force l'id pour datetimepicker sur #date 
+						https://stackoverflow.com/questions/75988981/does-thymeleafs-thfield-generate-an-id-attribute-too
+						en gardant le fragment localejsdatetimepicker
+					*/-->
 					<div class="form-floating mb-3">
 						<input id="date" placeholder="" class="form-control datepicker"
 							type="text" th:field="*{dateDispersion}"
@@ -109,20 +116,13 @@
 			</fieldset>
 		</div>
 		<div th:replace="~{includeForm :: dateAcquisitionField}"></div>
-		
-		
-		
 		<div class="form-floating mb-3">
 			<select class="form-control" th:field="*{origine}">
 				<option
 					th:each="origine : ${T(ooioo.ruches.essaim.ReineOrigine).values()}"
 					th:value="${origine}" th:text="#{${origine}}"></option>
-			</select> <label class="form-label" for="origine"
-				th:text="#{origine}"></label>
+			</select> <label class="form-label" for="origine" th:text="#{origine}"></label>
 		</div>
-		
-		
-		
 		<div th:replace="~{includeForm :: commentaireField}"></div>
 		<div class="form-floating mb-3">
 			<select class="form-control datepicker" th:field="*{souche}">
