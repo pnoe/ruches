@@ -689,7 +689,10 @@ public class EssaimController {
 	@PostMapping("/ruche/associe/sauve/{rucheId}/{essaimId}")
 	public String associeRucheSauve(Model model, @PathVariable long rucheId, @PathVariable long essaimId,
 			@RequestParam String date, @RequestParam String commentaire,
-			@RequestParam(defaultValue = "false") boolean swapPositions) {
+			@RequestParam(defaultValue = "false") boolean swapPositions,
+			@RequestParam(defaultValue = "BRD") ReineSortie sortie,
+			@RequestParam(defaultValue = "") String commDisp
+			) {
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 		if (rucheOpt.isEmpty()) {
 			logger.error(Const.IDRUCHEINCONNU, rucheId);
@@ -704,7 +707,8 @@ public class EssaimController {
 					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
 			return Const.INDEX;
 		}
-		essaimService.associeRucheSauve(essaimOpt.get(), rucheOpt.get(), date, commentaire, swapPositions);
+		essaimService.associeRucheSauve(essaimOpt.get(), rucheOpt.get(), date, commentaire, swapPositions,
+				sortie, commDisp);
 		return Const.REDIRECT_ESSAIM_ESSAIMID;
 	}
 }

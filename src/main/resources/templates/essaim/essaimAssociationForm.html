@@ -9,19 +9,19 @@
 <script th:inline="javascript">
 	/* exported doitEtreSupA, dateFirst, timeFirst, ruche, ruchesource, ruchetxt,
 	  lEssaim, essaimtxt, essaim, resteEnPlace, estDeplace, videDansLeRuher, dansLeRucher */
-	const doitEtreSupA = /*[[#{doitEtreSupA}]]*/ null;
-	const dateFirst = /*[[${dateFirst}]]*/ null;
-	const timeFirst = /*[[${timeFirst}]]*/ null;
-	const ruche = /*[[${ruche}]]*/ null;
-	const ruchesource = /*[[${rucheSource}]]*/ null;
-	const ruchetxt = /*[[#{ruche}]]*/ null;
-	const lEssaim = /*[[#{Lessaim}]]*/ null;
-	const essaimtxt = /*[[#{essaim}]]*/ null;
-	const essaim = /*[[${essaim}]]*/ null;
-	const resteEnPlace = /*[[#{resteEnPlace}]]*/ null;
-	const estDeplace = /*[[#{estDeplace}]]*/ null;
-	const videDansLeRuher = /*[[#{videDansLeRuher}]]*/ null;
-	const dansLeRucher = /*[[#{dansLeRucher}]]*/ null;
+	const doitEtreSupA = /*[[#{doitEtreSupA}]]*/null;
+	const dateFirst = /*[[${dateFirst}]]*/null;
+	const timeFirst = /*[[${timeFirst}]]*/null;
+	const ruche = /*[[${ruche}]]*/null;
+	const ruchesource = /*[[${rucheSource}]]*/null;
+	const ruchetxt = /*[[#{ruche}]]*/null;
+	const lEssaim = /*[[#{Lessaim}]]*/null;
+	const essaimtxt = /*[[#{essaim}]]*/null;
+	const essaim = /*[[${essaim}]]*/null;
+	const resteEnPlace = /*[[#{resteEnPlace}]]*/null;
+	const estDeplace = /*[[#{estDeplace}]]*/null;
+	const videDansLeRuher = /*[[#{videDansLeRuher}]]*/null;
+	const dansLeRucher = /*[[#{dansLeRucher}]]*/null;
 </script>
 </head>
 <body>
@@ -61,6 +61,27 @@
 				class="form-check-label" for="swapPositions"
 				th:text="#{echangePositionsRuches(${ruche.nom},${rucheSource.nom})}"></label>
 		</div>
+
+		<div class="form-floating mb-3" th:if="${ruche.essaim}"
+			style="margin-top: 5px">
+			<fieldset class="border rounded-3 p-3">
+				<div
+					th:text="#{sortie} + ' ' + #{essaim} + ' ' + ${ruche.essaim.nom}"></div>
+				<div class="form-floating mb-3">
+					<select class="form-control" id="sortie" name="sortie">
+						<option
+							th:each="sortie : ${T(ooioo.ruches.essaim.ReineSortie).values()}"
+							th:value="${sortie}" th:text="#{${sortie}}"></option>
+					</select> <label class="form-label" for="sortie" th:text="#{sortie}"></label>
+				</div>
+				<div class="form-floating mb-3">
+					<textarea class="form-control" id="commDisp" name="commDisp"
+						placeholder="Commentaire" maxlength="255"></textarea>
+					<label class="form-label" th:text="#{commDisp}" for="commDisp"></label>
+				</div>
+			</fieldset>
+		</div>
+
 		<br />
 		<div th:text="#{etatEnregistre}"></div>
 		<div th:if="${ruche.essaim}"

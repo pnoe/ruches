@@ -277,15 +277,16 @@ public class EssaimService {
 	 * @param swapPositions, true si échange de position des ruches demandé
 	 */
 	public void associeRucheSauve(Essaim essaim, Ruche rucheDest, String date, String commentaire,
-			boolean swapPositions) {
+			boolean swapPositions, ReineSortie sortie, String commDisp) {
 		LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 		// Si la rucheDest contient un essaim, le disperser
 		Essaim essaimDisperse = rucheDest.getEssaim();
 		if (essaimDisperse != null) {
 			// On disperse cet essaim : inactif et date, commentaire de dispersion
 			essaimDisperse.setActif(false);
+			essaimDisperse.setSortie(sortie);
 			essaimDisperse.setDateDispersion(dateEve);
-			essaimDisperse.setCommDisp(commentaire);
+			essaimDisperse.setCommDisp(commDisp);
 			essaimRepository.save(essaimDisperse);
 			logger.info(Const.MODIFIE, essaimDisperse);
 		}
@@ -658,8 +659,7 @@ public class EssaimService {
 				essaimPoids.put("id", essaim.getId().toString());
 				essaimPoids.put("dateA", essaim.getDateAcquisition().toString());
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-				essaimPoids.put("dateD",
-						(essaim.getActif()) ? "" : essaim.getDateDispersion().format(formatter));
+				essaimPoids.put("dateD", (essaim.getActif()) ? "" : essaim.getDateDispersion().format(formatter));
 				// calcul moyenne production miel par jour d'existence de l'essaim
 				if (rucherId == null) {
 					LocalDateTime dateFin = (essaim.getActif()) ? LocalDateTime.now() : essaim.getDateDispersion();
@@ -694,8 +694,9 @@ public class EssaimService {
 	}
 
 	/**
-	 * Enregistrement de l'essaimage.
-	 * Sauve en base le nouvel essaim restant dans la ruche après l'essaimage.
+	 * Enregistrement de l'essaimage. Sauve en base le nouvel essaim restant dans la
+	 * ruche après l'essaimage. Disperse l'autre essaim (inactif, sortie, date,
+	 * commentaire)
 	 *
 	 * @param essaimId    l'id de l'essaim qui essaime.
 	 * @param date        la date saisie dans le formulaire d'essaimage.
@@ -716,8 +717,7 @@ public class EssaimService {
 		Essaim nouvelEssaim = new Essaim(nom, true, // actif
 				dateEveAjout.toLocalDate(), // acquisition
 				// ESS Essaimage. la reine en place succède à l'essaimage de le ruche.
-				ReineOrigine.ESS,
-				commentaire, // Le champ commentaire du formulaire ? essaim ou événement dispersion ?
+				ReineOrigine.ESS, commentaire, // Le champ commentaire du formulaire ? essaim ou événement dispersion ?
 				dateEveAjout.toLocalDate(), // reineDateNaissance
 				false, // reineMarquee
 				essaim, // souche,
@@ -735,6 +735,7 @@ public class EssaimService {
 		essaim.setActif(false);
 		// eve dispersion supprimé, on met les infos dans l'entité essaim
 		LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
+		essaim.setSortie(ReineSortie.ESS);
 		essaim.setDateDispersion(dateEve);
 		essaim.setCommDisp(commentaire);
 		essaimRepository.save(essaim);
