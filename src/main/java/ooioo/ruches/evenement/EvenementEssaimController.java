@@ -30,6 +30,7 @@ import ooioo.ruches.Utils;
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.essaim.EssaimRepository;
 import ooioo.ruches.essaim.EssaimService;
+import ooioo.ruches.essaim.ReineSortie;
 import ooioo.ruches.ruche.Ruche;
 import ooioo.ruches.ruche.RucheRepository;
 import ooioo.ruches.rucher.Rucher;
@@ -545,7 +546,8 @@ public class EvenementEssaimController {
 	 */
 	@PostMapping("/sauve/dispersion/{essaimId}")
 	public String sauveDispersion(Model model, @PathVariable long essaimId,
-			@RequestParam(defaultValue = "false") boolean depot, @RequestParam String date,
+			@RequestParam(defaultValue = "false") boolean depot, 
+			@RequestParam ReineSortie sortie, @RequestParam String date,
 			@RequestParam String commentaire, @RequestParam(defaultValue = "") Long remerageId,
 			@RequestParam(defaultValue = "false") boolean evencadre) {
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
@@ -596,6 +598,7 @@ public class EvenementEssaimController {
 				}
 				// On inactive l'essaim.
 				essaim.setActif(false);
+				essaim.setSortie(sortie);
 				essaim.setDateDispersion(dateEve);
 				essaim.setCommDisp(commentaire);
 				essaimRepository.save(essaim);

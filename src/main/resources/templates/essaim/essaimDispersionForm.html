@@ -104,10 +104,19 @@
 				name="evencadre" checked /> <label class="form-check-label"
 				for="evencadre" th:text="#{creationevecadrezero}"></label>
 		</div>
+		<fieldset class="border rounded-3 p-3">
+		<div class="form-floating mb-3">
+			<select class="form-control" id="sortie" name="sortie">
+				<option
+					th:each="sortie : ${T(ooioo.ruches.essaim.ReineSortie).values()}"
+					th:value="${sortie}" th:text="#{${sortie}}"></option>
+			</select> <label class="form-label" for="sortie" th:text="#{sortie}"></label>
+		</div>
 		<div th:replace="~{includeForm :: date}"></div>
 		<div th:replace="~{includeForm :: commentaire}"></div>
+		</fieldset>
 		<th:block th:if="${nomRuche}">
-			<div class="form-floating mb-3">
+			<div class="form-floating mb-3" style="margin-top: 5px;">
 				<select class="form-control" id="remerageId" name="remerageId">
 					<option th:text="#{aucun}" value=""></option>
 					<option th:each="essaimopt : ${essaimsRemerage}"

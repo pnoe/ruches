@@ -89,7 +89,8 @@ public class EssaimController {
 	 */
 	@PostMapping("/sauve/dispersion/lot/{essaimIds}")
 	public String sauveLotDispersion(Model model, @PathVariable Long[] essaimIds,
-			@RequestParam(defaultValue = "false") boolean depot, @RequestParam String date,
+			@RequestParam(defaultValue = "false") boolean depot, 
+			@RequestParam ReineSortie sortie, @RequestParam String date,
 			@RequestParam String commentaire, @RequestParam(defaultValue = "false") boolean evencadre) {
 		LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 		for (Long essaimId : essaimIds) {
@@ -122,6 +123,7 @@ public class EssaimController {
 				}
 				// On inactive l'essaim
 				essaim.setActif(false);
+				essaim.setSortie(sortie);
 				essaim.setDateDispersion(dateEve);
 				essaim.setCommDisp(commentaire);
 				essaimRepository.save(essaim);
