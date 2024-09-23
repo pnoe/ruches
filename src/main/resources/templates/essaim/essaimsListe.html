@@ -68,10 +68,10 @@
 					<th rowspan="2" th:text="#{ruche}"></th>
 					<th rowspan="2" th:text="#{rucher}"></th>
 					<th:block th:if="${session.voirInactif}">
-						<th rowspan="2" th:text="#{actif}"></th>
-						<th rowspan="2" th:text="#{sortie}"></th>
-						<th rowspan="2" th:text="#{dateDispersion}"></th>
-						<th rowspan="2" th:text="#{commDisp}"></th>
+
+						<th colspan="4" th:text="#{sortie}" style="text-align: center"
+							data-dt-order="disable"></th>
+
 					</th:block>
 					<th rowspan="2" th:text="#{dateAcquisition}"></th>
 					<th rowspan="2" th:text="#{origine}"></th>
@@ -84,6 +84,14 @@
 					<th rowspan="2" th:text="#{commentaire}"></th>
 				</tr>
 				<tr>
+
+					<th:block th:if="${session.voirInactif}">
+						<th th:text="#{actif}"></th>
+						<th th:text="#{type}"></th>
+						<th th:text="#{date}"></th>
+						<th th:text="#{commentaire}"></th>
+					</th:block>
+
 					<th th:text="#{marque}"></th>
 					<th th:text="#{couleur}"></th>
 					<th th:text="#{naissance}"></th>
