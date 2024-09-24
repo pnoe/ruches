@@ -3,7 +3,9 @@ package ooioo.ruches;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +14,7 @@ import org.springframework.ui.Model;
 
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.essaim.EssaimRepository;
+import ooioo.ruches.essaim.ReineOrigine;
 import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.hausse.HausseRepository;
@@ -88,6 +91,18 @@ public class AccueilService {
 		long nbRuchesAvecEssaimProd = rucheRepository.countByEssaimNotNullAndActiveTrueAndProductionTrue();
 		model.addAttribute("nbRuchesAvecEssaimProd", nbRuchesAvecEssaimProd);
 		model.addAttribute("nbRuchesAvecEssaimElev", nbRuchesAvecEssaim - nbRuchesAvecEssaimProd);
+		// Origine des reines
+		Map<ReineOrigine, Long> nbEssaimByOrigine = new HashMap<>();
+		// TODO Plutot qu'une Map il faudrait utiliser deux arrays, car dans thymeleaf
+		//   avec th:each, l'ordre de traitement de la Map n'est pas celui
+		//   de sa création en java.
+		for (ReineOrigine ro : ReineOrigine.values()) {
+			Long nb = essaimRepository.countByOrigineAndActifTrue(ro);
+			if (nb != 0) {
+				nbEssaimByOrigine.put(ro, nb);
+			}
+		}
+		model.addAttribute("nbEssaimByOrigine", nbEssaimByOrigine);
 		// Nombre de hausses actives posées sur des ruches avec essaim.
 		model.addAttribute("nbHaussesSurRuchesAvecEssaim",
 				hausseRepository.countByActiveTrueAndRucheNotNullAndRucheActiveTrueAndRucheEssaimNotNull());

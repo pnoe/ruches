@@ -57,12 +57,16 @@
 					th:with="essaimsloc=${nbRuchesAvecEssaim + #arrays.length(essaimsActifSansRuche)}">
 					<li th:if="${essaimsloc} eq 0"
 						th:text="|${essaimsloc} #{essaim_s('')}|"></li>
-					<li th:unless="${essaimsloc} eq 0"
+					<li th:unless="${essaimsloc} eq 0"><span
 						th:text="|${essaimsloc} #{essaim_s(${essaimsloc<2}?'':'s')} 
 						(${#arrays.length(essaimsActifSansRuche)} #{essaimsHorsRuche
 						(${#arrays.length(essaimsActifSansRuche)<2}?'':'s')
-						})|">
-					</li>
+						})|"></span>
+						<ul>
+							<li><span th:utext="#{origine} + ' '"></span> <span
+								th:each="ro, iStat : ${nbEssaimByOrigine}"
+								th:text="${ro.getValue() + ' ' + ro.getKey() + (iStat.last ? '' : ', ')}"></span></li>
+						</ul></li>
 				</th:block>
 				<li th:if="${nbHausses} eq 0"
 					th:text="|${nbHausses} #{hausseS('')}|"></li>

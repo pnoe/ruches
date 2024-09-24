@@ -24,6 +24,20 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 	List<IdNom> findAllProjectedIdNomBy();
 
 	/*
+	 * Liste du nombre d'essaims par origine.
+	 */
+	/*
+	@Query(value = """
+			select count(*)
+				from Essaim
+				where actif = true
+				group by origine
+				order by origine
+			""")
+	*/
+	Long countByOrigineAndActifTrue(ReineOrigine ro);
+	
+	/*
 	 * Liste des id, dateAcqusition des essaims triés par dateAcquisition.
 	 */
 	@Query(value = """
