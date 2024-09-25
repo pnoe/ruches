@@ -63,9 +63,10 @@
 						(${#arrays.length(essaimsActifSansRuche)<2}?'':'s')
 						})|"></span>
 						<ul>
-							<li><span th:utext="#{origine} + ' '"></span> <span
-								th:each="ro, iStat : ${nbEssaimByOrigine}"
-								th:text="${ro.getValue() + ' ' + ro.getKey() + (iStat.last ? '' : ', ')}"></span></li>
+							<li><span th:text="#{origine} + ' '"></span> <span
+								th:each="ro, iStat : ${T(ooioo.ruches.essaim.ReineOrigine).values()}"
+								th:text="${nbEssaimByOrigine[iStat.index] + ' ' + ro + (iStat.last ? '' : ', ')}"></span>
+							</li>
 						</ul></li>
 				</th:block>
 				<li th:if="${nbHausses} eq 0"

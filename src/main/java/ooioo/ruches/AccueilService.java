@@ -3,9 +3,7 @@ package ooioo.ruches;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -92,15 +90,12 @@ public class AccueilService {
 		model.addAttribute("nbRuchesAvecEssaimProd", nbRuchesAvecEssaimProd);
 		model.addAttribute("nbRuchesAvecEssaimElev", nbRuchesAvecEssaim - nbRuchesAvecEssaimProd);
 		// Origine des reines
-		Map<ReineOrigine, Long> nbEssaimByOrigine = new HashMap<>();
-		// TODO Plutot qu'une Map il faudrait utiliser deux arrays, car dans thymeleaf
-		//   avec th:each, l'ordre de traitement de la Map n'est pas celui
-		//   de sa création en java.
+		// Eventuellement utiliser une deuxième List ave les origines
+		//   pour ne pas mettre les valeurs == 0
+		List<Long> nbEssaimByOrigine = new ArrayList<>();
 		for (ReineOrigine ro : ReineOrigine.values()) {
 			Long nb = essaimRepository.countByOrigineAndActifTrue(ro);
-			if (nb != 0) {
-				nbEssaimByOrigine.put(ro, nb);
-			}
+				nbEssaimByOrigine.add(nb);
 		}
 		model.addAttribute("nbEssaimByOrigine", nbEssaimByOrigine);
 		// Nombre de hausses actives posées sur des ruches avec essaim.
