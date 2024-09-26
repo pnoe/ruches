@@ -13,7 +13,7 @@ package ooioo.ruches.essaim;
  *        Elle n'est pas vide, pas encore bourdonneuse, elle n'est pas secouée.
  * 6  REM Remérage. La reine est euthanasiée par l'apiculteur.
  * 7  BRD Bourdonneuse. Suite à un échec de l'élevage non détecté à temps par l'apiculteur, des abeilles pondeuses apparaissent. 
- *        Au lieu de secouer le contenu de la ruche comme pour le cas DBR, on va essayer de la relancer avec EAN, CUP, CRD 
+ *        Au lieu de secouer le contenu de la ruche comme pour le cas DBR, on va essayer de la relancer avec EAN, CR0, CRD 
  *        ou une nouvelle reine.
  * 8  MLD Maladie.
  * 9  PST Empoisonnement. Pesticide ? Cause à faire valider par un labo
