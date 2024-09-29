@@ -65,8 +65,8 @@
 						<ul>
 							<li><span th:text="#{origine} + ' '"></span> <span
 								th:each="ro, iStat : ${T(ooioo.ruches.essaim.ReineOrigine).values()}"
-								th:text="${nbEssaimByOrigine[iStat.index] + ' ' + ro + (iStat.last ? '' : ', ')}"></span>
-							</li>
+								th:text="${nbEssaimByOrigine[iStat.index] + ' ' + ro + (iStat.last ? '' : ', ')}"
+								data-bs-toggle="tooltip" th:title="#{${ro}}"></span></li>
 						</ul></li>
 				</th:block>
 				<li th:if="${nbHausses} eq 0"
