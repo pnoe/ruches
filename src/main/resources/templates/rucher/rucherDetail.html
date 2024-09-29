@@ -138,14 +138,15 @@
 					<td th:text="${rucher.adresse}"></td>
 					<td><a class="num"
 						th:href="@{'geo:'+${rucher.latitude}+','+${rucher.longitude}}"
-						th:text="${#numbers.formatDecimal(rucher.latitude,1,4)}"></a></td>
+						th:text="${#numbers.formatDecimal(rucher.latitude,1,4)}"
+						data-bs-toggle="tooltip" th:title="#{AppelAppCarto}"></a></td>
 					<td class="num"
 						th:text="${#numbers.formatDecimal(rucher.longitude,1,4)}"></td>
 					<td class="num" th:text="${rucher.altitude}"></td>
 					<th:block th:if="${rucher.depot or dist != null}">
 						<td><a th:href="@{'/rucher/dists/'+${rucher.id}}"
-							th:text="${rucher.depot}?'0.000':${#numbers.formatDecimal(dist,1,3)}"></a>
-						</td>
+							th:text="${rucher.depot}?'0.000':${#numbers.formatDecimal(dist,1,3)}"
+							data-bs-toggle="tooltip" th:title="#{ToutesDistances}"> ></a></td>
 						<td th:text="${#temporals.format(temps, 'HH:mm')}"></td>
 					</th:block>
 					<td th:text="${rucher.ressource}"></td>
