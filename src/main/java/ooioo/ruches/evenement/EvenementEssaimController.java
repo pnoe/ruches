@@ -425,6 +425,7 @@ public class EvenementEssaimController {
 			model.addAttribute(Const.EVENEMENT, evenement);
 			// pour rappel du dernier événement traitement dans le fomulaire de saisie :
 			essaimService.modelAddEve(model, essaim, TypeEvenement.ESSAIMTRAITEMENT);
+			model.addAttribute("typeEve", List.of(TypeEvenement.ESSAIMTRAITEMENT, TypeEvenement.ESSAIMTRAITEMENTFIN));
 			return "essaim/essaimTraitementForm";
 		} else {
 			logger.error(Const.IDESSAIMXXINCONNU, essaimId);
@@ -443,6 +444,7 @@ public class EvenementEssaimController {
 		if (evenementOpt.isPresent()) {
 			Evenement evenement = evenementOpt.get();
 			model.addAttribute(Const.EVENEMENT, evenement);
+			model.addAttribute("typeEve", List.of(TypeEvenement.ESSAIMTRAITEMENT, TypeEvenement.ESSAIMTRAITEMENTFIN));
 			return "essaim/essaimTraitementForm";
 		} else {
 			logger.error(Const.IDEVENEMENTXXINCONNU, evenementId);

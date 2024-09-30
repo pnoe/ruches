@@ -50,11 +50,11 @@
 			th:field="*{hausse}" />
 		<div th:replace="~{includeForm :: dateField}"></div>
 		<div class="form-floating mb-3 ruches">
-			<select id="type" name="type" class="form-control">
-				<option
-					th:each="typeEve : ${{T(ooioo.ruches.evenement.TypeEvenement).ESSAIMTRAITEMENT, T(ooioo.ruches.evenement.TypeEvenement).ESSAIMTRAITEMENTFIN}}"
-					th:value="${typeEve}" th:text="#{${typeEve}}"
-					th:selected="${typeEve}==*{type}"></option>
+			<select id="type" name="type" class="form-control"> 
+					<option
+						th:each="te : ${typeEve}"
+					th:value="${te}" th:text="#{${te}}"
+					th:selected="${te}==*{type}"></option>
 			</select> <label class="form-label" for="type" th:text="#{typeEvenement}"></label>
 		</div>
 		<div class="form-floating mb-3">
