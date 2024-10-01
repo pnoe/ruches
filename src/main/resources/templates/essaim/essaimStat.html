@@ -48,9 +48,9 @@
 			</thead>
 			<tbody>
 				<tr th:each="essaimPoids : ${essaimsPoids}">
-					<td th:text="${essaimPoids.dateAcquisition}"></td>
+					<td th:text="${essaimPoids.dateA}"></td>
 					<td th:unless="${masquerInactif}"
-						th:text="${essaimPoids.dateDispersion}"></td>
+						th:text="${essaimPoids.dateD}"></td>
 					<td th:if="${rucherId == null}" th:text="${essaimPoids.duree}"></td>
 					<td th:text="${essaimPoids.pTotal}"></td>
 					<td th:text="${essaimPoids.pMax}"></td>
