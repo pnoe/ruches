@@ -45,7 +45,7 @@
 <script th:fragment="d3-scale-chromatic"
 	th:src="@{/js/d3-scale-chromatic.min-3.1.0.js}"></script>
 <script th:fragment="d3-zoom" th:src="@{/js/d3-zoom.min-3.0.0.js}"></script>
-	
+
 
 <script th:fragment="jsol" th:src="@{/js/ol-6.15.1/ol.js}"></script>
 <link th:fragment="cssol" rel="stylesheet" type="text/css" media="all"
@@ -72,8 +72,10 @@
 
 <script th:fragment="jsChart" th:src="@{/js/chart.umd.4.4.4.js}"></script>
 
-<script th:fragment="jsChartZoom" th:src="@{/js/chartjs-plugin-zoom.min-2.0.1.js}"></script>
-<script th:fragment="jsChartZoomHammer" th:src="@{/js/hammer.min-2.0.8.js}"></script>
+<script th:fragment="jsChartZoom"
+	th:src="@{/js/chartjs-plugin-zoom.min-2.0.1.js}"></script>
+<script th:fragment="jsChartZoomHammer"
+	th:src="@{/js/hammer.min-2.0.8.js}"></script>
 
 <script th:fragment="luxon" th:src="@{/js/luxon.min-3.5.0.js}"></script>
 <script th:fragment="chartjs-adapter"
@@ -107,20 +109,23 @@
 <body>
 	<div th:fragment="evedettitre" class="col">
 		<h1 class="item">
-			<a th:if="${type}==''" th:href="@{'/evenement/liste'}"
-				th:text="#{evenements}"></a> <a th:if="${type}=='hausse'"
-				th:href="@{'/evenement/hausse/'+${evenement.hausse.id}}"
-				th:text="#{hausse}+' '+${evenement.hausse.nom}"></a> <a
-				th:if="${type}=='essaim'"
-				th:href="@{'/evenement/essaim/'+${evenement.essaim.id}}"
-				th:text="#{essaim}+' '+${evenement.essaim.nom}"></a> <a
-				th:if="${type}=='ruche'"
+			<!--/* Eves avec retour vers entité ruche, hausse, rucher, essaim */-->
+			<a th:if="${type}=='ruche'"
 				th:href="@{'/evenement/ruche/'+${evenement.ruche.id}}"
 				th:text="#{ruche}+' '+${evenement.ruche.nom}"></a> <a
+				th:if="${type}=='hausse'"
+				th:href="@{'/evenement/hausse/'+${evenement.hausse.id}}"
+				th:text="#{hausse}+' '+${evenement.hausse.nom}"></a> <a
 				th:if="${type}=='rucher'"
 				th:href="@{'/evenement/rucher/'+${evenement.rucher.id}}"
 				th:text="#{rucher}+' '+${evenement.rucher.nom}"></a> <a
-				th:if="${type=='sucre'}" th:href="@{'/evenement/essaim/listeSucre'}"
+				th:if="${type}=='essaim'"
+				th:href="@{'/evenement/essaim/'+${evenement.essaim.id}}"
+				th:text="#{essaim}+' '+${evenement.essaim.nom}"></a>
+			<!--/* Eve avec retour vers liste tout eve, sucre, traitement, poids, cadre, ajoutruche, notif, remplissage, ajouthausse  */-->
+			<a th:if="${type}==''" th:href="@{'/evenement/liste'}"
+				th:text="#{evenements}"></a> <a th:if="${type=='sucre'}"
+				th:href="@{'/evenement/essaim/listeSucre'}"
 				th:text="#{evenementssucre}"></a> <a th:if="${type=='traitement'}"
 				th:href="@{'/evenement/essaim/listeTraitement/false'}"
 				th:text="#{evenementstraitement}"></a> <a th:if="${type=='poids'}"
@@ -128,12 +133,16 @@
 				th:text="#{evenementspoidsruche}"></a> <a th:if="${type=='cadre'}"
 				th:href="@{'/evenement/ruche/listeCadreRuche'}"
 				th:text="#{evenementcadreruche}"></a> <a
-				th:if="${type=='remplissage'}"
-				th:href="@{'/evenement/hausse/listeRemplissageHausse'}"
-				th:text="#{evenementremplissagehausse}"></a> <a
 				th:if="${type=='ajoutruche'}"
 				th:href="@{'/evenement/rucher/listeRucheAjout'}"
-				th:text="#{evenementsrucheajout}"></a>
+				th:text="#{evenementsrucheajout}"></a> <a th:if="${type=='notif'}"
+				th:href="@{'/evenement/listeNotif/false'}"
+				th:text="#{Notifications}"></a> <a th:if="${type=='remplissage'}"
+				th:href="@{'/evenement/hausse/listeRemplissageHausse'}"
+				th:text="#{evenementremplissagehausse}"></a> <a
+				th:if="${type=='ajouthausse'}"
+				th:href="@{'/evenement/hausse/poseRetraitHausse'}"
+				th:text="#{evtsPoseRetraitHausses}"></a>
 			<th:block
 				th:text="#{sep}+${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"></th:block>
 		</h1>
