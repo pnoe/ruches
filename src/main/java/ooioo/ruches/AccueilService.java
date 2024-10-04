@@ -101,6 +101,13 @@ public class AccueilService {
 		// Nombre de hausses actives posées sur des ruches avec essaim.
 		model.addAttribute("nbHaussesSurRuchesAvecEssaim",
 				hausseRepository.countByActiveTrueAndRucheNotNullAndRucheActiveTrueAndRucheEssaimNotNull());
+		
+		
+		long nbEssaimInactifs = essaimRepository.countByActifFalse();
+		model.addAttribute("nbEssaimInactifs", nbEssaimInactifs);
+		
+		
+		
 		// Distances de butinage : les rayons des cercles de butinages affichables sur
 		// les cartes des ruchers.
 		model.addAttribute("rayonsButinage", rayonsButinage);

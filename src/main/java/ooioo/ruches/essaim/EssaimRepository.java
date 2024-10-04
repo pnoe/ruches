@@ -37,6 +37,8 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 	*/
 	Long countByOrigineAndActifTrue(ReineOrigine ro);
 	
+	Long countByActifFalse();
+	
 	/*
 	 * Liste des id, dateAcqusition des essaims triés par dateAcquisition.
 	 */

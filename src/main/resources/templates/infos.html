@@ -30,56 +30,89 @@
 			<h1 class="item"
 				th:utext="${@environment.getProperty('accueil.titre')}"></h1>
 		</div>
-		<div class="row">
-			<th:block th:text="#{ElementActifUniq}"></th:block>
-			<ul>
-				<li th:text="|${nbRuchers} #{ruchersdepot(${nbRuchers<2}?'':'s')}|"></li>
-				<li
-					th:text="|${nbRrAvecRuches} #{ruchersRuches(${nbRuchers<2}?'':'s')}|"></li>
-				<li
-					th:text="|${nbRrAvecRuchesEtHausses} #{ruchersHausses(${nbRuchers<2}?'':'s')}|"></li>
-				<li th:if="${nbRuches} eq 0" th:text="|${nbRuches} #{rucheS('')}|"></li>
-				<li th:unless="${nbRuches} eq 0"
-					th:text="|${nbRuches} #{rucheS(${nbRuches<2}?'':'s')} (${nbRuchesProd} #{production} + ${nbRuchesElev} #{elevage})|"></li>
-				<th:block th:unless="${nbRuches} eq 0">
-					<li th:if="${nbRuchesAuDepot} eq 0"
-						th:text="|${nbRuchesAuDepot} #{ruchesaudepot('')}|"></li>
-					<li th:unless="${nbRuchesAuDepot} eq 0"
-						th:text="|${nbRuchesAuDepot} #{ruchesaudepot(${nbRuchesAuDepot<2}?'':'s')} (${nbRuchesAuDepotProd} #{production} + ${nbRuchesAuDepotElev} #{elevage})|">
-					</li>
-					<li th:if="${nbRuchesAvecEssaim} eq 0"
-						th:text="|${nbRuchesAvecEssaim} #{ruchesavecessaim('')}|"></li>
-					<li th:unless="${nbRuchesAvecEssaim} eq 0"
-						th:text="|${nbRuchesAvecEssaim} #{ruchesavecessaim(${nbRuchesAvecEssaim<2}?'':'s')} (${nbRuchesAvecEssaimProd} #{production} + ${nbRuchesAvecEssaimElev} #{elevage})|">
-					</li>
-				</th:block>
-				<th:block
-					th:with="essaimsloc=${nbRuchesAvecEssaim + #arrays.length(essaimsActifSansRuche)}">
-					<li th:if="${essaimsloc} eq 0"
-						th:text="|${essaimsloc} #{essaim_s('')}|"></li>
-					<li th:unless="${essaimsloc} eq 0"><span
-						th:text="|${essaimsloc} #{essaim_s(${essaimsloc<2}?'':'s')} 
+	</div>
+	<div class="accordion" id="accordion">
+		<div class="accordion-item">
+			<h1 class="accordion-header">
+				<button class="accordion-button" type="button"
+					data-bs-toggle="collapse" data-bs-target="#collapseA"
+					aria-expanded="true" aria-controls="collapseA"
+					th:text="#{ElementActifUniq}"></button>
+			</h1>
+			<div id="collapseA" class="accordion-collapse collapse show"
+				data-bs-parent="#accordion">
+				<div class="accordion-body">
+					<ul>
+						<li
+							th:text="|${nbRuchers} #{ruchersdepot(${nbRuchers<2}?'':'s')}|"></li>
+						<li
+							th:text="|${nbRrAvecRuches} #{ruchersRuches(${nbRuchers<2}?'':'s')}|"></li>
+						<li
+							th:text="|${nbRrAvecRuchesEtHausses} #{ruchersHausses(${nbRuchers<2}?'':'s')}|"></li>
+						<li th:if="${nbRuches} eq 0" th:text="|${nbRuches} #{rucheS('')}|"></li>
+						<li th:unless="${nbRuches} eq 0"
+							th:text="|${nbRuches} #{rucheS(${nbRuches<2}?'':'s')} (${nbRuchesProd} #{production} + ${nbRuchesElev} #{elevage})|"></li>
+						<th:block th:unless="${nbRuches} eq 0">
+							<li th:if="${nbRuchesAuDepot} eq 0"
+								th:text="|${nbRuchesAuDepot} #{ruchesaudepot('')}|"></li>
+							<li th:unless="${nbRuchesAuDepot} eq 0"
+								th:text="|${nbRuchesAuDepot} #{ruchesaudepot(${nbRuchesAuDepot<2}?'':'s')} (${nbRuchesAuDepotProd} #{production} + ${nbRuchesAuDepotElev} #{elevage})|">
+							</li>
+							<li th:if="${nbRuchesAvecEssaim} eq 0"
+								th:text="|${nbRuchesAvecEssaim} #{ruchesavecessaim('')}|"></li>
+							<li th:unless="${nbRuchesAvecEssaim} eq 0"
+								th:text="|${nbRuchesAvecEssaim} #{ruchesavecessaim(${nbRuchesAvecEssaim<2}?'':'s')} (${nbRuchesAvecEssaimProd} #{production} + ${nbRuchesAvecEssaimElev} #{elevage})|">
+							</li>
+						</th:block>
+						<th:block
+							th:with="essaimsloc=${nbRuchesAvecEssaim + #arrays.length(essaimsActifSansRuche)}">
+							<li th:if="${essaimsloc} eq 0"
+								th:text="|${essaimsloc} #{essaim_s('')}|"></li>
+							<li th:unless="${essaimsloc} eq 0"><span
+								th:text="|${essaimsloc} #{essaim_s(${essaimsloc<2}?'':'s')} 
 						(${#arrays.length(essaimsActifSansRuche)} #{essaimsHorsRuche
 						(${#arrays.length(essaimsActifSansRuche)<2}?'':'s')
 						})|"></span>
-						<ul>
-							<li><span th:text="#{origine} + ' '"></span> <span
-								th:each="ro, iStat : ${T(ooioo.ruches.essaim.ReineOrigine).values()}"
-								th:text="${nbEssaimByOrigine[iStat.index] + ' ' + ro + (iStat.last ? '' : ', ')}"
-								data-bs-toggle="tooltip" th:title="#{${ro}}"></span></li>
-						</ul></li>
-				</th:block>
-				<li th:if="${nbHausses} eq 0"
-					th:text="|${nbHausses} #{hausseS('')}|"></li>
-				<li th:unless="${nbHausses} eq 0"
-					th:text="|${nbHausses} #{hausseS(${nbHausses<2}?'':'s')} (${nbHaussesSurRuchesAvecEssaim} 
+								<ul>
+									<li><span th:text="#{origine} + ' : '"></span> <th:block
+											th:each="ro, iStat : ${T(ooioo.ruches.essaim.ReineOrigine).values()}">
+											<span th:text="${nbEssaimByOrigine[iStat.index] + ' '}">
+											</span>
+											<span class="link-info"
+												th:text="${ro + (iStat.last ? '' : ', ')}"
+												data-bs-toggle="tooltip" th:title="#{${ro}}"> </span>
+										</th:block></li>
+								</ul></li>
+						</th:block>
+						<li th:if="${nbHausses} eq 0"
+							th:text="|${nbHausses} #{hausseS('')}|"></li>
+						<li th:unless="${nbHausses} eq 0"
+							th:text="|${nbHausses} #{hausseS(${nbHausses<2}?'':'s')} (${nbHaussesSurRuchesAvecEssaim} 
 					#{posees((${nbHaussesSurRuchesAvecEssaim<2}?'':'s'))} + ${nbHaussesHorsRuche} 
 					#{nonposees(${nbHaussesHorsRuche<2}?'':'s')})|">
-				</li>
-			</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
 		</div>
-	</div>
-	<div class="accordion" id="accordion">
+
+		<div class="accordion-item">
+			<h1 class="accordion-header">
+				<button class="accordion-button collapsed" type="button"
+					data-bs-toggle="collapse" data-bs-target="#collapseI"
+					aria-expanded="true" aria-controls="collapseI"
+					th:text="#{ElementInActifUniq}"></button>
+			</h1>
+			<div id="collapseI" class="accordion-collapse collapse"
+				data-bs-parent="#accordion">
+				<div class="accordion-body">
+					<ul>
+						<li th:text="${nbEssaimInactifs + ' essaims inactifs'}"></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
 		<div class="accordion-item">
 			<h1 class="accordion-header">
 				<button class="accordion-button collapsed" type="button"
@@ -180,8 +213,7 @@
 							<tr>
 								<th scope="row" th:text="#{actionSucre}"></th>
 								<td th:each="sucre : ${sucreEssaims}"
-									th:text="${#numbers.formatDecimal(sucre,1,2,'DEFAULT')}">
-								</td>
+									th:text="${#numbers.formatDecimal(sucre,1,2,'DEFAULT')}"></td>
 							</tr>
 							<tr>
 								<th scope="row" th:text="#{nbTraitements}"></th>
@@ -490,6 +522,7 @@
 			</div>
 		</div>
 	</div>
+
 	<footer th:replace="~{include::footer}"></footer>
 </body>
 </html>
