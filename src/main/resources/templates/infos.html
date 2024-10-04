@@ -106,7 +106,7 @@
 				data-bs-parent="#accordion">
 				<div class="accordion-body">
 					<ul>
-						<li><span
+						<li th:unless="${nbEssaimInactifs} eq 0"><span
 							th:text="${nbEssaimInactifs + ' '} + #{essaimsInactifs}"></span>
 							<ul>
 								<li><span th:text="#{sortie} + ' : '"></span> <th:block
