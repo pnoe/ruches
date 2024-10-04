@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import ooioo.ruches.essaim.Essaim;
 import ooioo.ruches.essaim.EssaimRepository;
 import ooioo.ruches.essaim.ReineOrigine;
+import ooioo.ruches.essaim.ReineSortie;
 import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.hausse.HausseRepository;
@@ -90,24 +91,25 @@ public class AccueilService {
 		model.addAttribute("nbRuchesAvecEssaimProd", nbRuchesAvecEssaimProd);
 		model.addAttribute("nbRuchesAvecEssaimElev", nbRuchesAvecEssaim - nbRuchesAvecEssaimProd);
 		// Origine des reines
-		// Eventuellement utiliser une deuxième List ave les origines
-		//   pour ne pas mettre les valeurs == 0
+		// Eventuellement utiliser une deuxième List avec les origines
+		// pour ne pas mettre les valeurs == 0
 		List<Long> nbEssaimByOrigine = new ArrayList<>();
 		for (ReineOrigine ro : ReineOrigine.values()) {
-			Long nb = essaimRepository.countByOrigineAndActifTrue(ro);
-				nbEssaimByOrigine.add(nb);
+			nbEssaimByOrigine.add(essaimRepository.countByOrigineAndActifTrue(ro));
 		}
 		model.addAttribute("nbEssaimByOrigine", nbEssaimByOrigine);
 		// Nombre de hausses actives posées sur des ruches avec essaim.
 		model.addAttribute("nbHaussesSurRuchesAvecEssaim",
 				hausseRepository.countByActiveTrueAndRucheNotNullAndRucheActiveTrueAndRucheEssaimNotNull());
-		
-		
+
 		long nbEssaimInactifs = essaimRepository.countByActifFalse();
 		model.addAttribute("nbEssaimInactifs", nbEssaimInactifs);
-		
-		
-		
+		// Sorties des reines
+		List<Long> nbEssaimBySortie = new ArrayList<>();
+		for (ReineSortie rs : ReineSortie.values()) {
+			nbEssaimBySortie.add(essaimRepository.countBySortieAndActifFalse(rs));
+		}
+		model.addAttribute("nbEssaimBySortie", nbEssaimBySortie);
 		// Distances de butinage : les rayons des cercles de butinages affichables sur
 		// les cartes des ruchers.
 		model.addAttribute("rayonsButinage", rayonsButinage);

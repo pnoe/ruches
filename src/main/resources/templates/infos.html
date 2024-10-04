@@ -95,7 +95,6 @@
 				</div>
 			</div>
 		</div>
-
 		<div class="accordion-item">
 			<h1 class="accordion-header">
 				<button class="accordion-button collapsed" type="button"
@@ -107,12 +106,22 @@
 				data-bs-parent="#accordion">
 				<div class="accordion-body">
 					<ul>
-						<li th:text="${nbEssaimInactifs + ' essaims inactifs'}"></li>
+						<li><span
+							th:text="${nbEssaimInactifs + ' '} + #{essaimsInactifs}"></span>
+							<ul>
+								<li><span th:text="#{sortie} + ' : '"></span> <th:block
+										th:each="rs, iStat : ${T(ooioo.ruches.essaim.ReineSortie).values()}">
+										<span th:text="${nbEssaimBySortie[iStat.index] + ' '}">
+										</span>
+										<span class="link-info"
+											th:text="${rs + (iStat.last ? '' : ', ')}"
+											data-bs-toggle="tooltip" th:title="#{${rs}}"> </span>
+									</th:block></li>
+							</ul></li>
 					</ul>
 				</div>
 			</div>
 		</div>
-
 		<div class="accordion-item">
 			<h1 class="accordion-header">
 				<button class="accordion-button collapsed" type="button"

@@ -66,13 +66,13 @@
 			style="margin-top: 5px">
 			<fieldset class="border rounded-3 p-3">
 				<div
-					th:text="#{sortie} + ' ' + #{essaim} + ' ' + ${ruche.essaim.nom}"></div>
+					th:text="#{Sortie} + ' ' + #{essaim} + ' ' + ${ruche.essaim.nom}"></div>
 				<div class="form-floating mb-3">
 					<select class="form-control" id="sortie" name="sortie">
 						<option
 							th:each="sortie : ${T(ooioo.ruches.essaim.ReineSortie).values()}"
 							th:value="${sortie}" th:text="#{${sortie}}"></option>
-					</select> <label class="form-label" for="sortie" th:text="#{sortie}"></label>
+					</select> <label class="form-label" for="sortie" th:text="#{Sortie}"></label>
 				</div>
 				<div class="form-floating mb-3">
 					<textarea class="form-control" id="commDisp" name="commDisp"
