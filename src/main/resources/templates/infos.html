@@ -66,13 +66,16 @@
 						</th:block>
 						<th:block
 							th:with="essaimsloc=${nbRuchesAvecEssaim + #arrays.length(essaimsActifSansRuche)}">
+
 							<li th:if="${essaimsloc} eq 0"
 								th:text="|${essaimsloc} #{essaim_s('')}|"></li>
+
 							<li th:unless="${essaimsloc} eq 0"><span
 								th:text="|${essaimsloc} #{essaim_s(${essaimsloc<2}?'':'s')} 
 						(${#arrays.length(essaimsActifSansRuche)} #{essaimsHorsRuche
 						(${#arrays.length(essaimsActifSansRuche)<2}?'':'s')
 						})|"></span>
+
 								<ul>
 									<li><span th:text="#{origine} + ' : '"></span> <th:block
 											th:each="ro, iStat : ${T(ooioo.ruches.essaim.ReineOrigine).values()}">
@@ -80,7 +83,10 @@
 											</span>
 											<span class="link-info"
 												th:text="${ro + (iStat.last ? '' : ', ')}"
-												data-bs-toggle="tooltip" th:title="#{${ro}}"> </span>
+												data-bs-toggle="tooltip"
+												th:title="${#numbers.formatPercent((nbEssaimByOrigine[iStat.index]+0.0)/essaimsloc, 1, 2)} + 
+												' ' + #{${ro}}">
+											</span>
 										</th:block></li>
 								</ul></li>
 						</th:block>
@@ -107,7 +113,7 @@
 				<div class="accordion-body">
 					<ul>
 						<li th:unless="${nbEssaimInactifs} eq 0"><span
-							th:text="${nbEssaimInactifs + ' '} + #{essaimsInactifs}"></span>
+							th:text="${nbEssaimInactifs + ' '} + #{essaims}"></span>
 							<ul>
 								<li><span th:text="#{sortie} + ' : '"></span> <th:block
 										th:each="rs, iStat : ${T(ooioo.ruches.essaim.ReineSortie).values()}">
@@ -115,7 +121,10 @@
 										</span>
 										<span class="link-info"
 											th:text="${rs + (iStat.last ? '' : ', ')}"
-											data-bs-toggle="tooltip" th:title="#{${rs}}"> </span>
+											data-bs-toggle="tooltip"
+											th:title="${#numbers.formatPercent((nbEssaimBySortie[iStat.index]+0.0)/nbEssaimInactifs, 1, 2)} + 
+												' ' + #{${rs}}">
+										</span>
 									</th:block></li>
 							</ul></li>
 					</ul>
