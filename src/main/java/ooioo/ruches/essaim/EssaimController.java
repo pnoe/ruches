@@ -2,6 +2,7 @@ package ooioo.ruches.essaim;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -89,9 +90,9 @@ public class EssaimController {
 	 */
 	@PostMapping("/sauve/dispersion/lot/{essaimIds}")
 	public String sauveLotDispersion(Model model, @PathVariable Long[] essaimIds,
-			@RequestParam(defaultValue = "false") boolean depot, 
-			@RequestParam ReineSortie sortie, @RequestParam String date,
-			@RequestParam String commentaire, @RequestParam(defaultValue = "false") boolean evencadre) {
+			@RequestParam(defaultValue = "false") boolean depot, @RequestParam ReineSortie sortie,
+			@RequestParam String date, @RequestParam String commentaire,
+			@RequestParam(defaultValue = "false") boolean evencadre) {
 		LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 		for (Long essaimId : essaimIds) {
 			Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
@@ -535,6 +536,13 @@ public class EssaimController {
 		if (essaimOpt.isPresent()) {
 			Essaim essaim = essaimOpt.get();
 			model.addAttribute(Const.ESSAIM, essaim);
+			// Calcul de la durée de vie de l'essaim en années et jours
+			long j = ChronoUnit.DAYS.between(essaim.getDateAcquisition().atStartOfDay(),
+					(essaim.getActif()) ? LocalDateTime.now() : essaim.getDateDispersion());
+			long annees = j / 365;
+			long jours = j % 365;
+			model.addAttribute("annees", annees);
+			model.addAttribute("jours", jours);
 			Ruche ruche = rucheRepository.findByEssaimId(essaimId);
 			model.addAttribute("rucheEssaim", ruche);
 			List<String> noms = new ArrayList<>();
@@ -690,9 +698,7 @@ public class EssaimController {
 	public String associeRucheSauve(Model model, @PathVariable long rucheId, @PathVariable long essaimId,
 			@RequestParam String date, @RequestParam String commentaire,
 			@RequestParam(defaultValue = "false") boolean swapPositions,
-			@RequestParam(defaultValue = "BRD") ReineSortie sortie,
-			@RequestParam(defaultValue = "") String commDisp
-			) {
+			@RequestParam(defaultValue = "BRD") ReineSortie sortie, @RequestParam(defaultValue = "") String commDisp) {
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 		if (rucheOpt.isEmpty()) {
 			logger.error(Const.IDRUCHEINCONNU, rucheId);
@@ -707,8 +713,8 @@ public class EssaimController {
 					messageSource.getMessage(Const.IDESSAIMINCONNU, null, LocaleContextHolder.getLocale()));
 			return Const.INDEX;
 		}
-		essaimService.associeRucheSauve(essaimOpt.get(), rucheOpt.get(), date, commentaire, swapPositions,
-				sortie, commDisp);
+		essaimService.associeRucheSauve(essaimOpt.get(), rucheOpt.get(), date, commentaire, swapPositions, sortie,
+				commDisp);
 		return Const.REDIRECT_ESSAIM_ESSAIMID;
 	}
 }

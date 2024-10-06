@@ -119,7 +119,9 @@
 							th:text="${#temporals.format(essaim.dateDispersion, 'yyyy/MM/dd')}"></td>
 						<td th:text="${essaim.commDisp}"></td>
 					</th:block>
-					<td th:text="${essaim.dateAcquisition}"></td>
+					<td th:text="${essaim.dateAcquisition}" class="link-info"
+						data-bs-toggle="tooltip"
+						th:title="(${annees} ? (${annees} + ' ' + #{annee_s}) : '') + ${jours} + ' ' + #{jour_s}"></td>
 					<td th:if="${essaim.origine}" th:text="#{${essaim.origine}}"></td>
 					<td th:unless="${essaim.origine}"></td>
 					<td th:text="${essaim.reineMarquee}? #{oui} : #{non}"></td>
