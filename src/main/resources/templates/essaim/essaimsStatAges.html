@@ -21,18 +21,27 @@
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col">
+			<div class="col col-5">
 				<h1 class="item">
 					<a th:href="@{'/essaim/liste'}" th:text="#{Essaims}"></a>
 					<th:block th:text="#{sep}+#{ageDesReines}"></th:block>
 				</h1>
 			</div>
-			<div class="col">
+			<div class="col col-5">
 				<span
 					th:text="#{Min} + ' ' + ${ageMinJours} + ', ' +
 							#{Max} + ' ' + ${ageMaxJours} + ', ' +
 							#{Moyenne} + ' ' + ${ageMoyenJours} + ', ' +
 							#{EcartType} + ' ' + ${ageVarianceJours} + ' ' + #{jours}"></span>
+			</div>
+			<div class="col col-2">
+				<form action="#" th:action="@{/essaim/statistiquesage}" method="get"
+					id="ageReinesForm">
+					<select class="form-control" id="pas" name="pas">
+						<option th:each="i: ${#numbers.sequence(4, 10)}" th:value="${i}"
+							th:text="${i}" th:selected="${i==pas}"></option>
+					</select> <label for="pas">Pas(mois)</label>
+				</form>
 			</div>
 		</div>
 	</div>

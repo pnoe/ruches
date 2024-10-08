@@ -441,13 +441,13 @@ public class EssaimService {
 	}
 
 	/*
-	 * Calcul des statistiques sur l'âge des reines.
+	 * Calcul des statistiques sur l'âge des reines des essaims actifs.
 	 */
-	void statistiquesage(Model model) {
+	void statistiquesage(Model model, Integer pas) {
 		Iterable<Essaim> essaims = essaimRepository.findByActif(true);
-		int pas = 6;
+		// int pas = 10; // nombre de mois par classe d'âge
 		int maxAgeMois = 95; // reine ignorée si plus ancienne (96 mois, 8 ans)
-		// ages : classes d'âge de largeur "pas" en mois
+		// ages : nb de reines par classes d'âge de largeur "pas" en mois
 		// voir
 		// https://stackoverflow.com/questions/7139382/java-rounding-up-to-an-int-using-math-ceil/21830188
 		int[] ages = new int[(maxAgeMois + pas - 1) / pas];
@@ -460,43 +460,44 @@ public class EssaimService {
 		int nb = 1;
 		LocalDate dateNow = LocalDate.now();
 		double m = 0;
-		double s = 0;
+		double s = 0; // m et s pour calcul de la variance
 		for (Essaim essaim : essaims) {
-			if (essaim.getReineDateNaissance() != null) {
-				if (essaim.getReineDateNaissance().isAfter(dateNow)) {
-					// Si la reine n'est pas encore née on ne la prends pas en compte !
-					continue;
-				}
-				long ageMois = ChronoUnit.MONTHS.between(essaim.getReineDateNaissance(), dateNow);
-				if (ageMois > maxAgeMois) {
-					// Si la reine à plus de maxAgeMois on ne la prends pas en compte
-					// afficher un message en haut de la page de stat
-					logger.info("Essaim {}, âge supérieur à {} mois", essaim.getNom(), maxAgeMois);
-					continue;
-				}
-				if (rucheRepository.findByEssaimId(essaim.getId()) == null) {
-					// Si la reine n'est pas dans une ruche on ne la prends pas en compte
-					continue;
-				}
-				int indexAge = (int) ageMois / pas;
-				ages[indexAge]++;
-				indexMaxAges = Math.max(indexMaxAges, indexAge);
-				long ageJours = ChronoUnit.DAYS.between(essaim.getReineDateNaissance(), dateNow);
-				ageMaxJours = Math.max(ageMaxJours, ageJours);
-				if (premier) {
-					ageMinJours = ageJours;
-					premier = false;
-				} else {
-					ageMinJours = Math.min(ageMinJours, ageJours);
-				}
-				ageTotalJours += ageJours;
-				// Variance Welford's algorithm
-				double tmpM = m;
-				double ageJ = ageJours;
-				m += (ageJ - tmpM) / nb;
-				s += (ageJ - tmpM) * (ageJ - m);
-				nb++;
+			if ((essaim.getReineDateNaissance() == null) || (essaim.getReineDateNaissance().isAfter(dateNow))) {
+				// La date de naissance n'est pas obligatoire à la création de l'essaim, 
+				// si null on ignore l'essaim (on pourrait prendre la date d'acquisition).
+				// Si la reine n'est pas encore née on ne la prends pas en compte !
+				continue;
 			}
+			long ageMois = ChronoUnit.MONTHS.between(essaim.getReineDateNaissance(), dateNow);
+			if (ageMois > maxAgeMois) {
+				// Si la reine à plus de maxAgeMois on ne la prends pas en compte
+				// afficher un message en haut de la page de stat
+				logger.info("Essaim {}, âge supérieur à {} mois", essaim.getNom(), maxAgeMois);
+				continue;
+			}
+			if (rucheRepository.findByEssaimId(essaim.getId()) == null) {
+				// Si la reine n'est pas dans une ruche on ne la prends pas en compte
+				continue;
+			}
+			int indexAge = (int) ageMois / pas;
+			ages[indexAge]++;
+			indexMaxAges = Math.max(indexMaxAges, indexAge);
+			// Calcul de l'âge nini, max, moyen et de l'écart type en jours
+			long ageJours = ChronoUnit.DAYS.between(essaim.getReineDateNaissance(), dateNow);
+			ageMaxJours = Math.max(ageMaxJours, ageJours);
+			if (premier) {
+				ageMinJours = ageJours;
+				premier = false;
+			} else {
+				ageMinJours = Math.min(ageMinJours, ageJours);
+			}
+			ageTotalJours += ageJours;
+			// Variance Welford's algorithm
+			double tmpM = m;
+			double ageJ = ageJours;
+			m += (ageJ - tmpM) / nb;
+			s += (ageJ - tmpM) * (ageJ - m);
+			nb++;
 		}
 		List<Integer> agesHisto = new ArrayList<>();
 		for (int i = 0; i <= indexMaxAges; i++) {

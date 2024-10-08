@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -192,8 +193,13 @@ public class EssaimController {
 	 * essaim.
 	 */
 	@GetMapping("/statistiquesage")
-	public String statistiquesage(Model model) {
-		essaimService.statistiquesage(model);
+	public String statistiquesage(Model model, @RequestParam(required = false) Integer pas,
+			@CookieValue(value = "p", defaultValue = "6") Integer pCookie) {
+		if (pas == null) {
+			pas = pCookie;
+		}
+		essaimService.statistiquesage(model, pas);
+		model.addAttribute("pas", pas);
 		return "essaim/essaimsStatAges";
 	}
 
@@ -539,8 +545,9 @@ public class EssaimController {
 			// Calcul de la durée de vie de l'essaim en années et jours
 			long j = ChronoUnit.DAYS.between(essaim.getDateAcquisition().atStartOfDay(),
 					(essaim.getActif()) ? LocalDateTime.now() : essaim.getDateDispersion());
-			long annees = j / 365;
-			long jours = j % 365;
+			long aj = 365;
+			long annees = j / aj;
+			long jours = j % aj;
 			model.addAttribute("annees", annees);
 			model.addAttribute("jours", jours);
 			Ruche ruche = rucheRepository.findByEssaimId(essaimId);

@@ -2,6 +2,7 @@
 	ageDesReines, nbReinesTotal, Reines
 */
 'use strict';
+
 // https://github.com/code-nebula/chart-color-generator
 function calculatePoint(i, intervalSize, colorRangeInfo) {
 	const { colorStart, colorEnd, useEndAsStart } = colorRangeInfo;
@@ -22,6 +23,14 @@ function interpolateColors(dataLength, colorScale, colorRangeInfo) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+
+	const cookieOpt = ';SameSite=Strict;path=' + window.location.pathname;
+	// Pour le formulaire de choix du nombre de mois par tranche d'âge
+	document.getElementById('ageReinesForm').addEventListener('change', event => {
+		document.cookie = 'p=' + event.target.value + cookieOpt;
+		event.target.form.submit();
+	});
+
 	const colorScale = d3.interpolateRainbow;
 	const colorRangeInfo = {
 		colorStart: 0,
