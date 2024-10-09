@@ -37,10 +37,12 @@
 			<div class="col col-2">
 				<form action="#" th:action="@{/essaim/statistiquesage}" method="get"
 					id="ageReinesForm">
-					<select class="form-control" id="pas" name="pas">
-						<option th:each="i: ${#numbers.sequence(4, 10)}" th:value="${i}"
-							th:text="${i}" th:selected="${i==pas}"></option>
-					</select> <label for="pas">Pas(mois)</label>
+					<div class="form-floating">
+						<select class="form-select" id="pas" name="pas">
+							<option th:each="i: ${#numbers.sequence(4, 10)}" th:value="${i}"
+								th:text="${i}" th:selected="${i==pas}"></option>
+						</select> <label for="pas" th:text="#{Mois}"></label>
+					</div>
 				</form>
 			</div>
 		</div>

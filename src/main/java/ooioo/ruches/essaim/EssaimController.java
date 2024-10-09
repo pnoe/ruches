@@ -198,6 +198,9 @@ public class EssaimController {
 		if (pas == null) {
 			pas = pCookie;
 		}
+		if (pas <= 0) {
+			pas = 1;
+		}
 		essaimService.statistiquesage(model, pas);
 		model.addAttribute("pas", pas);
 		return "essaim/essaimsStatAges";
