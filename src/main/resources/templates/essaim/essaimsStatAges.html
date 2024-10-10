@@ -8,31 +8,27 @@
 <script th:replace="~{include :: d3-scale-chromatic}"></script>
 <script th:replace="~{include :: jsruches}"></script>
 <script th:inline="javascript">
-	/* exported agesHisto, pas, ageDesReines, nbReinesTotal, Reines
+	/* exported agesHisto, pas, ageDesReines, nbReinesTotal, Reines,
+	     buttontextprint, buttontextcol
 	 */
 	const pas = /*[[${pas}]]*/null;
 	const agesHisto = /*[[${agesHisto}]]*/null;
 	const ageDesReines = /*[[#{ageDesReines}]]*/null;
 	const nbReinesTotal = /*[[#{nbReinesTotal}]]*/null;
 	const Reines = /*[[#{Reines}]]*/null;
+	const buttTxtPrint = /*[[#{buttontextprint}]]*/null;
+	const buttTxtCol = /*[[#{buttontextcol}]]*/null;
 </script>
 </head>
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col col-5">
+			<div class="col col-10">
 				<h1 class="item">
 					<a th:href="@{'/essaim/liste'}" th:text="#{Essaims}"></a>
 					<th:block th:text="#{sep}+#{ageDesReines}"></th:block>
 				</h1>
-			</div>
-			<div class="col col-5">
-				<span
-					th:text="#{Min} + ' ' + ${ageMinJours} + ', ' +
-							#{Max} + ' ' + ${ageMaxJours} + ', ' +
-							#{Moyenne} + ' ' + ${ageMoyenJours} + ', ' +
-							#{EcartType} + ' ' + ${ageVarianceJours} + ' ' + #{jours}"></span>
 			</div>
 			<div class="col col-2">
 				<form action="#" th:action="@{/essaim/statistiquesage}" method="get"
@@ -43,12 +39,113 @@
 								th:text="${i}" th:selected="${i==pas}"></option>
 						</select> <label for="pas" th:text="#{Mois}"></label>
 					</div>
+
+					<input type="checkbox" id="actif" name="actif" th:title="#{actif}"
+						th:checked="${actif}" value="true" /> <label for="actif"
+						th:text="#{actif}"></label>
+
+
 				</form>
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid">
-		<canvas id="ctx"></canvas>
+	<div class="accordion" id="accordion">
+		<div class="accordion-item">
+			<h1 class="accordion-header">
+				<button class="accordion-button" type="button"
+					data-bs-toggle="collapse" data-bs-target="#collapseA"
+					aria-expanded="true" aria-controls="collapseA"
+					th:text="#{Graphique}"></button>
+			</h1>
+			<div id="collapseA" class="accordion-collapse collapse show"
+				data-bs-parent="#accordion">
+				<div class="accordion-body">
+					<div class="container-fluid">
+						<canvas id="ctx"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="accordion-item">
+			<h1 class="accordion-header">
+				<button class="accordion-button" type="button"
+					data-bs-toggle="collapse" data-bs-target="#collapseB"
+					aria-expanded="true" aria-controls="collapseA"
+					th:text="#{listeEssaims}"></button>
+			</h1>
+			<div id="collapseB" class="accordion-collapse collapse"
+				data-bs-parent="#accordion">
+				<div class="accordion-body">
+					<div class="container-fluid">
+						<table class="table table-bordered table-striped table-sm"
+							id="essaims">
+							<thead>
+								<th:block th:if="${actif}">
+									<tr>
+										<th th:text="#{nom}"></th>
+										<th th:text="#{Duree}"></th>
+										<th th:text="#{dateAcquisition}"></th>
+										<th th:text="#{Naissance}"></th>
+									</tr>
+								</th:block>
+								<th:block th:unless="${actif}">
+									<tr>
+										<th rowspan="2" th:text="#{nom}"></th>
+										<th rowspan="2" th:text="#{Duree}"></th>
+										<th rowspan="2" th:text="#{dateAcquisition}"></th>
+										<th rowspan="2" th:text="#{Naissance}"></th>
+										<th colspan="3" th:text="#{Sortie}" style="text-align: center"
+											data-dt-order="disable"></th>
+									</tr>
+									<tr>
+										<th th:text="#{type}"></th>
+										<th th:text="#{date}"></th>
+										<th th:text="#{commentaire}"></th>
+									</tr>
+								</th:block>
+							</thead>
+							<tbody th:with="f='dd/MM/yyyy'">
+								<tr th:each="essaim, i : ${essaims}">
+									<td><a th:href="@{'/essaim/'+${essaim.id}}"
+										th:text="${essaim.nom}"></a></td>
+									<td th:text="${agesMois[i.index]}"></td>
+									<td th:text="${essaim.dateAcquisition}"></td>
+									<td th:text="${essaim.reineDateNaissance}"></td>
+									<th:block th:unless="${actif}">
+										<td th:text="${essaim.actif ? '' : essaim.sortie}"></td>
+										<td
+											th:text="${essaim.actif ? '' : #temporals.format(essaim.dateDispersion, 'yyyy/MM/dd')}">
+										</td>
+										<td th:text="${essaim.actif ? '' : essaim.commDisp}"></td>
+									</th:block>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="accordion-item">
+			<h1 class="accordion-header">
+				<button class="accordion-button" type="button"
+					data-bs-toggle="collapse" data-bs-target="#collapseC"
+					aria-expanded="true" aria-controls="collapseA"
+					th:text="#{Statistiques}"></button>
+			</h1>
+			<div id="collapseC" class="accordion-collapse collapse"
+				data-bs-parent="#accordion">
+				<div class="accordion-body">
+					<div class="container-fluid">
+						<span
+							th:text="${#lists.size(essaims)} + ' ' + #{essaims} + '. ' + #{Min} + ' ' + 
+							${ageMinJours} + ', ' +
+							#{Max} + ' ' + ${ageMaxJours} + ', ' +
+							#{Moyenne} + ' ' + ${ageMoyenJours} + ', ' +
+							#{EcartType} + ' ' + ${ageVarianceJours} + ' ' + #{jours}"></span>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 	<footer th:replace="~{include::footer}"></footer>
 </body>

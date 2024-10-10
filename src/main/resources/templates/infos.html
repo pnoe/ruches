@@ -4,7 +4,9 @@
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script>
 	/* globals DataTable */
-		// https://stackoverflow.com/questions/17237812/datatable-jquery-table-header-width-not-aligned-with-body-width
+		// https://stackoverflow.com/questions/17237812/datatable-jquery-table-header-width-not-aligned-with-body-width :
+		//  Most likely your table is hidden initially which prevents jQuery DataTables from calculating column widths.
+		//  If table is in the collapsible element, you need to adjust headers when collapsible element becomes visible.
 		document.addEventListener('DOMContentLoaded', () => {
 			new DataTable('.datatable-tri', {
 				paging: false,

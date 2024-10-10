@@ -1,5 +1,5 @@
 /* globals d3, Chart, agesHisto, pas, 
-	ageDesReines, nbReinesTotal, Reines
+	ageDesReines, nbReinesTotal, Reines, buttontextprint, buttontextcol
 */
 'use strict';
 
@@ -24,10 +24,43 @@ function interpolateColors(dataLength, colorScale, colorRangeInfo) {
 
 document.addEventListener('DOMContentLoaded', () => {
 
+	const tbl = new DataTable('#essaims', {
+		paging: true,
+		searching: false,
+		info: true,
+		scrollX: true
+	});
+	
+	// Voir infos.html
+	document.getElementById('collapseB').addEventListener('shown.bs.collapse', () => {
+		$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+	}, { once: true });
+
+	/*
+		new DataTable('#essaims', {
+			// actifs :
+			// le controle de pagination en bas de la page est icomplet à l'initialisation
+			// le tri sur duree passe par trois états !
+			order: [[1, 'asc']],
+			layout: {
+				topStart: {
+					buttons: [
+						'pageLength'
+					]
+				}
+			}
+		});
+	*/
+
 	const cookieOpt = ';SameSite=Strict;path=' + window.location.pathname;
 	// Pour le formulaire de choix du nombre de mois par tranche d'âge
-	document.getElementById('ageReinesForm').addEventListener('change', event => {
+	//  select id="pas"
+	document.getElementById('pas').addEventListener('change', event => {
 		document.cookie = 'p=' + event.target.value + cookieOpt;
+		event.target.form.submit();
+	});
+	document.getElementById('actif').addEventListener('change', event => {
+		// document.cookie = 'a=' + event.target.value + cookieOpt;
 		event.target.form.submit();
 	});
 

@@ -194,15 +194,24 @@ public class EssaimController {
 	 */
 	@GetMapping("/statistiquesage")
 	public String statistiquesage(Model model, @RequestParam(required = false) Integer pas,
-			@CookieValue(value = "p", defaultValue = "6") Integer pCookie) {
+			@RequestParam(required = false) Boolean actif,
+			@CookieValue(value = "p", defaultValue = "6") Integer pCookie
+			// , @CookieValue(value = "a", defaultValue = "true") Boolean aCookie
+			) {
 		if (pas == null) {
 			pas = pCookie;
 		}
 		if (pas <= 0) {
 			pas = 1;
 		}
-		essaimService.statistiquesage(model, pas);
+		if (actif == null) {
+			// Quand la checkbox n'est pas cochée, actif n'est pas transmis au serveur
+			// https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox
+			actif = false;
+		}
+		essaimService.statistiquesage(model, pas, actif);
 		model.addAttribute("pas", pas);
+		model.addAttribute("actif", actif);
 		return "essaim/essaimsStatAges";
 	}
 

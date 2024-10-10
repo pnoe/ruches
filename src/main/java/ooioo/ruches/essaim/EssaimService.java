@@ -443,8 +443,13 @@ public class EssaimService {
 	/*
 	 * Calcul des statistiques sur l'âge des reines des essaims actifs.
 	 */
-	void statistiquesage(Model model, Integer pas) {
-		Iterable<Essaim> essaims = essaimRepository.findByActif(true);
+	void statistiquesage(Model model, Integer pas, Boolean actif) {
+		// Il faudra affiner pour les inactifs : ne pas prendre les ventes d'essaims,
+		// les vols...
+		
+		// TODO le template plante sur la liste des durées 570 items, l'index 570 est KO
+		
+		List<Essaim> essaims = essaimRepository.findByActif(actif);
 		// int pas = 10; // nombre de mois par classe d'âge
 		int maxAgeMois = 95; // reine ignorée si plus ancienne (96 mois, 8 ans)
 		// ages : nb de reines par classes d'âge de largeur "pas" en mois
@@ -461,27 +466,37 @@ public class EssaimService {
 		LocalDate dateNow = LocalDate.now();
 		double m = 0;
 		double s = 0; // m et s pour calcul de la variance
+		List<Essaim> essaimsOK = new ArrayList<>(essaims.size());
+		List<Long> agesMois = new ArrayList<>(essaims.size());
 		for (Essaim essaim : essaims) {
 			if ((essaim.getReineDateNaissance() == null) || (essaim.getReineDateNaissance().isAfter(dateNow))) {
-				// La date de naissance n'est pas obligatoire à la création de l'essaim, 
+				// La date de naissance n'est pas obligatoire à la création de l'essaim,
 				// si null on ignore l'essaim (on pourrait prendre la date d'acquisition).
 				// Si la reine n'est pas encore née on ne la prends pas en compte !
 				continue;
 			}
-			long ageMois = ChronoUnit.MONTHS.between(essaim.getReineDateNaissance(), dateNow);
+
+			// Si l'essaim est actif, son âge est le nombre de mois entre sa date de
+			// naissance et la date actuelle. S'il est inactif, c'est entre sa date de
+			// naissance et sa date de sortie du cheptel.
+			long ageMois = actif ? ChronoUnit.MONTHS.between(essaim.getReineDateNaissance(), dateNow)
+					: ChronoUnit.MONTHS.between(essaim.getReineDateNaissance(), essaim.getDateDispersion());
 			if (ageMois > maxAgeMois) {
 				// Si la reine à plus de maxAgeMois on ne la prends pas en compte
 				// afficher un message en haut de la page de stat
 				logger.info("Essaim {}, âge supérieur à {} mois", essaim.getNom(), maxAgeMois);
 				continue;
 			}
-			if (rucheRepository.findByEssaimId(essaim.getId()) == null) {
+			if (actif && rucheRepository.findByEssaimId(essaim.getId()) == null) {
 				// Si la reine n'est pas dans une ruche on ne la prends pas en compte
 				continue;
 			}
+			essaimsOK.add(essaim);
+			agesMois.add(ageMois);
 			int indexAge = (int) ageMois / pas;
 			ages[indexAge]++;
 			indexMaxAges = Math.max(indexMaxAges, indexAge);
+			
 			// Calcul de l'âge nini, max, moyen et de l'écart type en jours
 			long ageJours = ChronoUnit.DAYS.between(essaim.getReineDateNaissance(), dateNow);
 			ageMaxJours = Math.max(ageMaxJours, ageJours);
@@ -513,6 +528,8 @@ public class EssaimService {
 		model.addAttribute("ageMaxJours", ageMaxJours);
 		model.addAttribute("ageMinJours", ageMinJours);
 		model.addAttribute("pas", pas);
+		model.addAttribute("essaims", essaimsOK);
+		model.addAttribute("agesMois", agesMois);
 	}
 
 	/**
