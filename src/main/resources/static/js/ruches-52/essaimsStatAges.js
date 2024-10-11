@@ -1,5 +1,5 @@
 /* globals d3, Chart, agesHisto, pas, 
-	ageDesReines, nbReinesTotal, Reines, buttontextprint, buttontextcol
+	ageDesReines, nbReinesTotal, Reines
 */
 'use strict';
 
@@ -24,7 +24,7 @@ function interpolateColors(dataLength, colorScale, colorRangeInfo) {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-	const tbl = new DataTable('#essaims', {
+	new DataTable('#essaims', {
 		paging: true,
 		searching: false,
 		info: true,
