@@ -24,33 +24,18 @@ function interpolateColors(dataLength, colorScale, colorRangeInfo) {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-	new DataTable('#essaims', {
+	const tbl = new DataTable('#essaims', {
+		order: [[1, 'asc']],
 		paging: true,
 		searching: false,
 		info: true,
 		scrollX: true
 	});
-	
-	// Voir infos.html
-	document.getElementById('collapseB').addEventListener('shown.bs.collapse', () => {
-		$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
-	}, { once: true });
 
-	/*
-		new DataTable('#essaims', {
-			// actifs :
-			// le controle de pagination en bas de la page est icomplet à l'initialisation
-			// le tri sur duree passe par trois états !
-			order: [[1, 'asc']],
-			layout: {
-				topStart: {
-					buttons: [
-						'pageLength'
-					]
-				}
-			}
-		});
-	*/
+	// Pour afficher correctement les headers de la table. Voir infos.html.
+	document.getElementById('collapseB').addEventListener('shown.bs.collapse', () => {
+		tbl.columns.adjust();
+	}, { once: true });
 
 	const cookieOpt = ';SameSite=Strict;path=' + window.location.pathname;
 	// Pour le formulaire de choix du nombre de mois par tranche d'âge
@@ -73,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const colors = interpolateColors(agesHisto.length, colorScale, colorRangeInfo);
 	const labels = [];
 	for (let i = 0; i < agesHisto.length; i++) {
-		labels[i] = (i * pas) + '-' + ((i + 1) * pas) + 'mois';
+		labels[i] = (i * pas) + '-' + ((i + 1) * pas) + ' ' + mois;
 	}
 	const data = {
 		datasets: [{

@@ -15,6 +15,7 @@
 	const ageDesReines = /*[[#{ageDesReines}]]*/null;
 	const nbReinesTotal = /*[[#{nbReinesTotal}]]*/null;
 	const Reines = /*[[#{Reines}]]*/null;
+	const mois = /*[[#{mois}]]*/null;
 </script>
 </head>
 <body>
@@ -80,7 +81,7 @@
 								<th:block th:if="${actif}">
 									<tr>
 										<th th:text="#{nom}"></th>
-										<th th:text="#{Duree}"></th>
+										<th th:text="#{Duree} + ' ' + #{mois}"></th>
 										<th th:text="#{dateAcquisition}"></th>
 										<th th:text="#{Naissance}"></th>
 									</tr>
