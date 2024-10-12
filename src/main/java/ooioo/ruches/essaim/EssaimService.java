@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
@@ -56,11 +57,13 @@ public class EssaimService {
 	private final GrapheEsRuService grapheEsRuService;
 	private final DistRucherRepository drRepo;
 
+	private final List<ReineSortie> essaimIgnore = new ArrayList<>();
+
 	public EssaimService(EssaimRepository essaimRepository, HausseRepository hausseRepository,
 			EvenementRepository evenementRepository, RucheRepository rucheRepository,
 			RecolteRepository recolteRepository, RecolteHausseRepository recolteHausseRepository,
 			RucherRepository rucherRepository, MessageSource messageSource, GrapheEsRuService grapheEsRuService,
-			DistRucherRepository drRepo) {
+			DistRucherRepository drRepo, @Value("${essaim.age.ignore}") String[] essIgnore) {
 		this.essaimRepository = essaimRepository;
 		this.evenementRepository = evenementRepository;
 		this.rucheRepository = rucheRepository;
@@ -70,6 +73,11 @@ public class EssaimService {
 		this.messageSource = messageSource;
 		this.grapheEsRuService = grapheEsRuService;
 		this.drRepo = drRepo;
+		// Initialisation de la liste des types de sorties à ignorer pour le calcul de
+		// l'âge des reines inactives.
+		for (int i = 0; i < essIgnore.length; i++) {
+			essaimIgnore.add(ReineSortie.valueOf(essIgnore[i]));
+		}
 	}
 
 	public void descendance(Model model) {
@@ -444,11 +452,6 @@ public class EssaimService {
 	 * Calcul des statistiques sur l'âge des reines des essaims actifs.
 	 */
 	void statistiquesage(Model model, Integer pas, Boolean actif) {
-		// Il faudra affiner pour les inactifs : ne pas prendre les ventes d'essaims,
-		// les vols...
-
-		// TODO le template plante sur la liste des durées 570 items, l'index 570 est KO
-
 		List<Essaim> essaims = essaimRepository.findByActif(actif);
 		// int pas = 10; // nombre de mois par classe d'âge
 		int maxAgeMois = 95; // reine ignorée si plus ancienne (96 mois, 8 ans)
@@ -469,6 +472,11 @@ public class EssaimService {
 		List<Essaim> essaimsOK = new ArrayList<>(essaims.size());
 		List<Long> agesMois = new ArrayList<>(essaims.size());
 		for (Essaim essaim : essaims) {
+			if (!actif && essaimIgnore.contains(essaim.getSortie())) {
+				// On ignore les essaims inactifs de certains types de sortie. Voir
+				// essaim.age.ignore=DIV,REM dans application.properties
+				continue;
+			}
 			if (essaim.getReineDateNaissance() == null) {
 				// La date de naissance n'est pas obligatoire à la création de l'essaim,
 				// si null on ignore l'essaim (on pourrait prendre la date d'acquisition).

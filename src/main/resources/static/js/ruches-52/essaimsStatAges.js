@@ -1,5 +1,5 @@
 /* globals d3, Chart, agesHisto, pas, 
-	ageDesReines, nbReinesTotal, Reines
+	ageDesReines, nbReines, Reines, mois
 */
 'use strict';
 
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const colors = interpolateColors(agesHisto.length, colorScale, colorRangeInfo);
 	const labels = [];
 	for (let i = 0; i < agesHisto.length; i++) {
-		labels[i] = (i * pas) + '-' + ((i + 1) * pas) + ' ' + mois;
+		labels[i] = (i * pas) + '-' + ((i + 1) * pas);
 	}
 	const data = {
 		datasets: [{
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					display: true,
 					title: {
 						display: true,
-						text: ageDesReines,
+						text: ageDesReines + ' (' + mois + ')',
 						font: {
 							size: 14,
 						},
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					display: true,
 					title: {
 						display: true,
-						text: nbReinesTotal + ' ' + agesHisto.reduce((a, c) => a + c, 0),
+						text: nbReines,
 						font: {
 							size: 12,
 						},
