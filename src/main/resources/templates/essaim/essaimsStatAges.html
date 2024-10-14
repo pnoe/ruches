@@ -8,7 +8,7 @@
 <script th:replace="~{include :: d3-scale-chromatic}"></script>
 <script th:replace="~{include :: jsruches}"></script>
 <script th:inline="javascript">
-	/* exported agesHisto, pas, ageDesReines, nbReines, Reines, mois
+	/* exported pas, agesHisto, ageDesReines, nbReines, Reines, mois
 	 */
 	const pas = /*[[${pas}]]*/null;
 	const agesHisto = /*[[${agesHisto}]]*/null;
@@ -33,16 +33,13 @@
 					id="ageReinesForm">
 					<div class="form-floating">
 						<select class="form-select" id="pas" name="pas">
-							<option th:each="i: ${#numbers.sequence(4, 10)}" th:value="${i}"
+							<option th:each="i: ${#numbers.sequence(4, 12)}" th:value="${i}"
 								th:text="${i}" th:selected="${i==pas}"></option>
 						</select> <label for="pas" th:text="#{Mois}"></label>
 					</div>
-
 					<input type="checkbox" id="actif" name="actif" th:title="#{actif}"
 						th:checked="${actif}" value="true" /> <label for="actif"
 						th:text="#{actif}"></label>
-
-
 				</form>
 			</div>
 		</div>
