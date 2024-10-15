@@ -17,8 +17,10 @@ document.addEventListener('DOMContentLoaded', () => {
 		scrollX: true,
 		columnDefs: [
             {
-                targets: [-1, -2, -3],
-                visible: false
+            	// On masque les colonnnes ruche, rucher, agressivité, propreté et distance.
+            	//   class="cache" sur ces colonnes.
+                targets: 'cache',
+                visible: false	
             }
         ],
 		layout: {
@@ -112,8 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
 			<thead>
 				<tr>
 					<th th:text="#{essaim}"></th>
+					<th class="cache" th:text="#{ruche}"></th>
+					<th class="cache" th:text="#{rucher}"></th>
 					<th th:text="#{dateAcquisition}"></th>
-					<th th:unless="${masquerInactif}" th:text="#{dispersion}"></th>
+					<th th:unless="${masquerInactif}" th:text="#{Sortie}"></th>
 					<th th:if="${rucherId == null}" th:text="#{Duree}"></th>
 					<th th:text="#{Total}"></th>
 					<th th:text="#{Max}"></th>
@@ -121,15 +125,23 @@ document.addEventListener('DOMContentLoaded', () => {
 					<th th:if="${rucherId == null}" th:text="#{Moyen}"></th>
 					<th th:text="#{Note}"></th>
 					<th th:text="#{NbRecolte}"></th>
-					<th th:text="#{ag}" th:title="#{agressivite}"></th>
-					<th th:text="#{pr}" th:title="#{proprete}"></th>
-					<th th:text="#{Distance}"></th>
+					<th class="cache" th:text="#{ag}" th:title="#{agressivite}"></th>
+					<th class="cache" th:text="#{pr}" th:title="#{proprete}"></th>
+					<th class="cache" th:text="#{Distance}"></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="essaimPoids : ${essaimsPoids}">
+				<tr th:each="essaimPoids, i : ${essaimsPoids}">
 					<td><a th:href="@{'/essaim/'+${essaimPoids.id}}"
 						th:text="${essaimPoids.nom}"></a></td>
+					<td th:unless="${ruches[i.index] == null}"><a
+						th:href="@{'/ruche/'+${ruches[i.index].id}}"
+						th:text="${ruches[i.index].nom}"></a></td>
+					<td th:if="${ruches[i.index] == null}"></td>
+					<td th:unless="${ruchers[i.index] == null}"><a
+						th:href="@{'/rucher/'+${ruchers[i.index].id}}"
+						th:text="${ruchers[i.index].nom}"></a></td>
+					<td th:if="${ruchers[i.index] == null}"></td>
 					<td th:text="${essaimPoids.dateA}"></td>
 					<td th:unless="${masquerInactif}" th:text="${essaimPoids.dateD}"></td>
 					<td th:if="${rucherId == null}" th:text="${essaimPoids.duree}"></td>

@@ -554,6 +554,7 @@ public class EssaimService {
 	 * @param rucherId       optionnel pour ne prendre en compte que les hausses de
 	 *                       récolte dans ce rucher.
 	 * @param masquerInactif true pour masquer les essaims inactifs.
+	 * @param ess            essaim, null si tableau de tous les essaims
 	 */
 	void statistiques(Model model, Long rucherId, boolean masquerInactif, Essaim ess) {
 		// pour équivalence appel Get ou Post avec rucherId = 0
@@ -565,7 +566,6 @@ public class EssaimService {
 		// les essaims actifs ou inactifs.
 		List<Essaim> essaims;
 		if (ess == null) {
-			// List<Essaim> essaims =
 			essaims = masquerInactif ? essaimRepository.findByActif(true) : essaimRepository.findAll();
 		} else {
 			essaims = new ArrayList<>();
@@ -601,6 +601,8 @@ public class EssaimService {
 		// type (e) de ces valeurs pour cette récolte et ce rucher. note = (p - m) / e
 		// Pour calculer la note d'un essaim pour toutes ses récoltes on fait la moyenne
 		// de ces notes.
+		List<Ruche> ruches = new ArrayList<>();
+		List<Rucher> ruchers = new ArrayList<>();
 		for (Essaim essaim : essaims) {
 			// Long essaimId = essaim.getId();
 			Integer pTotal = 0; // poids de miel total produit par l'essaim
@@ -676,10 +678,14 @@ public class EssaimService {
 				essaimPoids.put("pr", essaim.getProprete() == null ? "" : essaim.getProprete().toString());
 				essaimPoids.put("ag", essaim.getAgressivite() == null ? "" : essaim.getAgressivite().toString());
 
+				// Calcul de la distance du rucher dans lequel est l'essaim par rapport au
+				// dépôt. On en profite pour mémoriser la ruche et le rucher pour leur
+				// affichage.
 				DistRucher dr = null;
 				Ruche ruche = rucheRepository.findByEssaimId(essaim.getId());
+				Rucher rucher = null;
 				if (ruche != null) {
-					Rucher rucher = ruche.getRucher();
+					rucher = ruche.getRucher();
 					if (rucher != null) {
 						Rucher depot = rucherRepository.findByDepotTrue();
 						dr = (depot.getId().intValue() > rucher.getId().intValue())
@@ -687,8 +693,9 @@ public class EssaimService {
 								: drRepo.findByRucherStartAndRucherEnd(depot, rucher);
 					}
 				}
+				ruches.add(ruche);
+				ruchers.add(rucher);
 				essaimPoids.put("dist", dr == null ? "" : Double.toString(dr.getDist() / 1000.));
-
 				essaimPoids.put("id", essaim.getId().toString());
 				essaimPoids.put("dateA", essaim.getDateAcquisition().toString());
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -715,6 +722,8 @@ public class EssaimService {
 		model.addAttribute("rucherIdNom", rucherRepository.findAllProjectedIdNomByOrderByNom());
 		model.addAttribute("rucherId", rucherId);
 		model.addAttribute("masquerInactif", masquerInactif);
+		model.addAttribute("ruches", ruches);
+		model.addAttribute("ruchers", ruchers);
 		if (ess != null) {
 			model.addAttribute("essaim", ess);
 			model.addAttribute("avgRecList", avgRecList);

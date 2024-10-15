@@ -216,8 +216,8 @@ public class EssaimController {
 	}
 
 	/**
-	 * Statistiques tableau poids de miel par essaim. Appel icône dans page liste
-	 * essaim.
+	 * Statistiques tableau poids de miel par essaim, date acquisition, Durée,
+	 * Total, Max, Min, Note, Nb récoltes. Appel à partir de la liste des essaims.
 	 *
 	 * @param rucherId       optionnel pour ne prendre en compte que les hausses de
 	 *                       récolte dans ce rucher.
