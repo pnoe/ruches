@@ -11,7 +11,6 @@
 		document.addEventListener('DOMContentLoaded', () => {
 			$('#reineDateNaissance, #dateAcquisition').datetimepicker(
 				{timepicker: false, format: 'Y-m-d'});
-			$.datetimepicker.setLocale(window.navigator.language.substring(0, 2));
 			document.getElementById('nom').focus();
 			jQuery.validator.addMethod('nomExiste', function (value) {
 				return !essaimNoms.includes(value);
@@ -31,6 +30,9 @@
 						}
 					},
 					dateAcquisition: {
+						required: true
+					},
+					reineDateNaissance: {
 						required: true
 					},
 					dateDispersion: {
@@ -101,10 +103,10 @@
 						en gardant le fragment localejsdatetimepicker
 					*/-->
 					<div class="form-floating mb-3">
-						<input id="date" placeholder="" class="form-control datepicker"
-							type="text" th:field="*{dateDispersion}"
-							th:errorclass="fieldError" /> <label class="form-label"
-							th:text="#{dateDispersion}" for="dateDispersion"></label>
+						<input id="date" placeholder="" class="form-control" type="text"
+							th:field="*{dateDispersion}" th:errorclass="fieldError" /> <label
+							class="form-label" th:text="#{dateDispersion}"
+							for="dateDispersion"></label>
 					</div>
 					<div class="form-floating mb-3">
 						<textarea class="form-control" th:field="*{commDisp}"
@@ -125,7 +127,7 @@
 		</div>
 		<div th:replace="~{includeForm :: commentaireField}"></div>
 		<div class="form-floating mb-3">
-			<select class="form-control datepicker" th:field="*{souche}">
+			<select class="form-control" th:field="*{souche}">
 				<option th:text="#{aucune}" value=""></option>
 				<option th:each="essaimopt : ${essaims}" th:value="${essaimopt.id}"
 					th:text="${essaimopt.nom}"></option>

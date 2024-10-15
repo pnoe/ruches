@@ -94,7 +94,7 @@
 	media="all" th:href="@{/js/jquery.datetimepicker.min-2.5.21.css}" />
 <script th:fragment="localejsdatetimepicker">
 	document.addEventListener('DOMContentLoaded', () => {
-		$('#date').datetimepicker();
+		$('#date').datetimepicker(); // bof... 
 		$.datetimepicker.setLocale(window.navigator.language.substring(0, 2));
 	});
 </script>
