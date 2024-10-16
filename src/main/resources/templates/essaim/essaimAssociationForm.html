@@ -49,7 +49,7 @@
 		<div class="row" th:if="${rucheSource}"
 			th:text="#{positionRuchesE(${rucheSource.nom},${rucheSource.essaim.nom},${rucheSource.rucher.nom})}"></div>
 	</div>
-	<br />
+	<br>
 	<form action="#"
 		th:action="@{'/essaim/ruche/associe/sauve/' + ${ruche.id} + '/' + ${essaim.id}}"
 		method="post" id="evenementForm">
@@ -82,7 +82,7 @@
 			</fieldset>
 		</div>
 
-		<br />
+		<br>
 		<div th:text="#{etatEnregistre}"></div>
 		<div th:if="${ruche.essaim}"
 			th:text="#{essaim} + ' ' + ${ruche.essaim.nom} + ' ' + #{disperse}"></div>

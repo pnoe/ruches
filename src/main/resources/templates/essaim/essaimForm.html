@@ -1,10 +1,10 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsdatetimepicker}"></script>
 <script th:replace="~{include :: localejsdatetimepicker}"></script>
-<link th:replace="~{include :: cssdatetimepicker}" />
+<link th:replace="~{include :: cssdatetimepicker}">
 <script th:inline="javascript">
 		const essaimNoms = /*[[${essaimNoms}]]*/null;
 		const nomexiste = /*[[#{nomexiste}]]*/null;
@@ -74,17 +74,20 @@
 	</div>
 	<form action="#" th:action="@{/essaim/sauve}" th:object="${essaim}"
 		method="post" id="essaimForm">
-		<input class="form-control" type="hidden" th:field="*{id}" />
+		<input class="form-control" type="hidden" th:field="*{id}">
 		<div th:replace="~{includeForm :: nomField}"></div>
 		<div class="mb-3 form-check">
-			<input class="form-check-input" type="checkbox"
-				th:field="*{reineMarquee}" /> <label class="form-check-label"
-				for="reineMarquee" th:text="#{reineMarquee}"></label>
+
+			<label class="form-check-label"> <input
+				class="form-check-input" type="checkbox" th:field="*{reineMarquee}">
+				<span th:text="#{reineMarquee}"></span>
+			</label>
+
 		</div>
 		<div class="form-floating mb-3">
 			<input class="form-control" type="text" placeholder="2021-03-26"
-				th:field="*{reineDateNaissance}" th:errorclass="fieldError" /> <label
-				class="form-label" th:text="#{reineDateNaissance}"
+				th:field="*{reineDateNaissance}" th:errorclass="fieldError">
+			<label class="form-label" th:text="#{reineDateNaissance}"
 				for="reineDateNaissance"></label>
 		</div>
 		<div class="form-floating mb-3">
@@ -100,13 +103,13 @@
 					</div>
 					<!--/* on force l'id pour datetimepicker sur #date 
 						https://stackoverflow.com/questions/75988981/does-thymeleafs-thfield-generate-an-id-attribute-too
-						en gardant le fragment localejsdatetimepicker
+						en gardant le fragment localejsdatetimepicker $('#date').datetimepicker();
+						On pourrait le faire ici en js avec dateDispersion
 					*/-->
 					<div class="form-floating mb-3">
 						<input id="date" placeholder="" class="form-control" type="text"
-							th:field="*{dateDispersion}" th:errorclass="fieldError" /> <label
-							class="form-label" th:text="#{dateDispersion}"
-							for="dateDispersion"></label>
+							th:field="*{dateDispersion}" th:errorclass="fieldError"> <label
+							class="form-label" th:text="#{dateDispersion}" for="date"></label>
 					</div>
 					<div class="form-floating mb-3">
 						<textarea class="form-control" th:field="*{commDisp}"
@@ -131,17 +134,17 @@
 				<option th:text="#{aucune}" value=""></option>
 				<option th:each="essaimopt : ${essaims}" th:value="${essaimopt.id}"
 					th:text="${essaimopt.nom}"></option>
-			</select> <label class="form-label" for="essaim" th:text="#{souche}"></label>
+			</select> <label class="form-label" for="souche" th:text="#{souche}"></label>
 		</div>
 		<div class="form-floating mb-3">
 			<input class="form-control" type="number" min="1" max="5"
-				th:field="*{agressivite}" placeholder="1" /> <label
+				th:field="*{agressivite}" placeholder="1"> <label
 				class="form-label" th:text="#{agressivite}" for="agressivite"></label>
 		</div>
 		<div class="form-floating mb-3">
 			<input class="form-control" type="number" min="1" max="5"
-				th:field="*{proprete}" placeholder="1" /> <label class="form-label"
-				th:text="#{proprete}" for="proprete"></label>
+				th:field="*{proprete}" placeholder="1"> <label
+				class="form-label" th:text="#{proprete}" for="proprete"></label>
 		</div>
 		<div th:replace="~{includeForm :: BtnForm}"></div>
 	</form>
