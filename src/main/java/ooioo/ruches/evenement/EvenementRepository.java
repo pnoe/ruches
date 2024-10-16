@@ -180,7 +180,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	// l'essaim et la date sont donnés en paramètre.
 	// ruche et essaim identiques.
 	@Query(value = """
-			select new ooioo.ruches.IdDate(id, date) 
+			select new ooioo.ruches.IdDate(id, date)
 			  from Evenement
 			  where type = ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE
 			    and ruche = :ruche
@@ -240,6 +240,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	 * journée d'intervention sur deux ruchers comptera pour 2 interventions. Les
 	 * événements type1 à 4 sont exclus de la recherche. Appelé avec les types
 	 * d'événements commentaires ruche, hausse, rucher et essaim.
+	 * https://www.postgresql.org/docs/current/functions-datetime.html#FUNCTIONS-DATETIME-TRUNC
 	 */
 	@Query(value = """
 			select count(*) from (
@@ -257,7 +258,9 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	/*
 	 * Renvoie le nombre de jours d'interventions par année. Les événements type1 à
 	 * 4 sont exclus de la recherche. Appelé avec les types d'événements
-	 * commentaires ruche, hausse, rucher et essaim.
+	 * commentaires ruche, hausse, rucher et essaim. Une seule intervention est
+	 * comptée si on est allé dans des ruchers différents la même journée
+	 * contrairement à la méthode précédente.
 	 */
 	@Query(value = """
 			select count(*) from (

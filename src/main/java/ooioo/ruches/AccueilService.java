@@ -186,14 +186,17 @@ public class AccueilService {
 		Integer nbCrHaussesTotal = 0;
 		for (int date = dateDebut; date <= dateFin; date++) {
 			annees.add(date);
+			// Poids de miel récolté par année
 			Optional<Double> poidsOpt = recolteRepository.findPoidsMielByYear(date);
 			Double poids = poidsOpt.isPresent() ? poidsOpt.get() : 0.0;
 			pdsMiel.add(poids);
 			pdsMielTotal += poids;
+			// Nombre de récoltes par année
 			Optional<Integer> nbRecOpt = recolteRepository.findRecoltesByYear(date);
 			Integer nbRec = nbRecOpt.isPresent() ? nbRecOpt.get() : 0;
 			nbRecoltes.add(nbRec);
 			nbRecTotal += nbRec;
+			// Renvoie le nombre d'interventions dans les ruchers par année
 			Optional<Integer> nbEveRucherOpt = evenementRepository.countEveAnneeRucher(date,
 					ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHE.ordinal(),
 					ooioo.ruches.evenement.TypeEvenement.COMMENTAIREHAUSSE.ordinal(),
@@ -202,6 +205,7 @@ public class AccueilService {
 			Integer nbEvRucher = nbEveRucherOpt.isPresent() ? nbEveRucherOpt.get() : 0;
 			nbEvesRucher.add(nbEvRucher);
 			nbEveRucherTotal += nbEvRucher;
+			// Renvoie le nombre d'interventions par année			
 			Optional<Integer> nbEveOpt = evenementRepository.countEveAnnee(date,
 					ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHE.ordinal(),
 					ooioo.ruches.evenement.TypeEvenement.COMMENTAIREHAUSSE.ordinal(),
