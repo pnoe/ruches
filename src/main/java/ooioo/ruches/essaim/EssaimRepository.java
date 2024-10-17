@@ -27,20 +27,15 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 	 * Liste du nombre d'essaims par origine.
 	 */
 	/*
-	@Query(value = """
-			select count(*)
-				from Essaim
-				where actif = true
-				group by origine
-				order by origine
-			""")
-	*/
+	 * @Query(value = """ select count(*) from Essaim where actif = true group by
+	 * origine order by origine """)
+	 */
 	Long countByOrigineAndActifTrue(ReineOrigine ro);
-	
+
 	Long countBySortieAndActifFalse(ReineSortie rs);
-	
+
 	Long countByActifFalse();
-	
+
 	/*
 	 * Liste des id, dateAcqusition des essaims triés par dateAcquisition.
 	 */
@@ -72,7 +67,7 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 			select distinct new ooioo.ruches.IdDateNoTime(e.id, dateAcquisition)
 				from Essaim e, Evenement ev
 				where e.id = essaim.id and
-				  type = ooioo.ruches.evenement.TypeEvenement.AJOUTESSAIMRUCHE and
+				  type = TypeEvenement.AJOUTESSAIMRUCHE and
 				  ruche.production = true
 				order by dateAcquisition asc
 			""")
@@ -88,7 +83,7 @@ public interface EssaimRepository extends ListCrudRepository<Essaim, Long> {
 				from Essaim e, Evenement ev
 				where e.id = essaim.id and
 				  actif = false and
-				  type = ooioo.ruches.evenement.TypeEvenement.AJOUTESSAIMRUCHE and
+				  type = TypeEvenement.AJOUTESSAIMRUCHE and
 				  ruche.production = true
 				order by dateDispersion asc
 			""")

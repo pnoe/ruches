@@ -38,10 +38,10 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			  from Evenement e
 			  where
 			    valeur <> ''
-			    and (type = ooioo.ruches.evenement.TypeEvenement.COMMENTAIREESSAIM
-			    or type = ooioo.ruches.evenement.TypeEvenement.COMMENTAIREHAUSSE
-			    or type = ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHE
-			    or type = ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHER)
+			    and (type = TypeEvenement.COMMENTAIREESSAIM
+			    or type = TypeEvenement.COMMENTAIREHAUSSE
+			    or type = TypeEvenement.COMMENTAIRERUCHE
+			    or type = TypeEvenement.COMMENTAIRERUCHER)
 			  order by date desc
 			""")
 	List<Evenement> findNotification();
@@ -151,8 +151,8 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			select e
 			  from Evenement e
 			  where ruche.id = :rucheId and
-			    (type = ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE
-			      or type = ooioo.ruches.evenement.TypeEvenement.HAUSSERETRAITRUCHE)
+			    (type = TypeEvenement.HAUSSEPOSERUCHE
+			      or type = TypeEvenement.HAUSSERETRAITRUCHE)
 			  order by date desc
 			""")
 	List<Evenement> findEveRucheHausseDesc(Long rucheId);
@@ -162,8 +162,8 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			select e
 			  from Evenement e
 			  where essaim.id = :essaimId and
-			    (type = ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE
-			      or type = ooioo.ruches.evenement.TypeEvenement.HAUSSERETRAITRUCHE)
+			    (type = TypeEvenement.HAUSSEPOSERUCHE
+			      or type = TypeEvenement.HAUSSERETRAITRUCHE)
 			  order by date asc
 			""")
 	List<Evenement> findEveEssaimHausseAsc(Long essaimId);
@@ -182,7 +182,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	@Query(value = """
 			select new ooioo.ruches.IdDate(id, date)
 			  from Evenement
-			  where type = ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE
+			  where type = TypeEvenement.HAUSSEPOSERUCHE
 			    and ruche = :ruche
 			    and essaim = :essaim
 			    and date > :date
@@ -194,22 +194,22 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	@Query(value = """
 			select e
 			  from Evenement e
-			  where type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENT
-			    or type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENTFIN
+			  where type = TypeEvenement.ESSAIMTRAITEMENT
+			    or type = TypeEvenement.ESSAIMTRAITEMENTFIN
 			""")
 	List<Evenement> findTraitementDateDesc();
 
 	@Query(value = """
 			select e
 			  from Evenement e
-			  where type = ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE
-			    or type = ooioo.ruches.evenement.TypeEvenement.HAUSSERETRAITRUCHE
+			  where type = TypeEvenement.HAUSSEPOSERUCHE
+			    or type = TypeEvenement.HAUSSERETRAITRUCHE
 			""")
 	List<Evenement> findPoseHausseDateDesc();
 
 	@Query(value = """
 			select e from Evenement e
-			  where type = ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER
+			  where type = TypeEvenement.RUCHEAJOUTRUCHER
 			    and ruche is not null
 			    and rucher is not null
 			  order by date desc
@@ -228,9 +228,9 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			select e
 			  from Evenement e
 			  where ruche = :ruche and
-			    type <> ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE and
-			    type <> ooioo.ruches.evenement.TypeEvenement.RUCHEPESEE and
-			    type <> ooioo.ruches.evenement.TypeEvenement.RUCHECADRE
+			    type <> TypeEvenement.HAUSSEPOSERUCHE and
+			    type <> TypeEvenement.RUCHEPESEE and
+			    type <> TypeEvenement.RUCHECADRE
 			  order by date desc limit 3
 			""")
 	List<Evenement> find3EveListePlus(Ruche ruche);
@@ -240,7 +240,8 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	 * journée d'intervention sur deux ruchers comptera pour 2 interventions. Les
 	 * événements type1 à 4 sont exclus de la recherche. Appelé avec les types
 	 * d'événements commentaires ruche, hausse, rucher et essaim.
-	 * https://www.postgresql.org/docs/current/functions-datetime.html#FUNCTIONS-DATETIME-TRUNC
+	 * https://www.postgresql.org/docs/current/functions-datetime.html#FUNCTIONS-
+	 * DATETIME-TRUNC
 	 */
 	@Query(value = """
 			select count(*) from (
@@ -279,8 +280,8 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			select e
 			  from Evenement e
 			  where essaim = :essaim and
-			    (type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENT or
-			      type = ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENTFIN)
+			    (type = TypeEvenement.ESSAIMTRAITEMENT or
+			      type = TypeEvenement.ESSAIMTRAITEMENTFIN)
 			  order by date desc limit 1
 			""")
 	Evenement findFirstTraitemenetByEssaim(Essaim essaim);
@@ -300,7 +301,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			 from Evenement e
 			 where hausse = :hausse and
 			   ruche = :#{#hausse.ruche} and
-			   type = ooioo.ruches.evenement.TypeEvenement.HAUSSEPOSERUCHE
+			   type = TypeEvenement.HAUSSEPOSERUCHE
 			 order by date desc
 			 limit 1
 			""")
@@ -318,7 +319,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	@Query(value = """
 			select sum(cast(valeur as double)) as sucre
 			  from Evenement
-			  where type=ooioo.ruches.evenement.TypeEvenement.ESSAIMSUCRE
+			  where type=TypeEvenement.ESSAIMSUCRE
 				and date_part('year', date)=?1
 			""")
 	Double sucreEssaimParAnnee(int date);
@@ -327,7 +328,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	@Query(value = """
 			select count(*) as nbtraitements
 			  from Evenement
-			  where type=ooioo.ruches.evenement.TypeEvenement.ESSAIMTRAITEMENT
+			  where type=TypeEvenement.ESSAIMTRAITEMENT
 				and date_part('year', date)=?1
 			""")
 	Integer countTraitementsEssaimParAnnee(int date);

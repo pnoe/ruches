@@ -525,7 +525,7 @@ public class EvenementEssaimController {
 			// que la date choisie soit postérieure à celle du dernier ajout
 			// de la ruche dans son rucher
 			Evenement evenFirst = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
-					ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER);
+					TypeEvenement.RUCHEAJOUTRUCHER);
 			DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
 			model.addAttribute("dateTime", evenFirst.getDate());
@@ -548,10 +548,9 @@ public class EvenementEssaimController {
 	 */
 	@PostMapping("/sauve/dispersion/{essaimId}")
 	public String sauveDispersion(Model model, @PathVariable long essaimId,
-			@RequestParam(defaultValue = "false") boolean depot, 
-			@RequestParam ReineSortie sortie, @RequestParam String date,
-			@RequestParam String commentaire, @RequestParam(defaultValue = "") Long remerageId,
-			@RequestParam(defaultValue = "false") boolean evencadre) {
+			@RequestParam(defaultValue = "false") boolean depot, @RequestParam ReineSortie sortie,
+			@RequestParam String date, @RequestParam String commentaire,
+			@RequestParam(defaultValue = "") Long remerageId, @RequestParam(defaultValue = "false") boolean evencadre) {
 		Optional<Essaim> essaimOpt = essaimRepository.findById(essaimId);
 		if (essaimOpt.isPresent()) {
 			LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));

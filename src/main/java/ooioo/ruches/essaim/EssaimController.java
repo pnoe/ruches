@@ -194,10 +194,9 @@ public class EssaimController {
 	 */
 	@GetMapping("/statistiquesage")
 	public String statistiquesage(Model model, @RequestParam(required = false) Integer pas,
-			@RequestParam(required = false) Boolean actif,
-			@CookieValue(value = "p", defaultValue = "6") Integer pCookie
-			// , @CookieValue(value = "a", defaultValue = "true") Boolean aCookie
-			) {
+			@RequestParam(required = false) Boolean actif, @CookieValue(value = "p", defaultValue = "6") Integer pCookie
+	// , @CookieValue(value = "a", defaultValue = "true") Boolean aCookie
+	) {
 		if (pas == null) {
 			pas = pCookie;
 		}
@@ -677,9 +676,9 @@ public class EssaimController {
 					// Envoyer la date max événements ajout ruchers pour imposer une date de
 					// l'événement essaim mis dans rucher postérieure à cette date.
 					Evenement evenRuche = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
-							ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER);
+							TypeEvenement.RUCHEAJOUTRUCHER);
 					Evenement evenRucheSource = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(rucheSource,
-							ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER);
+							TypeEvenement.RUCHEAJOUTRUCHER);
 					LocalDateTime dateTime = evenRuche.getDate().isBefore(evenRucheSource.getDate())
 							? evenRucheSource.getDate()
 							: evenRuche.getDate();

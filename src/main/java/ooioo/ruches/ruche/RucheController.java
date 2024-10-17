@@ -89,7 +89,7 @@ public class RucheController {
 		rucheService.grapheRuches(model);
 		return "ruche/ruchesGraphe";
 	}
-	
+
 	/**
 	 * Historique de l'ajout des hausses sur une ruche
 	 */
@@ -236,7 +236,7 @@ public class RucheController {
 			model.addAttribute("depotId", rucherRepository.findByDepotTrue().getId());
 			model.addAttribute(Const.DATE, Utils.dateTimeDecal(session));
 			Evenement evenFirst = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
-					ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER);
+					TypeEvenement.RUCHEAJOUTRUCHER);
 			DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
 			model.addAttribute("dateTime", evenFirst.getDate());
@@ -452,8 +452,8 @@ public class RucheController {
 		if (rucheOpt.isPresent()) {
 			Ruche ruche = rucheOpt.get();
 			Iterable<Hausse> haussesRuche = hausseRepository.findByRucheIdOrderByOrdreSurRuche(rucheId);
-			List<Hausse> haussesRucheAjout = toutes ? hausseRepository.findHaussesPourAjout(rucheId) :
-				hausseRepository.findHaussesPourAjout(rucheId, ruche.getRucher().getId());
+			List<Hausse> haussesRucheAjout = toutes ? hausseRepository.findHaussesPourAjout(rucheId)
+					: hausseRepository.findHaussesPourAjout(rucheId, ruche.getRucher().getId());
 			model.addAttribute(Const.RUCHE, ruche);
 			model.addAttribute("haussesRuche", haussesRuche);
 			model.addAttribute("haussesRucheAjout", haussesRucheAjout);

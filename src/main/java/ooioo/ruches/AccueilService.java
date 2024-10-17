@@ -16,6 +16,7 @@ import ooioo.ruches.essaim.ReineOrigine;
 import ooioo.ruches.essaim.ReineSortie;
 import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
+import ooioo.ruches.evenement.TypeEvenement;
 import ooioo.ruches.hausse.HausseRepository;
 import ooioo.ruches.recolte.Recolte;
 import ooioo.ruches.recolte.RecolteRepository;
@@ -198,19 +199,15 @@ public class AccueilService {
 			nbRecTotal += nbRec;
 			// Renvoie le nombre d'interventions dans les ruchers par année
 			Optional<Integer> nbEveRucherOpt = evenementRepository.countEveAnneeRucher(date,
-					ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHE.ordinal(),
-					ooioo.ruches.evenement.TypeEvenement.COMMENTAIREHAUSSE.ordinal(),
-					ooioo.ruches.evenement.TypeEvenement.COMMENTAIREHAUSSE.ordinal(),
-					ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHER.ordinal());
+					TypeEvenement.COMMENTAIRERUCHE.ordinal(), TypeEvenement.COMMENTAIREHAUSSE.ordinal(),
+					TypeEvenement.COMMENTAIREHAUSSE.ordinal(), TypeEvenement.COMMENTAIRERUCHER.ordinal());
 			Integer nbEvRucher = nbEveRucherOpt.isPresent() ? nbEveRucherOpt.get() : 0;
 			nbEvesRucher.add(nbEvRucher);
 			nbEveRucherTotal += nbEvRucher;
-			// Renvoie le nombre d'interventions par année			
+			// Renvoie le nombre d'interventions par année
 			Optional<Integer> nbEveOpt = evenementRepository.countEveAnnee(date,
-					ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHE.ordinal(),
-					ooioo.ruches.evenement.TypeEvenement.COMMENTAIREHAUSSE.ordinal(),
-					ooioo.ruches.evenement.TypeEvenement.COMMENTAIREHAUSSE.ordinal(),
-					ooioo.ruches.evenement.TypeEvenement.COMMENTAIRERUCHER.ordinal());
+					TypeEvenement.COMMENTAIRERUCHE.ordinal(), TypeEvenement.COMMENTAIREHAUSSE.ordinal(),
+					TypeEvenement.COMMENTAIREHAUSSE.ordinal(), TypeEvenement.COMMENTAIRERUCHER.ordinal());
 			Integer nbEv = nbEveOpt.isPresent() ? nbEveOpt.get() : 0;
 			nbEves.add(nbEv);
 			nbEveTotal += nbEv;

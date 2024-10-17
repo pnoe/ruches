@@ -370,12 +370,12 @@ public class RucherController {
 							.add(recolteHausseRepository.countRucheByRecolteByRucher(recolte.getId(), rucherId));
 				}
 			}
-			
+
 			List<Long> datesRec = new ArrayList<>(recoltesListe.size());
 			for (Recolte rec : recoltesListe) {
-				datesRec.add(rec.getDate().toEpochSecond( ZoneOffset.UTC));
+				datesRec.add(rec.getDate().toEpochSecond(ZoneOffset.UTC));
 			}
-			
+
 			model.addAttribute("datesRec", datesRec);
 			// model.addAttribute("recoltesListe", recoltesListe);
 			model.addAttribute("recoltesNbRuches", recoltesNbRuches);
@@ -954,7 +954,7 @@ public class RucherController {
 					ruchesNoms.append(ruche.getNom() + ",");
 					rIds.append(ruche.getId() + ",");
 					Evenement evenFirst = evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
-							ooioo.ruches.evenement.TypeEvenement.RUCHEAJOUTRUCHER);
+							TypeEvenement.RUCHEAJOUTRUCHER);
 					if (dateTimeMin.isBefore(evenFirst.getDate())) {
 						dateTimeMin = evenFirst.getDate();
 					}
