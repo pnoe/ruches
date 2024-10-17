@@ -8,6 +8,9 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(collectionResourceRel = "distRucherRepository")
 public interface DistRucherRepository extends CrudRepository<DistRucher, Long> {
 
+	/*
+	 * Distance entre les deux ruchers. r1 doit être inférieur à r2. 
+	 */
 	DistRucher findByRucherStartAndRucherEnd(Rucher r1, Rucher r2);
 
 	@Modifying

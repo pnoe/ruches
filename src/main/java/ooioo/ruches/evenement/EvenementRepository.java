@@ -236,9 +236,9 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	List<Evenement> find3EveListePlus(Ruche ruche);
 
 	/*
-	 * Renvoie le nombre d'interventions dans les ruchers par année. Une même
-	 * journée d'intervention sur deux ruchers comptera pour 2 interventions. Les
-	 * événements type1 à 4 sont exclus de la recherche. Appelé avec les types
+	 * Renvoie le nombre de jours d'interventions dans les ruchers par année. Une
+	 * même journée d'intervention sur deux ruchers comptera pour 2 interventions.
+	 * Les événements type1 à 4 sont exclus de la recherche. Appelé avec les types
 	 * d'événements commentaires ruche, hausse, rucher et essaim.
 	 * https://www.postgresql.org/docs/current/functions-datetime.html#FUNCTIONS-
 	 * DATETIME-TRUNC
@@ -256,6 +256,35 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			""", nativeQuery = true)
 	Optional<Integer> countEveAnneeRucher(Integer annee, int type1, int type2, int type3, int type4);
 
+	
+	
+	/*
+	 * Renvoie la liste des jours d'interventions dans les ruchers par année. Une
+	 * même journée d'intervention sur deux ruchers comptera pour 2 interventions.
+	 * Les événements type1 à 4 sont exclus de la recherche. Appelé avec les types
+	 * d'événements commentaires ruche, hausse, rucher et essaim.
+	 * select new ooioo.ruches.IdDate(null, max(e.date))
+	 * select new ooioo.ruches.IdDate(rucher_id, date_trunc('day', date))
+	 * 
+	 *  Attention pas de nativeQuery avec new !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	 *    date_trunc impose nativeQuery ?
+	 *    OK avec List<Object[]>
+	 * 
+	 */
+	/*
+	@Query(value = """
+			select distinct rucher_id, date_trunc('day', date)
+			    from evenement
+			    where extract(year from date) = :annee and
+			      type <> :type1 and
+			      type <> :type2 and
+			      type <> :type3 and
+			      type <> :type4
+			    order by date_trunc('day', date)
+			""", nativeQuery = true)
+	List<Object[]> idDateEveAnneeRucher(Integer annee, int type1, int type2, int type3, int type4);
+	*/
+	
 	/*
 	 * Renvoie le nombre de jours d'interventions par année. Les événements type1 à
 	 * 4 sont exclus de la recherche. Appelé avec les types d'événements
