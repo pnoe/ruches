@@ -44,7 +44,7 @@
 					<th th:text="#{ruche}"></th>
 					<th th:text="#{essaim}"></th>
 					<th th:text="#{rucher}"></th>
-					<th th:text="#{quantite}"></th>
+					<th th:text="#{Traitement}"></th>
 					<th th:text="#{commentaire}"></th>
 				</tr>
 			</thead>
@@ -57,7 +57,9 @@
 						th:text="${evenement.essaim?.nom}"></a></td>
 					<td><a th:href="@{'/rucher/'+${evenement.rucher?.id}}"
 						th:text="${evenement.rucher?.nom}"></a></td>
-					<td class="num" th:text="${evenement.valeur}"></td>
+						
+					<td class="num" th:text="#{${evenement.valeur}}"></td>
+					
 					<td th:text="${evenement.commentaire}"></td>
 				</tr>
 			</tbody>

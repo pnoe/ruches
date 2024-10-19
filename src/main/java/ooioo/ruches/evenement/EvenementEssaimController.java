@@ -282,6 +282,12 @@ public class EvenementEssaimController {
 
 	/**
 	 * Créations des événements pour un lot d'essaims.
+	 * 
+	 * @param essaimIds     la liste de ids des essaims
+	 * @param typeEvenement le type d'événement : commentaire essaim, sucre,
+	 *                      traitement ou cadre
+	 * @param valeur        sucre : la quantité de sucre, traitement : le type de
+	 *                      traitement, cadre : le nombre de cadres
 	 */
 	@PostMapping("/sauve/lot/{essaimIds}")
 	public String sauveLot(@PathVariable Long[] essaimIds, @RequestParam TypeEvenement typeEvenement,
@@ -299,7 +305,7 @@ public class EvenementEssaimController {
 				}
 				LocalDateTime dateEve = LocalDateTime.parse(date, DateTimeFormatter.ofPattern(Const.YYYYMMDDHHMM));
 				if (typeEvenement.equals(TypeEvenement.RUCHECADRE) &&
-				// Si le nombre de cadre
+				// Si événement cadre, limiter la valeur au nombre de cadre max.
 						ruche.getType() != null && ruche.getType().getNbCadresMax() != null
 						&& Integer.parseInt(valeur) > ruche.getType().getNbCadresMax()) {
 					valeur = Integer.toString(ruche.getType().getNbCadresMax());

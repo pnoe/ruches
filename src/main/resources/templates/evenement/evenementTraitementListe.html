@@ -50,7 +50,7 @@
 					<th th:text="#{ruche}"></th>
 					<th th:text="#{essaim}"></th>
 					<th th:text="#{rucher}"></th>
-					<th th:text="#{valeur}"></th>
+					<th th:text="#{Traitement}"></th>
 					<th th:text="#{commentaire}"></th>
 				</tr>
 			</thead>
@@ -66,8 +66,7 @@
 					<td th:text="${evenement.ruche?.nom}"></td>
 					<td th:text="${evenement.essaim?.nom}"></td>
 					<td th:text="${evenement.rucher?.nom}"></td>
-					<td class="num"
-						th:text="${#numbers.formatDecimal(evenement.valeur,1,2,'COMMA')}"></td>
+					<td th:text="${evenement.valeur}"></td>
 					<td th:text="${evenement.commentaire}"></td>
 				</tr>
 			</tbody>

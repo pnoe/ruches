@@ -77,12 +77,10 @@
 		<input class="form-control" type="hidden" th:field="*{id}">
 		<div th:replace="~{includeForm :: nomField}"></div>
 		<div class="mb-3 form-check">
-
 			<label class="form-check-label"> <input
 				class="form-check-input" type="checkbox" th:field="*{reineMarquee}">
 				<span th:text="#{reineMarquee}"></span>
 			</label>
-
 		</div>
 		<div class="form-floating mb-3">
 			<input class="form-control" type="text" placeholder="2021-03-26"
@@ -108,8 +106,8 @@
 					*/-->
 					<div class="form-floating mb-3">
 						<input id="date" placeholder="" class="form-control" type="text"
-							th:field="*{dateDispersion}" th:errorclass="fieldError"> <label
-							class="form-label" th:text="#{dateDispersion}" for="date"></label>
+							th:field="*{dateDispersion}" th:errorclass="fieldError">
+						<label class="form-label" th:text="#{dateDispersion}" for="date"></label>
 					</div>
 					<div class="form-floating mb-3">
 						<textarea class="form-control" th:field="*{commDisp}"
