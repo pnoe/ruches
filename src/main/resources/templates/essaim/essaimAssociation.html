@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:inline="javascript">
@@ -39,7 +39,7 @@
 					th:text="#{essaimdanslaruche}+' '+${rucheEssaim.nom}"></h6>
 			</div>
 			<div class="col">
-				<input class="form-check-input" type="checkbox" id="avecEssaim" />
+				<input class="form-check-input" type="checkbox" id="avecEssaim">
 				<label class="form-check-label" for="avecEssaim"
 					th:text="#{avecEssaims}"></label>
 			</div>

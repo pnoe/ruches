@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsdatetimepicker}"></script>
@@ -7,8 +7,9 @@
 <script th:replace="~{include :: localejsdatetimepicker}"></script>
 <script th:replace="~{include :: jsruches}"></script>
 <script th:inline="javascript">
-	/* exported complet */
+	/* exported complet, traitements */
 	const complet = /*[[${complet}]]*/null;
+	const traitements = /*[[${T(ooioo.ruches.evenement.TypeTraitement).values()}]]*/null;
 </script>
 </head>
 <body>
@@ -28,20 +29,19 @@
 			</div>
 			<div class="col">
 				<span class="padicons"> <input type="checkbox"
-					id="showruches" th:title="#{afficherrucheetc}"
-					th:text="#{afficherPlus}" />
-
+					id="showruches"> <label class="form-label" for="showruches"
+					th:title="#{afficherrucheetc}" th:text="#{afficherPlus}"></label>
 				</span>
 			</div>
 		</div>
 	</div>
 	<form action="#" th:action="@{/evenement/sauve}"
 		th:object="${evenement}" method="post" id="evenementForm">
-		<input type="hidden" th:field="*{id}" />
+		<input type="hidden" th:field="*{id}">
 		<div th:replace="~{includeForm :: dateField}"></div>
 		<div class="form-floating mb-3">
-			<input placeholder="" class="form-control" type="number" step="0.001"
-				th:field="*{valeur}" th:errorclass="fieldError" maxlength="64" /> <label
+			<input placeholder="" class="form-control" th:field="*{valeur}"
+				th:errorclass="fieldError" maxlength="64"> <label
 				class="form-label" for="valeur" th:text="#{valeur}"></label>
 		</div>
 		<div th:replace="~{includeForm :: commentaireField}"></div>
@@ -51,8 +51,7 @@
 					th:each="typeEvenement : ${T(ooioo.ruches.evenement.TypeEvenement).values()}"
 					th:unless="${typeEvenement == T(ooioo.ruches.evenement.TypeEvenement).LIBRE}"
 					th:value="${typeEvenement}" th:text="#{${typeEvenement}}"></option>
-			</select> <label class="form-label" for="typeEvenement"
-				th:text="#{typeEvenement}"></label>
+			</select> <label class="form-label" for="type" th:text="#{typeEvenement}"></label>
 		</div>
 		<div class="form-floating mb-3 ruches" style="display: none">
 			<select class="form-control" th:field="*{ruche}">

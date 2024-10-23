@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsruches}"></script>
@@ -57,11 +57,10 @@
 		<div th:replace="~{includeForm :: commentaire}"></div>
 		<div class="form-check" th:if="${rucheSource}">
 			<input class="form-check-input" type="checkbox" id="swapPositions"
-				th:checked="${ruche.rucher.depot}" name="swapPositions" /> <label
+				th:checked="${ruche.rucher.depot}" name="swapPositions"> <label
 				class="form-check-label" for="swapPositions"
 				th:text="#{echangePositionsRuches(${ruche.nom},${rucheSource.nom})}"></label>
 		</div>
-
 		<div class="form-floating mb-3" th:if="${ruche.essaim}"
 			style="margin-top: 5px">
 			<fieldset class="border rounded-3 p-3">
@@ -81,7 +80,6 @@
 				</div>
 			</fieldset>
 		</div>
-
 		<br>
 		<div th:text="#{etatEnregistre}"></div>
 		<div th:if="${ruche.essaim}"

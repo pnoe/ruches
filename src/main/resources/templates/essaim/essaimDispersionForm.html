@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsdatetimepicker}"></script>
@@ -96,12 +96,12 @@
 		method="post" id="evenementForm">
 		<div class="form-check">
 			<input class="form-check-input" type="checkbox" id="depot"
-				name="depot" checked /> <label class="form-check-label" for="depot"
+				name="depot" checked> <label class="form-check-label" for="depot"
 				th:text="#{retourrucheaudepot}"></label>
 		</div>
 		<div id="divevencadre" class="form-check">
 			<input class="form-check-input" type="checkbox" id="evencadre"
-				name="evencadre" checked /> <label class="form-check-label"
+				name="evencadre" checked> <label class="form-check-label"
 				for="evencadre" th:text="#{creationevecadrezero}"></label>
 		</div>
 		<fieldset class="border rounded-3 p-3">

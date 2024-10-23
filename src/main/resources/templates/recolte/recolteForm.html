@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsdatetimepicker}"></script>
@@ -26,10 +26,10 @@
 	</div>
 	<form action="#" th:action="@{/recolte/sauve}" th:object="${recolte}"
 		method="post" id="recolteForm">
-		<input type="hidden" th:field="*{id}" />
+		<input type="hidden" th:field="*{id}">
 		<div class="form-floating mb-3">
 			<input class="form-control" type="text" th:field="*{date}"
-				th:errorclass="fieldError" placeholder="" /> <label
+				th:errorclass="fieldError" placeholder=""> <label
 				class="form-label" th:text="#{date}" for="date"></label>
 		</div>
 		<div class="form-floating mb-3">
@@ -41,7 +41,7 @@
 		</div>
 		<div class="form-floating mb-3">
 			<input class="form-control" placeholder="" type="number" step="0.001"
-				min="0" th:field="*{poidsMiel}" th:errorclass="fieldError" /> <label
+				min="0" th:field="*{poidsMiel}" th:errorclass="fieldError"> <label
 				class="form-label" th:text="#{poidsMiel}" for="poidsMiel"></label>
 		</div>
 		<div th:replace="~{includeForm :: commentaireField}"></div>

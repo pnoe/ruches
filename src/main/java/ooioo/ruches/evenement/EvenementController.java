@@ -236,6 +236,7 @@ public class EvenementController {
 		model.addAttribute(Const.RUCHERS, rucherRepository.findAllProjectedIdNomByOrderByNom());
 		model.addAttribute(Const.HAUSSES, hausseRepository.findAllProjectedIdNomByOrderByNom());
 		model.addAttribute(Const.ESSAIMS, essaimRepository.findAllProjectedIdNomByOrderByNom());
+		// complet true pour afficher les champs ruches, ruchers, hausses et essaims
 		model.addAttribute("complet", "true");
 		Evenement evenement = new Evenement();
 		evenement.setDate(Utils.dateTimeDecal(session));
@@ -255,6 +256,7 @@ public class EvenementController {
 			model.addAttribute(Const.RUCHERS, rucherRepository.findAllProjectedIdNomByOrderByNom());
 			model.addAttribute(Const.HAUSSES, hausseRepository.findAllProjectedIdNomByOrderByNom());
 			model.addAttribute(Const.ESSAIMS, essaimRepository.findAllProjectedIdNomByOrderByNom());
+			// complet true pour afficher les champs ruches, ruchers, hausses et essaims
 			model.addAttribute("complet", complet);
 			model.addAttribute(Const.EVENEMENT, evenementOpt.get());
 			return EVEN_EVENFORM;

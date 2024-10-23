@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsChart}"></script>
@@ -38,7 +38,7 @@
 						</select> <label for="pas" th:text="#{Mois}"></label>
 					</div>
 					<input type="checkbox" id="actif" name="actif" th:title="#{actif}"
-						th:checked="${actif}" value="true" /> <label for="actif"
+						th:checked="${actif}" value="true"> <label for="actif"
 						th:text="#{actif}"></label>
 				</form>
 			</div>

@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsdatetimepicker}"></script>
@@ -44,10 +44,11 @@
 	</div>
 	<form action="#" th:action="@{'/evenement/essaim/sauve'}"
 		th:object="${evenement}" method="post" id="evenementForm">
-		<input type="hidden" th:field="*{id}" /> <input type="hidden"
-			th:field="*{ruche}" /> <input type="hidden" th:field="*{rucher}" />
-		<input type="hidden" th:field="*{essaim}" /> <input type="hidden"
-			th:field="*{hausse}" />
+		<input type="hidden" th:field="*{id}"> <input type="hidden"
+			th:field="*{ruche}"> <input type="hidden"
+			th:field="*{rucher}"> <input type="hidden"
+			th:field="*{essaim}"> <input type="hidden"
+			th:field="*{hausse}">
 		<div th:replace="~{includeForm :: dateField}"></div>
 		<div class="form-floating mb-3 ruches">
 			<select id="type" name="type" class="form-control">
@@ -60,7 +61,7 @@
 				<option
 					th:each="traitement : ${T(ooioo.ruches.evenement.TypeTraitement).values()}"
 					th:value="${traitement}" th:text="#{${traitement}}"></option>
-			</select> <label class="form-label" for="traitement" th:text="#{Traitement}"></label>
+			</select> <label class="form-label" for="valeur" th:text="#{Traitement}"></label>
 		</div>
 		<div th:replace="~{includeForm :: commentaireField}"></div>
 		<div th:replace="~{includeForm :: BtnForm}"></div>

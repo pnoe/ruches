@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsdatetimepicker}"></script>
@@ -57,7 +57,7 @@
 		<div class="form-floating mb-3">
 			<input class="form-control" type="text" placeholder="" id="nom"
 				name="nom" maxlength="92"
-				th:value="${essaim.nom} + ${@environment.getProperty('essaime.suffix')}" />
+				th:value="${essaim.nom} + ${@environment.getProperty('essaime.suffix')}">
 			<label class="form-label" for="nom" th:text="#{NomNouvelEssaim}"></label>
 		</div>
 		<div th:replace="~{includeForm :: commentaire}"></div>

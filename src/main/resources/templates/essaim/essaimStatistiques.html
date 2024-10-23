@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:inline="javascript">
@@ -99,12 +99,12 @@ document.addEventListener('DOMContentLoaded', () => {
 				</div>
 				<div class="form-check col-sm-2 ">
 					<input class="form-check-input" type="checkbox" id="masquerInactif"
-						name="masquerInactif" th:checked="${masquerInactif}" /> <label
+						name="masquerInactif" th:checked="${masquerInactif}"> <label
 						class="form-check-label" for="masquerInactif"
 						th:text="#{masquerInactif}"></label>
 				</div>
 				<input class="col-sm-1 btn btn-outline-primary btn-sm" type="submit"
-					th:value="#{filtrer}" />
+					th:value="#{filtrer}">
 			</div>
 		</form>
 	</div>

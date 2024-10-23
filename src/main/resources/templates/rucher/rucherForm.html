@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:inline="javascript">
@@ -47,8 +47,8 @@
 	</div>
 	<form action="#" th:action="@{/rucher/sauve}" th:object="${rucher}"
 		method="post" id="rucherForm">
-		<input type="hidden" th:field="*{id}" /> <input type="hidden"
-			th:field="*{depot}" />
+		<input type="hidden" th:field="*{id}"> <input type="hidden"
+			th:field="*{depot}">
 		<div th:replace="~{includeForm :: nomField}"></div>
 		<div th:replace="~{includeForm :: actifField}"></div>
 		<div class="form-floating mb-3">
@@ -62,17 +62,17 @@
 		<div class="form-floating mb-3">
 			<input class="form-control" placeholder="100" type="number" step="1"
 				min="-200" max="4000" th:field="*{altitude}"
-				th:errorclass="fieldError" /> <label class="form-label"
+				th:errorclass="fieldError"> <label class="form-label"
 				for="altitude" th:text="#{altitude}"></label>
 		</div>
 		<div class="form-floating mb-3">
 			<input type="text" placeholder="xx" class="form-control"
-				th:field="*{adresse}" th:errorclass="fieldError" maxlength="255" />
+				th:field="*{adresse}" th:errorclass="fieldError" maxlength="255">
 			<label class="form-label" for="adresse" th:text="#{adresse}"></label>
 		</div>
 		<div class="form-floating mb-3">
 			<input placeholder="xx" type="text" class="form-control"
-				th:field="*{ressource}" th:errorclass="fieldError" /> <label
+				th:field="*{ressource}" th:errorclass="fieldError"> <label
 				class="form-label" for="ressource" th:text="#{ressource}"></label>
 		</div>
 		<div th:replace="~{includeForm :: commentaireField}"></div>

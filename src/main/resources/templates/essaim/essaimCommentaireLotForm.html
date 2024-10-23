@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsdatetimepicker}"></script>
@@ -42,9 +42,9 @@
 	<form action="#"
 		th:action="@{'/evenement/essaim/sauve/lot/' + ${eIds}}" method="post"
 		id="evenementForm">
-		<input type="hidden" id="valeur" name="valeur" /> <input
+		<input type="hidden" id="valeur" name="valeur"> <input
 			type="hidden" id="typeEvenement" name="typeEvenement"
-			value="COMMENTAIREESSAIM" />
+			value="COMMENTAIREESSAIM">
 		<div th:replace="~{includeForm :: date}"></div>
 		<div th:replace="~{includeForm :: commentaire}"></div>
 		<div th:replace="~{includeForm :: BtnForm}"></div>

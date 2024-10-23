@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:inline="javascript">
@@ -51,13 +51,13 @@
 	</div>
 	<form action="#" th:action="@{/rucheType/sauve}"
 		th:object="${rucheType}" method="post" id="rucheTypeForm">
-		<input type="hidden" th:field="*{id}" /> <input type="hidden"
-			th:field="*{version}" />
+		<input type="hidden" th:field="*{id}"> <input type="hidden"
+			th:field="*{version}">
 		<div th:replace="~{includeForm :: nomField}"></div>
 		<div class="form-floating mb-3">
 			<input placeholder="" class="form-control" type="number"
 				th:field="*{nbCadresMax}" th:errorclass="fieldError"
-				id="nbCadresMax" name="nbCadresMax" /> <label class="form-label"
+				id="nbCadresMax" name="nbCadresMax"> <label class="form-label"
 				for="nbCadresMax" th:text="#{nbCadresMax}"></label>
 		</div>
 		<div th:replace="~{includeForm :: commentaireField}"></div>

@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsruches}"></script>
@@ -48,7 +48,8 @@
 					aria-hidden="true"></a> &nbsp; <a
 					th:href="@{/essaim/statistiques?masquerInactif=on}"
 					class="bi-table" th:title="#{statistiquesproduction}"
-					aria-hidden="true"></a> <a th:href="@{/essaim/statistiquesage?actif=true}"
+					aria-hidden="true"></a> <a
+					th:href="@{/essaim/statistiquesage?actif=true}"
 					class="bi-bar-chart" th:title="#{statistiquesage}"
 					aria-hidden="true"></a> &nbsp; <a
 					th:href="@{'/essaim/grapheEssaims'}" class="bi-graph-up"

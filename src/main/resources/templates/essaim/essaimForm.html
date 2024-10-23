@@ -12,9 +12,11 @@
 			$('#reineDateNaissance, #dateAcquisition').datetimepicker(
 				{timepicker: false, format: 'Y-m-d'});
 			document.getElementById('nom').focus();
+			
 			jQuery.validator.addMethod('nomExiste', function (value) {
 				return !essaimNoms.includes(value);
 			}, nomexiste);
+			
 			const chkActif = document.getElementById('actif1');
 			$('#essaimForm').validate({
 				errorClass: 'erreur-form',
