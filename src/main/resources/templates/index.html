@@ -6,14 +6,14 @@
 </head>
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
-	<div class="logout"
-		sec:authorize="isAuthenticated()">
-		<span th:text="#{connecte}"></span> : <span id="login" sec:authentication="name"></span>
-		| <span th:text="#{roles}"></span> : <span id="role" 
-		th:text="${#authentication.getAuthorities()[0].getAuthority().equals('ROLE_')?'Aucun':'Admin'}"></span>
+	<div class="logout" sec:authorize="isAuthenticated()">
+		<span th:text="#{connecte}"></span> : <span id="login"
+			sec:authentication="name"></span> | <span th:text="#{roles}"></span>
+		: <span id="role"
+			th:text="${#authentication.getAuthorities()[0].getAuthority().equals('ROLE_')?'Aucun':'Admin'}"></span>
 		<div>
 			<form action="#" th:action="@{/logout}" method="post">
-				<input type="submit" th:value="#{deconnexion}" />
+				<input type="submit" th:value="#{deconnexion}">
 			</form>
 		</div>
 	</div>
@@ -22,8 +22,7 @@
 	<div class="row">
 		<header class="col jumbotron jumbotron-fluid">
 			<div class="container-fluid">
-				<h1 
-					id="titre" class="display-4 elegantshd"
+				<h1 id="titre" class="display-4 elegantshd"
 					th:utext="${@environment.getProperty('accueil.titre')}"></h1>
 			</div>
 		</header>

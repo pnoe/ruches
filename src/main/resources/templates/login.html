@@ -21,12 +21,12 @@
 	<br>
 	<form th:action="@{/login}" method="post">
 		<label for="username" th:text="#{nomUtilisateur}"></label><br> <input
-			type="text" id="username" name="username" autofocus /> <br>
-		<br> <label for="password" th:text="#{motDePasse}"></label><br>
-		<input type="password" id="password" name="password" /> <br>
-		<br> <input type="checkbox" id="showhide" name="showhide" /> <label
-			for="showhide" th:text="#{affichermotdepasse}"></label> <br>
-		<br> <input type="submit" th:value="#{connexion}" />
+			type="text" id="username" name="username" autofocus /> <br> <br>
+		<label for="password" th:text="#{motDePasse}"></label><br> <input
+			type="password" id="password" name="password"> <br> <br>
+		<input type="checkbox" id="showhide" name="showhide"> <label
+			for="showhide" th:text="#{affichermotdepasse}"></label> <br> <br>
+		<input type="submit" th:value="#{connexion}">
 	</form>
 	<br>
 	<br>

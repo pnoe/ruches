@@ -3,7 +3,7 @@
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsdatetimepicker}"></script>
-<link th:replace="~{include :: cssdatetimepicker}" />
+<link th:replace="~{include :: cssdatetimepicker}">
 <script th:replace="~{include :: localejsdatetimepicker}"></script>
 <script th:inline="javascript">
 		/* globals bootstrap */
@@ -96,8 +96,8 @@
 		method="post" id="evenementForm">
 		<div class="form-check">
 			<input class="form-check-input" type="checkbox" id="depot"
-				name="depot" checked> <label class="form-check-label" for="depot"
-				th:text="#{retourrucheaudepot}"></label>
+				name="depot" checked> <label class="form-check-label"
+				for="depot" th:text="#{retourrucheaudepot}"></label>
 		</div>
 		<div id="divevencadre" class="form-check">
 			<input class="form-check-input" type="checkbox" id="evencadre"
@@ -105,15 +105,15 @@
 				for="evencadre" th:text="#{creationevecadrezero}"></label>
 		</div>
 		<fieldset class="border rounded-3 p-3">
-		<div class="form-floating mb-3">
-			<select class="form-control" id="sortie" name="sortie">
-				<option
-					th:each="sortie : ${T(ooioo.ruches.essaim.ReineSortie).values()}"
-					th:value="${sortie}" th:text="#{${sortie}}"></option>
-			</select> <label class="form-label" for="sortie" th:text="#{Sortie}"></label>
-		</div>
-		<div th:replace="~{includeForm :: date}"></div>
-		<div th:replace="~{includeForm :: commentaire}"></div>
+			<div class="form-floating mb-3">
+				<select class="form-control" id="sortie" name="sortie">
+					<option
+						th:each="sortie : ${T(ooioo.ruches.essaim.ReineSortie).values()}"
+						th:value="${sortie}" th:text="#{${sortie}}"></option>
+				</select> <label class="form-label" for="sortie" th:text="#{Sortie}"></label>
+			</div>
+			<div th:replace="~{includeForm :: date}"></div>
+			<div th:replace="~{includeForm :: commentaire}"></div>
 		</fieldset>
 		<th:block th:if="${nomRuche}">
 			<div class="form-floating mb-3" style="margin-top: 5px;">

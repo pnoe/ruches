@@ -1,19 +1,18 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<head
+	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 </head>
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
-	<img th:alt="#{Erreur}" th:src="@{/images/abeille_erreur.png}" />
+	<img th:alt="#{Erreur}" th:src="@{/images/abeille_erreur.png}">
 	<h1 th:text="#{oups}"></h1>
 	<br>
 	<p th:if="${path}">
-		<strong th:text="#{page}"></strong>
-		<span th:text="${path}"></span>
+		<strong th:text="#{page}"></strong> <span th:text="${path}"></span>
 	</p>
 	<p th:if="${timestamp}">
-		<strong th:text="#{date}"></strong>
-		<span th:text="${timestamp}"></span>
+		<strong th:text="#{date}"></strong> <span th:text="${timestamp}"></span>
 	</p>
 	<footer th:replace="~{include::footer}"></footer>
 </body>

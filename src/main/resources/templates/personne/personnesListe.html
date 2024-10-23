@@ -73,7 +73,7 @@
 						th:text="${personne.nom}"></a></td>
 					<td th:text="${personne.prenom}"></td>
 					<td
-						th:utext="${#strings.replace(#strings.escapeXml(personne.tel),'/','<br/>')}"></td>
+						th:utext="${#strings.replace(#strings.escapeXml(personne.tel),'/','<br>')}"></td>
 					<td th:text="${personne.email}"></td>
 					<td th:text="${personne.adresse}"></td>
 					<td th:text="${personne.login}"></td>

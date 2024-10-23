@@ -77,7 +77,7 @@
 				<a href="#" class="bi-question-lg" data-bs-toggle="popover"
 					data-bs-trigger="focus" tabindex="0" role="button"
 					th:attr="data-bs-content=#{aiderucherdetailignmarkers}"></a> &nbsp;
-				<input type="text" th:placeholder="#{recherche}" id="searchtext" />
+				<input type="text" th:placeholder="#{recherche}" id="searchtext">
 				<span class="padicons"> <input type="checkbox"
 					id="dragMarker" th:title="#{markerFixes}" checked />
 				</span> <a th:href="@{'/rucher/rapproche/Osm/'+${rucher.id}}"
