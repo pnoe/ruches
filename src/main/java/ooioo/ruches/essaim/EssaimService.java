@@ -30,6 +30,7 @@ import ooioo.ruches.Utils;
 import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
+import ooioo.ruches.evenement.TypeTraitement;
 import ooioo.ruches.hausse.HausseRepository;
 import ooioo.ruches.recolte.Recolte;
 import ooioo.ruches.recolte.RecolteHausse;
@@ -192,10 +193,10 @@ public class EssaimService {
 		List<Evenement> evesTrait = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
 				TypeEvenement.ESSAIMTRAITEMENT);
 		List<Long> datesTrait = new ArrayList<>(evesTrait.size());
-		List<String> typesTrait = new ArrayList<>(evesTrait.size());
+		List<Integer> typesTrait = new ArrayList<>(evesTrait.size());
 		for (Evenement e : evesTrait) {
 			datesTrait.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
-			typesTrait.add(e.getValeur());
+			typesTrait.add(TypeTraitement.valueOf(e.getValeur()).ordinal());
 		}
 		model.addAttribute("datesTrait", datesTrait);
 		model.addAttribute("typesTrait", typesTrait);

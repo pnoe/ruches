@@ -145,7 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
 								// context.dataset.label renvoie le label du dataset
 								// https://www.chartjs.org/docs/latest/configuration/tooltip.html#tooltip-item-context
 								return [(new Date(context.parsed.x)).toLocaleString(), context.dataset.label,
-								txtTrait[context.dataIndex]
+								// typesTrait contient les index des types de traitement
+								// txtTrait contient les chaines localisées de ces types
+								txtTrait[typesTrait[context.dataIndex]]
 								];
 							} else if (context.datasetIndex === 5) {
 								// Si dataSet des chgt de ruchers, ne pas afficher y. Ajout de ' : '
