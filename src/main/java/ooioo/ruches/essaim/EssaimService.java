@@ -192,10 +192,13 @@ public class EssaimService {
 		List<Evenement> evesTrait = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
 				TypeEvenement.ESSAIMTRAITEMENT);
 		List<Long> datesTrait = new ArrayList<>(evesTrait.size());
+		List<String> typesTrait = new ArrayList<>(evesTrait.size());
 		for (Evenement e : evesTrait) {
 			datesTrait.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
+			typesTrait.add(e.getValeur());
 		}
 		model.addAttribute("datesTrait", datesTrait);
+		model.addAttribute("typesTrait", typesTrait);
 		// Les fins de traitement.
 		List<Evenement> evesFinTrait = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
 				TypeEvenement.ESSAIMTRAITEMENTFIN);

@@ -10,8 +10,8 @@
 <script th:replace="~{include :: jsruches}"></script>
 <script th:inline="javascript">
 	/* exported poids, dates, poidsSucre, datesSucre, poidsRec, datesRec, ruchersRec, 
-	datesTrait, datesFinTrait, datesRucher, nomsRucher, datesCadre, nbsCadre, datesHausses,
-	nbHausses, ajoutHausses, nomRucheHausses, vide, ruchetxt, ajout, retrait */
+	datesTrait, typesTrait, datesFinTrait, datesRucher, nomsRucher, datesCadre, nbsCadre, 
+	datesHausses, nbHausses, ajoutHausses, nomRucheHausses, vide, ruchetxt, ajout, retrait */
 	const poids = /*[[${poids}]]*/null;
 	const dates = /*[[${dates}]]*/null;
 	const poidsSucre = /*[[${poidsSucre}]]*/null;
@@ -20,6 +20,7 @@
 	const datesRec = /*[[${datesRec}]]*/null;
 	const ruchersRec = /*[[${ruchersRec}]]*/null;
 	const datesTrait = /*[[${datesTrait}]]*/null;
+	const typesTrait = /*[[${typesTrait}]]*/null;
 	const datesFinTrait = /*[[${datesFinTrait}]]*/null;
 	const datesRucher = /*[[${datesRucher}]]*/null;
 	const nomsRucher = /*[[${nomsRucher}]]*/null;
@@ -58,6 +59,11 @@
 				<span th:text="#{AucunEve}"></span>
 			</div>
 		</div>
+	</div>
+	<div id="trtTxt" hidden>
+		<p
+			th:each="traitement : ${T(ooioo.ruches.evenement.TypeTraitement).values()}"
+			th:text="#{${traitement}}"></p>
 	</div>
 	<canvas th:unless="${vide}" id="ctx"></canvas>
 	<footer th:replace="~{include::footer}"></footer>

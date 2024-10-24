@@ -1,5 +1,5 @@
 /* globals Chart, dates, poids, poidsSucre, datesSucre,
- poidsRec, datesRec, ruchersRec, datesTrait, datesFinTrait,
+ poidsRec, datesRec, ruchersRec, datesTrait, datesFinTrait, typesTrait,
  datesRucher, nomsRucher, datesCadre, nbsCadre, datesHausses, nbHausses,
  ajoutHausses, nomRucheHausses, vide, ruchetxt, ajout, retrait
 */
@@ -7,6 +7,8 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 	if (vide) { return; }
+	// Récupère les libellés des types de traitements mis par un th:each dans le template.
+	const txtTrait = Array.from(document.getElementById('trtTxt').children, ({ textContent }) => textContent);
 	Chart.defaults.elements.point.radius = 6; // default = 3
 	const graphe = new Chart('ctx', {
 		type: 'line',
@@ -141,12 +143,15 @@ document.addEventListener('DOMContentLoaded', () => {
 								// Si dataSet des traitements, ne pas afficher y.
 								// context.parsed.x renvoie le timestamp
 								// context.dataset.label renvoie le label du dataset
-								return [(new Date(context.parsed.x)).toLocaleString(), context.dataset.label];
+								// https://www.chartjs.org/docs/latest/configuration/tooltip.html#tooltip-item-context
+								return [(new Date(context.parsed.x)).toLocaleString(), context.dataset.label,
+								txtTrait[context.dataIndex]
+								];
 							} else if (context.datasetIndex === 5) {
 								// Si dataSet des chgt de ruchers, ne pas afficher y. Ajout de ' : '
 								// et nom du rucher dans afterLabel.
 								return [(new Date(context.parsed.x)).toLocaleString(),
-									context.dataset.label + ' : ' + nomsRucher[context.dataIndex]];
+								context.dataset.label + ' : ' + nomsRucher[context.dataIndex]];
 							}
 						},
 					}
@@ -163,4 +168,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		graphe.options.scales.yr.display = e.target.checked;
 		graphe.update();
 	});
+
+
+
+
 });
