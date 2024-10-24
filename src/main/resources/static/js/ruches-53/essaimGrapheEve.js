@@ -1,5 +1,6 @@
 /* globals Chart, dates, poids, poidsSucre, datesSucre,
  poidsRec, datesRec, ruchersRec, datesTrait, datesFinTrait, typesTrait,
+ typesTraitFin,
  datesRucher, nomsRucher, datesCadre, nbsCadre, datesHausses, nbHausses,
  ajoutHausses, nomRucheHausses, vide, ruchetxt, ajout, retrait
 */
@@ -139,15 +140,25 @@ document.addEventListener('DOMContentLoaded', () => {
 							}
 						},
 						label: function(context) {
-							if ((context.datasetIndex === 3) || (context.datasetIndex === 4)) {
-								// Si dataSet des traitements, ne pas afficher y.
+							if (context.datasetIndex === 3) {
+								// Si dataSet des début de traitements, ne pas afficher y.
 								// context.parsed.x renvoie le timestamp
 								// context.dataset.label renvoie le label du dataset
 								// https://www.chartjs.org/docs/latest/configuration/tooltip.html#tooltip-item-context
-								return [(new Date(context.parsed.x)).toLocaleString(), context.dataset.label,
-								// typesTrait contient les index des types de traitement
-								// txtTrait contient les chaines localisées de ces types
-								txtTrait[typesTrait[context.dataIndex]]
+								return [
+									(new Date(context.parsed.x)).toLocaleString(),
+									context.dataset.label,
+									// typesTrait contient les index des types de traitement pour les débuts de traitement
+									// txtTrait contient les chaines localisées de ces types
+									txtTrait[typesTrait[context.dataIndex]]
+								];
+							} else if (context.datasetIndex === 4) {
+								return [
+									(new Date(context.parsed.x)).toLocaleString(),
+									context.dataset.label,
+									// typesTrait contient les index des types de traitement pour les débuts de traitement
+									// txtTrait contient les chaines localisées de ces types
+									txtTrait[typesTraitFin[context.dataIndex]]
 								];
 							} else if (context.datasetIndex === 5) {
 								// Si dataSet des chgt de ruchers, ne pas afficher y. Ajout de ' : '
@@ -170,8 +181,5 @@ document.addEventListener('DOMContentLoaded', () => {
 		graphe.options.scales.yr.display = e.target.checked;
 		graphe.update();
 	});
-
-
-
 
 });

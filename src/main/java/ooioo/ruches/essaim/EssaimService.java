@@ -193,6 +193,8 @@ public class EssaimService {
 		List<Evenement> evesTrait = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
 				TypeEvenement.ESSAIMTRAITEMENT);
 		List<Long> datesTrait = new ArrayList<>(evesTrait.size());
+		// typesTrait les index (dans l'enum) des types de traitement
+		// pour permettre la récupération de la chaine localisée dans le template
 		List<Integer> typesTrait = new ArrayList<>(evesTrait.size());
 		for (Evenement e : evesTrait) {
 			datesTrait.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
@@ -204,10 +206,15 @@ public class EssaimService {
 		List<Evenement> evesFinTrait = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
 				TypeEvenement.ESSAIMTRAITEMENTFIN);
 		List<Long> datesFinTrait = new ArrayList<>(evesFinTrait.size());
+		// typesTraitFIn les index (dans l'enum) des types de traitement
+		// pour permettre la récupération de la chaine localisée dans le template
+		List<Integer> typesTraitFin = new ArrayList<>(evesTrait.size());
 		for (Evenement e : evesFinTrait) {
 			datesFinTrait.add(e.getDate().toEpochSecond(ZoneOffset.UTC));
+			typesTraitFin.add(TypeTraitement.valueOf(e.getValeur()).ordinal());
 		}
 		model.addAttribute("datesFinTrait", datesFinTrait);
+		model.addAttribute("typesTraitFin", typesTraitFin);
 		// Les changements de rucher.
 		List<Evenement> evesRucher = evenementRepository.findByEssaimIdAndTypeOrderByDateAsc(essaim.getId(),
 				TypeEvenement.RUCHEAJOUTRUCHER);
