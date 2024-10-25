@@ -256,35 +256,27 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			""", nativeQuery = true)
 	Optional<Integer> countEveAnneeRucher(Integer annee, int type1, int type2, int type3, int type4);
 
-	
-	
 	/*
 	 * Renvoie la liste des jours d'interventions dans les ruchers par année. Une
 	 * même journée d'intervention sur deux ruchers comptera pour 2 interventions.
 	 * Les événements type1 à 4 sont exclus de la recherche. Appelé avec les types
-	 * d'événements commentaires ruche, hausse, rucher et essaim.
-	 * select new ooioo.ruches.IdDate(null, max(e.date))
-	 * select new ooioo.ruches.IdDate(rucher_id, date_trunc('day', date))
+	 * d'événements commentaires ruche, hausse, rucher et essaim. select new
+	 * ooioo.ruches.IdDate(null, max(e.date)) select new
+	 * ooioo.ruches.IdDate(rucher_id, date_trunc('day', date))
 	 * 
-	 *  Attention pas de nativeQuery avec new !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	 *    date_trunc impose nativeQuery ?
-	 *    OK avec List<Object[]>
+	 * Attention pas de nativeQuery avec new
+	 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! date_trunc impose
+	 * nativeQuery ? OK avec List<Object[]>
 	 * 
 	 */
 	/*
-	@Query(value = """
-			select distinct rucher_id, date_trunc('day', date)
-			    from evenement
-			    where extract(year from date) = :annee and
-			      type <> :type1 and
-			      type <> :type2 and
-			      type <> :type3 and
-			      type <> :type4
-			    order by date_trunc('day', date)
-			""", nativeQuery = true)
-	List<Object[]> idDateEveAnneeRucher(Integer annee, int type1, int type2, int type3, int type4);
-	*/
-	
+	 * @Query(value = """ select distinct rucher_id, date_trunc('day', date) from
+	 * evenement where extract(year from date) = :annee and type <> :type1 and type
+	 * <> :type2 and type <> :type3 and type <> :type4 order by date_trunc('day',
+	 * date) """, nativeQuery = true) List<Object[]> idDateEveAnneeRucher(Integer
+	 * annee, int type1, int type2, int type3, int type4);
+	 */
+
 	/*
 	 * Renvoie le nombre de jours d'interventions par année. Les événements type1 à
 	 * 4 sont exclus de la recherche. Appelé avec les types d'événements
@@ -340,26 +332,37 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			select count(*) as nbeven
 			from Essaim
 			where actif = false
-				and date_part('year', dateDispersion)=:date
+				and date_part('year', dateDispersion) = :datea
 			""")
-	Integer countDispersionEssaimParAnnee(int date);
+	Integer countDispersionEssaimParAnnee(int datea);
 
 	// Quantité de sucre distribuée dans l'année passée en paramètre.
 	@Query(value = """
 			select sum(cast(valeur as double)) as sucre
 			  from Evenement
-			  where type=TypeEvenement.ESSAIMSUCRE
-				and date_part('year', date)=?1
+			  where type = TypeEvenement.ESSAIMSUCRE
+				and date_part('year', date) = :datea
 			""")
-	Double sucreEssaimParAnnee(int date);
+	Double sucreEssaimParAnnee(int datea);
 
 	// Nombre d'événements traitements faits dans l'année passée en paramètre.
 	@Query(value = """
 			select count(*) as nbtraitements
 			  from Evenement
-			  where type=TypeEvenement.ESSAIMTRAITEMENT
-				and date_part('year', date)=?1
+			  where type = TypeEvenement.ESSAIMTRAITEMENT
+				and date_part('year', date) = :datea
 			""")
-	Integer countTraitementsEssaimParAnnee(int date);
+	Integer countTraitementsEssaimParAnnee(int datea);
+
+	// Nombre d'événements traitements par type de traitement faits dans l'année
+	// passée en paramètre.
+	@Query(value = """
+			select count(*) as nbtraitements
+			  from Evenement
+			  where type = TypeEvenement.ESSAIMTRAITEMENT
+				and date_part('year', date) = :datea
+				and valeur = :typetrt
+			""")
+	Integer countTraitementsParAnneeParType(int datea, String typetrt);
 
 }

@@ -17,6 +17,7 @@ import ooioo.ruches.essaim.ReineSortie;
 import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
+import ooioo.ruches.evenement.TypeTraitement;
 import ooioo.ruches.hausse.HausseRepository;
 import ooioo.ruches.recolte.Recolte;
 import ooioo.ruches.recolte.RecolteRepository;
@@ -175,6 +176,8 @@ public class AccueilService {
 		List<Integer> nbDispersionEssaims = new ArrayList<>(nban);
 		List<Double> sucreEssaims = new ArrayList<>(nban);
 		List<Integer> nbTraitementsEssaims = new ArrayList<>(nban);
+		int [][] nbTraitementsType = new int[TypeTraitement.values().length][nban];
+		int [] nbTraitementsTypeTotal = new int[TypeTraitement.values().length];
 		Double pdsMielTotal = 0d;
 		Integer nbRecTotal = 0;
 		Integer nbEveRucherTotal = 0;
@@ -185,7 +188,8 @@ public class AccueilService {
 		Integer nbTraitementsEssaimsTotal = 0;
 		Integer nbCrRuchesTotal = 0;
 		Integer nbCrHaussesTotal = 0;
-		for (int date = dateDebut; date <= dateFin; date++) {
+		for (int date = dateDebut, i = 0; date <= dateFin; date++, i++) {
+			
 			annees.add(date);
 			// Poids de miel récolté par année
 			Optional<Double> poidsOpt = recolteRepository.findPoidsMielByYear(date);
@@ -225,9 +229,16 @@ public class AccueilService {
 			}
 			sucreEssaimsTotal += sucreAnneeEssaims;
 			sucreEssaims.add(sucreAnneeEssaims);
-			Integer nbTraitements = evenementRepository.countTraitementsEssaimParAnnee(date);
-			nbTraitementsEssaimsTotal += nbTraitements;
-			nbTraitementsEssaims.add(nbTraitements);
+			// Nombre de traitements par année (compte le eve début traitement).
+			Integer nbT = evenementRepository.countTraitementsEssaimParAnnee(date);
+			nbTraitementsEssaimsTotal += nbT;
+			nbTraitementsEssaims.add(nbT);
+			// Une ligne par type de traitement...
+			for (TypeTraitement tpT : TypeTraitement.values()) {
+				nbTraitementsType[tpT.ordinal()][i] = evenementRepository.countTraitementsParAnneeParType(date, tpT.name());
+				// System.out.println(tpT.name() + " " + date + " " + nbTraitementsType[tpT.ordinal()][i]);
+				nbTraitementsTypeTotal[tpT.ordinal()] += nbTraitementsType[tpT.ordinal()][i];
+			}
 			// Nombre de ruches créées dans l'année (année acquisition = date)
 			Integer nbCrRuche = rucheRepository.countRuchesCreeesDate(date);
 			nbCreationRuches.add(nbCrRuche);
@@ -245,6 +256,9 @@ public class AccueilService {
 		nbCreationRuches.add(nbCrRuchesTotal);
 		nbCreationHausses.add(nbCrHaussesTotal);
 		nbTraitementsEssaims.add(nbTraitementsEssaimsTotal);
+		for (TypeTraitement tpT : TypeTraitement.values()) {
+			nbTraitementsType[tpT.ordinal()][nban - 1] = nbTraitementsTypeTotal[tpT.ordinal()];
+		}
 		sucreEssaims.add(sucreEssaimsTotal);
 		nbDispersionEssaims.add(nbDispersionEssaimsTotal);
 		for (int j = 1; j < nbEssaims.size(); j++) {
@@ -260,6 +274,7 @@ public class AccueilService {
 		model.addAttribute("nbDispersionEssaims", nbDispersionEssaims);
 		model.addAttribute("sucreEssaims", sucreEssaims);
 		model.addAttribute("nbTraitementsEssaims", nbTraitementsEssaims);
+		model.addAttribute("nbTraitementsType", nbTraitementsType);
 		model.addAttribute("nbRuchesCr", nbCreationRuches);
 		model.addAttribute("nbHaussesCr", nbCreationHausses);
 	}

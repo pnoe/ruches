@@ -240,6 +240,11 @@
 								<td th:each="nbTraitements : ${nbTraitementsEssaims}"
 									th:text="${nbTraitements}"></td>
 							</tr>
+							<tr th:each="tpt, i : ${T(ooioo.ruches.evenement.TypeTraitement).values()}">
+								<th scope="row" th:text="#{${tpt}}"></th>
+								<td th:each="nbTraitements : ${nbTraitementsType[i.index]}"
+									th:text="${nbTraitements}"></td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
