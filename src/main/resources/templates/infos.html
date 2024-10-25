@@ -235,16 +235,23 @@
 								<td th:each="sucre : ${sucreEssaims}"
 									th:text="${#numbers.formatDecimal(sucre,1,2,'DEFAULT')}"></td>
 							</tr>
+
 							<tr>
-								<th scope="row" th:text="#{nbTraitements}"></th>
+								<th scope="row"><span th:text="#{nbTraitements}"></span> <a
+								    class="bi-plus-lg" style="font-size: 1.2rem;"
+									href="#" role="button" data-bs-toggle="collapse"
+									data-bs-target=".collapseTrt" aria-expanded="false"></a>
+								</th>
 								<td th:each="nbTraitements : ${nbTraitementsEssaims}"
 									th:text="${nbTraitements}"></td>
 							</tr>
-							<tr th:each="tpt, i : ${T(ooioo.ruches.evenement.TypeTraitement).values()}">
+							<tr class="collapse collapseTrt"
+								th:each="tpt, i : ${T(ooioo.ruches.evenement.TypeTraitement).values()}">
 								<th scope="row" th:text="#{${tpt}}"></th>
 								<td th:each="nbTraitements : ${nbTraitementsType[i.index]}"
 									th:text="${nbTraitements}"></td>
 							</tr>
+
 						</tbody>
 					</table>
 				</div>
