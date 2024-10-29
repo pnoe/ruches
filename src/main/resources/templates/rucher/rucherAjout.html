@@ -1,45 +1,14 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
+<script th:replace="~{include :: jsruches}"></script>
 <script th:inline="javascript">
-		/* globals DataTable */
-		const urlAjout = /*[[@{/rucher/ruches/ajouter/}]]*/null;
-		const rucherId = /*[[${rucher.id}]]*/null;
-		const selRuchesAjout = /*[[#{selectruchesajout}]]*/null;
-		document.addEventListener('DOMContentLoaded', () => {
-			const tableajout = new DataTable('#ajoutRuches', {
-				select: {
-					style: 'multi+shift'
-				}
-			});
-			new DataTable('#retraitRuches', {});
-			const actionAjoutRuches = document.getElementById('actionAjoutRuches');
-			function updateLinkAjout(_e, _dt, type) {
-				if (type === 'row') {
-					let rucheIds = '';
-					tableajout.rows({
-						selected: true
-					}).data().pluck(1).each(function (value) {
-						rucheIds += value + ',';
-					});
-					if (rucheIds) {
-						/*[- On enlève la dernière virgule et met à jour l'url de traitement -]*/
-						rucheIds = rucheIds.substring(0, rucheIds.length - 1);
-						actionAjoutRuches.setAttribute('href', urlAjout + rucherId + '/' + rucheIds);
-					} else {
-						actionAjoutRuches.setAttribute('href', '#actionAjoutRuches');
-					}
-				}
-			}
-			tableajout.on('select deselect', updateLinkAjout);
-			actionAjoutRuches.addEventListener('click', () => {
-				if (actionAjoutRuches.getAttribute('href') === '#actionAjoutRuches') {
-					alert(selRuchesAjout);
-				}
-			});
-		});
-	</script>
+	/* exported urlAjout, rucherId, selRuchesAjout */
+	const urlAjout = /*[[@{/rucher/ruches/ajouter/}]]*/null;
+	const rucherId = /*[[${rucher.id}]]*/null;
+	const selRuchesAjout = /*[[#{selectruchesajout}]]*/null;
+</script>
 </head>
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>
@@ -80,14 +49,12 @@
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>
-					<th hidden></th>
 					<th th:text="#{rucher}"></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="rucheNot : ${ruchesNot}">
+				<tr th:each="rucheNot : ${ruchesNot}" th:data-id="${rucheNot.id}">
 					<td th:text="${rucheNot.nom}"></td>
-					<td hidden th:text="${rucheNot.id}"></td>
 					<td th:text="${rucheNot.rucher?.nom}"></td>
 				</tr>
 			</tbody>
