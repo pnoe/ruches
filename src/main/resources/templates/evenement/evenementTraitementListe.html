@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: moment}"></script>
@@ -13,10 +13,22 @@
 		const buttontextprint = /*[[#{buttontextprint}]]*/null;
 		const buttontextcol = /*[[#{buttontextcol}]]*/null;
 		document.addEventListener('DOMContentLoaded', () => {
-			document.getElementById('groupe').addEventListener('click', event => {
+			
+			/*
+			document.getElementById('tous').addEventListener('click', event => {
 				location = location.href.slice(0, location.href.lastIndexOf('/'))
 					+ '/' + event.target.checked;
 			});
+			*/
+			
+			
+			document.getElementById('tous').addEventListener('change', event => {
+				event.target.form.submit();
+			});
+			document.getElementById('groupe').addEventListener('change', event => {
+				event.target.form.submit();
+			});
+			
 			evenementListe(true);
 		});
 	</script>
@@ -30,13 +42,25 @@
 					th:text="${tous} ? #{traitement} : #{eveDebutTraitement}"></h1>
 			</div>
 			<div class="col">
-				<span class="padicons"> <input type="checkbox" id="groupe"
-					th:title="#{tous}" th:checked="${tous}" /> <label for="tous"
-					th:text="#{tous}"></label>
+
+				<!--/*  
+				<span class="padicons"> <input type="checkbox" id="tous"
+					th:checked="${tous}"> <label for="tous"
+					th:text="#{tous}" th:title="#{TraitementDebutFin}"></label>
 				</span>
+			*/-->
+
+				<span class="padicons"> <input form="evenementForm"
+					type="checkbox" id="tous" name="tous" th:checked="${tous}"> <label
+					for="tous" th:text="#{tous}" th:title="#{TraitementDebutFin}"></label>
+				</span> <span class="padicons"> <input form="evenementForm"
+					type="checkbox" id="groupe" name="groupe" th:checked="${groupe}"> <label
+					for="groupe" th:text="#{grouper}"></label>
+				</span>
+
 			</div>
 			<div
-				th:insert="~{includeForm :: evenementListeDates(retController='/evenement/essaim/listeTraitement/' + ${tous})}"
+				th:insert="~{includeForm :: evenementListeDates(retController='/evenement/essaim/listeTraitement')}"
 				class="col"></div>
 		</div>
 	</div>

@@ -122,9 +122,11 @@ public class EvenementEssaimController {
 	 *
 	 * @param tous : événements traitement début et fin si true, début seulement
 	 * sinon.
+	 * @param groupe : groupe les événements par jour
 	 */
-	@GetMapping("/listeTraitement/{tous}")
-	public String listeTraitement(Model model, @PathVariable boolean tous,
+	@GetMapping("/listeTraitement")
+	public String listeTraitement(Model model,
+			@RequestParam(required = false) Boolean tous, @RequestParam(required = false) Boolean groupe,
 			@RequestParam(required = false) Integer periode,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
@@ -141,6 +143,14 @@ public class EvenementEssaimController {
 				datestext = dxCookie;
 			}
 		}
+		if (tous == null) {
+			tous = false;
+		}
+		if (groupe == null) {
+			groupe = false;
+		}
+		model.addAttribute("tous", tous);
+		model.addAttribute("groupe", groupe);
 		model.addAttribute(Const.EVENEMENTS, switch (periode) {
 		case 1 -> // toute période
 			tous ? evenementRepository.findTraitementDateDesc()

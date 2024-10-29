@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script>
@@ -235,13 +235,11 @@
 								<td th:each="sucre : ${sucreEssaims}"
 									th:text="${#numbers.formatDecimal(sucre,1,2,'DEFAULT')}"></td>
 							</tr>
-
 							<tr>
 								<th scope="row"><span th:text="#{nbTraitements}"></span> <a
-								    class="bi-plus-lg" style="font-size: 1.2rem;"
-									href="#" role="button" data-bs-toggle="collapse"
-									data-bs-target=".collapseTrt" aria-expanded="false"></a>
-								</th>
+									class="bi-plus-lg" style="font-size: 1.2rem;" href="#"
+									role="button" data-bs-toggle="collapse"
+									data-bs-target=".collapseTrt" aria-expanded="false"></a></th>
 								<td th:each="nbTraitements : ${nbTraitementsEssaims}"
 									th:text="${nbTraitements}"></td>
 							</tr>
@@ -251,7 +249,6 @@
 								<td th:each="nbTraitements : ${nbTraitementsType[i.index]}"
 									th:text="${nbTraitements}"></td>
 							</tr>
-
 						</tbody>
 					</table>
 				</div>

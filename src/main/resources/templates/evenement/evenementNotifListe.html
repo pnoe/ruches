@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsruches}"></script>
@@ -25,7 +25,7 @@
 					data-bs-trigger="focus" tabindex="0" role="button"
 					th:attr="data-bs-content=${dests}"></a> <span class="padicons">
 					<input type="checkbox" id="tous" th:title="#{tous}"
-					th:checked="${tous}" /> <label for="tous" th:text="#{tous}"></label>
+					th:checked="${tous}"> <label for="tous" th:text="#{tous}"></label>
 				</span>
 			</div>
 		</div>
