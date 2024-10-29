@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsdatetimepicker}"></script>
@@ -84,13 +84,13 @@ input[type="number"] {
 				<tr th:each="ruche, itemStat : ${ruches}"
 					th:with="p=${evesPesee[itemStat.index]}">
 					<td hidden><input type="number"
-						th:name="|idValLst[${itemStat.index}].id|" th:value="${ruche.id}" />
+						th:name="|idValLst[${itemStat.index}].id|" th:value="${ruche.id}">
 					</td>
 					<td th:text="${ruche.nom}"></td>
 					<td th:text="${ruche.poidsVide}"></td>
 					<td><input class="inputpds" type="number"
 						th:min="${ruche.poidsVide}" max="80" step="0.001"
-						th:name="|idValLst[${itemStat.index}].valeur|" /></td>
+						th:name="|idValLst[${itemStat.index}].valeur|"></td>
 					<td
 						th:text="(${p} == null) ? '' :
 						${#numbers.formatDecimal(p.valeur,1,2)}+' '+${#temporals.format(p.date,'dd/MM/yyyy')}">

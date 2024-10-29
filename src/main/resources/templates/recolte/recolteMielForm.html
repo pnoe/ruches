@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:inline="javascript">
@@ -89,18 +89,18 @@ input[type="number"] {
 				<tr th:each="rHM, itemStat : ${recolteMiel.recolteHaussesMiel}">
 					<td hidden><input type="number"
 						th:name="|recolteHaussesMiel[${itemStat.index}].recolteHausseId|"
-						th:value="${rHM.recolteHausseId}" /></td>
+						th:value="${rHM.recolteHausseId}"></td>
 					<td th:text="${hausses[itemStat.index].nom}"></td>
 					<td><input type="number" class="modif avant"
 						th:min="${hausses[itemStat.index].poidsVide}" max="80"
 						step="0.001" required="required"
 						th:name="|recolteHaussesMiel[${itemStat.index}].poidsAvant|"
-						th:value="${rHM.poidsAvant}" th:data-initval="${rHM.poidsAvant}" /></td>
+						th:value="${rHM.poidsAvant}" th:data-initval="${rHM.poidsAvant}"></td>
 					<td><input type="number" class="modif apres"
 						th:min="${hausses[itemStat.index].poidsVide}" max="80"
 						step="0.001" required="required"
 						th:name="|recolteHaussesMiel[${itemStat.index}].poidsApres|"
-						th:value="${rHM.poidsApres}" th:data-initval="${rHM.poidsApres}" /></td>
+						th:value="${rHM.poidsApres}" th:data-initval="${rHM.poidsApres}"></td>
 				</tr>
 			</tbody>
 		</table>
