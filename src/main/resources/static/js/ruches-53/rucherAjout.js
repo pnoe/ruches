@@ -1,6 +1,13 @@
 /* globals DataTable, urlAjout, rucherId, selRuchesAjout */
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
+	DataTable.type('num', {
+		// https://datatables.net/manual/data/types
+		// https://datatables.net/forums/discussion/78174/align-cells-left-after-2-0
+		// Pour que les noms de ruches "01" "02" soient alignés à gauche comme les strings
+		// Sinon l'alignement se fait à droite quand il n'y a que des noms de type num
+		className: 'string'
+	});
 	const tableajout = new DataTable('#ajoutRuches', {
 		select: {
 			style: 'multi+shift'
