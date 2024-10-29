@@ -2,6 +2,8 @@
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
 	const ttChk = document.getElementById('toutes');
+	const idAjout = document.getElementById('ajouterHausses');
+	const idRetrait = document.getElementById('retirerHausses');
 	if (location.href.endsWith('true')) {
 		ttChk.checked = true;
 	}
@@ -14,11 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		let href;
 		let table;
 		if (this.id === 'ajoutHausseRecolte') {
-			id = document.getElementById('ajouterHausses');
+			id = idAjout;
 			href = urlAjout;
 			table = tableAjout;
 		} else {
-			id = document.getElementById('retirerHausses');
+			id = idRetrait;
 			href = urlRetrait;
 			table = tableRetrait;
 		}
@@ -26,10 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			let hausseIds = '';
 			table.rows({
 				selected: true
-			}).data().pluck(1).each(function(value) {
-				// pluck(1) 2ième td dans le tableau, soit
-				// l'id de la hausse. Attention à l'ordre !
-				hausseIds += value + ',';
+			}).nodes().each(function(value) {
+				hausseIds += value.getAttribute('data-id') + ',';
 			});
 			if (hausseIds) {
 				// On enlève la dernière virgule et met à jour l'url de traitement.

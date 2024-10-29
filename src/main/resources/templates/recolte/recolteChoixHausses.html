@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsruches}"></script>
@@ -37,16 +37,15 @@
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>
-					<th hidden></th>
 					<th th:text="#{rucher}"></th>
 					<th th:text="#{ruche}"></th>
 					<th th:text="#{essaim}"></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="hausseRecolte : ${haussesRecolte}">
+				<tr th:each="hausseRecolte : ${haussesRecolte}"
+					th:data-id="${hausseRecolte.hausse.id}">
 					<td th:text="${hausseRecolte.hausse.nom}"></td>
-					<td hidden th:text="${hausseRecolte.hausse.id}"></td>
 					<td th:text="${hausseRecolte.rucher?.nom}"></td>
 					<td th:text="${hausseRecolte.ruche?.nom}"></td>
 					<td th:text="${hausseRecolte.essaim?.nom}"></td>
@@ -63,8 +62,8 @@
 				</div>
 				<div class="col">
 					<span class="padicons"> <input type="checkbox" id="toutes"
-						th:title="#{AffTtHausse}" th:checked="${tth}" /> <label
-						for="toutes" th:text="#{ToutesH}"></label>
+						th:checked="${tth}"> <label for="toutes"
+						th:title="#{AffTtHausse}" th:text="#{AffToutes}"></label>
 					</span>
 				</div>
 			</div>
@@ -74,16 +73,15 @@
 			<thead>
 				<tr>
 					<th th:text="#{nom}"></th>
-					<th hidden></th>
 					<th th:text="#{rucher}"></th>
 					<th th:text="#{ruche}"></th>
 					<th th:text="#{essaim}"></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="hausseNotInRecolte : ${haussesNotInRecolte}">
+				<tr th:each="hausseNotInRecolte : ${haussesNotInRecolte}"
+					th:data-id="${hausseNotInRecolte.id}">
 					<td th:text="${hausseNotInRecolte.nom}"></td>
-					<td hidden th:text="${hausseNotInRecolte.id}"></td>
 					<td th:text="${hausseNotInRecolte.ruche?.rucher?.nom}"></td>
 					<td th:text="${hausseNotInRecolte.ruche?.nom}"></td>
 					<td th:text="${hausseNotInRecolte.ruche?.essaim?.nom}"></td>
