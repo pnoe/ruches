@@ -11,7 +11,7 @@
 		<closure-compiler.version>2.31.0</closure-compiler.version>
 		<ortools.version>9.11.4210</ortools.version>
 		<java.version>22</java.version>
-		<ruches.js.version>53</ruches.js.version>
+		<ruches.js.version>54</ruches.js.version>
 	</properties>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
