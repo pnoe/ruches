@@ -7,6 +7,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 	const itDate = document.getElementById('date');
 	const itDateOk = document.getElementById('dateOK');
+	const cookieOpt = ';SameSite=Strict;path=' + window.location.pathname;
 	itDate.style.display = 'none';
 	itDateOk.style.display = 'none';
 
@@ -122,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			.find(row => row.startsWith('groupRH='))
 			?.split('=')[1];
 		if (cookieVal === undefined) {
-			document.cookie = 'groupRH=true';
+			document.cookie = 'groupRH=true'+ cookieOpt;
 			group = true;
 		} else {
 			group = cookieVal === 'true';
@@ -147,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 		groupChk.addEventListener('change', event => {
 			group = event.target.checked;
-			document.cookie = 'groupRH=' + group;
+			document.cookie = 'groupRH=' + group + cookieOpt;
 			if (group) {
 				new DataTable('#hausses', {
 					destroy: true,

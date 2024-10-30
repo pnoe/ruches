@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:inline="javascript">
@@ -67,7 +67,7 @@
 			</div>
 			<div class="col">
 				<span class="padicons"> <input type="checkbox" id="tous"
-					th:title="#{tousEssaims}" th:checked="${tous}" /> <label
+					th:title="#{tousEssaims}" th:checked="${tous}"> <label
 					for="tous" th:text="#{tous}"></label>
 				</span>
 			</div>
