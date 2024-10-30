@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsruches}"></script>
@@ -56,7 +56,7 @@
 			<div class="col">
 				<input type="text" th:placeholder="#{recherche}" id="searchtext">
 				<span class="padicons"> <input type="checkbox"
-					id="dragMarker" th:title="#{markerFixes}" checked />
+					id="dragMarker" th:title="#{markerFixes}" checked>
 				</span> <span id="liste" class="liste bi-list-ul cursorpointer"
 					th:title="#{listeRuchesOrdonnees}" aria-hidden="true"></span> <span
 					id="listeplus" class="liste bi-list-stars cursorpointer"
@@ -75,6 +75,6 @@
 	</div>
 	<div id="map"></div>
 	<footer th:replace="~{include::footer}"></footer>
+	<script async defer th:src="${@environment.getProperty('gg.map.url')}"></script>
 </body>
-<script async defer th:src="${@environment.getProperty('gg.map.url')}"></script>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:inline="javascript">
@@ -87,7 +87,7 @@
 					th:title="#{carteGg}" aria-hidden="true"></a> <a
 					th:href="@{'/rucher/Ign/'+${rucher.id}}" th:title="#{carteIgn}"
 					aria-hidden="true"><img th:src="@{'/images/france.svg'}"
-					style="margin-bottom: 3px;" /></a> <a
+					style="margin-bottom: 3px;" alt="IGN"></a> <a
 					th:href="@{'/rucher/Osm/'+${rucher.id}}" class="bi-globe"
 					th:title="#{carteOsm}" aria-hidden="true"></a> &nbsp; <a
 					th:href="@{'/rucher/meteo/'+${rucher.id}}" class="bi-sun"

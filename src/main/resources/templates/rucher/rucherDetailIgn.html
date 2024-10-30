@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsol}"></script>
@@ -82,7 +82,7 @@
 					th:attr="data-bs-content=#{aiderucherdetailignmarkers}"></a> &nbsp;
 				<input type="text" th:placeholder="#{recherche}" id="searchtext">
 				<span class="padicons"> <input type="checkbox"
-					id="dragMarker" th:title="#{markerFixes}" checked />
+					id="dragMarker" th:title="#{markerFixes}" checked>
 				</span> <a th:href="@{'/rucher/rapproche/Ign/'+${rucher.id}}"
 					class="rapproche bi-arrows-angle-contract" th:title="#{rapprocher}"
 					aria-hidden="true"> </a> <span id="liste"

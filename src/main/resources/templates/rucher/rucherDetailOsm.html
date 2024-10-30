@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsol}"></script>
@@ -79,7 +79,7 @@
 					th:attr="data-bs-content=#{aiderucherdetailignmarkers}"></a> &nbsp;
 				<input type="text" th:placeholder="#{recherche}" id="searchtext">
 				<span class="padicons"> <input type="checkbox"
-					id="dragMarker" th:title="#{markerFixes}" checked />
+					id="dragMarker" th:title="#{markerFixes}" checked>
 				</span> <a th:href="@{'/rucher/rapproche/Osm/'+${rucher.id}}"
 					class="rapproche bi-arrows-angle-contract" th:title="#{rapprocher}"
 					aria-hidden="true"></a> <span id="liste"
@@ -88,7 +88,7 @@
 					id="listeplus" class="liste bi-list-stars cursorpointer"
 					th:title="#{listePlusRuchesOrdonnees}" aria-hidden="true"></span> <span
 					id="export-png" class="bi-filetype-png cursorpointer"
-					th:title="#{exportPng}" aria-hidden="true"></span> <a
+					th:title="#{exportPng}" aria-hidden="true"></span> <a href="#"
 					id="image-download" th:download="${rucher.nom}+'.png'"></a> <span
 					id="export-gpx" class="bi-arrow-up-right-circle cursorpointer"
 					th:title="#{exportGPX}" aria-hidden="true"></span> <a
