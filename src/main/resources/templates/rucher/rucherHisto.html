@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:inline="javascript">
@@ -61,8 +61,8 @@
 				<a th:href="@{#{urldoc}+'3834_3476563104'}" class="bi-book"
 					th:title="#{Doc}" target="_blank" aria-hidden="true"></a> <span
 					class="padicons"> <input type="checkbox" id="groupe"
-					th:title="#{grouper}" th:checked="${group}" /> <label for="groupe"
-					th:text="#{grouper}"></label>
+					th:title="#{grouper}" th:checked="${group}"> <label
+					for="groupe" th:text="#{grouper}"></label>
 				</span>
 			</div>
 		</div>

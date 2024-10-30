@@ -370,18 +370,15 @@ public class RucherController {
 							.add(recolteHausseRepository.countRucheByRecolteByRucher(recolte.getId(), rucherId));
 				}
 			}
-
 			List<Long> datesRec = new ArrayList<>(recoltesListe.size());
 			for (Recolte rec : recoltesListe) {
 				datesRec.add(rec.getDate().toEpochSecond(ZoneOffset.UTC));
 			}
-
 			model.addAttribute("datesRec", datesRec);
 			// model.addAttribute("recoltesListe", recoltesListe);
 			model.addAttribute("recoltesNbRuches", recoltesNbRuches);
 			model.addAttribute("poidsListe", poidsListe);
 			// model.addAttribute("poidsTotal", poidsTotal);
-
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
@@ -410,7 +407,7 @@ public class RucherController {
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
 			model.addAttribute(Const.RUCHER, rucher);
-			// evenementRepository.findAjoutRucheOK
+			// evenementRepository.findAjoutRucheOK :
 			// la liste de tous les événements RUCHEAJOUTRUCHER triés par ordre de date
 			// descendante avec les champs ruche et rucher non null.
 			List<Transhumance> histoAll = new ArrayList<>(); // si non groupées
