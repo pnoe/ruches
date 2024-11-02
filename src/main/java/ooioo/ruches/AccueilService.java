@@ -236,7 +236,6 @@ public class AccueilService {
 			// Une ligne par type de traitement...
 			for (TypeTraitement tpT : TypeTraitement.values()) {
 				nbTraitementsType[tpT.ordinal()][i] = evenementRepository.countTraitementsParAnneeParType(date, tpT.name());
-				// System.out.println(tpT.name() + " " + date + " " + nbTraitementsType[tpT.ordinal()][i]);
 				nbTraitementsTypeTotal[tpT.ordinal()] += nbTraitementsType[tpT.ordinal()][i];
 			}
 			// Nombre de ruches créées dans l'année (année acquisition = date)

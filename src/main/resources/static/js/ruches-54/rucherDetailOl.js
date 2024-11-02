@@ -411,8 +411,6 @@ function rucherDetail(ign) {
 				ruches.length + ' ' + ruchestxt + '<br/>' + distancedeparcourstxt +
 				' ' + distParcours.toLocaleString(lang, digits2) + ' m';
 		} else {
-			// const essnom = (ruches[idx].essaim === null) ? '' : ruches[idx].essaim.nom;
-			// const essid = (ruches[idx].essaim === null) ? '' : ruches[idx].essaim.id;
 			const essnom = (essaims[idx] === null) ? '' : essaims[idx].nom;
 			const essid = (essaims[idx] === null) ? '' : essaims[idx].id;
 			document.getElementById('popup-content').innerHTML =

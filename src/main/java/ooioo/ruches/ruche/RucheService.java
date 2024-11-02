@@ -172,7 +172,6 @@ public class RucheService {
 		int nbr = ruches.size();
 		List<Integer> nbHausses = new ArrayList<>(nbr);
 		List<String> dateAjoutRucher = new ArrayList<>(nbr);
-		// List<Evenement> listeEvenCadre = new ArrayList<>(nbr);
 		// Liste des noms de ruchers pour filtre sur colonne rucher
 		List<String> ruchersNoms = new ArrayList<>();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -186,11 +185,8 @@ public class RucheService {
 			Evenement evenAjoutRucher = evenementRepository.findFirstByRucheAndRucherAndTypeOrderByDateDesc(ruche,
 					ruche.getRucher(), TypeEvenement.RUCHEAJOUTRUCHER);
 			dateAjoutRucher.add((evenAjoutRucher == null) ? "" : evenAjoutRucher.getDate().format(formatter));
-			// listeEvenCadre.add(evenementRepository.findFirstByRucheAndTypeOrderByDateDesc(ruche,
-			// TypeEvenement.RUCHECADRE));
 		}
 		model.addAttribute("dateAjoutRucher", dateAjoutRucher);
-		// model.addAttribute("listeEvenCadre", listeEvenCadre);
 		model.addAttribute(Const.NBHAUSSES, nbHausses);
 		model.addAttribute(Const.RUCHES, ruches);
 		Collections.sort(ruchersNoms);

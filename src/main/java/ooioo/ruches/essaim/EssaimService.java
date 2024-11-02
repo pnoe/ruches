@@ -511,7 +511,7 @@ public class EssaimService {
 			if (ageMois > maxAgeMois) {
 				// Si la reine à plus de maxAgeMois on ne la prends pas en compte
 				// afficher un message en haut de la page de stat
-				logger.info("{} âge supérieur à {} mois", maxAgeMois);
+				logger.info("{} âge supérieur à {} mois", essaim, maxAgeMois);
 				continue;
 			}
 			if (actif && rucheRepository.findByEssaimId(essaim.getId()) == null) {
@@ -626,8 +626,6 @@ public class EssaimService {
 				// Trouver pour cette récolte le rucher correspondant à l'essaim.
 				// Une récolte peut comporter plusieurs ruchers.
 				// Les hausses de récolte d'un essaim proviennent toutes du même rucher.
-				Double avgRec = 0d;
-				Double stdRec = 0d;
 				// rrId l'id du rucher de la première hausse de la récolte pour cet essaim.
 				Long rrId = recolteHausseRepository.findRucherIdRecolteEssaim(recolte, essaim);
 				if ((rrId == null) || // l'essaim n'a pas de hausse de récolte pour cette récolte
@@ -646,8 +644,8 @@ public class EssaimService {
 				// récolte et pour le rucher rrId. Ces valeurs sont nécessaires pour calculer la
 				// note de l'essaim pour cette récolte.
 				List<Double[]> avgStd = recolteHausseRepository.findAvgStdRecolte(recolte.getId(), rrId);
-				avgRec = (Double) avgStd.get(0)[0];
-				stdRec = (Double) avgStd.get(0)[1];
+				Double avgRec = avgStd.get(0)[0];
+				Double stdRec = avgStd.get(0)[1];
 				Integer poids = recolteHausseRepository.findPoidsMielEssaimRecolteRucher(essaim.getId(),
 						recolte.getId(), rrId);
 				// if (poids != null) {

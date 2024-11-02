@@ -375,10 +375,8 @@ public class RucherController {
 				datesRec.add(rec.getDate().toEpochSecond(ZoneOffset.UTC));
 			}
 			model.addAttribute("datesRec", datesRec);
-			// model.addAttribute("recoltesListe", recoltesListe);
 			model.addAttribute("recoltesNbRuches", recoltesNbRuches);
 			model.addAttribute("poidsListe", poidsListe);
-			// model.addAttribute("poidsTotal", poidsTotal);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,

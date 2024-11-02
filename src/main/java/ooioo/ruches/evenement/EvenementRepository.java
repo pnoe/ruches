@@ -269,13 +269,18 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	 * nativeQuery ? OK avec List<Object[]>
 	 * 
 	 */
-	/*
-	 * @Query(value = """ select distinct rucher_id, date_trunc('day', date) from
-	 * evenement where extract(year from date) = :annee and type <> :type1 and type
-	 * <> :type2 and type <> :type3 and type <> :type4 order by date_trunc('day',
-	 * date) """, nativeQuery = true) List<Object[]> idDateEveAnneeRucher(Integer
-	 * annee, int type1, int type2, int type3, int type4);
-	 */
+	
+	// @Query(value = """
+	//   select distinct rucher_id, date_trunc('day', date)
+	//     from	evenement 
+	//       where extract(year from date) = :annee
+	//         and type <> :type1 
+	//         and type <> :type2 
+	//         and type <> :type3
+	//         and type <> :type4 
+	//   order by date_trunc('day', date)
+	// """, nativeQuery = true)
+	// List<Object[]> idDateEveAnneeRucher(Integer annee, int type1, int type2, int type3, int type4);
 
 	/*
 	 * Renvoie le nombre de jours d'interventions par année. Les événements type1 à
