@@ -45,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		event.target.form.submit();
 	});
 	document.getElementById('actif').addEventListener('change', event => {
-		// document.cookie = 'a=' + event.target.value + cookieOpt;
 		event.target.form.submit();
 	});
 
