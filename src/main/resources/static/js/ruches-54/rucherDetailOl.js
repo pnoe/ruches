@@ -50,7 +50,7 @@ function rucherDetail(ign) {
 		const diametreTerre = (isNaN(rucher.altitude) ? 0 : rucher.altitude) +
 			2 * rTerreLat(latRucher);
 		const rucheRapp = [];
-		for (let ruche of ruches) {
+		for (const ruche of ruches) {
 			if (distanceTerre(diametreTerre, latRucher, ruche.latitude, longRucher,
 				ruche.longitude) > distMaxRuche) {
 				rucheRapp.push(ruche.nom);
