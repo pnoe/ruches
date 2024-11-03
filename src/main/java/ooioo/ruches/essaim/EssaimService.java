@@ -31,7 +31,6 @@ import ooioo.ruches.evenement.Evenement;
 import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
 import ooioo.ruches.evenement.TypeTraitement;
-import ooioo.ruches.hausse.HausseRepository;
 import ooioo.ruches.recolte.Recolte;
 import ooioo.ruches.recolte.RecolteHausse;
 import ooioo.ruches.recolte.RecolteHausseRepository;
@@ -60,11 +59,11 @@ public class EssaimService {
 
 	private final List<ReineSortie> essaimIgnore = new ArrayList<>();
 
-	public EssaimService(EssaimRepository essaimRepository, HausseRepository hausseRepository,
-			EvenementRepository evenementRepository, RucheRepository rucheRepository,
-			RecolteRepository recolteRepository, RecolteHausseRepository recolteHausseRepository,
-			RucherRepository rucherRepository, MessageSource messageSource, GrapheEsRuService grapheEsRuService,
-			DistRucherRepository drRepo, @Value("${essaim.age.ignore}") String[] essIgnore) {
+	public EssaimService(EssaimRepository essaimRepository, EvenementRepository evenementRepository,
+			RucheRepository rucheRepository, RecolteRepository recolteRepository,
+			RecolteHausseRepository recolteHausseRepository, RucherRepository rucherRepository,
+			MessageSource messageSource, GrapheEsRuService grapheEsRuService, DistRucherRepository drRepo,
+			@Value("${essaim.age.ignore}") String[] essIgnore) {
 		this.essaimRepository = essaimRepository;
 		this.evenementRepository = evenementRepository;
 		this.rucheRepository = rucheRepository;
@@ -615,7 +614,6 @@ public class EssaimService {
 		List<Ruche> ruches = new ArrayList<>();
 		List<Rucher> ruchers = new ArrayList<>();
 		for (Essaim essaim : essaims) {
-			// Long essaimId = essaim.getId();
 			Integer pTotal = 0; // poids de miel total produit par l'essaim
 			Integer pMax = 0; // poids de miel max lors d'une récolte
 			Integer pMin = Integer.MAX_VALUE; // poids de miel min lors d'une récolte

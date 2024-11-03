@@ -103,7 +103,7 @@ public class GrapheEsRuService {
 					boolean errDateAcq = ev.getDate().toLocalDate().isBefore(es.getDateAcquisition());
 					// Si essaim inactif et date événement ev (LocalDateTime) est après la date
 					// dispersion de l'essaim.
-					boolean errDateDisp = (es.getActif() == false) && (ev.getDate().isAfter(es.getDateDispersion()));
+					boolean errDateDisp = !es.getActif() && (ev.getDate().isAfter(es.getDateDispersion()));
 					// Si la ruche n'est pas renseignée
 					boolean errEveRuche = ev.getRuche() == null;
 					if (errDateAcq || errDateDisp || errEveRuche) {

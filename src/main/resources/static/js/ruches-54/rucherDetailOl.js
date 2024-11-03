@@ -50,10 +50,10 @@ function rucherDetail(ign) {
 		const diametreTerre = (isNaN(rucher.altitude) ? 0 : rucher.altitude) +
 			2 * rTerreLat(latRucher);
 		const rucheRapp = [];
-		for (let i = 0; i < ruches.length; i += 1) {
-			if (distanceTerre(diametreTerre, latRucher, ruches[i].latitude, longRucher,
-				ruches[i].longitude) > distMaxRuche) {
-				rucheRapp.push(ruches[i].nom);
+		for (let ruche of ruches) {
+			if (distanceTerre(diametreTerre, latRucher, ruche.latitude, longRucher,
+				ruche.longitude) > distMaxRuche) {
+				rucheRapp.push(ruche.nom);
 			}
 		}
 		if (rucheRapp.length > 0) {
@@ -95,7 +95,7 @@ function rucherDetail(ign) {
 				image: new ol.style.Circle({
 					radius: 12,
 					fill: new ol.style.Fill({
-						color: (essaims[i] === null) ? '#FE00FE' : essaims[i].reineCouleurMarquage 
+						color: (essaims[i] === null) ? '#FE00FE' : essaims[i].reineCouleurMarquage
 						// ruches[i].essaim.reineCouleurMarquage
 					})
 				}),

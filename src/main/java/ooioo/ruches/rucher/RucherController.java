@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -346,8 +345,16 @@ public class RucherController {
 						1000 * histoGroup.get(i).date().toLocalDate().toEpochSecond(LocalTime.MIN, ZoneOffset.UTC),
 						(long) histoGroup.get(i).etat().size() });
 				type.add(histoGroup.get(i).type() ? 1 : 0);
-				ruches.add(String.join(",", histoGroup.get(i).etat().stream().sorted().collect(Collectors.toList())));
-				ajout.add(String.join(",", histoGroup.get(i).ruche().stream().sorted().collect(Collectors.toList())));
+
+				// ruches.add(String.join(",",
+				// histoGroup.get(i).etat().stream().sorted().collect(Collectors.toList())));
+				// ajout.add(String.join(",",
+				// histoGroup.get(i).ruche().stream().sorted().collect(Collectors.toList())));
+
+				// Sonarlint
+				ruches.add(String.join(",", histoGroup.get(i).etat().stream().sorted().toList()));
+				ajout.add(String.join(",", histoGroup.get(i).ruche().stream().sorted().toList()));
+
 			}
 			model.addAttribute("datesNb", datesNb);
 			model.addAttribute("ruches", ruches);
@@ -806,7 +813,6 @@ public class RucherController {
 				return Const.INDEX;
 			}
 			// On interdit la suppression d'un rucher référencé dans des événements
-			// if (evenementRepository.countByRucher(rucher) != 0) {
 			if (evenementRepository.existsByRucher(rucher)) {
 				model.addAttribute(Const.MESSAGE,
 						"Ce rucher ne peut être supprimé, il est référencé dans des événements");

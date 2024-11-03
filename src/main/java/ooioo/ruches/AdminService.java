@@ -108,7 +108,6 @@ public class AdminService {
 		// la liste de tous les événements RUCHEAJOUTRUCHER
 		// ayant une ruche et un rucher non nuls
 		// triés par ordre de date descendante
-		// List<Evenement> evensListe = evenementRepository.findAjoutRucheOK();
 		int levens = evensListe.size();
 		// liste des événements générant des erreurs dans l'historique
 		List<Evenement> eveRucherRuche = new ArrayList<>();
