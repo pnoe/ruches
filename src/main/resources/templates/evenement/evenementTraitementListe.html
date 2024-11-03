@@ -13,9 +13,11 @@
 		const buttontextprint = /*[[#{buttontextprint}]]*/null;
 		const buttontextcol = /*[[#{buttontextcol}]]*/null;
 		document.addEventListener('DOMContentLoaded', () => {
-			document.getElementById('tous').addEventListener('click', event => {
-				location = location.href.slice(0, location.href.lastIndexOf('/'))
-					+ '/' + event.target.checked;
+			document.getElementById('tous').addEventListener('change', event => {
+				event.target.form.submit();
+			});
+			document.getElementById('groupe').addEventListener('change', event => {
+				event.target.form.submit();
 			});
 			evenementListe(true);
 		});
@@ -30,17 +32,21 @@
 					th:text="${tous} ? #{traitement} : #{eveDebutTraitement}"></h1>
 			</div>
 			<div class="col">
-				<span class="padicons"> <input type="checkbox" id="tous"
-					th:checked="${tous}"> <label for="tous" th:text="#{tous}"
+				<span class="padicons"> <input form="evenementForm"
+					type="checkbox" id="tous" name="tous" th:checked="${tous}">
+					<label for="tous" th:text="#{tous}"
 					th:title="#{TraitementDebutFin}"></label>
+				</span> <span class="padicons"> <input form="evenementForm"
+					type="checkbox" id="groupe" name="groupe" th:checked="${groupe}">
+					<label for="groupe" th:text="#{grouper}"></label>
 				</span>
 			</div>
 			<div
-				th:insert="~{includeForm :: evenementListeDates(retController='/evenement/essaim/listeTraitement/' + ${tous})}"
+				th:insert="~{includeForm :: evenementListeDates(retController='/evenement/essaim/listeTraitement')}"
 				class="col"></div>
 		</div>
 	</div>
-	<div class="container-fluid">
+	<div th:unless="${groupe}" class="container-fluid">
 		<table class="table table-bordered table-striped table-sm"
 			id="evenements">
 			<thead>
@@ -55,19 +61,45 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="evenement : ${evenements}">
+				<tr th:each="e : ${evenements}">
 					<td><a
-						th:text="${#temporals.format(evenement.date, 'yyyy/MM/dd HH:mm')}"
-						th:href="@{'/evenement/'+${evenement.id}+'?type=traitement'}"></a>
-					</td>
+						th:text="${#temporals.format(e.date, 'yyyy/MM/dd HH:mm')}"
+						th:href="@{'/evenement/'+${e.id}+'?type=traitement'}"></a></td>
 					<td th:if="${tous}"
-						th:text="${T(ooioo.ruches.evenement.TypeEvenement).ESSAIMTRAITEMENT.equals(evenement.type)}?#{Debut}:#{Fin}">
+						th:text="${T(ooioo.ruches.evenement.TypeEvenement).ESSAIMTRAITEMENT.equals(e.type)}?#{Debut}:#{Fin}">
 					</td>
-					<td th:text="${evenement.ruche?.nom}"></td>
-					<td th:text="${evenement.essaim?.nom}"></td>
-					<td th:text="${evenement.rucher?.nom}"></td>
-					<td th:text="${evenement.valeur}"></td>
-					<td th:text="${evenement.commentaire}"></td>
+					<td th:text="${e.ruche?.nom}"></td>
+					<td th:text="${e.essaim?.nom}"></td>
+					<td th:text="${e.rucher?.nom}"></td>
+					<td th:text="${e.valeur}"></td>
+					<td th:text="${e.commentaire}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div th:if="${groupe}" class="container-fluid">
+		<table class="table table-bordered table-striped table-sm"
+			id="evenements">
+			<thead>
+				<tr>
+					<th th:text="#{date}"></th>
+					<th th:if="${tous}" th:text="#{type}"></th>
+					<th th:text="#{rucher}"></th>
+					<th th:text="#{Traitement}"></th>
+					<th th:text="#{nb}"></th>
+					<th th:text="#{Ruches}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="e : ${evenements}"
+					th:with="date=${#conversions.convert(e[0], 'java.time.LocalDateTime')}">
+					<td th:text="${#temporals.format(date, 'yyyy/MM/dd')}"></td>
+					<td th:if="${tous}" th:text="(${e[2]}=='5')?#{Debut}:#{Fin}">
+					</td>
+					<td th:text="${e[1]}"></td>
+					<td th:text="${tous ? e[3] : e[2]}"></td>
+					<td th:text="${tous ? e[4] : e[3]}"></td>
+					<td th:text="${tous ? e[5] : e[4]}"></td>
 				</tr>
 			</tbody>
 		</table>

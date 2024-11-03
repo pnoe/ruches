@@ -191,6 +191,110 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			""")
 	IdDate findSucreEveAjoutHausse(Ruche ruche, Essaim essaim, LocalDateTime date);
 
+	// and date > :date1 and date < :date2
+	// Iterable<Evenement> findTypePeriode(LocalDateTime date1, LocalDateTime date2,
+	// TypeEvenement type1,
+
+	// Liste des événements début de traitement groupés par date
+	// (jour), rucher, traitement, triés par dates décroissantes.
+	// En retour liste de tableaux d'objets : date, nom rucher, type de traitement,
+	// nombre de ruches, nom des ruches
+	@Query(value = """
+			select date_trunc('day',e.date),
+			    rr.nom, e.valeur, count(*),
+			    string_agg(r.nom, ' ' order by r.nom)
+			        from evenement as e, ruche as r, rucher as rr
+			        where e.type = 5
+			          and rr.id = e.rucher_id
+			          and r.id = e.ruche_id
+			          and date > :date1 and date < :date2
+			        group by 1, 2, 3
+			      """, nativeQuery = true)
+	List<Object[]> findTrtGroupe(LocalDateTime date1, LocalDateTime date2);
+
+	// Liste des événements de traitement groupés par date
+	// (jour), rucher, type : 5 début 6 fin, traitement, triés par dates
+	// décroissantes. En retour liste de tableaux d'objets : date, nom rucher, début
+	// ou fin de traitement, type de traitement, nombre de ruches, nom des ruches
+	@Query(value = """
+			select date_trunc('day',e.date),
+			    rr.nom, e.type, e.valeur, count(*),
+			    string_agg(r.nom, ' ' order by r.nom)
+			        from evenement as e, ruche as r, rucher as rr
+			        where (e.type = 5 or e.type = 6)
+			          and rr.id = e.rucher_id
+			          and r.id = e.ruche_id
+			          and date > :date1 and date < :date2
+			        group by 1, 2, 3, 4
+			      """, nativeQuery = true)
+	List<Object[]> findTrtTousGroupe(LocalDateTime date1, LocalDateTime date2);
+
+	// Liste des événements début de traitement groupés par date
+	// (jour), rucher, traitement, triés par dates décroissantes.
+	// En retour liste de tableaux d'objets : date, nom rucher, type de traitement,
+	// nombre de ruches, nom des ruches
+	@Query(value = """
+			select date_trunc('day',e.date),
+			    rr.nom, e.valeur, count(*),
+			    string_agg(r.nom, ' ' order by r.nom)
+			        from evenement as e, ruche as r, rucher as rr
+			        where e.type = 5
+			          and rr.id = e.rucher_id
+			          and r.id = e.ruche_id
+			          and date > :date
+			        group by 1, 2, 3
+			      """, nativeQuery = true)
+	List<Object[]> findTrtGroupe(LocalDateTime date);
+
+	// Liste des événements de traitement groupés par date
+	// (jour), rucher, type : 5 début 6 fin, traitement, triés par dates
+	// décroissantes. En retour liste de tableaux d'objets : date, nom rucher, début
+	// ou fin de traitement, type de traitement, nombre de ruches, nom des ruches
+	@Query(value = """
+			select date_trunc('day',e.date),
+			    rr.nom, e.type, e.valeur, count(*),
+			    string_agg(r.nom, ' ' order by r.nom)
+			        from evenement as e, ruche as r, rucher as rr
+			        where (e.type = 5 or e.type = 6)
+			          and rr.id = e.rucher_id
+			          and r.id = e.ruche_id
+			          and date > :date
+			        group by 1, 2, 3, 4
+			      """, nativeQuery = true)
+	List<Object[]> findTrtTousGroupe(LocalDateTime date);
+
+	// Liste des événements début de traitement groupés par date
+	// (jour), rucher, traitement, triés par dates décroissantes.
+	// En retour liste de tableaux d'objets : date, nom rucher, type de traitement,
+	// nombre de ruches, nom des ruches
+	@Query(value = """
+			select date_trunc('day',e.date),
+			    rr.nom, e.valeur, count(*),
+			    string_agg(r.nom, ' ' order by r.nom)
+			        from evenement as e, ruche as r, rucher as rr
+			        where e.type = 5
+			          and rr.id = e.rucher_id
+			          and r.id = e.ruche_id
+			        group by 1, 2, 3
+			      """, nativeQuery = true)
+	List<Object[]> findTrtGroupe();
+
+	// Liste des événements de traitement groupés par date
+	// (jour), rucher, type : 5 début 6 fin, traitement, triés par dates
+	// décroissantes. En retour liste de tableaux d'objets : date, nom rucher, début
+	// ou fin de traitement, type de traitement, nombre de ruches, nom des ruches
+	@Query(value = """
+			select date_trunc('day',e.date),
+			    rr.nom, e.type, e.valeur, count(*),
+			    string_agg(r.nom, ' ' order by r.nom)
+			        from evenement as e, ruche as r, rucher as rr
+			        where (e.type = 5 or e.type = 6)
+			          and rr.id = e.rucher_id
+			          and r.id = e.ruche_id
+			        group by 1, 2, 3, 4
+			      """, nativeQuery = true)
+	List<Object[]> findTrtTousGroupe();
+
 	@Query(value = """
 			select e
 			  from Evenement e
@@ -269,18 +373,19 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	 * nativeQuery ? OK avec List<Object[]>
 	 * 
 	 */
-	
+
 	// @Query(value = """
-	//   select distinct rucher_id, date_trunc('day', date)
-	//     from	evenement 
-	//       where extract(year from date) = :annee
-	//         and type <> :type1 
-	//         and type <> :type2 
-	//         and type <> :type3
-	//         and type <> :type4 
-	//   order by date_trunc('day', date)
+	// select distinct rucher_id, date_trunc('day', date)
+	// from evenement
+	// where extract(year from date) = :annee
+	// and type <> :type1
+	// and type <> :type2
+	// and type <> :type3
+	// and type <> :type4
+	// order by date_trunc('day', date)
 	// """, nativeQuery = true)
-	// List<Object[]> idDateEveAnneeRucher(Integer annee, int type1, int type2, int type3, int type4);
+	// List<Object[]> idDateEveAnneeRucher(Integer annee, int type1, int type2, int
+	// type3, int type4);
 
 	/*
 	 * Renvoie le nombre de jours d'interventions par année. Les événements type1 à
