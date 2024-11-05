@@ -345,16 +345,8 @@ public class RucherController {
 						1000 * histoGroup.get(i).date().toLocalDate().toEpochSecond(LocalTime.MIN, ZoneOffset.UTC),
 						(long) histoGroup.get(i).etat().size() });
 				type.add(histoGroup.get(i).type() ? 1 : 0);
-
-				// ruches.add(String.join(",",
-				// histoGroup.get(i).etat().stream().sorted().collect(Collectors.toList())));
-				// ajout.add(String.join(",",
-				// histoGroup.get(i).ruche().stream().sorted().collect(Collectors.toList())));
-
-				// Sonarlint
 				ruches.add(String.join(",", histoGroup.get(i).etat().stream().sorted().toList()));
 				ajout.add(String.join(",", histoGroup.get(i).ruche().stream().sorted().toList()));
-
 			}
 			model.addAttribute("datesNb", datesNb);
 			model.addAttribute("ruches", ruches);

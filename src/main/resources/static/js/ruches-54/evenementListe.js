@@ -4,6 +4,8 @@
 function evenementListe(initDatatable) {
 	const cookieOpt = ';SameSite=Strict;path=' + window.location.pathname;
 	if (initDatatable) {
+		// https://datatables.net/forums/discussion/78174/align-cells-left-after-2-0
+		// Forcé l'alignement à gauche en html pour liste eve traitements groupés
 		const table = new DataTable('#evenements', {
 			order: [[0, 'desc']],
 			scrollX: true,

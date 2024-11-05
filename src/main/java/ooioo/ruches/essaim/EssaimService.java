@@ -732,6 +732,7 @@ public class EssaimService {
 		model.addAttribute("ruches", ruches);
 		model.addAttribute("ruchers", ruchers);
 		if (ess != null) {
+			// Stat pour un seul essaim, en retour la liste des récoltes.
 			model.addAttribute("essaim", ess);
 			model.addAttribute("avgRecList", avgRecList);
 			model.addAttribute("stdRecList", stdRecList);

@@ -122,13 +122,13 @@ public class EvenementEssaimController {
 	 *
 	 * @param tous : événements traitement début et fin si true, début seulement
 	 * sinon.
+	 * 
+	 * @param groupe : groupe les événements traitement par date, rucher, début fin
+	 * type de traitement.
 	 */
-	// @GetMapping("/listeTraitement/{tous}")
 	@GetMapping("/listeTraitement")
-	public String listeTraitement(Model model,
-			// @PathVariable boolean tous,
-			@RequestParam(required = false) Boolean tous, @RequestParam(required = false) Boolean groupe,
-			@RequestParam(required = false) Integer periode,
+	public String listeTraitement(Model model, @RequestParam(required = false) Boolean tous,
+			@RequestParam(required = false) Boolean groupe, @RequestParam(required = false) Integer periode,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext,
@@ -152,50 +152,55 @@ public class EvenementEssaimController {
 		}
 		model.addAttribute("tous", tous);
 		model.addAttribute("groupe", groupe);
-
-		// TODO mettre un autre nom que EVENEMENTS
+		// Si groupe true, une liste d'objet est renvoyée par la requête sql.
+		// Sinon c'est une liste d'événements.
+		TypeEvenement tED = TypeEvenement.ESSAIMTRAITEMENT;
+		TypeEvenement tEF = TypeEvenement.ESSAIMTRAITEMENTFIN;
 		model.addAttribute(Const.EVENEMENTS, switch (periode) {
 		case 1 -> // toute période
 			groupe ? (tous ? evenementRepository.findTrtTousGroupe() : evenementRepository.findTrtGroupe())
 					: (tous ? evenementRepository.findTraitementDateDesc()
-							: evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.ESSAIMTRAITEMENT));
+							: evenementRepository.findByTypeOrderByDateDesc(tED));
 		case 2 -> // moins d'un an
-			groupe ? (tous ? evenementRepository.findTrtTousGroupe(LocalDateTime.now().minusYears(1))
-					: evenementRepository.findTrtGroupe(LocalDateTime.now().minusYears(1)))
-					: (tous ? evenementRepository.findTypePeriode(LocalDateTime.now().minusYears(1),
-							TypeEvenement.ESSAIMTRAITEMENT, TypeEvenement.ESSAIMTRAITEMENTFIN)
-							: evenementRepository.findTypePeriode(TypeEvenement.ESSAIMTRAITEMENT,
-									LocalDateTime.now().minusYears(1)));
+		{
+			LocalDateTime dateM = LocalDateTime.now().minusYears(1);
+			yield groupe
+					? (tous ? evenementRepository.findTrtTousGroupe(dateM) : evenementRepository.findTrtGroupe(dateM))
+					: (tous ? evenementRepository.findTypePeriode(dateM, tED, tEF)
+							: evenementRepository.findTypePeriode(tED, dateM));
+		}
 		case 3 -> // moins d'un mois
-			groupe ? (tous ? evenementRepository.findTrtTousGroupe(LocalDateTime.now().minusMonths(1))
-					: evenementRepository.findTrtGroupe(LocalDateTime.now().minusMonths(1)))
-					: (tous ? evenementRepository.findTypePeriode(LocalDateTime.now().minusMonths(1),
-							TypeEvenement.ESSAIMTRAITEMENT, TypeEvenement.ESSAIMTRAITEMENTFIN)
-							: evenementRepository.findTypePeriode(TypeEvenement.ESSAIMTRAITEMENT,
-									LocalDateTime.now().minusMonths(1)));
+		{
+			LocalDateTime dateM = LocalDateTime.now().minusMonths(1);
+			yield groupe
+					? (tous ? evenementRepository.findTrtTousGroupe(dateM) : evenementRepository.findTrtGroupe(dateM))
+					: (tous ? evenementRepository.findTypePeriode(dateM, tED, tEF)
+							: evenementRepository.findTypePeriode(tED, dateM));
+		}
 		case 4 -> // moins d'une semaine
-			groupe ? (tous ? evenementRepository.findTrtTousGroupe(LocalDateTime.now().minusWeeks(1))
-					: evenementRepository.findTrtGroupe(LocalDateTime.now().minusWeeks(1)))
-					: (tous ? evenementRepository.findTypePeriode(LocalDateTime.now().minusWeeks(1),
-							TypeEvenement.ESSAIMTRAITEMENT, TypeEvenement.ESSAIMTRAITEMENTFIN)
-							: evenementRepository.findTypePeriode(TypeEvenement.ESSAIMTRAITEMENT,
-									LocalDateTime.now().minusWeeks(1)));
+		{
+			LocalDateTime dateM = LocalDateTime.now().minusWeeks(1);
+			yield groupe
+					? (tous ? evenementRepository.findTrtTousGroupe(dateM) : evenementRepository.findTrtGroupe(dateM))
+					: (tous ? evenementRepository.findTypePeriode(dateM, tED, tEF)
+							: evenementRepository.findTypePeriode(tED, dateM));
+		}
 		case 5 -> // moins d'un jour
-			groupe ? (tous ? evenementRepository.findTrtTousGroupe(LocalDateTime.now().minusDays(1))
-					: evenementRepository.findTrtGroupe(LocalDateTime.now().minusDays(1)))
-					: (tous ? evenementRepository.findTypePeriode(LocalDateTime.now().minusDays(1),
-							TypeEvenement.ESSAIMTRAITEMENT, TypeEvenement.ESSAIMTRAITEMENTFIN)
-							: evenementRepository.findTypePeriode(TypeEvenement.ESSAIMTRAITEMENT,
-									LocalDateTime.now().minusDays(1)));
+		{
+			LocalDateTime dateM = LocalDateTime.now().minusDays(1);
+			yield groupe
+					? (tous ? evenementRepository.findTrtTousGroupe(dateM) : evenementRepository.findTrtGroupe(dateM))
+					: (tous ? evenementRepository.findTypePeriode(dateM, tED, tEF)
+							: evenementRepository.findTypePeriode(tED, dateM));
+		}
 		default -> {
 			// ajouter tests date1 et date2 non null
 			model.addAttribute("datestext", datestext);
 			yield groupe
 					? (tous ? evenementRepository.findTrtTousGroupe(date1, date2)
 							: evenementRepository.findTrtGroupe(date1, date2))
-					: (tous ? evenementRepository.findTypePeriode(date1, date2, TypeEvenement.ESSAIMTRAITEMENT,
-							TypeEvenement.ESSAIMTRAITEMENTFIN)
-							: evenementRepository.findTypePeriode(TypeEvenement.ESSAIMTRAITEMENT, date1, date2));
+					: (tous ? evenementRepository.findTypePeriode(date1, date2, tED, tEF)
+							: evenementRepository.findTypePeriode(tED, date1, date2));
 		}
 		});
 		model.addAttribute("periode", periode);

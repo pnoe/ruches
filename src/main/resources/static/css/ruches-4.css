@@ -7,13 +7,17 @@ footer {
 }
 
 tfoot input {
-        width: 100%;
-        padding: 3px;
-        box-sizing: border-box;
-    }
+	width: 100%;
+	padding: 3px;
+	box-sizing: border-box;
+}
+
+.txtGauche {
+	text-align: left !important;
+}
 
 .navbar {
-	margin:0 !important;
+	margin: 0 !important;
 	padding: 0px !important;
 }
 
@@ -23,7 +27,7 @@ tfoot input {
 }
 
 body {
- padding-top: 43px; 
+	padding-top: 43px;
 }
 
 .accordion-button {

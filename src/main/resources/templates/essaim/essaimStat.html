@@ -18,7 +18,7 @@
 			<div class="col">
 				<h1 class="item">
 					<a th:href="@{'/essaim/'+${essaim.id}}"
-						th:text="#{Essaims}+ ' '+${essaim.nom}"></a>
+						th:text="#{essaim}+' '+${essaim.nom}"></a>
 					<th:block th:text="#{sep}+#{Production}"></th:block>
 				</h1>
 			</div>
@@ -30,8 +30,12 @@
 					th:title="#{Doc}" target="_blank" aria-hidden="true"></a>
 			</div>
 		</div>
+		<div th:if="${#lists.isEmpty(essaimsPoids)}" class="row">
+			<span th:text="#{PasDeRecolte}"> </span>
+		</div>
 	</div>
-	<div class="container-fluid">
+	<div th:unless="${#lists.isEmpty(essaimsPoids)}"
+		class="container-fluid">
 		<table class="table table-bordered table-striped table-sm" id="essaim">
 			<thead>
 				<tr>
@@ -61,7 +65,8 @@
 			</tbody>
 		</table>
 	</div>
-	<div class="container-fluid">
+	<div th:unless="${#lists.isEmpty(essaimsPoids)}"
+		class="container-fluid">
 		<table class="table table-bordered table-striped table-sm"
 			id="recoltes">
 			<thead>

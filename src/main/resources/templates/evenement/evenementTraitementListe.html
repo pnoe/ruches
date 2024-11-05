@@ -82,7 +82,7 @@
 			id="evenements">
 			<thead>
 				<tr>
-					<th th:text="#{date}"></th>
+					<th class="txtGauche" th:text="#{date}"></th>
 					<th th:if="${tous}" th:text="#{type}"></th>
 					<th th:text="#{rucher}"></th>
 					<th th:text="#{Traitement}"></th>
@@ -93,7 +93,8 @@
 			<tbody>
 				<tr th:each="e : ${evenements}"
 					th:with="date=${#conversions.convert(e[0], 'java.time.LocalDateTime')}">
-					<td th:text="${#temporals.format(date, 'yyyy/MM/dd')}"></td>
+					<td class="txtGauche"
+						th:text="${#temporals.format(date, 'yyyy/MM/dd')}"></td>
 					<td th:if="${tous}" th:text="(${e[2]}=='5')?#{Debut}:#{Fin}">
 					</td>
 					<td th:text="${e[1]}"></td>
