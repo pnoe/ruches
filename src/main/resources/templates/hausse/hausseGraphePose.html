@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsChart}"></script>
@@ -34,7 +34,7 @@
 			</div>
 			<div class="col">
 				<label th:text="#{AfficherEchelle}" for="scales"></label> <input
-					type="checkbox" id="scales" checked /> &nbsp;
+					type="checkbox" id="scales" checked> &nbsp;
 				<button id="zoomini" type="button" class="btn btn-primary btn-sm"
 					th:text="#{ZoomIni}"></button>
 			</div>

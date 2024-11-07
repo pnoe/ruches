@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsdatetimepicker}"></script>
@@ -57,7 +57,7 @@
 		<div th:replace="~{includeForm :: dateField}"></div>
 		<div class="form-floating mb-3">
 			<input placeholder="" class="form-control" type="number" step="1"
-				min="0" max="100" th:errorclass="fieldError" th:field="*{valeur}" />
+				min="0" max="100" th:errorclass="fieldError" th:field="*{valeur}">
 			<label class="form-label" th:text="#{remplissage}" for="valeur"></label>
 		</div>
 		<div th:replace="~{includeForm :: commentaireField}"></div>
