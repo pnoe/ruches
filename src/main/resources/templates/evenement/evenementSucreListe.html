@@ -8,12 +8,16 @@
 <script th:replace="~{include :: jsruches}"></script>
 <script th:replace="~{include :: jsruchesnom('evenementListe')}"></script>
 <script th:inline="javascript">
-		/* exported Evenements, buttTxtPrint, buttTxtCol */
+		/* exported Evenements, buttTxtPrint, buttTxtCol, groupe */
 		/* globals evenementListe, evenementSucreListe */
 		const Evenements = /*[[#{evenementssucre}]]*/null;
 		const buttTxtPrint = /*[[#{buttontextprint}]]*/null;
 		const buttTxtCol = /*[[#{buttontextcol}]]*/null;
+		const groupe =  /*[[${groupe}]]*/null;
 		document.addEventListener('DOMContentLoaded', () => {
+			document.getElementById('groupe').addEventListener('change', event => {
+				event.target.form.submit();
+			});
 			evenementSucreListe();
 			evenementListe(false);
 		});
@@ -26,12 +30,18 @@
 			<div class="col">
 				<h1 class="item" th:text="#{evenementssucre}"></h1>
 			</div>
+			<div class="col">
+				<span class="padicons"> <input form="evenementForm"
+					type="checkbox" id="groupe" name="groupe" th:checked="${groupe}">
+					<label for="groupe" th:text="#{grouper}" th:title="#{GrouperTrt}"></label>
+				</span>
+			</div>
 			<div
 				th:insert="~{includeForm :: evenementListeDates(retController='/evenement/essaim/listeSucre')}"
 				class="col"></div>
 		</div>
 	</div>
-	<div class="container-fluid">
+	<div th:unless="${groupe}" class="container-fluid">
 		<table class="table table-bordered table-striped table-sm"
 			id="evenementssucre">
 			<thead>
@@ -65,6 +75,39 @@
 			<tfoot>
 				<tr>
 					<th colspan="4" style="text-align: right" th:text="#{Total}"></th>
+					<th></th>
+					<th></th>
+					<th></th>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+	<div th:if="${groupe}" class="container-fluid">
+		<table class="table table-bordered table-striped table-sm"
+			id="evenementssucre">
+			<thead>
+				<tr>
+					<th class="txtGauche" th:text="#{date}"></th>
+					<th th:text="#{rucher}"></th>
+					<th th:text="#{poidsVide}"></th>
+					<th th:text="#{nb}"></th>
+					<th th:text="#{Ruches}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="e : ${evenements}"
+					th:with="date=${#conversions.convert(e[0], 'java.time.LocalDateTime')}">
+					<td class="txtGauche"
+						th:text="${#temporals.format(date, 'yyyy/MM/dd')}"></td>
+					<td th:text="${e[1]}"></td>
+					<td th:text="${e[2]}"></td>
+					<td th:text="${e[3]}"></td>
+					<td th:text="${e[4]}"></td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<th colspan="2" style="text-align: right" th:text="#{Total}"></th>
 					<th></th>
 					<th></th>
 					<th></th>

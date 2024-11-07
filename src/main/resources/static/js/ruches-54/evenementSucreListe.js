@@ -1,5 +1,5 @@
 /* globals
-	  buttTxtPrint, buttTxtCol, Evenements, DataTable
+	  buttTxtPrint, buttTxtCol, Evenements, DataTable, groupe
 */
 /* exported evenementSucreListe */
 'use strict';
@@ -33,12 +33,13 @@ function evenementSucreListe() {
 			}
 		},
 		footerCallback: function() {
+			// affichage du poids total de sucre ajouté par page et pour toute la période
 			const api = this.api();
 			// Remove the formatting to get integer data for summation
 			function valPoids(i) {
 				return typeof i === 'string' ? i.replace(/[,]/, '.') * 1 : typeof i === 'number' ? i : 0;
 			}
-			const coltotal = 4;
+			const coltotal = groupe ? 2 : 4; // La colonne des poids
 			const total = api.column(coltotal, {
 				search: 'applied'
 			}).data().reduce(function(a, b) {

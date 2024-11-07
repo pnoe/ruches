@@ -70,9 +70,12 @@ public class EvenementEssaimController {
 	/*
 	 * Liste événements essaim sucre. Période moins d'un an par défaut (value = "p",
 	 * defaultValue = "2").
+	 *
+	 * @param groupe : groupe les événements sucre par date (jour) et rucher
 	 */
 	@GetMapping("/listeSucre")
 	public String listeSucre(Model model, @RequestParam(required = false) Integer periode,
+			@RequestParam(required = false) Boolean groupe,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext,
@@ -88,29 +91,56 @@ public class EvenementEssaimController {
 				datestext = dxCookie;
 			}
 		}
-		List<Evenement> evSucre = switch (periode) {
-		case 1 -> // toute période
-			evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.ESSAIMSUCRE);
-		case 2 -> // moins d'un an
-			evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusYears(1));
-		case 3 -> // moins d'un mois
-			evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusMonths(1));
-		case 4 -> // moins d'une semaine
-			evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusWeeks(1));
-		case 5 -> // moins d'un jour
-			evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusDays(1));
-		default -> {
-			// ajouter tests date1 et date2 non null
-			model.addAttribute("datestext", datestext);
-			yield evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, date1, date2);
+		if (groupe == null) {
+			groupe = false;
 		}
-		};
-		model.addAttribute(Const.EVENEMENTS, evSucre);
-		List<IdDate> evePose = new ArrayList<>(evSucre.size());
-		for (Evenement eve : evSucre) {
-			evePose.add(evenementRepository.findSucreEveAjoutHausse(eve.getRuche(), eve.getEssaim(), eve.getDate()));
+		model.addAttribute("groupe", groupe);
+		if (groupe) {
+			model.addAttribute(Const.EVENEMENTS, switch (periode) {
+			case 1 -> // toute période
+				evenementRepository.findSucreGroupe();
+			case 2 -> // moins d'un an
+				evenementRepository.findSucreGroupe(LocalDateTime.now().minusYears(1));
+			case 3 -> // moins d'un mois
+				evenementRepository.findSucreGroupe(LocalDateTime.now().minusMonths(1));
+			case 4 -> // moins d'une semaine
+				evenementRepository.findSucreGroupe(LocalDateTime.now().minusWeeks(1));
+			case 5 -> // moins d'un jour
+				evenementRepository.findSucreGroupe(LocalDateTime.now().minusDays(1));
+			default -> {
+				// ajouter tests date1 et date2 non null
+				model.addAttribute("datestext", datestext);
+				yield evenementRepository.findSucreGroupe(date1, date2);
+			}
+			});
+		} else {
+			List<Evenement> evSucre = switch (periode) {
+			case 1 -> // toute période
+				evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.ESSAIMSUCRE);
+			case 2 -> // moins d'un an
+				evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusYears(1));
+			case 3 -> // moins d'un mois
+				evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusMonths(1));
+			case 4 -> // moins d'une semaine
+				evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusWeeks(1));
+			case 5 -> // moins d'un jour
+				evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusDays(1));
+			default -> {
+				// ajouter tests date1 et date2 non null
+				model.addAttribute("datestext", datestext);
+				yield evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, date1, date2);
+			}
+			};
+			model.addAttribute(Const.EVENEMENTS, evSucre);
+			List<IdDate> evePose = new ArrayList<>(evSucre.size());
+			for (Evenement eve : evSucre) {
+				// Recherche événement pose hausse suivant l'événement sucre dont la ruche
+				// et l'essaim sont identiques.
+				evePose.add(
+						evenementRepository.findSucreEveAjoutHausse(eve.getRuche(), eve.getEssaim(), eve.getDate()));
+			}
+			model.addAttribute("evePose", evePose);
 		}
-		model.addAttribute("evePose", evePose);
 		model.addAttribute("periode", periode);
 		return "evenement/evenementSucreListe";
 	}

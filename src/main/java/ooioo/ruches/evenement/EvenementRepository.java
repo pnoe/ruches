@@ -191,9 +191,56 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			""")
 	IdDate findSucreEveAjoutHausse(Ruche ruche, Essaim essaim, LocalDateTime date);
 
-	// and date > :date1 and date < :date2
-	// Iterable<Evenement> findTypePeriode(LocalDateTime date1, LocalDateTime date2,
-	// TypeEvenement type1,
+	// Liste des événements sucre groupés par date (jour), rucher, triés par dates
+	// décroissantes.
+	// En retour liste de tableaux d'objets : date, nom rucher, poids de sucre
+	// total, nombre de ruches et string contenant les noms des ruches
+	@Query(value = """
+			select date_trunc('day',e.date), rr.nom, sum(cast(valeur as numeric)),
+				count(*), string_agg(r.nom, ' ' order by r.nom)
+			from evenement as e, ruche as r, rucher as rr
+			where e.type = 7
+			  and rr.id = e.rucher_id
+			  and r.id = e.ruche_id
+			group by 1, 2
+			order by 1 desc;
+			""", nativeQuery = true)
+	List<Object[]> findSucreGroupe();
+
+	// Liste des événements sucre groupés par date (jour), rucher, triés par dates
+	// décroissantes.
+	// En retour liste de tableaux d'objets : date, nom rucher, poids de sucre
+	// total, nombre de ruches et string contenant les noms des ruches
+	@Query(value = """
+			select date_trunc('day',e.date), rr.nom, sum(cast(valeur as numeric)),
+				count(*), string_agg(r.nom, ' ' order by r.nom)
+			from evenement as e, ruche as r, rucher as rr
+			where e.type = 7
+			  and rr.id = e.rucher_id
+			  and r.id = e.ruche_id
+			  and e.date > :date
+			group by 1, 2
+			order by 1 desc;
+			""", nativeQuery = true)
+	List<Object[]> findSucreGroupe(LocalDateTime date);
+
+	// Liste des événements sucre groupés par date (jour), rucher, triés par dates
+	// décroissantes.
+	// En retour liste de tableaux d'objets : date, nom rucher, poids de sucre
+	// total, nombre de ruches et string contenant les noms des ruches
+	@Query(value = """
+			select date_trunc('day',e.date), rr.nom, sum(cast(valeur as numeric)),
+				count(*), string_agg(r.nom, ' ' order by r.nom)
+			from evenement as e, ruche as r, rucher as rr
+			where e.type = 7
+			  and rr.id = e.rucher_id
+			  and r.id = e.ruche_id
+			  and e.date > :date1
+			  and e.date < :date2
+			group by 1, 2
+			order by 1 desc;
+			""", nativeQuery = true)
+	List<Object[]> findSucreGroupe(LocalDateTime date1, LocalDateTime date2);
 
 	// Liste des événements début de traitement groupés par date
 	// (jour), rucher, traitement, triés par dates décroissantes.
@@ -207,7 +254,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			        where e.type = 5
 			          and rr.id = e.rucher_id
 			          and r.id = e.ruche_id
-			          and date > :date1 and date < :date2
+			          and e.date > :date1 and date < :date2
 			        group by 1, 2, 3
 			      """, nativeQuery = true)
 	List<Object[]> findTrtGroupe(LocalDateTime date1, LocalDateTime date2);
@@ -224,7 +271,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			        where (e.type = 5 or e.type = 6)
 			          and rr.id = e.rucher_id
 			          and r.id = e.ruche_id
-			          and date > :date1 and date < :date2
+			          and e.date > :date1 and date < :date2
 			        group by 1, 2, 3, 4
 			      """, nativeQuery = true)
 	List<Object[]> findTrtTousGroupe(LocalDateTime date1, LocalDateTime date2);
@@ -241,7 +288,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			        where e.type = 5
 			          and rr.id = e.rucher_id
 			          and r.id = e.ruche_id
-			          and date > :date
+			          and e.date > :date
 			        group by 1, 2, 3
 			      """, nativeQuery = true)
 	List<Object[]> findTrtGroupe(LocalDateTime date);
@@ -258,7 +305,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			        where (e.type = 5 or e.type = 6)
 			          and rr.id = e.rucher_id
 			          and r.id = e.ruche_id
-			          and date > :date
+			          and e.date > :date
 			        group by 1, 2, 3, 4
 			      """, nativeQuery = true)
 	List<Object[]> findTrtTousGroupe(LocalDateTime date);
