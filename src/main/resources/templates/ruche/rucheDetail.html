@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsruches}"></script>
@@ -39,8 +39,9 @@
 					th:title="#{modifier}" aria-hidden="true"></a> &nbsp; <span
 					id="clone" class="bi-collection cursorpointer" th:title="#{cloner}"
 					aria-hidden="true"></span> <a
-					th:href="@{'/ruche/hausses/'+${ruche.id}+'/false'}" class="bi-justify"
-					th:title="#{ajoutRetraitHausses}" aria-hidden="true"></a> <a
+					th:href="@{'/ruche/hausses/'+${ruche.id}+'/false'}"
+					class="bi-justify" th:title="#{ajoutRetraitHausses}"
+					aria-hidden="true"></a> <a
 					th:href="@{'/ruche/rucher/'+${ruche.id}}" class="bi-house"
 					th:title="#{changerDeRucher}" aria-hidden="true"></a> <a
 					id="supprime" th:href="@{'/ruche/supprime/'+${ruche.id}}"
