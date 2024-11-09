@@ -100,7 +100,8 @@
 					<td class="txtGauche"
 						th:text="${#temporals.format(date, 'yyyy/MM/dd')}"></td>
 					<td th:text="${e[1]}"></td>
-					<td th:text="${e[2]}"></td>
+					<td class="num"
+						th:text="${#numbers.formatDecimal(e[2],1,2,'COMMA')}"></td>
 					<td th:text="${e[3]}"></td>
 					<td th:text="${e[4]}"></td>
 				</tr>
