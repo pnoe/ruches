@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org" lang="fr">
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script>
@@ -238,10 +238,9 @@
 
 							<tr>
 								<th scope="row"><span th:text="#{nbTraitements}"></span> <a
-								    class="bi-plus-lg" style="font-size: 1.2rem;"
-									href="#" role="button" data-bs-toggle="collapse"
-									data-bs-target=".collapseTrt" aria-expanded="false"></a>
-								</th>
+									class="bi-plus-lg" style="font-size: 1.2rem;" href="#"
+									role="button" data-bs-toggle="collapse"
+									data-bs-target=".collapseTrt" aria-expanded="false"></a></th>
 								<td th:each="nbTraitements : ${nbTraitementsEssaims}"
 									th:text="${nbTraitements}"></td>
 							</tr>
@@ -554,7 +553,6 @@
 			</div>
 		</div>
 	</div>
-
 	<footer th:replace="~{include::footer}"></footer>
 </body>
 </html>
