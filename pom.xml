@@ -125,7 +125,6 @@
 	<build>
 		<finalName>ruches</finalName>
 		<plugins>
-
 			<!-- 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
