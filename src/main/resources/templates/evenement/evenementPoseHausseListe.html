@@ -12,7 +12,14 @@
 		const Evenements = /*[[#{evtsPoseRetraitHausses}]]*/ null;
 		const buttontextprint = /*[[#{buttontextprint}]]*/null;
 		const buttontextcol = /*[[#{buttontextcol}]]*/null;
-		document.addEventListener('DOMContentLoaded', () => evenementListe(true));
+		const groupe =  /*[[${groupe}]]*/null;
+		document.addEventListener('DOMContentLoaded', () => {
+			document.getElementById('groupe').addEventListener('change', event => {
+				event.target.form.submit();
+			});
+			evenementListe(true)
+		}		
+		);
 	</script>
 </head>
 <body>
@@ -22,12 +29,18 @@
 			<div class="col">
 				<h1 class="item" th:text="#{evtsPoseRetraitHausses}"></h1>
 			</div>
+			<div class="col">
+				<span class="padicons"> <input form="evenementForm"
+					type="checkbox" id="groupe" name="groupe" th:checked="${groupe}">
+					<label for="groupe" th:text="#{grouper}" th:title="#{GrouperSucre}"></label>
+				</span>
+			</div>
 			<div
 				th:insert="~{includeForm :: evenementListeDates(retController='/evenement/hausse/poseRetraitHausse')}"
 				class="col"></div>
 		</div>
 	</div>
-	<div class="container-fluid">
+	<div th:unless="${groupe}" class="container-fluid">
 		<table class="table table-bordered table-striped table-sm"
 			id="evenements">
 			<thead>
@@ -53,6 +66,32 @@
 					<td th:text="${evenement.rucher?.nom}"></td>
 					<td th:text="${evenement.essaim?.nom}"></td>
 					<td th:text="${evenement.commentaire}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div th:if="${groupe}" class="container-fluid">
+		<table class="table table-bordered table-striped table-sm"
+			id="evenements">
+			<thead>
+				<tr>
+					<th class="txtGauche" th:text="#{date}"></th>
+					<th th:text="#{evenement}"></th>
+					<th th:text="#{rucher}"></th>
+					<th th:text="#{nb}"></th>
+					<th th:text="#{Ruches}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="e : ${evenements}"
+					th:with="date=${#conversions.convert(e[0], 'java.time.LocalDateTime')}">
+					<td class="txtGauche"
+						th:text="${#temporals.format(date, 'yyyy/MM/dd')}"></td>
+					<td
+						th:text="${e[2]} == 2 ? #{'HAUSSEPOSERUCHE'} : #{'HAUSSERETRAITRUCHE'}"></td>
+					<td th:text="${e[1]}"></td>
+					<td th:text="${e[3]}"></td>
+					<td th:text="${e[4]}"></td>
 				</tr>
 			</tbody>
 		</table>

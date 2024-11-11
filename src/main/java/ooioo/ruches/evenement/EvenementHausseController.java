@@ -50,9 +50,13 @@ public class EvenementHausseController {
 
 	/*
 	 * Liste des événements pose et retrait de hausse.
+	 * 
+	 * @param groupe : groupe les événements sucre par date (jour), rucher et type
+	 * ajout/retrait
 	 */
 	@GetMapping("/poseRetraitHausse")
 	public String poseRetraitHausseListe(Model model, @RequestParam(required = false) Integer periode,
+			@RequestParam(required = false) Boolean groupe,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext,
@@ -68,27 +72,51 @@ public class EvenementHausseController {
 				datestext = dxCookie;
 			}
 		}
-		model.addAttribute(Const.EVENEMENTS, switch (periode) {
-		case 1 -> // toute période
-			evenementRepository.findPoseHausseDateDesc();
-		case 2 -> // moins d'un an
-			evenementRepository.findTypePeriode(LocalDateTime.now().minusYears(1), TypeEvenement.HAUSSEPOSERUCHE,
-					TypeEvenement.HAUSSERETRAITRUCHE);
-		case 3 -> // moins d'un mois
-			evenementRepository.findTypePeriode(LocalDateTime.now().minusMonths(1), TypeEvenement.HAUSSEPOSERUCHE,
-					TypeEvenement.HAUSSERETRAITRUCHE);
-		case 4 -> // moins d'une semaine
-			evenementRepository.findTypePeriode(LocalDateTime.now().minusWeeks(1), TypeEvenement.HAUSSEPOSERUCHE,
-					TypeEvenement.HAUSSERETRAITRUCHE);
-		case 5 -> // moins d'un jour
-			evenementRepository.findTypePeriode(LocalDateTime.now().minusDays(1), TypeEvenement.HAUSSEPOSERUCHE,
-					TypeEvenement.HAUSSERETRAITRUCHE);
-		default -> { // ajouter tests date1 et date2 non null
-			model.addAttribute("datestext", datestext);
-			yield evenementRepository.findTypePeriode(date1, date2, TypeEvenement.HAUSSEPOSERUCHE,
-					TypeEvenement.HAUSSERETRAITRUCHE);
+		if (groupe == null) {
+			groupe = false;
 		}
-		});
+		model.addAttribute("groupe", groupe);
+		if (groupe) {
+			model.addAttribute(Const.EVENEMENTS, switch (periode) {
+			case 1 -> // toute période
+				evenementRepository.findHausseGroupe();
+			case 2 -> // moins d'un an
+				evenementRepository.findHausseGroupe(LocalDateTime.now().minusYears(1));
+			case 3 -> // moins d'un mois
+				evenementRepository.findHausseGroupe(LocalDateTime.now().minusMonths(1));
+			case 4 -> // moins d'une semaine
+				evenementRepository.findHausseGroupe(LocalDateTime.now().minusWeeks(1));
+			case 5 -> // moins d'un jour
+				evenementRepository.findHausseGroupe(LocalDateTime.now().minusDays(1));
+			default -> {
+				// ajouter tests date1 et date2 non null
+				model.addAttribute("datestext", datestext);
+				yield evenementRepository.findHausseGroupe(date1, date2);
+			}
+			});
+		} else {
+			model.addAttribute(Const.EVENEMENTS, switch (periode) {
+			case 1 -> // toute période
+				evenementRepository.findPoseHausseDateDesc();
+			case 2 -> // moins d'un an
+				evenementRepository.findTypePeriode(LocalDateTime.now().minusYears(1), TypeEvenement.HAUSSEPOSERUCHE,
+						TypeEvenement.HAUSSERETRAITRUCHE);
+			case 3 -> // moins d'un mois
+				evenementRepository.findTypePeriode(LocalDateTime.now().minusMonths(1), TypeEvenement.HAUSSEPOSERUCHE,
+						TypeEvenement.HAUSSERETRAITRUCHE);
+			case 4 -> // moins d'une semaine
+				evenementRepository.findTypePeriode(LocalDateTime.now().minusWeeks(1), TypeEvenement.HAUSSEPOSERUCHE,
+						TypeEvenement.HAUSSERETRAITRUCHE);
+			case 5 -> // moins d'un jour
+				evenementRepository.findTypePeriode(LocalDateTime.now().minusDays(1), TypeEvenement.HAUSSEPOSERUCHE,
+						TypeEvenement.HAUSSERETRAITRUCHE);
+			default -> { // ajouter tests date1 et date2 non null
+				model.addAttribute("datestext", datestext);
+				yield evenementRepository.findTypePeriode(date1, date2, TypeEvenement.HAUSSEPOSERUCHE,
+						TypeEvenement.HAUSSERETRAITRUCHE);
+			}
+			});
+		}
 		model.addAttribute("periode", periode);
 		return "evenement/evenementPoseHausseListe";
 	}
