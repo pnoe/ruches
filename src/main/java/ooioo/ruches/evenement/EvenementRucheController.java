@@ -65,7 +65,7 @@ public class EvenementRucheController {
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext,
-			@CookieValue(value = "p", defaultValue = "1") Integer pCookie,
+			@CookieValue(value = "p", defaultValue = "2") Integer pCookie,
 			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
 			@CookieValue(value = "d1", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
 			@CookieValue(value = "d2", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie) {
@@ -117,7 +117,7 @@ public class EvenementRucheController {
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext,
-			@CookieValue(value = "p", defaultValue = "1") Integer pCookie,
+			@CookieValue(value = "p", defaultValue = "2") Integer pCookie,
 			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
 			@CookieValue(value = "d1", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
 			@CookieValue(value = "d2", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie) {

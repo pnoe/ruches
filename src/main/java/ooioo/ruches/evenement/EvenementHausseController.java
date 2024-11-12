@@ -50,6 +50,8 @@ public class EvenementHausseController {
 
 	/*
 	 * Liste des événements pose et retrait de hausse.
+	 *   voir ooioo.ruches.evenement.EvenementController.liste
+	 *   valeur par défaut de la période : 2 moins d'un an
 	 * 
 	 * @param groupe : groupe les événements sucre par date (jour), rucher et type
 	 * ajout/retrait
@@ -60,7 +62,7 @@ public class EvenementHausseController {
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext,
-			@CookieValue(value = "p", defaultValue = "1") Integer pCookie,
+			@CookieValue(value = "p", defaultValue = "2") Integer pCookie,
 			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
 			@CookieValue(value = "d1", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
 			@CookieValue(value = "d2", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie) {
@@ -129,7 +131,7 @@ public class EvenementHausseController {
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
 			@RequestParam(required = false) String datestext,
-			@CookieValue(value = "p", defaultValue = "1") Integer pCookie,
+			@CookieValue(value = "p", defaultValue = "2") Integer pCookie,
 			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
 			@CookieValue(value = "d1", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
 			@CookieValue(value = "d2", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie) {
