@@ -196,32 +196,31 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	// Liste des événements ajout/retrait hausses groupés par date (jour), rucher,
 	// et type (ajout/retrait) triés par dates décroissantes.
 	// En retour liste de tableaux d'objets : date, nom rucher, type ajout/retrait,
-	// nombre de ruches et string contenant les noms des ruches (une ruche peut
-	// apparaître en double si on lui a ajouté deux hausses)
+	// nombre de ruches et string contenant les noms des hausses
 	@Query(value = """
 			select date_trunc('day',e.date), rr.nom, e.type,
-				count(*), string_agg(r.nom, ' ' order by r.nom)
-			from evenement as e, ruche as r, rucher as rr
+				count(*), string_agg(h.nom, ' ' order by h.nom)
+			from evenement as e, hausse as h, rucher as rr
 			where (e.type = 2 or e.type = 3)
 			  and rr.id = e.rucher_id
-			  and r.id = e.ruche_id
+			  and h.id = e.hausse_id
 			group by 1, 2, 3
 			order by 1 desc;
 			""", nativeQuery = true)
 	List<Object[]> findHausseGroupe();
 
 	// Liste des événements ajout/retrait hausses groupés par date (jour), rucher,
-	// et type (ajout/retrait) triés par dates décroissantes.
+	// et type (ajout/retrait) triés par dates décroissantes. La date de l'événement
+	// doit être supérieure à la date passée en paramètre.
 	// En retour liste de tableaux d'objets : date, nom rucher, type ajout/retrait,
-	// nombre de ruches et string contenant les noms des ruches (une ruche peut
-	// apparaître en double si on lui a ajouté deux hausses)
+	// nombre de ruches et string contenant les noms des hausses
 	@Query(value = """
 			select date_trunc('day',e.date), rr.nom, e.type,
-				count(*), string_agg(r.nom, ' ' order by r.nom)
-			from evenement as e, ruche as r, rucher as rr
+				count(*), string_agg(h.nom, ' ' order by h.nom)
+			from evenement as e, hausse as h, rucher as rr
 			where (e.type = 2 or e.type = 3)
 			  and rr.id = e.rucher_id
-			  and r.id = e.ruche_id
+			  and h.id = e.hausse_id
 			  and e.date > :date
 			group by 1, 2, 3
 			order by 1 desc;
@@ -230,16 +229,17 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 	// Liste des événements ajout/retrait hausses groupés par date (jour), rucher,
 	// et type (ajout/retrait) triés par dates décroissantes.
+	// La date de l'événement doit être comprise entre les deux dates passées en
+	// paramètre.
 	// En retour liste de tableaux d'objets : date, nom rucher, type ajout/retrait,
-	// nombre de ruches et string contenant les noms des ruches (une ruche peut
-	// apparaître en double si on lui a ajouté deux hausses)
+	// nombre de ruches et string contenant les noms des hausses
 	@Query(value = """
 			select date_trunc('day',e.date), rr.nom, e.type,
-				count(*), string_agg(r.nom, ' ' order by r.nom)
+				count(*), string_agg(h.nom, ' ' order by h.nom)
 			from evenement as e, ruche as r, rucher as rr
 			where (e.type = 2 or e.type = 3)
 			  and rr.id = e.rucher_id
-			  and r.id = e.ruche_id
+			  and h.id = e.hausse_id
 			  and e.date > :date1
 			  and e.date < :date2
 			group by 1, 2, 3

@@ -46,6 +46,7 @@
 				<tr>
 					<th th:text="#{date}"></th>
 					<th th:text="#{evenement}"></th>
+					<th th:text="#{hausse}"></th>
 					<th th:text="#{ruche}"></th>
 					<th th:text="#{Ordre}"></th>
 					<th th:text="#{rucher}"></th>
@@ -60,6 +61,7 @@
 						th:href="@{'/evenement/'+${evenement.id}+'?type=ajouthausse'}"></a>
 					</td>
 					<td th:text="#{${evenement.type}}"></td>
+					<td th:text="${evenement.hausse?.nom}"></td>
 					<td th:text="${evenement.ruche?.nom}"></td>
 					<td th:text="${evenement.valeur}"></td>
 					<td th:text="${evenement.rucher?.nom}"></td>
@@ -78,7 +80,7 @@
 					<th th:text="#{evenement}"></th>
 					<th th:text="#{rucher}"></th>
 					<th th:text="#{nb}"></th>
-					<th th:text="#{Ruches}"></th>
+					<th th:text="#{Hausses}"></th>
 				</tr>
 			</thead>
 			<tbody>
