@@ -9,6 +9,7 @@ package ooioo.ruches.evenement;
  *   8 COMMENTAIRERUCHE, 9 COMMENTAIREHAUSSE, 10 COMMENTAIREESSAIM, 11 COMMENTAIRERUCHER
  *   12 LIBRE, 13 RUCHEPESEE, 14 RUCHECADRE
  *    l'événement 12 anciennnement dispersion a été intégré à l'entité essaim
+ *    attention evenementForm.html saute LIBRE dans la liste des options du select
  */
 public enum TypeEvenement {
 	RUCHEAJOUTRUCHER, AJOUTESSAIMRUCHE,

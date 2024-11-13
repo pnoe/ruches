@@ -191,8 +191,6 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			""")
 	IdDate findSucreEveAjoutHausse(Ruche ruche, Essaim essaim, LocalDateTime date);
 
-	////////////////////////////////////////////////////////////////////////////////////////////
-
 	// Liste des événements ajout/retrait hausses groupés par date (jour), rucher,
 	// et type (ajout/retrait) triés par dates décroissantes.
 	// En retour liste de tableaux d'objets : date, nom rucher, type ajout/retrait,
@@ -200,7 +198,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	@Query(value = """
 			select date_trunc('day',e.date), rr.nom, e.type,
 				count(*), string_agg(h.nom, ' ' order by h.nom)
-			from evenement as e, hausse as h, rucher as rr
+			from evenement e, hausse h, rucher rr
 			where (e.type = 2 or e.type = 3)
 			  and rr.id = e.rucher_id
 			  and h.id = e.hausse_id
@@ -217,7 +215,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	@Query(value = """
 			select date_trunc('day',e.date), rr.nom, e.type,
 				count(*), string_agg(h.nom, ' ' order by h.nom)
-			from evenement as e, hausse as h, rucher as rr
+			from evenement e, hausse h, rucher rr
 			where (e.type = 2 or e.type = 3)
 			  and rr.id = e.rucher_id
 			  and h.id = e.hausse_id
@@ -236,7 +234,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	@Query(value = """
 			select date_trunc('day',e.date), rr.nom, e.type,
 				count(*), string_agg(h.nom, ' ' order by h.nom)
-			from evenement as e, ruche as r, rucher as rr
+			from evenement e, ruche r, rucher rr
 			where (e.type = 2 or e.type = 3)
 			  and rr.id = e.rucher_id
 			  and h.id = e.hausse_id
@@ -247,8 +245,6 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			""", nativeQuery = true)
 	List<Object[]> findHausseGroupe(LocalDateTime date1, LocalDateTime date2);
 
-	////////////////////////////////////////////////////////////////////////////////////////////
-
 	// Liste des événements sucre groupés par date (jour), rucher, triés par dates
 	// décroissantes.
 	// En retour liste de tableaux d'objets : date, nom rucher, poids de sucre
@@ -256,7 +252,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	@Query(value = """
 			select date_trunc('day',e.date), rr.nom, sum(cast(valeur as numeric)),
 				count(*), string_agg(r.nom, ' ' order by r.nom)
-			from evenement as e, ruche as r, rucher as rr
+			from evenement e, ruche r, rucher rr
 			where e.type = 7
 			  and rr.id = e.rucher_id
 			  and r.id = e.ruche_id
@@ -272,7 +268,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	@Query(value = """
 			select date_trunc('day',e.date), rr.nom, sum(cast(valeur as numeric)),
 				count(*), string_agg(r.nom, ' ' order by r.nom)
-			from evenement as e, ruche as r, rucher as rr
+			from evenement e, ruche r, rucher rr
 			where e.type = 7
 			  and rr.id = e.rucher_id
 			  and r.id = e.ruche_id
@@ -289,7 +285,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	@Query(value = """
 			select date_trunc('day',e.date), rr.nom, sum(cast(valeur as numeric)),
 				count(*), string_agg(r.nom, ' ' order by r.nom)
-			from evenement as e, ruche as r, rucher as rr
+			from evenement e, ruche r, rucher rr
 			where e.type = 7
 			  and rr.id = e.rucher_id
 			  and r.id = e.ruche_id
@@ -308,7 +304,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			select date_trunc('day',e.date),
 			    rr.nom, e.valeur, count(*),
 			    string_agg(r.nom, ' ' order by r.nom)
-			        from evenement as e, ruche as r, rucher as rr
+			        from evenement e, ruche r, rucher rr
 			        where e.type = 5
 			          and rr.id = e.rucher_id
 			          and r.id = e.ruche_id
@@ -325,7 +321,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			select date_trunc('day',e.date),
 			    rr.nom, e.type, e.valeur, count(*),
 			    string_agg(r.nom, ' ' order by r.nom)
-			        from evenement as e, ruche as r, rucher as rr
+			        from evenement e, ruche r, rucher rr
 			        where (e.type = 5 or e.type = 6)
 			          and rr.id = e.rucher_id
 			          and r.id = e.ruche_id
@@ -342,7 +338,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			select date_trunc('day',e.date),
 			    rr.nom, e.valeur, count(*),
 			    string_agg(r.nom, ' ' order by r.nom)
-			        from evenement as e, ruche as r, rucher as rr
+			        from evenement e, ruche r, rucher rr
 			        where e.type = 5
 			          and rr.id = e.rucher_id
 			          and r.id = e.ruche_id
@@ -359,7 +355,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			select date_trunc('day',e.date),
 			    rr.nom, e.type, e.valeur, count(*),
 			    string_agg(r.nom, ' ' order by r.nom)
-			        from evenement as e, ruche as r, rucher as rr
+			        from evenement e, ruche r, rucher rr
 			        where (e.type = 5 or e.type = 6)
 			          and rr.id = e.rucher_id
 			          and r.id = e.ruche_id
@@ -376,7 +372,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			select date_trunc('day',e.date),
 			    rr.nom, e.valeur, count(*),
 			    string_agg(r.nom, ' ' order by r.nom)
-			        from evenement as e, ruche as r, rucher as rr
+			        from evenement e, ruche r, rucher rr
 			        where e.type = 5
 			          and rr.id = e.rucher_id
 			          and r.id = e.ruche_id
@@ -392,7 +388,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			select date_trunc('day',e.date),
 			    rr.nom, e.type, e.valeur, count(*),
 			    string_agg(r.nom, ' ' order by r.nom)
-			        from evenement as e, ruche as r, rucher as rr
+			        from evenement e, ruche r, rucher rr
 			        where (e.type = 5 or e.type = 6)
 			          and rr.id = e.rucher_id
 			          and r.id = e.ruche_id
@@ -544,7 +540,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	Evenement findEvePoseHausse(Hausse hausse);
 
 	@Query(value = """
-			select count(*) as nbeven
+			select count(*)
 			from Essaim
 			where actif = false
 				and date_part('year', dateDispersion) = :datea
@@ -553,7 +549,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 	// Quantité de sucre distribuée dans l'année passée en paramètre.
 	@Query(value = """
-			select sum(cast(valeur as double)) as sucre
+			select sum(cast(valeur as double))
 			  from Evenement
 			  where type = TypeEvenement.ESSAIMSUCRE
 				and date_part('year', date) = :datea
@@ -562,7 +558,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 
 	// Nombre d'événements traitements faits dans l'année passée en paramètre.
 	@Query(value = """
-			select count(*) as nbtraitements
+			select count(*)
 			  from Evenement
 			  where type = TypeEvenement.ESSAIMTRAITEMENT
 				and date_part('year', date) = :datea
@@ -572,7 +568,7 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	// Nombre d'événements traitements par type de traitement faits dans l'année
 	// passée en paramètre.
 	@Query(value = """
-			select count(*) as nbtraitements
+			select count(*)
 			  from Evenement
 			  where type = TypeEvenement.ESSAIMTRAITEMENT
 				and date_part('year', date) = :datea
