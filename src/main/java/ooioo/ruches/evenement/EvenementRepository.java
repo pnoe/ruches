@@ -245,6 +245,62 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 			""", nativeQuery = true)
 	List<Object[]> findHausseGroupe(LocalDateTime date1, LocalDateTime date2);
 
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Liste des événements "essaim ajout ruche" groupés par essaim
+	// triés par dates nom d'essaim.
+	// En retour liste de tableaux d'objets : nom essaim, nombre d'essaims et string
+	// contenant les noms des ruches.
+	@Query(value = """
+			select es.nom, count(*), string_agg(r.nom, ' ' order by r.nom)
+			from evenement e, ruche r, essaim es
+			where e.type = 1
+			  and es.id = e.essaim_id
+			  and r.id = e.ruche_id
+			group by es.nom
+			order by es.nom desc;
+			""", nativeQuery = true)
+	List<Object[]> findEssaimRucheGroupe();
+
+	// Liste des événements "essaim ajout ruche" groupés par essaim
+	// triés par dates nom d'essaim.
+	// En retour liste de tableaux d'objets : nom essaim, nombre d'essaims et string
+	// contenant les noms des ruches.
+	@Query(value = """
+			select es.nom, count(*), string_agg(r.nom, ' ' order by r.nom)
+			from evenement e, ruche r, essaim es
+			where e.type = 1
+			  and es.id = e.essaim_id
+			  and r.id = e.ruche_id
+			  and e.date > :date
+			group by es.nom
+			order by es.nom desc;
+			""", nativeQuery = true)
+	List<Object[]> findEssaimRucheGroupe(LocalDateTime date);
+
+	// Liste des événements "essaim ajout ruche" groupés par essaim
+	// triés par dates nom d'essaim.
+	// En retour liste de tableaux d'objets : date, nom rucher, poids de sucre
+	// total, nombre de ruches et string contenant les noms des ruches
+	// Liste des événements "essaim ajout ruche" groupés par date (jour), rucher,
+	// triés par dates décroissantes.
+	// En retour liste de tableaux d'objets : nom essaim, nombre d'essaims et string
+	// contenant les noms des ruches.
+	@Query(value = """
+			select es.nom, count(*), string_agg(r.nom, ' ' order by r.nom)
+			from evenement e, ruche r, essaim es
+			where e.type = 1
+			  and es.id = e.essaim_id
+			  and r.id = e.ruche_id
+			   and e.date > :date1
+			  and e.date < :date2
+			group by es.nom
+			order by es.nom desc;
+			""", nativeQuery = true)
+	List<Object[]> findEssaimRucheGroupe(LocalDateTime date1, LocalDateTime date2);
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	// Liste des événements sucre groupés par date (jour), rucher, triés par dates
 	// décroissantes.
 	// En retour liste de tableaux d'objets : date, nom rucher, poids de sucre

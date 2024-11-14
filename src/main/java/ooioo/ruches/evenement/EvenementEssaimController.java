@@ -68,6 +68,75 @@ public class EvenementEssaimController {
 	}
 
 	/*
+	 * Liste événements "ajoute essaim ruche". Période moins d'un an par défaut
+	 * (value = "p", defaultValue = "2").
+	 *
+	 * @param groupe : groupe les événements sucre par date (jour) et rucher
+	 */
+	@GetMapping("/ajouteEssaimRuche")
+	public String ajouteEssaimRuche(Model model, @RequestParam(required = false) Integer periode,
+			@RequestParam(required = false) Boolean groupe,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date1,
+			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date2,
+			@RequestParam(required = false) String datestext,
+			@CookieValue(value = "p", defaultValue = "2") Integer pCookie,
+			@CookieValue(value = "dx", defaultValue = "") String dxCookie,
+			@CookieValue(value = "d1", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d1Cookie,
+			@CookieValue(value = "d2", defaultValue = "") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime d2Cookie) {
+		if (periode == null) {
+			periode = pCookie;
+			if (pCookie == 6) {
+				date1 = d1Cookie;
+				date2 = d2Cookie;
+				datestext = dxCookie;
+			}
+		}
+		if (groupe == null) {
+			groupe = false;
+		}
+		model.addAttribute("groupe", groupe);
+		if (groupe) {
+			model.addAttribute(Const.EVENEMENTS, switch (periode) {
+			case 1 -> // toute période
+				evenementRepository.findEssaimRucheGroupe();
+			case 2 -> // moins d'un an
+				evenementRepository.findEssaimRucheGroupe(LocalDateTime.now().minusYears(1));
+			case 3 -> // moins d'un mois
+				evenementRepository.findEssaimRucheGroupe(LocalDateTime.now().minusMonths(1));
+			case 4 -> // moins d'une semaine
+				evenementRepository.findEssaimRucheGroupe(LocalDateTime.now().minusWeeks(1));
+			case 5 -> // moins d'un jour
+				evenementRepository.findEssaimRucheGroupe(LocalDateTime.now().minusDays(1));
+			default -> {
+				// ajouter tests date1 et date2 non null
+				model.addAttribute("datestext", datestext);
+				yield evenementRepository.findEssaimRucheGroupe(date1, date2);
+			}
+			});
+		} else {
+			model.addAttribute(Const.EVENEMENTS, switch (periode) {
+			case 1 -> // toute période
+				evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.AJOUTESSAIMRUCHE);
+			case 2 -> // moins d'un an
+				evenementRepository.findTypePeriode(TypeEvenement.AJOUTESSAIMRUCHE, LocalDateTime.now().minusYears(1));
+			case 3 -> // moins d'un mois
+				evenementRepository.findTypePeriode(TypeEvenement.AJOUTESSAIMRUCHE, LocalDateTime.now().minusMonths(1));
+			case 4 -> // moins d'une semaine
+				evenementRepository.findTypePeriode(TypeEvenement.AJOUTESSAIMRUCHE, LocalDateTime.now().minusWeeks(1));
+			case 5 -> // moins d'un jour
+				evenementRepository.findTypePeriode(TypeEvenement.AJOUTESSAIMRUCHE, LocalDateTime.now().minusDays(1));
+			default -> {
+				// ajouter tests date1 et date2 non null
+				model.addAttribute("datestext", datestext);
+				yield evenementRepository.findTypePeriode(TypeEvenement.AJOUTESSAIMRUCHE, date1, date2);
+			}
+			});
+		}
+		model.addAttribute("periode", periode);
+		return "evenement/evenementEssaimRucheListe";
+	}
+
+	/*
 	 * Liste événements essaim sucre. Période moins d'un an par défaut (value = "p",
 	 * defaultValue = "2").
 	 *
