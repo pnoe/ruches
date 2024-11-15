@@ -48,7 +48,6 @@
 					<th th:text="#{essaim}"></th>
 					<th th:text="#{ruche}"></th>
 					<th th:text="#{rucher}"></th>
-
 					<th th:text="#{commentaire}"></th>
 				</tr>
 			</thead>
@@ -70,6 +69,7 @@
 			id="evenements">
 			<thead>
 				<tr>
+					<th th:text="#{date}"></th>
 					<th th:text="#{essaim}"></th>
 					<th th:text="#{nb}"></th>
 					<th th:text="#{Ruches}"></th>
@@ -77,9 +77,11 @@
 			</thead>
 			<tbody>
 				<tr th:each="e : ${evenements}">
-					<td th:text="${e[0]}"></td>
-					<td th:text="${e[1]}"></td>
+					<td><a th:text="${#strings.substring(e[0],0,10)}"
+						th:href="@{'/evenement/'+${e[1]}}+'?type=essaimruche'"></a></td>
 					<td th:text="${e[2]}"></td>
+					<td th:text="${e[3]}"></td>
+					<td th:text="${e[4]}"></td>
 				</tr>
 			</tbody>
 		</table>
