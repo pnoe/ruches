@@ -176,12 +176,16 @@ public class AccueilService {
 		List<Integer> nbDispersionEssaims = new ArrayList<>(nban);
 		List<Double> sucreEssaims = new ArrayList<>(nban);
 		List<Integer> nbTraitementsEssaims = new ArrayList<>(nban);
-		int [][] nbTraitementsType = new int[TypeTraitement.values().length][nban];
-		int [] nbTraitementsTypeTotal = new int[TypeTraitement.values().length];
+		int[][] nbTraitementsType = new int[TypeTraitement.values().length][nban];
+		int[] nbTraitementsTypeTotal = new int[TypeTraitement.values().length];
+		List<Integer> nbEveTot = new ArrayList<>(nban);
+		int[][] nbEveType = new int[TypeEvenement.values().length][nban];
+		int[] nbEveTypeTotal = new int[TypeEvenement.values().length];
+		Integer nbEvenementTotal = 0;
 		Double pdsMielTotal = 0d;
 		Integer nbRecTotal = 0;
 		Integer nbEveRucherTotal = 0;
-		Integer nbEveTotal = 0;
+		Integer nbEveTotal = 0;  // Pour nombre d'inerventions.
 		Integer nbCreationEssaimsTotal = 0;
 		Integer nbDispersionEssaimsTotal = 0;
 		Double sucreEssaimsTotal = 0.0;
@@ -189,7 +193,6 @@ public class AccueilService {
 		Integer nbCrRuchesTotal = 0;
 		Integer nbCrHaussesTotal = 0;
 		for (int date = dateDebut, i = 0; date <= dateFin; date++, i++) {
-			
 			annees.add(date);
 			// Poids de miel récolté par année
 			Optional<Double> poidsOpt = recolteRepository.findPoidsMielByYear(date);
@@ -235,7 +238,8 @@ public class AccueilService {
 			nbTraitementsEssaims.add(nbT);
 			// Une ligne par type de traitement...
 			for (TypeTraitement tpT : TypeTraitement.values()) {
-				nbTraitementsType[tpT.ordinal()][i] = evenementRepository.countTraitementsParAnneeParType(date, tpT.name());
+				nbTraitementsType[tpT.ordinal()][i] = evenementRepository.countTraitementsParAnneeParType(date,
+						tpT.name());
 				nbTraitementsTypeTotal[tpT.ordinal()] += nbTraitementsType[tpT.ordinal()][i];
 			}
 			// Nombre de ruches créées dans l'année (année acquisition = date)
@@ -245,7 +249,15 @@ public class AccueilService {
 			// Nombre d'essaims créés dans l'année (année acquisition = date)
 			Integer nbCrHausse = hausseRepository.countHaussesCreeesDate(date);
 			nbCreationHausses.add(nbCrHausse);
-			nbCrHaussesTotal += nbCrHausse;
+			// Nombre d'événements par type, par année
+			Integer nbE = evenementRepository.countEveParAnnee(date);
+			nbEvenementTotal += nbE;
+			nbEveTot.add(nbE);
+			for (TypeEvenement tpe : TypeEvenement.values()) {
+				nbEveType[tpe.ordinal()][i] = evenementRepository.countEveParAnneeEtType(date,
+						tpe);
+				nbEveTypeTotal[tpe.ordinal()] += nbEveType[tpe.ordinal()][i];
+			}
 		}
 		pdsMiel.add(pdsMielTotal);
 		nbRecoltes.add(nbRecTotal);
@@ -276,6 +288,12 @@ public class AccueilService {
 		model.addAttribute("nbTraitementsType", nbTraitementsType);
 		model.addAttribute("nbRuchesCr", nbCreationRuches);
 		model.addAttribute("nbHaussesCr", nbCreationHausses);
+		nbEveTot.add(nbEvenementTotal);
+		model.addAttribute("nbEveTot", nbEveTot);
+		for (TypeEvenement tpE : TypeEvenement.values()) {
+			nbEveType[tpE.ordinal()][nban - 1] = nbEveTypeTotal[tpE.ordinal()];
+		}
+		model.addAttribute("nbEveType", nbEveType);
 	}
 
 	private void ruchersMalCale(Model model, List<Rucher> ruchers) {

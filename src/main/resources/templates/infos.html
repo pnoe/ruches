@@ -235,7 +235,6 @@
 								<td th:each="sucre : ${sucreEssaims}"
 									th:text="${#numbers.formatDecimal(sucre,1,2,'DEFAULT')}"></td>
 							</tr>
-
 							<tr>
 								<th scope="row"><span th:text="#{nbTraitements}"></span> <a
 									class="bi-plus-lg" style="font-size: 1.2rem;" href="#"
@@ -246,11 +245,23 @@
 							</tr>
 							<tr class="collapse collapseTrt"
 								th:each="tpt, i : ${T(ooioo.ruches.evenement.TypeTraitement).values()}">
-								<th scope="row" th:text="#{${tpt}}"></th>
+								<th scope="row" th:text="'- ' + #{${tpt}}"></th>
 								<td th:each="nbTraitements : ${nbTraitementsType[i.index]}"
 									th:text="${nbTraitements}"></td>
 							</tr>
-
+							<tr>
+								<th scope="row"><span th:text="#{NbEve}"></span> <a
+									class="bi-plus-lg" style="font-size: 1.2rem;" href="#"
+									role="button" data-bs-toggle="collapse"
+									data-bs-target=".collapseEve" aria-expanded="false"></a></th>
+								<td th:each="nbE : ${nbEveTot}" th:text="${nbE}"></td>
+							</tr>
+							<tr class="collapse collapseEve"
+								th:each="tpe, i : ${T(ooioo.ruches.evenement.TypeEvenement).values()}"
+								th:unless="${tpe == T(ooioo.ruches.evenement.TypeEvenement).LIBRE}">
+								<th scope="row" th:text="'- ' + #{${tpe}}"></th>
+								<td th:each="nbE : ${nbEveType[i.index]}" th:text="${nbE}"></td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
