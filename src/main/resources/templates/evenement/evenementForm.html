@@ -49,7 +49,6 @@
 			<select class="form-control" th:field="*{type}">
 				<option
 					th:each="typeEvenement : ${T(ooioo.ruches.evenement.TypeEvenement).values()}"
-					th:unless="${typeEvenement == T(ooioo.ruches.evenement.TypeEvenement).LIBRE}"
 					th:value="${typeEvenement}" th:text="#{${typeEvenement}}"></option>
 			</select> <label class="form-label" for="type" th:text="#{typeEvenement}"></label>
 		</div>

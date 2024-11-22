@@ -257,8 +257,7 @@
 								<td th:each="nbE : ${nbEveTot}" th:text="${nbE}"></td>
 							</tr>
 							<tr class="collapse collapseEve"
-								th:each="tpe, i : ${T(ooioo.ruches.evenement.TypeEvenement).values()}"
-								th:unless="${tpe == T(ooioo.ruches.evenement.TypeEvenement).LIBRE}">
+								th:each="tpe, i : ${T(ooioo.ruches.evenement.TypeEvenement).values()}">
 								<th scope="row" th:text="'- ' + #{${tpe}}"></th>
 								<td th:each="nbE : ${nbEveType[i.index]}" th:text="${nbE}"></td>
 							</tr>
