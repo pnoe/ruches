@@ -209,7 +209,7 @@
 							<tr>
 								<th scope="row" th:text="#{poidsMiel_nbEssaims}"></th>
 								<td th:each="nbE : ${nbEssaims}"
-									th:text="${#numbers.formatDecimal(pdsMiel[nbEStat.index]/nbE/1000.0,1,2,'DEFAULT')}">
+									th:text="${nbE==0?'0.00':#numbers.formatDecimal(pdsMiel[nbEStat.index]/nbE/1000.0,1,2,'DEFAULT')}">
 								</td>
 								<td></td>
 							</tr>

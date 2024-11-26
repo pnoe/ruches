@@ -246,9 +246,10 @@ public class AccueilService {
 			Integer nbCrRuche = rucheRepository.countRuchesCreeesDate(date);
 			nbCreationRuches.add(nbCrRuche);
 			nbCrRuchesTotal += nbCrRuche;
-			// Nombre d'essaims créés dans l'année (année acquisition = date)
+			// Nombre de hausses créées dans l'année (année acquisition = date)
 			Integer nbCrHausse = hausseRepository.countHaussesCreeesDate(date);
 			nbCreationHausses.add(nbCrHausse);
+			nbCrHaussesTotal += nbCrHausse;
 			// Nombre d'événements par type, par année
 			Integer nbE = evenementRepository.countEveParAnnee(date);
 			nbEvenementTotal += nbE;
