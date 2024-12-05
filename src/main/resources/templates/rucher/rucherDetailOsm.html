@@ -3,7 +3,12 @@
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsol}"></script>
+
+<!--
 <script th:replace="~{include :: jsGpOsmPluginOpenLayers}"></script>
+ -->
+<script th:replace="~{include :: jsOsmIgnExtOl}"></script>
+
 <script th:replace="~{include :: jsruchesnom('rucherDetailOl')}"></script>
 <script th:replace="~{include :: jsruchesnom('rucherDetailCarto')}"></script>
 <script th:replace="~{include :: dom-to-image}"></script>
@@ -60,7 +65,13 @@
 		document.addEventListener('DOMContentLoaded', () => rucherDetail(false));
 	</script>
 <script th:replace="~{include :: cssol}"></script>
+
+<!-- 
 <script th:replace="~{include :: cssGpPluginOpenLayers}"></script>
+-->
+<script th:replace="~{include :: cssIgnClassic}"></script>
+<script th:replace="~{include :: cssIgnExt}"></script>
+
 </head>
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>

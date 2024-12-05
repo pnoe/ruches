@@ -206,8 +206,8 @@ function rucherDetail(ign) {
 		})
 	});
 	const map = new ol.Map({
-		interactions: ol.interaction.defaults({ doubleClickZoom: false }).extend([select, translate]),
-		controls: ol.control.defaults({
+		interactions: ol.interaction.defaults.defaults({ doubleClickZoom: false }).extend([select, translate]),
+		controls: ol.control.defaults.defaults({
 			attribution: false
 		}),
 		target: 'map',
@@ -374,7 +374,8 @@ function rucherDetail(ign) {
 		layerSwitcher.removeLayer(osmLayer);
 		layerSwitcher.addLayer(osmLayer, {
 			title: 'OpenStreetMap',
-			description: 'Carte OpenStreetMap'
+			description: 'Carte OpenStreetMap',
+			legends: [{ url: 'https://www.openstreetmap.org/key' }]
 		});
 		// Belgique
 		const beLegendURL = 'https://cartoweb.wmts.ngi.be/legend/topo/default/legende_fr.png';

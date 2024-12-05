@@ -5,7 +5,12 @@
 <script th:replace="~{include :: jsol}"></script>
 <script th:replace="~{include :: jsGpPluginOpenLayers}"></script>
 <link th:replace="~{include :: cssol}">
+
+<!-- /*
 <link th:replace="~{include :: cssGpPluginOpenLayers}">
+*/-->
+<script th:replace="~{include :: jsIgnExtOl}"></script>
+
 <script th:replace="~{include :: jsruchesnom('rucherDetailOl')}"></script>
 <script th:replace="~{include :: jsruchesnom('rucherDetailCarto')}"></script>
 <script th:replace="~{include :: dom-to-image}"></script>
@@ -63,7 +68,14 @@
 		window.addEventListener('load', () => rucherDetail(true));
 	</script>
 <script th:replace="~{include :: cssol}"></script>
+
+<!-- /*
 <script th:replace="~{include :: cssGpPluginOpenLayers}"></script>
+*/-->
+  
+<script th:replace="~{include :: cssIgnClassic}"></script>
+<script th:replace="~{include :: cssIgnExt}"></script>
+
 </head>
 <body>
 	<nav th:replace="~{navbar::navbar}"></nav>

@@ -46,14 +46,50 @@
 <script th:fragment="d3-zoom" th:src="@{/js/d3-zoom.min-3.0.0.js}"></script>
 
 
-<script th:fragment="jsol" th:src="@{/js/ol-6.15.1/ol.js}"></script>
+<script th:fragment="jsol" th:src="@{/js/ol-10.2.1/ol.js}"></script>
 <link th:fragment="cssol" rel="stylesheet" type="text/css" media="all"
-	th:href="@{/js/ol-6.15.1/ol.css}">
+	th:href="@{/js/ol-10.2.1/ol.css}">
 
 <!--/* th:data-key="${@environment.getProperty('ign.data.key')}" */-->
 <!--/* th:attr="data-url=@{/js/autoconf.js}" */-->
 <!--/* th:attr="data-url=@{/js/customConfig.json}" */-->
 
+
+
+<!-- Library Access Geoportal Service 
+<script src="../../../node_modules/geoportal-access-lib/dist/GpServices.js"></script>
+-->
+<!-- Classic IGN theme 
+<link rel="stylesheet" href="../../../dist/bundle/Classic.css" />    
+-->
+<!-- Extension Géoplateforme pour OpenLayers 
+<link rel="stylesheet" href="../../../dist/bundle/GpfExtOL.css" />
+<script src="../../../dist/bundle/GpfExtOL.js"></script>
+-->
+
+
+<link th:fragment="cssIgnClassic" rel="stylesheet"
+	type="text/css" media="all"
+	th:href="@{/js/IGN-1.0.0-beta.0/Classic.css}">
+<link th:fragment="cssIgnExt" rel="stylesheet"
+	type="text/css" media="all"
+	th:href="@{/js/IGN-1.0.0-beta.0/GpfExtOL.css}">
+
+<script th:fragment="jsIgnExtOl"
+	th:attr="data-url=@{/js/customConfig.json}"
+	th:src="@{/js/IGN-1.0.0-beta.0/GpfExtOL.js}"></script>
+
+<!-- 
+<script th:fragment="jsIgnExtOl"
+	data-key="parcellaire,agriculture,essentiels,ign_scan_ws"
+	th:src="@{/js/IGN-1.0.0-beta.0/GpfExtOL.js}"></script>
+ -->
+
+<script th:fragment="jsOsmIgnExtOl"
+	th:src="@{/js/IGN-1.0.0-beta.0/GpfExtOL.js}"></script>
+
+
+<!--/*  
 <script th:fragment="jsGpPluginOpenLayers"
 	th:attr="data-url=@{/js/customConfig.json}"
 	th:src="@{/js/GpPluginOpenLayers-3.4.4/GpPluginOpenLayers.js}"></script>
@@ -63,6 +99,8 @@
 <link th:fragment="cssGpPluginOpenLayers" rel="stylesheet"
 	type="text/css" media="all"
 	th:href="@{/js/GpPluginOpenLayers-3.4.4/GpPluginOpenLayers.css}">
+*/-->
+
 
 <script defer th:fragment="dom-to-image"
 	th:src="@{/js/dom-to-image-more.min-3.4.5.js}"></script>

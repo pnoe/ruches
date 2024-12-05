@@ -3,7 +3,14 @@
 <head
 	th:replace="~{include :: common_header(~{::script},~{::style},~{::link})}">
 <script th:replace="~{include :: jsol}"></script>
+
+<!--/* 
 <script th:replace="~{include :: jsGpPluginOpenLayers}"></script>
+*/-->
+<script th:replace="~{include :: jsIgnExtOl}"></script>
+
+
+
 <script th:replace="~{include :: jsruchesnom('rucherListeOl')}"></script>
 <script th:inline="javascript">
 		/* exported ol, ruchers, nomRuches, lesRucherstxt,	lesRuchestxt, pasderuchetxt, 
@@ -23,7 +30,14 @@
 		window.addEventListener('load', () => rucherListeIgn(true));
 	</script>
 <script th:replace="~{include :: cssol}"></script>
+
+<!--/*
 <script th:replace="~{include :: cssGpPluginOpenLayers}"></script>
+*/-->
+  
+<script th:replace="~{include :: cssIgnClassic}"></script>
+<script th:replace="~{include :: cssIgnExt}"></script>
+
 <style>
 .ol-rotate {
 	top: 4em;

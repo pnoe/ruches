@@ -111,8 +111,9 @@ function rucherListeIgn(ign) {
 	);
 	const map = new ol.Map({
 		// ajout {doubleClickZoom: false}
-		interactions: ol.interaction.defaults({ doubleClickZoom: false }).extend([select, translate]),
-		controls: ol.control.defaults({
+		// ol 10 .defaults
+		interactions: ol.interaction.defaults.defaults({ doubleClickZoom: false }).extend([select, translate]),
+		controls: ol.control.defaults.defaults({
 			attribution: false
 		}),
 		target: 'map',
