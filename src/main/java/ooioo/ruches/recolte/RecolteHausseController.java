@@ -241,7 +241,7 @@ public class RecolteHausseController {
 
 	/**
 	 * Appel de la page de choix des hausses d'une récolte.
-	 * 
+	 *
 	 * @param toutesHausses boolean true si on veut afficher toutes les hausses dans
 	 *                      le tableau de choix des hausses à ajouter.
 	 */

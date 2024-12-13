@@ -16,12 +16,12 @@ package ooioo.ruches.essaim;
 * 11 RVN Reine vierge. Une reine vierge née en couveuse est implantée dans l'essaim.
 * 12 CRE Cellule de réémergence. Une reine vierge née en couveuse est implantée dans l'essaim dans une cellule de réémergence.
 * 13 ESS Essaimage. la reine en place succède à l'essaimage de le ruche. Il s'agit d'un remérage naturel.
-*        Cela donne des reines de qualité mais avec avec un caractère essaimeur potentiellement marqué. 
+*        Cela donne des reines de qualité mais avec avec un caractère essaimeur potentiellement marqué.
 * 14 SUP Supercédure. la reine en place succède à la précédente sans le départ d'un essaim.
 *        Les deux reines peuvent coexister une courte période. La vieille reine sera expulsée sans le départ d'essaim.
 *        Ce caractère génétique (supercédure) est recherché par les apiculteurs
 * 15 SAU Sauveté. La reine en place succède à la précédente suite à la mort accidentelle de cette dernière.
-*        Reine de qualité souvent médiocre. 
+*        Reine de qualité souvent médiocre.
 */
 public enum ReineOrigine {
 	AEC, AEN, ARF, ARV, ENN, ENB, AUR, EAN, CRD, CR3, CR0, RVN, CRE, ESS, SUP, SAU

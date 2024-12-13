@@ -102,7 +102,7 @@ public class AccueilController {
 	 * Demande d'un nouveau password. Initialise un token et une date d'expiration
 	 * dans l'entité personne. Envoie un email à l'utilisateur avec un lien sur la
 	 * même url mais en GET intégrant ce token.
-	 * 
+	 *
 	 * @param email l'email de l'utilisateur demandant un nouveau password
 	 */
 	@PostMapping("/resetPassword")

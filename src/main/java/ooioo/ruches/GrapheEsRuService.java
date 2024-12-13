@@ -21,7 +21,7 @@ import ooioo.ruches.evenement.EvenementRepository;
 import ooioo.ruches.evenement.TypeEvenement;
 
 /*
- * Pour le calcul des données des graphiques du nombre de ruches et d'essaims. 
+ * Pour le calcul des données des graphiques du nombre de ruches et d'essaims.
  */
 @Service
 public class GrapheEsRuService {
@@ -37,7 +37,7 @@ public class GrapheEsRuService {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param ruchesAcqu    les ids et dates (LocalDateTime) d'acquisition des
 	 *                      ruches.
 	 * @param ruInacLastEve les ids et dates (LocalDateTime) d'inactivation des
@@ -168,7 +168,7 @@ public class GrapheEsRuService {
 
 	/**
 	 * Calcul de la liste des dates et nombre d'essaims regroupés par jour.
-	 * 
+	 *
 	 * @param essaimsAcqu les ids et dates (LocalDate) d'acquisition des essaims.
 	 * @param essaimsDisp les ids et dates (LocalDateTime) de dispersion des essaims
 	 *                    (inactifs).

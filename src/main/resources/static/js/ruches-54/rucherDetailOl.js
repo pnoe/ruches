@@ -314,6 +314,12 @@ function rucherDetail(ign) {
 		if (ignCarteLiscense) {
 			layersMap.insertAt(0, new ol.layer.GeoportalWMTS({
 				layer: 'GEOGRAPHICALGRIDSYSTEMS.MAPS'
+				// par défaut légende image affichant "Aucune légende n'est disponible pour cette donnée"
+				// https://data.geopf.fr/annexes/ressources/legendes/LEGEND.jpg
+				/* , legends: [{ url: 
+			'https://www.geoportail.gouv.fr/depot/layers/GEOGRAPHICALGRIDSYSTEMS.MAPS/legendes/GEOGRAPHICALGRIDSYSTEMS.MAPS_100k-legend.png' 
+				}]
+				*/
 			}));
 		}
 		layersMap.insertAt(0, new ol.layer.GeoportalWMTS({

@@ -535,11 +535,11 @@ public interface EvenementRepository extends CrudRepository<Evenement, Long> {
 	 * d'événements commentaires ruche, hausse, rucher et essaim. select new
 	 * ooioo.ruches.IdDate(null, max(e.date)) select new
 	 * ooioo.ruches.IdDate(rucher_id, date_trunc('day', date))
-	 * 
+	 *
 	 * Attention pas de nativeQuery avec new
 	 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! date_trunc impose
 	 * nativeQuery ? OK avec List<Object[]>
-	 * 
+	 *
 	 */
 
 	// @Query(value = """

@@ -52,7 +52,7 @@ public class EvenementHausseController {
 	 * Liste des événements pose et retrait de hausse.
 	 *   voir ooioo.ruches.evenement.EvenementController.liste
 	 *   valeur par défaut de la période : 2 moins d'un an
-	 * 
+	 *
 	 * @param groupe : groupe les événements sucre par date (jour), rucher et type
 	 * ajout/retrait
 	 */

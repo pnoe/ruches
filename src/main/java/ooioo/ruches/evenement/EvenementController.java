@@ -126,7 +126,7 @@ public class EvenementController {
 	 * Liste événements notifications : événements commentaire avec un nombre x de
 	 * jours dans le champ valeur. Des emails sont envoyés x jours avant la date de
 	 * l'événement aux destinataires spécifiées dans la configuration.
-	 * 
+	 *
 	 * @param tous : si false, seul les événements notif. non échus sont affichés.
 	 */
 	@GetMapping("/listeNotif/{tous}")
@@ -168,11 +168,11 @@ public class EvenementController {
 
 	/*
 	 * Détail d'un événement d'id evenementId
-	 * 
+	 *
 	 * @param type : "" pour retour liste tous even, essaim/ruche/rucher/hausse pour
 	 * retour liste spécifique à l'objet dont l'id est dans itemId,
 	 * sucre/traitement/... pour retour liste even/sucre...
-	 * 
+	 *
 	 * @param itemId l'id de l'objet de retour
 	 */
 	@GetMapping("/{evenementId}")

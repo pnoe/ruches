@@ -284,7 +284,7 @@ public class EssaimController {
 
 	/**
 	 * Enregistrement de l'essaimage.
-	 * 
+	 *
 	 * @param essaimId    l'id de l'essaim qui essaime
 	 * @param date        la date saisie dans le formulaire d'essaimage
 	 * @param nom         le nom du nouvel essaim restant dans la ruche saisi dans
@@ -707,7 +707,7 @@ public class EssaimController {
 	/**
 	 * Change un essaim de ruche. Il faut mettre l'essaim essaimId dans le ruche
 	 * rucheId. Si la ruche contient un essaim, le disperser.
-	 * 
+	 *
 	 * @param date,          la date saisie dans le formulaire
 	 * @param commentaire,   le commentaire saisi dans le formulaire
 	 * @param swapPositions, true si échange de position des ruches demandé

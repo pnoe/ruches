@@ -221,7 +221,7 @@ public class EvenementEssaimController {
 	 *
 	 * @param tous : événements traitement début et fin si true, début seulement
 	 * sinon.
-	 * 
+	 *
 	 * @param groupe : groupe les événements traitement par date, rucher, début fin
 	 * type de traitement.
 	 */
@@ -361,7 +361,7 @@ public class EvenementEssaimController {
 	 * Pour la création d'événements par lot. Récupère les noms à partir des ids du
 	 * lot. Récupère la date éventuellement décalée. Met cette date, les ids et les
 	 * noms dans model pour le formulaire.
-	 * 
+	 *
 	 * @param session   pour la date décalée
 	 * @param model
 	 * @param essaimIds les ids du lot d'essaims
@@ -410,7 +410,7 @@ public class EvenementEssaimController {
 
 	/**
 	 * Créations des événements pour un lot d'essaims.
-	 * 
+	 *
 	 * @param essaimIds     la liste de ids des essaims
 	 * @param typeEvenement le type d'événement : commentaire essaim, sucre,
 	 *                      traitement ou cadre

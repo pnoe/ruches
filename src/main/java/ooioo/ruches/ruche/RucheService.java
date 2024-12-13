@@ -78,7 +78,7 @@ public class RucheService {
 
 	/**
 	 * Historique de l'ajout des hausses sur une ruche.
-	 * 
+	 *
 	 * @return true rucheId OK, false KO
 	 */
 	boolean historique(Model model, Long rucheId) {
@@ -234,7 +234,7 @@ public class RucheService {
 	 *
 	 * @param parcours liste des ids des ruches ordonnés selon le parcours le plus
 	 * court.
-	 * 
+	 *
 	 * @param plus true pour liste détaillée.
 	 */
 	void listePlusRucher(HttpSession session, Model model, Rucher rucher, List<Long> parcours, boolean plus) {

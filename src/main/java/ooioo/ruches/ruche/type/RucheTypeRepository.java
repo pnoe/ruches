@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository("rucheTypeRepository")
 public interface RucheTypeRepository extends CrudRepository<RucheType, Long> {
 	List<RucheType> findAllByOrderByNom();
-	
+
 	RucheType findByNom(String nom);
-	
+
 }

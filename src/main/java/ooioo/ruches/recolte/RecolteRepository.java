@@ -20,7 +20,7 @@ public interface RecolteRepository extends ListCrudRepository<Recolte, Long> {
 	Recolte findFirstByOrderByDateDesc();
 
 	Recolte findFirstByOrderByDateAsc();
-	
+
 	/*
 	 * Renvoie pour la liste des récoltes, le nombre de hausses de la récolte et la
 	 * date de la récolte dans le Record IdDate.
@@ -45,7 +45,7 @@ public interface RecolteRepository extends ListCrudRepository<Recolte, Long> {
 				where date_part('year', date) = :year
 			""", nativeQuery = true)
 	Optional<Double> findPoidsMielByYear(int year);
-	
+
 	/*
 	 * Renvoie le nombre de récoltes pour l'année passée en paramètre Si
 	 * aucune ligne trouvée (année sans récolte) Optional permet de traiter le

@@ -22,7 +22,7 @@ public class Personne {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	@Version
 	private Integer version;
 

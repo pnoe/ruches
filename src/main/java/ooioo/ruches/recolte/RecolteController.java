@@ -87,7 +87,7 @@ public class RecolteController {
 			List<Double> partRec = new ArrayList<>(idruchers.size());
 			List<Double> minRec = new ArrayList<>(idruchers.size());
 			List<Double> maxRec = new ArrayList<>(idruchers.size());
-			Double pTotalRec = 0d;
+			double pTotalRec = 0d;
 			for (Long id : idruchers) {
 				Optional<Rucher> rucherOpt = rucherRepository.findById(id);
 				ruchers.add(rucherOpt.get());

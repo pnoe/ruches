@@ -75,7 +75,7 @@ public class RucherService {
 	 * Id. Ne stocke pas la distance d'un rucher à lui même. Pour éventuel
 	 * intégration dans un calcul de distances parcourues pour les transhumances ou
 	 * affichage brut du tableau.
-	 * 
+	 *
 	 * @param reset si true toutes les distances sont effacées puis recalculées,
 	 *              sinon seules les distances non enregistées sont recalculées.
 	 */

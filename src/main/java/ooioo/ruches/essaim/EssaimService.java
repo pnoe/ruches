@@ -75,8 +75,8 @@ public class EssaimService {
 		this.drRepo = drRepo;
 		// Initialisation de la liste des types de sorties à ignorer pour le calcul de
 		// l'âge des reines inactives.
-		for (int i = 0; i < essIgnore.length; i++) {
-			essaimIgnore.add(ReineSortie.valueOf(essIgnore[i]));
+		for (String element : essIgnore) {
+			essaimIgnore.add(ReineSortie.valueOf(element));
 		}
 	}
 
@@ -287,7 +287,7 @@ public class EssaimService {
 
 	/**
 	 * Change un essaim de ruche. Si la ruche contient un essaim, le disperser.
-	 * 
+	 *
 	 * @param essaim,        l'essaim à changer du ruche
 	 * @param rucheDest,     la ruche dans laquelle on met l'essaim
 	 * @param date,          la date saisie dans le formulaire
@@ -356,7 +356,7 @@ public class EssaimService {
 	/**
 	 * Clone d'un essaim. Crée des essaims clones et met ces essaims dans des ruches
 	 * avec création des événements AJOUTESSAIMRUCHE.
-	 * 
+	 *
 	 * @param essaimOpt l'essaim à cloner.
 	 * @param nomclones les noms des essaims à créer séparés par des ",".
 	 * @param nomruches les noms des ruches dans lesquelles mettre les essaims
@@ -614,11 +614,11 @@ public class EssaimService {
 		List<Ruche> ruches = new ArrayList<>();
 		List<Rucher> ruchers = new ArrayList<>();
 		for (Essaim essaim : essaims) {
-			Integer pTotal = 0; // poids de miel total produit par l'essaim
+			int pTotal = 0; // poids de miel total produit par l'essaim
 			Integer pMax = 0; // poids de miel max lors d'une récolte
 			Integer pMin = Integer.MAX_VALUE; // poids de miel min lors d'une récolte
 			boolean essaimOK = false;
-			Double noteEssaim = 0d;
+			double noteEssaim = 0d;
 			int nbRec = 0;
 			for (Recolte recolte : recoltes) {
 				// Trouver pour cette récolte le rucher correspondant à l'essaim.
@@ -656,7 +656,7 @@ public class EssaimService {
 				// note, la note de l'essaim pour cette récolte dans son rucher.
 				// Ecart simple standardisé : écart par rapport à la moyenne divisé par l'écart
 				// type.
-				Double note = ((stdRec == 0d) ? 0d : (poids - avgRec) / stdRec);
+				double note = ((stdRec == 0d) ? 0d : (poids - avgRec) / stdRec);
 				// Si appel pour un essaim unique, on mémorise les valeurs pour la récolte dans
 				// des listes : poids, avgRec, stdRec, note
 				if (ess != null) {
