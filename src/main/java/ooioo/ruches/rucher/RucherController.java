@@ -333,7 +333,8 @@ public class RucherController {
 			List<Integer> type = new ArrayList<>(hSize + 1);
 			// ajout les noms des ruches ajoutées
 			List<String> ajout = new ArrayList<>(hSize + 1);
-			if ((hSize > 0) && (histoGroup.get(hSize - 1).etat().size() != 0)) {
+			if ((hSize > 0) && !histoGroup.get(hSize - 1).etat().isEmpty()) {
+				// if ((hSize > 0) && (histoGroup.get(hSize - 1).etat().size() != 0)) {
 				datesNb.add(new Long[] { 1000 * histoGroup.get(hSize - 1).date().toLocalDate().minusDays(1l)
 						.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), 0l });
 				ruches.add("");

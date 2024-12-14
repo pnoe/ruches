@@ -54,6 +54,10 @@ public class EvenementEssaimController {
 	private final EssaimService essaimService;
 
 	private static final String commForm = "essaim/essaimCommentaireForm";
+	private static final String dtstext = "datestext";
+	private static final String grp = "groupe";
+	private static final String prd = "periode";
+	private static final String redirEssList = "redirect:/essaim/liste";
 
 	public EvenementEssaimController(EvenementRepository evenementRepository, RucheRepository rucheRepository,
 			EssaimRepository essaimRepository, RucherRepository rucherRepository, MessageSource messageSource,
@@ -94,7 +98,7 @@ public class EvenementEssaimController {
 		if (groupe == null) {
 			groupe = false;
 		}
-		model.addAttribute("groupe", groupe);
+		model.addAttribute(grp, groupe);
 		if (groupe) {
 			model.addAttribute(Const.EVENEMENTS, switch (periode) {
 			case 1 -> // toute période
@@ -109,7 +113,7 @@ public class EvenementEssaimController {
 				evenementRepository.findEssaimRucheGroupe(LocalDateTime.now().minusDays(1));
 			default -> {
 				// ajouter tests date1 et date2 non null
-				model.addAttribute("datestext", datestext);
+				model.addAttribute(dtstext, datestext);
 				yield evenementRepository.findEssaimRucheGroupe(date1, date2);
 			}
 			});
@@ -127,12 +131,12 @@ public class EvenementEssaimController {
 				evenementRepository.findTypePeriode(TypeEvenement.AJOUTESSAIMRUCHE, LocalDateTime.now().minusDays(1));
 			default -> {
 				// ajouter tests date1 et date2 non null
-				model.addAttribute("datestext", datestext);
+				model.addAttribute(dtstext, datestext);
 				yield evenementRepository.findTypePeriode(TypeEvenement.AJOUTESSAIMRUCHE, date1, date2);
 			}
 			});
 		}
-		model.addAttribute("periode", periode);
+		model.addAttribute(prd, periode);
 		return "evenement/evenementEssaimRucheListe";
 	}
 
@@ -163,7 +167,7 @@ public class EvenementEssaimController {
 		if (groupe == null) {
 			groupe = false;
 		}
-		model.addAttribute("groupe", groupe);
+		model.addAttribute(grp, groupe);
 		if (groupe) {
 			model.addAttribute(Const.EVENEMENTS, switch (periode) {
 			case 1 -> // toute période
@@ -178,7 +182,7 @@ public class EvenementEssaimController {
 				evenementRepository.findSucreGroupe(LocalDateTime.now().minusDays(1));
 			default -> {
 				// ajouter tests date1 et date2 non null
-				model.addAttribute("datestext", datestext);
+				model.addAttribute(dtstext, datestext);
 				yield evenementRepository.findSucreGroupe(date1, date2);
 			}
 			});
@@ -196,7 +200,7 @@ public class EvenementEssaimController {
 				evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, LocalDateTime.now().minusDays(1));
 			default -> {
 				// ajouter tests date1 et date2 non null
-				model.addAttribute("datestext", datestext);
+				model.addAttribute(dtstext, datestext);
 				yield evenementRepository.findTypePeriode(TypeEvenement.ESSAIMSUCRE, date1, date2);
 			}
 			};
@@ -210,7 +214,7 @@ public class EvenementEssaimController {
 			}
 			model.addAttribute("evePose", evePose);
 		}
-		model.addAttribute("periode", periode);
+		model.addAttribute(prd, periode);
 		return "evenement/evenementSucreListe";
 	}
 
@@ -250,7 +254,7 @@ public class EvenementEssaimController {
 			groupe = false;
 		}
 		model.addAttribute("tous", tous);
-		model.addAttribute("groupe", groupe);
+		model.addAttribute(grp, groupe);
 		// Si groupe true, une liste d'objet est renvoyée par la requête sql.
 		// Sinon c'est une liste d'événements.
 		TypeEvenement tED = TypeEvenement.ESSAIMTRAITEMENT;
@@ -294,7 +298,7 @@ public class EvenementEssaimController {
 		}
 		default -> {
 			// ajouter tests date1 et date2 non null
-			model.addAttribute("datestext", datestext);
+			model.addAttribute(dtstext, datestext);
 			yield groupe
 					? (tous ? evenementRepository.findTrtTousGroupe(date1, date2)
 							: evenementRepository.findTrtGroupe(date1, date2))
@@ -302,7 +306,7 @@ public class EvenementEssaimController {
 							: evenementRepository.findTypePeriode(tED, date1, date2));
 		}
 		});
-		model.addAttribute("periode", periode);
+		model.addAttribute(prd, periode);
 		return "evenement/evenementTraitementListe";
 	}
 
@@ -336,7 +340,7 @@ public class EvenementEssaimController {
 				logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 			}
 		}
-		return "redirect:/essaim/liste";
+		return redirEssList;
 	}
 
 	/**
@@ -447,7 +451,7 @@ public class EvenementEssaimController {
 				logger.error(Const.IDESSAIMXXINCONNU, essaimId);
 			}
 		}
-		return "redirect:/essaim/liste";
+		return redirEssList;
 	}
 
 	/**
@@ -739,7 +743,7 @@ public class EvenementEssaimController {
 				essaimRepository.save(essaim);
 				logger.info(Const.MODIFIE, essaim);
 				// essaim inactivé on affiche la liste des essaims
-				return "redirect:/essaim/liste";
+				return redirEssList;
 			} else {
 				logger.error(ESSAIMPASDANSRUCHE);
 				model.addAttribute(Const.MESSAGE, ESSAIMPASDANSRUCHE);

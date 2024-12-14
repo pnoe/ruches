@@ -47,6 +47,7 @@ public class EvenementHausseController {
 	}
 
 	private static final String commForm = "hausse/hausseCommentaireForm";
+	private static final String dtstext = "datestext";
 
 	/*
 	 * Liste des événements pose et retrait de hausse.
@@ -92,7 +93,7 @@ public class EvenementHausseController {
 				evenementRepository.findHausseGroupe(LocalDateTime.now().minusDays(1));
 			default -> {
 				// ajouter tests date1 et date2 non null
-				model.addAttribute("datestext", datestext);
+				model.addAttribute(dtstext, datestext);
 				yield evenementRepository.findHausseGroupe(date1, date2);
 			}
 			});
@@ -113,7 +114,7 @@ public class EvenementHausseController {
 				evenementRepository.findTypePeriode(LocalDateTime.now().minusDays(1), TypeEvenement.HAUSSEPOSERUCHE,
 						TypeEvenement.HAUSSERETRAITRUCHE);
 			default -> { // ajouter tests date1 et date2 non null
-				model.addAttribute("datestext", datestext);
+				model.addAttribute(dtstext, datestext);
 				yield evenementRepository.findTypePeriode(date1, date2, TypeEvenement.HAUSSEPOSERUCHE,
 						TypeEvenement.HAUSSERETRAITRUCHE);
 			}
@@ -155,7 +156,7 @@ public class EvenementHausseController {
 		case 5 -> // moins d'un jour
 			evenementRepository.findTypePeriode(TypeEvenement.HAUSSEREMPLISSAGE, LocalDateTime.now().minusDays(1));
 		default -> { // ajouter tests date1 et date2 non null
-			model.addAttribute("datestext", datestext);
+			model.addAttribute(dtstext, datestext);
 			yield evenementRepository.findTypePeriode(TypeEvenement.HAUSSEREMPLISSAGE, date1, date2);
 		}
 		});
