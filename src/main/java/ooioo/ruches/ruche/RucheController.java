@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +22,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,7 +45,7 @@ import ooioo.ruches.rucher.Rucher;
 import ooioo.ruches.rucher.RucherRepository;
 import ooioo.ruches.rucher.RucherService;
 
-@Controller
+@RestController
 @RequestMapping("/ruche")
 public class RucheController {
 
@@ -114,8 +113,7 @@ public class RucheController {
 	 */
 	@PostMapping("/clone/{rucheId}")
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody String clone(HttpSession session, Model model, @PathVariable long rucheId,
-			@RequestParam String nomclones) {
+	public String clone(HttpSession session, Model model, @PathVariable long rucheId, @RequestParam String nomclones) {
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 		if (rucheOpt.isPresent()) {
 			Ruche ruche = rucheOpt.get();
@@ -475,7 +473,7 @@ public class RucheController {
 	 */
 	@PostMapping("/ordreHausses/{rucheId}")
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody String ordreHausses(@PathVariable long rucheId, @RequestBody Long[] hausses) {
+	public String ordreHausses(@PathVariable long rucheId, @RequestBody Long[] hausses) {
 		for (int i = 0; i < hausses.length; i++) {
 			Optional<Hausse> hausseOpt = hausseRepository.findById(hausses[i]);
 			if (hausseOpt.isPresent()) {
@@ -604,7 +602,7 @@ public class RucheController {
 	 */
 	@PostMapping("/deplace/{rucheId}/{lat}/{lng}")
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody String deplace(@PathVariable Long rucheId, @PathVariable Float lat, @PathVariable Float lng) {
+	public String deplace(@PathVariable Long rucheId, @PathVariable Float lat, @PathVariable Float lng) {
 		Optional<Ruche> rucheOpt = rucheRepository.findById(rucheId);
 		if (rucheOpt.isPresent()) {
 			Ruche ruche = rucheOpt.get();

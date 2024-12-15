@@ -65,6 +65,7 @@ public class RucherController {
 	private static final String RUCHER_RUCHERFORM = "rucher/rucherForm";
 	private static final String RUCHER_RUCHERLISTE = "rucher/ruchersListe";
 	private static final String HISTO = "histo";
+	private static final String redirectRucher = "redirect:/rucher/";
 
 	private final Logger logger = LoggerFactory.getLogger(RucherController.class);
 
@@ -237,7 +238,7 @@ public class RucherController {
 			model.addAttribute(Const.MESSAGE, Const.IDRUCHERINCONNU);
 			return Const.INDEX;
 		}
-		return "redirect:/rucher/" + rucherId + "?ruchespesee=" + String.join("-", ruches);
+		return redirectRucher + rucherId + "?ruchespesee=" + String.join("-", ruches);
 	}
 
 	/**
@@ -334,7 +335,6 @@ public class RucherController {
 			// ajout les noms des ruches ajoutées
 			List<String> ajout = new ArrayList<>(hSize + 1);
 			if ((hSize > 0) && !histoGroup.get(hSize - 1).etat().isEmpty()) {
-				// if ((hSize > 0) && (histoGroup.get(hSize - 1).etat().size() != 0)) {
 				datesNb.add(new Long[] { 1000 * histoGroup.get(hSize - 1).date().toLocalDate().minusDays(1l)
 						.toEpochSecond(LocalTime.MIN, ZoneOffset.UTC), 0l });
 				ruches.add("");
@@ -626,7 +626,7 @@ public class RucherController {
 		String action = (rucher.getId() == null) ? "créé" : "modifié";
 		rucherRepository.save(rucher);
 		logger.info("{} {}", rucher, action);
-		return "redirect:/rucher/" + rucher.getId();
+		return redirectRucher + rucher.getId();
 	}
 
 	/**
@@ -759,7 +759,7 @@ public class RucherController {
 					messageSource.getMessage(Const.IDRUCHERINCONNU, null, LocaleContextHolder.getLocale()));
 			return Const.INDEX;
 		}
-		return "redirect:/rucher/" + servletPath + "/{rucherId}";
+		return redirectRucher + servletPath + "/{rucherId}";
 	}
 
 	/**

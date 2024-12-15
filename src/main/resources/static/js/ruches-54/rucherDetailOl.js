@@ -474,7 +474,7 @@ function rucherDetail(ign) {
 			for (const marker of markerRuches) {
 				if ((marker.getStyle().getText().getText().toUpperCase() === searchtext) ||
 					(marker.getStyle().getText().getText().toUpperCase() === '*' + searchtext) ||
-					(Object.prototype.hasOwnProperty.call(marker, 'essaimnom') &&
+					(Object.hasOwn(marker, 'essaimnom') &&
 						(marker.get('essaimnom').toUpperCase() === searchtext))) {
 					selectDoubleClick.getFeatures().clear();
 					selectDoubleClick.getFeatures().push(marker);

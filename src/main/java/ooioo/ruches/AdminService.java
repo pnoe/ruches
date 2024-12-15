@@ -95,14 +95,13 @@ public class AdminService {
 	 * des hausses sur les ruches.
 	 */
 	public void tests(Model model) {
-		// La liste de tous les ruches même inactifs
-		List<Evenement> evensListe = evenementRepository.findAjoutRucheOK();
-		histo(model, evensListe);
-		eveInc(model, evensListe);
+		histo(model);
+		eveInc(model);
 		hausses(model);
 	}
 
-	private void histo(Model model, List<Evenement> evensListe) {
+	private void histo(Model model) {
+		List<Evenement> evensListe = evenementRepository.findAjoutRucheOK();
 		// Recherche des erreurs dans l'historique des ajouts de ruches dans les ruchers
 		Iterable<Rucher> ruchers = rucherRepository.findAll();
 		// la liste de tous les événements RUCHEAJOUTRUCHER
@@ -198,9 +197,12 @@ public class AdminService {
 		model.addAttribute("rucherNonVide", rucherNonVide);
 	}
 
-	private void eveInc(Model model, List<Evenement> evensListe) {
+	/*
+	 * Recherche des événements dont les champs sont incorrects.
+	 */
+	private void eveInc(Model model) {
 		List<Evenement> eveInc = new ArrayList<>();
-		evensListe = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEAJOUTRUCHER);
+		List<Evenement> evensListe = evenementRepository.findByTypeOrderByDateDesc(TypeEvenement.RUCHEAJOUTRUCHER);
 		for (Evenement eve : evensListe) {
 			if ((eve.getRucher() == null) || (eve.getRuche() == null)) {
 				eveInc.add(eve);

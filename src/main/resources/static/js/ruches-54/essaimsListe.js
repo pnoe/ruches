@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		} else {
 			let nomsStr = '';
 			// reEx pour recherche du nom de l'essaim dans link colonne nom de l'essaim
-			const reEx = RegExp('>(.*)<');
+			const reEx = />(.*)</;
 			// sel tableau des lignes selectionnées
 			const sel = table.rows({ selected: true }).data().toArray();
 			// on pourrait voir quels essaims sont déjà marqué pour afficher

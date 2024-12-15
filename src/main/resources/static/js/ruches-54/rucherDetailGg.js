@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			for (const marker of markersRuche) {
 				if ((marker.label.text.toUpperCase() === searchtext) ||
 					(marker.label.text.toUpperCase() === '*' + searchtext) ||
-					(Object.prototype.hasOwnProperty.call(marker, 'essaimnom') &&
+					(Object.hasOwn(marker, 'essaimnom') &&
 						(marker.essaimnom.toUpperCase() === searchtext))
 				) {
 					google.maps.event.trigger(marker, 'click');

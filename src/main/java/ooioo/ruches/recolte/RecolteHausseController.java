@@ -21,7 +21,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +29,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpSession;
 import ooioo.ruches.Const;
@@ -49,7 +48,7 @@ import ooioo.ruches.ruche.RucheService;
 import ooioo.ruches.rucher.Rucher;
 import ooioo.ruches.rucher.RucherRepository;
 
-@Controller
+@RestController
 @RequestMapping("/recolte")
 public class RecolteHausseController {
 
@@ -218,7 +217,7 @@ public class RecolteHausseController {
 	 */
 	@GetMapping("/listesPlus")
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody Map<String, Object> listePlus() {
+	public Map<String, Object> listePlus() {
 		Map<String, Object> map = new HashMap<>();
 		map.put(Const.RUCHES, rucheRepository.findAllProjectedIdNomByOrderByNom());
 		map.put(Const.RUCHERS, rucherRepository.findAllProjectedIdNomByOrderByNom());
@@ -357,7 +356,7 @@ public class RecolteHausseController {
 	 */
 	@PostMapping("/haussesDepot/{recolteId}")
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody String haussesDepot(HttpSession session, Model model, @PathVariable long recolteId,
+	public String haussesDepot(HttpSession session, Model model, @PathVariable long recolteId,
 			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm") LocalDateTime date) {
 		Optional<Recolte> recolteOpt = recolteRepository.findById(recolteId);
 		StringBuilder retHausses = new StringBuilder();

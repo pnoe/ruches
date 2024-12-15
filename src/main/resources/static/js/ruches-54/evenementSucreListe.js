@@ -35,9 +35,12 @@ function evenementSucreListe() {
 		footerCallback: function() {
 			// affichage du poids total de sucre ajouté par page et pour toute la période
 			const api = this.api();
-			// Remove the formatting to get integer data for summation
 			function valPoids(i) {
-				return typeof i === 'string' ? i.replace(/[,]/, '.') * 1 : typeof i === 'number' ? i : 0;
+				if (typeof i === 'string') {
+					// Replace comma with dot and convert to number
+					return parseFloat(i.replace(/,/, '.')) || 0;
+				}
+				return typeof i === 'number' ? i : 0;
 			}
 			const coltotal = groupe ? 2 : 4; // La colonne des poids
 			const total = api.column(coltotal, {
