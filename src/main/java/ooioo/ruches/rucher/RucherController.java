@@ -398,9 +398,11 @@ public class RucherController {
 	 *              événements, "group" true si regroupement fait, "rucher" l'objet
 	 *              rucher (titre, lien)
 	 * @param group : si true les événements de même jour sont regroupés
+	 * @param depot : pour passer la variable depot au client
 	 */
-	@GetMapping("/historique/{rucherId}/{group}")
-	public String historique(Model model, @PathVariable long rucherId, @PathVariable boolean group) {
+	@GetMapping("/historique/{rucherId}/{group}/{depot}")
+	public String historique(Model model, @PathVariable long rucherId, @PathVariable boolean group,
+			@PathVariable boolean depot) {
 		Optional<Rucher> rucherOpt = rucherRepository.findById(rucherId);
 		if (rucherOpt.isPresent()) {
 			Rucher rucher = rucherOpt.get();
@@ -413,6 +415,7 @@ public class RucherController {
 			rucherService.transhum(rucher, evenementRepository.findAjoutRucheOK(), group, histoAll, histoGroup);
 			model.addAttribute(HISTO, group ? histoGroup : histoAll);
 			model.addAttribute("group", group);
+			model.addAttribute("depot", depot);
 		} else {
 			logger.error(Const.IDRUCHERXXINCONNU, rucherId);
 			model.addAttribute(Const.MESSAGE,
@@ -425,8 +428,8 @@ public class RucherController {
 	/**
 	 * Transhumances de tous les ruchers.
 	 */
-	@GetMapping("/historiques/{group}")
-	public String historiques(Model model, @PathVariable boolean group) {
+	@GetMapping("/historiques/{group}/{depot}")
+	public String historiques(Model model, @PathVariable boolean group, @PathVariable boolean depot) {
 		List<Rucher> ruchers = rucherRepository.findByActifTrue();
 		List<Transhumance> histoAll = new ArrayList<>(); // si non groupés
 		List<Transhumance> histoGroup = new ArrayList<>(); // si groupés
@@ -454,6 +457,7 @@ public class RucherController {
 			model.addAttribute(HISTO, histoAll);
 		}
 		model.addAttribute("group", group);
+		model.addAttribute("depot", depot);
 		return "rucher/ruchersHisto";
 	}
 

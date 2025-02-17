@@ -9,10 +9,17 @@
 		const buttontextcol = /*[[#{buttontextcol}]]*/null;
 		const transhumances = /*[[#{transhumances}]]*/null;
 		const rucher = /*[[#{rucher}]]*/null;
+		let depot = /*[[${depot}]]*/null;
 		document.addEventListener('DOMContentLoaded', () => {
+			const lH = location.href;
+			const loc = lH.slice(0, lH.lastIndexOf('/', lH.length - 7) + 1);
+			const depotTxt = 'Depot';
 			document.getElementById('groupe').addEventListener('click', event => {
-				location = location.href.slice(0, location.href.lastIndexOf('/'))
-					+ '/' + event.target.checked;
+				location = loc + event.target.checked + '/' + depot;
+			});
+			document.getElementById('depot').addEventListener('click', () => {
+				depot = !depot;
+				table.draw();
 			});
 			const table = new DataTable('#transhumances', {
 				scrollX: true,
@@ -43,6 +50,10 @@
 					}
 				}				
 			});
+			$.fn.dataTable.ext.search.push(
+					function (settings, searchData) {
+						return depot || (searchData[2] !== depotTxt);
+					});
 		});
 	</script>
 </head>
@@ -62,7 +73,9 @@
 					th:title="#{Doc}" target="_blank" aria-hidden="true"></a> <span
 					class="padicons"> <input type="checkbox" id="groupe"
 					th:title="#{grouper}" th:checked="${group}"> <label
-					for="groupe" th:text="#{grouper}"></label>
+					for="groupe" th:text="#{grouper}"></label> <input type="checkbox"
+					id="depot" th:title="#{afficherDepot}" th:checked="${depot}">
+					<label for="depot" th:text="#{depot}"></label>
 				</span>
 			</div>
 		</div>
