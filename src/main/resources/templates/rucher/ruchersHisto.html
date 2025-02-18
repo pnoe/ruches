@@ -47,9 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		}
 	});
-	
 	$.fn.dataTable.ext.search.push(
 			function (settings, searchData) {
+				// Si depot true affiche toutes les lignes sinon n'affiche que
+				// les lignes ne contenant pas "Dépôt" dans la quatrième colonne.
 				return depot || (searchData[3] !== depotTxt);
 			});
 });

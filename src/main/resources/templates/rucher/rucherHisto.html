@@ -52,6 +52,8 @@
 			});
 			$.fn.dataTable.ext.search.push(
 					function (settings, searchData) {
+						// Si depot true affiche toutes les lignes sinon n'affiche que
+						// les lignes ne contenant pas "Dépôt" dans la troisième colonne.
 						return depot || (searchData[2] !== depotTxt);
 					});
 		});
