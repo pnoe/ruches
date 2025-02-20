@@ -684,7 +684,14 @@ public class EssaimService {
 				essaimPoids.put("nom", essaim.getNom());
 				essaimPoids.put("pr", essaim.getProprete() == null ? "" : essaim.getProprete().toString());
 				essaimPoids.put("ag", essaim.getAgressivite() == null ? "" : essaim.getAgressivite().toString());
-
+				// Ajouter la souche de l'essaim pour permettre le regroupement des soeurs par
+				// tri datatable
+				Essaim souche = essaim.getSouche();
+				if (souche != null) {
+					// utilisation de #maps.containsKey dans le template
+					essaimPoids.put("soucheid", souche.getId().toString());
+					essaimPoids.put("souchenom", souche.getNom());
+				}
 				// Calcul de la distance du rucher dans lequel est l'essaim par rapport au
 				// dépôt. On en profite pour mémoriser la ruche et le rucher pour leur
 				// affichage.

@@ -114,6 +114,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			<thead>
 				<tr>
 					<th th:text="#{essaim}"></th>
+
+					<th class="cache" th:text="#{souche}"></th>
+
 					<th class="cache" th:text="#{ruche}"></th>
 					<th class="cache" th:text="#{rucher}"></th>
 					<th th:text="#{dateAcquisition}"></th>
@@ -134,6 +137,9 @@ document.addEventListener('DOMContentLoaded', () => {
 				<tr th:each="essaimPoids, i : ${essaimsPoids}">
 					<td><a th:href="@{'/essaim/'+${essaimPoids.id}}"
 						th:text="${essaimPoids.nom}"></a></td>
+					<td><a th:if="${#maps.containsKey(essaimPoids, 'soucheid')}"
+						th:href="@{'/essaim/'+${essaimPoids.soucheid}}"
+						th:text="${essaimPoids.souchenom}"></a></td>
 					<td th:unless="${ruches[i.index] == null}"><a
 						th:href="@{'/ruche/'+${ruches[i.index].id}}"
 						th:text="${ruches[i.index].nom}"></a></td>
